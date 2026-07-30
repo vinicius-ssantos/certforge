@@ -1,0 +1,37 @@
+name: Bug report
+description: Report reproducible incorrect behavior that is not a security vulnerability.
+title: "fix: "
+labels: ["type: bug", "status: needs-triage"]
+body:
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Add logs, screenshots, or failing test details without secrets or private data.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I removed credentials, tokens, personal data, and unpublished answer content.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true
