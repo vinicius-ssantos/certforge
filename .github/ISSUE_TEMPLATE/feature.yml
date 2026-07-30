@@ -1,0 +1,44 @@
+name: Feature slice
+description: Propose an implementation slice linked to an active release.
+title: "feat: "
+labels: ["type: feature", "status: needs-triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which learner, editorial, security, or operational problem must be solved?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User-visible outcome
+      description: What demonstrable capability will exist?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Provide testable criteria.
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: deferred
+    attributes:
+      label: Explicitly deferred
+      description: What is intentionally not part of this slice?
+    validations:
+      required: true
+  - type: dropdown
+    id: release
+    attributes:
+      label: Target release
+      options:
+        - v0.1.0 Study Core
+        - Future roadmap hypothesis
+        - Security or operational blocker
+    validations:
+      required: true
