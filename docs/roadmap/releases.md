@@ -6,9 +6,11 @@ Each release must create a demonstrable user outcome. Infrastructure-only milest
 
 ## `v0.1.0` — Study Core
 
-**Outcome:** A learner can study reviewed questions by topic and inspect evidence of progress.
+**Outcome:** A learner can study reviewed Java certification questions by topic and inspect evidence of progress.
 
-Includes catalog, question delivery, answer submission, explanation, attempt history, basic topic progress, editorial administration, question revisioning, authentication, authorization, auditability, and operational foundations.
+Includes preparation catalog foundations, the Java certification profile, question delivery, answer submission, explanation, attempt history, basic topic progress, editorial administration, question revisioning, authentication, authorization, auditability, and operational foundations.
+
+Interview-specific question types, evaluation, and job targeting are explicitly excluded from this release.
 
 ## `v0.2.0` — Adaptive Review
 
@@ -41,6 +43,28 @@ Requires a separately deployed runner, strict resource controls, no network acce
 ## `v0.7.0` — AI Study Assistant
 
 **Outcome:** A learner can request supplementary explanations and reviewed practice variations while correctness remains grounded in deterministic and editorial evidence.
+
+## Parallel product direction — Interview Prep
+
+Interview Prep is intentionally not assigned a release number yet. It may be scheduled after the Study Core is demonstrated and the reusable learning model is validated.
+
+Target outcome: a learner preparing for a Java backend interview can practice role-relevant questions, explain technical decisions, receive structured reviewed feedback, inspect weak topics, and rehearse likely follow-up questions.
+
+Candidate capabilities:
+
+- `INTERVIEW` preparation tracks alongside `CERTIFICATION` tracks;
+- Java Backend Pleno/Sênior topic taxonomy;
+- objective and guided-response question modes;
+- expected-concept rubrics, reference answers, common mistakes, and follow-up questions;
+- role/seniority metadata;
+- job-description-derived study sessions with an explicit topic weighting;
+- interview-specific history and weakness evidence;
+- future mock interviewer experience;
+- future AI assistance constrained by reviewed criteria rather than opaque scoring.
+
+Interview Prep must reuse proven study primitives where appropriate, but it must not force subjective interview responses into certification-style binary correctness.
+
+See [Interview Prep direction](../product/interview-prep.md).
 
 ## Release gates
 
