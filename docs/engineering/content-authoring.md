@@ -85,7 +85,7 @@ A question that is ambiguous or disputed must not be published. Fix it, or leave
 
 ### Before publishing anything in this track
 
-The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` were taken from secondary summaries, because the Oracle exam page could not be fetched. Compare them with the official page (`https://education.oracle.com/java-se-21-developer/pexam_1Z0-830`) first; see [preparation catalog](../architecture/preparation-catalog.md).
+The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` are only partly verified. Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers, but the exact objective wording comes from secondary summaries, because the exam page is rendered by JavaScript and blocks automated clients. Compare the topics with the official page (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) in a browser first; see [preparation catalog](../architecture/preparation-catalog.md).
 
 ## The initial pack
 
