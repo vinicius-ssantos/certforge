@@ -1,5 +1,6 @@
 package dev.certforge.questionbank.internal;
 
+import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.PublishedOption;
 import dev.certforge.questionbank.PublishedQuestion;
@@ -19,16 +20,37 @@ import org.springframework.transaction.annotation.Transactional;
 class QuestionBankReadService implements QuestionBank {
 
   private final QuestionRepository repository;
+  private final PreparationCatalog catalog;
 
-  QuestionBankReadService(QuestionRepository repository) {
+  QuestionBankReadService(QuestionRepository repository, PreparationCatalog catalog) {
     this.repository = repository;
+    this.catalog = catalog;
   }
 
   @Override
   public List<PublishedQuestion> eligibleForTopic(TopicId topicId) {
-    return repository.findPublishedByTopic(topicId.value()).stream()
-        .map(QuestionBankReadService::learnerView)
-        .toList();
+    return catalog
+        .findActiveTopicContext(topicId)
+        .map(
+            context ->
+                repository
+                    .findPublishedByTopic(topicId.value(), context.examVersionId().value())
+                    .stream()
+                    .map(QuestionBankReadService::learnerView)
+                    .toList())
+        .orElse(List.of());
+  }
+
+  @Override
+  public Optional<PublishedQuestion> findSnapshotQuestion(QuestionRevisionId revisionId) {
+    return repository
+        .findRevision(revisionId.value())
+        .filter(
+            revision ->
+                revision.status() == RevisionStatus.PUBLISHED
+                    || revision.status() == RevisionStatus.DEPRECATED)
+        .filter(revision -> revision.publishedAt() != null)
+        .map(QuestionBankReadService::learnerView);
   }
 
   @Override

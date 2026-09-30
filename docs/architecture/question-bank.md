@@ -59,12 +59,13 @@ The domain model left open whether editor and reviewer must be different people.
 
 ## Learner-safe projections
 
-The module contract `QuestionBank` exposes three reads to other modules:
+The module contract `QuestionBank` exposes four reads to other modules:
 
 | Method | Returns | Use |
 |---|---|---|
-| `eligibleForTopic(topicId)` | `PublishedQuestion`s | Selecting questions for a session |
+| `eligibleForTopic(topicId)` | `PublishedQuestion`s | Selecting questions for a session. Only published revisions bound to the topic's current active exam version; empty for an inactive topic |
 | `findPublished(revisionId)` | `PublishedQuestion` | Showing a question to a learner |
+| `findSnapshotQuestion(revisionId)` | `PublishedQuestion` | Showing a session's question even after it was deprecated; empty for revisions never published |
 | `findRevision(revisionId)` | `RevisionEvidence`, any status | Checking correctness and showing a historical attempt |
 
 `PublishedQuestion` is safe to serialize to a learner before an answer is submitted: it has the prompt, type, difficulty, Java release, topic and option keys and text. It has no correctness flags, option explanations, overall explanation, references, reviewer, author or editorial data. Only published revisions are returned.

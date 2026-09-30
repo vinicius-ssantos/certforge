@@ -143,12 +143,14 @@ class QuestionRepository {
         .list();
   }
 
-  List<Revision> findPublishedByTopic(UUID topicId) {
+  /** Published revisions of a topic that are bound to the given (current) exam version. */
+  List<Revision> findPublishedByTopic(UUID topicId, UUID examVersionId) {
     return jdbc.sql(
             SELECT_REVISION
-                + " where topic_id = :topic and status = 'PUBLISHED'"
-                + " order by published_at, revision_number")
+                + " where topic_id = :topic and exam_version_id = :exam"
+                + " and status = 'PUBLISHED' order by published_at, revision_number")
         .param("topic", topicId)
+        .param("exam", examVersionId)
         .query(this::mapRevision)
         .list();
   }
