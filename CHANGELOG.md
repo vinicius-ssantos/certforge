@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Identity, session authentication, role and permission authorization, and abuse protection (#5, ADR 0008).
 - Enforced modular monolith boundaries with Spring Modulith: initial modules, declared allowed dependencies, architecture tests in CI, and module conventions (#4).
 - Product vision and principles.
 - Explicit scope and non-goals.

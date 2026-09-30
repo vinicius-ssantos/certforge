@@ -11,5 +11,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0005](0005-ai-not-source-of-truth.md) | Do not use AI as the source of correctness | Accepted |
 | [0006](0006-isolate-code-execution.md) | Isolate future code execution | Accepted |
 | [0007](0007-generalize-preparation-catalog.md) | Generalize the catalog root without generalizing v0.1 behavior | Accepted |
+| [0008](0008-session-cookie-authentication.md) | Authenticate with server-side sessions and open registration | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.

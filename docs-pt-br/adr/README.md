@@ -13,5 +13,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0005](0005-ai-not-source-of-truth.md) | Não usar IA como fonte de correção | Aceita |
 | [0006](0006-isolate-code-execution.md) | Isolar a futura execução de código | Aceita |
 | [0007](0007-generalize-preparation-catalog.md) | Generalizar a raiz do catálogo sem generalizar o comportamento da v0.1 | Aceita |
+| [0008](0008-session-cookie-authentication.md) | Autenticar com sessões no servidor e cadastro aberto | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.
