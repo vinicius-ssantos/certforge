@@ -1,20 +1,20 @@
 # CertForge
 
-> Adaptive and verifiable preparation for professional Java certification exams.
+> Adaptive and verifiable preparation for Java certifications and technical interviews.
 
-CertForge is an open-source learning platform designed to help software engineers prepare for professional certification exams through authorial questions, deliberate practice, spaced review, mock exams, and evidence-based progress tracking.
+CertForge is an open-source learning platform for software engineers who want deliberate practice, reviewed technical content, explainable progress, and evidence-based preparation.
 
-The initial product scope targets Java certification preparation, beginning with Oracle Java SE 21 Developer content. The architecture and domain model remain certification-agnostic so future tracks can be introduced without weakening the first release.
+The first committed product scope remains Java certification preparation, beginning with Oracle Java SE 21 Developer content. The product direction now also includes technical interview preparation, but interview capabilities are explicitly deferred until the Study Core is proven.
 
 ## Why CertForge exists
 
-Traditional quiz applications usually measure whether a learner selected the expected option. CertForge is intended to go further by recording the reasoning context around each attempt, identifying recurring weaknesses, scheduling targeted reviews, and eventually validating Java snippets in an isolated execution environment.
+Traditional quiz applications usually measure whether a learner selected the expected option. CertForge is intended to go further by recording the reasoning context around each attempt, identifying recurring weaknesses, scheduling targeted reviews, supporting richer technical questions, and eventually validating Java snippets in an isolated execution environment.
 
 The product is guided by five principles:
 
 1. **Learning value before feature count.** Every release must provide a usable study capability.
-2. **Authorial and reviewable content.** Exam dumps and leaked questions are not accepted.
-3. **Deterministic correctness first.** Compilation, execution, tests, and reviewed answers take precedence over AI-generated judgment.
+2. **Authorial and reviewable content.** Exam dumps, leaked questions, and copied interview banks are not accepted.
+3. **Deterministic correctness first.** Compilation, execution, tests, reviewed answers, and explicit evaluation criteria take precedence over AI-generated judgment.
 4. **Progress must be explainable.** Readiness indicators must be derived from visible evidence.
 5. **Security is architectural.** Future code execution will be isolated from the main application and its data.
 
@@ -32,16 +32,20 @@ The product is guided by five principles:
 
 Only `v0.1.0` is committed scope. Later releases express product direction and may change as evidence is collected.
 
+Interview Prep is a parallel future product direction, not part of `v0.1.0` and not automatically assigned to one of the numbered releases above. Its design must reuse proven study primitives without weakening certification-specific correctness or scope discipline.
+
 ## Initial architecture direction
 
 CertForge starts as a modular monolith with clear domain boundaries:
 
 - identity and access;
-- certification catalog;
+- preparation catalog;
 - question bank;
 - study sessions;
 - attempts and progress;
 - administration and editorial workflow.
+
+The first catalog profile is Java certification. Future interview tracks may reuse the same topic and study foundations while retaining interview-specific evaluation rules.
 
 The initial source of truth will be PostgreSQL. A future Java runner will be deployed as a separate, restricted service and will not receive direct database credentials.
 
@@ -50,6 +54,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 - [Product vision](docs/product/vision.md)
 - [Scope and non-goals](docs/product/scope-and-non-goals.md)
 - [Content policy](docs/product/content-policy.md)
+- [Interview Prep direction](docs/product/interview-prep.md)
 - [Release roadmap](docs/roadmap/releases.md)
 - [`v0.1.0` Study Core](docs/roadmap/v0.1-study-core.md)
 - [Architecture overview](docs/architecture/overview.md)
@@ -65,7 +70,7 @@ No application code should be introduced until the `v0.1.0` scope, domain langua
 
 ## Contributing
 
-The project is being established incrementally. See [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes. Certification content must follow the authorial-content and technical-review rules defined in the content policy.
+The project is being established incrementally. See [CONTRIBUTING.md](CONTRIBUTING.md) before proposing changes. Published learning content must follow the authorial-content and technical-review rules defined in the content policy.
 
 ## Security
 
