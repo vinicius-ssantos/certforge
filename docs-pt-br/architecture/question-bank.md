@@ -61,12 +61,13 @@ O modelo de domínio deixou em aberto se editor e revisor precisam ser pessoas d
 
 ## Projeções seguras para o aluno
 
-O contrato de módulo `QuestionBank` expõe três leituras para os outros módulos:
+O contrato de módulo `QuestionBank` expõe quatro leituras para os outros módulos:
 
 | Método | Retorna | Uso |
 |---|---|---|
-| `eligibleForTopic(topicId)` | `PublishedQuestion`s | Selecionar questões para uma sessão |
+| `eligibleForTopic(topicId)` | `PublishedQuestion`s | Selecionar questões para uma sessão. Somente revisões publicadas vinculadas à versão de prova ativa atual do tópico; vazio para um tópico inativo |
 | `findPublished(revisionId)` | `PublishedQuestion` | Mostrar uma questão ao aluno |
+| `findSnapshotQuestion(revisionId)` | `PublishedQuestion` | Mostrar a questão de uma sessão mesmo depois de depreciada; vazio para revisões nunca publicadas |
 | `findRevision(revisionId)` | `RevisionEvidence`, qualquer status | Verificar a correção e mostrar uma tentativa histórica |
 
 `PublishedQuestion` é seguro para serializar ao aluno antes de a resposta ser submetida: tem o enunciado, o tipo, a dificuldade, a release do Java, o tópico e as chaves e textos das alternativas. Não tem indicadores de correção, explicações de alternativas, explicação geral, referências, revisor, autor nem dados editoriais. Somente revisões publicadas são devolvidas.

@@ -108,7 +108,7 @@ Events initially support modular decoupling, projections, and auditability. They
 - Whether certification compatibility belongs directly to a question revision or to an explicit track/exam association.
 - Resolved: `CertificationProfile` is a one-to-one record of its track and `ExamVersion` carries its own lifecycle. See [Preparation catalog](preparation-catalog.md).
 - Resolved: a reviewer cannot review their own revision by default, and a single-maintainer deployment can opt out explicitly. See [Question bank](question-bank.md).
-- Whether abandoned sessions expire through a scheduled policy or explicit user action.
+- Resolved: sessions expire lazily after a configurable time, with no scheduled job. See [Study sessions](study-sessions.md).
 - Whether progress projections are synchronous initially or updated through reliable internal events.
 
 Interview-only design questions are tracked separately and do not block the first release unless they expose a harmful irreversible coupling.

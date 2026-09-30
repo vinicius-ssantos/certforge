@@ -562,4 +562,48 @@ class QuestionBankIT {
                     UUID.fromString(ids[1])))
         .hasMessageContaining("immutable");
   }
+
+  // ---- study-session support -----------------------------------------------------------------
+
+  @Test
+  void eligibleQuestionsMustBeBoundToTheTopicsCurrentExamVersion() throws Exception {
+    String[] ids = publishNew("Bound to an exam version");
+    TopicId topic = new TopicId(UUID.fromString(TOPIC));
+    assertThat(bank.eligibleForTopic(topic))
+        .extracting(q -> q.revisionId().value().toString())
+        .contains(ids[1]);
+
+    // Simulate the exam version having been replaced since this revision was published.
+    jdbc.update(
+        "update certforge.qb_question_revision set exam_version_id = ? where id = ?",
+        UUID.randomUUID(),
+        UUID.fromString(ids[1]));
+
+    assertThat(bank.eligibleForTopic(topic))
+        .extracting(q -> q.revisionId().value().toString())
+        .doesNotContain(ids[1]);
+    assertThat(bank.eligibleForTopic(new TopicId(UUID.randomUUID()))).isEmpty();
+  }
+
+  @Test
+  void snapshotQuestionsStayReadableAfterDeprecationButNeverForUnpublishedRevisions()
+      throws Exception {
+    String[] published = publishNew("Was published");
+    String[] draft = createComplete("Never published");
+    QuestionRevisionId publishedId = new QuestionRevisionId(UUID.fromString(published[1]));
+
+    assertThat(bank.findSnapshotQuestion(publishedId)).isPresent();
+    send(post("/api/admin/question-revisions/" + published[1] + "/deprecate"), admin, null)
+        .andExpect(status().isOk());
+
+    assertThat(bank.findPublished(publishedId)).isEmpty();
+    var snapshot = bank.findSnapshotQuestion(publishedId);
+    assertThat(snapshot).isPresent();
+    assertThat(json.writeValueAsString(snapshot.orElseThrow()))
+        .contains("Was published")
+        .doesNotContainIgnoringCase("explanation")
+        .doesNotContainIgnoringCase("correct\"");
+    assertThat(bank.findSnapshotQuestion(new QuestionRevisionId(UUID.fromString(draft[1]))))
+        .isEmpty();
+  }
 }
