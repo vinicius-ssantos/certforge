@@ -10,9 +10,11 @@ CertForge begins as a modular monolith. The goal is independent domain boundarie
 
 Authentication, account lifecycle, roles, and permissions. Other modules consume stable identity identifiers and authorization decisions rather than identity persistence details.
 
-### `certification-catalog`
+### `preparation-catalog`
 
-Certification tracks, exam versions, topics, ordering, lifecycle, and Java-version compatibility.
+Preparation tracks, stable topics, ordering, lifecycle, and profile-specific preparation metadata.
+
+The committed `v0.1.0` exposes only the Java certification profile. Certification-specific provider, exam-version, objective, and Java-release metadata remain explicit inside the catalog boundary rather than being flattened into generic fields. Future interview-track behavior is outside the first release.
 
 ### `question-bank`
 
@@ -34,9 +36,10 @@ Security- and integrity-relevant administrative events, especially question life
 
 - `study` may reference published question contracts but cannot modify editorial content.
 - `progress` consumes attempt facts and does not own study-session commands.
-- `question-bank` references catalog identifiers but does not own the catalog.
+- `question-bank` references preparation-catalog identifiers but does not own the catalog.
 - `identity` must not depend on learning modules.
 - Administrative interfaces orchestrate module capabilities but do not bypass domain rules.
+- No module may access another module's repositories or persistence entities directly.
 
 ## Persistence
 
@@ -47,6 +50,12 @@ Flyway manages schema changes. Production migrations must be forward-safe, obser
 ## Interfaces
 
 The first application may expose a web API consumed by a separate web frontend. Public contracts are version-conscious, validation errors are stable, and learner APIs avoid exposing answer material before an attempt is submitted.
+
+## Future interview boundary
+
+The catalog may later expose `INTERVIEW` tracks, but interview-specific role/seniority metadata, guided-response evaluation, job-description blueprints, and mock-interviewer behavior are not part of `v0.1.0`.
+
+Where certification and interview semantics differ, explicit domain types are preferred over nullable generic fields or overloaded meanings.
 
 ## Future runner boundary
 
