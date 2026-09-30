@@ -65,6 +65,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 - [`v0.1.0` Study Core](docs-pt-br/roadmap/v0.1-study-core.md)
 - [Visão geral da arquitetura](docs-pt-br/architecture/overview.md)
 - [Modelo de domínio inicial](docs-pt-br/architecture/domain-model.md)
+- [Identidade e acesso](docs-pt-br/architecture/identity-and-access.md)
 - [Segurança e modelo de ameaças](docs-pt-br/architecture/threat-model.md)
 - [Decisões de arquitetura](docs-pt-br/adr/README.md)
 

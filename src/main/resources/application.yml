@@ -9,9 +9,29 @@ spring:
     enabled: true
   lifecycle:
     timeout-per-shutdown-phase: 20s
+  session:
+    timeout: 30m
+    jdbc:
+      initialize-schema: never
+      table-name: certforge.identity_session
 
 server:
   shutdown: graceful
+
+certforge:
+  identity:
+    # Session cookie Secure flag. Leave empty to follow the request scheme; set to true when
+    # TLS is terminated by a proxy in front of the app.
+    secure-cookie: ${SESSION_COOKIE_SECURE:}
+    throttle:
+      login-failures-per-email: 5
+      login-failures-per-ip: 50
+      window: 15m
+      registrations-per-ip: 10
+    # Optional first administrator, created only when no administrator exists.
+    bootstrap-admin:
+      email: ${BOOTSTRAP_ADMIN_EMAIL:}
+      password: ${BOOTSTRAP_ADMIN_PASSWORD:}
 
 management:
   endpoints:
