@@ -1,0 +1,20 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Separates what the language specification guarantees about boxed Integer identity from what a typical JVM happens to do, which is a common source of wrong assumptions.",
+  "prompt": "Two `Integer` variables `a` and `b` are each initialized by autoboxing the same `int` literal. Which statement is guaranteed by the Java language specification?",
+  "explanation": "Autoboxing an int between -128 and 127 is guaranteed to yield the same Integer object every time, so == on two such values is true. For values outside that range the specification allows either outcome, so code must not depend on it. When both operands of == are references, the operator compares identity, not numeric value; use equals to compare values.",
+  "options": [
+    {"key": "A", "text": "For `Integer a = 100, b = 100;` the expression `a == b` is always `true`.", "correct": true, "explanation": "JLS 5.1.7 requires boxing conversions of the same int value between -128 and 127 to produce identical references, so the comparison is always true."},
+    {"key": "B", "text": "For `Integer a = 1000, b = 1000;` the expression `a == b` is always `false`.", "correct": false, "explanation": "The specification does not promise a new object for values outside the cached range. An implementation may cache more values, so the result is unspecified rather than always false."},
+    {"key": "C", "text": "When both operands are `Integer`, `==` unboxes them and compares the numeric values.", "correct": false, "explanation": "Unboxing happens for == only when one operand is a primitive numeric type. With two reference operands, == is a reference equality test."},
+    {"key": "D", "text": "`a.equals(b)` returns `false` whenever `a` and `b` are different objects.", "correct": false, "explanation": "Integer.equals compares the wrapped int values, so two distinct Integer objects holding the same value are equal."}
+  ],
+  "references": [
+    {"title": "JLS 5.1.7 Boxing Conversion", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-5.html#jls-5.1.7"},
+    {"title": "JLS 15.21.3 Reference Equality Operators == and !=", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.21.3"},
+    {"title": "Integer.valueOf(int), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html#valueOf(int)"}
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "exports and opens look similar but differ in compile-time versus run-time access and in whether private members are reachable through reflection.",
+  "prompt": "A module declares directives for one of its packages, `p`. Which statements about `exports` and `opens` are true? Select all that apply.",
+  "explanation": "exports controls compile-time and run-time access to the public and protected types of a package. opens controls run-time reflective access, including to private members, and does not grant compile-time access. A qualified form (to m) limits either directive to specific modules. Being exported alone does not allow deep reflection on private members.",
+  "options": [
+    {"key": "A", "text": "`exports p;` makes the public types of `p` accessible to code in other modules at both compile time and run time.", "correct": true, "explanation": "That is the purpose of exports: it defines the accessible API of the module."},
+    {"key": "B", "text": "`opens p;` allows code in other modules to use reflection at run time to access all types and members of `p`, including private ones.", "correct": true, "explanation": "An open package allows deep reflection, for example setAccessible(true) on a private field."},
+    {"key": "C", "text": "`opens p;` also makes the public types of `p` accessible to other modules at compile time.", "correct": false, "explanation": "opens affects run time only. Without exports, other modules cannot compile against the package."},
+    {"key": "D", "text": "`exports p to m;` makes the package accessible only to module `m`.", "correct": true, "explanation": "This is a qualified export, which restricts access to the named module or modules."},
+    {"key": "E", "text": "If `p` is exported but not opened, another module can call `setAccessible(true)` on a private field of a class in `p`.", "correct": false, "explanation": "Reflective access to non-public members requires the package to be open. The call fails with InaccessibleObjectException."}
+  ],
+  "references": [
+    {"title": "JLS 7.7.2 Exported and Opened Packages", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2"},
+    {"title": "AccessibleObject.setAccessible(boolean), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/reflect/AccessibleObject.html#setAccessible(boolean)"}
+  ]
+}

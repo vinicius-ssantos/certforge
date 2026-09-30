@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "The code looks reasonable and would run if it compiled. The candidate must know the dominance rule for pattern labels and that it is a compile-time, not a run-time, problem.",
+  "prompt": "What happens when this program is compiled and run with Java 21?\n\n```java\n{{snippet}}\n```",
+  "explanation": "A pattern label dominates a later label when every value the later label could match is already matched by the earlier one. Every Integer is a Number, so the Integer label can never be selected after the Number label. The language makes this a compile-time error rather than silently ignoring the unreachable label, so the program does not compile.",
+  "options": [
+    {"key": "A", "text": "It prints number.", "correct": false, "explanation": "This is what would happen if the program compiled, which is why the trap is tempting. It cannot run because of the dominance error."},
+    {"key": "B", "text": "It prints integer.", "correct": false, "explanation": "The most specific label is not preferred. Labels are tried in order, and in any case the program is rejected before it runs."},
+    {"key": "C", "text": "It does not compile because a case label is dominated by a preceding case label.", "correct": true, "explanation": "Case Number dominates case Integer, which the compiler reports as an error. Reordering the labels so the more specific type comes first fixes it."},
+    {"key": "D", "text": "It compiles but throws a MatchException at run time.", "correct": false, "explanation": "MatchException signals a failure to match in an exhaustive switch at run time. Here the problem is detected at compile time."}
+  ],
+  "references": [
+    {"title": "JLS 14.11.1 Switch Blocks (dominance of case labels)", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11.1"}
+  ]
+}

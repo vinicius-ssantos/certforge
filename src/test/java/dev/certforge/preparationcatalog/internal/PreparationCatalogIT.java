@@ -212,7 +212,13 @@ class PreparationCatalogIT {
         .andExpect(jsonPath("$.provider").value("Oracle"))
         .andExpect(jsonPath("$.examVersion.examCode").value("1Z0-830"))
         .andExpect(jsonPath("$.examVersion.javaRelease").value(21))
-        .andExpect(jsonPath("$.examVersion.objectivesUrl").isNotEmpty())
+        .andExpect(
+            jsonPath("$.examVersion.objectivesUrl")
+                .value(
+                    "https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830"))
+        .andExpect(
+            jsonPath("$.certificationName")
+                .value("Oracle Certified Professional Java SE 21 Developer"))
         .andExpect(jsonPath("$.topics.length()").value(10))
         .andExpect(jsonPath("$.topics[0].slug").value("date-time-text-numeric-boolean"))
         .andExpect(jsonPath("$.topics[0].id").value(SEEDED_TOPIC_ID))

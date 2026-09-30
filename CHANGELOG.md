@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Initial authorial Java SE 21 content pack (20 questions, verified code), content importer and content authoring guide. The pack awaits human technical review and is not published (#8).
 - Versioned question bank with immutable revisions, the editorial lifecycle, database-enforced immutability and learner-safe projections (#7).
 - Preparation catalog with the Java certification profile, exam versions, stable topics and seeded Oracle Java SE 21 (1Z0-830) taxonomy (#6).
 - Identity, session authentication, role and permission authorization, and abuse protection (#5, ADR 0008).

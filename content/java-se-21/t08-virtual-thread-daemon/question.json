@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Virtual threads are a Java 21 feature and several plausible statements about them are false, so the candidate must know their defining properties.",
+  "prompt": "Which statement about virtual threads in Java 21 is true?",
+  "explanation": "A virtual thread is always a daemon thread, so it does not keep the JVM alive, and its daemon status cannot be changed to false. Virtual threads are not pooled platform threads: they are cheap threads managed by the JVM and mounted on carrier threads while they run. They can execute synchronized blocks, although blocking inside one may pin the carrier thread.",
+  "options": [
+    {"key": "A", "text": "A virtual thread is always a daemon thread.", "correct": true, "explanation": "isDaemon() always returns true for a virtual thread, so the JVM does not wait for virtual threads to finish before exiting."},
+    {"key": "B", "text": "A virtual thread is a platform thread taken from a pool that the JVM recycles.", "correct": false, "explanation": "Virtual threads are lightweight threads scheduled by the JVM onto a small set of carrier threads. They are not pooled platform threads, and creating one per task is the intended usage."},
+    {"key": "C", "text": "Calling `setDaemon(false)` on a virtual thread makes the JVM wait for it before exiting.", "correct": false, "explanation": "Attempting to set a virtual thread to non-daemon throws IllegalArgumentException. It cannot be made to keep the JVM alive."},
+    {"key": "D", "text": "A virtual thread cannot execute code inside a `synchronized` block.", "correct": false, "explanation": "It can. The caveat is that blocking while holding a monitor can pin the carrier thread, which reduces scalability but is not forbidden."}
+  ],
+  "references": [
+    {"title": "JEP 444: Virtual Threads", "url": "https://openjdk.org/jeps/444"},
+    {"title": "Thread.isDaemon(), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html#isDaemon()"}
+  ]
+}

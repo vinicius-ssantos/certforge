@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes three kinds of list: unmodifiable, fixed-size but writable, and ordinary. The candidate must know exactly which mutations each one allows.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "List.of returns an unmodifiable list, so add throws UnsupportedOperationException. Arrays.asList returns a fixed-size list backed by the array: set is allowed, but add and remove are not. The set call changed the first element to q, and the failed add left the list unchanged.",
+  "options": [
+    {"key": "A", "text": "immutable fixed-size [q, y]", "correct": true, "explanation": "Both add calls throw UnsupportedOperationException, and the only successful change is the set call on the fixed-size list."},
+    {"key": "B", "text": "immutable [q, y]", "correct": false, "explanation": "add on the Arrays.asList list also throws UnsupportedOperationException because its size is fixed, so fixed-size is printed as well."},
+    {"key": "C", "text": "immutable fixed-size [x, y]", "correct": false, "explanation": "set is permitted on a fixed-size list, so the first element does become q."},
+    {"key": "D", "text": "immutable fixed-size [q, y, z]", "correct": false, "explanation": "The add call threw an exception, so z was never added."}
+  ],
+  "references": [
+    {"title": "List (unmodifiable lists), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#unmodifiable"},
+    {"title": "Arrays.asList(T...), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Arrays.html#asList(T...)"}
+  ]
+}

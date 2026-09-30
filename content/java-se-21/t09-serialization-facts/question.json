@@ -1,0 +1,18 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Deserialization bypasses the constructors of serializable classes but not of the first non-serializable superclass, and transient fields get default values rather than initializer values.",
+  "prompt": "Class `Item` implements `Serializable` and extends class `Base`, which does not implement `Serializable` and has an accessible no-argument constructor. `Item` has a `transient int cache = 5;` field and a constructor. An `Item` is serialized and then deserialized. Which statements are true? Select all that apply.",
+  "explanation": "During deserialization the no-argument constructor of the closest non-serializable superclass runs, so Base fields get their constructor-assigned values and their serialized state is not used. The constructors of serializable classes such as Item do not run, so a transient field ends up with its default value (0 here), not with the value from its initializer.",
+  "options": [
+    {"key": "A", "text": "The no-argument constructor of `Base` runs, so the fields of `Base` get the values that constructor assigns.", "correct": true, "explanation": "Serialization does not save the state of a non-serializable superclass; it is re-initialized by running that class's accessible no-arg constructor."},
+    {"key": "B", "text": "The constructor of `Item` runs before its fields are restored from the stream.", "correct": false, "explanation": "Constructors of serializable classes are not invoked during deserialization. Their fields are restored directly from the stream."},
+    {"key": "C", "text": "The `transient` field `cache` is restored with its default value, `0`.", "correct": true, "explanation": "Transient fields are not written, and because Item's constructor and initializers do not run, the field is left at the default value, not 5."},
+    {"key": "D", "text": "The fields of `Base` are read from the stream because `Item` is serializable.", "correct": false, "explanation": "Only the state of serializable classes in the hierarchy is written. Making a subclass serializable does not cause the non-serializable superclass state to be saved."}
+  ],
+  "references": [
+    {"title": "java.io.Serializable, Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html"}
+  ]
+}

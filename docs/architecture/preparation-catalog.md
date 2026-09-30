@@ -73,9 +73,15 @@ Failures use the same RFC 9457 problem responses as identity, with stable codes 
 9. Using Java I/O API
 10. Implementing localization
 
-Each mapping stores the objective text in `objective_ref`, and the exam version stores the official objectives page, `https://education.oracle.com/java-se-21-developer/pexam_1Z0-830`, so every topic is traceable to a public source. Identifiers are fixed so topic identity is the same in every environment.
+Each mapping stores the objective text in `objective_ref`, and the exam version stores the official objectives page, `https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`, so every topic is traceable to a public source. Identifiers are fixed so topic identity is the same in every environment.
 
-> **Review required before publishing content.** The objective wording was taken from secondary summaries, because the Oracle page could not be fetched when the seed was written. A reviewer must compare `objective_ref` and the topic list with the official page and, if they differ, correct the display names and mappings (display names can be corrected without changing identity). No question may be published against these topics before that review.
+> **Review required before publishing content.** What is verified and what is not:
+>
+> - The exam page URL is the canonical one declared by Oracle's own page metadata, and `V6__correct_java_exam_source.sql` corrected an earlier alias.
+> - Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers: date, time, text, numeric and boolean values; program flow and exceptions; object-oriented and functional programming, inheritance, polymorphism, generics, records and lambdas; streams, arrays, collections, concurrency, I/O and localization; modules, packaging and deployment. The ten topics cover these areas.
+> - The announcement sends readers to the exam page for the exact list of objectives, and that page is rendered by JavaScript and blocks automated clients. The exact wording of each objective group, and the split into ten groups, therefore still comes from secondary summaries.
+>
+> A reviewer must compare `objective_ref` and the topic list with the exam page in a browser and, if they differ, correct the display names and mappings (display names can be corrected without changing identity). Generics has no topic of its own; decide whether it needs one. No question may be published against these topics before that review.
 
 ## Deferred
 

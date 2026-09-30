@@ -75,9 +75,15 @@ As falhas usam as mesmas respostas de problema RFC 9457 da identidade, com códi
 9. Using Java I/O API
 10. Implementing localization
 
-Cada mapeamento guarda o texto do objetivo em `objective_ref`, e a versão da prova guarda a página oficial de objetivos, `https://education.oracle.com/java-se-21-developer/pexam_1Z0-830`, de modo que cada tópico é rastreável a uma fonte pública. Os identificadores são fixos, então a identidade dos tópicos é a mesma em todos os ambientes.
+Cada mapeamento guarda o texto do objetivo em `objective_ref`, e a versão da prova guarda a página oficial de objetivos, `https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`, de modo que cada tópico é rastreável a uma fonte pública. Os identificadores são fixos, então a identidade dos tópicos é a mesma em todos os ambientes.
 
-> **Revisão necessária antes de publicar conteúdo.** O texto dos objetivos foi tirado de resumos secundários, porque a página da Oracle não pôde ser acessada quando os dados iniciais foram escritos. Um revisor deve comparar `objective_ref` e a lista de tópicos com a página oficial e, se diferirem, corrigir os nomes de exibição e os mapeamentos (nomes de exibição podem ser corrigidos sem mudar a identidade). Nenhuma questão pode ser publicada nesses tópicos antes dessa revisão.
+> **Revisão necessária antes de publicar conteúdo.** O que está verificado e o que não está:
+>
+> - A URL da página da prova é a canônica declarada pelos metadados da própria página da Oracle, e `V6__correct_java_exam_source.sql` corrigiu um alias anterior.
+> - O [anúncio da prova](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) pela Oracle University confirma as áreas que a prova cobre: data, hora, texto, valores numéricos e booleanos; controle de fluxo e exceções; programação orientada a objetos e funcional, herança, polimorfismo, generics, records e lambdas; streams, arrays, coleções, concorrência, E/S e localização; módulos, empacotamento e deploy. Os dez tópicos cobrem essas áreas.
+> - O anúncio remete à página da prova para a lista exata de objetivos, e essa página é renderizada por JavaScript e bloqueia clientes automatizados. O texto exato de cada grupo de objetivos, e a divisão em dez grupos, portanto ainda vêm de resumos secundários.
+>
+> Um revisor deve comparar `objective_ref` e a lista de tópicos com a página da prova em um navegador e, se diferirem, corrigir os nomes de exibição e os mapeamentos (nomes de exibição podem ser corrigidos sem mudar a identidade). Generics não tem um tópico próprio; decida se precisa de um. Nenhuma questão pode ser publicada nesses tópicos antes dessa revisão.
 
 ## Adiado
 

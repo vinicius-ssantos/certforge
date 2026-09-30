@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reading a pattern-matching switch with a guard in order and recognising that the first matching label wins.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "A switch with pattern labels evaluates the labels from top to bottom and selects the first one that matches. The value is an Integer and 42 is greater than 40, so the guarded label matches first and the result is large. The unguarded Integer label would only apply to Integer values that fail the guard.",
+  "options": [
+    {"key": "A", "text": "large", "correct": true, "explanation": "The first label, `Integer i when i > 40`, matches because the selector is an Integer and the guard 42 > 40 is true."},
+    {"key": "B", "text": "small", "correct": false, "explanation": "That label is reached only by Integer values for which the earlier guard is false. 42 satisfies the guard, so it never gets there."},
+    {"key": "C", "text": "other", "correct": false, "explanation": "The default label applies only when no other label matches. An Integer selector matches the first label."},
+    {"key": "D", "text": "The code does not compile.", "correct": false, "explanation": "The switch is exhaustive because of the default label, and the guarded label precedes the unguarded one, so there is no dominance error."}
+  ],
+  "references": [
+    {"title": "JLS 14.11 The switch Statement", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11"}
+  ]
+}

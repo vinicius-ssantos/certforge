@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "List has two remove methods and the argument type decides which one runs. Mixing up removal by index with removal by element is a very common mistake.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "remove(1) with an int argument calls remove(int index) and removes the element at index 1, which is 20, leaving [10, 30, 1]. remove(Integer.valueOf(1)) calls remove(Object) and removes the first element equal to 1, leaving [10, 30].",
+  "options": [
+    {"key": "A", "text": "[10, 30]", "correct": true, "explanation": "The first call removes by index (20), the second removes by value (the trailing 1)."},
+    {"key": "B", "text": "[10, 20, 30]", "correct": false, "explanation": "This would result if remove(1) removed the value 1. An int argument selects remove(int index), so the element at index 1 is removed instead."},
+    {"key": "C", "text": "[10, 30, 1]", "correct": false, "explanation": "This is the list after only the first call. The second call removes the element equal to 1."},
+    {"key": "D", "text": "[20, 30]", "correct": false, "explanation": "Neither call removes the first element. One removes index 1 and the other removes the value 1."}
+  ],
+  "references": [
+    {"title": "List.remove(int), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#remove(int)"},
+    {"title": "List.remove(Object), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html#remove(java.lang.Object)"}
+  ]
+}

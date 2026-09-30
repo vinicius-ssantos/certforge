@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks how line terminators are handled by the NIO.2 convenience methods, in particular that a trailing newline does not produce an extra empty line.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Files.readAllLines splits the content into lines using line terminators. A final terminator ends the last line; it does not start a new, empty one. The text alpha, newline, beta, newline therefore contains two lines.",
+  "options": [
+    {"key": "A", "text": "2", "correct": true, "explanation": "The trailing newline terminates the line beta and does not create a third, empty line."},
+    {"key": "B", "text": "3", "correct": false, "explanation": "A third element would appear only if there were text after the last line terminator, for example a blank line."},
+    {"key": "C", "text": "1", "correct": false, "explanation": "The method recognises every line terminator, not just the last one, so the two lines are returned separately."},
+    {"key": "D", "text": "It throws an exception because the file was not closed.", "correct": false, "explanation": "readAllLines opens and closes the file itself. The code only needs to handle the IOException it may throw."}
+  ],
+  "references": [
+    {"title": "Files.readAllLines(Path), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#readAllLines(java.nio.file.Path)"}
+  ]
+}

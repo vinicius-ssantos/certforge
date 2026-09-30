@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires separating compile-time overload resolution, which uses static types, from run-time dispatch, and knowing how a null argument is resolved.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Overload resolution uses the static type of the argument. The variable text is declared as Object, so show(Object) is chosen even though it holds a String. The literal \"hello\" has type String, so the more specific show(String) applies. The null literal is compatible with both overloads and String is more specific than Object, so show(String) is chosen without ambiguity.",
+  "options": [
+    {"key": "A", "text": "Object String String", "correct": true, "explanation": "show(text) uses the static type Object; show(\"hello\") and show(null) both select the most specific applicable method, show(String)."},
+    {"key": "B", "text": "String String String", "correct": false, "explanation": "Methods are not chosen by the run-time type of an argument. The variable text has static type Object."},
+    {"key": "C", "text": "Object Object String", "correct": false, "explanation": "The literal \"hello\" has static type String, so the more specific overload applies to the second call."},
+    {"key": "D", "text": "The code does not compile because show(null) is ambiguous.", "correct": false, "explanation": "A call is ambiguous only when neither candidate is more specific. String is a subtype of Object, so show(String) is strictly more specific. It would be ambiguous with two unrelated types such as String and Integer."}
+  ],
+  "references": [
+    {"title": "JLS 15.12.2 Compile-Time Step 2: Determine Method Signature", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.12.2"},
+    {"title": "JLS 15.12.2.5 Choosing the Most Specific Method", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.12.2.5"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Relies on ExecutorService being AutoCloseable since Java 19 and on close() waiting for submitted tasks, a behavior many candidates do not know.",
+  "prompt": "What is printed by this program with Java 21?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Since Java 19, ExecutorService implements AutoCloseable. Its close method initiates an orderly shutdown and waits until previously submitted tasks have completed. When the try block ends, all 100 tasks have therefore finished, and the counter holds 100.",
+  "options": [
+    {"key": "A", "text": "100", "correct": true, "explanation": "close() blocks until the submitted tasks are done, so every increment has happened before the value is read."},
+    {"key": "B", "text": "A value below 100 is possible, because tasks may still be running.", "correct": false, "explanation": "That would be true with an executor that is only shut down without waiting. Closing the executor waits for completion."},
+    {"key": "C", "text": "The code does not compile because ExecutorService is not AutoCloseable.", "correct": false, "explanation": "ExecutorService extends AutoCloseable from Java 19 onwards, so it can be a try-with-resources resource in Java 21."},
+    {"key": "D", "text": "The program never ends because the pool threads are never shut down.", "correct": false, "explanation": "Closing the executor shuts the pool down, so the pool threads terminate and the JVM can exit."}
+  ],
+  "references": [
+    {"title": "ExecutorService.close(), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ExecutorService.html#close()"}
+  ]
+}
