@@ -15,6 +15,8 @@ The first release must allow a learner to:
 - allow an authorized content editor to manage draft and published questions;
 - preserve the exact published question revision used by an attempt.
 
+The implementation may use preparation-track terminology in the catalog where it is no more complex than certification-specific terminology, but no interview behavior is required by `v0.1.0`.
+
 ## Required operational scope
 
 - PostgreSQL migrations are versioned and repeatable in test environments.
@@ -26,6 +28,9 @@ The first release must allow a learner to:
 
 ## Explicit non-goals for `v0.1.0`
 
+- Technical interview preparation flows.
+- Job-description ingestion or job-specific study plans.
+- Free-text or guided-response interview evaluation.
 - AI-generated or AI-corrected answers.
 - Compilation or execution of submitted Java code.
 - Timed full mock exams.
@@ -36,8 +41,14 @@ The first release must allow a learner to:
 - Payments, subscriptions, advertisements, or monetization.
 - Community publication of questions.
 - Rankings, competitive leaderboards, streak pressure, or advanced gamification.
-- Certifications other than the initial Java track.
+- Certification tracks other than the initial Java track.
 - Microservices, Kafka, Kubernetes, or distributed caches without demonstrated need.
+
+## Future-compatible boundary
+
+Interview Prep is a documented future direction. The initial architecture may preserve reusable concepts such as preparation track, topic, question revision, study session, attempt evidence, and progress projection, but must not implement interview-only behavior prematurely.
+
+Certification-specific concepts such as exam version, provider, objective mapping, and exact answer correctness remain explicit and must not be diluted into generic fields.
 
 ## Scope-control rule
 
