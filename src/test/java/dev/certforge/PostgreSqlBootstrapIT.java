@@ -16,7 +16,7 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 class PostgreSqlBootstrapIT {
 
   @Container @ServiceConnection
-  static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine");
+  static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:17.11-alpine");
 
   @Autowired JdbcTemplate jdbcTemplate;
 
