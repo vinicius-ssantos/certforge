@@ -41,7 +41,7 @@ Completing a session does not require answering every question.
 
 ## Expiration policy
 
-A session expires when it has been in progress longer than `certforge.study.session-ttl` (default 24 hours from its start). Expiration is lazy and needs no scheduled job: when a session is read, or when the learner lists sessions or starts a new one, every session of that learner whose time is up becomes `EXPIRED`. This means an abandoned session never blocks the learner's next start, and the recorded close time is the moment it was detected. How expired and abandoned sessions count toward progress is decided in #11.
+A session expires when it has been in progress longer than `certforge.study.session-ttl` (default 24 hours from its start). Expiration is lazy and needs no scheduled job: when a session is read, or when the learner lists sessions or starts a new one, every session of that learner whose time is up becomes `EXPIRED`. This means an abandoned session never blocks the learner's next start, and the recorded close time is the moment it was detected. How expired and abandoned sessions count toward progress is defined in [history and progress](history-and-progress.md): their accepted answers count, and sessions without answers add nothing.
 
 ## Endpoints
 

@@ -2,10 +2,12 @@ package dev.certforge.study.internal;
 
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionEvidence;
+import dev.certforge.study.AttemptRecorded;
 import dev.certforge.study.internal.AttemptViews.Answer;
 import dev.certforge.study.internal.AttemptViews.AttemptResult;
 import dev.certforge.study.internal.AttemptViews.OptionAnswer;
@@ -22,6 +24,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -56,6 +59,7 @@ class AttemptService {
   private final QuestionBank questionBank;
   private final CurrentActor currentActor;
   private final Clock clock;
+  private final ApplicationEventPublisher events;
   private final TransactionTemplate transaction;
 
   AttemptService(
@@ -64,12 +68,14 @@ class AttemptService {
       QuestionBank questionBank,
       CurrentActor currentActor,
       Clock clock,
+      ApplicationEventPublisher events,
       PlatformTransactionManager transactionManager) {
     this.attempts = attempts;
     this.sessions = sessions;
     this.questionBank = questionBank;
     this.currentActor = currentActor;
     this.clock = clock;
+    this.events = events;
     this.transaction = new TransactionTemplate(transactionManager);
   }
 
@@ -125,7 +131,17 @@ class AttemptService {
             key,
             fingerprint);
     try {
-      transaction.executeWithoutResult(status -> attempts.insert(attempt));
+      transaction.executeWithoutResult(
+          status -> {
+            attempts.insert(attempt);
+            events.publishEvent(
+                new AttemptRecorded(
+                    attempt.id(),
+                    learner,
+                    new TopicId(session.topicId()),
+                    attempt.correct(),
+                    attempt.submittedAt()));
+          });
     } catch (DuplicateKeyException e) {
       return resolveRace(learner, key, fingerprint, sessionId, position);
     } catch (DataAccessException e) {

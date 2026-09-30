@@ -23,6 +23,7 @@ Os nomes de arquivos e de identificadores de domínio (`PreparationTrack`, `Ques
 - [Catálogo de preparação](architecture/preparation-catalog.md)
 - [Sessões de estudo](architecture/study-sessions.md)
 - [Submissão de respostas](architecture/answer-submission.md)
+- [Histórico e progresso](architecture/history-and-progress.md)
 - [Banco de questões](architecture/question-bank.md)
 - [Modelo de ameaças inicial](architecture/threat-model.md)
 

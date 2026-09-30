@@ -70,6 +70,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 - [Banco de questões](docs-pt-br/architecture/question-bank.md)
 - [Sessões de estudo](docs-pt-br/architecture/study-sessions.md)
 - [Submissão de respostas](docs-pt-br/architecture/answer-submission.md)
+- [Histórico e progresso](docs-pt-br/architecture/history-and-progress.md)
 - [Criação e importação de conteúdo](docs-pt-br/engineering/content-authoring.md)
 - [Segurança e modelo de ameaças](docs-pt-br/architecture/threat-model.md)
 - [Decisões de arquitetura](docs-pt-br/adr/README.md)

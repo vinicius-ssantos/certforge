@@ -111,7 +111,7 @@ Os eventos inicialmente apoiam o desacoplamento modular, as projeções e a audi
 - Resolvido: `CertificationProfile` é um registro um-para-um da sua trilha e `ExamVersion` tem ciclo de vida próprio. Veja [Catálogo de preparação](preparation-catalog.md).
 - Resolvido: por padrão um revisor não pode revisar a própria revisão, e uma instalação com um único mantenedor pode desativar isso explicitamente. Veja [Banco de questões](question-bank.md).
 - Resolvido: as sessões expiram de forma preguiçosa após um tempo configurável, sem job agendado. Veja [Sessões de estudo](study-sessions.md).
-- Se as projeções de progresso são síncronas inicialmente ou atualizadas por eventos internos confiáveis.
+- Resolvido: o progresso é atualizado de forma síncrona, dentro da transação que registra uma tentativa, por meio de um evento em processo, com reconciliação e reconstrução a partir das tentativas. Veja [Histórico e progresso](history-and-progress.md).
 
 As questões de design exclusivas de entrevista são acompanhadas separadamente e não bloqueiam a primeira release, a menos que exponham um acoplamento irreversível prejudicial.
 

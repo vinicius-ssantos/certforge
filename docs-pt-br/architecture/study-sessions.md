@@ -43,7 +43,7 @@ Concluir uma sessão não exige responder a todas as questões.
 
 ## Política de expiração
 
-Uma sessão expira quando fica em andamento por mais que `certforge.study.session-ttl` (padrão de 24 horas desde o início). A expiração é preguiçosa e dispensa job agendado: quando uma sessão é lida, ou quando o aluno lista as sessões ou inicia uma nova, toda sessão desse aluno cujo prazo acabou passa a `EXPIRED`. Assim, uma sessão abandonada nunca bloqueia o próximo início do aluno, e o horário de encerramento registrado é o momento em que a expiração foi detectada. Como sessões expiradas e abandonadas contam para o progresso é decidido na #11.
+Uma sessão expira quando fica em andamento por mais que `certforge.study.session-ttl` (padrão de 24 horas desde o início). A expiração é preguiçosa e dispensa job agendado: quando uma sessão é lida, ou quando o aluno lista as sessões ou inicia uma nova, toda sessão desse aluno cujo prazo acabou passa a `EXPIRED`. Assim, uma sessão abandonada nunca bloqueia o próximo início do aluno, e o horário de encerramento registrado é o momento em que a expiração foi detectada. Como sessões expiradas e abandonadas contam para o progresso está definido em [histórico e progresso](history-and-progress.md): suas respostas aceitas contam, e sessões sem respostas não somam nada.
 
 ## Endpoints
 
