@@ -67,6 +67,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 - [Question bank](docs/architecture/question-bank.md)
 - [Study sessions](docs/architecture/study-sessions.md)
 - [Answer submission](docs/architecture/answer-submission.md)
+- [History and progress](docs/architecture/history-and-progress.md)
 - [Content authoring and import](docs/engineering/content-authoring.md)
 - [Security and threat model](docs/architecture/threat-model.md)
 - [Architecture decisions](docs/adr/README.md)
