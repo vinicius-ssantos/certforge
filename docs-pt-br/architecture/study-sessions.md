@@ -6,7 +6,7 @@ Issue: #9 — Implementar sessões de estudo focadas em um tópico e a seleção
 
 ## O que é uma sessão
 
-O aluno inicia uma sessão para um tópico e recebe um conjunto ordenado de questões publicadas. O conjunto e a ordem ficam fixos quando a sessão começa. Responder às questões pertence à #10; esta issue cobre iniciar, consultar, concluir e abandonar uma sessão.
+O aluno inicia uma sessão para um tópico e recebe um conjunto ordenado de questões publicadas. O conjunto e a ordem ficam fixos quando a sessão começa. Responder às questões está descrito em [submissão de respostas](answer-submission.md); este documento cobre iniciar, consultar, concluir e abandonar uma sessão. A visão da sessão mostra quais questões foram respondidas (`answered`) e a lista mostra `answeredCount`, e nenhum dos dois revela a correção.
 
 ## Iniciando uma sessão
 

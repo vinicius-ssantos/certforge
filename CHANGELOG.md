@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Idempotent answer submission with server-side grading, immutable attempt evidence, and answer disclosure only after an accepted submission (#10).
 - Topic-focused study sessions with an immutable question snapshot, lazy expiration, one session in progress per topic, and learner-safe payloads (#9).
 - Initial authorial Java SE 21 content pack (20 questions, verified code), content importer and content authoring guide. The pack awaits human technical review and is not published (#8).
 - Versioned question bank with immutable revisions, the editorial lifecycle, database-enforced immutability and learner-safe projections (#7).
