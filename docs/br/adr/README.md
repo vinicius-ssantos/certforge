@@ -1,0 +1,17 @@
+# Architecture Decision Records (ADRs)
+
+> Tradução de [`docs/adr/README.md`](../../adr/README.md). O inglês é a fonte canônica.
+
+As ADRs registram decisões que são estruturalmente importantes, custosas de reverter ou necessárias para preservar a integridade do produto.
+
+| ADR | Decisão | Status |
+|---|---|---|
+| [0001](0001-modular-monolith.md) | Começar como um monolito modular | Aceita |
+| [0002](0002-postgresql-source-of-truth.md) | Usar PostgreSQL como fonte da verdade | Aceita |
+| [0003](0003-version-published-questions.md) | Versionar questões publicadas imutáveis | Aceita |
+| [0004](0004-authorial-content-only.md) | Permitir apenas conteúdo autoral de certificação | Aceita |
+| [0005](0005-ai-not-source-of-truth.md) | Não usar IA como fonte de correção | Aceita |
+| [0006](0006-isolate-code-execution.md) | Isolar a futura execução de código | Aceita |
+| [0007](0007-generalize-preparation-catalog.md) | Generalizar a raiz do catálogo sem generalizar o comportamento da v0.1 | Aceita |
+
+Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.
