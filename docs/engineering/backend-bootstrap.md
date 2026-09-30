@@ -12,7 +12,7 @@ The bootstrap favors current stable releases with an LTS Java runtime and delega
 | Spring Boot | 4.1.1 | Stable application platform |
 | Spring Modulith | 2.1.1 | Version selected now; module implementation belongs to #4 |
 | Maven | 3.9.16 recommended | Builds require Maven 3.9.x |
-| PostgreSQL server | 17.11 | Local/Testcontainers compatibility baseline |
+| PostgreSQL server | 18.6 | Local/Testcontainers database image |
 | Flyway | 12.4.0 | Managed by Spring Boot 4.1.1 |
 | PostgreSQL JDBC | 42.7.13 | Managed by Spring Boot 4.1.1 |
 | Testcontainers | 2.0.5 | Managed by Spring Boot 4.1.1 |
@@ -21,7 +21,7 @@ Spring Boot 4.1.1 supports Java versions through Java 26, so Java 25 provides a 
 
 Spring Modulith is dependency-managed but no application module is introduced in #3. Architectural modules and verification are owned by #4.
 
-PostgreSQL 17.11 is intentionally pinned even though PostgreSQL 18 is available. The Spring Boot 4.1.1 managed Flyway 12.4.0 baseline rejected PostgreSQL 18.6 during bootstrap CI. We prefer the framework-managed dependency set over overriding Flyway in the foundation. PostgreSQL 18 can be reconsidered when the managed Flyway line supports it in this stack or through a separately reviewed platform upgrade.
+Flyway 12.x modularizes database support. PostgreSQL therefore requires the Boot-managed `org.flywaydb:flyway-database-postgresql` module in addition to `spring-boot-starter-flyway`. Both remain on Spring Boot 4.1.1's managed Flyway 12.4.0 baseline.
 
 ## Local prerequisites
 
@@ -90,7 +90,7 @@ Only `health` and `info` actuator endpoints are exposed over HTTP.
 
 Flyway owns schema evolution from the first commit. The initial migration creates only the technical `certforge` schema. It deliberately introduces no product/domain table.
 
-Integration tests start PostgreSQL 17.11 using Testcontainers and verify that Flyway successfully records the migration from an empty database.
+Integration tests start PostgreSQL 18.6 using Testcontainers and verify that Flyway successfully records the migration from an empty database.
 
 ## Dependency policy
 
@@ -99,7 +99,8 @@ Integration tests start PostgreSQL 17.11 using Testcontainers and verify that Fl
 - Dependabot checks Maven and GitHub Actions dependencies weekly.
 - Snapshot dependencies are not part of the bootstrap.
 - Version upgrades that change platform compatibility require a documented review.
-- Database-major upgrades must be validated against the Boot-managed migration stack before adoption.
+- Database-specific Flyway modules must remain aligned with the Boot-managed Flyway version.
+- Database-major upgrades must be validated against the managed migration stack before adoption.
 
 ## Deferred from #3
 
