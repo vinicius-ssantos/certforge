@@ -6,6 +6,8 @@ CertForge begins as a modular monolith. The goal is independent domain boundarie
 
 ## Initial modules
 
+The modules are implemented and verified as described in [Module conventions](module-conventions.md). Hyphenated module names map to hyphen-free Java packages (for example `preparation-catalog` is `dev.certforge.preparationcatalog`).
+
 ### `identity`
 
 Authentication, account lifecycle, roles, and permissions. Other modules consume stable identity identifiers and authorization decisions rather than identity persistence details.

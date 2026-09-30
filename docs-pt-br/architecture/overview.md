@@ -8,6 +8,8 @@ O CertForge começa como um monolito modular. O objetivo é ter fronteiras de do
 
 ## Módulos iniciais
 
+Os módulos são implementados e verificados conforme descrito em [Convenções de módulos](module-conventions.md). Nomes de módulo com hífen correspondem a pacotes Java sem hífen (por exemplo, `preparation-catalog` é `dev.certforge.preparationcatalog`).
+
 ### `identity`
 
 Autenticação, ciclo de vida de contas, papéis e permissões. Os demais módulos consomem identificadores de identidade estáveis e decisões de autorização, em vez de detalhes de persistência de identidade.
