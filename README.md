@@ -1,5 +1,7 @@
 # CertForge
 
+**English** | [Português (Brasil)](README.pt-BR.md)
+
 > Adaptive and verifiable preparation for Java certifications and technical interviews.
 
 CertForge is an open-source learning platform for software engineers who want deliberate practice, reviewed technical content, explainable progress, and evidence-based preparation.
