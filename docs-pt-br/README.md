@@ -20,6 +20,7 @@ Os nomes de arquivos e de identificadores de domínio (`PreparationTrack`, `Ques
 - [Modelo de domínio inicial](architecture/domain-model.md)
 - [Convenções de módulos](architecture/module-conventions.md)
 - [Identidade e acesso](architecture/identity-and-access.md)
+- [Catálogo de preparação](architecture/preparation-catalog.md)
 - [Modelo de ameaças inicial](architecture/threat-model.md)
 
 ## Decisões de arquitetura

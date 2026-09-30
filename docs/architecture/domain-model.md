@@ -106,7 +106,7 @@ Events initially support modular decoupling, projections, and auditability. They
 ## Open design questions for implementation
 
 - Whether certification compatibility belongs directly to a question revision or to an explicit track/exam association.
-- Whether `CertificationProfile` and `ExamVersion` are separate aggregates or one lifecycle boundary in `v0.1.0`.
+- Resolved: `CertificationProfile` is a one-to-one record of its track and `ExamVersion` carries its own lifecycle. See [Preparation catalog](preparation-catalog.md).
 - Whether editor and reviewer separation must be enforced for the first private operating model.
 - Whether abandoned sessions expire through a scheduled policy or explicit user action.
 - Whether progress projections are synchronous initially or updated through reliable internal events.

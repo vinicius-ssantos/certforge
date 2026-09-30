@@ -108,7 +108,7 @@ Os eventos inicialmente apoiam o desacoplamento modular, as projeções e a audi
 ## Questões de design em aberto para a implementação
 
 - Se a compatibilidade de certificação pertence diretamente a uma revisão de questão ou a uma associação explícita de trilha/prova.
-- Se `CertificationProfile` e `ExamVersion` são agregados separados ou uma única fronteira de ciclo de vida na `v0.1.0`.
+- Resolvido: `CertificationProfile` é um registro um-para-um da sua trilha e `ExamVersion` tem ciclo de vida próprio. Veja [Catálogo de preparação](preparation-catalog.md).
 - Se a separação entre editor e revisor deve ser imposta no primeiro modelo operacional privado.
 - Se as sessões abandonadas expiram por uma política agendada ou por ação explícita do usuário.
 - Se as projeções de progresso são síncronas inicialmente ou atualizadas por eventos internos confiáveis.

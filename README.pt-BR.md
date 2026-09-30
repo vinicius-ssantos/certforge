@@ -66,6 +66,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 - [Visão geral da arquitetura](docs-pt-br/architecture/overview.md)
 - [Modelo de domínio inicial](docs-pt-br/architecture/domain-model.md)
 - [Identidade e acesso](docs-pt-br/architecture/identity-and-access.md)
+- [Catálogo de preparação](docs-pt-br/architecture/preparation-catalog.md)
 - [Segurança e modelo de ameaças](docs-pt-br/architecture/threat-model.md)
 - [Decisões de arquitetura](docs-pt-br/adr/README.md)
 
