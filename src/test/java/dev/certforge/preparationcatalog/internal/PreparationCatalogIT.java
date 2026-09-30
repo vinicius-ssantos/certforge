@@ -244,6 +244,10 @@ class PreparationCatalogIT {
     assertThat(catalog.findActiveTopic(new TopicId(UUID.fromString(SEEDED_TOPIC_ID)))).isPresent();
     assertThat(catalog.findActiveTopic(new TopicId(UUID.randomUUID()))).isEmpty();
     assertThat(catalog.activeTrack("java-certification")).isPresent();
+    var context = catalog.findActiveTopicContext(new TopicId(UUID.fromString(SEEDED_TOPIC_ID)));
+    assertThat(context).isPresent();
+    assertThat(context.orElseThrow().javaRelease()).isEqualTo(21);
+    assertThat(catalog.findActiveTopicContext(new TopicId(UUID.randomUUID()))).isEmpty();
   }
 
   // ---- lifecycle -----------------------------------------------------------------------------

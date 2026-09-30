@@ -4,6 +4,7 @@ import dev.certforge.preparationcatalog.ExamVersionId;
 import dev.certforge.preparationcatalog.ExamVersionView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
+import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
 import dev.certforge.preparationcatalog.TrackView;
@@ -51,6 +52,19 @@ class CatalogReadService implements PreparationCatalog {
         .flatMap(row -> repository.findTrack(row.trackId()))
         .flatMap(this::toView)
         .flatMap(track -> find(track.topics(), id));
+  }
+
+  @Override
+  public Optional<TopicContext> findActiveTopicContext(TopicId id) {
+    return repository
+        .findActiveTopic(id.value())
+        .flatMap(row -> repository.findTrack(row.trackId()))
+        .flatMap(this::toView)
+        .filter(track -> find(track.topics(), id).isPresent())
+        .map(
+            track ->
+                new TopicContext(
+                    id, track.id(), track.examVersion().id(), track.examVersion().javaRelease()));
   }
 
   private Optional<TrackView> toView(TrackRow track) {

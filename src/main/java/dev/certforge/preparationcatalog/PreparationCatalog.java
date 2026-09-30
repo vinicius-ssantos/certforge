@@ -17,4 +17,7 @@ public interface PreparationCatalog {
 
   /** The topic if it is part of the active exam version of an active track. */
   Optional<TopicView> findActiveTopic(TopicId id);
+
+  /** The certification context of an active topic, or empty if it is not active. */
+  Optional<TopicContext> findActiveTopicContext(TopicId id);
 }
