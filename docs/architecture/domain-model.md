@@ -2,13 +2,20 @@
 
 ## Aggregate and entity candidates
 
-### Certification catalog
+### Preparation catalog
 
-- `CertificationTrack`
+- `PreparationTrack`
+- `Topic`
+- `CertificationProfile`
 - `ExamVersion`
-- `ExamTopic`
 
-A track contains exam versions. An exam version owns its ordered topic taxonomy and lifecycle. Topic identifiers are stable so progress evidence remains interpretable.
+`PreparationTrack` is the stable learner-facing preparation target. A track has a `TrackKind`, initially `CERTIFICATION` and reserved for future `INTERVIEW` use.
+
+The committed `v0.1.0` track is a Java certification track. Its `CertificationProfile` owns provider/exam metadata and its `ExamVersion` owns the objective/version lifecycle required for certification correctness.
+
+Topics belong to a preparation track and have stable identifiers so progress evidence remains interpretable. Certification-specific objective mappings remain explicit metadata rather than being hidden inside generic topic fields.
+
+This generalization is intentionally narrow: it avoids making certification the permanent root abstraction while adding no interview behavior to `v0.1.0`.
 
 ### Question bank
 
@@ -20,12 +27,16 @@ A track contains exam versions. An exam version owns its ordered topic taxonomy 
 
 `Question` is the logical identity. `QuestionRevision` is the immutable publishable artifact. Options, expected answers, explanations, references, declared compatibility, and review evidence belong to the revision.
 
+For `v0.1.0`, supported question types remain single-choice and multiple-choice with deterministic correctness.
+
+Future Interview Prep may introduce guided-response metadata such as expected concepts, reference answers, common mistakes, follow-up prompts, and seniority expectations. Those fields are not part of the first release and must not be simulated through nullable certification fields.
+
 Core invariants:
 
 - a revision belongs to exactly one logical question;
 - a published revision cannot be edited;
 - only an approved revision can be published;
-- a question has at most one active published revision per declared exam-version context unless an explicit variant model is introduced;
+- a question has at most one active published revision per declared track/exam context unless an explicit variant model is introduced;
 - a single-choice revision has exactly one expected option;
 - a multiple-choice revision has at least two options and at least one expected option;
 - every published revision has an explanation and authoritative reference;
@@ -43,10 +54,12 @@ Core invariants:
 
 - an attempt references a question revision present in its session;
 - one accepted submission exists per session question unless an explicit retry mode is introduced;
-- correctness is computed against the referenced immutable revision;
+- objective correctness is computed against the referenced immutable revision;
 - selected options, confidence, elapsed time, and submission timestamp are persisted;
 - correct-answer details are disclosed only after accepted submission;
 - completed sessions reject new attempts.
+
+Future guided interview responses require a distinct evaluation contract. They must not overload objective `correct` semantics.
 
 ### Progress
 
@@ -55,13 +68,17 @@ Core invariants:
 
 Progress is a derived model built from attempts and sessions. It is not the source of truth for historical answers and must be rebuildable.
 
+Future interview progress may include evidence such as expected-concept coverage or recurring weakness categories, but opaque AI readiness scores are not a source of truth.
+
 ## Identity references
 
 Learning aggregates store stable user identifiers rather than embedding identity records. Personal profile data is minimized and separated from attempt evidence.
 
 ## Important value objects
 
-- `CertificationTrackId`
+- `PreparationTrackId`
+- `TrackKind`
+- `CertificationProfileId`
 - `ExamVersionId`
 - `TopicId`
 - `QuestionId`
@@ -88,9 +105,12 @@ Events initially support modular decoupling, projections, and auditability. They
 
 ## Open design questions for implementation
 
-- Whether an exam version may reuse one revision directly or requires an explicit compatibility association.
+- Whether certification compatibility belongs directly to a question revision or to an explicit track/exam association.
+- Whether `CertificationProfile` and `ExamVersion` are separate aggregates or one lifecycle boundary in `v0.1.0`.
 - Whether editor and reviewer separation must be enforced for the first private operating model.
 - Whether abandoned sessions expire through a scheduled policy or explicit user action.
 - Whether progress projections are synchronous initially or updated through reliable internal events.
+
+Interview-only design questions are tracked separately and do not block the first release unless they expose a harmful irreversible coupling.
 
 These questions must be decided before the affected implementation issue is accepted, not abstracted prematurely.
