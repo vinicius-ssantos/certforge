@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class CertForgeApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(CertForgeApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(CertForgeApplication.class, args);
+  }
 }

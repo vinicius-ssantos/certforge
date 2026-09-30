@@ -151,6 +151,9 @@
                 <configuration>
                     <printFailingErrors>true</printFailingErrors>
                     <failOnViolation>true</failOnViolation>
+                    <rulesets>
+                        <ruleset>category/java/errorprone.xml</ruleset>
+                    </rulesets>
                 </configuration>
                 <executions>
                     <execution>

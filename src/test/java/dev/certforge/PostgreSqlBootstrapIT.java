@@ -15,18 +15,18 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 @Testcontainers
 class PostgreSqlBootstrapIT {
 
-    @Container
-    @ServiceConnection
-    static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine");
+  @Container
+  @ServiceConnection
+  static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine");
 
-    @Autowired JdbcTemplate jdbcTemplate;
+  @Autowired JdbcTemplate jdbcTemplate;
 
-    @Test
-    void appliesFlywayMigrationsAgainstDisposablePostgres() {
-        Integer appliedMigrations =
-                jdbcTemplate.queryForObject(
-                        "select count(*) from flyway_schema_history where success = true", Integer.class);
+  @Test
+  void appliesFlywayMigrationsAgainstDisposablePostgres() {
+    Integer appliedMigrations =
+        jdbcTemplate.queryForObject(
+            "select count(*) from flyway_schema_history where success = true", Integer.class);
 
-        assertThat(appliedMigrations).isNotNull().isGreaterThanOrEqualTo(1);
-    }
+    assertThat(appliedMigrations).isNotNull().isGreaterThanOrEqualTo(1);
+  }
 }

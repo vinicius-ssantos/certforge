@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class BootstrapUnitTest {
 
-    @Test
-    void testHarnessIsAvailable() {
-        assertThat("certforge").isNotBlank();
-    }
+  @Test
+  void testHarnessIsAvailable() {
+    assertThat(CertForgeApplication.class).isNotNull();
+  }
 }
