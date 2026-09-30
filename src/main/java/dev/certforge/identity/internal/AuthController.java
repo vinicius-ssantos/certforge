@@ -1,5 +1,6 @@
 package dev.certforge.identity.internal;
 
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -31,6 +32,10 @@ import org.springframework.web.bind.annotation.RestController;
 class AuthController {
 
   private final AccountService accounts;
+  private static final String AUTH_FAILURES = "certforge.auth.failures";
+  private static final String REASON = "reason";
+
+  private final MeterRegistry metrics;
   private final AuthenticationManager authenticationManager;
   private final SecurityContextRepository securityContextRepository;
   private final SessionAuthenticationStrategy sessionStrategy;
@@ -44,7 +49,9 @@ class AuthController {
       SecurityContextRepository securityContextRepository,
       SessionAuthenticationStrategy sessionStrategy,
       IdentityProperties properties,
-      Clock clock) {
+      Clock clock,
+      MeterRegistry metrics) {
+    this.metrics = metrics;
     this.accounts = accounts;
     this.authenticationManager = authenticationManager;
     this.securityContextRepository = securityContextRepository;
@@ -89,6 +96,7 @@ class AuthController {
     } catch (AuthenticationException e) {
       loginLimiter.record(emailKey);
       loginLimiter.record(ipKey);
+      metrics.counter(AUTH_FAILURES, REASON, "invalid_credentials").increment();
       throw new InvalidCredentials();
     }
 
@@ -106,9 +114,10 @@ class AuthController {
     return AccountView.of(accounts.get(UUID.fromString(authentication.getName())));
   }
 
-  private static void failIfBlocked(AttemptLimiter limiter, String key, int limit) {
+  private void failIfBlocked(AttemptLimiter limiter, String key, int limit) {
     Duration retryAfter = limiter.retryAfter(key, limit);
     if (retryAfter.isPositive()) {
+      metrics.counter(AUTH_FAILURES, REASON, "throttled").increment();
       throw new TooManyAttempts(retryAfter);
     }
   }

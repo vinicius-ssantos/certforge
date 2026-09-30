@@ -1,7 +1,7 @@
 package dev.certforge.study.internal;
 
+import dev.certforge.platform.Page;
 import dev.certforge.study.internal.HistoryViews.AttemptHistoryItem;
-import dev.certforge.study.internal.HistoryViews.Page;
 import dev.certforge.study.internal.HistoryViews.SessionHistoryItem;
 import java.util.UUID;
 import org.springframework.http.CacheControl;

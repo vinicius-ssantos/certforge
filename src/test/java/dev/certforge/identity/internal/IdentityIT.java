@@ -225,9 +225,14 @@ class IdentityIT {
 
     assertThat(wrongPassword.getResponse().getStatus()).isEqualTo(401);
     assertThat(unknownAccount.getResponse().getStatus()).isEqualTo(401);
-    assertThat(wrongPassword.getResponse().getContentAsString())
-        .isEqualTo(unknownAccount.getResponse().getContentAsString())
+    // Only the per-request correlation id may differ between the two bodies.
+    assertThat(withoutRequestId(wrongPassword))
+        .isEqualTo(withoutRequestId(unknownAccount))
         .contains("invalid_credentials");
+  }
+
+  private static String withoutRequestId(MvcResult result) throws Exception {
+    return result.getResponse().getContentAsString().replaceAll(",\"requestId\":\"[^\"]*\"", "");
   }
 
   @Test

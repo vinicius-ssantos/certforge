@@ -146,6 +146,16 @@ public final class EditorialFixtures {
         .andExpect(status().isOk());
   }
 
+  /** The account used as author by {@link #publish}. */
+  public Account editorAccount() throws Exception {
+    return editor();
+  }
+
+  /** The account used as reviewer when advancing a revision. */
+  public Account reviewerAccount() throws Exception {
+    return reviewer();
+  }
+
   private Account editor() throws Exception {
     if (editor == null) {
       editor = user("EDITOR");

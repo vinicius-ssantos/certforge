@@ -4,7 +4,7 @@
  */
 @ApplicationModule(
     displayName = "preparation-catalog",
-    allowedDependencies = {"identity"})
+    allowedDependencies = {"platform", "identity"})
 package dev.certforge.preparationcatalog;
 
 import org.springframework.modulith.ApplicationModule;

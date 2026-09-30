@@ -9,6 +9,9 @@ spring:
     enabled: true
   lifecycle:
     timeout-per-shutdown-phase: 20s
+  mvc:
+    problemdetails:
+      enabled: true
   session:
     timeout: 30m
     jdbc:
@@ -37,9 +40,34 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info
+        # health and info are public; everything else requires the OPERATIONS_VIEW permission.
+        include: health,info,metrics
   endpoint:
     health:
       probes:
         enabled: true
+      # Never reveal details publicly. Only component names and their status are shown, and only
+      # for the two probe groups below.
       show-details: never
+      group:
+        # Liveness: is the process itself alive. It never looks at the database, so a database
+        # outage does not make an orchestrator restart healthy instances.
+        liveness:
+          include: livenessState
+          show-components: always
+        # Readiness: can this instance do useful work now (database reachable, schema migrated).
+        readiness:
+          include: readinessState,db,flywayMigrations
+          show-components: always
+
+logging:
+  pattern:
+    # Correlates every log line of a request. Set LOGGING_STRUCTURED_FORMAT_CONSOLE=logstash (or ecs)
+    # for JSON logs; the request id is then a field of each entry.
+    correlation: "[%X{requestId:-}] "
+  logback:
+    rollingpolicy:
+      # Bounded retention. These apply when file logging is enabled with logging.file.name.
+      max-history: 14
+      max-file-size: 50MB
+      total-size-cap: 1GB

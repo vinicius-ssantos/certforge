@@ -11,9 +11,6 @@ import java.util.UUID;
  */
 interface HistoryViews {
 
-  /** One page of results and, when there are more, the cursor of the next page. */
-  record Page<T>(List<T> items, String nextCursor) {}
-
   record SessionHistoryItem(
       UUID id,
       TopicId topicId,

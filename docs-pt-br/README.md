@@ -36,6 +36,7 @@ Os nomes de arquivos e de identificadores de domínio (`PreparationTrack`, `Ques
 - [Definição de pronto](engineering/definition-of-done.md)
 - [Bootstrap do backend](engineering/backend-bootstrap.md)
 - [Criação e importação de conteúdo](engineering/content-authoring.md)
+- [Operações e triagem de incidentes](engineering/operations.md)
 
 ## Roadmap
 

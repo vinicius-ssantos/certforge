@@ -13,6 +13,9 @@ import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ReferenceView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ReviewView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.RevisionView;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.List;
@@ -33,6 +36,8 @@ class QuestionBankService {
   static final String ACTION_PUBLISHED = "QUESTION_REVISION_PUBLISHED";
   static final String ACTION_REPLACED = "QUESTION_REVISION_REPLACED";
   static final String ACTION_DEPRECATED = "QUESTION_REVISION_DEPRECATED";
+  private static final String TRANSITIONS = "certforge.editorial.transitions";
+  private static final String ACTION = "action";
 
   private final QuestionRepository repository;
   private final PreparationCatalog catalog;
@@ -40,6 +45,8 @@ class QuestionBankService {
   private final Clock clock;
   private final ApplicationEventPublisher events;
   private final QuestionBankProperties properties;
+  private final MeterRegistry metrics;
+  private final ObservationRegistry observations;
 
   QuestionBankService(
       QuestionRepository repository,
@@ -47,13 +54,17 @@ class QuestionBankService {
       CurrentActor currentActor,
       Clock clock,
       ApplicationEventPublisher events,
-      QuestionBankProperties properties) {
+      QuestionBankProperties properties,
+      MeterRegistry metrics,
+      ObservationRegistry observations) {
     this.repository = repository;
     this.catalog = catalog;
     this.currentActor = currentActor;
     this.clock = clock;
     this.events = events;
     this.properties = properties;
+    this.metrics = metrics;
+    this.observations = observations;
   }
 
   // ---- reads ---------------------------------------------------------------------------------
@@ -84,7 +95,7 @@ class QuestionBankService {
     UUID questionId = UUID.randomUUID();
     repository.insertQuestion(questionId, actor.value());
     repository.insertRevision(UUID.randomUUID(), questionId, 1, actor.value(), content);
-    return get(questionId);
+    return transitioned("created", questionId);
   }
 
   /** Starts a correction: a new DRAFT revision copied from the latest revision. */
@@ -101,7 +112,7 @@ class QuestionBankService {
     int latest = repository.latestRevisionNumber(questionId);
     RevisionContent base = repository.findRevisions(questionId).get(latest - 1).content();
     repository.insertRevision(UUID.randomUUID(), questionId, latest + 1, actor.value(), base);
-    return get(questionId);
+    return transitioned("revision_started", questionId);
   }
 
   @Transactional
@@ -121,7 +132,7 @@ class QuestionBankService {
     requireStatus(revision, RevisionStatus.DRAFT, "revision_not_draft");
     requireComplete(revision);
     repository.markSubmitted(revisionId, clock.instant());
-    return get(revision.questionId());
+    return transitioned("submitted", revision.questionId());
   }
 
   // ---- review --------------------------------------------------------------------------------
@@ -136,7 +147,7 @@ class QuestionBankService {
     repository.insertReview(revisionId, actor.value(), "APPROVED", comment, now);
     repository.setStatus(revisionId, RevisionStatus.APPROVED);
     audit(actor, ACTION_APPROVED, revisionId, now);
-    return get(revision.questionId());
+    return transitioned("approved", revision.questionId());
   }
 
   @Transactional
@@ -148,7 +159,7 @@ class QuestionBankService {
     repository.insertReview(
         revisionId, actor.value(), "CHANGES_REQUESTED", comment, clock.instant());
     repository.setStatus(revisionId, RevisionStatus.DRAFT);
-    return get(revision.questionId());
+    return transitioned("changes_requested", revision.questionId());
   }
 
   // ---- publication ---------------------------------------------------------------------------
@@ -159,6 +170,11 @@ class QuestionBankService {
    */
   @Transactional
   QuestionView publish(UUID revisionId) {
+    return Observation.createNotStarted("certforge.editorial.publish", observations)
+        .observe(() -> doPublish(revisionId));
+  }
+
+  private QuestionView doPublish(UUID revisionId) {
     ActorId actor = currentActor.require();
     Revision revision = revision(revisionId);
     requireStatus(revision, RevisionStatus.APPROVED, "revision_not_approved");
@@ -181,10 +197,11 @@ class QuestionBankService {
             previous -> {
               repository.markDeprecated(previous.id(), now);
               audit(actor, ACTION_REPLACED, previous.id(), now);
+              metrics.counter(TRANSITIONS, ACTION, "replaced").increment();
             });
     repository.markPublished(revisionId, context.examVersionId().value(), actor.value(), now);
     audit(actor, ACTION_PUBLISHED, revisionId, now);
-    return get(revision.questionId());
+    return transitioned("published", revision.questionId());
   }
 
   @Transactional
@@ -195,10 +212,16 @@ class QuestionBankService {
     Instant now = clock.instant();
     repository.markDeprecated(revisionId, now);
     audit(actor, ACTION_DEPRECATED, revisionId, now);
-    return get(revision.questionId());
+    return transitioned("deprecated", revision.questionId());
   }
 
   // ---- internals -----------------------------------------------------------------------------
+
+  /** Counts an accepted transition and returns the updated editorial view. */
+  private QuestionView transitioned(String action, UUID questionId) {
+    metrics.counter(TRANSITIONS, ACTION, action).increment();
+    return get(questionId);
+  }
 
   private Revision revision(UUID id) {
     return repository

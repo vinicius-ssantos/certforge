@@ -1,10 +1,13 @@
 package dev.certforge.identity.internal;
 
-class EmailAlreadyRegistered extends RuntimeException {
+import dev.certforge.platform.ProblemException;
+import org.springframework.http.HttpStatus;
+
+class EmailAlreadyRegistered extends ProblemException {
 
   private static final long serialVersionUID = 1L;
 
   EmailAlreadyRegistered() {
-    super("Email already registered");
+    super(HttpStatus.CONFLICT, "email_already_registered", "Email already registered");
   }
 }

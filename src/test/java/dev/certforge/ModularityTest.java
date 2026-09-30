@@ -14,7 +14,14 @@ import org.springframework.modulith.core.ApplicationModules;
 class ModularityTest {
 
   private static final Set<String> EXPECTED_MODULES =
-      Set.of("identity", "preparationcatalog", "questionbank", "study", "progress", "audit");
+      Set.of(
+          "platform",
+          "identity",
+          "preparationcatalog",
+          "questionbank",
+          "study",
+          "progress",
+          "audit");
 
   private final ApplicationModules modules = ApplicationModules.of(CertForgeApplication.class);
 

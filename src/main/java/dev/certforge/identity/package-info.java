@@ -4,7 +4,7 @@
  */
 @ApplicationModule(
     displayName = "identity",
-    allowedDependencies = {})
+    allowedDependencies = {"platform"})
 package dev.certforge.identity;
 
 import org.springframework.modulith.ApplicationModule;

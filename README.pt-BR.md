@@ -72,6 +72,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 - [Submissão de respostas](docs-pt-br/architecture/answer-submission.md)
 - [Histórico e progresso](docs-pt-br/architecture/history-and-progress.md)
 - [Criação e importação de conteúdo](docs-pt-br/engineering/content-authoring.md)
+- [Operações e triagem de incidentes](docs-pt-br/engineering/operations.md)
 - [Segurança e modelo de ameaças](docs-pt-br/architecture/threat-model.md)
 - [Decisões de arquitetura](docs-pt-br/adr/README.md)
 
