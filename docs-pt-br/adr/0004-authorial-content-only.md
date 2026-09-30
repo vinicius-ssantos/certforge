@@ -1,6 +1,6 @@
 # ADR 0004: Permitir apenas conteúdo autoral de certificação
 
-> Tradução de [`docs/adr/0004-authorial-content-only.md`](../../adr/0004-authorial-content-only.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0004-authorial-content-only.md`](../../docs/adr/0004-authorial-content-only.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30

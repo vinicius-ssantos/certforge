@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADRs)
 
-> Tradução de [`docs/adr/README.md`](../../adr/README.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/README.md`](../../docs/adr/README.md). O inglês é a fonte canônica.
 
 As ADRs registram decisões que são estruturalmente importantes, custosas de reverter ou necessárias para preservar a integridade do produto.
 

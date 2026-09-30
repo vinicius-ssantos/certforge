@@ -1,6 +1,6 @@
 # Modelo de Domínio Inicial
 
-> Tradução de [`docs/architecture/domain-model.md`](../../architecture/domain-model.md). O inglês é a fonte canônica. Os nomes de agregados, entidades, value objects e eventos permanecem em inglês.
+> Tradução de [`docs/architecture/domain-model.md`](../../docs/architecture/domain-model.md). O inglês é a fonte canônica. Os nomes de agregados, entidades, value objects e eventos permanecem em inglês.
 
 ## Candidatos a agregados e entidades
 

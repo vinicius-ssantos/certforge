@@ -1,6 +1,6 @@
 # Escopo e Não-objetivos
 
-> Tradução de [`docs/product/scope-and-non-goals.md`](../../product/scope-and-non-goals.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/scope-and-non-goals.md`](../../docs/product/scope-and-non-goals.md). O inglês é a fonte canônica.
 
 ## Escopo comprometido: `v0.1.0` Study Core
 

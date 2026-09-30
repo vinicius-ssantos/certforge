@@ -1,6 +1,6 @@
 # Visão Geral da Arquitetura
 
-> Tradução de [`docs/architecture/overview.md`](../../architecture/overview.md). O inglês é a fonte canônica.
+> Tradução de [`docs/architecture/overview.md`](../../docs/architecture/overview.md). O inglês é a fonte canônica.
 
 ## Estilo
 

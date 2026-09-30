@@ -1,6 +1,6 @@
 # Modelo de Ameaças Inicial
 
-> Tradução de [`docs/architecture/threat-model.md`](../../architecture/threat-model.md). O inglês é a fonte canônica.
+> Tradução de [`docs/architecture/threat-model.md`](../../docs/architecture/threat-model.md). O inglês é a fonte canônica.
 
 ## Escopo
 

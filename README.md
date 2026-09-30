@@ -53,7 +53,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 
 ## Documentation
 
-- Also available in [Brazilian Portuguese](docs/br/README.md)
+- Also available in [Brazilian Portuguese](docs-pt-br/README.md)
 - [Product vision](docs/product/vision.md)
 - [Scope and non-goals](docs/product/scope-and-non-goals.md)
 - [Content policy](docs/product/content-policy.md)

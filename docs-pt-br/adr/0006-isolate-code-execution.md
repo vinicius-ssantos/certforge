@@ -1,6 +1,6 @@
 # ADR 0006: Isolar a futura execução de código
 
-> Tradução de [`docs/adr/0006-isolate-code-execution.md`](../../adr/0006-isolate-code-execution.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0006-isolate-code-execution.md`](../../docs/adr/0006-isolate-code-execution.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30

@@ -1,6 +1,6 @@
 # ADR 0001: Começar como um monolito modular
 
-> Tradução de [`docs/adr/0001-modular-monolith.md`](../../adr/0001-modular-monolith.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0001-modular-monolith.md`](../../docs/adr/0001-modular-monolith.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30
