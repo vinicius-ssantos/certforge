@@ -1,6 +1,6 @@
 # Definição de Pronto
 
-> Tradução de [`docs/engineering/definition-of-done.md`](../../engineering/definition-of-done.md). O inglês é a fonte canônica.
+> Tradução de [`docs/engineering/definition-of-done.md`](../../docs/engineering/definition-of-done.md). O inglês é a fonte canônica.
 
 Uma mudança no CertForge só está pronta quando todos os critérios aplicáveis são atendidos.
 

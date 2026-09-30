@@ -1,6 +1,6 @@
 # Métricas de Sucesso
 
-> Tradução de [`docs/product/success-metrics.md`](../../product/success-metrics.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/success-metrics.md`](../../docs/product/success-metrics.md). O inglês é a fonte canônica.
 
 ## Resultado do produto
 

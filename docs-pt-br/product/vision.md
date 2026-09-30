@@ -1,6 +1,6 @@
 # Visão do Produto
 
-> Tradução de [`docs/product/vision.md`](../../product/vision.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/vision.md`](../../docs/product/vision.md). O inglês é a fonte canônica.
 
 ## Declaração de visão
 

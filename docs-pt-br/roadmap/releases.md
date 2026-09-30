@@ -1,6 +1,6 @@
 # Roadmap de Releases
 
-> Tradução de [`docs/roadmap/releases.md`](../../roadmap/releases.md). O inglês é a fonte canônica.
+> Tradução de [`docs/roadmap/releases.md`](../../docs/roadmap/releases.md). O inglês é a fonte canônica.
 
 ## Política de releases
 

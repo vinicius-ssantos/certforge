@@ -1,6 +1,6 @@
 # ADR 0003: Versionar questões publicadas imutáveis
 
-> Tradução de [`docs/adr/0003-version-published-questions.md`](../../adr/0003-version-published-questions.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0003-version-published-questions.md`](../../docs/adr/0003-version-published-questions.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30

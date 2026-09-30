@@ -1,6 +1,6 @@
 # Personas
 
-> Tradução de [`docs/product/personas.md`](../../product/personas.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/personas.md`](../../docs/product/personas.md). O inglês é a fonte canônica.
 
 ## Persona primária: desenvolvedor Java em atividade
 

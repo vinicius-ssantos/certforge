@@ -1,6 +1,6 @@
 # Direção do Interview Prep
 
-> Tradução de [`docs/product/interview-prep.md`](../../product/interview-prep.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/interview-prep.md`](../../docs/product/interview-prep.md). O inglês é a fonte canônica.
 
 ## Status
 

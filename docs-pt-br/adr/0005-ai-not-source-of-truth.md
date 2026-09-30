@@ -1,6 +1,6 @@
 # ADR 0005: Não usar IA como fonte de correção
 
-> Tradução de [`docs/adr/0005-ai-not-source-of-truth.md`](../../adr/0005-ai-not-source-of-truth.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0005-ai-not-source-of-truth.md`](../../docs/adr/0005-ai-not-source-of-truth.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30

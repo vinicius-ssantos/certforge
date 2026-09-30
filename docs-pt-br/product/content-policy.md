@@ -1,6 +1,6 @@
 # Política de Conteúdo de Certificação
 
-> Tradução de [`docs/product/content-policy.md`](../../product/content-policy.md). O inglês é a fonte canônica.
+> Tradução de [`docs/product/content-policy.md`](../../docs/product/content-policy.md). O inglês é a fonte canônica.
 
 ## Propósito
 

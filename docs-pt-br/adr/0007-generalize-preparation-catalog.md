@@ -1,6 +1,6 @@
 # ADR 0007: Generalizar o catálogo de preparação sem generalizar o comportamento da v0.1
 
-> Tradução de [`docs/adr/0007-generalize-preparation-catalog.md`](../../adr/0007-generalize-preparation-catalog.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0007-generalize-preparation-catalog.md`](../../docs/adr/0007-generalize-preparation-catalog.md). O inglês é a fonte canônica.
 
 ## Status
 

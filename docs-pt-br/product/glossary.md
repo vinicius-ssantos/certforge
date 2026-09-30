@@ -1,6 +1,6 @@
 # Glossário de Domínio
 
-> Tradução de [`docs/product/glossary.md`](../../product/glossary.md). O inglês é a fonte canônica. Os termos em negrito são a tradução; os nomes em inglês usados no código e na documentação original aparecem entre parênteses.
+> Tradução de [`docs/product/glossary.md`](../../docs/product/glossary.md). O inglês é a fonte canônica. Os termos em negrito são a tradução; os nomes em inglês usados no código e na documentação original aparecem entre parênteses.
 
 - **Trilha de certificação (Certification track):** Uma família de conteúdo de preparação, como a certificação Java profissional.
 - **Versão da prova (Exam version):** Um conjunto específico de objetivos de prova e um alvo de preparação versionado.

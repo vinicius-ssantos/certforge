@@ -1,6 +1,6 @@
 # Documentação em Português (Brasil)
 
-> Tradução da documentação em [`docs/`](../). O inglês é a fonte canônica: em caso de divergência, vale a versão em inglês. Baseada no commit `71ccf99`.
+> Tradução da documentação em [`docs/`](../docs/product/vision.md). O inglês é a fonte canônica: em caso de divergência, vale a versão em inglês. Baseada no commit `71ccf99`.
 
 Os nomes de arquivos e de identificadores de domínio (`PreparationTrack`, `QuestionRevision` etc.), bem como nomes de estados e enums (`DRAFT`, `CERTIFICATION` etc.), são mantidos em inglês para preservar a rastreabilidade com o código e com o glossário original.
 

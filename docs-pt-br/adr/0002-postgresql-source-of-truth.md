@@ -1,6 +1,6 @@
 # ADR 0002: Usar PostgreSQL como fonte da verdade
 
-> Tradução de [`docs/adr/0002-postgresql-source-of-truth.md`](../../adr/0002-postgresql-source-of-truth.md). O inglês é a fonte canônica.
+> Tradução de [`docs/adr/0002-postgresql-source-of-truth.md`](../../docs/adr/0002-postgresql-source-of-truth.md). O inglês é a fonte canônica.
 
 - Status: Aceita
 - Data: 2026-07-30
