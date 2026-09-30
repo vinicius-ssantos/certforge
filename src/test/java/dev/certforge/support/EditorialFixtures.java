@@ -72,11 +72,26 @@ public final class EditorialFixtures {
     return new Account(id, email, login(email));
   }
 
-  /** Creates a complete question and takes it through review to PUBLISHED. */
+  /** Creates a complete single-choice question (option A is correct) and publishes it. */
   public Published publish(String topicId, String prompt) throws Exception {
+    return publishBody(questionBody(topicId, prompt, "A"));
+  }
+
+  /** A single-choice question whose correct option is the given key, A or B. */
+  public Published publishWithCorrect(String topicId, String prompt, String correctKey)
+      throws Exception {
+    return publishBody(questionBody(topicId, prompt, correctKey));
+  }
+
+  /** A multiple-choice question whose correct options are A and C, out of A, B and C. */
+  public Published publishMultiple(String topicId, String prompt) throws Exception {
+    return publishBody(multipleBody(topicId, prompt));
+  }
+
+  private Published publishBody(String body) throws Exception {
     Account author = editor();
     MvcResult created =
-        send(post("/api/admin/questions"), author.session(), questionBody(topicId, prompt))
+        send(post("/api/admin/questions"), author.session(), body)
             .andExpect(status().isCreated())
             .andReturn();
     String content = created.getResponse().getContentAsString();
@@ -88,6 +103,12 @@ public final class EditorialFixtures {
 
   /** Publishes a corrected revision of an already published question and returns its id. */
   public String replace(String questionId, String newPrompt, String topicId) throws Exception {
+    return replaceWithCorrect(questionId, newPrompt, topicId, "A");
+  }
+
+  /** Like {@link #replace} but the corrected revision has a different correct option. */
+  public String replaceWithCorrect(
+      String questionId, String newPrompt, String topicId, String correctKey) throws Exception {
     Account author = editor();
     MvcResult created =
         send(post("/api/admin/questions/" + questionId + "/revisions"), author.session(), null)
@@ -99,7 +120,7 @@ public final class EditorialFixtures {
     send(
             put("/api/admin/question-revisions/" + revisionId),
             author.session(),
-            questionBody(topicId, newPrompt))
+            questionBody(topicId, newPrompt, correctKey))
         .andExpect(status().isOk());
     advance(revisionId);
     return revisionId;
@@ -175,16 +196,36 @@ public final class EditorialFixtures {
     };
   }
 
-  private static String questionBody(String topicId, String prompt) {
+  private static String multipleBody(String topicId, String prompt) {
+    return "{\"type\":\"MULTIPLE_CHOICE\",\"topicId\":\""
+        + topicId
+        + "\",\"javaRelease\":21,\"difficulty\":\"HARD\","
+        + "\"difficultyRationale\":\"Fixture rationale\",\"prompt\":\""
+        + prompt
+        + "\",\"explanation\":\"Secret overall explanation\","
+        + "\"options\":[{\"key\":\"A\",\"text\":\"First\",\"correct\":true,"
+        + "\"explanation\":\"Secret why A\"},{\"key\":\"B\",\"text\":\"Second\","
+        + "\"correct\":false,\"explanation\":\"Secret why B\"},{\"key\":\"C\","
+        + "\"text\":\"Third\",\"correct\":true,\"explanation\":\"Secret why C\"}],"
+        + "\"references\":[{\"title\":\"JLS\","
+        + "\"url\":\"https://docs.oracle.com/javase/specs/jls/se21/html/index.html\"}]}";
+  }
+
+  private static String questionBody(String topicId, String prompt, String correctKey) {
+    boolean aCorrect = "A".equals(correctKey);
     return "{\"type\":\"SINGLE_CHOICE\",\"topicId\":\""
         + topicId
         + "\",\"javaRelease\":21,\"difficulty\":\"MEDIUM\","
         + "\"difficultyRationale\":\"Fixture rationale\",\"prompt\":\""
         + prompt
         + "\",\"explanation\":\"Secret overall explanation\","
-        + "\"options\":[{\"key\":\"A\",\"text\":\"First\",\"correct\":true,"
+        + "\"options\":[{\"key\":\"A\",\"text\":\"First\",\"correct\":"
+        + aCorrect
+        + ","
         + "\"explanation\":\"Secret why A\"},{\"key\":\"B\",\"text\":\"Second\","
-        + "\"correct\":false,\"explanation\":\"Secret why B\"}],"
+        + "\"correct\":"
+        + !aCorrect
+        + ",\"explanation\":\"Secret why B\"}],"
         + "\"references\":[{\"title\":\"JLS\","
         + "\"url\":\"https://docs.oracle.com/javase/specs/jls/se21/html/index.html\"}]}";
   }

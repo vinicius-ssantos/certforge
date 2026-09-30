@@ -13,6 +13,7 @@ import dev.certforge.study.internal.SessionViews.SessionSummary;
 import dev.certforge.study.internal.SessionViews.SessionView;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 class StudyService {
 
   private final StudyRepository repository;
+  private final AttemptRepository attempts;
   private final PreparationCatalog catalog;
   private final QuestionBank questionBank;
   private final QuestionSelector selector;
@@ -45,6 +47,7 @@ class StudyService {
 
   StudyService(
       StudyRepository repository,
+      AttemptRepository attempts,
       PreparationCatalog catalog,
       QuestionBank questionBank,
       QuestionSelector selector,
@@ -53,6 +56,7 @@ class StudyService {
       StudyProperties properties,
       PlatformTransactionManager transactionManager) {
     this.repository = repository;
+    this.attempts = attempts;
     this.catalog = catalog;
     this.questionBank = questionBank;
     this.selector = selector;
@@ -84,7 +88,8 @@ class StudyService {
           "question_count_out_of_range",
           "The number of questions must be between 1 and " + properties.maxQuestionCount());
     }
-    Instant now = clock.instant();
+    // PostgreSQL stores microseconds: truncating keeps the response equal to what is read later.
+    Instant now = clock.instant().truncatedTo(ChronoUnit.MICROS);
     repository.expireDue(learner.value(), now);
 
     TopicContext context =
@@ -126,7 +131,7 @@ class StudyService {
           .map(StudyService::activeSessionExists)
           .orElse(StudyException.conflict("active_session_exists", "A session is in progress"));
     }
-    return view(session, selected);
+    return view(session, selected, List.of());
   }
 
   private static StudyException activeSessionExists(StudySession existing) {
@@ -140,7 +145,7 @@ class StudyService {
 
   SessionView get(UUID sessionId) {
     StudySession session = owned(sessionId);
-    return view(session, snapshot(session));
+    return view(session, snapshot(session), attempts.answeredPositions(sessionId));
   }
 
   List<SessionSummary> list(SessionStatus status) {
@@ -154,6 +159,7 @@ class StudyService {
                     new TopicId(session.topicId()),
                     session.status().name(),
                     repository.questionCount(session.id()),
+                    attempts.answeredPositions(session.id()).size(),
                     session.createdAt(),
                     session.expiresAt(),
                     session.closedAt()))
@@ -181,13 +187,13 @@ class StudyService {
           "session_not_in_progress", "The session is no longer in progress");
     }
     StudySession closed = repository.find(sessionId).orElseThrow();
-    return view(closed, snapshot(closed));
+    return view(closed, snapshot(closed), attempts.answeredPositions(sessionId));
   }
 
   // ---- internals -----------------------------------------------------------------------------
 
   /** The session if it belongs to the current learner, expiring it first when its time is up. */
-  private StudySession owned(UUID sessionId) {
+  StudySession owned(UUID sessionId) {
     ActorId learner = currentActor.require();
     StudySession session =
         repository
@@ -217,10 +223,12 @@ class StudyService {
     return questions;
   }
 
-  private static SessionView view(StudySession session, List<PublishedQuestion> questions) {
+  private static SessionView view(
+      StudySession session, List<PublishedQuestion> questions, List<Integer> answered) {
     List<SessionQuestionView> views = new ArrayList<>();
     for (int position = 0; position < questions.size(); position++) {
-      views.add(new SessionQuestionView(position, questions.get(position)));
+      views.add(
+          new SessionQuestionView(position, questions.get(position), answered.contains(position)));
     }
     return new SessionView(
         session.id(),

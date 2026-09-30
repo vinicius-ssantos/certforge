@@ -22,13 +22,14 @@ interface SessionViews {
       Instant closedAt,
       List<SessionQuestionView> questions) {}
 
-  record SessionQuestionView(int position, PublishedQuestion question) {}
+  record SessionQuestionView(int position, PublishedQuestion question, boolean answered) {}
 
   record SessionSummary(
       UUID id,
       TopicId topicId,
       String status,
       int questionCount,
+      int answeredCount,
       Instant createdAt,
       Instant expiresAt,
       Instant closedAt) {}

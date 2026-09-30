@@ -4,7 +4,7 @@ Issue: #9 — Implement topic-focused study sessions and question selection. Dep
 
 ## What a session is
 
-A learner starts a session for one topic and receives an ordered set of published questions. The set and its order are fixed when the session starts. Answering questions belongs to #10; this issue covers starting, inspecting, completing and abandoning a session.
+A learner starts a session for one topic and receives an ordered set of published questions. The set and its order are fixed when the session starts. Answering questions is described in [answer submission](answer-submission.md); this document covers starting, inspecting, completing and abandoning a session. The session view shows which questions are `answered` and the session list shows `answeredCount`, neither of which reveals correctness.
 
 ## Starting a session
 
