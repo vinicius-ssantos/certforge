@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing the four module directives that mention another module or package, each of which solves a different problem.",
+  "prompt": "Module `app` declares `requires lib;`. The public methods of module `lib` use types from module `util` in their signatures, and `app` calls those methods. `app` does not declare any dependency on `util`. Which directive in the `module-info.java` of `lib` lets `app` read `util` implicitly so that this compiles?",
+  "explanation": "requires transitive makes the required module readable by every module that requires the declaring module. It is the directive to use when the API of a module exposes types from its dependency, so clients do not have to repeat the dependency themselves.",
+  "options": [
+    {"key": "A", "text": "`requires transitive util;`", "correct": true, "explanation": "Implied readability: any module that reads lib also reads util, which is exactly what app needs."},
+    {"key": "B", "text": "`exports util to app;`", "correct": false, "explanation": "exports makes a package of the declaring module available to other modules. It does not grant readability of another module, and util is a module, not a package of lib."},
+    {"key": "C", "text": "`requires static util;`", "correct": false, "explanation": "static makes the dependency mandatory at compile time but optional at run time. It does not make util readable to modules that require lib."},
+    {"key": "D", "text": "`uses util;`", "correct": false, "explanation": "uses declares that the module consumes a service type through ServiceLoader. It names a service interface, not a module, and grants no readability."}
+  ],
+  "references": [
+    {"title": "JLS 7.7.1 Dependences", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.1"}
+  ]
+}

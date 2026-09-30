@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the basic accessors of Locale and the difference between its toString form and the IETF language tag form.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Locale.forLanguageTag parses an IETF BCP 47 tag. The language code is stored in lower case (pt) and the country in upper case (BR). Locale.toString uses an underscore between them, pt_BR, whereas toLanguageTag would give pt-BR.",
+  "options": [
+    {"key": "A", "text": "pt BR pt_BR", "correct": true, "explanation": "getLanguage returns pt, getCountry returns BR, and toString joins them with an underscore."},
+    {"key": "B", "text": "pt BR pt-BR", "correct": false, "explanation": "The hyphenated form is the language tag returned by toLanguageTag. toString uses an underscore."},
+    {"key": "C", "text": "Portuguese Brazil pt_BR", "correct": false, "explanation": "getLanguage and getCountry return codes, not display names. Display names come from getDisplayLanguage and getDisplayCountry."},
+    {"key": "D", "text": "pt br pt_br", "correct": false, "explanation": "Locale normalises the country code to upper case, so it is BR, not br."}
+  ],
+  "references": [
+    {"title": "Locale.forLanguageTag(String), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html#forLanguageTag(java.lang.String)"},
+    {"title": "Locale.toString(), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html#toString()"}
+  ]
+}

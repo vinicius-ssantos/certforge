@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The naive expectation is an overflow into the next month or an exception; the candidate must know that java.time clamps to the last valid day.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "LocalDate.plusMonths adds the months and, if the resulting day-of-month does not exist in the target month, uses the last valid day of that month. February 2024 has 29 days because 2024 is a leap year, so 31 January plus one month is 29 February.",
+  "options": [
+    {"key": "A", "text": "2024-02-29", "correct": true, "explanation": "The day-of-month 31 is invalid in February, so the last valid day is used. 2024 is a leap year, which makes it the 29th."},
+    {"key": "B", "text": "2024-03-02", "correct": false, "explanation": "This is what overflowing by days would give, but java.time never rolls over into the next month when adding months."},
+    {"key": "C", "text": "2024-02-28", "correct": false, "explanation": "This would be correct in a non-leap year. 2024 is a leap year, so February has 29 days."},
+    {"key": "D", "text": "It throws a DateTimeException.", "correct": false, "explanation": "An invalid day-of-month after plusMonths is adjusted, not rejected. Exceptions come from invalid inputs to factory methods such as LocalDate.of."}
+  ],
+  "references": [
+    {"title": "LocalDate.plusMonths(long), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/LocalDate.html#plusMonths(long)"}
+  ]
+}

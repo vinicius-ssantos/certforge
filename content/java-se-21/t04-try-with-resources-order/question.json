@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires remembering that resources are closed in the reverse order of their declaration, which is easy to confuse with the opening order.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Resources in a try-with-resources header are initialized from left to right, then the body runs, then the resources are closed in the opposite order. Resource b was opened last, so it is closed first.",
+  "options": [
+    {"key": "A", "text": "open-a open-b body close-b close-a", "correct": true, "explanation": "Initialization follows declaration order and closing is the reverse, so b is closed before a."},
+    {"key": "B", "text": "open-a open-b body close-a close-b", "correct": false, "explanation": "Closing in declaration order would leave b open while a is already closed. The language closes in reverse order to respect dependencies between resources."},
+    {"key": "C", "text": "open-b open-a body close-a close-b", "correct": false, "explanation": "Resources are not reordered. They are initialized in the order in which they are declared."},
+    {"key": "D", "text": "open-a open-b close-b close-a body", "correct": false, "explanation": "Resources are closed after the body finishes, not before it."}
+  ],
+  "references": [
+    {"title": "JLS 14.20.3.1 Basic try-with-resources", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3.1"}
+  ]
+}

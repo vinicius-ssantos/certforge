@@ -1,0 +1,19 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "The output depends on elements flowing through the pipeline one at a time and on a short-circuiting terminal operation stopping the traversal, which contradicts the loop-by-loop intuition.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Intermediate operations are lazy and elements are pulled through the whole pipeline one at a time. Element 1 is rejected by the filter, element 2 passes the filter and is mapped, and findFirst, being short-circuiting, stops the traversal as soon as it has a result, so elements 3 and 4 are never examined.",
+  "options": [
+    {"key": "A", "text": "f1 f2 m2", "correct": true, "explanation": "f1 fails the filter, f2 passes and reaches map (m2), then findFirst has its result and traversal stops."},
+    {"key": "B", "text": "f1 f2 f3 f4 m2 m4", "correct": false, "explanation": "This describes each stage processing all elements before the next one starts. Streams process element by element through the pipeline and findFirst short-circuits."},
+    {"key": "C", "text": "f1 f2 f3 f4 m2", "correct": false, "explanation": "The filter is not run ahead of the rest of the pipeline. After m2 the terminal operation is satisfied and f3 and f4 are never evaluated."},
+    {"key": "D", "text": "f1 m1 f2 m2", "correct": false, "explanation": "The map operation only receives elements that pass the filter, so m1 is never printed."}
+  ],
+  "references": [
+    {"title": "java.util.stream package: stream operations and pipelines", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"},
+    {"title": "Stream.findFirst(), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#findFirst()"}
+  ]
+}

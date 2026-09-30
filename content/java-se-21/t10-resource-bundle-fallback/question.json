@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "The lookup order tries the default locale before falling back to the base bundle, which contradicts the common assumption that an unmatched locale goes straight to the base bundle.",
+  "prompt": "A class path contains three bundles for the base name `Msg`: the base bundle `Msg`, `Msg_en_US` and `Msg_de`. Each defines the key `who`, whose value is `base`, `en_US` and `de` respectively. What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "ResourceBundle.getBundle first looks for candidate bundles for the requested locale (fr_FR, then fr) and none exists. Only then does it try the candidates for the default locale, which is en_US here, and Msg_en_US is found. The base bundle is used only if neither the requested locale nor the default locale produces a bundle.",
+  "options": [
+    {"key": "A", "text": "en_US", "correct": true, "explanation": "No French bundle exists, so the lookup falls back to the default locale before the base bundle, and Msg_en_US matches."},
+    {"key": "B", "text": "base", "correct": false, "explanation": "The base bundle is the last resort. A bundle for the default locale is preferred when the requested locale has none."},
+    {"key": "C", "text": "de", "correct": false, "explanation": "Msg_de is for German. Nothing relates the French locale to it."},
+    {"key": "D", "text": "It throws a MissingResourceException.", "correct": false, "explanation": "A bundle is found (Msg_en_US), and it contains the key who, so no exception is thrown."}
+  ],
+  "references": [
+    {"title": "ResourceBundle.getBundle(String, Locale), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ResourceBundle.html#getBundle(java.lang.String,java.util.Locale)"}
+  ]
+}

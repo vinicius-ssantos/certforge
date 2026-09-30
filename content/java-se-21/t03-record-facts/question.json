@@ -1,0 +1,19 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Each statement targets a distinct rule about what a record may and may not declare, so guessing from general class knowledge leads to mistakes.",
+  "prompt": "Consider the declaration `record Point(int x, int y) { }`. Which statements are true? Select all that apply.",
+  "explanation": "A record is a restricted kind of class. It is implicitly final, implicitly extends java.lang.Record (so it cannot extend another class), and it may implement interfaces. For each component the compiler declares a private final field, and a record cannot declare further instance fields outside its header.",
+  "options": [
+    {"key": "A", "text": "The record class is implicitly final.", "correct": true, "explanation": "JLS 8.10 states that a record class is implicitly final, so it cannot be extended."},
+    {"key": "B", "text": "The record can explicitly extend another class, for example `extends Shape`.", "correct": false, "explanation": "A record implicitly extends java.lang.Record and its declaration has no extends clause."},
+    {"key": "C", "text": "The record can implement interfaces such as `Comparable<Point>`.", "correct": true, "explanation": "A record may have an implements clause; it only cannot have an extends clause."},
+    {"key": "D", "text": "The record can declare extra instance fields in its body, such as `int z;`.", "correct": false, "explanation": "Instance fields other than those implied by the components are not allowed in a record body. Static fields are allowed."},
+    {"key": "E", "text": "The field generated for each component is private and final.", "correct": true, "explanation": "For each record component the compiler implicitly declares a private final field."}
+  ],
+  "references": [
+    {"title": "JLS 8.10 Record Classes", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10"}
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "A single try/finally with a return tests the basic ordering rule: the finally block runs before control leaves the method.",
+  "prompt": "What is printed by this program?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The return statement evaluates its expression and then control is about to leave the method, but the finally block always runs first. So cleanup is printed by the finally block, the method then returns 1, and only afterwards does main print the returned value.",
+  "options": [
+    {"key": "A", "text": "cleanup 1", "correct": true, "explanation": "finally runs while compute() is still executing, before its result reaches println in main, so cleanup appears first."},
+    {"key": "B", "text": "1 cleanup", "correct": false, "explanation": "The value is printed by main only after compute() has returned, which is after the finally block has already printed."},
+    {"key": "C", "text": "1", "correct": false, "explanation": "The finally block runs even when the try block returns, so it does print its text."},
+    {"key": "D", "text": "cleanup", "correct": false, "explanation": "The method still returns 1 and main prints it. Only an exception escaping the finally block or System.exit would prevent that."}
+  ],
+  "references": [
+    {"title": "JLS 14.20.2 Execution of try-finally and try-catch-finally", "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.2"}
+  ]
+}

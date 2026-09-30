@@ -1,0 +1,20 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Each statement checks a different fact about stream pipelines: laziness, single use, stateful operations, short-circuiting and the purpose of peek.",
+  "prompt": "Which statements about Java streams are true? Select all that apply.",
+  "explanation": "A pipeline does no work until a terminal operation starts it, and a stream can be consumed only once. Operations such as sorted are stateful: they may need to see the whole input before producing output. limit is a short-circuiting intermediate operation, not a terminal one, and peek exists mainly to support debugging.",
+  "options": [
+    {"key": "A", "text": "An intermediate operation such as `filter` does not process any element until a terminal operation is invoked.", "correct": true, "explanation": "Intermediate operations are lazy. Traversal of the source starts only when the terminal operation is executed."},
+    {"key": "B", "text": "The same `Stream` instance can be traversed a second time after its terminal operation has completed.", "correct": false, "explanation": "A stream must be operated on only once. Reusing it throws IllegalStateException; a new stream must be created from the source."},
+    {"key": "C", "text": "`sorted()` is a stateful intermediate operation.", "correct": true, "explanation": "Sorting needs to see all the elements before it can emit the first one in order, which is the definition of a stateful operation."},
+    {"key": "D", "text": "`limit(n)` is a terminal operation.", "correct": false, "explanation": "limit returns a stream, so it is an intermediate operation. It is short-circuiting because it can finish the traversal early."},
+    {"key": "E", "text": "`peek` exists mainly to support debugging, for example to see elements as they flow past a point in the pipeline.", "correct": true, "explanation": "The API documentation describes this as the main purpose of peek. It should not be relied on for side effects that matter."}
+  ],
+  "references": [
+    {"title": "java.util.stream package: stream operations and pipelines", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"},
+    {"title": "Stream.peek(Consumer), Java SE 21 API", "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#peek(java.util.function.Consumer)"}
+  ]
+}
