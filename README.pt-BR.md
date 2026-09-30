@@ -55,18 +55,18 @@ A fonte da verdade inicial será o PostgreSQL. Um futuro runner Java será impla
 
 ## Documentação
 
-A documentação detalhada está em inglês:
+A documentação completa está disponível em português em [`docs/br/`](docs/br/README.md) e em inglês em [`docs/`](docs/product/vision.md), que é a fonte canônica:
 
-- [Visão do produto](docs/product/vision.md)
-- [Escopo e não-objetivos](docs/product/scope-and-non-goals.md)
-- [Política de conteúdo](docs/product/content-policy.md)
-- [Direção do Interview Prep](docs/product/interview-prep.md)
-- [Roadmap de releases](docs/roadmap/releases.md)
-- [`v0.1.0` Study Core](docs/roadmap/v0.1-study-core.md)
-- [Visão geral da arquitetura](docs/architecture/overview.md)
-- [Modelo de domínio inicial](docs/architecture/domain-model.md)
-- [Segurança e modelo de ameaças](docs/architecture/threat-model.md)
-- [Decisões de arquitetura](docs/adr/README.md)
+- [Visão do produto](docs/br/product/vision.md)
+- [Escopo e não-objetivos](docs/br/product/scope-and-non-goals.md)
+- [Política de conteúdo](docs/br/product/content-policy.md)
+- [Direção do Interview Prep](docs/br/product/interview-prep.md)
+- [Roadmap de releases](docs/br/roadmap/releases.md)
+- [`v0.1.0` Study Core](docs/br/roadmap/v0.1-study-core.md)
+- [Visão geral da arquitetura](docs/br/architecture/overview.md)
+- [Modelo de domínio inicial](docs/br/architecture/domain-model.md)
+- [Segurança e modelo de ameaças](docs/br/architecture/threat-model.md)
+- [Decisões de arquitetura](docs/br/adr/README.md)
 
 ## Status do projeto
 
