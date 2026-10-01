@@ -69,6 +69,8 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 ## Revisando e publicando
 
+O [pacote de revisão de conteúdo](../../docs/release/content-review-packet.md) (em inglês, como as questões) expõe o pacote inteiro para o revisor: cada questão como o aluno a vê, depois o gabarito, as razões, as referências, a saída que o build verificou e as conferências abaixo como caixas para marcar. Ele é gerado (`node content/build-review-packet.mjs`) e o CI falha se estiver desatualizado.
+
 A revisão é feita por uma conta diferente da do autor, por padrão (`reviewer_must_differ_from_author`; veja o documento do banco de questões para mudar isso em uma instalação com um único mantenedor). O revisor precisa do papel `REVIEWER` e o publicador do papel `ADMINISTRATOR`.
 
 1. Liste o que aguarda revisão: `GET /api/admin/questions?status=TECHNICAL_REVIEW`.

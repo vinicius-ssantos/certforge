@@ -74,6 +74,13 @@ jobs:
       - name: Size budget
         run: npm run budget
 
+      # The packet a reviewer works from is generated from the question pack; it must match it.
+      - name: Content review packet is current
+        working-directory: .
+        run: |
+          node content/build-review-packet.mjs --out "$RUNNER_TEMP/packet.md"
+          diff docs/release/content-review-packet.md "$RUNNER_TEMP/packet.md"
+
       # Fails on a known high or critical advisory in anything that ships to the browser.
       - name: Dependency audit
         run: npm audit --omit=dev --audit-level=high
