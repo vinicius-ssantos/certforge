@@ -1,0 +1,10 @@
+# Added on top of compose.release.yaml to run the end-to-end tests against the release images:
+#   docker compose -f compose.release.yaml -f compose.e2e.yaml up --build
+# The tests publish clearly labelled fixture questions through the editorial API with one account
+# acting as author, reviewer and publisher, and register many accounts from one address, so reviewer
+# separation and the registration throttle are relaxed. Never use this file for anything else.
+services:
+  app:
+    environment:
+      CERTFORGE_QUESTIONBANK_REQUIREREVIEWERSEPARATION: "false"
+      CERTFORGE_IDENTITY_THROTTLE_REGISTRATIONSPERIP: "1000"

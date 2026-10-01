@@ -70,6 +70,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 - [History and progress](docs/architecture/history-and-progress.md)
 - [Content authoring and import](docs/engineering/content-authoring.md)
 - [Operations and incident triage](docs/engineering/operations.md)
+- [Release environment](docs/engineering/release-environment.md)
 - [Security and threat model](docs/architecture/threat-model.md)
 - [Architecture decisions](docs/adr/README.md)
 
