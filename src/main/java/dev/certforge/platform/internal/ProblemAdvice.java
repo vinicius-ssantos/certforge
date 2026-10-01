@@ -14,11 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * The single place that turns failures into responses. Every body is an RFC 9457 problem with a
@@ -62,17 +67,41 @@ class ProblemAdvice extends ResponseEntityExceptionHandler {
     return ResponseEntity.badRequest().body(detail);
   }
 
-  /** Framework errors (bad JSON, wrong method, unknown path and so on) get the same contract. */
+  /**
+   * Framework errors (bad JSON, wrong method, unknown path, unsupported content type and so on) get
+   * the same contract. The body is always built here. The framework hands over no body for most of
+   * them and, for the rest, one whose text describes the server's internals, so neither is used:
+   * only the status, a stable code for the kind of failure and the request id leave.
+   */
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
       Exception ex, Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-    if (body instanceof ProblemDetail problem) {
-      if (problem.getProperties() == null || !problem.getProperties().containsKey(CODE)) {
-        problem.setProperty(CODE, "invalid_request");
-      }
-      problem.setProperty(REQUEST_ID, RequestId.current());
+    ProblemDetail problem = ProblemDetail.forStatus(status);
+    problem.setTitle(reason(status));
+    problem.setProperty(CODE, codeFor(ex, status));
+    problem.setProperty(REQUEST_ID, RequestId.current());
+    return super.handleExceptionInternal(ex, problem, headers, status, request);
+  }
+
+  private static String codeFor(Exception ex, HttpStatusCode status) {
+    if (ex instanceof NoResourceFoundException || ex instanceof NoHandlerFoundException) {
+      return "not_found";
     }
-    return super.handleExceptionInternal(ex, body, headers, status, request);
+    if (ex instanceof HttpRequestMethodNotSupportedException) {
+      return "method_not_allowed";
+    }
+    if (ex instanceof HttpMediaTypeNotSupportedException) {
+      return "unsupported_media_type";
+    }
+    if (ex instanceof HttpMediaTypeNotAcceptableException) {
+      return "not_acceptable";
+    }
+    return status.value() == 404 ? "not_found" : "invalid_request";
+  }
+
+  private static String reason(HttpStatusCode status) {
+    HttpStatus known = HttpStatus.resolve(status.value());
+    return known == null ? "Request failed" : known.getReasonPhrase();
   }
 
   /**

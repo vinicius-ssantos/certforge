@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- Failures the web framework raises before a controller runs (an unknown path, a method or content type the endpoint does not take, an unacceptable representation) now answer with the same problem body as every other error: a stable `code` and the request id, and none of the framework’s own text. They used to leave both out. Found by the new error inspection (#15).
 - Security updates found by the first image scan: Tomcat 11.0.25 (a critical advisory in 11.0.24), Jackson 3.1.7 and 2.21.7 (high advisories), and operating-system package upgrades in both images (#15).
 - Built assets are no longer inlined as `data:` URIs, which a strict Content Security Policy blocks; fonts would have failed to load in production (#15).
 - Ending a study session early now moves focus to the confirmation and back, instead of leaving keyboard and screen-reader users on a button that had disappeared (#14).
@@ -15,6 +16,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Release validation that runs in CI: an authorization matrix generated from the application’s own request mappings (an endpoint without an access rule fails; each role is refused what it lacks and admitted to what it has; state-changing endpoints refuse a missing CSRF token), an answer-privacy journey in a real browser (responses, page, storage, cache headers, direct API access, built bundle), a historical-integrity journey (an answer keeps showing the revision the learner saw after the question is replaced), and an inspection of errors, metrics and logs of the running stack (#15).
 - A release-like environment: backend and web images, an nginx proxy with a strict Content Security Policy and security headers, PostgreSQL, and a `release` CI job that scans the images, checks the proxy (including that a forged `X-Forwarded-For` cannot get around rate limiting) and runs the whole end-to-end suite against the images (#15).
 - Editorial history by name: the editorial view of a question now says who wrote, reviewed and published each revision (by email address, staff-only endpoints). A review records the content-policy checklist items the reviewer ticked (`checklist`, optional, fixed codes, migration V11); it is shown in the review notes and does not gate approval. The web app uses both (#14).
 - Comparison of a revision with the one before it (word by word, field by field, announced in words as well as marked) and protection of unsaved edits in the question editor, by link, back button or closing the tab (#14).
