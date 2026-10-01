@@ -1,5 +1,6 @@
 package dev.certforge.platform;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.function.Function;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,7 @@ import org.springframework.http.HttpStatus;
  * One page of results and, when there are more, the cursor of the next page. Pages are fetched one
  * row longer than their size: the extra row only tells whether another page follows.
  */
-public record Page<T>(List<T> items, String nextCursor) {
+public record Page<T>(List<T> items, @Schema(nullable = true) String nextCursor) {
 
   public static final int DEFAULT_SIZE = 20;
   public static final int MAX_SIZE = 50;

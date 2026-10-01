@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Learner web app foundation: a contract-first React client generated from the backend OpenAPI contract, sign-in and registration, track browsing, accessible layout with automated checks, and a web CI job (#13, ADR 0009).
 - Persisted audit trail for editorial transitions, request correlation, a single safe error contract, metrics, liveness and readiness probes, and an operations guide with incident triage (#12).
 - Learner attempt and session history with keyset pagination, and rebuildable topic progress with reconciliation (#11).
 - Idempotent answer submission with server-side grading, immutable attempt evidence, and answer disclosure only after an accepted submission (#10).

@@ -1,6 +1,7 @@
 package dev.certforge.progress.internal;
 
 import dev.certforge.preparationcatalog.TopicId;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -17,18 +18,21 @@ interface ProgressViews {
    */
   record TopicProgress(
       TopicId topicId,
-      String topicName,
-      String trackSlug,
+      @Schema(nullable = true) String topicName,
+      @Schema(nullable = true) String trackSlug,
       int attempted,
       int correct,
       int incorrect,
-      BigDecimal accuracy,
-      Instant lastActivityAt) {}
+      @Schema(nullable = true) BigDecimal accuracy,
+      @Schema(nullable = true) Instant lastActivityAt) {}
 
   record CountsView(int attempted, int correct, Instant lastActivityAt) {}
 
   /** A topic where the stored projection differs from what the attempts say it should be. */
-  record Difference(TopicId topicId, CountsView expected, CountsView stored) {}
+  record Difference(
+      TopicId topicId,
+      @Schema(nullable = true) CountsView expected,
+      @Schema(nullable = true) CountsView stored) {}
 
   record Reconciliation(boolean consistent, List<Difference> differences) {}
 

@@ -1,5 +1,6 @@
 package dev.certforge.questionbank.internal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -16,34 +17,38 @@ interface AdminQuestionViews {
       int number,
       String status,
       String type,
-      UUID topicId,
-      Integer javaRelease,
-      String difficulty,
-      String difficultyRationale,
-      String prompt,
-      String explanation,
+      @Schema(nullable = true) UUID topicId,
+      @Schema(nullable = true) Integer javaRelease,
+      @Schema(nullable = true) String difficulty,
+      @Schema(nullable = true) String difficultyRationale,
+      @Schema(nullable = true) String prompt,
+      @Schema(nullable = true) String explanation,
       List<OptionView> options,
       List<ReferenceView> references,
       UUID authorId,
-      UUID examVersionId,
+      @Schema(nullable = true) UUID examVersionId,
       Instant createdAt,
-      Instant submittedAt,
-      Instant publishedAt,
-      UUID publishedBy,
-      Instant deprecatedAt,
+      @Schema(nullable = true) Instant submittedAt,
+      @Schema(nullable = true) Instant publishedAt,
+      @Schema(nullable = true) UUID publishedBy,
+      @Schema(nullable = true) Instant deprecatedAt,
       List<ReviewView> reviews) {}
 
   record OptionView(String key, String text, boolean correct, String explanation) {}
 
   record ReferenceView(String title, String url) {}
 
-  record ReviewView(UUID reviewerId, String decision, String comment, Instant decidedAt) {}
+  record ReviewView(
+      UUID reviewerId,
+      String decision,
+      @Schema(nullable = true) String comment,
+      Instant decidedAt) {}
 
   record QuestionSummary(
       UUID id,
       UUID latestRevisionId,
       int latestRevisionNumber,
       String latestStatus,
-      String prompt,
-      UUID topicId) {}
+      @Schema(nullable = true) String prompt,
+      @Schema(nullable = true) UUID topicId) {}
 }

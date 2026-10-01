@@ -33,3 +33,37 @@ jobs:
 
       - name: Verify
         run: mvn --batch-mode --no-transfer-progress verify
+
+  web:
+    name: Web / lint, types, tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: API types match the contract
+        run: npm run api:check
+
+      - name: Unit and accessibility tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
