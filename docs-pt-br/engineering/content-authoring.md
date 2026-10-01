@@ -14,6 +14,7 @@ O que a ferramenta comprova automaticamente, a cada build:
 
 - cada questão está completa segundo as invariantes do banco de questões (alternativas, exatamente uma correta em escolha única, explicações, referências https, Java 21);
 - cada trecho de código compila com `--release 21` e produz exatamente a saída, ou o erro de compilação, que a questão afirma;
+- o gabarito concorda com essa saída: quando uma alternativa tem o texto que o programa imprime, é ela que está marcada como correta, então a questão não pode imprimir uma coisa e apontar outra;
 - o pacote cobre os dez tópicos, com os dois tipos de questão e todas as dificuldades, e não há dois enunciados idênticos;
 - o pacote inteiro pode ser importado em uma aplicação em execução, reimportado sem duplicar e levado por revisão e publicação.
 

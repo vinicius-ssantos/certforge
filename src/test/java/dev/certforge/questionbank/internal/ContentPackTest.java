@@ -110,7 +110,38 @@ class ContentPackTest {
                       assertThat(request.references())
                           .allSatisfy(ref -> assertThat(ref.url()).startsWith("https://"));
                       verifyCode(dir, work.resolve(dir.getFileName()));
+                      answerKeyAgreesWithTheProgram(dir, request);
                     }));
+  }
+
+  /**
+   * The answer key must agree with what the program really does. {@link #verifyCode} proves what
+   * the program prints; this links that output to the option marked correct, so a question that
+   * prints one thing and marks another as the answer cannot pass. Questions whose options are prose
+   * rather than the literal output say nothing this can check, and are left to the human reviewer.
+   */
+  private void answerKeyAgreesWithTheProgram(Path dir, RevisionRequest request) throws IOException {
+    Path expectedFile = dir.resolve("expected.txt");
+    if (!Files.exists(expectedFile)) {
+      return;
+    }
+    String expected = Files.readString(expectedFile).replace("\r\n", "\n").strip();
+    if (expected.startsWith(COMPILE_ERROR)) {
+      return;
+    }
+    List<QuestionAdminController.OptionRequest> printed =
+        request.options().stream().filter(o -> o.text().strip().equals(expected)).toList();
+    if (printed.isEmpty()) {
+      return;
+    }
+    assertThat(printed)
+        .as("%s offers the program's output as more than one option", dir.getFileName())
+        .hasSize(1);
+    assertThat(printed.getFirst().correct())
+        .as(
+            "%s prints \"%s\", so the option with that text is the answer and must be marked correct",
+            dir.getFileName(), expected)
+        .isTrue();
   }
 
   private void verifyCode(Path dir, Path out) throws Exception {
