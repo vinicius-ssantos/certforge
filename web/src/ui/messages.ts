@@ -33,6 +33,32 @@ export function errorMessage(error: unknown): string {
       return "The page's security token expired. Try again.";
     case "track_not_found":
       return "This track does not exist or is not available.";
+    case "topic_not_found":
+      return "This topic does not exist or is not available.";
+    case "insufficient_content":
+      return "There are not enough published questions on this topic yet. Try another topic.";
+    case "active_session_exists":
+      return "You already have a practice session in progress for this topic.";
+    case "session_not_found":
+      return "This practice session does not exist.";
+    case "session_expired":
+      return "This practice session expired. Answers you already gave were kept.";
+    case "session_not_in_progress":
+      return "This practice session is already finished.";
+    case "already_answered":
+      return "You already answered this question.";
+    case "concurrent_submission":
+      return "Your answer is still being saved. Wait a moment and try again.";
+    case "idempotency_key_reused":
+    case "idempotency_key_invalid":
+    case "idempotency_key_required":
+      return "Your answer could not be saved safely. Reload the page and try again.";
+    case "invalid_option":
+    case "duplicate_option":
+    case "single_choice_requires_one_option":
+      return "Choose one answer from the list.";
+    case "question_count_out_of_range":
+      return "That number of questions is not allowed.";
     case "forbidden":
       return "You do not have permission to do that.";
     default:

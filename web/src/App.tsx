@@ -4,6 +4,7 @@ import { RegisterPage } from "./auth/RegisterPage";
 import { RequireAuth } from "./auth/RequireAuth";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
+import { SessionPage } from "./study/SessionPage";
 import { Layout } from "./ui/Layout";
 import { EmptyState } from "./ui/States";
 import { useDocumentTitle } from "./ui/useDocumentTitle";
@@ -31,6 +32,7 @@ export function App() {
         <Route element={<RequireAuth />}>
           <Route index element={<TracksPage />} />
           <Route path="/tracks/:slug" element={<TrackPage />} />
+          <Route path="/sessions/:sessionId" element={<SessionPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
