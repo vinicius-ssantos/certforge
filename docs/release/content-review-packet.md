@@ -113,7 +113,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 >
 > ```java
 > import java.time.LocalDate;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     LocalDate date = LocalDate.of(2024, 1, 31);
@@ -329,11 +329,11 @@ COMPILE_ERROR: pattern.dominated
 >   static void show(Object o) {
 >     System.out.print("Object ");
 >   }
-> 
+>
 >   static void show(String s) {
 >     System.out.print("String ");
 >   }
-> 
+>
 >   public static void main(String[] args) {
 >     Object text = "hello";
 >     show(text);
@@ -473,7 +473,7 @@ true
 >       System.out.print("cleanup ");
 >     }
 >   }
-> 
+>
 >   public static void main(String[] args) {
 >     System.out.println(compute());
 >   }
@@ -541,18 +541,18 @@ cleanup 1
 > public class Main {
 >   static class Res implements AutoCloseable {
 >     private final String name;
-> 
+>
 >     Res(String name) {
 >       this.name = name;
 >       System.out.print("open-" + name + " ");
 >     }
-> 
+>
 >     @Override
 >     public void close() {
 >       System.out.print("close-" + name + " ");
 >     }
 >   }
-> 
+>
 >   public static void main(String[] args) {
 >     try (Res a = new Res("a");
 >         Res b = new Res("b")) {
@@ -622,7 +622,7 @@ open-a open-b body close-b close-a
 > ```java
 > import java.util.Arrays;
 > import java.util.List;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     List<String> fixed = List.of("x", "y");
@@ -704,7 +704,7 @@ immutable fixed-size [q, y]
 > ```java
 > import java.util.ArrayList;
 > import java.util.List;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     List<Integer> numbers = new ArrayList<>(List.of(10, 20, 30, 1));
@@ -831,7 +831,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 >
 > ```java
 > import java.util.stream.Stream;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     Stream.of(1, 2, 3, 4)
@@ -1021,7 +1021,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 > ```java
 > import java.util.concurrent.Executors;
 > import java.util.concurrent.atomic.AtomicInteger;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     AtomicInteger counter = new AtomicInteger();
@@ -1156,7 +1156,7 @@ rejected
 > import java.io.IOException;
 > import java.nio.file.Files;
 > import java.nio.file.Path;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) throws IOException {
 >     Path file = Files.createTempFile("lines", ".txt");
@@ -1286,7 +1286,7 @@ The code in the question compiles for Java 21 and prints:
 >
 > ```java
 > import java.util.Locale;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     Locale locale = Locale.forLanguageTag("pt-BR");
@@ -1356,7 +1356,7 @@ pt BR pt_BR
 > ```java
 > import java.util.Locale;
 > import java.util.ResourceBundle;
-> 
+>
 > public class Main {
 >   public static void main(String[] args) {
 >     Locale.setDefault(Locale.US);

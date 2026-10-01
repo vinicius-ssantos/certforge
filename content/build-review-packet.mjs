@@ -5,8 +5,11 @@
 // always matches the pack.
 //
 // Usage: node content/build-review-packet.mjs [--pack content/java-se-21] [--out docs/release/content-review-packet.md]
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync as readRaw, writeFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
+
+// Read as LF whatever the checkout used, so the packet is the same on every machine and in CI.
+const readFileSync = (path, encoding) => readRaw(path, encoding).replace(/\r\n/g, "\n");
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
