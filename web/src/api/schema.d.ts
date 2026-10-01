@@ -940,18 +940,22 @@ export interface components {
             name: string;
         };
         RequiredReviewRequest: {
+            checklist?: string[];
             comment: string;
         };
         ReviewRequest: {
+            checklist?: string[];
             comment?: string;
         };
         ReviewView: {
+            checklist: string[];
             comment: string | null;
             /** Format: date-time */
             decidedAt: string;
             decision: string;
             /** Format: uuid */
             reviewerId: string;
+            reviewerName: string | null;
         };
         RevisionRequest: {
             /** @enum {string} */
@@ -971,6 +975,7 @@ export interface components {
         RevisionView: {
             /** Format: uuid */
             authorId: string;
+            authorName: string | null;
             /** Format: date-time */
             createdAt: string;
             /** Format: date-time */
@@ -992,6 +997,7 @@ export interface components {
             publishedAt: string | null;
             /** Format: uuid */
             publishedBy: string | null;
+            publishedByName: string | null;
             references: components["schemas"]["ReferenceView"][];
             reviews: components["schemas"]["ReviewView"][];
             status: string;

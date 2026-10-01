@@ -83,14 +83,17 @@ class QuestionAdminController {
   @PreAuthorize("hasAuthority('CONTENT_REVIEW')")
   QuestionView approve(
       @PathVariable UUID revisionId, @Valid @RequestBody(required = false) ReviewRequest request) {
-    return service.approve(revisionId, request == null ? null : request.comment());
+    return service.approve(
+        revisionId,
+        request == null ? null : request.comment(),
+        request == null ? null : request.checklist());
   }
 
   @PostMapping("/api/admin/question-revisions/{revisionId}/request-changes")
   @PreAuthorize("hasAuthority('CONTENT_REVIEW')")
   QuestionView requestChanges(
       @PathVariable UUID revisionId, @Valid @RequestBody RequiredReviewRequest request) {
-    return service.requestChanges(revisionId, request.comment());
+    return service.requestChanges(revisionId, request.comment(), request.checklist());
   }
 
   @PostMapping("/api/admin/question-revisions/{revisionId}/publish")
@@ -152,7 +155,12 @@ class QuestionAdminController {
       @NotBlank @Size(max = 300) String title,
       @NotBlank @Size(max = 500) @Pattern(regexp = "^https://\\S+$") String url) {}
 
-  record ReviewRequest(@Size(max = 4000) String comment) {}
+  /**
+   * {@code checklist} lists the content-policy items the reviewer checked, by code (see {@code
+   * ReviewChecklist}); it is recorded with the decision and optional.
+   */
+  record ReviewRequest(@Size(max = 4000) String comment, @Size(max = 10) List<String> checklist) {}
 
-  record RequiredReviewRequest(@NotBlank @Size(max = 4000) String comment) {}
+  record RequiredReviewRequest(
+      @NotBlank @Size(max = 4000) String comment, @Size(max = 10) List<String> checklist) {}
 }

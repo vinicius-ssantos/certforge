@@ -10,7 +10,7 @@ Issue: #7 — Implementar o banco de questões versionado e o fluxo editorial. D
 - `QuestionRevision` é a unidade de conteúdo e de revisão: tipo, tópico, release do Java, dificuldade e justificativa, enunciado, explicação geral, alternativas, referências, autor e decisões de revisão. As tentativas referenciam uma revisão, nunca a questão lógica.
 - Cada alternativa tem uma chave (`A`–`H`), texto, um indicador de correção e a sua própria explicação de por que está correta ou incorreta.
 - As referências são fontes autoritativas com título e uma URL `https`.
-- `ContentReview` registra cada decisão de revisão técnica (`APPROVED` ou `CHANGES_REQUESTED`) com o revisor e um comentário.
+- `ContentReview` registra cada decisão de revisão técnica (`APPROVED` ou `CHANGES_REQUESTED`) com o revisor, um comentário e os itens do checklist da política de conteúdo que o revisor marcou (veja abaixo).
 
 ## Ciclo de vida
 
@@ -91,6 +91,11 @@ Aprovação, publicação, substituição e depreciação publicam um `AuditFact
 
 Todo comando devolve a visão editorial da questão. Essas respostas incluem o gabarito e são apenas para editores, revisores e publicadores.
 
+### Quem e o quê é mostrado à equipe
+
+- A visão editorial nomeia as pessoas envolvidas: `authorName`, `publishedByName` e, em cada revisão, `reviewerName`, ao lado dos ids. O nome é o e-mail da conta, resolvido por `AccountNames`, do módulo de identidade. Aparece só nesses endpoints da equipe e nunca em algo que um aluno possa ler.
+- **Checklist da revisão.** `approve` e `request-changes` aceitam um `checklist` opcional: os códigos dos itens da política de conteúdo que o revisor marcou (`TECHNICAL_ACCURACY`, `CODE_VERIFIED`, `NO_AMBIGUITY`, `REASONS_ACCURATE`, `OFFICIAL_REFERENCES`). Duplicatas são descartadas, um código desconhecido é recusado (`invalid_checklist`), e a lista é guardada com a revisão e devolvida em `reviews[].checklist` (vazia para revisões feitas antes disso existir). Ele registra o que o revisor diz ter conferido; não condiciona a aprovação, porque exigir todos os itens seria uma decisão de política editorial.
+
 ## Adiado
 
-Submissão pela comunidade, importação em massa, publicação por IA, análise de desempenho das questões, execução arbitrária de Java, blueprints de simulado, persistência dos fatos de auditoria (#12), um endpoint de questões para o aluno (#9, #10) e ferramentas de comparação de revisões para revisores (#14).
+Submissão pela comunidade, importação em massa, publicação por IA, análise de desempenho das questões, execução arbitrária de Java, blueprints de simulado, persistência dos fatos de auditoria (#12), um endpoint de questões para o aluno (#9, #10) (a comparação de revisões é feita pelo app web a partir dos dados acima).

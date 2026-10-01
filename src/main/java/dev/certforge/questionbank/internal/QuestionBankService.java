@@ -1,6 +1,7 @@
 package dev.certforge.questionbank.internal;
 
 import dev.certforge.audit.AuditFact;
+import dev.certforge.identity.AccountNames;
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
 import dev.certforge.preparationcatalog.PreparationCatalog;
@@ -18,7 +19,9 @@ import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -42,6 +45,7 @@ class QuestionBankService {
   private final QuestionRepository repository;
   private final PreparationCatalog catalog;
   private final CurrentActor currentActor;
+  private final AccountNames accountNames;
   private final Clock clock;
   private final ApplicationEventPublisher events;
   private final QuestionBankProperties properties;
@@ -52,6 +56,7 @@ class QuestionBankService {
       QuestionRepository repository,
       PreparationCatalog catalog,
       CurrentActor currentActor,
+      AccountNames accountNames,
       Clock clock,
       ApplicationEventPublisher events,
       QuestionBankProperties properties,
@@ -60,6 +65,7 @@ class QuestionBankService {
     this.repository = repository;
     this.catalog = catalog;
     this.currentActor = currentActor;
+    this.accountNames = accountNames;
     this.clock = clock;
     this.events = events;
     this.properties = properties;
@@ -138,26 +144,28 @@ class QuestionBankService {
   // ---- review --------------------------------------------------------------------------------
 
   @Transactional
-  QuestionView approve(UUID revisionId, String comment) {
+  QuestionView approve(UUID revisionId, String comment, List<String> checklist) {
+    List<String> ticked = ReviewChecklist.validate(checklist);
     ActorId actor = currentActor.require();
     Revision revision = revision(revisionId);
     requireStatus(revision, RevisionStatus.TECHNICAL_REVIEW, "revision_not_in_review");
     requireSeparation(actor, revision);
     Instant now = clock.instant();
-    repository.insertReview(revisionId, actor.value(), "APPROVED", comment, now);
+    repository.insertReview(revisionId, actor.value(), "APPROVED", comment, ticked, now);
     repository.setStatus(revisionId, RevisionStatus.APPROVED);
     audit(actor, ACTION_APPROVED, revisionId, now);
     return transitioned("approved", revision.questionId());
   }
 
   @Transactional
-  QuestionView requestChanges(UUID revisionId, String comment) {
+  QuestionView requestChanges(UUID revisionId, String comment, List<String> checklist) {
+    List<String> ticked = ReviewChecklist.validate(checklist);
     ActorId actor = currentActor.require();
     Revision revision = revision(revisionId);
     requireStatus(revision, RevisionStatus.TECHNICAL_REVIEW, "revision_not_in_review");
     requireSeparation(actor, revision);
     repository.insertReview(
-        revisionId, actor.value(), "CHANGES_REQUESTED", comment, clock.instant());
+        revisionId, actor.value(), "CHANGES_REQUESTED", comment, ticked, clock.instant());
     repository.setStatus(revisionId, RevisionStatus.DRAFT);
     return transitioned("changes_requested", revision.questionId());
   }
@@ -263,6 +271,14 @@ class QuestionBankService {
 
   private RevisionView view(Revision r) {
     RevisionContent c = r.content();
+    List<Review> reviews = repository.findReviews(r.id());
+    List<UUID> people = new ArrayList<>();
+    people.add(r.authorId());
+    if (r.publishedBy() != null) {
+      people.add(r.publishedBy());
+    }
+    reviews.forEach(review -> people.add(review.reviewerId()));
+    Map<UUID, String> names = accountNames.of(people);
     return new RevisionView(
         r.id(),
         r.number(),
@@ -279,19 +295,23 @@ class QuestionBankService {
             .toList(),
         c.references().stream().map(ref -> new ReferenceView(ref.title(), ref.url())).toList(),
         r.authorId(),
+        names.get(r.authorId()),
         r.examVersionId(),
         r.createdAt(),
         r.submittedAt(),
         r.publishedAt(),
         r.publishedBy(),
+        r.publishedBy() == null ? null : names.get(r.publishedBy()),
         r.deprecatedAt(),
-        repository.findReviews(r.id()).stream()
+        reviews.stream()
             .map(
                 review ->
                     new ReviewView(
                         review.reviewerId(),
+                        names.get(review.reviewerId()),
                         review.decision(),
                         review.comment(),
+                        review.checklist(),
                         review.decidedAt()))
             .toList());
   }

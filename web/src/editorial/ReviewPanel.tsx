@@ -8,14 +8,7 @@ import { useHasAny } from "../auth/permissions";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
-
-const POLICY = [
-  "The correct answer is technically right for the stated Java release",
-  "The code compiles and prints what the question says",
-  "Nothing in the wording is ambiguous",
-  "Every reason is accurate, including for the wrong options",
-  "The references are official documentation",
-];
+import { CHECKLIST } from "./labels";
 
 type Action = "approve" | "request-changes" | "publish" | "deprecate" | "new-revision";
 
@@ -52,6 +45,7 @@ export function ReviewPanel({
   const can = useCanDecide(revision, isLatest);
 
   const [comment, setComment] = useState("");
+  const [ticked, setTicked] = useState<string[]>([]);
   const [problems, setProblems] = useState<{ fieldId?: string; message: string }[]>([]);
   const [failure, setFailure] = useState<string | null>(null);
 
@@ -63,14 +57,14 @@ export function ReviewPanel({
           return unwrap(
             api.POST("/api/admin/question-revisions/{revisionId}/approve", {
               params: { path },
-              body: comment.trim() ? { comment: comment.trim() } : {},
+              body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
             }),
           );
         case "request-changes":
           return unwrap(
             api.POST("/api/admin/question-revisions/{revisionId}/request-changes", {
               params: { path },
-              body: { comment: comment.trim() },
+              body: { comment: comment.trim(), checklist: ticked },
             }),
           );
         case "publish":
@@ -121,11 +115,22 @@ export function ReviewPanel({
           <ErrorSummary problems={shown} />
           <fieldset>
             <legend>Content policy</legend>
-            <p className="hint">Tick what you checked yourself. These boxes are your own reminder and are not saved.</p>
-            {POLICY.map((item, index) => (
-              <label key={item} className="check">
-                <input type="checkbox" name={`policy-${index}`} />
-                {item}
+            <p className="hint">
+              Tick only what you checked yourself. The items you tick are recorded with your decision.
+            </p>
+            {CHECKLIST.map((item) => (
+              <label key={item.code} className="check">
+                <input
+                  type="checkbox"
+                  name={item.code}
+                  checked={ticked.includes(item.code)}
+                  onChange={(event) =>
+                    setTicked((current) =>
+                      event.target.checked ? [...current, item.code] : current.filter((code) => code !== item.code),
+                    )
+                  }
+                />
+                {item.label}
               </label>
             ))}
           </fieldset>

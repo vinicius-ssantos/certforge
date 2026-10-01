@@ -227,7 +227,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         />
         {changesRequested ? (
           <section className="changes" aria-labelledby="changes-heading">
-            <h2 id="changes-heading">A reviewer asked for changes</h2>
+            <h2 id="changes-heading">
+              {changesRequested.reviewerName ? `${changesRequested.reviewerName} asked for changes` : "A reviewer asked for changes"}
+            </h2>
             <p>{changesRequested.comment}</p>
           </section>
         ) : null}

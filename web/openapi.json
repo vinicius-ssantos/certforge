@@ -883,6 +883,14 @@
       },
       "RequiredReviewRequest" : {
         "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array"
+          },
           "comment" : {
             "maxLength" : 4000,
             "minLength" : 0,
@@ -894,6 +902,14 @@
       },
       "ReviewRequest" : {
         "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array"
+          },
           "comment" : {
             "maxLength" : 4000,
             "minLength" : 0,
@@ -904,6 +920,12 @@
       },
       "ReviewView" : {
         "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
           "comment" : {
             "type" : [ "string", "null" ]
           },
@@ -917,9 +939,12 @@
           "reviewerId" : {
             "format" : "uuid",
             "type" : "string"
+          },
+          "reviewerName" : {
+            "type" : [ "string", "null" ]
           }
         },
-        "required" : [ "comment", "decidedAt", "decision", "reviewerId" ],
+        "required" : [ "checklist", "comment", "decidedAt", "decision", "reviewerId", "reviewerName" ],
         "type" : "object"
       },
       "RevisionRequest" : {
@@ -982,6 +1007,9 @@
             "format" : "uuid",
             "type" : "string"
           },
+          "authorName" : {
+            "type" : [ "string", "null" ]
+          },
           "createdAt" : {
             "format" : "date-time",
             "type" : "string"
@@ -1032,6 +1060,9 @@
             "format" : "uuid",
             "type" : [ "string", "null" ]
           },
+          "publishedByName" : {
+            "type" : [ "string", "null" ]
+          },
           "references" : {
             "items" : {
               "$ref" : "#/components/schemas/ReferenceView"
@@ -1059,7 +1090,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "authorId", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "references", "reviews", "status", "submittedAt", "topicId", "type" ],
+        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "status", "submittedAt", "topicId", "type" ],
         "type" : "object"
       },
       "RolesRequest" : {

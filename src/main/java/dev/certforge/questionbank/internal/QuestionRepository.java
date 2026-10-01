@@ -257,23 +257,29 @@ class QuestionRepository {
   // ---- reviews -------------------------------------------------------------------------------
 
   void insertReview(
-      UUID revisionId, UUID reviewerId, String decision, String comment, Instant now) {
+      UUID revisionId,
+      UUID reviewerId,
+      String decision,
+      String comment,
+      List<String> checklist,
+      Instant now) {
     jdbc.sql(
             "insert into certforge.qb_content_review"
-                + " (id, revision_id, reviewer_id, decision, comment, decided_at)"
-                + " values (:id, :revisionId, :reviewer, :decision, :comment, :now)")
+                + " (id, revision_id, reviewer_id, decision, comment, checklist, decided_at)"
+                + " values (:id, :revisionId, :reviewer, :decision, :comment, :checklist, :now)")
         .param(ID, UUID.randomUUID())
         .param(REVISION_ID, revisionId)
         .param("reviewer", reviewerId)
         .param("decision", decision)
         .param("comment", comment)
+        .param("checklist", ReviewChecklist.store(checklist))
         .param(NOW, utc(now))
         .update();
   }
 
   List<Review> findReviews(UUID revisionId) {
     return jdbc.sql(
-            "select reviewer_id, decision, comment, decided_at"
+            "select reviewer_id, decision, comment, checklist, decided_at"
                 + " from certforge.qb_content_review where revision_id = :revisionId"
                 + " order by decided_at")
         .param(REVISION_ID, revisionId)
@@ -283,6 +289,7 @@ class QuestionRepository {
                     rs.getObject("reviewer_id", UUID.class),
                     rs.getString("decision"),
                     rs.getString("comment"),
+                    ReviewChecklist.load(rs.getString("checklist")),
                     instant(rs, "decided_at")))
         .list();
   }

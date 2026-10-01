@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import type { Revision } from "../api/types";
 import { formatDateTime } from "../history/format";
 import { Prompt } from "../ui/Prompt";
-import { DIFFICULTY_LABEL, TYPE_LABEL } from "./labels";
+import { CHECKLIST, DIFFICULTY_LABEL, TYPE_LABEL } from "./labels";
 import { RevisionDiff } from "./RevisionDiff";
 
 const DECISION: Record<string, string> = {
@@ -40,6 +40,10 @@ export function RevisionView({
     <div className={aside ? "with-aside" : undefined}>
       <div>
         <p className="muted">{meta.join(" · ")}</p>
+        <p className="muted">
+          {revision.authorName ? `Written by ${revision.authorName}` : "Author unknown"}
+          {revision.publishedByName ? ` · Published by ${revision.publishedByName}` : ""}
+        </p>
         {previous ? <RevisionDiff previous={previous} revision={revision} topicName={topicNameOf ?? (() => undefined)} /> : null}
         <section className="stage" aria-labelledby="learner-view">
           <h2 id="learner-view">As the learner will see it</h2>
@@ -96,9 +100,19 @@ export function RevisionView({
             <ul className="notes">
               {revision.reviews.map((review) => (
                 <li key={`${review.reviewerId}-${review.decidedAt}`}>
-                  <strong>{DECISION[review.decision] ?? review.decision}</strong>{" "}
+                  <strong>{DECISION[review.decision] ?? review.decision}</strong>
+                  {review.reviewerName ? ` by ${review.reviewerName}` : ""}{" "}
                   <time dateTime={review.decidedAt}>{formatDateTime(review.decidedAt)}</time>
                   {review.comment ? <p>{review.comment}</p> : null}
+                  {review.checklist.length > 0 ? (
+                    <p className="muted">
+                      Checked:{" "}
+                      {review.checklist
+                        .map((code) => CHECKLIST.find((item) => item.code === code)?.label ?? code)
+                        .join("; ")}
+                      .
+                    </p>
+                  ) : null}
                 </li>
               ))}
             </ul>
