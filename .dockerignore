@@ -1,0 +1,9 @@
+target
+web
+.git
+.github
+docs
+docs-pt-br
+content
+**/node_modules
+*.md

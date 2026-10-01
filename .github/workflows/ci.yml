@@ -160,3 +160,97 @@ jobs:
             web/test-results
             backend.log
           retention-days: 7
+
+  release:
+    name: Release images / scan, checks and end-to-end
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      COMPOSE_PROJECT_NAME: certforge-release
+      DB_PASSWORD: ci-release-password-not-a-secret
+      BOOTSTRAP_ADMIN_EMAIL: e2e-admin@example.com
+      BOOTSTRAP_ADMIN_PASSWORD: e2e-admin-password-123
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Build the release images
+        run: docker compose -f compose.release.yaml build
+
+      # Fixable high and critical findings fail the build. A new advisory can therefore fail an
+      # unrelated change; the fix is nearly always a version bump (see docs/engineering/release-environment.md).
+      - name: Scan the images
+        run: |
+          for image in certforge-release-app certforge-release-web; do
+            docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy:0.74.0 image \
+              --scanners vuln --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 "$image"
+          done
+
+      - name: Start the release stack
+        run: |
+          docker compose -f compose.release.yaml up -d
+          for attempt in $(seq 1 60); do
+            if curl -sf http://localhost:8080/actuator/health/readiness > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          docker compose -f compose.release.yaml logs
+          exit 1
+
+      - name: Check the proxy, headers and rate-limit trust
+        run: bash deploy/verify-release.sh
+
+      # The end-to-end tests need the fixtures and many registrations from one address, which the
+      # release settings refuse. compose.e2e.yaml relaxes exactly those two on a fresh database.
+      - name: Restart for the end-to-end tests
+        run: |
+          docker compose -f compose.release.yaml down -v
+          docker compose -f compose.release.yaml -f compose.e2e.yaml up -d
+          for attempt in $(seq 1 60); do
+            if curl -sf http://localhost:8080/actuator/health/readiness > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          docker compose -f compose.release.yaml -f compose.e2e.yaml logs
+          exit 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        working-directory: web
+        run: npm ci
+
+      - name: Install the browser
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+
+      - name: Run the end-to-end tests against the release images
+        working-directory: web
+        env:
+          E2E_BASE_URL: http://localhost:8081
+        run: npm run e2e
+
+      - name: Keep the reports and logs of a failed run
+        if: failure()
+        run: |
+          mkdir -p release-logs
+          docker compose -f compose.release.yaml -f compose.e2e.yaml logs --no-color > release-logs/compose.log 2>&1 || true
+
+      - name: Upload the reports of a failed run
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-failure
+          path: |
+            web/playwright-report
+            web/test-results
+            release-logs
+          retention-days: 7
+
+      - name: Stop the stack
+        if: always()
+        run: docker compose -f compose.release.yaml -f compose.e2e.yaml down -v

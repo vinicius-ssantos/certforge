@@ -21,6 +21,15 @@
         <java.version>25</java.version>
         <spring-modulith.version>2.1.1</spring-modulith.version>
         <springdoc.version>3.1.1</springdoc.version>
+        <!--
+          Security fixes ahead of the Spring Boot 4.1.1 managed versions (image scan, 2026-10-01):
+          Tomcat 11.0.24 has critical advisories fixed in 11.0.25, and both Jackson lines have high
+          ones fixed in 3.1.7 and 2.21.7. Remove each override once Spring Boot manages a version
+          at or above it.
+        -->
+        <tomcat.version>11.0.25</tomcat.version>
+        <jackson-bom.version>3.1.7</jackson-bom.version>
+        <jackson-2-bom.version>2.21.7</jackson-2-bom.version>
         <maven-enforcer-plugin.version>3.6.3</maven-enforcer-plugin.version>
         <maven-pmd-plugin.version>3.28.0</maven-pmd-plugin.version>
         <spotless-maven-plugin.version>3.10.3</spotless-maven-plugin.version>

@@ -8,11 +8,14 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- Security updates found by the first image scan: Tomcat 11.0.25 (a critical advisory in 11.0.24), Jackson 3.1.7 and 2.21.7 (high advisories), and operating-system package upgrades in both images (#15).
+- Built assets are no longer inlined as `data:` URIs, which a strict Content Security Policy blocks; fonts would have failed to load in production (#15).
 - Ending a study session early now moves focus to the confirmation and back, instead of leaving keyboard and screen-reader users on a button that had disappeared (#14).
 - Flyway now keeps its history table in `public` regardless of the database user name. With the documented user `certforge`, the schema of the same name became the current schema after the first start, so readiness reported the schema as not migrated and the next start failed.
 
 ### Added
 
+- A release-like environment: backend and web images, an nginx proxy with a strict Content Security Policy and security headers, PostgreSQL, and a `release` CI job that scans the images, checks the proxy (including that a forged `X-Forwarded-For` cannot get around rate limiting) and runs the whole end-to-end suite against the images (#15).
 - Editorial history by name: the editorial view of a question now says who wrote, reviewed and published each revision (by email address, staff-only endpoints). A review records the content-policy checklist items the reviewer ticked (`checklist`, optional, fixed codes, migration V11); it is shown in the review notes and does not gate approval. The web app uses both (#14).
 - Comparison of a revision with the one before it (word by word, field by field, announced in words as well as marked) and protection of unsaved edits in the question editor, by link, back button or closing the tab (#14).
 - Review and publication in the web app: a reviewer reads the question as the learner will see it and approves it or sends it back with a comment; an administrator publishes (after a confirmation) or retires a revision; an author starts a new revision of a published question. Covered end to end by a test that takes one question from draft to published through three accounts (#14).

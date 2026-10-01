@@ -6,6 +6,11 @@ import { defineConfig } from "vitest/config";
 // application never handles an authentication token.
 export default defineConfig({
   plugins: [react()],
+  build: {
+    // Never inline assets as data: URIs. The production Content Security Policy allows fonts only
+    // from the app's own origin, and Vite would otherwise embed the small font files in the CSS.
+    assetsInlineLimit: 0,
+  },
   server: { proxy: { "/api": "http://localhost:8080" } },
   // The built app is served the same way for the end-to-end tests.
   preview: { proxy: { "/api": "http://localhost:8080" } },
