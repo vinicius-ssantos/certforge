@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from "react";
+import { Prompt } from "../ui/Prompt";
+import { useMemo, useState, type FormEvent } from "react";
 import type { AttemptRequest, Confidence, Question } from "../api/types";
 import { ErrorSummary } from "../ui/Form";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
@@ -79,7 +80,12 @@ export function QuestionForm({
     );
   }
 
-  const shown = failure ? [...problems, { message: failure }] : problems;
+  // Stable between renders: the summary takes focus when this array changes, and re-rendering for a
+  // keystroke or a click must not pull focus back to it.
+  const shown = useMemo(
+    () => (failure ? [...problems, { message: failure }] : problems),
+    [problems, failure],
+  );
 
   return (
     <section aria-labelledby="question-heading">
@@ -88,7 +94,7 @@ export function QuestionForm({
       </h2>
       <ErrorSummary problems={shown} />
       <form onSubmit={submit} noValidate>
-        <div className="prompt">{question.prompt}</div>
+        <Prompt text={question.prompt} />
 
         <fieldset>
           <legend>{multiple ? "Choose all the correct answers" : "Choose one answer"}</legend>

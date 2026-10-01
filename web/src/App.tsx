@@ -4,6 +4,10 @@ import { RegisterPage } from "./auth/RegisterPage";
 import { RequireAuth } from "./auth/RequireAuth";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
+import { NewQuestionPage } from "./editorial/NewQuestionPage";
+import { QuestionPage } from "./editorial/QuestionPage";
+import { QueuePage } from "./editorial/QueuePage";
+import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
 import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
@@ -39,6 +43,11 @@ export function App() {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/sessions/:sessionId" element={<SessionReviewPage />} />
           <Route path="/progress" element={<ProgressPage />} />
+          <Route element={<RequireEditorial />}>
+            <Route path="/editorial" element={<QueuePage />} />
+            <Route path="/editorial/new" element={<NewQuestionPage />} />
+            <Route path="/editorial/questions/:questionId" element={<QuestionPage />} />
+          </Route>
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

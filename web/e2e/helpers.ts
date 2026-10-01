@@ -34,3 +34,12 @@ export async function expectNoHorizontalOverflow(page: Page) {
   );
   expect(overflow, `horizontal overflow on ${page.url()}`).toBeLessThanOrEqual(0);
 }
+
+/** Signs in through the sign-in page, as a person would. */
+export async function signIn(page: Page, account: { email: string; password: string }) {
+  await page.goto("/login");
+  await page.getByLabel("Email").fill(account.email);
+  await page.getByLabel("Password").fill(account.password);
+  await page.getByRole("button", { name: "Sign in" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeVisible();
+}

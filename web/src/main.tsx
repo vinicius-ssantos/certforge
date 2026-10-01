@@ -6,6 +6,12 @@ import { App } from "./App";
 import { ApiProvider } from "./api/ApiProvider";
 import { AuthProvider, ME_KEY } from "./auth/AuthContext";
 import { createQueryClient } from "./queryClient";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource-variable/source-serif-4";
+import "./tokens.css";
 import "./styles.css";
 
 const queryClient = createQueryClient(() => queryClient.setQueryData(ME_KEY, null));

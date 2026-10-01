@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { useAuth } from "../auth/AuthContext";
+import { useHasAny } from "../auth/permissions";
 
 /**
  * Moves keyboard and screen-reader focus to the new page's heading after a navigation. In a single
@@ -15,6 +16,11 @@ function useRouteFocus(mainRef: RefObject<HTMLElement | null>) {
       first.current = false;
       return;
     }
+    // A page that has already placed focus somewhere inside itself (a confirmation, say) keeps it.
+    const active = document.activeElement;
+    if (active && active !== document.body && mainRef.current?.contains(active)) {
+      return;
+    }
     const heading = mainRef.current?.querySelector<HTMLElement>("h1");
     if (heading) {
       heading.tabIndex = -1;
@@ -26,6 +32,7 @@ function useRouteFocus(mainRef: RefObject<HTMLElement | null>) {
 export function Layout() {
   const mainRef = useRef<HTMLElement>(null);
   const { state, logout } = useAuth();
+  const editorial = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH");
   useRouteFocus(mainRef);
 
   return (
@@ -43,6 +50,7 @@ export function Layout() {
               </NavLink>
               <NavLink to="/progress">Progress</NavLink>
               <NavLink to="/history">History</NavLink>
+              {editorial ? <NavLink to="/editorial">Editorial</NavLink> : null}
               <button type="button" className="link-button" onClick={() => void logout()}>
                 Sign out
               </button>
