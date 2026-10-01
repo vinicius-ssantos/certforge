@@ -34,6 +34,8 @@ Rotas em `/editorial`, para contas com `CONTENT_AUTHOR`, `CONTENT_REVIEW` ou `CO
 
 - **Decidir**: o revisor vê, ao lado da revisão, um checklist da política de conteúdo e um comentário, e então **Approve** ou **Request changes** (o comentário é obrigatório e a revisão volta ao autor como rascunho). As caixas do checklist são um lembrete do próprio revisor e não são salvas; só o comentário é. O administrador vê **Publish** (desabilitado até a revisão ser aprovada) e, em uma revisão publicada, **Retire**. O autor vê **Start a new revision** na última revisão publicada ou aposentada, que a copia para um novo rascunho.
 - **Passos irreversíveis pedem confirmação.** Publicar e aposentar usam uma confirmação que diz o que vai acontecer; o foco vai para o botão que confirma e volta ao primeiro botão se a pessoa desistir.
+- **Comparar**: uma revisão que tem antecessora abre mostrando o que mudou desde ela, palavra por palavra e campo por campo (questão, alternativas e se estão corretas, razões, explicação, referências). Acréscimos são sublinhados e remoções riscadas, e ambos também são anunciados em palavras.
+- **Alterações não salvas são protegidas.** Sair do editor com edições não salvas, por um link, pelo botão voltar ou fechando a aba, pergunta antes; ficar mantém tudo e devolve o foco a Save draft. O app usa um roteador de dados (`createBrowserRouter`) para isso.
 - **Sempre atual.** A fila e a questão são lidas de novo toda vez que abrem, porque outra pessoa pode tê-las aprovado ou publicado nesse meio-tempo.
 
 Uma revisão é uma sequência numerada (escrita, em revisão, aprovada, publicada), então é desenhada como uma.

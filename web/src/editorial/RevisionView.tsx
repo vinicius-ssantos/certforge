@@ -3,6 +3,7 @@ import type { Revision } from "../api/types";
 import { formatDateTime } from "../history/format";
 import { Prompt } from "../ui/Prompt";
 import { DIFFICULTY_LABEL, TYPE_LABEL } from "./labels";
+import { RevisionDiff } from "./RevisionDiff";
 
 const DECISION: Record<string, string> = {
   APPROVED: "Approved",
@@ -18,10 +19,15 @@ export function RevisionView({
   revision,
   topicName,
   aside,
+  previous,
+  topicNameOf,
 }: {
   revision: Revision;
   topicName: string | undefined;
   aside?: ReactNode;
+  /** The revision before this one, when there is one, to show what a correction changed. */
+  previous?: Revision | undefined;
+  topicNameOf?: (id: string) => string | undefined;
 }) {
   const meta = [
     TYPE_LABEL[revision.type] ?? revision.type,
@@ -34,6 +40,7 @@ export function RevisionView({
     <div className={aside ? "with-aside" : undefined}>
       <div>
         <p className="muted">{meta.join(" · ")}</p>
+        {previous ? <RevisionDiff previous={previous} revision={revision} topicName={topicNameOf ?? (() => undefined)} /> : null}
         <section className="stage" aria-labelledby="learner-view">
           <h2 id="learner-view">As the learner will see it</h2>
           <p className="muted">No answers are shown here, exactly as in a study session.</p>
