@@ -1,0 +1,9 @@
+# Secret scanning configuration (gitleaks). The default rules stay on; this adds one narrow
+# exception rather than disabling a rule or skipping files.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "The documentation names the Idempotency-Key request header, which the generic API-key rule mistakes for a credential. It is a client-chosen retry token, not a secret."
+regexes = ['''Idempotency-Key:?\s''']
+paths = ['''docs(-pt-br)?/architecture/answer-submission\.md''']

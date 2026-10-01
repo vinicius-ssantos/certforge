@@ -46,7 +46,21 @@ The `release` job builds these images and then:
 3. Restarts on a fresh database with `compose.e2e.yaml`, which relaxes only reviewer separation and the registration throttle, and runs the whole Playwright suite against the release images, so the real proxy, headers and Content Security Policy are exercised. The suite fails any page that triggers a Content Security Policy violation, and includes the answer-privacy and historical-integrity journeys.
 4. Inspects the running stack after that traffic with `deploy/verify-privacy.mjs`: a dozen failing requests must each answer with the problem body (stable `code`, the request id also on the response header, no stack trace, class name or SQL), no metric tag may hold an id or an email address or have more than 50 values, and the logs must hold no answer text, password, cookie or authorization value. The application logs little at INFO level, so this log check is a guard against future leaks more than evidence about today’s volume.
 
+5. Measures the primary flows for one learner (sign in, list tracks, start a session, read it, submit an answer, finish, read history and progress) and the backend’s startup, and fails if a flow’s 95th percentile exceeds its budget. The budgets are several times the baseline measured on a developer machine, so a slow shared runner does not fail them and a real regression does. They are not a statement about capacity: one client, one instance, sequential requests.
+6. **Rehearses recovery**: backs up the database that has just seen all that traffic, restores it into a brand-new PostgreSQL, and compares every table by row count and content checksum, plus the migration history.
+
 `compose.e2e.yaml` is for that purpose only.
+
+## Other gates in CI
+
+| Gate | What it holds |
+|---|---|
+| Secret scan | gitleaks over the whole git history, default rules plus one narrow, documented exception (`.gitleaks.toml`). |
+| CodeQL | Security analysis of the Java backend and the TypeScript app, on pull requests, on `main` and weekly. |
+| Dependency audit | `npm audit` for anything that ships to the browser; Dependabot for both ecosystems and the workflows. |
+| Static analysis | PMD and the compiler in the backend build; ESLint with the accessibility rules and strict TypeScript in the web app. |
+| Size budget | The gzip size of the JavaScript and CSS on first load (`npm run budget`). Deterministic, so it is tight. |
+| Upgrade test | `MigrationUpgradeIT` applies each migration on top of the previous one and upgrades a database that holds a reviewed revision. |
 
 ## Run the same checks yourself
 
