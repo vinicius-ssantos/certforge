@@ -17,6 +17,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- The content pack build now checks that the answer key agrees with what the code does: when an option carries the text the program prints, that option must be the one marked correct. It verified the program and the key separately before, so a question could print one thing and mark another as the answer (#8).
 - Accessibility checks now cover **both colour schemes** (axe runs once per scheme on every page the end-to-end suite visits, measuring with reduced motion so it does not sample the 150 ms colour transition) and WCAG 2.1 reflow: no page may need sideways scrolling down to a 320 pixel width (#13, #14, #15).
 - A content review packet for the initial question pack, generated from it (`content/build-review-packet.mjs`): each question as the learner sees it, the answer key, reasons and references, the output the build verified, and the content-policy checks as boxes to tick. CI fails if it is out of date (#8, #15).
 - Release documentation: demonstration scripts for the learner and editorial journeys with screenshots (and a script for what only a person can check), draft release notes, a readiness review that maps each acceptance criterion of #15 to its evidence and lists the blockers, a threat model brought up to date with what was built and found, and backup, rollback, reconciliation and incident-response procedures in the operations guide, the first two exercised in CI (#15).

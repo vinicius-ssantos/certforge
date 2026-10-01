@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack.
 
-**None of these questions has been reviewed by a person.** They are AI-assisted drafts. The build checks that every code snippet compiles for Java 21 and prints what the question says, which is what the "Verified output" lines show; it cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what this review is for.
+**None of these questions has been reviewed by a person.** They are AI-assisted drafts. The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what this review is for.
 
 ## How to review
 

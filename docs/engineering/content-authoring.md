@@ -12,6 +12,7 @@ What the tooling does prove, automatically, on every build:
 
 - each question is complete under the question-bank invariants (options, exactly one correct option for single-choice, explanations, https references, Java 21);
 - every code snippet compiles with `--release 21` and produces exactly the output, or the compile error, that the question states;
+- the answer key agrees with that output: when an option carries the text the program prints, that option is the one marked correct, so a question cannot print one thing and point at another;
 - the pack covers all ten topics with both question types and all difficulties, and no two prompts are identical;
 - the whole pack can be imported into a running application, re-imported without duplicates, and taken through review and publication.
 
