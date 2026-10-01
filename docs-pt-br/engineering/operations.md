@@ -116,7 +116,7 @@ pg_restore -U certforge -d certforge --no-owner --exit-on-error certforge-2026-1
 - **Depois de uma restauração, encerre todas as sessões**: `delete from certforge.identity_session;` (isso só desconecta as pessoas). Um backup pode conter sessões que foram revogadas depois dele, por exemplo de uma conta desabilitada ou que perdeu um papel, e restaurar as reviveria.
 - Guarde os backups fora do host do banco e trate-os como sensíveis: eles têm hashes de senha e todas as respostas dos alunos.
 - **Ensaie.** O `deploy/rehearse-restore.sh` faz backup de um stack em execução, restaura em um PostgreSQL novo e compara cada tabela por contagem de linhas e checksum do conteúdo, além do histórico de migrações. O CI o roda a cada mudança; rode-o no seu ambiente antes de confiar em um backup.
-- Esta release não define objetivo de ponto nem de tempo de recuperação. Eles dependem de quantas vezes você faz backup e onde; decida-os para a sua implantação.
+- Os objetivos de recuperação estão propostos na [ADR 0010](../adr/0010-first-deployment-posture.md), que aguarda decisão: 24 horas de dados e um dia útil para voltar, decorrentes de backups diários e de uma única instância. Enquanto não for aceita, esta release não promete nenhum dos dois.
 
 ## Atualizar e reverter
 
