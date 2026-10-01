@@ -30,4 +30,8 @@ Routes under `/editorial`, for accounts with `CONTENT_AUTHOR`, `CONTENT_REVIEW` 
 - **New question** (`/editorial/new`) and **a question** (`/editorial/questions/:id`): the author of a draft gets the editor; everyone else gets the revision as a reviewer reads it (the question exactly as the learner will see it, then the answer key and reasons, then review notes).
 - **Saving** keeps an unfinished draft. **Send for review** asks the server whether the revision is complete and lists what is missing beside the form, each item leading to its field.
 
+- **Deciding**: a reviewer sees a content-policy checklist and a comment beside the revision, then **Approve** or **Request changes** (a comment is required, and the revision goes back to its author as a draft). The tick-boxes are the reviewer's own reminder and are not saved; only the comment is. An administrator sees **Publish** (disabled until the revision is approved) and, on a published revision, **Retire**. An author sees **Start a new revision** on the latest published or retired revision, which copies it into a new draft.
+- **Irreversible steps ask twice.** Publishing and retiring use a confirmation that says what will happen; focus moves to the confirming button and returns to the first button if the person backs out.
+- **Always current.** The queue and a question are re-read every time they open, because another person may have approved or published them since.
+
 A revision is a numbered sequence (written, in review, approved, published), so it is drawn as one.

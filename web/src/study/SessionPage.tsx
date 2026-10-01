@@ -4,6 +4,7 @@ import { Link, useLocation, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { AttemptRequest, AttemptResult, Question, Session } from "../api/types";
+import { Confirm } from "../ui/Confirm";
 import { ErrorState, Loading } from "../ui/States";
 import { errorMessage } from "../ui/messages";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
@@ -38,7 +39,6 @@ export function SessionPage() {
 
   const [feedback, setFeedback] = useState<Feedback | null>(null);
   const [failure, setFailure] = useState<string | null>(null);
-  const [confirmingAbandon, setConfirmingAbandon] = useState(false);
 
   function store(updated: Session) {
     queryClient.setQueryData(sessionKey(sessionId), updated);
@@ -94,7 +94,6 @@ export function SessionPage() {
       ),
     onSuccess: (closed) => {
       setFeedback(null);
-      setConfirmingAbandon(false);
       store(closed);
     },
     onError: (error) => {
@@ -179,21 +178,17 @@ export function SessionPage() {
       {finish.isError ? <ErrorState error={finish.error} /> : null}
       {body}
       <div className="session-actions">
-        {confirmingAbandon ? (
-          <div role="group" aria-label="Confirm ending the session" className="confirm">
-            <p>End this session now? The answers you already gave are kept.</p>
-            <button type="button" onClick={() => finish.mutate("abandon")} disabled={closing}>
-              Yes, end the session
-            </button>{" "}
-            <button type="button" className="secondary" onClick={() => setConfirmingAbandon(false)}>
-              Keep practising
-            </button>
-          </div>
-        ) : (
-          <button type="button" className="link-button" onClick={() => setConfirmingAbandon(true)}>
-            End session without finishing
-          </button>
-        )}
+        <Confirm
+          triggerClassName="link-button"
+          title="Confirm ending the session"
+          explain="End this session now? The answers you already gave are kept."
+          confirmLabel="Yes, end the session"
+          cancelLabel="Keep practising"
+          busy={closing}
+          onConfirm={() => finish.mutate("abandon")}
+        >
+          End session without finishing
+        </Confirm>
       </div>
     </>
   );

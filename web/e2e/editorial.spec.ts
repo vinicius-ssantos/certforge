@@ -1,7 +1,12 @@
 import { expect, test, type Page } from "@playwright/test";
 import { createStaff } from "./api";
 import { expectNoA11yViolations, expectNoHorizontalOverflow, signIn } from "./helpers";
-import { TOPIC_NAME } from "./seed";
+
+/**
+ * The editorial tests publish real questions into the throwaway database, so they use a topic of
+ * their own. The learner tests draw their sessions from another one and stay predictable.
+ */
+const TOPIC_NAME = "Java I/O API";
 
 /** Fills the editor with a complete, clearly labelled test question. */
 async function writeQuestion(page: Page, label: string) {
@@ -17,6 +22,12 @@ async function writeQuestion(page: Page, label: string) {
   await page.getByLabel("Explanation", { exact: true }).fill("Integer addition gives two.");
   await page.getByLabel("Title of reference 1").fill("Java SE 21 documentation");
   await page.getByLabel("Link of reference 1").fill("https://docs.oracle.com/en/java/javase/21/");
+}
+
+async function openQuestion(page: Page, filter: string, label: string) {
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Editorial" }).click();
+  await page.getByRole("link", { name: filter }).click();
+  await page.getByRole("link", { name: label }).first().click();
 }
 
 test.describe("the editorial desk", () => {
@@ -62,6 +73,56 @@ test.describe("the editorial desk", () => {
     await page.getByRole("link", { name: "Back to questions" }).click();
     await page.getByRole("link", { name: "Waiting for review" }).click();
     await expect(page.getByRole("row", { name: new RegExp(label) })).toContainText("In review");
+  });
+
+  test("a question goes from draft to published through an author, a reviewer and an administrator", async ({ page, browser, isMobile }) => {
+    test.skip(isMobile, "a workflow check across three people; the layout is covered by the other tests");
+    const label = `E2E pipeline question ${Date.now()}`;
+
+    // The author writes it and sends it.
+    await signIn(page, await createStaff(["LEARNER", "EDITOR"]));
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Editorial" }).click();
+    await page.getByRole("link", { name: "New question" }).click();
+    await writeQuestion(page, label);
+    await page.getByRole("button", { name: "Send for review" }).click();
+    await expect(page.getByText(/Sent for review/)).toBeVisible();
+
+    // A reviewer reads it as the learner will, and approves it.
+    const reviewerPage = await (await browser.newContext()).newPage();
+    await signIn(reviewerPage, await createStaff(["LEARNER", "REVIEWER"]));
+    await openQuestion(reviewerPage, "Waiting for review", label);
+    await expect(reviewerPage.getByRole("region", { name: "As the learner will see it" })).toContainText(label);
+    await expect(reviewerPage.getByRole("heading", { name: "Publish" })).toHaveCount(0);
+    await expectNoA11yViolations(reviewerPage);
+    await reviewerPage.getByLabel("Comment").fill("Checked by the e2e reviewer.");
+    await reviewerPage.getByRole("button", { name: "Approve" }).click();
+    await expect(reviewerPage.getByRole("status").filter({ hasText: /^Approved./ })).toBeFocused();
+    await expect(reviewerPage.getByText("Current status:")).toContainText("Approved");
+    await reviewerPage.context().close();
+
+    // An administrator publishes it, after being asked to confirm.
+    const adminPage = await (await browser.newContext()).newPage();
+    await signIn(adminPage, await createStaff(["LEARNER", "ADMINISTRATOR"]));
+    await openQuestion(adminPage, "Approved", label);
+    await adminPage.getByRole("button", { name: "Publish revision 1" }).click();
+    const confirm = adminPage.getByRole("group", { name: "Confirm publishing revision 1" });
+    await expect(confirm.getByRole("button", { name: "Yes, publish revision 1" })).toBeFocused();
+    await expectNoA11yViolations(adminPage);
+    await confirm.getByRole("button", { name: "Yes, publish revision 1" }).click();
+    await expect(adminPage.getByRole("status").filter({ hasText: /^Published./ })).toBeFocused();
+    await expect(adminPage.getByText("Current status:")).toContainText("Published");
+    await adminPage.getByRole("link", { name: "Back to questions" }).click();
+    await adminPage.getByRole("link", { name: "Published" }).click();
+    await expect(adminPage.getByRole("row", { name: new RegExp(label) })).toContainText("Published");
+    await adminPage.context().close();
+
+    // The author can now correct it by starting a new revision, copied from the published one.
+    await openQuestion(page, "Published", label);
+    await expect(page.getByRole("heading", { level: 1, name: "Revision 1" })).toBeVisible();
+    await page.getByRole("button", { name: "Start a new revision" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Revision 2" })).toBeVisible();
+    await expect(page.getByLabel("Question", { exact: true })).toHaveValue(new RegExp(label));
+    await expect(page.getByRole("list", { name: "Revision status" }).locator("li[aria-current=step]")).toContainText("Draft");
   });
 
   test("a learner has no way into the editorial desk", async ({ page, request }) => {

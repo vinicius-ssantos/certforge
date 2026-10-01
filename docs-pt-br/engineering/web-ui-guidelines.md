@@ -32,4 +32,8 @@ Rotas em `/editorial`, para contas com `CONTENT_AUTHOR`, `CONTENT_REVIEW` ou `CO
 - **Nova questão** (`/editorial/new`) e **uma questão** (`/editorial/questions/:id`): o autor de um rascunho recebe o editor; os demais recebem a revisão como um revisor a lê (a questão exatamente como o aluno a verá, depois o gabarito e as razões, depois as notas de revisão).
 - **Salvar** guarda um rascunho inacabado. **Send for review** pergunta ao servidor se a revisão está completa e lista o que falta ao lado do formulário, cada item levando ao seu campo.
 
+- **Decidir**: o revisor vê, ao lado da revisão, um checklist da política de conteúdo e um comentário, e então **Approve** ou **Request changes** (o comentário é obrigatório e a revisão volta ao autor como rascunho). As caixas do checklist são um lembrete do próprio revisor e não são salvas; só o comentário é. O administrador vê **Publish** (desabilitado até a revisão ser aprovada) e, em uma revisão publicada, **Retire**. O autor vê **Start a new revision** na última revisão publicada ou aposentada, que a copia para um novo rascunho.
+- **Passos irreversíveis pedem confirmação.** Publicar e aposentar usam uma confirmação que diz o que vai acontecer; o foco vai para o botão que confirma e volta ao primeiro botão se a pessoa desistir.
+- **Sempre atual.** A fila e a questão são lidas de novo toda vez que abrem, porque outra pessoa pode tê-las aprovado ou publicado nesse meio-tempo.
+
 Uma revisão é uma sequência numerada (escrita, em revisão, aprovada, publicada), então é desenhada como uma.

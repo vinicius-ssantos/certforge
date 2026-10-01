@@ -82,7 +82,10 @@ test.describe("the learner journey", () => {
     await page.keyboard.press("Enter");
 
     await expect(page.getByRole("heading", { level: 2, name: `Question 1 of ${FIXTURE_COUNT}` })).toBeFocused();
-    await page.keyboard.press("Tab");
+    // A question with code has a scrollable code block, which is a tab stop of its own, first.
+    for (let presses = 0; presses < 3 && !(await page.locator("#option-A").evaluate((node) => node === document.activeElement)); presses += 1) {
+      await page.keyboard.press("Tab");
+    }
     await expect(page.locator("#option-A")).toBeFocused();
     await page.keyboard.press("Space");
     await expect(page.locator("#option-A")).toBeChecked();
