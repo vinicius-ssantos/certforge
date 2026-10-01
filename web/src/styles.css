@@ -808,3 +808,10 @@ del {
   background: var(--danger-bg);
   color: inherit;
 }
+
+.head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.25rem;
+}

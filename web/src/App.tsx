@@ -4,9 +4,12 @@ import { RegisterPage } from "./auth/RegisterPage";
 import { RequireAuth } from "./auth/RequireAuth";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
+import { CatalogPage } from "./editorial/CatalogPage";
+import { CatalogTrackPage } from "./editorial/CatalogTrackPage";
 import { NewQuestionPage } from "./editorial/NewQuestionPage";
 import { QuestionPage } from "./editorial/QuestionPage";
 import { QueuePage } from "./editorial/QueuePage";
+import { RequireCatalogManage } from "./editorial/RequireCatalogManage";
 import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
 import { SessionReviewPage } from "./history/SessionReviewPage";
@@ -47,6 +50,10 @@ export function App() {
             <Route path="/editorial" element={<QueuePage />} />
             <Route path="/editorial/new" element={<NewQuestionPage />} />
             <Route path="/editorial/questions/:questionId" element={<QuestionPage />} />
+            <Route element={<RequireCatalogManage />}>
+              <Route path="/editorial/catalog" element={<CatalogPage />} />
+              <Route path="/editorial/catalog/:trackId" element={<CatalogTrackPage />} />
+            </Route>
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

@@ -28,3 +28,6 @@ export type EditorialQuestion = Schemas["QuestionView"];
 export type Revision = Schemas["RevisionView"];
 export type RevisionRequest = Schemas["RevisionRequest"];
 export type Review = Schemas["ReviewView"];
+export type AdminTrack = Schemas["AdminTrackView"];
+export type AdminExamVersion = Schemas["AdminExamVersionView"];
+export type AdminTopic = Schemas["AdminTopicView"];

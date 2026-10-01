@@ -21,7 +21,8 @@ export const editor = {
   email: "editor@example.com",
   enabled: true,
   roles: ["EDITOR"],
-  permissions: ["CONTENT_AUTHOR"],
+  // Every account is also a learner (ADR 0008), so staff carry STUDY too.
+  permissions: ["STUDY", "CONTENT_AUTHOR"],
 };
 
 export const reviewer = {
@@ -29,7 +30,7 @@ export const reviewer = {
   email: "reviewer@example.com",
   enabled: true,
   roles: ["REVIEWER"],
-  permissions: ["CONTENT_REVIEW"],
+  permissions: ["STUDY", "CONTENT_REVIEW"],
 };
 
 export const admin = {
@@ -37,7 +38,17 @@ export const admin = {
   email: "admin@example.com",
   enabled: true,
   roles: ["ADMINISTRATOR"],
-  permissions: ["CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH"],
+  // What Role.ADMINISTRATOR really grants, plus STUDY, which every account has (ADR 0008).
+  permissions: [
+    "STUDY",
+    "CATALOG_MANAGE",
+    "CONTENT_AUTHOR",
+    "CONTENT_REVIEW",
+    "CONTENT_PUBLISH",
+    "ACCOUNT_MANAGE",
+    "AUDIT_READ",
+    "OPERATIONS_VIEW",
+  ],
 };
 
 export const javaTrack = {

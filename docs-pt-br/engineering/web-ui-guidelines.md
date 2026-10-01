@@ -39,4 +39,6 @@ Rotas em `/editorial`, para contas com `CONTENT_AUTHOR`, `CONTENT_REVIEW` ou `CO
 - **Alterações não salvas são protegidas.** Sair do editor com edições não salvas, por um link, pelo botão voltar ou fechando a aba, pergunta antes; ficar mantém tudo e devolve o foco a Save draft. O app usa um roteador de dados (`createBrowserRouter`) para isso.
 - **Sempre atual.** A fila e a questão são lidas de novo toda vez que abrem, porque outra pessoa pode tê-las aprovado ou publicado nesse meio-tempo.
 
+- **Catálogo** (`/editorial/catalog`, só administradores): uma visão somente leitura de trilhas, versões de exame e os tópicos mapeados nelas. Nesta release o catálogo é criado por migração, então nada ali o edita. A página responde à pergunta que a mesa levanta: publicar liga uma revisão à versão de exame ativa do tópico, então ela diz contra quais tópicos dá para publicar, qual Java release precisam ter e quais tópicos nenhuma versão ativa mapeia.
+
 Uma revisão é uma sequência numerada (escrita, em revisão, aprovada, publicada), então é desenhada como uma.

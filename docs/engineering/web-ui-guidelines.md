@@ -37,4 +37,6 @@ Routes under `/editorial`, for accounts with `CONTENT_AUTHOR`, `CONTENT_REVIEW` 
 - **Unsaved changes are protected.** Leaving the editor with edits that are not saved, by a link, the back button or closing the tab, asks first; staying keeps everything and returns focus to Save draft. The app uses a data router (`createBrowserRouter`) for this.
 - **Always current.** The queue and a question are re-read every time they open, because another person may have approved or published them since.
 
+- **Catalog** (`/editorial/catalog`, administrators only): a read-only view of tracks, exam versions and the topics mapped to them. In this release the catalog is created by migration, so nothing here edits it. The page answers the question the desk raises: publishing binds a revision to the active exam version of its topic, so it says which topics can be published against, which Java release they must target, and which topics no active version maps.
+
 A revision is a numbered sequence (written, in review, approved, published), so it is drawn as one.

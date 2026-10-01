@@ -17,6 +17,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Catalog inspection in the editorial desk, for administrators: tracks, exam versions and the topics mapped to each with their objective wording, plus a plain statement of what can be published where, since publishing binds a revision to the active exam version of its topic and to that exam's Java release. Read-only, because in this release the catalog is created by migration (#14).
 - Keyboard and screen-reader checks in CI: every screen is walked with Tab (each control reachable, a visible focus ring on each, the skip link first and working, a confirmation that takes the focus and gives it back), and the accessibility tree of the main screens, which is what a screen reader announces, is asserted. What a person still has to judge is now narrower and is written down in the demonstration scripts (#13, #14, #15).
 - The content pack build now checks that the answer key agrees with what the code does: when an option carries the text the program prints, that option must be the one marked correct. It verified the program and the key separately before, so a question could print one thing and mark another as the answer (#8).
 - Accessibility checks now cover **both colour schemes** (axe runs once per scheme on every page the end-to-end suite visits, measuring with reduced motion so it does not sample the 150 ms colour transition) and WCAG 2.1 reflow: no page may need sideways scrolling down to a 320 pixel width (#13, #14, #15).

@@ -117,6 +117,11 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await admin.getByRole("button", { name: "Publish revision 1" }).click();
   await expect(admin.getByRole("group", { name: "Confirm publishing revision 1" })).toBeVisible();
   await shot(admin, "14-publish-confirm");
+  await admin.goto("/editorial/catalog");
+  await expect(admin.getByRole("heading", { level: 1, name: "Catalog" })).toBeVisible();
+  await admin.getByRole("link", { name: "Java Certification" }).click();
+  await expect(admin.getByRole("region", { name: "Where content can be published" })).toBeVisible();
+  await shot(admin, "15-catalog-track");
   await admin.context().close();
   await author.dispose();
   await reviewerApi.dispose();
