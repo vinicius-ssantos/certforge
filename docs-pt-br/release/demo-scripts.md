@@ -50,6 +50,6 @@ Verificações automáticas não julgam isto, e a release não está pronta até
 
 - **Só teclado.** Faça os roteiros A e B sem mouse. Todo controle alcançável, anel de foco visível em todo lugar, o foco vai para o título depois de cada navegação e para o resultado depois de cada resposta, nada prende o foco.
 - **Leitor de tela.** Com um leitor de tela (por exemplo o NVDA com Firefox ou Chrome), faça o roteiro A e a primeira metade do B. Títulos, marcos, rótulos de formulário, o resumo de erros, as mensagens de status depois de salvar, enviar ou aprovar e o feedback da resposta devem ser anunciados de forma sensata.
-- **Esquema escuro.** Mude o sistema operacional para escuro e olhe todas as telas atrás de contraste e legibilidade; as verificações automáticas de acessibilidade rodam só no esquema claro.
-- **Zoom e telas pequenas.** Amplie a 200% e use uma janela da largura de um celular; nada deve ser cortado nem exigir rolagem lateral, exceto blocos de código longos.
+- **Esquema escuro.** Mude o sistema operacional para escuro e olhe todas as telas. O contraste é medido automaticamente nos dois esquemas, então o que sobra para você é julgamento: lê-se com conforto, algo parece sujo ou ofuscante, as cores de estado ainda significam o que deveriam.
+- **Zoom e telas pequenas.** Amplie a 200% e a 400% e use uma janela da largura de um celular. O CI verifica que nenhuma página exige rolagem lateral até a largura de 320 pixels; o que você procura é se continua utilizável e em ordem sensata, não apenas se não quebrou.
 - **O conteúdo.** O pacote de questões precisa de uma revisão técnica por alguém que conheça os objetivos do exame, e o texto dos objetivos no catálogo precisa ser conferido com a página da Oracle.

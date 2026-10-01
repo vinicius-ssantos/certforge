@@ -39,10 +39,17 @@ test("an answer keeps showing the revision the learner saw after the question is
   // An administrator replaces that question through a new revision.
   const replacedPrompt = `${seen.prompt} (replaced ${stamp})`;
   const after: QuestionView = await replacePublished(admin, seen.questionId, replacedPrompt);
-  expect(after.revisions.map((revision) => [revision.number, revision.status])).toEqual([
-    [1, "DEPRECATED"],
-    [2, "PUBLISHED"],
-  ]);
+
+  // Stated as the rule rather than as fixed revision numbers: the test may be given a question that
+  // an earlier run on the same database already corrected, and the rule holds either way. Exactly
+  // one revision is published, it is the newest and it carries the correction; the one the learner
+  // answered is retired.
+  const published = after.revisions.filter((revision) => revision.status === "PUBLISHED");
+  expect(published).toHaveLength(1);
+  expect(published[0]!.prompt).toBe(replacedPrompt);
+  const answered = after.revisions.find((revision) => revision.id === seen.revisionId)!;
+  expect(answered.status).toBe("DEPRECATED");
+  expect(published[0]!.number).toBeGreaterThan(answered.number);
 
   // The session the learner took still holds the revision it was given...
   const old = (await (await request.get(`/api/study/sessions/${started.id}`)).json()) as { questions: SessionQuestion[] };
@@ -55,7 +62,7 @@ test("an answer keeps showing the revision the learner saw after the question is
   };
   expect(history.items).toHaveLength(1);
   expect(history.items[0]!.question.prompt).toBe(seen.prompt);
-  expect(history.items[0]!.question.revisionNumber).toBe(1);
+  expect(history.items[0]!.question.revisionNumber).toBe(seen.revisionNumber);
   expect(history.items[0]!.question.revisionStatus).toBe("DEPRECATED");
 
   // What the learner sees in the browser is the original wording, never the replacement.
