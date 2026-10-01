@@ -29,6 +29,7 @@ export function QueuePage() {
 
   const questions = useQuery({
     queryKey: ["editorial", "questions", status],
+    staleTime: 0, // statuses change under other people's hands; see QuestionPage
     queryFn: () =>
       unwrap(
         api.GET("/api/admin/questions", {

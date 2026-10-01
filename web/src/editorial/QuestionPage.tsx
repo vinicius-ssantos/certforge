@@ -8,14 +8,43 @@ import { useTopicNames } from "../history/useTopicNames";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
+import type { EditorialQuestion, Revision } from "../api/types";
 import { RevisionEditor } from "./RevisionEditor";
+import { ReviewPanel, useCanDecide } from "./ReviewPanel";
 import { RevisionView } from "./RevisionView";
 import { StatusMark, StatusRail } from "./StatusParts";
 
 const NOTICE: Record<string, string> = {
   sent: "Sent for review. A reviewer other than you will pick it up from the queue.",
   saved: "Draft saved.",
+  approved: "Approved. An administrator can now publish it.",
+  changes: "Sent back to the author with your comment. It is a draft again.",
+  published: "Published. Learners can now get this question in their sessions.",
+  retired: "Retired. It stays in history and no new session will use it.",
+  started: "New revision started as a draft, copied from the previous one.",
 };
+
+function RevisionWithDecisions({
+  question,
+  revision,
+  isLatest,
+  topicName,
+}: {
+  question: EditorialQuestion;
+  revision: Revision;
+  isLatest: boolean;
+  topicName: string | undefined;
+}) {
+  const can = useCanDecide(revision, isLatest);
+  const any = can.review || can.publish || can.retire || can.startRevision;
+  return (
+    <RevisionView
+      revision={revision}
+      topicName={topicName}
+      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} /> } : {})}
+    />
+  );
+}
 
 function Notice({ kind }: { kind: string }) {
   const ref = useFocusOnMount<HTMLParagraphElement>();
@@ -42,6 +71,9 @@ export function QuestionPage() {
 
   const question = useQuery({
     queryKey: ["editorial", "question", questionId],
+    // Someone else may have approved or published it since this was last read, and acting on an
+    // out-of-date status would mislead, so the page always checks again when it opens.
+    staleTime: 0,
     queryFn: () =>
       unwrap(api.GET("/api/admin/questions/{questionId}", { params: { path: { questionId } } })),
   });
@@ -66,7 +98,7 @@ export function QuestionPage() {
       ) : null}
       {question.data && revision ? (
         <>
-          {notice && NOTICE[notice] ? <Notice kind={notice} /> : null}
+          {notice && NOTICE[notice] ? <Notice key={notice} kind={notice} /> : null}
           <div className="revision-head">
             <StatusRail status={revision.status} />
             <p className="muted">
@@ -89,8 +121,10 @@ export function QuestionPage() {
           {revision.status === "DRAFT" && canAuthor && revision.authorId === account.id ? (
             <RevisionEditor key={revision.id} revision={revision} />
           ) : (
-            <RevisionView
+            <RevisionWithDecisions
+              question={question.data}
               revision={revision}
+              isLatest={revision.id === revisions[revisions.length - 1]?.id}
               topicName={revision.topicId ? topicNames.get(revision.topicId) : undefined}
             />
           )}

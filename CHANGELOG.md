@@ -8,10 +8,12 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- Ending a study session early now moves focus to the confirmation and back, instead of leaving keyboard and screen-reader users on a button that had disappeared (#14).
 - Flyway now keeps its history table in `public` regardless of the database user name. With the documented user `certforge`, the schema of the same name became the current schema after the first start, so readiness reported the schema as not migrated and the next start failed.
 
 ### Added
 
+- Review and publication in the web app: a reviewer reads the question as the learner will see it and approves it or sends it back with a comment; an administrator publishes (after a confirmation) or retires a revision; an author starts a new revision of a published question. Covered end to end by a test that takes one question from draft to published through three accounts (#14).
 - Editorial desk in the web app: question queue with status filters, the draft editor (save unfinished work, send for review with a list of what is missing that links to each field), and a read-only revision view that shows the question as the learner will see it before the answer key. Staff-only, shown by permission (#14).
 - A shared visual system (editorial desk look, light and dark tokens, bundled fonts) applied to the whole web app, and fenced code blocks in questions now render as code for learners and reviewers. See the web interface guidelines (#14).
 - Learner history, session review and topic progress pages, and end-to-end tests with Playwright and axe on desktop and mobile viewports, run in CI against the real backend and PostgreSQL (#13).

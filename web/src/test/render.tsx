@@ -32,6 +32,14 @@ export const reviewer = {
   permissions: ["CONTENT_REVIEW"],
 };
 
+export const admin = {
+  id: "77777777-7777-4777-8777-777777777777",
+  email: "admin@example.com",
+  enabled: true,
+  roles: ["ADMINISTRATOR"],
+  permissions: ["CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH"],
+};
+
 export const javaTrack = {
   id: "22222222-2222-4222-8222-222222222222",
   slug: "java-certification",
