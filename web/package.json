@@ -18,7 +18,8 @@
     "api:generate": "openapi-typescript openapi.json -o src/api/schema.d.ts",
     "api:check": "node scripts/check-api-types.mjs",
     "e2e": "playwright test",
-    "budget": "node scripts/check-bundle-size.mjs"
+    "budget": "node scripts/check-bundle-size.mjs",
+    "demo:screens": "playwright test e2e/screenshots.spec.ts --project desktop"
   },
   "dependencies": {
     "@fontsource-variable/source-serif-4": "5.3.0",

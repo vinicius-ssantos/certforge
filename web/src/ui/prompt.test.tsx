@@ -27,6 +27,16 @@ describe("splitFences", () => {
 });
 
 describe("Prompt", () => {
+  it("makes a paragraph of each block of text and keeps single line breaks inside one", () => {
+    const { container } = render(<Prompt text={"First paragraph.\nStill the first.\n\nSecond paragraph."} />);
+
+    const paragraphs = container.querySelectorAll("p");
+    expect(paragraphs).toHaveLength(2);
+    expect(paragraphs[0]).toHaveTextContent("First paragraph. Still the first.");
+    expect(paragraphs[0]?.textContent).toContain("\n");
+    expect(paragraphs[1]).toHaveTextContent("Second paragraph.");
+  });
+
   it("shows code as code and never as markup", () => {
     render(<Prompt text={'Run <b>this</b>:\n\n```java\nSystem.out.println("<i>x</i>");\n```'} />);
 

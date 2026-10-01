@@ -157,3 +157,10 @@ export async function replacePublished(
   await publishRevision(admin, draft.id);
   return (await (await admin.get(`/api/admin/questions/${questionId}`)).json()) as QuestionView;
 }
+
+/** An API session signed in as the given account. */
+export async function signedInApi(account: Account): Promise<APIRequestContext> {
+  const api = await request.newContext({ baseURL: API_URL });
+  await post(api, "/api/auth/login", account);
+  return api;
+}

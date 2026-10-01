@@ -74,14 +74,27 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 - [Criação e importação de conteúdo](docs-pt-br/engineering/content-authoring.md)
 - [Operações e triagem de incidentes](docs-pt-br/engineering/operations.md)
 - [Ambiente de release](docs-pt-br/engineering/release-environment.md)
+- [Diretrizes da interface web](docs-pt-br/engineering/web-ui-guidelines.md)
+- [Roteiros de demonstração da `v0.1.0`](docs-pt-br/release/demo-scripts.md)
+- [Notas de release da `v0.1.0` (rascunho)](docs-pt-br/release/v0.1.0-release-notes.md)
+- [Revisão de prontidão da `v0.1.0`](docs-pt-br/release/v0.1.0-readiness.md)
 - [Segurança e modelo de ameaças](docs-pt-br/architecture/threat-model.md)
 - [Decisões de arquitetura](docs-pt-br/adr/README.md)
 
 ## Status do projeto
 
-**Fase de fundação — somente documentação.**
+**A `v0.1.0` Study Core está construída e ainda não foi lançada.** O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release existem e são testados de ponta a ponta no CI. O que separa isto de uma release é trabalho que só uma pessoa pode fazer: revisar o pacote inicial de questões e uma passada manual de acessibilidade. A [revisão de prontidão](docs-pt-br/release/v0.1.0-readiness.md) lista as barreiras e os bloqueios.
 
-Nenhum código de aplicação deve ser introduzido até que o escopo da `v0.1.0`, a linguagem de domínio, a política editorial e as decisões arquiteturais iniciais sejam revisados e aceitos.
+### Experimente
+
+Você precisa do Docker. Na raiz do repositório:
+
+```sh
+export DB_PASSWORD=local-demo BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='uma senha local longa'
+docker compose -f compose.release.yaml up --build -d    # http://localhost:8081
+```
+
+Uma instalação nova não tem questões até que pessoas revisem e publiquem algumas; os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) dizem como carregar o pacote real ou dados de teste claramente identificados. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`.
 
 ## Contribuindo
 
