@@ -11,12 +11,12 @@ The product is a place to study carefully and to write and review questions care
   - Blue `--accent` for links and the focus ring.
   - State: green `--ok` (approved, published, correct), brass `--review` (in review), red `--danger` (changes requested, incorrect).
 - **Type**: Source Serif 4 for anything meant to be read (questions, explanations, headings), IBM Plex Sans for the interface, JetBrains Mono for code. Fonts are bundled with the app (`@fontsource`), so the app makes no third-party requests.
-- **Layout**: dense tables for scanning, a reading column capped at 44rem, two columns (content and decisions) on wide screens, one column on narrow ones.
+- **Layout**: dense tables for scanning, a reading column capped at 44rem, two columns (content and decisions) on wide screens, one column on narrow ones. Every page reflows to a 320 CSS pixel window without sideways scrolling (WCAG 1.4.10), which CI checks; a long code block scrolls on its own instead of widening the page.
 
 ## Rules
 
 1. **Colour never carries state alone.** Every state is a word, usually with a symbol (`○ Draft`, `◐ In review`, `● Approved`, `✓ Published`). Correct and incorrect answers are stated in words.
-2. **Contrast.** Text and state colours are meant to be at least 4.5:1 on their background and the focus ring at least 3:1, in both schemes. Real-browser axe checks every page it visits in CI, **in the light scheme only**; the dark scheme uses colours chosen to the same ratios but is not yet asserted automatically, so it needs a manual check.
+2. **Contrast.** Text and state colours are at least 4.5:1 on their background and the focus ring at least 3:1, **in both schemes**. Real-browser axe checks every page it visits in CI, once per scheme. It measures with reduced motion emulated, because the app transitions colour over 150 ms and measuring mid-switch samples a blend of the two themes rather than either one. What axe cannot judge, such as whether the dark scheme reads pleasantly, still wants a person.
 3. **Focus follows the content.** After navigating, focus moves to the page heading, unless the page already placed it somewhere on purpose (a confirmation, the next question, the result of an answer).
 4. **Errors say what to do.** Messages are chosen by the server's stable error codes (`web/src/ui/messages.ts`), never by server text. A summary at the top of a form takes focus and links to each field.
 5. **The server decides, the screen words it.** Completeness of a revision, who may review, what may be published are all server rules. The interface shows what the server says and never duplicates a rule it would then have to keep in step. Hiding a button is a courtesy, not protection.

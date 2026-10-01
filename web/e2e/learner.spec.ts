@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./test";
 import { FIXTURE_COUNT, TOPIC_NAME } from "./seed";
-import { expectNoA11yViolations, expectNoHorizontalOverflow, register } from "./helpers";
+import { expectNoA11yViolations, expectReflows, register } from "./helpers";
 
 async function startPractice(page: Page) {
   await page.getByRole("link", { name: "Java Certification" }).click();
@@ -24,14 +24,14 @@ test.describe("the learner journey", () => {
   test("register, practise a topic, finish, then review history and progress", async ({ page }) => {
     await register(page);
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await startPractice(page);
     await expect(page.getByRole("heading", { level: 2, name: `Question 1 of ${FIXTURE_COUNT}` })).toBeFocused();
     // The learner has not answered yet, so nothing may reveal the answer.
     await expect(page.getByText("Correct answer.")).toHaveCount(0);
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     for (let number = 1; number <= FIXTURE_COUNT; number += 1) {
       await expect(
@@ -41,7 +41,7 @@ test.describe("the learner journey", () => {
       await expect(page.getByRole("heading", { level: 2, name: "Correct" })).toBeFocused();
       if (number === 1) {
         await expectNoA11yViolations(page);
-        await expectNoHorizontalOverflow(page);
+        await expectReflows(page);
       }
       await page
         .getByRole("button", { name: number === FIXTURE_COUNT ? "Finish session" : "Next question" })
@@ -58,13 +58,13 @@ test.describe("the learner journey", () => {
     await expect(row).toContainText("Completed");
     await expect(row).toContainText(`${FIXTURE_COUNT} of ${FIXTURE_COUNT}`);
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await row.getByRole("link").click();
     await expect(page.getByRole("heading", { level: 1, name: "Session review" })).toBeVisible();
     await expect(page.getByRole("heading", { level: 2, name: "Question 1: correct" })).toBeVisible();
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Progress" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Progress" })).toBeVisible();
@@ -72,7 +72,7 @@ test.describe("the learner journey", () => {
     await expect(progress).toContainText(String(FIXTURE_COUNT));
     await expect(progress).toContainText("100%");
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
   });
 
   test("a question can be answered with the keyboard alone", async ({ page, isMobile }) => {
@@ -145,11 +145,11 @@ test.describe("the learner journey", () => {
     await page.goto("/login");
     await expect(page.getByRole("heading", { level: 1, name: "Sign in" })).toBeVisible();
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await page.goto("/register");
     await expect(page.getByRole("heading", { level: 1, name: "Create an account" })).toBeVisible();
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
   });
 });

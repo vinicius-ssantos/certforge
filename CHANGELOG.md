@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- The historical-integrity end-to-end test asserted fixed revision numbers, so it only passed on a fresh database and failed on a second run against the same one. It now states the rule it is really about: exactly one revision is published, it carries the correction, and the revision the learner answered is retired (#15).
 - Failures the web framework raises before a controller runs (an unknown path, a method or content type the endpoint does not take, an unacceptable representation) now answer with the same problem body as every other error: a stable `code` and the request id, and none of the framework’s own text. They used to leave both out. Found by the new error inspection (#15).
 - Security updates found by the first image scan: Tomcat 11.0.25 (a critical advisory in 11.0.24), Jackson 3.1.7 and 2.21.7 (high advisories), and operating-system package upgrades in both images (#15).
 - Built assets are no longer inlined as `data:` URIs, which a strict Content Security Policy blocks; fonts would have failed to load in production (#15).
@@ -16,6 +17,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Accessibility checks now cover **both colour schemes** (axe runs once per scheme on every page the end-to-end suite visits, measuring with reduced motion so it does not sample the 150 ms colour transition) and WCAG 2.1 reflow: no page may need sideways scrolling down to a 320 pixel width (#13, #14, #15).
 - A content review packet for the initial question pack, generated from it (`content/build-review-packet.mjs`): each question as the learner sees it, the answer key, reasons and references, the output the build verified, and the content-policy checks as boxes to tick. CI fails if it is out of date (#8, #15).
 - Release documentation: demonstration scripts for the learner and editorial journeys with screenshots (and a script for what only a person can check), draft release notes, a readiness review that maps each acceptance criterion of #15 to its evidence and lists the blockers, a threat model brought up to date with what was built and found, and backup, rollback, reconciliation and incident-response procedures in the operations guide, the first two exercised in CI (#15).
 - Release gates in CI: a performance baseline with budgets (one learner, sequential, plus backend startup), a backup and restore rehearsal that compares every table, a bundle size budget, `npm audit`, secret scanning of the whole history (gitleaks) and CodeQL for the backend and the web app; and a migration upgrade test that keeps a reviewed revision across the latest change (#15).

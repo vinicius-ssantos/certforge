@@ -1,7 +1,7 @@
 import type { Page } from "@playwright/test";
 import { expect, test } from "./test";
 import { createStaff } from "./api";
-import { expectNoA11yViolations, expectNoHorizontalOverflow, signIn } from "./helpers";
+import { expectNoA11yViolations, expectReflows, signIn } from "./helpers";
 
 /**
  * The editorial tests publish real questions into the throwaway database, so they use a topic of
@@ -39,12 +39,12 @@ test.describe("the editorial desk", () => {
     await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Editorial" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Questions" })).toBeVisible();
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await page.getByRole("link", { name: "New question" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "New question" })).toBeVisible();
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     // Save only what is written so far; the server accepts an unfinished draft.
     await page.getByLabel("Topic", { exact: true }).selectOption({ label: TOPIC_NAME });
@@ -69,7 +69,7 @@ test.describe("the editorial desk", () => {
     await expect(page.getByRole("region", { name: "As the learner will see it" })).toContainText(label);
     await expect(page.getByLabel("Code example")).toContainText("System.out.println(1 + 1);");
     await expectNoA11yViolations(page);
-    await expectNoHorizontalOverflow(page);
+    await expectReflows(page);
 
     await page.getByRole("link", { name: "Back to questions" }).click();
     await page.getByRole("link", { name: "Waiting for review" }).click();

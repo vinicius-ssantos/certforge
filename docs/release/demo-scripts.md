@@ -48,6 +48,6 @@ Automated checks cannot judge these, and the release is not ready until a person
 
 - **Keyboard only.** Do Scripts A and B without a mouse. Every control reachable, a visible focus ring everywhere, focus lands on the heading after each navigation and on the result after each answer, nothing traps focus.
 - **Screen reader.** With a screen reader (for example NVDA with Firefox or Chrome), do Script A and the first half of Script B. Headings, landmarks, form labels, the error summary, status messages after saving, sending or approving, and the answer feedback should all be announced sensibly.
-- **Dark scheme.** Switch the operating system to dark and look at every screen for contrast and legibility; the automated accessibility checks run in the light scheme only.
-- **Zoom and small screens.** Zoom to 200 per cent and use a phone-width window; nothing should be cut off or need sideways scrolling, apart from long code blocks.
+- **Dark scheme.** Switch the operating system to dark and look at every screen. Contrast is measured automatically in both schemes, so what is left for you is judgement: does it read comfortably, does anything look muddy or glaring, do the state colours still mean what they should.
+- **Zoom and small screens.** Zoom to 200 and 400 per cent and use a phone-width window. CI checks that no page needs sideways scrolling down to a 320 pixel width; what you are looking for is whether it is still usable and sensibly ordered, not just unbroken.
 - **The content.** The question pack needs a technical review by someone who knows the exam objectives, and the wording of the objectives in the catalog needs checking against Oracle's page.
