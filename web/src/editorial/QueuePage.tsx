@@ -22,6 +22,7 @@ export function QueuePage() {
   useDocumentTitle("Questions");
   const api = useApi();
   const canAuthor = useHasAny("CONTENT_AUTHOR");
+  const canManageCatalog = useHasAny("CATALOG_MANAGE");
   const topicNames = useTopicNames();
   const [params] = useSearchParams();
   const requested = params.get("status");
@@ -42,11 +43,14 @@ export function QueuePage() {
     <>
       <div className="page-head">
         <h1>Questions</h1>
-        {canAuthor ? (
-          <Link to="/editorial/new" className="button">
-            New question
-          </Link>
-        ) : null}
+        <div className="head-actions">
+          {canManageCatalog ? <Link to="/editorial/catalog">Catalog</Link> : null}
+          {canAuthor ? (
+            <Link to="/editorial/new" className="button">
+              New question
+            </Link>
+          ) : null}
+        </div>
       </div>
       <nav className="tabs" aria-label="Filter by status">
         {FILTERS.map((filter) => (
