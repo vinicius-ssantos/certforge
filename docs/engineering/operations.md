@@ -114,7 +114,7 @@ pg_restore -U certforge -d certforge --no-owner --exit-on-error certforge-2026-1
 - **After a restore, end every session**: `delete from certforge.identity_session;` (this only signs people out). A backup can contain sessions that were revoked after it was taken, for example for an account that was disabled or lost a role, and restoring would revive them.
 - Keep backups somewhere other than the database host, and treat them as sensitive: they hold password hashes and every learner's answers.
 - **Rehearse it.** `deploy/rehearse-restore.sh` backs up a running stack, restores into a brand-new PostgreSQL and compares every table by row count and content checksum plus the migration history. CI runs it on every change; run it against your own environment before relying on a backup.
-- This release defines no recovery point or recovery time objective. They depend on how often you back up and where; decide them for your deployment.
+- Recovery objectives are proposed in [ADR 0010](../adr/0010-first-deployment-posture.md), which is awaiting a decision: 24 hours of data and one working day to be back, following from daily backups and a single instance. Until it is accepted, this release promises neither.
 
 ## Upgrading and rolling back
 
