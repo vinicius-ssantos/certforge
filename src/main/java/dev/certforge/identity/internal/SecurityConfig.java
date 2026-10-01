@@ -1,5 +1,6 @@
 package dev.certforge.identity.internal;
 
+import dev.certforge.platform.RequestId;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.Clock;
@@ -88,6 +89,8 @@ class SecurityConfig {
                 requests
                     .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info")
                     .permitAll()
+                    .requestMatchers("/actuator/**")
+                    .hasAuthority("OPERATIONS_VIEW")
                     .requestMatchers(HttpMethod.GET, "/api/auth/csrf")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")
@@ -117,6 +120,14 @@ class SecurityConfig {
     return http.build();
   }
 
+  /**
+   * The request id is validated by its filter to be URL-safe, so it is safe inside a JSON string.
+   */
+  private static String requestId() {
+    String id = RequestId.current();
+    return id == null ? "" : id;
+  }
+
   /** Writes a fixed, non-sensitive RFC 9457 body. Values are constants, never user input. */
   private static void problem(HttpServletResponse response, int status, String title, String code)
       throws IOException {
@@ -132,6 +143,8 @@ class SecurityConfig {
                 + status
                 + ",\"code\":\""
                 + code
+                + "\",\"requestId\":\""
+                + requestId()
                 + "\"}");
   }
 }

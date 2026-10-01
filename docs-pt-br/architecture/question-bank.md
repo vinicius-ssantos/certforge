@@ -76,7 +76,7 @@ O contrato de módulo `QuestionBank` expõe quatro leituras para os outros módu
 
 ## Fatos de auditoria
 
-Aprovação, publicação, substituição e depreciação publicam um `AuditFact` (ator, ação, assunto `question-revision:<id>`, momento) como evento em processo, dentro da mesma transação. Ações: `QUESTION_REVISION_APPROVED`, `QUESTION_REVISION_PUBLISHED`, `QUESTION_REVISION_REPLACED`, `QUESTION_REVISION_DEPRECATED`. O módulo `audit` os persistirá na #12; até lá os fatos são emitidos, mas não armazenados.
+Aprovação, publicação, substituição e depreciação publicam um `AuditFact` (ator, ação, assunto `question-revision:<id>`, momento) como evento em processo, dentro da mesma transação. Ações: `QUESTION_REVISION_APPROVED`, `QUESTION_REVISION_PUBLISHED`, `QUESTION_REVISION_REPLACED`, `QUESTION_REVISION_DEPRECATED`. O módulo `audit` persiste cada fato na mesma transação, em uma tabela somente de acréscimo; veja [operações](../engineering/operations.md).
 
 ## Endpoints
 

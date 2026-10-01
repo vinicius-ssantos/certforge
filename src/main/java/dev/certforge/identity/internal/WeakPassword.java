@@ -1,17 +1,14 @@
 package dev.certforge.identity.internal;
 
-class WeakPassword extends RuntimeException {
+import dev.certforge.platform.ProblemException;
+import org.springframework.http.HttpStatus;
+
+/** The password violates the policy. The code names the rule; the password is never echoed. */
+class WeakPassword extends ProblemException {
 
   private static final long serialVersionUID = 1L;
 
-  private final String violationCode;
-
   WeakPassword(String violationCode) {
-    super(violationCode);
-    this.violationCode = violationCode;
-  }
-
-  String code() {
-    return violationCode;
+    super(HttpStatus.BAD_REQUEST, violationCode, "Password does not meet the policy");
   }
 }

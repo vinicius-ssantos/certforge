@@ -2,6 +2,8 @@ package dev.certforge.study.internal;
 
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.platform.Page;
+import dev.certforge.platform.PageCursor;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionRevisionId;
@@ -14,12 +16,10 @@ import dev.certforge.study.internal.HistoryViews.AttemptHistoryItem;
 import dev.certforge.study.internal.HistoryViews.HistoricalOption;
 import dev.certforge.study.internal.HistoryViews.HistoricalQuestion;
 import dev.certforge.study.internal.HistoryViews.HistoricalReference;
-import dev.certforge.study.internal.HistoryViews.Page;
 import dev.certforge.study.internal.HistoryViews.SessionHistoryItem;
 import java.time.Clock;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 class HistoryService implements StudyEvidence {
-
-  static final int DEFAULT_PAGE_SIZE = 20;
-  static final int MAX_PAGE_SIZE = 50;
 
   private final HistoryRepository history;
   private final StudyRepository sessionStore;
@@ -61,9 +58,9 @@ class HistoryService implements StudyEvidence {
   Page<SessionHistoryItem> sessions(String cursor, Integer size) {
     UUID learner = currentActor.require().value();
     sessionStore.expireDue(learner, clock.instant());
-    int limit = pageSize(size);
-    List<SessionRow> rows = history.sessions(learner, decode(cursor), limit + 1);
-    return page(
+    int limit = Page.size(size);
+    List<SessionRow> rows = history.sessions(learner, PageCursor.decodeOrNull(cursor), limit + 1);
+    return Page.of(
         rows,
         limit,
         row ->
@@ -76,16 +73,16 @@ class HistoryService implements StudyEvidence {
                 row.correctCount(),
                 row.createdAt(),
                 row.closedAt()),
-        row -> new Cursor(row.createdAt(), row.id()));
+        row -> new PageCursor(row.createdAt(), row.id()));
   }
 
   /** Accepted attempts newest first, each with the revision that was answered. */
   Page<AttemptHistoryItem> attempts(UUID topicId, UUID sessionId, String cursor, Integer size) {
     UUID learner = currentActor.require().value();
-    int limit = pageSize(size);
+    int limit = Page.size(size);
     List<AttemptRow> rows =
-        history.attempts(learner, topicId, sessionId, decode(cursor), limit + 1);
-    return page(rows, limit, this::toItem, row -> new Cursor(row.submittedAt(), row.id()));
+        history.attempts(learner, topicId, sessionId, PageCursor.decodeOrNull(cursor), limit + 1);
+    return Page.of(rows, limit, this::toItem, row -> new PageCursor(row.submittedAt(), row.id()));
   }
 
   private AttemptHistoryItem toItem(AttemptRow row) {
@@ -131,29 +128,5 @@ class HistoryService implements StudyEvidence {
   @Override
   public List<ActorId> learnersWithAttempts() {
     return history.learnersWithAttempts().stream().map(ActorId::new).toList();
-  }
-
-  // ---- paging --------------------------------------------------------------------------------
-
-  private static Cursor decode(String cursor) {
-    return cursor == null || cursor.isBlank() ? null : Cursor.decode(cursor);
-  }
-
-  private static int pageSize(Integer requested) {
-    int size = requested == null ? DEFAULT_PAGE_SIZE : requested;
-    if (size < 1 || size > MAX_PAGE_SIZE) {
-      throw StudyException.invalid(
-          "invalid_page_size", "The page size must be between 1 and " + MAX_PAGE_SIZE);
-    }
-    return size;
-  }
-
-  /** Rows were fetched with one extra; its presence means another page follows. */
-  private static <R, T> Page<T> page(
-      List<R> rows, int limit, Function<R, T> toItem, Function<R, Cursor> toCursor) {
-    boolean more = rows.size() > limit;
-    List<R> visible = more ? rows.subList(0, limit) : rows;
-    String next = more ? toCursor.apply(visible.get(visible.size() - 1)).encode() : null;
-    return new Page<>(visible.stream().map(toItem).toList(), next);
   }
 }

@@ -1,7 +1,7 @@
 /** Security- and integrity-relevant administrative facts. */
 @ApplicationModule(
     displayName = "audit",
-    allowedDependencies = {"identity"})
+    allowedDependencies = {"platform", "identity"})
 package dev.certforge.audit;
 
 import org.springframework.modulith.ApplicationModule;

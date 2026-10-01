@@ -11,6 +11,9 @@ import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.study.internal.SessionViews.SessionQuestionView;
 import dev.certforge.study.internal.SessionViews.SessionSummary;
 import dev.certforge.study.internal.SessionViews.SessionView;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -44,6 +47,8 @@ class StudyService {
   private final Clock clock;
   private final StudyProperties properties;
   private final TransactionTemplate transaction;
+  private final MeterRegistry metrics;
+  private final ObservationRegistry observations;
 
   StudyService(
       StudyRepository repository,
@@ -54,7 +59,9 @@ class StudyService {
       CurrentActor currentActor,
       Clock clock,
       StudyProperties properties,
-      PlatformTransactionManager transactionManager) {
+      PlatformTransactionManager transactionManager,
+      MeterRegistry metrics,
+      ObservationRegistry observations) {
     this.repository = repository;
     this.attempts = attempts;
     this.catalog = catalog;
@@ -64,6 +71,8 @@ class StudyService {
     this.clock = clock;
     this.properties = properties;
     this.transaction = new TransactionTemplate(transactionManager);
+    this.metrics = metrics;
+    this.observations = observations;
   }
 
   int defaultQuestionCount() {
@@ -81,6 +90,11 @@ class StudyService {
    * concurrent start, rejected by the unique index, can be answered with the session that won.
    */
   SessionView start(UUID topicId, Integer requestedCount) {
+    return Observation.createNotStarted("certforge.session.start", observations)
+        .observe(() -> doStart(topicId, requestedCount));
+  }
+
+  private SessionView doStart(UUID topicId, Integer requestedCount) {
     ActorId learner = currentActor.require();
     int count = requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
     if (count < 1 || count > properties.maxQuestionCount()) {
@@ -131,6 +145,7 @@ class StudyService {
           .map(StudyService::activeSessionExists)
           .orElse(StudyException.conflict("active_session_exists", "A session is in progress"));
     }
+    metrics.counter("certforge.sessions.created").increment();
     return view(session, selected, List.of());
   }
 

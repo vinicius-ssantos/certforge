@@ -12,6 +12,9 @@ import dev.certforge.study.internal.AttemptViews.Answer;
 import dev.certforge.study.internal.AttemptViews.AttemptResult;
 import dev.certforge.study.internal.AttemptViews.OptionAnswer;
 import dev.certforge.study.internal.AttemptViews.Reference;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -61,6 +64,8 @@ class AttemptService {
   private final Clock clock;
   private final ApplicationEventPublisher events;
   private final TransactionTemplate transaction;
+  private final MeterRegistry metrics;
+  private final ObservationRegistry observations;
 
   AttemptService(
       AttemptRepository attempts,
@@ -69,7 +74,9 @@ class AttemptService {
       CurrentActor currentActor,
       Clock clock,
       ApplicationEventPublisher events,
-      PlatformTransactionManager transactionManager) {
+      PlatformTransactionManager transactionManager,
+      MeterRegistry metrics,
+      ObservationRegistry observations) {
     this.attempts = attempts;
     this.sessions = sessions;
     this.questionBank = questionBank;
@@ -77,9 +84,16 @@ class AttemptService {
     this.clock = clock;
     this.events = events;
     this.transaction = new TransactionTemplate(transactionManager);
+    this.metrics = metrics;
+    this.observations = observations;
   }
 
   Outcome submit(UUID sessionId, int position, String key, Submission submission) {
+    return Observation.createNotStarted("certforge.attempt.submit", observations)
+        .observe(() -> doSubmit(sessionId, position, key, submission));
+  }
+
+  private Outcome doSubmit(UUID sessionId, int position, String key, Submission submission) {
     ActorId learner = currentActor.require();
     requireKey(key);
     List<String> selected = normalize(submission.selectedOptions());
@@ -151,6 +165,10 @@ class AttemptService {
       }
       throw e;
     }
+    metrics
+        .counter(
+            "certforge.attempts.submitted", "outcome", attempt.correct() ? "correct" : "incorrect")
+        .increment();
     return new Outcome(result(attempt, evidence), false);
   }
 
@@ -171,6 +189,7 @@ class AttemptService {
       throw StudyException.conflict(
           "idempotency_key_reused", "This key was already used for a different request");
     }
+    metrics.counter("certforge.attempts.replayed").increment();
     return new Outcome(result(earlier, evidence(earlier.revisionId())), true);
   }
 

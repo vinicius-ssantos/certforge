@@ -10,12 +10,13 @@ Cada módulo é um subpacote direto de `dev.certforge`. Nomes de pacote Java nã
 
 | Módulo | Pacote | Dependências permitidas |
 |---|---|---|
-| `identity` | `dev.certforge.identity` | nenhuma |
-| `preparation-catalog` | `dev.certforge.preparationcatalog` | `identity` |
-| `question-bank` | `dev.certforge.questionbank` | `identity`, `preparationcatalog`, `audit` |
-| `study` | `dev.certforge.study` | `identity`, `preparationcatalog`, `questionbank` |
-| `progress` | `dev.certforge.progress` | `identity`, `preparationcatalog`, `study` |
-| `audit` | `dev.certforge.audit` | `identity` |
+| `platform` | `dev.certforge.platform` | nenhuma |
+| `identity` | `dev.certforge.identity` | `platform` |
+| `preparation-catalog` | `dev.certforge.preparationcatalog` | `platform`, `identity` |
+| `question-bank` | `dev.certforge.questionbank` | `platform`, `identity`, `preparationcatalog`, `audit` |
+| `study` | `dev.certforge.study` | `platform`, `identity`, `preparationcatalog`, `questionbank` |
+| `progress` | `dev.certforge.progress` | `platform`, `identity`, `preparationcatalog`, `study` |
+| `audit` | `dev.certforge.audit` | `platform`, `identity` |
 
 As dependências permitidas são declaradas com `@ApplicationModule(allowedDependencies = ...)` no `package-info.java` de cada módulo e seguem as regras de direção da [visão geral da arquitetura](overview.md).
 
@@ -44,3 +45,7 @@ O `ModularityTest` roda no CI (`mvn verify`) e falha o build quando:
 ## Exemplo mínimo de interação
 
 `audit.AuditFact` registra uma ação auditável e referencia `identity.ActorId`. O módulo `audit` depende de `identity` apenas pela sua API pública e declara essa dependência explicitamente.
+
+## O módulo `platform`
+
+O `platform` guarda o que todos os módulos compartilham na fronteira web e não depende de nenhum outro módulo: `ProblemException`, o tipo base de toda falha de domínio, que o tratador de erros único transforma em um problema RFC 9457 com um `code` estável e o `requestId`; `RequestId`, o identificador de correlação; e os tipos `Page`/`PageCursor` da paginação por cursor. Os módulos levantam falhas estendendo `ProblemException` e nunca montam um corpo de erro por conta própria. Veja [operações](../engineering/operations.md).

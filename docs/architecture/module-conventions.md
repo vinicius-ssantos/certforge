@@ -8,12 +8,13 @@ Each module is a direct sub-package of `dev.certforge`. Java package names canno
 
 | Module | Package | Allowed dependencies |
 |---|---|---|
-| `identity` | `dev.certforge.identity` | none |
-| `preparation-catalog` | `dev.certforge.preparationcatalog` | `identity` |
-| `question-bank` | `dev.certforge.questionbank` | `identity`, `preparationcatalog`, `audit` |
-| `study` | `dev.certforge.study` | `identity`, `preparationcatalog`, `questionbank` |
-| `progress` | `dev.certforge.progress` | `identity`, `preparationcatalog`, `study` |
-| `audit` | `dev.certforge.audit` | `identity` |
+| `platform` | `dev.certforge.platform` | none |
+| `identity` | `dev.certforge.identity` | `platform` |
+| `preparation-catalog` | `dev.certforge.preparationcatalog` | `platform`, `identity` |
+| `question-bank` | `dev.certforge.questionbank` | `platform`, `identity`, `preparationcatalog`, `audit` |
+| `study` | `dev.certforge.study` | `platform`, `identity`, `preparationcatalog`, `questionbank` |
+| `progress` | `dev.certforge.progress` | `platform`, `identity`, `preparationcatalog`, `study` |
+| `audit` | `dev.certforge.audit` | `platform`, `identity` |
 
 The allowed dependencies are declared with `@ApplicationModule(allowedDependencies = ...)` in each module's `package-info.java` and follow the direction rules in the [architecture overview](overview.md).
 
@@ -42,3 +43,7 @@ The allowed dependencies are declared with `@ApplicationModule(allowedDependenci
 ## Minimal interaction example
 
 `audit.AuditFact` records an auditable action and references `identity.ActorId`. The `audit` module depends on `identity` only through its public API and declares that dependency explicitly.
+
+## The `platform` module
+
+`platform` holds what every module shares on the web boundary and depends on no other module: `ProblemException`, the base type for every domain failure, which the single error advice turns into an RFC 9457 problem with a stable `code` and the `requestId`; `RequestId`, the correlation identifier; and the `Page`/`PageCursor` types of keyset pagination. Modules raise failures by extending `ProblemException` and never build an error body themselves. See [operations](../engineering/operations.md).

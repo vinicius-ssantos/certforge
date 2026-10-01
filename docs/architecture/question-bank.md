@@ -74,7 +74,7 @@ The module contract `QuestionBank` exposes four reads to other modules:
 
 ## Audit facts
 
-Approval, publication, replacement and deprecation publish an `AuditFact` (actor, action, subject `question-revision:<id>`, time) as an in-process event inside the same transaction. Actions: `QUESTION_REVISION_APPROVED`, `QUESTION_REVISION_PUBLISHED`, `QUESTION_REVISION_REPLACED`, `QUESTION_REVISION_DEPRECATED`. The `audit` module will persist them in #12; until then the facts are emitted but not stored.
+Approval, publication, replacement and deprecation publish an `AuditFact` (actor, action, subject `question-revision:<id>`, time) as an in-process event inside the same transaction. Actions: `QUESTION_REVISION_APPROVED`, `QUESTION_REVISION_PUBLISHED`, `QUESTION_REVISION_REPLACED`, `QUESTION_REVISION_DEPRECATED`. The `audit` module persists every fact in the same transaction, in an append-only table; see [operations](../engineering/operations.md).
 
 ## Endpoints
 

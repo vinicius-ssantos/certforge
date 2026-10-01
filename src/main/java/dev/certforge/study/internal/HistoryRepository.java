@@ -1,6 +1,7 @@
 package dev.certforge.study.internal;
 
 import dev.certforge.identity.ActorId;
+import dev.certforge.platform.PageCursor;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.study.AttemptFact;
 import java.sql.ResultSet;
@@ -51,7 +52,7 @@ class HistoryRepository {
   }
 
   /** Sessions newest first, strictly after the cursor, at most {@code limit} rows. */
-  List<SessionRow> sessions(UUID learnerId, Cursor after, int limit) {
+  List<SessionRow> sessions(UUID learnerId, PageCursor after, int limit) {
     String paging = after == null ? "" : " and (s.created_at, s.id) < (:cursorAt, :cursorId)";
     var statement =
         jdbc.sql(
@@ -84,7 +85,8 @@ class HistoryRepository {
   }
 
   /** Attempts newest first, optionally narrowed to a topic and/or a session. */
-  List<AttemptRow> attempts(UUID learnerId, UUID topicId, UUID sessionId, Cursor after, int limit) {
+  List<AttemptRow> attempts(
+      UUID learnerId, UUID topicId, UUID sessionId, PageCursor after, int limit) {
     StringBuilder where = new StringBuilder(" where a.learner_id = :learner");
     if (topicId != null) {
       where.append(" and s.topic_id = :topic");
@@ -157,7 +159,7 @@ class HistoryRepository {
         .list();
   }
 
-  private static OffsetDateTime utc(Cursor cursor) {
+  private static OffsetDateTime utc(PageCursor cursor) {
     return OffsetDateTime.ofInstant(cursor.at(), ZoneOffset.UTC);
   }
 

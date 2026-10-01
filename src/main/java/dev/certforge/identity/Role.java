@@ -13,7 +13,9 @@ public enum Role {
       Permission.CONTENT_AUTHOR,
       Permission.CONTENT_REVIEW,
       Permission.CONTENT_PUBLISH,
-      Permission.ACCOUNT_MANAGE);
+      Permission.ACCOUNT_MANAGE,
+      Permission.AUDIT_READ,
+      Permission.OPERATIONS_VIEW);
 
   private final Set<Permission> granted;
 

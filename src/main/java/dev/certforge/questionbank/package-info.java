@@ -4,7 +4,7 @@
  */
 @ApplicationModule(
     displayName = "question-bank",
-    allowedDependencies = {"identity", "preparationcatalog", "audit"})
+    allowedDependencies = {"platform", "identity", "preparationcatalog", "audit"})
 package dev.certforge.questionbank;
 
 import org.springframework.modulith.ApplicationModule;
