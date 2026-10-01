@@ -1,4 +1,5 @@
-import { request, type APIRequestContext } from "@playwright/test";
+import { request } from "@playwright/test";
+import { ADMIN_EMAIL, ADMIN_PASSWORD, API_URL, post } from "./api";
 
 /**
  * Publishes a small set of clearly labelled fixture questions so a learner session can run.
@@ -8,27 +9,12 @@ import { request, type APIRequestContext } from "@playwright/test";
  * the same editorial workflow a person would (draft, submit, approve, publish), and say so in their
  * text.
  */
-export const API_URL = process.env["E2E_API_URL"] ?? "http://localhost:8080";
-export const ADMIN_EMAIL = process.env["E2E_ADMIN_EMAIL"] ?? "e2e-admin@example.com";
-export const ADMIN_PASSWORD = process.env["E2E_ADMIN_PASSWORD"] ?? "e2e-admin-password-123";
 
 /** The seeded "Handling date, time, text, numeric and boolean values" topic of the Oracle track. */
 export const TOPIC_ID = "a3000000-0000-4000-8000-000000000001";
 export const TOPIC_NAME = "Date, time, text, numeric and boolean values";
 export const FIXTURE_COUNT = 10;
 const MARKER = "E2E fixture question";
-
-async function post(api: APIRequestContext, path: string, data?: unknown) {
-  const csrf = (await (await api.get("/api/auth/csrf")).json()) as { token: string; headerName: string };
-  const response = await api.post(path, {
-    headers: { [csrf.headerName]: csrf.token },
-    ...(data === undefined ? {} : { data }),
-  });
-  if (!response.ok()) {
-    throw new Error(`POST ${path} failed: ${response.status()} ${await response.text()}`);
-  }
-  return response;
-}
 
 function fixture(number: number) {
   const multiple = number > FIXTURE_COUNT - 2;

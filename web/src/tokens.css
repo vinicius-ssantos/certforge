@@ -1,0 +1,47 @@
+/* Design tokens, the "editorial desk" look: cool paper, ink, one blue for links and focus, and a
+   proofreader's palette for state (green approved, brass in review, red changes). Contrast: text
+   and links are at least 4.5:1 on their background in both schemes, state colours too, and the
+   focus ring is at least 3:1 against everything around it. Colour never carries state alone: every
+   state also has a word or a symbol. */
+:root {
+  --bg: #f2f5f4;
+  --surface: #ffffff;
+  --text: #16212b;
+  --muted: #4b5b68;
+  --accent: #2f5da8;
+  --action: #16212b;
+  --action-text: #f2f5f4;
+  --border: #c5d0cc;
+  --border-strong: #8a9a95;
+  --danger: #b3261e;
+  --danger-bg: #fbeae8;
+  --ok: #1f7a5c;
+  --ok-bg: #e4f2ec;
+  --review: #8a6a1f;
+  --focus: #2f5da8;
+
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-read: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #10171c;
+    --surface: #182128;
+    --text: #e6edea;
+    --muted: #a7b5b0;
+    --accent: #8fb3f2;
+    --action: #e6edea;
+    --action-text: #10171c;
+    --border: #2e3b42;
+    --border-strong: #6b7c84;
+    --danger: #ff9e96;
+    --danger-bg: #3a1a18;
+    --ok: #7fd1ae;
+    --ok-bg: #12312a;
+    --review: #d9b863;
+    --focus: #8fb3f2;
+  }
+}

@@ -12,6 +12,8 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Editorial desk in the web app: question queue with status filters, the draft editor (save unfinished work, send for review with a list of what is missing that links to each field), and a read-only revision view that shows the question as the learner will see it before the answer key. Staff-only, shown by permission (#14).
+- A shared visual system (editorial desk look, light and dark tokens, bundled fonts) applied to the whole web app, and fenced code blocks in questions now render as code for learners and reviewers. See the web interface guidelines (#14).
 - Learner history, session review and topic progress pages, and end-to-end tests with Playwright and axe on desktop and mobile viewports, run in CI against the real backend and PostgreSQL (#13).
 - Learner study flow in the web app: start a practice session from a topic, resume the one in progress, single and multiple choice questions with confidence, idempotent submission with feedback, explanation and references, finish or end a session, and expired-session states, with focus managed across questions and results (#13).
 - Learner web app foundation: a contract-first React client generated from the backend OpenAPI contract, sign-in and registration, track browsing, accessible layout with automated checks, and a web CI job (#13, ADR 0009).

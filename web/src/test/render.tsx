@@ -16,6 +16,22 @@ export const account = {
   permissions: ["STUDY"],
 };
 
+export const editor = {
+  id: "99999999-9999-4999-8999-999999999999",
+  email: "editor@example.com",
+  enabled: true,
+  roles: ["EDITOR"],
+  permissions: ["CONTENT_AUTHOR"],
+};
+
+export const reviewer = {
+  id: "88888888-8888-4888-8888-888888888888",
+  email: "reviewer@example.com",
+  enabled: true,
+  roles: ["REVIEWER"],
+  permissions: ["CONTENT_REVIEW"],
+};
+
 export const javaTrack = {
   id: "22222222-2222-4222-8222-222222222222",
   slug: "java-certification",
@@ -69,12 +85,12 @@ export interface Rendered {
  */
 export function renderApp(
   routes: Record<string, Handler> = {},
-  options: { path?: string; signedIn?: boolean } = {},
+  options: { path?: string; signedIn?: boolean; as?: typeof account } = {},
 ): Rendered {
   const signedIn = options.signedIn ?? true;
   const fetch = fakeFetch({
     "GET /api/auth/me": signedIn
-      ? { body: account }
+      ? { body: options.as ?? account }
       : { status: 401, body: { code: "unauthenticated", status: 401, title: "Unauthorized" } },
     "GET /api/auth/csrf": { body: { headerName: "X-XSRF-TOKEN", token: "test-csrf-token" } },
     ...routes,

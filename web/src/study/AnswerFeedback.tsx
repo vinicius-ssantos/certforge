@@ -1,3 +1,4 @@
+import { Prompt } from "../ui/Prompt";
 import type { AttemptResult, Question } from "../api/types";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
 
@@ -23,7 +24,7 @@ export function AnswerFeedback({
       <h2 id="result-heading" ref={heading} tabIndex={-1}>
         {result.correct ? "Correct" : "Not quite"}
       </h2>
-      <div className="prompt">{question.prompt}</div>
+      <Prompt text={question.prompt} />
 
       <ul className="answers">
         {result.answer.options.map((option) => (
@@ -43,7 +44,7 @@ export function AnswerFeedback({
       </ul>
 
       <h3>Explanation</h3>
-      <div className="prompt">{result.answer.explanation}</div>
+      <Prompt text={result.answer.explanation} />
 
       {result.answer.references.length > 0 ? (
         <>

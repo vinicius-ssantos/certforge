@@ -59,6 +59,26 @@ export function errorMessage(error: unknown): string {
       return "Choose one answer from the list.";
     case "question_count_out_of_range":
       return "That number of questions is not allowed.";
+    case "question_not_found":
+    case "revision_not_found":
+      return "This question or revision does not exist.";
+    case "revision_incomplete":
+      return "The revision is not complete yet. The list beside the form says what is missing.";
+    case "revision_not_editable":
+    case "revision_not_draft":
+      return "Only a draft can be edited. Create a new revision to change this question.";
+    case "not_revision_author":
+      return "Only the author of a revision can change or send it.";
+    case "revision_not_in_review":
+      return "This revision is not waiting for review any more.";
+    case "revision_not_approved":
+      return "Only an approved revision can be published.";
+    case "reviewer_must_differ_from_author":
+      return "A revision cannot be reviewed by the person who wrote it.";
+    case "open_revision_exists":
+      return "This question already has a revision in progress.";
+    case "topic_not_active":
+      return "That topic is not active. Choose another one.";
     case "forbidden":
       return "You do not have permission to do that.";
     default:

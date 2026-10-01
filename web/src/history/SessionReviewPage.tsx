@@ -1,3 +1,4 @@
+import { Prompt } from "../ui/Prompt";
 import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
@@ -43,7 +44,7 @@ export function SessionReviewPage() {
               <h2>
                 Question {attempt.position + 1}: {attempt.correct ? "correct" : "incorrect"}
               </h2>
-              <div className="prompt">{attempt.question.prompt}</div>
+              <Prompt text={attempt.question.prompt} />
               <p>
                 Your answer: {attempt.selectedOptions.join(", ")}. Confidence:{" "}
                 {attempt.confidence.toLowerCase()}. Answered{" "}
@@ -67,7 +68,7 @@ export function SessionReviewPage() {
                     </li>
                   ))}
                 </ul>
-                <div className="prompt">{attempt.question.explanation}</div>
+                <Prompt text={attempt.question.explanation} />
                 {attempt.question.references.length > 0 ? (
                   <ul>
                     {attempt.question.references.map((reference) => (
