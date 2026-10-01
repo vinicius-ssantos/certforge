@@ -7,6 +7,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react()],
   server: { proxy: { "/api": "http://localhost:8080" } },
+  // The built app is served the same way for the end-to-end tests.
+  preview: { proxy: { "/api": "http://localhost:8080" } },
   test: {
     environment: "jsdom",
     globals: true,

@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
@@ -111,6 +111,6 @@ describe("navigation", () => {
 
     const heading = await screen.findByRole("heading", { level: 1, name: "Java Certification" });
     expect(heading).toHaveFocus();
-    expect(document.title).toBe("Java Certification · CertForge");
+    await waitFor(() => expect(document.title).toBe("Java Certification · CertForge"));
   });
 });

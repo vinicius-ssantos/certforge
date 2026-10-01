@@ -21,4 +21,5 @@ export type SessionHistoryItem = Schemas["SessionHistoryItem"];
 export type AttemptHistoryPage = Schemas["PageAttemptHistoryItem"];
 export type AttemptHistoryItem = Schemas["AttemptHistoryItem"];
 export type TopicProgress = Schemas["TopicProgress"];
+export type HistoricalQuestion = Schemas["HistoricalQuestion"];
 export type Confidence = AttemptRequest["confidence"];

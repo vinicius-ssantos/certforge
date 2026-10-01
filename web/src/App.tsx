@@ -4,6 +4,9 @@ import { RegisterPage } from "./auth/RegisterPage";
 import { RequireAuth } from "./auth/RequireAuth";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
+import { HistoryPage } from "./history/HistoryPage";
+import { SessionReviewPage } from "./history/SessionReviewPage";
+import { ProgressPage } from "./progress/ProgressPage";
 import { SessionPage } from "./study/SessionPage";
 import { Layout } from "./ui/Layout";
 import { EmptyState } from "./ui/States";
@@ -33,6 +36,9 @@ export function App() {
           <Route index element={<TracksPage />} />
           <Route path="/tracks/:slug" element={<TrackPage />} />
           <Route path="/sessions/:sessionId" element={<SessionPage />} />
+          <Route path="/history" element={<HistoryPage />} />
+          <Route path="/history/sessions/:sessionId" element={<SessionReviewPage />} />
+          <Route path="/progress" element={<ProgressPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>
