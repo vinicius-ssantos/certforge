@@ -23,3 +23,11 @@ updates:
     open-pull-requests-limit: 10
     labels:
       - dependencies
+    ignore:
+      # ESLint 10 is blocked: eslint-plugin-jsx-a11y (our accessibility lint) supports ESLint up to
+      # 9 and has no release for 10, and @eslint/js 10 requires ESLint 10. Remove these two entries
+      # when jsx-a11y supports ESLint 10, then upgrade both together.
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
