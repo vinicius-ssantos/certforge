@@ -1,33 +1,71 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
-import { unwrap } from "../api/problem";
+import { ApiError, unwrap } from "../api/problem";
 import type { Topic } from "../api/types";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 
-function TopicList({ topics }: { topics: Topic[] }) {
+function TopicList({
+  topics,
+  onStart,
+  busy,
+}: {
+  topics: Topic[];
+  onStart: (topic: Topic) => void;
+  busy: boolean;
+}) {
   return (
     <ol className="topics">
       {topics.map((topic) => (
         <li key={topic.id}>
           <strong>{topic.name}</strong>
-          <span className="muted"> {topic.objectiveRef}</span>
-          {topic.subtopics.length > 0 ? <TopicList topics={topic.subtopics} /> : null}
+          <span className="muted"> {topic.objectiveRef}</span>{" "}
+          <button
+            type="button"
+            className="small"
+            aria-label={`Practice ${topic.name}`}
+            disabled={busy}
+            onClick={() => onStart(topic)}
+          >
+            Practice
+          </button>
+          {topic.subtopics.length > 0 ? (
+            <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} />
+          ) : null}
         </li>
       ))}
     </ol>
   );
 }
 
+function isActiveSession(error: unknown): error is ApiError {
+  return error instanceof ApiError && error.code === "active_session_exists";
+}
+
 export function TrackPage() {
   const { slug = "" } = useParams();
   const api = useApi();
+  const navigate = useNavigate();
   const track = useQuery({
     queryKey: ["track", slug],
     queryFn: () => unwrap(api.GET("/api/catalog/tracks/{slug}", { params: { path: { slug } } })),
   });
   useDocumentTitle(track.data?.name ?? "Track");
+
+  // Starting a session for a topic that already has one in progress is not a failure for the
+  // learner: the server says which session it is and the learner simply continues it.
+  const start = useMutation({
+    mutationFn: (topic: Topic) =>
+      unwrap(api.POST("/api/study/sessions", { body: { topicId: topic.id } })),
+    onSuccess: (session) => navigate(`/sessions/${session.id}`),
+    onError: (error) => {
+      const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
+      if (typeof existing === "string") {
+        navigate(`/sessions/${existing}`, { state: { resumed: true } });
+      }
+    },
+  });
 
   // The heading is always the first element and is never replaced as the data arrives, so focus
   // moved to it by the route change stays put instead of being lost on a re-render.
@@ -56,7 +94,12 @@ export function TrackPage() {
             </a>
           </p>
           <h2>Topics</h2>
-          <TopicList topics={track.data.topics} />
+          {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
+          <TopicList
+            topics={track.data.topics}
+            onStart={(topic) => start.mutate(topic)}
+            busy={start.isPending}
+          />
           <p>
             <Link to="/">All tracks</Link>
           </p>
