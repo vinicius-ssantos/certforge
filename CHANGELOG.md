@@ -17,6 +17,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Keyboard and screen-reader checks in CI: every screen is walked with Tab (each control reachable, a visible focus ring on each, the skip link first and working, a confirmation that takes the focus and gives it back), and the accessibility tree of the main screens, which is what a screen reader announces, is asserted. What a person still has to judge is now narrower and is written down in the demonstration scripts (#13, #14, #15).
 - The content pack build now checks that the answer key agrees with what the code does: when an option carries the text the program prints, that option must be the one marked correct. It verified the program and the key separately before, so a question could print one thing and mark another as the answer (#8).
 - Accessibility checks now cover **both colour schemes** (axe runs once per scheme on every page the end-to-end suite visits, measuring with reduced motion so it does not sample the 150 ms colour transition) and WCAG 2.1 reflow: no page may need sideways scrolling down to a 320 pixel width (#13, #14, #15).
 - A content review packet for the initial question pack, generated from it (`content/build-review-packet.mjs`): each question as the learner sees it, the answer key, reasons and references, the output the build verified, and the content-policy checks as boxes to tick. CI fails if it is out of date (#8, #15).

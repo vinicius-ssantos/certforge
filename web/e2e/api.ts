@@ -164,3 +164,27 @@ export async function signedInApi(account: Account): Promise<APIRequestContext> 
   await post(api, "/api/auth/login", account);
   return api;
 }
+
+interface QuestionSummary {
+  topicId: string | null;
+  latestStatus: string;
+  prompt: string | null;
+}
+
+/**
+ * Makes sure a topic has enough published questions for the "Practice" button, which starts a
+ * session of the server's default size. Tops up to `count` rather than publishing every time, so
+ * repeated runs against the same database do not pile up questions.
+ */
+export async function ensurePractisableTopic(
+  admin: APIRequestContext,
+  topicId: string,
+  prompt: string,
+  count = 10,
+): Promise<void> {
+  const all = (await (await admin.get("/api/admin/questions?status=PUBLISHED")).json()) as QuestionSummary[];
+  const existing = all.filter((q) => q.topicId === topicId && q.prompt === prompt).length;
+  for (let i = existing; i < count; i += 1) {
+    await publishNewQuestion(admin, topicId, prompt);
+  }
+}

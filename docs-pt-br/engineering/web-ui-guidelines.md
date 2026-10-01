@@ -19,10 +19,11 @@ O produto é um lugar para estudar com cuidado e para escrever e revisar questõ
 
 1. **A cor nunca carrega o estado sozinha.** Todo estado é uma palavra, em geral com um símbolo (`○ Draft`, `◐ In review`, `● Approved`, `✓ Published`). Respostas corretas e incorretas são ditas em palavras.
 2. **Contraste.** Texto e cores de estado têm pelo menos 4,5:1 sobre o fundo e o anel de foco pelo menos 3:1, **nos dois esquemas**. O axe em navegador real verifica cada página visitada no CI, uma vez por esquema. Ele mede com movimento reduzido emulado, porque o app faz transição de cor em 150 ms e medir durante a troca amostra uma mistura dos dois temas, e não um deles. O que o axe não julga, como se o esquema escuro é agradável de ler, ainda pede uma pessoa.
-3. **O foco acompanha o conteúdo.** Depois de navegar, o foco vai para o título da página, a menos que a página já tenha colocado o foco em outro lugar de propósito (uma confirmação, a próxima questão, o resultado de uma resposta).
-4. **Erros dizem o que fazer.** As mensagens são escolhidas pelos códigos de erro estáveis do servidor (`web/src/ui/messages.ts`), nunca pelo texto do servidor. Um resumo no topo do formulário recebe foco e leva a cada campo.
-5. **O servidor decide, a tela dá as palavras.** A completude de uma revisão, quem pode revisar e o que pode ser publicado são regras do servidor. A interface mostra o que o servidor diz e nunca duplica uma regra que depois teria de acompanhar. Esconder um botão é cortesia, não proteção.
-6. **Código é código.** As questões usam blocos cercados (três crases). Eles aparecem em um bloco monoespaçado, rolável pelo teclado, e o texto nunca é inserido como HTML.
+3. **Teclado e leitor de tela são testados, não presumidos.** O CI percorre cada tela com Tab (todo controle alcançável, anel de foco em cada um, o link de pular conteúdo primeiro, uma confirmação que toma o foco e o devolve) e afirma a árvore de acessibilidade das telas principais, que é o que um leitor de tela anuncia. Um leitor de tela real e um julgamento da ordem de tabulação ainda pedem uma pessoa.
+4. **O foco acompanha o conteúdo.** Depois de navegar, o foco vai para o título da página, a menos que a página já tenha colocado o foco em outro lugar de propósito (uma confirmação, a próxima questão, o resultado de uma resposta).
+5. **Erros dizem o que fazer.** As mensagens são escolhidas pelos códigos de erro estáveis do servidor (`web/src/ui/messages.ts`), nunca pelo texto do servidor. Um resumo no topo do formulário recebe foco e leva a cada campo.
+6. **O servidor decide, a tela dá as palavras.** A completude de uma revisão, quem pode revisar e o que pode ser publicado são regras do servidor. A interface mostra o que o servidor diz e nunca duplica uma regra que depois teria de acompanhar. Esconder um botão é cortesia, não proteção.
+7. **Código é código.** As questões usam blocos cercados (três crases). Eles aparecem em um bloco monoespaçado, rolável pelo teclado, e o texto nunca é inserido como HTML.
 
 ## A mesa editorial
 

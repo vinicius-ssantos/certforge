@@ -17,10 +17,11 @@ The product is a place to study carefully and to write and review questions care
 
 1. **Colour never carries state alone.** Every state is a word, usually with a symbol (`○ Draft`, `◐ In review`, `● Approved`, `✓ Published`). Correct and incorrect answers are stated in words.
 2. **Contrast.** Text and state colours are at least 4.5:1 on their background and the focus ring at least 3:1, **in both schemes**. Real-browser axe checks every page it visits in CI, once per scheme. It measures with reduced motion emulated, because the app transitions colour over 150 ms and measuring mid-switch samples a blend of the two themes rather than either one. What axe cannot judge, such as whether the dark scheme reads pleasantly, still wants a person.
-3. **Focus follows the content.** After navigating, focus moves to the page heading, unless the page already placed it somewhere on purpose (a confirmation, the next question, the result of an answer).
-4. **Errors say what to do.** Messages are chosen by the server's stable error codes (`web/src/ui/messages.ts`), never by server text. A summary at the top of a form takes focus and links to each field.
-5. **The server decides, the screen words it.** Completeness of a revision, who may review, what may be published are all server rules. The interface shows what the server says and never duplicates a rule it would then have to keep in step. Hiding a button is a courtesy, not protection.
-6. **Code is code.** Questions use fenced blocks (three backticks). They render in a monospaced block, scrollable by keyboard, and text is never inserted as HTML.
+3. **Keyboard and screen reader are tested, not assumed.** CI walks every screen with Tab (every control reachable, a focus ring on each, the skip link first, a confirmation that takes the focus and gives it back) and asserts the accessibility tree of the main screens, which is what a screen reader announces. A real screen reader and a judgement of the tab order still want a person.
+4. **Focus follows the content.** After navigating, focus moves to the page heading, unless the page already placed it somewhere on purpose (a confirmation, the next question, the result of an answer).
+5. **Errors say what to do.** Messages are chosen by the server's stable error codes (`web/src/ui/messages.ts`), never by server text. A summary at the top of a form takes focus and links to each field.
+6. **The server decides, the screen words it.** Completeness of a revision, who may review, what may be published are all server rules. The interface shows what the server says and never duplicates a rule it would then have to keep in step. Hiding a button is a courtesy, not protection.
+7. **Code is code.** Questions use fenced blocks (three backticks). They render in a monospaced block, scrollable by keyboard, and text is never inserted as HTML.
 
 ## The editorial desk
 
