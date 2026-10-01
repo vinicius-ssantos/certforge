@@ -234,6 +234,15 @@ jobs:
           E2E_BASE_URL: http://localhost:8081
         run: npm run e2e
 
+      # After real traffic has gone through the stack: errors keep to the contract and leak nothing,
+      # metrics carry no ids or addresses, and the logs hold no answers, passwords or cookies.
+      - name: Inspect errors, metrics and logs
+        env:
+          E2E_BASE_URL: http://localhost:8081
+        run: |
+          docker compose -f compose.release.yaml -f compose.e2e.yaml logs --no-color app > app.log
+          node deploy/verify-privacy.mjs --logs app.log
+
       - name: Keep the reports and logs of a failed run
         if: failure()
         run: |

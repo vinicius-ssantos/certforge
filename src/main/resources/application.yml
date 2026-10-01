@@ -15,8 +15,12 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 20s
   mvc:
+    # Off on purpose. ProblemAdvice is the one place that builds error bodies, and it extends the
+    # framework's own handler. The automatic one Spring Boot adds when this is on answers first for
+    # the failures raised before a controller runs (unknown path, wrong method or content type) and
+    # leaves out the stable code and the request id.
     problemdetails:
-      enabled: true
+      enabled: false
   session:
     timeout: 30m
     jdbc:
