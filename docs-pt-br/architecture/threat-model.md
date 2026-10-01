@@ -62,6 +62,40 @@ Ameaça: logs ou traces capturam credenciais, respostas esperadas, conteúdo com
 
 Controles: campos de telemetria estruturados e em lista de permissão, redação, retenção limitada, controles de acesso, testes negativos.
 
+## Situação na v0.1.0
+
+Cada controle acima como foi construído, e o que o prova. "CI" significa que roda a cada mudança.
+
+| Ameaça | Controle como construído | Prova |
+|---|---|---|
+| Divulgação prematura de respostas | Os payloads do aluno são tipos separados, sem correção, razões, explicação nem referências; a resposta só chega na resposta a um envio aceito; respostas autenticadas são `no-store`; a sessão de outro aluno dá `404`, não `403`; respostas não aparecem em nenhuma linha de log | `AttemptSubmissionIT`, `StudySessionIT`; o `privacy.spec.ts` inspeciona cada resposta, a página, o armazenamento do navegador, cabeçalhos de cache, o acesso direto à API e o bundle construído em um navegador real; o `verify-privacy.mjs` varre os logs (CI) |
+| Alteração não autorizada de conteúdo | Permissões explícitas checadas no servidor; revisões imutáveis depois de enviadas (também garantido por gatilhos do banco); publicar exige uma revisão aprovada e, por padrão, outro revisor; eventos de auditoria | O `AuthorizationMatrixIT` é construído a partir dos próprios mapeamentos de requisição da aplicação, então um endpoint sem regra de acesso reprova o build, e confere cada papel nos dois sentidos mais o CSRF em todo endpoint que altera estado; `QuestionBankIT` (CI) |
+| Perda de integridade histórica | Tentativas e snapshots de sessão referenciam ids de revisões imutáveis; substituir uma questão cria uma nova revisão e aposenta a antiga | `history-integrity.spec.ts`: uma resposta continua mostrando a revisão que o aluno viu depois que a questão é substituída; `HistoryIT` (CI) |
+| Abuso de contas | bcrypt, política de senha por tamanho, limitação por endereço e por conta, erros de login genéricos, sessões no servidor revogadas ao mudar papel ou desabilitar, CSRF por cookie duplicado | `IdentityIT`, `CsrfFlowIT`; o proxy não pode ser usado para forjar o endereço do cliente (abaixo) |
+| Injeção e renderização insegura | SQL parametrizado; texto de questão renderizado como texto, nunca como HTML (código só em blocos cercados); uma Content Security Policy que permite só a origem do próprio app; sem estilos nem scripts inline | `prompt.test.tsx`; o `verify-release.sh` confere a política; a suíte ponta a ponta reprova qualquer página que provoque violação da política (CI) |
+| Telemetria sensível | Conjuntos fixos de rótulos com limite de valores distintos; ids de requisição aleatórios; logs sem respostas nem credenciais | `OperabilityIT`; o `verify-privacy.mjs` confere tags de métricas e logs depois de tráfego real (CI) |
+
+## Ameaças encontradas ao validar a v0.1.0
+
+A validação contra as imagens de release achou estas; cada uma foi corrigida e testada.
+
+- **Corpos de erro que saíram do contrato.** Falhas levantadas antes de um controller rodar (caminho desconhecido, método ou tipo de conteúdo errado) respondiam com o corpo do próprio framework, sem `code` nem id de requisição e com texto sobre o servidor. Agora todo erro tem o mesmo corpo (`FrameworkErrorContractIT`).
+- **Endereço do cliente atrás de um proxy.** Os limitadores usam o endereço do cliente, então atrás de um proxy todos dividiriam um balde, e um proxy que acrescentasse ao `X-Forwarded-For` deixaria o cliente escolher o próprio. O proxy de release sobrescreve o cabeçalho e o backend o lê; o `verify-release.sh` prova que um cabeçalho forjado não burla o limite.
+- **Dependências vulneráveis.** A primeira varredura de imagens achou avisos críticos no Tomcat (incluindo bypass de restrição de segurança e de autenticação) e avisos altos no Jackson em versões gerenciadas pelo Spring Boot 4.1.1. Elas são sobrescritas no `pom.xml`, e a varredura agora reprova o build com qualquer achado alto ou crítico corrigível.
+- **Uma política que o app teria quebrado.** A Content Security Policy estrita bloqueia fontes `data:`, que o build embutia. O build não embute mais recursos.
+
+## Riscos residuais e limites aceitos
+
+Conhecidos, declarados e não escondidos pelos testes acima.
+
+- **Sem verificação de e-mail e sem recuperação de senha** (ADR 0008). O e-mail de uma conta não é verificado, e uma senha esquecida exige um administrador.
+- **A limitação por taxa é em memória por instância.** Rode uma única instância do backend até ele ter um armazenamento compartilhado.
+- **O TLS não está nas imagens.** Termine-o na frente do container web e defina `SESSION_COOKIE_SECURE=true` (veja o documento do ambiente de release).
+- **A equipe vê o e-mail uns dos outros** como nomes de autor, revisor e publicador, em endpoints só da equipe. Alunos nunca veem.
+- **Backups têm hashes de senha e todas as respostas dos alunos** e devem ser protegidos de acordo; restaurar um pode reviver sessões revogadas, então encerre todas as sessões depois de uma restauração (veja o guia de operação).
+- **A correção do conteúdo é um julgamento humano.** O checklist que o revisor marca é registrado como evidência do que ele diz ter conferido; não faz uma questão estar certa. O pacote inicial de conteúdo ainda não passou por essa revisão humana.
+- **A varredura de vulnerabilidades cobre pacotes, não lógica.** Ela não substitui este documento.
+
 ## Ameaças futuras do runner
 
 Antes da `v0.5.0`, uma revisão dedicada do runner deve tratar:

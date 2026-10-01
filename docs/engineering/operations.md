@@ -29,7 +29,7 @@ Every error is an RFC 9457 problem (`application/problem+json`) produced in one 
 ```
 
 - `code` is stable and machine-readable; the per-feature codes are listed in the architecture documents.
-- Validation failures use `validation_failed` with a `fields` list of names only, and framework errors (malformed JSON, wrong method, unknown path) use `invalid_request`.
+- Validation failures use `validation_failed` with a `fields` list of names only, and framework errors keep to the same body with a code for the kind of failure: `invalid_request` (malformed JSON and the like), `not_found` (unknown path), `method_not_allowed`, `unsupported_media_type` and `not_acceptable`. None of them carries text from the framework.
 - Any unexpected failure returns `500` with `internal_error` and the generic title `Unexpected error`. The body has no stack trace, exception class or message; the full details go to the log under the same `requestId`.
 - Authentication and authorization failures (`unauthenticated`, `forbidden`, `csrf_invalid`) follow the same shape.
 
@@ -97,6 +97,73 @@ Start from the signal, then the request id.
 ### Recovering a failed migration
 
 Health shows the failure but does not change the database. Identify the failed migration from the startup log and from `flyway_schema_history`, correct the underlying problem (data or permissions), then mark or remove the failed row as Flyway's repair procedure describes and restart. Migrations that have been applied are never edited, because Flyway checksums them; corrections go in a new migration.
+
+## Backup and restore
+
+All state is in PostgreSQL: accounts, sessions, content, attempts, history and the audit trail. The backend and web containers hold nothing, so the database is the only thing to back up.
+
+```sh
+# Back up the whole database (custom format, restorable selectively and in parallel)
+docker compose -f compose.release.yaml exec -T postgres pg_dump -U certforge -d certforge -Fc > certforge-$(date +%F).dump
+
+# Restore into a new, empty database
+pg_restore -U certforge -d certforge --no-owner --exit-on-error certforge-2026-10-01.dump
+```
+
+- Back up before every upgrade, and before anything that rewrites data by hand.
+- **After a restore, end every session**: `delete from certforge.identity_session;` (this only signs people out). A backup can contain sessions that were revoked after it was taken, for example for an account that was disabled or lost a role, and restoring would revive them.
+- Keep backups somewhere other than the database host, and treat them as sensitive: they hold password hashes and every learner's answers.
+- **Rehearse it.** `deploy/rehearse-restore.sh` backs up a running stack, restores into a brand-new PostgreSQL and compares every table by row count and content checksum plus the migration history. CI runs it on every change; run it against your own environment before relying on a backup.
+- This release defines no recovery point or recovery time objective. They depend on how often you back up and where; decide them for your deployment.
+
+## Upgrading and rolling back
+
+Migrations run when the backend starts, in order and forward only, and are recorded in `flyway_schema_history`. The rule for a release is that migrations are **additive**: new tables and columns with defaults, never a rename or removal in the same release that stops using the old name. The backend names its columns, so the previous version keeps working on the newer schema. V11 (the review checklist column) is an example.
+
+- **Upgrade**: take a backup, deploy the new images, wait for readiness, run `deploy/verify-release.sh`.
+- **Roll back the application**: redeploy the previous images. This is safe while every migration in between is additive, which the rule above is for. Do not try to undo a migration.
+- **If a migration damaged data or was not additive**: restore the backup taken before the upgrade and redeploy the previous images. Everything written since the backup is lost, so say so to the people affected.
+- A failed migration leaves the instance unready; see [Recovering a failed migration](#recovering-a-failed-migration).
+
+## Reconciling data
+
+Some data is derived, and some is evidence. Repair the first; never edit the second.
+
+- **Topic progress is derived** from attempts. `GET /api/progress/reconciliation` shows any difference and `POST /api/progress/rebuild` repairs it.
+- **Attempts, published revisions and audit records are evidence.** The database refuses to change them. If a number looks wrong, the projection is wrong, not the evidence.
+- **Sessions expire on read**: an in-progress session past its expiry is reported as expired and needs no clean-up.
+- **Publication and audit should agree.** Every published or replaced revision has an audit event. To list any that do not:
+
+```sql
+select r.id from certforge.qb_question_revision r
+where r.published_at is not null
+  and not exists (select 1 from certforge.audit_event a
+                  where a.action = 'QUESTION_REVISION_PUBLISHED'
+                    and a.subject = 'question-revision:' || r.id);
+```
+
+An empty result is the expected one. Revisions published before the audit trail existed (before issue #12) would appear; there are none in a database that began at v0.1.0.
+
+## Incident response
+
+In order, and write down what you did and when:
+
+1. **Contain.** If answers or accounts may be exposed, stop traffic first: stop the `web` container, or let readiness fail. A short outage is better than a continuing leak.
+2. **Preserve evidence.** Take a database backup before changing anything, and keep the logs. The `requestId` ties a user's report to log lines and to audit records.
+3. **Identify.** Use the triage table above, the audit trail (`GET /api/admin/audit`) and the metrics.
+4. **Fix or roll back.** See above. For one wrong question, retire it (the editorial desk's Retire) instead of editing the database; its history stays.
+5. **Verify.** Readiness is up, `deploy/verify-release.sh` passes, and the symptom is gone.
+6. **Tell the people affected** what happened and what they should do, and record the incident (what, why, what changed) in the changelog or a decision record.
+
+Common cases:
+
+| Case | First steps |
+|---|---|
+| A question's answer or wording is wrong | Retire the revision; start a new revision and publish it after review. Learners' past attempts keep showing what they saw. |
+| Answers may have leaked before submission | Contain, then run `deploy/verify-privacy.mjs` and the privacy end-to-end journey against the stack, and read the audit trail for who published what. |
+| An account is compromised | Disable it (`POST /api/admin/accounts/{id}/disable`), which ends its sessions at once; review what it did in the audit trail. |
+| The database password or the bootstrap administrator password is exposed | Change it in the database and in the backend's environment, restart the backend, and sign everyone out (`delete from certforge.identity_session;`). |
+| A dependency advisory is published | The image scan fails the next build; bump the version (see `pom.xml` for how overrides are recorded), rebuild and redeploy. |
 
 ## Deferred
 

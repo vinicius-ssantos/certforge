@@ -71,14 +71,27 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 - [Content authoring and import](docs/engineering/content-authoring.md)
 - [Operations and incident triage](docs/engineering/operations.md)
 - [Release environment](docs/engineering/release-environment.md)
+- [Web interface guidelines](docs/engineering/web-ui-guidelines.md)
+- [`v0.1.0` demonstration scripts](docs/release/demo-scripts.md)
+- [`v0.1.0` release notes (draft)](docs/release/v0.1.0-release-notes.md)
+- [`v0.1.0` readiness review](docs/release/v0.1.0-readiness.md)
 - [Security and threat model](docs/architecture/threat-model.md)
 - [Architecture decisions](docs/adr/README.md)
 
 ## Project status
 
-**Foundation phase — documentation only.**
+**`v0.1.0` Study Core is built and not yet released.** The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment exist and are tested end to end in CI. What stands between this and a release is work only a person can do: reviewing the initial question pack and a manual accessibility pass. The [readiness review](docs/release/v0.1.0-readiness.md) lists the gates and the blockers.
 
-No application code should be introduced until the `v0.1.0` scope, domain language, editorial policy, and initial architecture decisions are reviewed and accepted.
+### Try it
+
+You need Docker. From the repository root:
+
+```sh
+export DB_PASSWORD=local-demo BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='a long local password'
+docker compose -f compose.release.yaml up --build -d    # http://localhost:8081
+```
+
+A fresh install has no questions until people review and publish some; the [demonstration scripts](docs/release/demo-scripts.md) say how to load the real pack or clearly labelled test data. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`.
 
 ## Contributing
 

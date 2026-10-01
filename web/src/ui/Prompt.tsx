@@ -41,7 +41,11 @@ export function Prompt({ text }: { text: string }): ReactNode {
             <code>{segment.value}</code>
           </pre>
         ) : (
-          <p key={index}>{segment.value.trim()}</p>
+          // A blank line starts a new paragraph; a single line break inside one is kept.
+          segment.value
+            .trim()
+            .split(/\n{2,}/)
+            .map((paragraph, at) => <p key={`${index}-${at}`}>{paragraph}</p>)
         ),
       )}
     </div>
