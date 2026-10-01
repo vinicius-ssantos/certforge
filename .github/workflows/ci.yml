@@ -71,6 +71,13 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Size budget
+        run: npm run budget
+
+      # Fails on a known high or critical advisory in anything that ships to the browser.
+      - name: Dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
   e2e:
     name: End-to-end / Playwright
     runs-on: ubuntu-latest
@@ -161,6 +168,22 @@ jobs:
             backend.log
           retention-days: 7
 
+  secrets:
+    name: Secret scan / whole history
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      # The default rules plus one narrow exception documented in .gitleaks.toml.
+      - name: Scan the history for secrets
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:v8.30.1 detect             --source /repo --config /repo/.gitleaks.toml --no-banner --redact
+
   release:
     name: Release images / scan, checks and end-to-end
     runs-on: ubuntu-latest
@@ -233,6 +256,18 @@ jobs:
         env:
           E2E_BASE_URL: http://localhost:8081
         run: npm run e2e
+
+      # One learner, sequential, against budgets several times the baseline measured on a developer
+      # machine, so a slow shared runner does not fail them but a real regression does.
+      - name: Measure the performance baseline
+        run: |
+          docker compose -f compose.release.yaml -f compose.e2e.yaml logs --no-color app > app-start.log
+          node deploy/measure-baseline.mjs --rounds 20 --startup-log app-start.log --enforce | tee baseline.md
+
+      # Backs up the database that has just seen all that traffic, restores it into a new PostgreSQL
+      # and compares every table.
+      - name: Rehearse backup and restore
+        run: bash deploy/rehearse-restore.sh -f compose.release.yaml -f compose.e2e.yaml
 
       # After real traffic has gone through the stack: errors keep to the contract and leak nothing,
       # metrics carry no ids or addresses, and the logs hold no answers, passwords or cookies.

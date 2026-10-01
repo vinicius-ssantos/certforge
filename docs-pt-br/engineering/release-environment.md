@@ -48,7 +48,21 @@ O job `release` constrói essas imagens e então:
 3. Reinicia com banco novo usando o `compose.e2e.yaml`, que relaxa apenas a separação entre autor e revisor e o limitador de cadastro, e roda toda a suíte do Playwright contra as imagens de release, exercitando o proxy, os cabeçalhos e a Content Security Policy reais. A suíte reprova qualquer página que provoque uma violação da Content Security Policy e inclui as jornadas de privacidade das respostas e de integridade histórica.
 4. Inspeciona o stack em execução, depois desse tráfego, com o `deploy/verify-privacy.mjs`: uma dúzia de requisições que falham devem responder cada uma com o corpo de problema (`code` estável, o id da requisição também no cabeçalho da resposta, sem stack trace, nome de classe nem SQL), nenhuma tag de métrica pode ter um id ou e-mail nem mais de 50 valores, e os logs não podem ter texto de resposta, senha, cookie ou valor de autorização. A aplicação registra pouco no nível INFO, então essa checagem dos logs protege contra vazamentos futuros mais do que dá evidência sobre o volume de hoje.
 
+5. Mede os fluxos principais de um aluno (entrar, listar trilhas, iniciar uma sessão, lê-la, enviar uma resposta, terminar, ler histórico e progresso) e a inicialização do backend, e falha se o percentil 95 de um fluxo passar do orçamento. Os orçamentos são várias vezes a linha de base medida em uma máquina de desenvolvimento, então um runner compartilhado lento não os viola e uma regressão real viola. Não são uma afirmação de capacidade: um cliente, uma instância, requisições sequenciais.
+6. **Ensaia a recuperação**: faz backup do banco que acabou de receber todo esse tráfego, restaura em um PostgreSQL novo e compara cada tabela por contagem de linhas e checksum do conteúdo, além do histórico de migrações.
+
 O `compose.e2e.yaml` serve só a esse propósito.
+
+## Outras barreiras no CI
+
+| Barreira | O que garante |
+|---|---|
+| Varredura de segredos | gitleaks sobre todo o histórico do git, regras padrão mais uma exceção estreita e documentada (`.gitleaks.toml`). |
+| CodeQL | Análise de segurança do backend Java e do app TypeScript, em pull requests, na `main` e toda semana. |
+| Auditoria de dependências | `npm audit` para tudo que vai ao navegador; Dependabot para os dois ecossistemas e os workflows. |
+| Análise estática | PMD e o compilador no build do backend; ESLint com as regras de acessibilidade e TypeScript estrito no app web. |
+| Orçamento de tamanho | O tamanho gzip do JavaScript e do CSS no primeiro carregamento (`npm run budget`). Determinístico, então é apertado. |
+| Teste de upgrade | O `MigrationUpgradeIT` aplica cada migração sobre a anterior e atualiza um banco que contém uma revisão revisada. |
 
 ## Rode você mesmo as mesmas verificações
 
