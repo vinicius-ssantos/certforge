@@ -154,7 +154,7 @@ export function SessionPage() {
       <QuestionForm
         key={next.position}
         question={next.question}
-        position={next.position}
+        number={next.position + 1}
         total={ordered.length}
         failure={failure}
         submitting={submit.isPending}

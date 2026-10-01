@@ -6,8 +6,14 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ## [Unreleased]
 
+### Fixed
+
+- Flyway now keeps its history table in `public` regardless of the database user name. With the documented user `certforge`, the schema of the same name became the current schema after the first start, so readiness reported the schema as not migrated and the next start failed.
+
 ### Added
 
+- Learner history, session review and topic progress pages, and end-to-end tests with Playwright and axe on desktop and mobile viewports, run in CI against the real backend and PostgreSQL (#13).
+- Learner study flow in the web app: start a practice session from a topic, resume the one in progress, single and multiple choice questions with confidence, idempotent submission with feedback, explanation and references, finish or end a session, and expired-session states, with focus managed across questions and results (#13).
 - Learner web app foundation: a contract-first React client generated from the backend OpenAPI contract, sign-in and registration, track browsing, accessible layout with automated checks, and a web CI job (#13, ADR 0009).
 - Persisted audit trail for editorial transitions, request correlation, a single safe error contract, metrics, liveness and readiness probes, and an operations guide with incident triage (#12).
 - Learner attempt and session history with keyset pagination, and rebuildable topic progress with reconciliation (#11).

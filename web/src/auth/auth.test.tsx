@@ -10,7 +10,7 @@ describe("signing in", () => {
     renderApp({}, { signedIn: false });
 
     expect(await screen.findByRole("heading", { level: 1, name: "Sign in" })).toBeInTheDocument();
-    expect(document.title).toBe("Sign in · CertForge");
+    await waitFor(() => expect(document.title).toBe("Sign in · CertForge"));
   });
 
   it("labels every field and has no accessibility violations", async () => {

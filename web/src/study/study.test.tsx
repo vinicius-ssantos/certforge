@@ -40,8 +40,8 @@ function session(overrides: Record<string, unknown> = {}) {
     expiresAt: "2026-09-30T14:00:00Z",
     closedAt: null,
     questions: [
-      question(1, "SINGLE_CHOICE", "Which option compiles?"),
-      question(2, "MULTIPLE_CHOICE", "Which options are checked exceptions?"),
+      question(0, "SINGLE_CHOICE", "Which option compiles?"),
+      question(1, "MULTIPLE_CHOICE", "Which options are checked exceptions?"),
     ],
     ...overrides,
   };
@@ -69,7 +69,7 @@ function result(position: number, correct: boolean, selected: string[]) {
   };
 }
 
-const ATTEMPT = `/api/study/sessions/${SESSION_ID}/questions/1/attempt`;
+const ATTEMPT = `/api/study/sessions/${SESSION_ID}/questions/0/attempt`;
 
 describe("starting a practice session", () => {
   it("starts a session for the chosen topic and shows the first question", async () => {
@@ -163,7 +163,7 @@ describe("answering questions", () => {
   it("submits with an idempotency key, then shows the result and moves focus to it", async () => {
     const user = userEvent.setup();
     const { fetch, container } = await openSession({
-      [`POST ${ATTEMPT}`]: { body: result(1, true, ["A"]) },
+      [`POST ${ATTEMPT}`]: { body: result(0, true, ["A"]) },
     });
 
     await user.click(screen.getByRole("radio", { name: /First option/ }));
@@ -185,7 +185,7 @@ describe("answering questions", () => {
 
   it("says so in words when the answer was wrong", async () => {
     const user = userEvent.setup();
-    await openSession({ [`POST ${ATTEMPT}`]: { body: result(1, false, ["B"]) } });
+    await openSession({ [`POST ${ATTEMPT}`]: { body: result(0, false, ["B"]) } });
 
     await user.click(screen.getByRole("radio", { name: /Second option/ }));
     await user.click(screen.getByRole("radio", { name: /Low/ }));
@@ -197,7 +197,7 @@ describe("answering questions", () => {
 
   it("moves to the next question with focus on its heading, and allows several answers when asked", async () => {
     const user = userEvent.setup();
-    await openSession({ [`POST ${ATTEMPT}`]: { body: result(1, true, ["A"]) } });
+    await openSession({ [`POST ${ATTEMPT}`]: { body: result(0, true, ["A"]) } });
     await user.click(screen.getByRole("radio", { name: /First option/ }));
     await user.click(screen.getByRole("radio", { name: /High/ }));
     await user.click(screen.getByRole("button", { name: "Submit answer" }));
@@ -215,7 +215,7 @@ describe("answering questions", () => {
     const user = userEvent.setup();
     let attempts = 0;
     const { fetch } = await openSession({
-      [`POST ${ATTEMPT}`]: () => (++attempts === 1 ? problem(500, "internal_error") : { body: result(1, true, ["A"]) }),
+      [`POST ${ATTEMPT}`]: () => (++attempts === 1 ? problem(500, "internal_error") : { body: result(0, true, ["A"]) }),
     });
     await user.click(screen.getByRole("radio", { name: /First option/ }));
     await user.click(screen.getByRole("radio", { name: /Medium/ }));
@@ -239,15 +239,15 @@ describe("finishing", () => {
     const user = userEvent.setup();
     const answeredFirst = session({
       questions: [
-        { ...question(1, "SINGLE_CHOICE", "Which option compiles?"), answered: true },
-        question(2, "SINGLE_CHOICE", "Second one?"),
+        { ...question(0, "SINGLE_CHOICE", "Which option compiles?"), answered: true },
+        question(1, "SINGLE_CHOICE", "Second one?"),
       ],
     });
-    const lastAttempt = `/api/study/sessions/${SESSION_ID}/questions/2/attempt`;
+    const lastAttempt = `/api/study/sessions/${SESSION_ID}/questions/1/attempt`;
     renderApp(
       {
         [`GET /api/study/sessions/${SESSION_ID}`]: { body: answeredFirst },
-        [`POST ${lastAttempt}`]: { body: result(2, true, ["A"]) },
+        [`POST ${lastAttempt}`]: { body: result(1, true, ["A"]) },
         [`POST /api/study/sessions/${SESSION_ID}/complete`]: {
           body: {
             ...answeredFirst,

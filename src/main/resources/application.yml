@@ -7,6 +7,11 @@ spring:
     password: ${DB_PASSWORD:certforge}
   flyway:
     enabled: true
+    # Pinned on purpose. Without it Flyway uses the connection's current schema, and PostgreSQL's
+    # default search path puts a schema named like the database user first. With the documented
+    # user "certforge", the schema "certforge" created by V1 would become the current schema after
+    # the first start, and Flyway would look for its history table there instead of in public.
+    default-schema: public
   lifecycle:
     timeout-per-shutdown-phase: 20s
   mvc:

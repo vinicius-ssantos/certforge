@@ -19,14 +19,15 @@ const CONFIDENCE: { value: Confidence; label: string }[] = [
  */
 export function QuestionForm({
   question,
-  position,
+  number,
   total,
   failure,
   submitting,
   onSubmit,
 }: {
   question: Question;
-  position: number;
+  /** The question's number as the learner reads it, starting at 1. */
+  number: number;
   total: number;
   failure: string | null;
   submitting: boolean;
@@ -83,7 +84,7 @@ export function QuestionForm({
   return (
     <section aria-labelledby="question-heading">
       <h2 id="question-heading" ref={heading} tabIndex={-1}>
-        Question {position} of {total}
+        Question {number} of {total}
       </h2>
       <ErrorSummary problems={shown} />
       <form onSubmit={submit} noValidate>
