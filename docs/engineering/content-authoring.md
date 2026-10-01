@@ -67,6 +67,8 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 ## Reviewing and publishing
 
+The [content review packet](../release/content-review-packet.md) lays the whole pack out for a reviewer: each question as the learner sees it, then the answer key, reasons, references, the output the build verified, and the checks below as boxes to tick. It is generated (`node content/build-review-packet.mjs`) and CI fails if it is out of date.
+
 Review is done by a different account from the author by default (`reviewer_must_differ_from_author`; see the question-bank document to change this for a single-maintainer setup). The reviewer needs the `REVIEWER` role and the publisher the `ADMINISTRATOR` role.
 
 1. List what awaits review: `GET /api/admin/questions?status=TECHNICAL_REVIEW`.
