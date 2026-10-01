@@ -123,6 +123,24 @@ test.describe("the editorial desk", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Revision 2" })).toBeVisible();
     await expect(page.getByLabel("Question", { exact: true })).toHaveValue(new RegExp(label));
     await expect(page.getByRole("list", { name: "Revision status" }).locator("li[aria-current=step]")).toContainText("Draft");
+
+    // Editing, then trying to leave, asks first; the work is still there when the author stays.
+    await page.getByLabel("Question", { exact: true }).focus();
+    await page.keyboard.press("Control+End");
+    await page.keyboard.type(" Corrected.");
+    await page.getByRole("link", { name: "Back to questions" }).click();
+    const unsaved = page.getByRole("group", { name: "Unsaved changes" });
+    await expect(unsaved.getByRole("button", { name: "Keep editing" })).toBeFocused();
+    await expectNoA11yViolations(page);
+    await unsaved.getByRole("button", { name: "Keep editing" }).click();
+    await expect(page.getByLabel("Question", { exact: true })).toHaveValue(/Corrected\.$/);
+
+    // Sending the correction shows what it changed compared with the published revision.
+    await page.getByRole("button", { name: "Send for review" }).click();
+    const diff = page.getByRole("region", { name: "What changed since revision 1" });
+    await expect(diff).toContainText("Corrected.");
+    await expect(diff.locator("ins")).toContainText("Corrected.");
+    await expectNoA11yViolations(page);
   });
 
   test("a learner has no way into the editorial desk", async ({ page, request }) => {

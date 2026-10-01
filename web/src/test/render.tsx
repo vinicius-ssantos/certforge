@@ -1,6 +1,6 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
-import { MemoryRouter } from "react-router";
+import { createMemoryRouter, RouterProvider } from "react-router";
 import { App } from "../App";
 import { ApiProvider } from "../api/ApiProvider";
 import { createApi } from "../api/client";
@@ -107,14 +107,24 @@ export function renderApp(
   const queryClient = createQueryClient(() => queryClient.setQueryData(ME_KEY, null));
   queryClient.setDefaultOptions({ queries: { retry: false, staleTime: 0 } });
 
-  const rendered = render(
-    <ApiProvider api={api}>
-      <QueryClientProvider client={queryClient}>
-        <MemoryRouter initialEntries={[options.path ?? "/"]}>
+  const router = createMemoryRouter(
+    [
+      {
+        path: "*",
+        element: (
           <AuthProvider>
             <App />
           </AuthProvider>
-        </MemoryRouter>
+        ),
+      },
+    ],
+    { initialEntries: [options.path ?? "/"] },
+  );
+
+  const rendered = render(
+    <ApiProvider api={api}>
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </ApiProvider>,
   );

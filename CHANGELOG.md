@@ -13,6 +13,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Added
 
+- Comparison of a revision with the one before it (word by word, field by field, announced in words as well as marked) and protection of unsaved edits in the question editor, by link, back button or closing the tab (#14).
 - Review and publication in the web app: a reviewer reads the question as the learner will see it and approves it or sends it back with a comment; an administrator publishes (after a confirmation) or retires a revision; an author starts a new revision of a published question. Covered end to end by a test that takes one question from draft to published through three accounts (#14).
 - Editorial desk in the web app: question queue with status filters, the draft editor (save unfinished work, send for review with a list of what is missing that links to each field), and a read-only revision view that shows the question as the learner will see it before the answer key. Staff-only, shown by permission (#14).
 - A shared visual system (editorial desk look, light and dark tokens, bundled fonts) applied to the whole web app, and fenced code blocks in questions now render as code for learners and reviewers. See the web interface guidelines (#14).

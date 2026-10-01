@@ -29,11 +29,15 @@ function RevisionWithDecisions({
   revision,
   isLatest,
   topicName,
+  previous,
+  topicNameOf,
 }: {
   question: EditorialQuestion;
   revision: Revision;
   isLatest: boolean;
   topicName: string | undefined;
+  previous: Revision | undefined;
+  topicNameOf: (id: string) => string | undefined;
 }) {
   const can = useCanDecide(revision, isLatest);
   const any = can.review || can.publish || can.retire || can.startRevision;
@@ -41,6 +45,8 @@ function RevisionWithDecisions({
     <RevisionView
       revision={revision}
       topicName={topicName}
+      previous={previous}
+      topicNameOf={topicNameOf}
       {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} /> } : {})}
     />
   );
@@ -126,6 +132,8 @@ export function QuestionPage() {
               revision={revision}
               isLatest={revision.id === revisions[revisions.length - 1]?.id}
               topicName={revision.topicId ? topicNames.get(revision.topicId) : undefined}
+              previous={revisions[revisions.findIndex((candidate) => candidate.id === revision.id) - 1]}
+              topicNameOf={(id) => topicNames.get(id)}
             />
           )}
         </>

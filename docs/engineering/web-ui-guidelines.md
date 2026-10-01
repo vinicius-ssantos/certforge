@@ -32,6 +32,8 @@ Routes under `/editorial`, for accounts with `CONTENT_AUTHOR`, `CONTENT_REVIEW` 
 
 - **Deciding**: a reviewer sees a content-policy checklist and a comment beside the revision, then **Approve** or **Request changes** (a comment is required, and the revision goes back to its author as a draft). The tick-boxes are the reviewer's own reminder and are not saved; only the comment is. An administrator sees **Publish** (disabled until the revision is approved) and, on a published revision, **Retire**. An author sees **Start a new revision** on the latest published or retired revision, which copies it into a new draft.
 - **Irreversible steps ask twice.** Publishing and retiring use a confirmation that says what will happen; focus moves to the confirming button and returns to the first button if the person backs out.
+- **Comparing**: a revision that has a predecessor opens with what changed since it, word by word, field by field (question, options and their correctness, reasons, explanation, references). Additions are underlined and removals struck through, and both are also announced in words.
+- **Unsaved changes are protected.** Leaving the editor with edits that are not saved, by a link, the back button or closing the tab, asks first; staying keeps everything and returns focus to Save draft. The app uses a data router (`createBrowserRouter`) for this.
 - **Always current.** The queue and a question are re-read every time they open, because another person may have approved or published them since.
 
 A revision is a numbered sequence (written, in review, approved, published), so it is drawn as one.

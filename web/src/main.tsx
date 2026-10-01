@@ -1,7 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router";
+import { createBrowserRouter, RouterProvider } from "react-router";
 import { App } from "./App";
 import { ApiProvider } from "./api/ApiProvider";
 import { AuthProvider, ME_KEY } from "./auth/AuthContext";
@@ -14,6 +14,19 @@ import "@fontsource-variable/source-serif-4";
 import "./tokens.css";
 import "./styles.css";
 
+// A data router, which is what lets a page stop a navigation that would lose unsaved work. The
+// application's own routes stay in App; this one route hands everything to it.
+const router = createBrowserRouter([
+  {
+    path: "*",
+    element: (
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    ),
+  },
+]);
+
 const queryClient = createQueryClient(() => queryClient.setQueryData(ME_KEY, null));
 
 const root = document.getElementById("root");
@@ -25,11 +38,7 @@ createRoot(root).render(
   <StrictMode>
     <ApiProvider>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
-        </BrowserRouter>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </ApiProvider>
   </StrictMode>,

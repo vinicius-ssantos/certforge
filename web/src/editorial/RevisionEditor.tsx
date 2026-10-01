@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState, type FormEvent, type ReactNode } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useBlocker, useNavigate } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { Revision } from "../api/types";
@@ -60,10 +60,41 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   const { topics } = useTopics();
 
   const [draft, setDraft] = useState<Draft>(() => (revision ? draftFrom(revision) : emptyDraft()));
+  // What was last saved (or loaded), to tell whether leaving would lose anything.
+  const [baseline, setBaseline] = useState(() => JSON.stringify(revision ? draftFrom(revision) : emptyDraft()));
+  const dirty = JSON.stringify(draft) !== baseline;
+  const dirtyRef = useRef(dirty);
+  useEffect(() => {
+    dirtyRef.current = dirty;
+  }, [dirty]);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [failure, setFailure] = useState<string | null>(null);
   const [violations, setViolations] = useState<string[] | null>(null);
   const [savedAt, setSavedAt] = useState<string | null>(null);
+
+  // Leaving the page, by a link, the back button or closing the tab, must not silently lose work.
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      dirtyRef.current &&
+      (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search),
+  );
+  useEffect(() => {
+    if (!dirty) {
+      return;
+    }
+    const warn = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+    };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+  const keepEditing = useRef<HTMLButtonElement>(null);
+  const saveButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (blocker.state === "blocked") {
+      keepEditing.current?.focus();
+    }
+  }, [blocker.state]);
 
   const change = (patch: Partial<Draft>) => setDraft((current) => ({ ...current, ...patch }));
   const multiple = draft.type === "MULTIPLE_CHOICE";
@@ -84,6 +115,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
             }),
           )
         : await unwrap(api.POST("/api/admin/questions", { body: request }));
+      // What is on screen is now saved, so moving on from here loses nothing.
+      dirtyRef.current = false;
+      setBaseline(JSON.stringify(draft));
       queryClient.setQueryData(questionKey(saved.id), saved);
       void queryClient.invalidateQueries({ queryKey: ["editorial", "questions"] });
       setSavedAt(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
@@ -167,6 +201,24 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   return (
     <div className="with-aside">
       <form onSubmit={submit} noValidate>
+        {blocker.state === "blocked" ? (
+          <div role="group" aria-label="Unsaved changes" className="confirm">
+            <p>You have changes that are not saved. If you leave now they are lost.</p>
+            <button
+              ref={keepEditing}
+              type="button"
+              onClick={() => {
+                blocker.reset();
+                saveButton.current?.focus();
+              }}
+            >
+              Keep editing
+            </button>{" "}
+            <button type="button" className="secondary" onClick={() => blocker.proceed()}>
+              Leave without saving
+            </button>
+          </div>
+        ) : null}
         <ErrorSummary
           problems={summary.map((problem) => ({
             ...(problem.fieldId ? { fieldId: problem.fieldId } : {}),
@@ -378,7 +430,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         </fieldset>
 
         <div className="actions">
-          <button type="submit" className="secondary" disabled={save.isPending}>
+          <button ref={saveButton} type="submit" className="secondary" disabled={save.isPending}>
             Save draft
           </button>
           <button type="button" disabled={save.isPending} onClick={() => save.mutate(true)}>
