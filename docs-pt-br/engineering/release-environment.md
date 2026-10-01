@@ -13,6 +13,9 @@ Como o CertForge roda como imagens atrás de um proxy, o que essa configuração
 | `web` | construída do `web/Dockerfile` | nginx servindo o app web construído e fazendo proxy de `/api` para o `app`. É o único container feito para ser acessado por usuários. |
 
 ```sh
+just up            # ou, com questões de demonstração para praticar: just demo
+
+# o mesmo sem o just:
 DB_PASSWORD=... BOOTSTRAP_ADMIN_EMAIL=... BOOTSTRAP_ADMIN_PASSWORD=... \
   docker compose -f compose.release.yaml up --build
 # o app fica então em http://localhost:8081 (mude com WEB_PORT)
@@ -67,9 +70,12 @@ O `compose.e2e.yaml` serve só a esse propósito.
 ## Rode você mesmo as mesmas verificações
 
 ```sh
-export DB_PASSWORD=local-test BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='uma senha local longa'
-docker compose -f compose.release.yaml up --build -d
-bash deploy/verify-release.sh
+just up
+just verify            # cabeçalhos, endpoints de operação escondidos, contrato de erro, confiança no limitador
+just verify-privacy    # erros, rótulos de métricas e logs, depois de algum tráfego
+just baseline          # quanto levam os fluxos principais, contra os orçamentos
+just rehearse-restore  # backup, restauração em um PostgreSQL novo, comparação de cada tabela
+just scan              # vulnerabilidades conhecidas nas duas imagens
 ```
 
 ## Limites conhecidos

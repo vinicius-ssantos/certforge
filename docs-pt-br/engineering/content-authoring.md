@@ -50,7 +50,7 @@ content/
 8. Rode a verificação do pacote:
 
 ```bash
-mvn -Dtest=ContentPackTest test
+./mvnw -Dtest=ContentPackTest test
 ```
 
 Ela falha com o nome da questão se a saída, o resultado da compilação ou qualquer invariante divergir.

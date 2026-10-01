@@ -50,7 +50,7 @@ jobs:
 
       - name: Build the backend
         if: matrix.language == 'java-kotlin'
-        run: mvn --batch-mode --no-transfer-progress -DskipTests package
+        run: ./mvnw --batch-mode --no-transfer-progress -DskipTests package
 
       - name: Analyze
         uses: github/codeql-action/analyze@v4

@@ -26,8 +26,9 @@ Flyway 12.x modularizes database support. PostgreSQL therefore requires the Boot
 ## Local prerequisites
 
 - JDK 25
-- Maven 3.9.x (3.9.16 recommended)
 - Docker with Compose support
+- Maven is **not** needed: the repository carries the Maven wrapper, so `./mvnw` fetches the pinned version (3.9.11) on first use. CI uses the same wrapper.
+- [just](https://github.com/casey/just) is optional and shortens the commands below: `just db`, `just backend`, `just web`, `just check`. Run `just` to see them all.
 
 No production credentials are required for local development.
 
@@ -36,7 +37,7 @@ No production credentials are required for local development.
 A clean checkout is verified with:
 
 ```bash
-mvn verify
+./mvnw verify
 ```
 
 The `verify` lifecycle runs:
@@ -52,7 +53,7 @@ The `verify` lifecycle runs:
 To apply Java formatting before verification:
 
 ```bash
-mvn spotless:apply
+./mvnw spotless:apply
 ```
 
 ## Run locally
@@ -66,7 +67,7 @@ docker compose up -d postgres
 Start CertForge:
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 The default local database connection is:

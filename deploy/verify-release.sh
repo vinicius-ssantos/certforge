@@ -56,26 +56,32 @@ check "an anonymous request gets a problem response with a request id" bash -c "
   grep -qi '^content-type: application/problem+json' /tmp/verify-me.txt &&
   grep -q '\"requestId\"' /tmp/verify-me.txt"
 
-# Registration is limited per client address (10 by default). If the proxy let a client pick its own
-# X-Forwarded-For, sending a different one each time would never reach the limit.
+# Registration is limited per client address. If the proxy let a client choose its own
+# X-Forwarded-For, a different one on each request would never reach the limit, so the test is that
+# the limit is still reached. The counts are not asserted: the bucket may already be partly used on
+# a stack that has served traffic, and what matters is that forging the header does not grant more.
 jar="$(mktemp)"
 curl -s -c "$jar" "$WEB/api/auth/csrf" > /dev/null
 token="$(grep XSRF-TOKEN "$jar" | awk '{print $7}')"
 created=0
 refused=0
+other=""
 for i in $(seq 1 14); do
   code="$(curl -s -o /dev/null -w '%{http_code}' -b "$jar" -X POST "$WEB/api/auth/register" \
     -H "X-XSRF-TOKEN: $token" -H "Content-Type: application/json" \
     -H "X-Forwarded-For: 203.0.113.$i" \
     -d "{\"email\":\"verify-$RANDOM-$i@example.com\",\"password\":\"a long verification password\"}")"
-  [ "$code" = "201" ] && created=$((created + 1))
-  [ "$code" = "429" ] && refused=$((refused + 1))
+  case "$code" in
+    201) created=$((created + 1)) ;;
+    429) refused=$((refused + 1)) ;;
+    *) other="$other $code" ;;
+  esac
 done
 rm -f "$jar"
-if [ "$created" -eq 10 ] && [ "$refused" -eq 4 ]; then
-  echo "ok    a forged X-Forwarded-For does not get around the per-address limit (10 accepted, 4 refused)"
+if [ "$refused" -gt 0 ] && [ -z "$other" ]; then
+  echo "ok    a forged X-Forwarded-For does not get around the per-address limit ($created accepted, $refused refused)"
 else
-  echo "FAIL  a forged X-Forwarded-For does not get around the per-address limit ($created accepted, $refused refused; expected 10 and 4)"
+  echo "FAIL  a forged X-Forwarded-For does not get around the per-address limit ($created accepted, $refused refused; unexpected responses:${other:- none})"
   failures=$((failures + 1))
 fi
 

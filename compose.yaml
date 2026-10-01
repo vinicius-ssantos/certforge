@@ -13,7 +13,12 @@ services:
       timeout: 3s
       retries: 10
     volumes:
-      - certforge-postgres:/var/lib/postgresql/data
+      # PostgreSQL 18 keeps its data in a version-specific directory below this path, so a single
+      # mount here is what the image expects. Mounting at /var/lib/postgresql/data, which earlier
+      # images used, makes the container refuse to start. The volume is named for this layout; a
+      # volume from an older image is left alone rather than reused, because 18 cannot read it
+      # without pg_upgrade.
+      - certforge-dev-data:/var/lib/postgresql
 
 volumes:
-  certforge-postgres:
+  certforge-dev-data:

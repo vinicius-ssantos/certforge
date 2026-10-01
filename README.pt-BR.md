@@ -87,14 +87,23 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 
 ### Experimente
 
-Você precisa do Docker. Na raiz do repositório:
+Você precisa do Docker e, para a forma curta, do [just](https://github.com/casey/just).
 
 ```sh
-export DB_PASSWORD=local-demo BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='uma senha local longa'
-docker compose -f compose.release.yaml up --build -d    # http://localhost:8081
+just demo          # constrói, sobe e publica dez questões de demonstração claramente identificadas
 ```
 
-Uma instalação nova não tem questões até que pessoas revisem e publiquem algumas; os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) dizem como carregar o pacote real ou dados de teste claramente identificados. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`.
+Ele fica em `http://localhost:8081`; entre como `admin@example.com` com `a long local password`. O `just` sozinho lista o resto: `just down`, `just logs app`, `just check`, `just verify`.
+
+Sem o `just`, a mesma coisa:
+
+```sh
+export DB_PASSWORD=local-only-password BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='a long local password'
+docker compose -f compose.release.yaml up --build -d       # http://localhost:8081
+node deploy/seed-demo.mjs                                   # as questões de demonstração
+```
+
+Essas questões de demonstração dizem no próprio texto que são dados de demonstração. O pacote real em `content/` nunca é publicado por automação e ainda aguarda a revisão humana, então uma instalação simples não tem questão nenhuma. Os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) percorrem o produto inteiro. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`; o build usa o wrapper do Maven (`./mvnw`), então não é preciso instalar o Maven.
 
 ## Contribuindo
 

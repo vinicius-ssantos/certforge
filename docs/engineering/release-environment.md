@@ -11,6 +11,9 @@ How CertForge runs as images behind a proxy, what that setup guarantees, and how
 | `web` | built from `web/Dockerfile` | nginx serving the built web app and proxying `/api` to `app`. This is the only container meant to be reached by users. |
 
 ```sh
+just up            # or, with demo questions to practise on: just demo
+
+# the same without just:
 DB_PASSWORD=... BOOTSTRAP_ADMIN_EMAIL=... BOOTSTRAP_ADMIN_PASSWORD=... \
   docker compose -f compose.release.yaml up --build
 # the app is then at http://localhost:8081 (change with WEB_PORT)
@@ -65,9 +68,12 @@ The `release` job builds these images and then:
 ## Run the same checks yourself
 
 ```sh
-export DB_PASSWORD=local-test BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='a long local password'
-docker compose -f compose.release.yaml up --build -d
-bash deploy/verify-release.sh
+just up
+just verify            # headers, hidden operations endpoints, error contract, rate-limit trust
+just verify-privacy    # errors, metric labels and logs, after some traffic
+just baseline          # how long the primary flows take, against their budgets
+just rehearse-restore  # back up, restore into a new PostgreSQL, compare every table
+just scan              # known vulnerabilities in the two images
 ```
 
 ## Known limits
