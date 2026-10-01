@@ -48,7 +48,7 @@ content/
 8. Run the pack verification:
 
 ```bash
-mvn -Dtest=ContentPackTest test
+./mvnw -Dtest=ContentPackTest test
 ```
 
 It fails with the question name if the output, compile result or any invariant differs.

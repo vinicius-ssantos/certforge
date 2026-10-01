@@ -32,7 +32,7 @@ jobs:
           mvn --version
 
       - name: Verify
-        run: mvn --batch-mode --no-transfer-progress verify
+        run: ./mvnw --batch-mode --no-transfer-progress verify
 
   web:
     name: Web / lint, types, tests, build
@@ -117,7 +117,7 @@ jobs:
           cache: maven
 
       - name: Package the backend
-        run: mvn --batch-mode --no-transfer-progress -DskipTests package
+        run: ./mvnw --batch-mode --no-transfer-progress -DskipTests package
 
       # The fixtures go through the editorial workflow with one account acting as author, reviewer
       # and publisher, so reviewer separation is relaxed for this throwaway database only.

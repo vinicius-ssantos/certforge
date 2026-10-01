@@ -84,14 +84,23 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 
 ### Try it
 
-You need Docker. From the repository root:
+You need Docker, and [just](https://github.com/casey/just) if you want the short form.
 
 ```sh
-export DB_PASSWORD=local-demo BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='a long local password'
-docker compose -f compose.release.yaml up --build -d    # http://localhost:8081
+just demo          # builds, starts, and publishes ten clearly labelled demo questions
 ```
 
-A fresh install has no questions until people review and publish some; the [demonstration scripts](docs/release/demo-scripts.md) say how to load the real pack or clearly labelled test data. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`.
+It is then at `http://localhost:8081`; sign in as `admin@example.com` with `a long local password`. `just` on its own lists everything else: `just down`, `just logs app`, `just check`, `just verify`.
+
+Without `just`, the same thing:
+
+```sh
+export DB_PASSWORD=local-only-password BOOTSTRAP_ADMIN_EMAIL=admin@example.com BOOTSTRAP_ADMIN_PASSWORD='a long local password'
+docker compose -f compose.release.yaml up --build -d       # http://localhost:8081
+node deploy/seed-demo.mjs                                   # the demo questions
+```
+
+Those demo questions say in their own text that they are demo data. The real pack in `content/` is never published by automation and still waits for its human review, so a plain install has no questions at all. The [demonstration scripts](docs/release/demo-scripts.md) walk the whole product. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`; the build uses the Maven wrapper (`./mvnw`), so Maven need not be installed.
 
 ## Contributing
 

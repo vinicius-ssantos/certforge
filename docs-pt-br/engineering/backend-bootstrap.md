@@ -28,8 +28,9 @@ O Flyway 12.x modulariza o suporte a bancos de dados. Por isso, o PostgreSQL exi
 ## Pré-requisitos locais
 
 - JDK 25
-- Maven 3.9.x (3.9.16 recomendado)
 - Docker com suporte a Compose
+- O Maven **não** é necessário: o repositório carrega o wrapper, então o `./mvnw` baixa a versão fixada (3.9.11) no primeiro uso. O CI usa o mesmo wrapper.
+- O [just](https://github.com/casey/just) é opcional e encurta os comandos abaixo: `just db`, `just backend`, `just web`, `just check`. Rode `just` para ver todos.
 
 Nenhuma credencial de produção é necessária para o desenvolvimento local.
 
@@ -38,7 +39,7 @@ Nenhuma credencial de produção é necessária para o desenvolvimento local.
 Um checkout limpo é verificado com:
 
 ```bash
-mvn verify
+./mvnw verify
 ```
 
 O ciclo de vida `verify` executa:
@@ -54,7 +55,7 @@ O ciclo de vida `verify` executa:
 Para aplicar a formatação Java antes da verificação:
 
 ```bash
-mvn spotless:apply
+./mvnw spotless:apply
 ```
 
 ## Executar localmente
@@ -68,7 +69,7 @@ docker compose up -d postgres
 Inicie o CertForge:
 
 ```bash
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
 A conexão padrão com o banco de dados local é:
