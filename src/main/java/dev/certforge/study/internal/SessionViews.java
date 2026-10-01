@@ -2,6 +2,7 @@ package dev.certforge.study.internal;
 
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.PublishedQuestion;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ interface SessionViews {
       int requestedCount,
       Instant createdAt,
       Instant expiresAt,
-      Instant closedAt,
+      @Schema(nullable = true) Instant closedAt,
       List<SessionQuestionView> questions) {}
 
   record SessionQuestionView(int position, PublishedQuestion question, boolean answered) {}
@@ -32,5 +33,5 @@ interface SessionViews {
       int answeredCount,
       Instant createdAt,
       Instant expiresAt,
-      Instant closedAt) {}
+      @Schema(nullable = true) Instant closedAt) {}
 }

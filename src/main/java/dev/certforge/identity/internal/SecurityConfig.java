@@ -91,6 +91,10 @@ class SecurityConfig {
                     .permitAll()
                     .requestMatchers("/actuator/**")
                     .hasAuthority("OPERATIONS_VIEW")
+                    // Answers only when springdoc.api-docs.enabled=true (tests and local tooling);
+                    // in production the endpoint does not exist.
+                    .requestMatchers("/v3/api-docs", "/v3/api-docs/**")
+                    .permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/auth/csrf")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login")

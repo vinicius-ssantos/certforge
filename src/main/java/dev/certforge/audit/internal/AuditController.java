@@ -3,6 +3,7 @@ package dev.certforge.audit.internal;
 import dev.certforge.audit.internal.AuditRepository.EventRow;
 import dev.certforge.platform.Page;
 import dev.certforge.platform.PageCursor;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +24,12 @@ class AuditController {
 
   /** One recorded fact: who did what to which subject, when, and in which request. */
   record AuditEventView(
-      UUID id, UUID actorId, String action, String subject, Instant occurredAt, String requestId) {}
+      UUID id,
+      UUID actorId,
+      String action,
+      String subject,
+      Instant occurredAt,
+      @Schema(nullable = true) String requestId) {}
 
   private final AuditRepository repository;
 

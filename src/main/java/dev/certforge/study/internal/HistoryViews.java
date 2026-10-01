@@ -1,6 +1,7 @@
 package dev.certforge.study.internal;
 
 import dev.certforge.preparationcatalog.TopicId;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ interface HistoryViews {
       int answeredCount,
       int correctCount,
       Instant createdAt,
-      Instant closedAt) {}
+      @Schema(nullable = true) Instant closedAt) {}
 
   record AttemptHistoryItem(
       UUID id,

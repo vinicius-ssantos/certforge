@@ -1,5 +1,6 @@
 package dev.certforge.preparationcatalog.internal;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,5 +30,6 @@ interface AdminViews {
 
   record AdminMappingView(UUID topicId, String objectiveRef, int position) {}
 
-  record AdminTopicView(UUID id, String slug, String name, UUID parentId) {}
+  record AdminTopicView(
+      UUID id, String slug, String name, @Schema(nullable = true) UUID parentId) {}
 }
