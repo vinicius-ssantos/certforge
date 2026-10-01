@@ -80,7 +80,8 @@ test.describe("the editorial desk", () => {
     const label = `E2E pipeline question ${Date.now()}`;
 
     // The author writes it and sends it.
-    await signIn(page, await createStaff(["LEARNER", "EDITOR"]));
+    const author = await createStaff(["LEARNER", "EDITOR"]);
+    await signIn(page, author);
     await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Editorial" }).click();
     await page.getByRole("link", { name: "New question" }).click();
     await writeQuestion(page, label);
@@ -94,6 +95,9 @@ test.describe("the editorial desk", () => {
     await expect(reviewerPage.getByRole("region", { name: "As the learner will see it" })).toContainText(label);
     await expect(reviewerPage.getByRole("heading", { name: "Publish" })).toHaveCount(0);
     await expectNoA11yViolations(reviewerPage);
+    await expect(reviewerPage.getByText(`Written by ${author.email}`)).toBeVisible();
+    await reviewerPage.getByLabel(/technically right/).check();
+    await reviewerPage.getByLabel(/compiles and prints/).check();
     await reviewerPage.getByLabel("Comment").fill("Checked by the e2e reviewer.");
     await reviewerPage.getByRole("button", { name: "Approve" }).click();
     await expect(reviewerPage.getByRole("status").filter({ hasText: /^Approved./ })).toBeFocused();
@@ -104,6 +108,10 @@ test.describe("the editorial desk", () => {
     const adminPage = await (await browser.newContext()).newPage();
     await signIn(adminPage, await createStaff(["LEARNER", "ADMINISTRATOR"]));
     await openQuestion(adminPage, "Approved", label);
+    const notes = adminPage.getByRole("region", { name: "Review notes" });
+    await expect(notes).toContainText("by staff-");
+    await expect(notes).toContainText("Checked: The correct answer is technically right");
+    await expect(notes).toContainText("The code compiles and prints what the question says");
     await adminPage.getByRole("button", { name: "Publish revision 1" }).click();
     const confirm = adminPage.getByRole("group", { name: "Confirm publishing revision 1" });
     await expect(confirm.getByRole("button", { name: "Yes, publish revision 1" })).toBeFocused();
@@ -111,6 +119,7 @@ test.describe("the editorial desk", () => {
     await confirm.getByRole("button", { name: "Yes, publish revision 1" }).click();
     await expect(adminPage.getByRole("status").filter({ hasText: /^Published./ })).toBeFocused();
     await expect(adminPage.getByText("Current status:")).toContainText("Published");
+    await expect(adminPage.getByText(/Published by staff-/)).toBeVisible();
     await adminPage.getByRole("link", { name: "Back to questions" }).click();
     await adminPage.getByRole("link", { name: "Published" }).click();
     await expect(adminPage.getByRole("row", { name: new RegExp(label) })).toContainText("Published");

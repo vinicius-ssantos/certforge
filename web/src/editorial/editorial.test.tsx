@@ -18,6 +18,8 @@ function revision(overrides: Record<string, unknown> = {}) {
     number: 1,
     status: "DRAFT",
     authorId: editor.id,
+    authorName: "editor@example.com",
+    publishedByName: null,
     type: "SINGLE_CHOICE",
     topicId: TOPIC_ID,
     javaRelease: 21,
@@ -314,14 +316,14 @@ describe("editing and sending", () => {
         ...tracks,
         [`GET ${QUESTION_URL}`]: {
           body: question({
-            reviews: [{ reviewerId: reviewer.id, decision: "CHANGES_REQUESTED", comment: "Option B needs a better reason.", decidedAt: "2026-09-30T12:00:00Z" }],
+            reviews: [{ reviewerId: reviewer.id, reviewerName: "reviewer@example.com", decision: "CHANGES_REQUESTED", comment: "Option B needs a better reason.", checklist: [], decidedAt: "2026-09-30T12:00:00Z" }],
           }),
         },
       },
       { as: editor, path: `/editorial/questions/${QUESTION_ID}` },
     );
 
-    expect(await screen.findByRole("heading", { name: "A reviewer asked for changes" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "reviewer@example.com asked for changes" })).toBeInTheDocument();
     expect(screen.getByText("Option B needs a better reason.")).toBeInTheDocument();
   });
 });
@@ -394,5 +396,49 @@ describe("reading a revision", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent("does not exist");
     expect(screen.getByRole("link", { name: "Back to questions" })).toHaveAttribute("href", "/editorial");
+  });
+});
+
+describe("who and what, in a revision's history", () => {
+  it("names the author, the reviewer and the publisher, and lists what the reviewer checked", async () => {
+    const done = question({
+      status: "PUBLISHED",
+      publishedByName: "admin@example.com",
+      reviews: [
+        {
+          reviewerId: reviewer.id,
+          reviewerName: "reviewer@example.com",
+          decision: "APPROVED",
+          comment: "Looks right.",
+          checklist: ["TECHNICAL_ACCURACY", "CODE_VERIFIED"],
+          decidedAt: "2026-09-30T12:00:00Z",
+        },
+      ],
+    });
+    renderApp(
+      { ...tracks, [`GET ${QUESTION_URL}`]: { body: done } },
+      { as: reviewer, path: `/editorial/questions/${QUESTION_ID}` },
+    );
+
+    expect(await screen.findByText(/Written by editor@example.com · Published by admin@example.com/)).toBeInTheDocument();
+    const notes = screen.getByRole("region", { name: "Review notes" });
+    expect(within(notes).getByRole("listitem")).toHaveTextContent("Approved by reviewer@example.com");
+    expect(within(notes).getByText(/^Checked:/)).toHaveTextContent(
+      "The correct answer is technically right for the stated Java release; The code compiles and prints what the question says.",
+    );
+  });
+
+  it("copes with a review recorded before checklists existed", async () => {
+    const old = question({
+      status: "APPROVED",
+      reviews: [{ reviewerId: reviewer.id, reviewerName: null, decision: "APPROVED", comment: null, checklist: [], decidedAt: "2026-09-30T12:00:00Z" }],
+    });
+    renderApp(
+      { ...tracks, [`GET ${QUESTION_URL}`]: { body: old } },
+      { as: reviewer, path: `/editorial/questions/${QUESTION_ID}` },
+    );
+
+    const notes = await screen.findByRole("region", { name: "Review notes" });
+    expect(within(notes).queryByText(/^Checked:/)).not.toBeInTheDocument();
   });
 });

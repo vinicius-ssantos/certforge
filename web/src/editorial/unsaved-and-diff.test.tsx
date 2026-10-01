@@ -16,6 +16,8 @@ function revision(overrides: Record<string, unknown> = {}) {
     number: 1,
     status: "DRAFT",
     authorId: editor.id,
+    authorName: "editor@example.com",
+    publishedByName: null,
     type: "SINGLE_CHOICE",
     topicId: TOPIC_ID,
     javaRelease: 21,

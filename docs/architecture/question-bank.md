@@ -8,7 +8,7 @@ Issue: #7 — Implement versioned question bank and editorial workflow. Decision
 - `QuestionRevision` is the unit of content and review: type, topic, Java release, difficulty and rationale, prompt, overall explanation, options, references, author, and review decisions. Attempts reference a revision, never the logical question.
 - Each option has a key (`A`–`H`), text, a correctness flag, and its own explanation of why it is correct or incorrect.
 - References are authoritative sources with a title and an `https` URL.
-- `ContentReview` records each technical review decision (`APPROVED` or `CHANGES_REQUESTED`) with the reviewer and a comment.
+- `ContentReview` records each technical review decision (`APPROVED` or `CHANGES_REQUESTED`) with the reviewer, a comment and the content-policy checklist items the reviewer ticked (see below).
 
 ## Lifecycle
 
@@ -89,6 +89,11 @@ Approval, publication, replacement and deprecation publish an `AuditFact` (actor
 
 Every command returns the editorial view of the question. These responses include the answer key and are for editors, reviewers and publishers only.
 
+### Who and what is shown to staff
+
+- The editorial view names the people involved: `authorName`, `publishedByName` and, on each review, `reviewerName`, next to the ids. The name is the account’s email address, resolved through the identity module’s `AccountNames`. It appears only in these staff endpoints and never in anything a learner can read.
+- **Review checklist.** `approve` and `request-changes` accept an optional `checklist`: the codes of the content-policy items the reviewer ticked (`TECHNICAL_ACCURACY`, `CODE_VERIFIED`, `NO_AMBIGUITY`, `REASONS_ACCURATE`, `OFFICIAL_REFERENCES`). Duplicates are dropped, an unknown code is refused (`invalid_checklist`), and the list is stored with the review and returned in `reviews[].checklist` (empty for reviews made before this existed). It records what the reviewer says they checked; it does not gate approval, because requiring every item would be an editorial policy decision.
+
 ## Deferred
 
-Community submission, bulk import, AI publication, question analytics, arbitrary Java execution, mock-exam blueprints, persisting audit facts (#12), a learner-facing question endpoint (#9, #10), and compare-revisions tooling for reviewers (#14).
+Community submission, bulk import, AI publication, question analytics, arbitrary Java execution, mock-exam blueprints, persisting audit facts (#12), a learner-facing question endpoint (#9, #10)(the comparison of revisions is done by the web app from the data above).

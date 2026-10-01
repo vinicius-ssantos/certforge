@@ -2,6 +2,7 @@ package dev.certforge.questionbank.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -343,6 +344,87 @@ class QuestionBankIT {
     send(post("/api/admin/question-revisions/" + ids[1] + "/request-changes"), reviewer, "{}")
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("validation_failed"));
+  }
+
+  // ---- who and what, as shown to editorial staff ----------------------------------------------
+
+  private String emailOf(User user) {
+    return jdbc.queryForObject(
+        "select email from certforge.identity_account where id = ?", String.class, user.id());
+  }
+
+  @Test
+  void staffSeeWhoWroteReviewedAndPublishedARevision() throws Exception {
+    String[] ids = createComplete("Who did what");
+    submit(ids[1]);
+    send(
+            post("/api/admin/question-revisions/" + ids[1] + "/approve"),
+            reviewer,
+            "{\"comment\":\"Checked\"}")
+        .andExpect(status().isOk());
+    publish(ids[1]).andExpect(status().isOk());
+
+    send(get("/api/admin/questions/" + ids[0]), reviewer, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].authorName").value(emailOf(editor)))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].reviewerName").value(emailOf(reviewer)))
+        .andExpect(jsonPath("$.revisions[0].publishedByName").value("qb-admin@example.com"));
+  }
+
+  @Test
+  void aRevisionNotYetPublishedHasNoPublisherName() throws Exception {
+    String[] ids = createComplete("Not published");
+
+    send(get("/api/admin/questions/" + ids[0]), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].authorName").value(emailOf(editor)))
+        .andExpect(jsonPath("$.revisions[0].publishedByName").value(nullValue()));
+  }
+
+  @Test
+  void aReviewRecordsTheChecklistItemsTheReviewerTicked() throws Exception {
+    String[] approved = createComplete("Approved with a checklist");
+    submit(approved[1]);
+    send(
+            post("/api/admin/question-revisions/" + approved[1] + "/approve"),
+            reviewer,
+            "{\"checklist\":[\"TECHNICAL_ACCURACY\",\"CODE_VERIFIED\",\"TECHNICAL_ACCURACY\"]}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist.length()").value(2))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist[0]").value("TECHNICAL_ACCURACY"))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist[1]").value("CODE_VERIFIED"));
+
+    String[] returned = createComplete("Returned with a checklist");
+    submit(returned[1]);
+    send(
+            post("/api/admin/question-revisions/" + returned[1] + "/request-changes"),
+            reviewer,
+            "{\"comment\":\"Fix B\",\"checklist\":[\"NO_AMBIGUITY\"]}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist[0]").value("NO_AMBIGUITY"));
+
+    String[] bare = createComplete("Approved without a checklist");
+    submit(bare[1]);
+    approve(bare[1]);
+    send(get("/api/admin/questions/" + bare[0]), reviewer, null)
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist.length()").value(0));
+  }
+
+  @Test
+  void anUnknownChecklistItemIsRejectedAndNothingChanges() throws Exception {
+    String[] ids = createComplete("Unknown item");
+    submit(ids[1]);
+
+    send(
+            post("/api/admin/question-revisions/" + ids[1] + "/approve"),
+            reviewer,
+            "{\"checklist\":[\"LOOKS_GOOD_TO_ME\"]}")
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("invalid_checklist"));
+
+    assertThat(statusOf(bank, ids[1])).isEqualTo(RevisionStatus.TECHNICAL_REVIEW);
+    send(get("/api/admin/questions/" + ids[0]), reviewer, null)
+        .andExpect(jsonPath("$.revisions[0].reviews.length()").value(0));
   }
 
   // ---- invariants ----------------------------------------------------------------------------

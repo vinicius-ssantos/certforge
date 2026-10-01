@@ -26,11 +26,13 @@ interface AdminQuestionViews {
       List<OptionView> options,
       List<ReferenceView> references,
       UUID authorId,
+      @Schema(nullable = true) String authorName,
       @Schema(nullable = true) UUID examVersionId,
       Instant createdAt,
       @Schema(nullable = true) Instant submittedAt,
       @Schema(nullable = true) Instant publishedAt,
       @Schema(nullable = true) UUID publishedBy,
+      @Schema(nullable = true) String publishedByName,
       @Schema(nullable = true) Instant deprecatedAt,
       List<ReviewView> reviews) {}
 
@@ -40,8 +42,10 @@ interface AdminQuestionViews {
 
   record ReviewView(
       UUID reviewerId,
+      @Schema(nullable = true) String reviewerName,
       String decision,
       @Schema(nullable = true) String comment,
+      List<String> checklist,
       Instant decidedAt) {}
 
   record QuestionSummary(

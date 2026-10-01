@@ -18,6 +18,8 @@ function revision(overrides: Record<string, unknown> = {}) {
     number: 1,
     status: "TECHNICAL_REVIEW",
     authorId: editor.id,
+    authorName: "editor@example.com",
+    publishedByName: null,
     type: "SINGLE_CHOICE",
     topicId: TOPIC_ID,
     javaRelease: 21,
@@ -58,7 +60,7 @@ describe("reviewing", () => {
 
     expect(await screen.findByRole("group", { name: "Content policy" })).toBeInTheDocument();
     expect(screen.getAllByRole("checkbox")).toHaveLength(5);
-    expect(screen.getByText(/not saved/)).toBeInTheDocument();
+    expect(screen.getByText(/recorded with your decision/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Publish" })).not.toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
@@ -81,9 +83,32 @@ describe("reviewing", () => {
     expect(await screen.findByText(/^Approved\./)).toHaveFocus();
     expect(screen.getByText("Current status:")).toHaveTextContent("Approved");
     const call = fetch.calls.find((entry) => entry.path === `${REV}/approve`);
-    expect(call?.body).toEqual({ comment: "Checked on JDK 21." });
+    expect(call?.body).toEqual({ comment: "Checked on JDK 21.", checklist: [] });
     expect(call?.headers.get("X-XSRF-TOKEN")).toBe("test-csrf-token");
     expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
+  });
+
+  it("records exactly the items the reviewer ticked, with the decision", async () => {
+    const user = userEvent.setup();
+    const { fetch } = renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: { body: view(revision()) },
+        [`POST ${REV}/approve`]: { body: view(revision({ status: "APPROVED" })) },
+      },
+      { as: reviewer, ...OPEN },
+    );
+
+    await user.click(await screen.findByRole("checkbox", { name: /technically right/ }));
+    await user.click(screen.getByRole("checkbox", { name: /compiles and prints/ }));
+    await user.click(screen.getByRole("checkbox", { name: /compiles and prints/ }));
+    await user.click(screen.getByRole("checkbox", { name: /official documentation/ }));
+    await user.click(screen.getByRole("button", { name: "Approve" }));
+
+    await screen.findByText(/^Approved./);
+    expect(fetch.calls.find((entry) => entry.path === `${REV}/approve`)?.body).toEqual({
+      checklist: ["TECHNICAL_ACCURACY", "OFFICIAL_REFERENCES"],
+    });
   });
 
   it("approves without a comment", async () => {
@@ -100,7 +125,7 @@ describe("reviewing", () => {
     await user.click(await screen.findByRole("button", { name: "Approve" }));
 
     await screen.findByText(/^Approved\./);
-    expect(fetch.calls.find((entry) => entry.path === `${REV}/approve`)?.body).toEqual({});
+    expect(fetch.calls.find((entry) => entry.path === `${REV}/approve`)?.body).toEqual({ checklist: [] });
   });
 
   it("will not ask for changes without saying what, and does not call the server", async () => {
@@ -135,6 +160,7 @@ describe("reviewing", () => {
     expect(await screen.findByText(/Sent back to the author/)).toHaveFocus();
     expect(fetch.calls.find((entry) => entry.path === `${REV}/request-changes`)?.body).toEqual({
       comment: "Option B needs a better reason.",
+      checklist: [],
     });
   });
 

@@ -16,6 +16,15 @@ export function statusOf(status: string) {
 /** The steps of a revision's life, in order. A replaced revision has left the sequence. */
 export const LIFECYCLE = ["DRAFT", "TECHNICAL_REVIEW", "APPROVED", "PUBLISHED"] as const;
 
+/** The content-policy checks a reviewer can attest to, by the codes the server records. */
+export const CHECKLIST = [
+  { code: "TECHNICAL_ACCURACY", label: "The correct answer is technically right for the stated Java release" },
+  { code: "CODE_VERIFIED", label: "The code compiles and prints what the question says" },
+  { code: "NO_AMBIGUITY", label: "Nothing in the wording is ambiguous" },
+  { code: "REASONS_ACCURATE", label: "Every reason is accurate, including for the wrong options" },
+  { code: "OFFICIAL_REFERENCES", label: "The references are official documentation" },
+] as const;
+
 export const TYPE_LABEL: Record<string, string> = {
   SINGLE_CHOICE: "Single choice",
   MULTIPLE_CHOICE: "Multiple choice",
