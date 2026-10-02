@@ -92,6 +92,22 @@ Review is done by a different account from the author by default (`reviewer_must
 
 A question that is ambiguous or disputed must not be published. Fix it, or leave it in draft.
 
+### Doing all of that at once
+
+Once a review is recorded in the pack, `deploy/publish-pack.mjs` walks the whole workflow for you — create, submit, approve, publish — carrying the recorded verdict as the approval comment and the record's `checklist` as what the reviewer attests to:
+
+```sh
+just reviewer reviewer@example.com 'a long password'   # once: the second account approval needs
+just publish-content reviewer@example.com 'a long password'
+```
+
+It automates the typing, not the judgement, and refuses twice so that it cannot claim a review that does not exist:
+
+- **A question whose recorded digest no longer matches is held back**, not published, because nobody has reviewed the text that would go out. The run reports it and exits non-zero.
+- **The reviewer account is never invented.** The demo seeder registers a throwaway reviewer because its questions are throwaway data; here that would write a fictional reviewer into the provenance of real content, so the account is passed in and must already exist.
+
+It also refuses a reviewer that is the author, skips prompts already in the bank so a second run tops up instead of duplicating, and prints the author, reviewer and publisher of record at the end. `--dry-run` reports what it would publish without contacting anything.
+
 ### Before publishing anything in this track
 
 The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` are only partly verified. Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers, but the exact objective wording comes from secondary summaries, because the exam page is rendered by JavaScript and blocks automated clients. Compare the topics with the official page (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) in a browser first; see [preparation catalog](../architecture/preparation-catalog.md).

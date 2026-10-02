@@ -15,7 +15,14 @@ docker compose -f compose.release.yaml up --build -d     # o app fica em http://
 
 Depois dê questões ao app, de um de dois jeitos:
 
-- **O pacote real.** Importe `content/java-se-21` e leve-o por revisão e publicação como descrito no [guia de autoria de conteúdo](../engineering/content-authoring.md). A revisão técnica dele está feita e [registrada](../../content/java-se-21/review.json); a mesa editorial ainda precisa carregar esse veredito, então a aprovação exige uma segunda conta, a menos que você suba o stack com a separação entre autor e revisor desligada, o que serve só para uma demonstração de uma pessoa.
+- **O pacote real**, que é para o que o produto serve de fato. A revisão técnica dele está feita e [registrada](../../content/java-se-21/review.json), então dois comandos o publicam pelo fluxo editorial real:
+
+  ```sh
+  just reviewer reviewer@example.com 'uma senha longa'   # uma vez: a aprovação exige uma segunda conta
+  just publish-content reviewer@example.com 'uma senha longa'
+  ```
+
+  O segundo segura qualquer questão que o registro de revisão não cubra mais. Veja o [guia de autoria de conteúdo](../engineering/content-authoring.md) para o fluxo na mão.
 - **Uma olhada rápida com dados de teste.** Suba o stack com as configurações de teste (`docker compose -f compose.release.yaml -f compose.e2e.yaml up --build -d`) e então, em `web/`, `npm ci`, `npx playwright install chromium` e `E2E_BASE_URL=http://localhost:8081 npx playwright test e2e/learner.spec.ts -g "signing out"`. Essa execução publica dez questões de teste claramente identificadas pelo fluxo editorial.
 
 ## Roteiro A: o aluno

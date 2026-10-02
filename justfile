@@ -173,11 +173,11 @@ baseline rounds="20":
 rehearse-restore:
     bash deploy/rehearse-restore.sh -p certforge-release -f compose.release.yaml
 
-# Known vulnerabilities in the two images, as CI fails on them. CI always builds from scratch, so a
-# cached build here can report a package that a fresh one would have upgraded away: `just scan fresh`
-# rebuilds without the cache and is what matches CI.
+# CI always builds from scratch, so a cached build here can report a package that a fresh one would
+# have upgraded away: `just scan fresh` rebuilds without the cache and is what matches CI.
 # MSYS_NO_PATHCONV keeps Git Bash on Windows from rewriting the container paths into Windows ones;
 # it means nothing on other systems.
+# Known vulnerabilities in the two images, as CI fails on them.
 [group('inspect')]
 scan fresh="":
     {{release}} build {{ if fresh != "" { "--no-cache --pull" } else { "" } }}
@@ -203,7 +203,21 @@ review-packet:
 # Import the real question pack as drafts awaiting review. It publishes nothing.
 [group('content')]
 import-content email password:
-    java content/ContentImporter.java --base-url {{backend_url}} --email {{email}} --password {{password}}
+    java content/ContentImporter.java --base-url {{backend_url}} --email {{ quote(email) }} --password {{ quote(password) }}
+
+# Choose a real person: they carry reviews of record. This is how a single maintainer gets the
+# second account the editorial workflow needs.
+# Give an account the REVIEWER role, creating the account if it does not exist yet.
+[group('content')]
+reviewer email password:
+    node deploy/grant-reviewer.mjs --url {{web_url}} --email {{ quote(email) }} --password {{ quote(password) }}
+
+# It carries the verdict recorded in the pack's review.json, holds back any question that record no
+# longer covers, and never invents the reviewer: pass an account from `just reviewer`.
+# Publish the reviewed question pack through the real editorial workflow.
+[group('content')]
+publish-content reviewer_email reviewer_password:
+    node deploy/publish-pack.mjs --url {{web_url}} --reviewer-email {{ quote(reviewer_email) }} --reviewer-password {{ quote(reviewer_password) }}
 
 # Regenerate the API contract from the backend and the types the web app is built against.
 [group('content')]

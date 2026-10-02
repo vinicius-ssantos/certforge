@@ -4,6 +4,9 @@
   "reviewedOn": "2026-10-02",
   "packet": "docs/release/content-review-packet.md",
   "method": "The reviewer read the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and reported no technical errors in any of the twenty.",
+  "checklist": [
+    "TECHNICAL_ACCURACY"
+  ],
   "caveats": [
     "The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.",
     "The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.",

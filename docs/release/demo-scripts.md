@@ -13,7 +13,14 @@ docker compose -f compose.release.yaml up --build -d     # the app is at http://
 
 Then give the app questions, in one of two ways:
 
-- **The real pack.** Import `content/java-se-21` and take it through review and publication as described in the [content authoring guide](../engineering/content-authoring.md). Its technical review is done and [recorded](../../content/java-se-21/review.json); the editorial desk still has to carry that verdict, so approval needs a second account unless you start the stack with reviewer separation off, which is for a single-maintainer demo only.
+- **The real pack**, which is what the product is actually for. Its technical review is done and [recorded](../../content/java-se-21/review.json), so two commands publish it through the real editorial workflow:
+
+  ```sh
+  just reviewer reviewer@example.com 'a long password'   # once: approval needs a second account
+  just publish-content reviewer@example.com 'a long password'
+  ```
+
+  The second one holds back any question the recorded review no longer covers. See the [content authoring guide](../engineering/content-authoring.md) for the workflow by hand.
 - **A quick look with test data.** Start the stack with the test settings (`docker compose -f compose.release.yaml -f compose.e2e.yaml up --build -d`), then, in `web/`, `npm ci`, `npx playwright install chromium` and `E2E_BASE_URL=http://localhost:8081 npx playwright test e2e/learner.spec.ts -g "signing out"`. That run publishes ten clearly labelled fixture questions through the editorial workflow.
 
 ## Script A: the learner
