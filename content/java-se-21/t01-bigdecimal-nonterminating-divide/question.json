@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the exact division contract of BigDecimal when no rounding mode is supplied.",
+  "prompt": "What happens when `new BigDecimal(\"1\").divide(new BigDecimal(\"3\"))` is evaluated with no rounding mode or MathContext?",
+  "explanation": "The exact decimal expansion of 1/3 is non-terminating. The no-rounding overload requires an exact representable quotient and throws `ArithmeticException` otherwise.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns 0.3333333333 using a default precision.",
+      "correct": false,
+      "explanation": "This overload does not silently choose a default precision."
+    },
+    {
+      "key": "B",
+      "text": "It returns 0 because both operands were created from integer-looking strings.",
+      "correct": false,
+      "explanation": "BigDecimal division is decimal arithmetic, not integer division."
+    },
+    {
+      "key": "C",
+      "text": "It throws ArithmeticException.",
+      "correct": true,
+      "explanation": "A non-terminating decimal expansion requires a rounding rule for this operation."
+    },
+    {
+      "key": "D",
+      "text": "It returns Double.NaN.",
+      "correct": false,
+      "explanation": "BigDecimal does not represent this situation with floating-point NaN."
+    }
+  ],
+  "references": [
+    {
+      "title": "BigDecimal.divide(BigDecimal) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigDecimal.html#divide(java.math.BigDecimal)"
+    }
+  ]
+}
