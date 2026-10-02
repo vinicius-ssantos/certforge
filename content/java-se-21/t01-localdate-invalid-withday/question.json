@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes date-adjustment methods that clamp invalid dates from methods that reject an invalid requested day.",
+  "prompt": "What happens when `LocalDate.of(2026, 4, 15).withDayOfMonth(31)` is evaluated?",
+  "explanation": "April has only 30 days. `withDayOfMonth` validates the requested day for the resulting year/month and throws `DateTimeException` when it is invalid.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns 2026-04-30.",
+      "correct": false,
+      "explanation": "withDayOfMonth does not clamp an explicitly requested invalid day."
+    },
+    {
+      "key": "B",
+      "text": "It returns 2026-05-01.",
+      "correct": false,
+      "explanation": "The operation does not overflow an invalid day into the next month."
+    },
+    {
+      "key": "C",
+      "text": "It throws DateTimeException.",
+      "correct": true,
+      "explanation": "Day 31 is invalid for April."
+    },
+    {
+      "key": "D",
+      "text": "It returns the original date unchanged.",
+      "correct": false,
+      "explanation": "An invalid requested day is reported rather than ignored."
+    }
+  ],
+  "references": [
+    {
+      "title": "LocalDate.withDayOfMonth(int) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/LocalDate.html#withDayOfMonth(int)"
+    }
+  ]
+}
