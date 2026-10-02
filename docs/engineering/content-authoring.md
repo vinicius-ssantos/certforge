@@ -112,6 +112,29 @@ It also refuses a reviewer that is the author, skips prompts already in the bank
 
 The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` are only partly verified. Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers, but the exact objective wording comes from secondary summaries, because the exam page is rendered by JavaScript and blocks automated clients. Compare the topics with the official page (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) in a browser first; see [preparation catalog](../architecture/preparation-catalog.md).
 
+## Your own study material
+
+A maintainer may hold a licence to material they have no right to redistribute: an official practice exam, a book's question bank, a course. `content/private/` is where that lives. Git ignores it, and CI fails if any file under it is ever tracked, because `.gitignore` only asks — a `git add -f` or a stray `git add -A` from a different directory gets through it.
+
+This matters more here than in a private project. **This repository is public and Apache-2.0**, so a file committed under `content/` is not merely published: it is sublicensed to everyone who clones it, and that is not a right a licence to study grants anyone.
+
+The scripts already work on any directory, so a private pack needs no special support:
+
+```sh
+node deploy/publish-pack.mjs --pack content/private --reviewer-email ... --reviewer-password ...
+```
+
+It needs its own `review.json`, like any pack, and that is a useful place to write down in `caveats` what the material is and why it is not in the repository.
+
+### The two ways this leaks anyway
+
+The ignored directory handles the obvious case. Two others are not obvious:
+
+1. **Screenshots.** `just screenshots` captures pages from a *running* stack into `docs/release/screenshots/`, and those PNGs are committed. Recapture them against the end-to-end test stack, whose questions are the suite's own fixtures, and never against an instance holding private content: a screenshot of a licensed question is a copy of it, in the public repository, in a form no text search will ever find.
+2. **Derivation, which is the one that actually costs you.** Copying is the easy case to avoid. The trap is reading someone's question, understanding it, and then writing *your own version* of it into the authorial pack. Rewording does not undo derivation; a derivative work is protected the same way. The line that holds is: learn **the subject** from the specification, not **the question** from their bank. If a question in `content/java-se-21/` exists because you saw theirs, it does not belong there however much you rewrote it.
+
+No test can check the second one. It is a discipline, and the only thing automation does here is make the file path impossible to get wrong by accident.
+
 ## The initial pack
 
 | Topic | Questions |

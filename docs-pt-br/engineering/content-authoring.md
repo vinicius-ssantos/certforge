@@ -114,6 +114,29 @@ Uma questão ambígua ou contestada não deve ser publicada. Corrija-a ou deixe-
 
 Os nomes dos tópicos e o texto dos objetivos semeados por `V4__seed_java_certification_catalog.sql` estão apenas parcialmente verificados. O [anúncio da prova](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) pela Oracle University confirma as áreas que a prova cobre, mas o texto exato dos objetivos vem de resumos secundários, porque a página da prova é renderizada por JavaScript e bloqueia clientes automatizados. Compare antes os tópicos com a página oficial (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) em um navegador; veja o [catálogo de preparação](../architecture/preparation-catalog.md).
 
+## O seu próprio material de estudo
+
+Um mantenedor pode ter licença de material que não tem direito de redistribuir: um simulado oficial, o banco de questões de um livro, um curso. `content/private/` é onde isso fica. O git ignora, e o CI falha se qualquer arquivo ali for versionado, porque o `.gitignore` apenas pede — um `git add -f`, ou um `git add -A` distraído de outro diretório, passa por ele.
+
+Isso pesa mais aqui do que num projeto privado. **Este repositório é público e Apache-2.0**, então um arquivo comitado em `content/` não é só publicado: ele é sublicenciado a todo mundo que clonar, e esse não é um direito que licença de estudo conceda a ninguém.
+
+Os scripts já funcionam sobre qualquer diretório, então um pacote privado não precisa de suporte especial:
+
+```sh
+node deploy/publish-pack.mjs --pack content/private --reviewer-email ... --reviewer-password ...
+```
+
+Ele precisa do próprio `review.json`, como qualquer pacote, e esse é um bom lugar para escrever em `caveats` o que o material é e por que não está no repositório.
+
+### As duas formas de isso vazar mesmo assim
+
+O diretório ignorado resolve o caso óbvio. Dois outros não são óbvios:
+
+1. **Capturas de tela.** O `just screenshots` captura páginas de um stack **em execução** para `docs/release/screenshots/`, e esses PNGs são versionados. Recapture contra o stack de teste ponta a ponta, cujas questões são as da própria suíte, e nunca contra uma instância com conteúdo privado carregado: a captura de uma questão licenciada é uma cópia dela, no repositório público, numa forma que nenhuma busca por texto vai achar.
+2. **Derivação, que é a que realmente custa.** Copiar é o caso fácil de evitar. A armadilha é ler a questão de alguém, entendê-la, e então escrever *a sua versão* dela no pacote autoral. Reescrever não desfaz derivação; obra derivada é protegida igual. A linha que se sustenta é: aprenda **o assunto** na especificação, não **a questão** no banco deles. Se uma questão em `content/java-se-21/` existe porque você viu a deles, ela não pertence ali, por mais que você tenha reescrito.
+
+Nenhum teste confere a segunda. É disciplina, e o único papel da automação aqui é tornar o caminho de arquivo impossível de errar por descuido.
+
 ## O pacote inicial
 
 | Tópico | Questões |

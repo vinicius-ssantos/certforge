@@ -81,6 +81,24 @@ jobs:
           node content/build-review-packet.mjs --out "$RUNNER_TEMP/packet.md"
           diff docs/release/content-review-packet.md "$RUNNER_TEMP/packet.md"
 
+      # content/private/ is where a maintainer keeps material they hold a licence to but no right to
+      # redistribute. This repository is public and Apache-2.0, so a file committed there would be
+      # published and sublicensed. .gitignore asks; this refuses.
+      - name: No private content is tracked
+        working-directory: .
+        run: |
+          tracked="$(git ls-files content/private)"
+          if [ -n "$tracked" ]; then
+            echo "These files are under content/private/ but tracked in git:" >&2
+            echo "$tracked" >&2
+            echo "" >&2
+            echo "This repository is public and Apache-2.0: committing them publishes and" >&2
+            echo "sublicenses them. Remove them from the index with:" >&2
+            echo "  git rm --cached -r content/private" >&2
+            exit 1
+          fi
+          echo "no private content is tracked"
+
       # Fails on a known high or critical advisory in anything that ships to the browser.
       - name: Dependency audit
         run: npm audit --omit=dev --audit-level=high
