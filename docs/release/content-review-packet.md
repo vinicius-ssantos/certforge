@@ -112,7 +112,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:a57b48871984a632e9636cb314306fdcb0eac9e42d815ca1c7ab51862cd04c99`
+To record: `"digest": "sha256:a2fbe740c9fa46fdb62cd9e5e9b5287d1abf6ebb534c3d4e67384a9757be5d0b"`, `"verified": null`
 
 **Comments:**
 
@@ -186,7 +186,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:d74789d624e7677a24ff6b5d5d7c34dfb9095dc81b7736140317c98eea9f54f6`
+To record: `"digest": "sha256:24805254eb5d6198170d923e3d1a25233edb90f634da9d21b943ff930afd0788"`, `"verified": "sha256:2b65ec693644068605c58315fc62d32e4eff6b2f515de973ce63f5bc6e3dcadf"`
 
 **Comments:**
 
@@ -265,7 +265,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:ddfe40ffe584357b0739920dce4ec6429e9568be1b3fa7faf0bce9e0279884ad`
+To record: `"digest": "sha256:7b9f33bbab91807a0a5d1a72bcba7224065f0a6ee616a936fe993599f9439974"`, `"verified": "sha256:d35c416a85b807e9b5384915d6ebb4a9f7352713efd89857b45a242f473728a9"`
 
 **Comments:**
 
@@ -343,7 +343,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:29fcf3424d7bcba487f53c5f9872dd14653bda202d0e4f778a916434e95101f0`
+To record: `"digest": "sha256:1b08bfb104293ab6a09b7785345619c737e8b747e4c7e8ea8ae77ca907055e12"`, `"verified": "sha256:9bc000eb5e1d7638deac445c820e4b235e7d8035a51679f335382f0c726c4b4c"`
 
 **Comments:**
 
@@ -426,7 +426,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:aa481e073b7d659109b86429bfc3ee049d9e9e1017877967641d6334213b1b1a`
+To record: `"digest": "sha256:610a17628ad547aed33f9478cf6b1d1d2d4d9757394de00e0cbc27f3ea34827a"`, `"verified": "sha256:108f635869465d369f8d263885c1849c80b0c4ac86c984373abe5e27fcc27cf3"`
 
 **Comments:**
 
@@ -495,7 +495,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:61c28256c551033dc333943831ceb11395906977bb53ad128dcce17912b97cb6`
+To record: `"digest": "sha256:f5f4762b3f2a338b25cdba4922389326500e4fb5396487f286fe1f66885aef2f"`, `"verified": "sha256:04b97a311ea0caea2d7a1f0630c56f85e39bc9c6cdb81d8e186d37c3bde1fd1b"`
 
 **Comments:**
 
@@ -574,7 +574,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:240d4a5b10d6aaed53268e5b05286b90646d5ddf8676c3b64cd93579c13e41e7`
+To record: `"digest": "sha256:b399a71cdc40ede1c57471984ea2bb491506700850485c6168a550358535e9fe"`, `"verified": "sha256:0b545567f105495ea805011bb88b61161211226535998fa3e77730d4036c2765"`
 
 **Comments:**
 
@@ -662,7 +662,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:e5370850c99c87059999d0cb697f6bfb57f2d4a2b98bf4f6ec99c24fd178b0e8`
+To record: `"digest": "sha256:6e4d63f790dc1427e9bb3b63f0be08e6c7e0c9ab7dc0e5802e047aff10c582da"`, `"verified": "sha256:58db8b1fbd426c4b73071e576d7c311f7135a102dc6cdbfe5f9219bfe400787a"`
 
 **Comments:**
 
@@ -750,7 +750,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:c830a32e3a2fd75245909fe4b6de1767e6b3c94b68355c5c0dd8cbdd7f0aeb67`
+To record: `"digest": "sha256:fa5b94ce4a081fd1fc275bf77b3d633d5da2dfb89037ad27c7113e21e4a9c863"`, `"verified": "sha256:9c454ad3e5835e8aeed4ec6b0f9709168cd2334a87e36ddb98c78c4f5ff51178"`
 
 **Comments:**
 
@@ -828,7 +828,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:699e368bdfff61d605ed7e93781a510442445a7b1464bd2930d9c160ee91c3e8`
+To record: `"digest": "sha256:aa3ad1790530cd56ef478623a373c5729f588f5b334bcac4079f0d3cc0ba5333"`, `"verified": "sha256:9262ba71a165a51ed187e6b9a3b70bb6683a0b56d0d090f75a83f2eece52fbcf"`
 
 **Comments:**
 
@@ -890,7 +890,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:4e50b71ca042574876c19d7ff95c1806433d6e0d1f7453cc80572566ca45fe46`
+To record: `"digest": "sha256:6aefbf857ab03ebf0639c5df18fdf73d11544b50be59c6ec9fa977deba8bc9da"`, `"verified": null`
 
 **Comments:**
 
@@ -976,7 +976,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:d9dd4f24053690761ca11551e8e10722f74786a4353b7c74b5f811e52f24691b`
+To record: `"digest": "sha256:6bcb8ebb13ff8df307b70cee16d7a84159a68ad161012cde5bcef14fc6275d5e"`, `"verified": "sha256:a3a4003fed2b5863c030cddf99221c1de7bc8da864922df2bac1b7b3b1759749"`
 
 **Comments:**
 
@@ -1038,7 +1038,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:00636d4776e9a6c083b4907dc663384ade4bf1c71cc0eb31838b3bb43be05c53`
+To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf1db359adf23f38"`, `"verified": null`
 
 **Comments:**
 
@@ -1097,7 +1097,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:71c8f4f376606029152d0834e99787b5fda7fa4a9a88d4c7e4e914fa7af122dc`
+To record: `"digest": "sha256:af626b88c696999048debefb40bbe702accffa6ba8b6c839dfd0f6498351a9cb"`, `"verified": null`
 
 **Comments:**
 
@@ -1177,7 +1177,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:fdd1544ac933ee4a3a948f8f06bd7dfed68463a76e8909b4f21d0cd7f1adb93c`
+To record: `"digest": "sha256:4a02b0bcaa676c452f8468022e676f0c2d5be448f8d239a884d8d4f3068d729b"`, `"verified": "sha256:ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306"`
 
 **Comments:**
 
@@ -1243,7 +1243,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:29f1a00c81472433d1c499c677abd354aa39339a7db6c9920aa6ebd047f5ac10`
+To record: `"digest": "sha256:1a524f8719b99f90a06295ef3391bf1d248e689b5dcfca3aef6edb780bbf0890"`, `"verified": "sha256:533a743b128d5f0045f659014c6ec7ad3ee4af485ae01d046d479edde0d2f0d1"`
 
 **Comments:**
 
@@ -1324,7 +1324,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:c09f08cae31db96c648f3330e2b72053a7f3a9783122b0b1c5c78715f2ad29db`
+To record: `"digest": "sha256:4e5421d645083af9e41ed10336eef3972945a5b8d2f3ff9bf2521d33f7852d4c"`, `"verified": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"`
 
 **Comments:**
 
@@ -1387,7 +1387,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:b8d138a023b826fae2e2b83fad45546fe47cff66dd120a9488d76cc1def6a4a0`
+To record: `"digest": "sha256:9879711d5575e507206e13321fa33849bdbfa5f5ca2e2634d6d4405616e76b84"`, `"verified": "sha256:9a4e10c986b981cac4b9fcc5f8f8e9c662955d1ee6dbc008d2313cb6267c7705"`
 
 **Comments:**
 
@@ -1462,7 +1462,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:2397c34f0ab2a7fbc06a26916aaa2b8de9f1e7f24ddc0c075b074f1ef887cda4`
+To record: `"digest": "sha256:52ba86a006fd5ca4762e840f473707568a5907be1fe1687faf96ba1e1b870759"`, `"verified": "sha256:a07fbea8a5a970f755712ae8eaa522a029de9a93355ec6bec967f4685ec97f6f"`
 
 **Comments:**
 
@@ -1538,7 +1538,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-Digest of the question as it stands: `sha256:2e22b257f110f2ffb23a21e6ce7155cd90dba5360a6654bbfaee868ef6d1ccba`
+To record: `"digest": "sha256:faaf1a0cb99cf50d4449d2f3dd1ff0b185c6b3661dd9700b1d678b8e6278399e"`, `"verified": "sha256:674ac4b0bd40c5764a1ddf4e0119e9b4ee02f743211eefcf7b27c932a4831a4b"`
 
 **Comments:**
 

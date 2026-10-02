@@ -72,9 +72,24 @@ export function reviewDigest(question) {
     question.explanation,
     question.options.map((option) => [option.key, option.text, option.correct === true, option.explanation]),
     question.references.map((reference) => [reference.title, reference.url]),
-    question.expected,
   ];
-  return `sha256:${createHash("sha256").update(JSON.stringify(reviewed)).digest("hex")}`;
+  return sha256(JSON.stringify(reviewed));
+}
+
+/**
+ * The output the build verified, digested, or null for a question that carries no program. It is
+ * kept apart from {@link reviewDigest} on purpose, because the two kinds of change are not the
+ * same: an output that *changes* means the question now does something else and the review no
+ * longer covers it, while an output that *appears* where there was none only adds evidence for a
+ * claim the reviewer already read. Folding it into the one digest would mark a question unreviewed
+ * for being verified, which is the opposite of the incentive ADR 0011 wants.
+ */
+export function verifiedDigest(question) {
+  return question.expected === null || question.expected === undefined ? null : sha256(question.expected);
+}
+
+function sha256(value) {
+  return `sha256:${createHash("sha256").update(value).digest("hex")}`;
 }
 
 /** The recorded human review of a pack, or null when nobody has reviewed it. */
@@ -84,24 +99,36 @@ export function readReviewRecord(pack) {
 }
 
 /**
- * What the record says about one question, as it stands now: `reviewed` when the recorded digest
- * still matches the question, `changed` when the question has been edited since, and `unreviewed`
- * when the record does not mention it. A review covers the text that was read, not the name of the
- * file that held it.
+ * What the record says about one question as it stands now: `reviewed` when the review still
+ * covers it, `changed` when it has been edited since, and `unreviewed` when the record does not
+ * mention it. A review covers the text that was read, not the name of the file that held it.
+ *
+ * <p>Verification is weighed separately. Gaining a verified output keeps the review, because
+ * nothing the reviewer read changed and the claim is now backed by a program; losing one, or having
+ * it print something else, does not, because the question no longer does what was reviewed.
  */
 export function reviewStatusOf(record, question) {
   const entry = record?.questions?.[question.name];
   const current = reviewDigest(question);
+  const verified = verifiedDigest(question);
   if (!entry) {
-    return { state: "unreviewed", currentDigest: current };
+    return { state: "unreviewed", currentDigest: current, currentVerified: verified };
   }
+  const recorded = entry.verified ?? null;
+  const textHolds = entry.digest === current;
+  // null -> a digest is evidence appearing. Anything else differing is the question changing.
+  const verificationHolds = recorded === verified || (recorded === null && verified !== null);
   return {
-    state: entry.digest === current ? "reviewed" : "changed",
+    state: textHolds && verificationHolds ? "reviewed" : "changed",
+    verificationAdded: textHolds && recorded === null && verified !== null,
+    whatChanged: textHolds ? (verificationHolds ? null : "the verified output") : "the text",
     verdict: entry.verdict,
     reviewer: record.reviewer,
     reviewedOn: record.reviewedOn,
     recordedDigest: entry.digest,
     currentDigest: current,
+    recordedVerified: recorded,
+    currentVerified: verified,
   };
 }
 

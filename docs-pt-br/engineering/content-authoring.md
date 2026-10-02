@@ -27,7 +27,7 @@ content/
   ContentImporter.java          importador independente, sem dependências
   pack.mjs                      leitura de um pacote, do catálogo e do registro de revisão
   java-se-21/
-    review.json                 quem revisou quais questões, quando, e um digest de cada
+    review.json                 quem revisou quais questões, quando, e digests de cada
     t04-finally-return/
       question.json             o corpo da requisição de POST /api/admin/questions
       Main.java                 código mostrado ao aluno e verificado pelo build
@@ -79,9 +79,23 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 O [pacote de revisão de conteúdo](../../docs/release/content-review-packet.md) (em inglês, como as questões) expõe o pacote inteiro para o revisor: cada questão como o aluno a vê, depois o gabarito, as razões, as referências, a saída que o build verificou e, por questão, ou o veredito já registrado ou as conferências abaixo como caixas para marcar. Ele é gerado (`node content/build-review-packet.mjs`) e o CI falha se estiver desatualizado.
 
-Uma revisão concluída é registrada no `review.json` do pacote: o revisor, a data, como revisou, o que a revisão **não** estabelece e, para cada questão, um veredito e um digest de tudo o que ele julgou — o enunciado com seu código, as alternativas, o gabarito, cada explicação, a justificativa de dificuldade, as referências e a saída verificada. O pacote imprime o digest a registrar embaixo de cada questão não revisada.
+Uma revisão concluída é registrada no `review.json` do pacote: o revisor, a data, como revisou, o que a revisão **não** estabelece e, para cada questão, um veredito e dois digests. O `digest` cobre tudo o que o revisor julgou — o enunciado com seu código, as alternativas, o gabarito, cada explicação, a justificativa e as referências. O `verified` cobre a saída que o build provou, ou é `null` para questão sem programa. O pacote imprime os dois embaixo de cada questão, prontos para colar.
 
-Esse digest é o ponto. **Edite uma questão revisada e ela volta a contar como não revisada**: o pacote a marca como "changed since review" e imprime um digest novo, e como o CI compara o pacote comitado com um build novo, a mudança não chega à `main` ainda alegando o veredito antigo. Reindentar o JSON não muda nada, porque o digest cobre o que foi lido, não como o arquivo foi formatado. Registrar revisão de uma questão que ninguém leu derruba tudo isso, então não faça.
+Esses digests são o ponto. **Edite uma questão revisada e ela volta a contar como não revisada**: o pacote a marca como "changed since review" e imprime digests novos, e como o CI compara o pacote comitado com um build novo, a mudança não chega à `main` ainda alegando o veredito antigo.
+
+Os dois são pesados de formas diferentes, porque os dois tipos de mudança não são a mesma coisa:
+
+| O que você faz | A revisão |
+|---|---|
+| Mudar uma palavra do enunciado, de uma alternativa, do gabarito, de uma explicação, da justificativa ou de uma referência | **perdida** |
+| Fazer o programa imprimir outra coisa | **perdida** — a questão não faz mais o que foi revisado |
+| Apagar o programa | **perdida** — a evidência que o pacote mostrava não existe mais |
+| **Escrever um programa para uma questão que não tinha** | **mantida**, e anotada como mais bem sustentada do que quando o veredito foi dado |
+| Reindentar o JSON | mantida; o digest cobre o que foi lido, não como o arquivo foi escrito |
+
+A quarta linha importa. Juntar a saída verificada num único digest marcaria a questão como não revisada **por ter sido verificada**, o que pune exatamente o movimento que a [ADR 0011](../adr/0011-grade-content-evidence.md) quer incentivar: nada do que o revisor leu mudou, e a afirmação agora tem um programa por trás.
+
+Registrar revisão de uma questão que ninguém leu derruba tudo isso, então não faça.
 
 A revisão é feita por uma conta diferente da do autor, por padrão (`reviewer_must_differ_from_author`; veja o documento do banco de questões para mudar isso em uma instalação com um único mantenedor). O revisor precisa do papel `REVIEWER` e o publicador do papel `ADMINISTRATOR`.
 
