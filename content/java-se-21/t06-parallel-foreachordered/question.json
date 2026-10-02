@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes parallel execution from encounter-order guarantees of forEachOrdered.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Although the stream is parallel, `forEachOrdered` performs the action in encounter order for an ordered stream. The range therefore prints 0, 1, 2, 3 in order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0123",
+      "correct": true,
+      "explanation": "forEachOrdered preserves encounter order."
+    },
+    {
+      "key": "B",
+      "text": "The order is necessarily random.",
+      "correct": false,
+      "explanation": "That would be a concern with forEach, not forEachOrdered on an ordered stream."
+    },
+    {
+      "key": "C",
+      "text": "3210",
+      "correct": false,
+      "explanation": "Parallel execution does not imply reverse encounter order."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because parallel streams cannot use forEachOrdered.",
+      "correct": false,
+      "explanation": "forEachOrdered is specifically defined for streams, including parallel streams."
+    }
+  ],
+  "references": [
+    {
+      "title": "BaseStream and IntStream forEachOrdered (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/IntStream.html#forEachOrdered(java.util.function.IntConsumer)"
+    }
+  ]
+}
