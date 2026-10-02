@@ -4,7 +4,7 @@
   "javaRelease": 21,
   "difficulty": "MEDIUM",
   "difficultyRationale": "Distinguishes static method hiding from dynamic dispatch of overridden instance methods.",
-  "prompt": "A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but references a subclass object, which declaration is selected by `variable.method()`?",
+  "prompt": "A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but holds a subclass instance, which declaration is selected by `variable.method()`?",
   "explanation": "Static methods are hidden, not overridden. Method selection is based on the compile-time type of the qualifying expression, so the superclass static method is selected.",
   "options": [
     {
