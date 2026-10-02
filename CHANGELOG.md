@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- The `justfile` recipes failed on Windows outside Git Bash: `bash` on the PATH there is the WSL launcher, and a WSL distribution has no Docker unless its integration is on, so `just demo` from PowerShell could not reach Docker at all. Git Bash is now named outright for Windows, with the override documented (#15).
 - The development `compose.yaml` could not start PostgreSQL at all: it mounted the data volume at `/var/lib/postgresql/data`, which the pinned PostgreSQL 18 image refuses, even on an empty volume. It now mounts at `/var/lib/postgresql`, under a new volume name so a volume written by an older image is left alone rather than reused.
 - `deploy/verify-release.sh` asserted exact counts for the rate-limit check, so it only passed against a stack whose throttle bucket was untouched. It now asserts the property that matters, that a forged `X-Forwarded-For` does not get around the limit, which holds whatever the bucket already holds.
 - The historical-integrity end-to-end test asserted fixed revision numbers, so it only passed on a fresh database and failed on a second run against the same one. It now states the rule it is really about: exactly one revision is published, it carries the correction, and the revision the learner answered is retired (#15).

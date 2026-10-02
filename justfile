@@ -6,6 +6,13 @@
 
 set shell := ["bash", "-uc"]
 
+# On Windows, `bash` on the PATH is usually the WSL launcher, and a WSL distribution has no Docker
+# unless its integration is switched on. The recipes want Git Bash, so it is named outright. If Git
+# is installed somewhere else, pass the path once:
+#     just --shell "D:/Git/bin/bash.exe" --shell-arg -uc demo
+# This setting only takes literal values, so it cannot read that path from the environment.
+set windows-shell := ["C:/Program Files/Git/bin/bash.exe", "-uc"]
+
 export DB_PASSWORD := env_var_or_default("DB_PASSWORD", "local-only-password")
 export BOOTSTRAP_ADMIN_EMAIL := env_var_or_default("BOOTSTRAP_ADMIN_EMAIL", "admin@example.com")
 export BOOTSTRAP_ADMIN_PASSWORD := env_var_or_default("BOOTSTRAP_ADMIN_PASSWORD", "a long local password")

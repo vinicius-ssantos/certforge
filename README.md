@@ -90,7 +90,7 @@ You need Docker, and [just](https://github.com/casey/just) if you want the short
 just demo          # builds, starts, and publishes ten clearly labelled demo questions
 ```
 
-It is then at `http://localhost:8081`; sign in as `admin@example.com` with `a long local password`. `just` on its own lists everything else: `just down`, `just logs app`, `just check`, `just verify`.
+It is then at `http://localhost:8081`; sign in as `admin@example.com` with `a long local password`. `just` on its own lists everything else: `just down`, `just logs app`, `just check`, `just verify`. On Windows the recipes run under Git Bash, which the `justfile` names outright because `bash` on the PATH there is usually the WSL launcher, and a WSL distribution has no Docker unless its integration is on.
 
 Without `just`, the same thing:
 
