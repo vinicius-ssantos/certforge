@@ -1,0 +1,3 @@
+primary=E1 from body
+suppressedCount=1
+suppressed=E2 from close

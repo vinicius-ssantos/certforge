@@ -1,0 +1,3 @@
+stripRemovesEmSpace=true
+trimRemovesEmSpace=false
+trimRemovesAsciiSpace=true
