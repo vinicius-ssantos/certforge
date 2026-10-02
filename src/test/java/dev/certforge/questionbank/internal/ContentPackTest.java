@@ -46,6 +46,12 @@ class ContentPackTest {
   static final String SNIPPET_PLACEHOLDER = "{{snippet}}";
   static final String COMPILE_ERROR = "COMPILE_ERROR:";
 
+  // The only three sources a reference may cite (ADR 0011). The first two are scoped by release;
+  // a JEP is not, because it describes one release by definition.
+  static final String API_DOCS = "https://docs.oracle.com/en/java/javase/";
+  static final String SPECS = "https://docs.oracle.com/javase/specs/";
+  static final String JEPS = "https://openjdk.org/jeps/";
+
   /** Fixed ids of the ten topics seeded by V4__seed_java_certification_catalog.sql. */
   static final Set<String> SEEDED_TOPICS = new HashSet<>();
 
@@ -107,11 +113,45 @@ class ContentPackTest {
                       assertThat(SEEDED_TOPICS).contains(request.topicId().toString());
                       assertThat(request.prompt()).doesNotContain(SNIPPET_PLACEHOLDER);
                       assertThat(request.options()).hasSizeBetween(4, 5);
-                      assertThat(request.references())
-                          .allSatisfy(ref -> assertThat(ref.url()).startsWith("https://"));
+                      request.references().forEach(ref -> referenceIsOfficial(dir, ref, request));
                       verifyCode(dir, work.resolve(dir.getFileName()));
                       answerKeyAgreesWithTheProgram(dir, request);
                     }));
+  }
+
+  /**
+   * A reference must point at an official, version-correct source. ADR 0005 forbids fabricating
+   * references and the content policy asks for ones "sufficient for independent verification";
+   * until ADR 0011 this was checked only as far as the {@code https://} prefix, which a dead link,
+   * a blog post or the Java 17 page all satisfy.
+   *
+   * <p>This says nothing about whether the reference supports the claim. That is the semantic step,
+   * and it stays with the human reviewer.
+   */
+  private void referenceIsOfficial(
+      Path dir, QuestionAdminController.ReferenceRequest ref, RevisionRequest request) {
+    String url = ref.url();
+    String release = String.valueOf(request.javaRelease());
+    String where = dir.getFileName() + " reference " + ref.title();
+
+    if (url.startsWith(API_DOCS)) {
+      // https://docs.oracle.com/en/java/javase/21/... -- the segment after javase/ is the release.
+      assertThat(url)
+          .as("%s must cite the API documentation for Java %s, not another release", where, release)
+          .startsWith(API_DOCS + release + "/");
+    } else if (url.startsWith(SPECS)) {
+      // https://docs.oracle.com/javase/specs/jls/se21/... -- the specification is scoped by seNN.
+      assertThat(url)
+          .as("%s must cite the se%s specification, not another release", where, release)
+          .contains("/se" + release + "/");
+    } else {
+      assertThat(url)
+          .as(
+              "%s must be an official source: the Java SE specifications, the API documentation, or"
+                  + " a JEP. Anything else cannot be a reference, however good it is",
+              where)
+          .startsWith(JEPS);
+    }
   }
 
   /**

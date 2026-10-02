@@ -10,7 +10,7 @@ Issue: #8 — Create the initial authorial Java certification content pack. Poli
 
 What the tooling does prove, automatically, on every build:
 
-- each question is complete under the question-bank invariants (options, exactly one correct option for single-choice, explanations, https references, Java 21);
+- each question is complete under the question-bank invariants (options, exactly one correct option for single-choice, explanations, references, Java 21);
 - every code snippet compiles with `--release 21` and produces exactly the output, or the compile error, that the question states;
 - the answer key agrees with that output: when an option carries the text the program prints, that option is the one marked correct, so a question cannot print one thing and point at another;
 - the pack covers all ten topics with both question types and all difficulties, and no two prompts are identical;
@@ -45,7 +45,12 @@ content/
 3. Target Java 21 only (`javaRelease` must be 21 for this track) and avoid behavior the specification leaves unspecified. A question about something the language does not guarantee is ambiguous by construction.
 4. Keep code deterministic and independent of the operating system, time, locale defaults, hash ordering and threads. Output must be identical on every supported JDK.
 5. Give 4 or 5 options. Every option needs an explanation of why it is correct or incorrect. Distractors must be plausible mistakes, not trick wording.
-6. Add authoritative references with `https` URLs (JLS, JEPs, the Java SE 21 API). Prefer stable anchors.
+6. Add authoritative references. Only three sources are accepted, and the build enforces it (ADR 0011):
+   - the Java SE specifications, `https://docs.oracle.com/javase/specs/...`, scoped to `se21`;
+   - the API documentation, `https://docs.oracle.com/en/java/javase/21/...`;
+   - a JEP, `https://openjdk.org/jeps/...`, which needs no scoping because it describes one release.
+
+   Prefer stable anchors. A reference to another release, or to any other site however good, fails the build: before ADR 0011 the only check was the `https://` prefix, which a dead link or the Java 17 page both satisfy. What no check can do is tell whether the reference supports the claim — that stays with the reviewer.
 7. State the difficulty and why.
 8. Run the pack verification:
 
