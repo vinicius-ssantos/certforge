@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the compile-time exhaustiveness requirement of switch expressions.",
+  "prompt": "Which statement about a Java 21 `switch` expression is correct?",
+  "explanation": "A switch expression must be exhaustive: every possible selector value must be handled by a matching label or by a construct the compiler can prove exhaustive.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It may omit all unmatched values and implicitly return null.",
+      "correct": false,
+      "explanation": "There is no implicit null result for unmatched selector values."
+    },
+    {
+      "key": "B",
+      "text": "It must be exhaustive.",
+      "correct": true,
+      "explanation": "Every switch expression must cover all possible selector values."
+    },
+    {
+      "key": "C",
+      "text": "It must always contain a default label, even when enum cases are exhaustive.",
+      "correct": false,
+      "explanation": "A default label is not mandatory when exhaustiveness can be proven another way."
+    },
+    {
+      "key": "D",
+      "text": "Only integer selectors can be used in switch expressions.",
+      "correct": false,
+      "explanation": "Other supported selector types include enum, String, and reference types with pattern matching."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.28 switch Expressions",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.28"
+    }
+  ]
+}
