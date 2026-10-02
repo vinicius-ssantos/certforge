@@ -169,7 +169,14 @@ No test can check the second one. It is a discipline, and the only thing automat
 | 9 Java I/O | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localization | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Four questions are conceptual and have no runnable code, so the build cannot check them: `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-requires-transitive` and `t07-exports-and-opens`. They rely on their references alone, so reviewers should read those references with extra care.
+Three questions are conceptual and have no runnable code, so the build cannot check them: `t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`. They rely on their references alone, so reviewers should read those references with extra care. The review packet derives that list rather than repeating it, so it cannot go stale.
+
+`t07-requires-transitive` used to be a fourth. It now carries a three-module graph under `modules/`, where `app` requires only `lib`, uses a type from `util`, and compiles because `lib` declares `requires transitive util` — remove the `transitive` and the build fails with `package u is not visible`. That is the conversion [ADR 0011](../adr/0011-grade-content-evidence.md) asks for, and it kept its recorded review, because nothing the reviewer read changed.
+
+The other three are harder, and two of them may not be worth converting:
+
+- `t01-integer-boxing-guarantee` probably cannot be converted at all. It asks what the specification *guarantees*, and a program only shows what one JVM did; the cache above 127 is explicitly unspecified, so a program printing `false` for 1000 would prove nothing about the rule.
+- `t06-stream-facts` and `t07-exports-and-opens` are fact lists where one program can show some claims but not all. `peek` existing "mainly to support debugging" is a statement about intent, and `opens` not granting compile-time access needs a compilation that *fails*. Verifying those honestly needs several verification cases per question, positive and negative, which the harness does not do yet — and a program that proved three of five options while the packet said "a program backs this question" would be worse than none.
 
 ## Deferred
 

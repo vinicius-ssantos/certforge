@@ -7,11 +7,13 @@
 
 ADR 0005 says AI cannot determine final correctness "when deterministic validation is possible", and that published content requires human technical review. It asks the same thing of every question. Two facts have since become concrete enough to act on.
 
-**The evidence behind a question varies enormously.** Sixteen of the twenty questions in the initial pack carry a program that the build compiles for Java 21, runs, and checks prints exactly what the question claims; since #60 the option carrying that output must also be the one marked correct. Four carry nothing mechanical at all — `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-exports-and-opens`, `t07-requires-transitive`. ADR 0005 asks one undifferentiated human review of both kinds, which overstates what the sixteen need and understates what the four need.
+**The evidence behind a question varies enormously.** Seventeen of the twenty questions in the initial pack carry a program that the build compiles for Java 21, runs, and checks prints exactly what the question claims; since #60 the option carrying that output must also be the one marked correct. Three carry nothing mechanical at all — `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-exports-and-opens`. ADR 0005 asks one undifferentiated human review of both kinds, which overstates what the seventeen need and understates what the three need.
+
+(When this was first written it was sixteen and four. `t07-requires-transitive` was converted by writing the module graph its claim is about, which is decision 1 of this ADR in practice. `t01-integer-boxing-guarantee` looks unconvertible: it asks what the specification *guarantees*, and a program only shows what one JVM did.)
 
 **Human review does not scale, and that is a product constraint rather than a complaint.** Twenty questions took one reviewing session. A bank large enough to be useful needs hundreds. If every question requires a full technical review by someone who knows the exam, the pack stops growing, and the release roadmap depends on it growing.
 
-The tempting answer is to let an official reference stand in for the review. It does not work. A reference proves a link exists, not that the claim follows from it: "`Integer a = 1000, b = 1000;` means `a == b` is always `false`", cited to JLS 5.1.7, is an impeccable citation of a false claim, and no automated check would notice. Worse, the rule would wave through precisely the four questions with the least evidence behind them, because those are the ones that are nothing *but* prose and references.
+The tempting answer is to let an official reference stand in for the review. It does not work. A reference proves a link exists, not that the claim follows from it: "`Integer a = 1000, b = 1000;` means `a == b` is always `false`", cited to JLS 5.1.7, is an impeccable citation of a false claim, and no automated check would notice. Worse, the rule would wave through precisely the questions with the least evidence behind them, because those are the ones that are nothing *but* prose and references.
 
 References themselves are also barely checked. `ContentPackTest` asserts that a reference URL starts with `https://`. The content policy requires authoritative references "sufficient for independent verification" and ADR 0005 forbids fabricating them; nothing enforced either.
 
@@ -31,7 +33,7 @@ References themselves are also barely checked. `ContentPackTest` asserts that a 
 
 - The pack can grow faster where the compiler can do the work, and no faster where it cannot. That is the honest shape of the constraint, and it puts the incentive on writing verifiable questions.
 - The review record gains a tier per question, so "reviewed" stops meaning two different things in the same file.
-- The four Asserted questions in the initial pack are labelled as such and are the first candidates for conversion.
+- The Asserted questions in the initial pack are labelled as such and are the first candidates for conversion.
 - A reference to an unversioned or outdated page fails the build. Some legitimate sources are not version-scoped — a JEP describes one release by definition — so the rule is per source, not global.
 - The tiers are a review policy, not a publishing permission. Nothing publishes itself at either tier; `deploy/publish-pack.mjs` still refuses anything a recorded human review does not currently cover.
 - Grading creates a way to be dishonest that did not exist before: calling a question Verified when its program does not actually establish the answer. The build decides the tier from whether a program exists and agrees with the key, so the label is derived, never asserted by hand.

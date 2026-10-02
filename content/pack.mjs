@@ -5,6 +5,15 @@ import { readdirSync, readFileSync as readRaw, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join } from "node:path";
 
+/** Every Java source in a question, at any depth, so a module graph is included. */
+function javaFilesUnder(dir) {
+  return readdirSync(dir, { recursive: true })
+    .map(String)
+    .filter((entry) => entry.endsWith(".java"))
+    .sort()
+    .map((entry) => ({ path: entry.split("\\").join("/"), body: readText(join(dir, entry)).trimEnd() }));
+}
+
 /** Read as LF whatever the checkout used, so every machine and CI see the same bytes. */
 export const readText = (path) => readRaw(path, "utf8").replace(/\r\n/g, "\n");
 
@@ -46,7 +55,9 @@ export function readPack(pack, topics = readTopics()) {
       if (raw.includes("{{snippet}}")) {
         raw = raw.replace("{{snippet}}", () => JSON.stringify(code).slice(1, -1));
       }
-      return { name, code, expected, ...JSON.parse(raw) };
+      // `program` is every source the build compiles, which for a modular question is the whole
+      // graph and not just the file the learner sees.
+      return { name, code, expected, program: javaFilesUnder(dir), ...JSON.parse(raw) };
     });
 
   questions.sort(

@@ -184,12 +184,20 @@ class ContentPackTest {
         .isTrue();
   }
 
+  /**
+   * Compiles and runs the program a question carries, and checks it does what the question says.
+   *
+   * <p>A question with a {@code modules/} directory is compiled as a module graph instead of a flat
+   * set of sources, because some claims are only true of modules: whether {@code requires
+   * transitive} makes a dependency readable, what {@code exports} and {@code opens} each permit.
+   * Flat compilation on the class path cannot show any of that, so those questions had no
+   * mechanical backing at all until this existed.
+   */
   private void verifyCode(Path dir, Path out) throws Exception {
     Path expectedFile = dir.resolve("expected.txt");
-    List<Path> sources;
-    try (Stream<Path> files = Files.list(dir)) {
-      sources = files.filter(f -> f.toString().endsWith(".java")).sorted().toList();
-    }
+    Path modules = dir.resolve("modules");
+    boolean modular = Files.isDirectory(modules);
+    List<Path> sources = modular ? javaFilesUnder(modules) : javaFilesIn(dir);
     if (sources.isEmpty()) {
       assertThat(expectedFile).as("expected.txt without code in %s", dir).doesNotExist();
       return;
@@ -197,6 +205,11 @@ class ContentPackTest {
     assertThat(expectedFile).as("code in %s needs expected.txt", dir).exists();
     String expected = Files.readString(expectedFile).replace("\r\n", "\n").strip();
     Files.createDirectories(out);
+
+    List<String> compilerOptions = new ArrayList<>(List.of("--release", "21", "-Xlint:-options"));
+    if (modular) {
+      compilerOptions.addAll(List.of("--module-source-path", modules.toString()));
+    }
 
     JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
     DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<>();
@@ -211,7 +224,7 @@ class ContentPackTest {
                       null,
                       files,
                       diagnostics,
-                      List.of("--release", "21", "-Xlint:-options"),
+                      compilerOptions,
                       null,
                       files.getJavaFileObjectsFromPaths(sources))
                   .call());
@@ -232,15 +245,57 @@ class ContentPackTest {
     assertThat(compiled)
         .as("%s must compile for Java 21: %s", dir.getFileName(), diagnostics.getDiagnostics())
         .isTrue();
-    assertThat(run(out)).isEqualTo(expected);
+    assertThat(run(modular ? modularEntryPoint(out, modules) : classPathEntryPoint(out)))
+        .isEqualTo(expected);
   }
 
-  private static String run(Path classes) throws Exception {
+  private static List<Path> javaFilesIn(Path dir) throws IOException {
+    try (Stream<Path> files = Files.list(dir)) {
+      return files.filter(f -> f.toString().endsWith(".java")).sorted().toList();
+    }
+  }
+
+  private static List<Path> javaFilesUnder(Path root) throws IOException {
+    try (Stream<Path> files = Files.walk(root)) {
+      return files.filter(f -> f.toString().endsWith(".java")).sorted().toList();
+    }
+  }
+
+  private static List<String> classPathEntryPoint(Path out) {
+    return List.of("-cp", out.toString(), "Main");
+  }
+
+  /**
+   * How to run a module graph: the single {@code Main.java} under {@code modules/} is the entry
+   * point, its module is the directory directly under {@code modules/}, and its package comes from
+   * the directories between the two. The layout names the entry point, so no question has to
+   * declare it.
+   */
+  private static List<String> modularEntryPoint(Path out, Path modules) throws IOException {
+    List<Path> mains =
+        javaFilesUnder(modules).stream()
+            .filter(f -> f.getFileName().toString().equals("Main.java"))
+            .toList();
+    assertThat(mains)
+        .as("a modular question needs exactly one Main.java under %s", modules)
+        .hasSize(1);
+
+    Path relative = modules.relativize(mains.getFirst());
+    StringBuilder mainClass = new StringBuilder();
+    for (int segment = 1; segment < relative.getNameCount() - 1; segment++) {
+      mainClass.append(relative.getName(segment)).append('.');
+    }
+    mainClass.append("Main");
+    return List.of(
+        "--module-path", out.toString(), "--module", relative.getName(0) + "/" + mainClass);
+  }
+
+  private static String run(List<String> arguments) throws Exception {
     Path java = Path.of(System.getProperty("java.home"), "bin", "java");
-    Process process =
-        new ProcessBuilder(java.toString(), "-cp", classes.toString(), "Main")
-            .redirectErrorStream(true)
-            .start();
+    List<String> command = new ArrayList<>();
+    command.add(java.toString());
+    command.addAll(arguments);
+    Process process = new ProcessBuilder(command).redirectErrorStream(true).start();
     byte[] output = process.getInputStream().readAllBytes();
     assertThat(process.waitFor(30, TimeUnit.SECONDS)).as("program finished in time").isTrue();
     String text = new String(output, StandardCharsets.UTF_8).replace("\r\n", "\n").strip();

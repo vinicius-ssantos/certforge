@@ -10,7 +10,7 @@
   "caveats": [
     "The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.",
     "The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.",
-    "Four questions have no runnable code, so the build verifies nothing about them and they rest entirely on this review and their references: t01-integer-boxing-guarantee, t06-stream-facts, t07-exports-and-opens, t07-requires-transitive.",
+    "A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.",
     "The exam objective wording seeded in the catalog was not part of this review and is still unverified against Oracle's own page."
   ],
   "questions": {

@@ -72,6 +72,14 @@ if (record?.caveats?.length) {
   add("## What this review does not establish");
   add();
   record.caveats.forEach((caveat) => add(`- ${caveat}`));
+  // Derived rather than written into the record, which is what let an earlier hand-written list go
+  // stale the moment a question gained a program.
+  const unverified = questions.filter((question) => question.expected === null);
+  add(
+    unverified.length === 0
+      ? "- Every question in this pack now carries a program the build runs."
+      : `- Nothing is verified by the build in ${unverified.length} of the ${questions.length} questions: ${unverified.map((question) => `\`${question.name}\``).join(", ")}.`,
+  );
   add();
 }
 
@@ -102,7 +110,7 @@ add("|---:|---|---|---|---|---|---|");
 questions.forEach((q, index) => {
   const state = status.get(q.name);
   add(
-    `| ${index + 1} | [\`${q.name}\`](#${index + 1}-${q.name}) | ${topics.get(q.topicId)?.name ?? q.topicId} | ${q.type === "SINGLE_CHOICE" ? "single" : "multiple"} | ${q.difficulty.toLowerCase()} | ${q.code ? "yes" : "no (conceptual)"} | ${MARK[state.state](state)} |`,
+    `| ${index + 1} | [\`${q.name}\`](#${index + 1}-${q.name}) | ${topics.get(q.topicId)?.name ?? q.topicId} | ${q.type === "SINGLE_CHOICE" ? "single" : "multiple"} | ${q.difficulty.toLowerCase()} | ${q.expected === null ? "no (conceptual)" : q.code && q.prompt.includes(q.code) ? "yes, shown" : "yes, not shown"} | ${MARK[state.state](state)} |`,
   );
 });
 add();
@@ -141,14 +149,33 @@ questions.forEach((q, index) => {
   add();
   add("### Verified by the build");
   add();
-  if (q.code) {
-    add(`The code in the question compiles for Java 21 and prints:`);
+  if (q.expected === null) {
+    add("Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.");
+  } else {
+    const shown = q.code !== null && q.prompt.includes(q.code);
+    add(
+      shown
+        ? "The code in the question compiles for Java 21 and prints:"
+        : `A program the learner does not see backs this question. It compiles for Java 21 and prints:`,
+    );
     add();
     add("```text");
-    add(q.expected ?? "(no output)");
+    add(q.expected || "(no output)");
     add("```");
-  } else {
-    add("Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.");
+    // A reviewer cannot judge whether a proof is a proof without seeing it, and for a
+    // verification-only program the prompt does not show it.
+    if (!shown) {
+      add();
+      add(`That program, ${q.program.length === 1 ? "in one file" : `across ${q.program.length} files`}:`);
+      q.program.forEach((file) => {
+        add();
+        add(`\`${file.path}\`:`);
+        add();
+        add("```java");
+        add(file.body);
+        add("```");
+      });
+    }
   }
   add();
   add("### Review");
