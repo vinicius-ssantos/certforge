@@ -18,5 +18,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0010](0010-first-deployment-posture.md) | Rodar a v0.1.0 como uma instância atrás de um terminador TLS, com backups diários fora do host | Aceita |
 | [0011](0011-grade-content-evidence.md) | Graduar a evidência do conteúdo e verificar referências mecanicamente | Aceita |
 | [0012](0012-interface-language.md) | Traduzir a interface e manter o texto das questões em inglês | Aceita |
+| [0013](0013-derived-review-queue.md) | Derivar a fila de revisão da evidência das tentativas, e dizer por que cada item está nela | **Proposta** |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.
