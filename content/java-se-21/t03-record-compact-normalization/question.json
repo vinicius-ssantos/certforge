@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the special assignment semantics of a compact canonical constructor in a record.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "In a compact canonical constructor, the component fields are implicitly assigned from the constructor parameters after the body runs. Reassigning parameter `value` to its absolute value therefore changes what is stored.",
+  "options": [
+    {
+      "key": "A",
+      "text": "-7",
+      "correct": false,
+      "explanation": "The compact constructor changes the parameter before the implicit field assignment."
+    },
+    {
+      "key": "B",
+      "text": "7",
+      "correct": true,
+      "explanation": "The parameter is normalized to 7, then the implicit canonical assignment stores 7."
+    },
+    {
+      "key": "C",
+      "text": "0",
+      "correct": false,
+      "explanation": "There is no default-value assignment that overrides the canonical constructor parameter."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because compact constructors cannot reassign parameters.",
+      "correct": false,
+      "explanation": "The parameter can be reassigned; direct assignment to the record component field is what is restricted in a compact constructor."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.10.4 Record Constructor Declarations",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10.4"
+    }
+  ]
+}
