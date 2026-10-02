@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the Java 21 switch feature that lets null handling be expressed directly in the switch labels.",
+  "prompt": "In a Java 21 switch that needs to handle a null selector value explicitly, which label is designed for that case?",
+  "explanation": "Java 21 switch labels may use `case null` to handle a null selector explicitly instead of handling null outside the switch.",
+  "options": [
+    {
+      "key": "A",
+      "text": "case null ->",
+      "correct": true,
+      "explanation": "`case null` is the dedicated label for matching a null selector value."
+    },
+    {
+      "key": "B",
+      "text": "case Object o ->",
+      "correct": false,
+      "explanation": "A type pattern is not the dedicated null label."
+    },
+    {
+      "key": "C",
+      "text": "default null ->",
+      "correct": false,
+      "explanation": "This is not valid switch label syntax."
+    },
+    {
+      "key": "D",
+      "text": "case Optional.empty() ->",
+      "correct": false,
+      "explanation": "Optional.empty() is an object value and is unrelated to a null selector."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.11 The switch Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11"
+    }
+  ]
+}

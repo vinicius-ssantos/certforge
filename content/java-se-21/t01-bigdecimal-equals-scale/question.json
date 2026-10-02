@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing BigDecimal's representation-sensitive equals contract from its numerical ordering comparison.",
+  "prompt": "Given `BigDecimal a = new BigDecimal(\"1.0\")` and `BigDecimal b = new BigDecimal(\"1.00\")`, which statement is correct?",
+  "explanation": "`BigDecimal.equals` requires both numerical value and scale to be equal, so these values are not equal by `equals`. `compareTo` compares numerical value and therefore returns zero.",
+  "options": [
+    {
+      "key": "A",
+      "text": "a.equals(b) is true and a.compareTo(b) is 0.",
+      "correct": false,
+      "explanation": "`equals` also considers scale, and the scales differ."
+    },
+    {
+      "key": "B",
+      "text": "a.equals(b) is false and a.compareTo(b) is 0.",
+      "correct": true,
+      "explanation": "The scales differ for `equals`, while the numerical values compare as equal."
+    },
+    {
+      "key": "C",
+      "text": "a.equals(b) is true and a.compareTo(b) is nonzero.",
+      "correct": false,
+      "explanation": "This reverses both relevant contracts."
+    },
+    {
+      "key": "D",
+      "text": "Both methods throw ArithmeticException because the scales differ.",
+      "correct": false,
+      "explanation": "Different scales are valid BigDecimal representations and do not cause these comparisons to throw."
+    }
+  ],
+  "references": [
+    {
+      "title": "BigDecimal (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigDecimal.html"
+    }
+  ]
+}

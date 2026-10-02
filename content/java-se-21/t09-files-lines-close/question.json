@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the resource-lifecycle requirement of a lazily populated stream backed by an open file.",
+  "prompt": "What is the recommended way to use the `Stream<String>` returned by `Files.lines(path)`?",
+  "explanation": "The returned stream is lazily populated and encapsulates an open file, so it should be closed promptly, typically by placing the stream itself in a try-with-resources statement.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Use it in try-with-resources so the stream, and therefore the file, is closed.",
+      "correct": true,
+      "explanation": "This follows the API contract for closing the file-backed stream."
+    },
+    {
+      "key": "B",
+      "text": "Never close it; terminal operations always close every stream automatically.",
+      "correct": false,
+      "explanation": "Terminal stream operations do not generally close streams automatically."
+    },
+    {
+      "key": "C",
+      "text": "Call System.gc() after the terminal operation instead of closing it.",
+      "correct": false,
+      "explanation": "Garbage collection is not a resource-management mechanism for an open file stream."
+    },
+    {
+      "key": "D",
+      "text": "Convert the Path to File first; that removes the need to close the stream.",
+      "correct": false,
+      "explanation": "Changing the path representation does not change the lifecycle of the stream returned by `Files.lines`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Files.lines(Path) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#lines(java.nio.file.Path)"
+    }
+  ]
+}
