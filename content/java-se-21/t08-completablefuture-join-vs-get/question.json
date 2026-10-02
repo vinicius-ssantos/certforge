@@ -1,0 +1,45 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the exception-surface difference between two common ways to wait for a CompletableFuture result.",
+  "prompt": "Which statements correctly distinguish `CompletableFuture.join()` from `Future.get()`? Select all that apply.",
+  "explanation": "`join()` returns the result like `get()`, but if the computation completed exceptionally it throws an unchecked `CompletionException`. `get()` exposes checked waiting/failure exceptions such as `InterruptedException` and `ExecutionException`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "join() may throw CompletionException for exceptional completion.",
+      "correct": true,
+      "explanation": "CompletionException is the unchecked wrapper used by join."
+    },
+    {
+      "key": "B",
+      "text": "get() declares checked exceptions including InterruptedException and ExecutionException.",
+      "correct": true,
+      "explanation": "Those checked exceptions are part of Future.get's contract."
+    },
+    {
+      "key": "C",
+      "text": "join() always returns immediately and never waits.",
+      "correct": false,
+      "explanation": "join waits when necessary for completion."
+    },
+    {
+      "key": "D",
+      "text": "get() can be called only on platform threads, not virtual threads.",
+      "correct": false,
+      "explanation": "The API is not restricted to platform threads."
+    }
+  ],
+  "references": [
+    {
+      "title": "CompletableFuture.join() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html#join()"
+    },
+    {
+      "title": "Future.get() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Future.html#get()"
+    }
+  ]
+}
