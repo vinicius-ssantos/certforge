@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the distinction between constructing and starting a virtual thread with the Thread builder API.",
+  "prompt": "Which statements about `Thread.ofVirtual().unstarted(task)` are correct in Java 21? Select all that apply.",
+  "explanation": "The builder creates a new virtual Thread in the unstarted state. Calling `start()` later schedules it to execute its task.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns a virtual Thread.",
+      "correct": true,
+      "explanation": "The builder is specifically the virtual-thread builder."
+    },
+    {
+      "key": "B",
+      "text": "The returned thread has not been started yet.",
+      "correct": true,
+      "explanation": "The `unstarted` method creates without starting."
+    },
+    {
+      "key": "C",
+      "text": "The task runs synchronously before unstarted returns.",
+      "correct": false,
+      "explanation": "The thread has not begun execution."
+    },
+    {
+      "key": "D",
+      "text": "The returned value is an ExecutorService.",
+      "correct": false,
+      "explanation": "The builder returns a Thread object."
+    }
+  ],
+  "references": [
+    {
+      "title": "Thread.Builder.OfVirtual (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.Builder.OfVirtual.html"
+    }
+  ]
+}
