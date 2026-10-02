@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests whether arithmetic is performed before assignment conversion to a wider floating-point type.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Both operands of `5 / 2` are `int`, so integer division happens first and produces `2`. Only then is the result widened to `double`, producing `2.0`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2.5",
+      "correct": false,
+      "explanation": "A floating-point operand would be needed before division for the fractional part to be preserved."
+    },
+    {
+      "key": "B",
+      "text": "2.0",
+      "correct": true,
+      "explanation": "Integer division produces 2, then assignment widens it to double."
+    },
+    {
+      "key": "C",
+      "text": "2",
+      "correct": false,
+      "explanation": "The value is stored in a double and println uses its double representation."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because int cannot be assigned to double.",
+      "correct": false,
+      "explanation": "Widening primitive conversion from int to double is allowed."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.17.2 Division Operator /",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.17.2"
+    }
+  ]
+}
