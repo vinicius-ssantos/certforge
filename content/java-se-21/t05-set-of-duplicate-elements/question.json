@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests the documented creation-time contract of the immutable Set factory methods.",
+  "prompt": "What happens when `Set.of(\"a\", \"a\")` is evaluated?",
+  "explanation": "The unmodifiable sets created by `Set.of` reject duplicate elements at creation time. Passing duplicates causes `IllegalArgumentException`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It creates a set containing one element.",
+      "correct": false,
+      "explanation": "Unlike adding twice to many mutable Set implementations, `Set.of` rejects duplicate arguments instead of silently keeping one."
+    },
+    {
+      "key": "B",
+      "text": "It creates a two-element set.",
+      "correct": false,
+      "explanation": "A Set cannot contain duplicate equal elements, and the factory does not preserve both arguments."
+    },
+    {
+      "key": "C",
+      "text": "It throws IllegalArgumentException.",
+      "correct": true,
+      "explanation": "The `Set.of` contract specifies `IllegalArgumentException` for duplicate elements."
+    },
+    {
+      "key": "D",
+      "text": "It throws UnsupportedOperationException during creation.",
+      "correct": false,
+      "explanation": "UnsupportedOperationException applies to mutation attempts on the created unmodifiable set, not duplicate arguments at creation time."
+    }
+  ],
+  "references": [
+    {
+      "title": "Set (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html"
+    }
+  ]
+}

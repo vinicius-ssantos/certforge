@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests a compile-time restriction specific to multi-catch alternatives that is easy to miss when reasoning only from normal catch ordering.",
+  "prompt": "Which statement about the alternatives in a multi-catch parameter such as `catch (A | B ex)` is correct?",
+  "explanation": "It is a compile-time error if one alternative in a multi-catch is a subtype of another alternative. The alternatives must not be related by subclassing in that way.",
+  "options": [
+    {
+      "key": "A",
+      "text": "One alternative may be a subclass of another as long as it appears first.",
+      "correct": false,
+      "explanation": "Ordering does not make subtype-related alternatives legal inside the same multi-catch parameter."
+    },
+    {
+      "key": "B",
+      "text": "No alternative may be a subtype of another alternative.",
+      "correct": true,
+      "explanation": "The language rejects subtype-related alternatives in the same multi-catch parameter."
+    },
+    {
+      "key": "C",
+      "text": "All alternatives must have the same direct superclass.",
+      "correct": false,
+      "explanation": "There is no requirement that all alternatives share the same direct superclass."
+    },
+    {
+      "key": "D",
+      "text": "Only unchecked exception types may be combined.",
+      "correct": false,
+      "explanation": "Multi-catch may combine checked exception types as well, provided the other rules are satisfied."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20 The try statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20"
+    }
+  ]
+}

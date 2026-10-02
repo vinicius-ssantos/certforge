@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing statement-style control transfer from producing a value from a block in a switch expression.",
+  "prompt": "A `case` arm of a switch expression uses a block and must produce the value of that arm. Which statement is used to provide that value from the block?",
+  "explanation": "A block in a switch expression uses `yield` to produce the value of the switch expression. `break` exits a switch statement but does not yield a value for a switch expression block.",
+  "options": [
+    {
+      "key": "A",
+      "text": "break value;",
+      "correct": false,
+      "explanation": "`break` does not provide a result value for a switch expression block."
+    },
+    {
+      "key": "B",
+      "text": "return value;",
+      "correct": false,
+      "explanation": "`return` exits the enclosing method, not just the switch expression arm."
+    },
+    {
+      "key": "C",
+      "text": "yield value;",
+      "correct": true,
+      "explanation": "`yield` transfers control out of the switch expression block while providing its value."
+    },
+    {
+      "key": "D",
+      "text": "continue value;",
+      "correct": false,
+      "explanation": "`continue` applies to loops and does not produce a switch expression result."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.21 The yield Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.21"
+    }
+  ]
+}

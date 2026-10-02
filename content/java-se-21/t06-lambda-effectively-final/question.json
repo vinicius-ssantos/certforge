@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the capture rule for local variables used from a lambda body.",
+  "prompt": "A lambda expression captures a local variable declared in its enclosing method. What must be true of that local variable?",
+  "explanation": "A local variable, method parameter, or exception parameter referenced from a lambda body must be final or effectively final, subject to the definite-assignment rules.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It must be declared static.",
+      "correct": false,
+      "explanation": "Local variables cannot be made static, and static status is not the capture rule."
+    },
+    {
+      "key": "B",
+      "text": "It must be final or effectively final.",
+      "correct": true,
+      "explanation": "This is the language rule for captured local variables and parameters."
+    },
+    {
+      "key": "C",
+      "text": "It must have a primitive type.",
+      "correct": false,
+      "explanation": "Both primitive and reference-typed locals may be captured."
+    },
+    {
+      "key": "D",
+      "text": "It must be assigned inside the lambda before being read.",
+      "correct": false,
+      "explanation": "The capture rule is not satisfied by assigning the variable inside the lambda; captured locals are final or effectively final."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.27.2 Lambda Body",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2"
+    }
+  ]
+}

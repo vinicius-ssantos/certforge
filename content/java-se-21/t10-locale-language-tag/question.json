@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks how a standard BCP 47 language tag is represented by Locale.",
+  "prompt": "After `Locale locale = Locale.forLanguageTag(\"pt-BR\");`, what do `locale.getLanguage()` and `locale.getCountry()` return?",
+  "explanation": "`Locale.forLanguageTag` interprets the BCP 47 tag. For `pt-BR`, the language is `pt` and the country/region is `BR`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "pt and BR",
+      "correct": true,
+      "explanation": "The language subtag is `pt` and the region subtag is `BR`."
+    },
+    {
+      "key": "B",
+      "text": "PT and br",
+      "correct": false,
+      "explanation": "Locale language codes are normalized to lower case and country codes to upper case in these accessors."
+    },
+    {
+      "key": "C",
+      "text": "pt-BR and an empty string",
+      "correct": false,
+      "explanation": "The language and country are exposed as separate components."
+    },
+    {
+      "key": "D",
+      "text": "Portuguese and Brazil",
+      "correct": false,
+      "explanation": "The accessors return language and country codes, not localized display names."
+    }
+  ],
+  "references": [
+    {
+      "title": "Locale (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html"
+    }
+  ]
+}

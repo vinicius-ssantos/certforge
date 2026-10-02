@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Separates volatile visibility guarantees from atomicity of a compound read-modify-write operation.",
+  "prompt": "Suppose `count` is declared `volatile int count;` and multiple threads execute `count++`. Which statement is correct?",
+  "explanation": "Volatile reads and writes have visibility and ordering guarantees, but `count++` is a compound read-modify-write operation and is not made atomic merely because the field is volatile.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Every increment is atomic because count is volatile.",
+      "correct": false,
+      "explanation": "Volatile does not turn a compound increment into one atomic action."
+    },
+    {
+      "key": "B",
+      "text": "Updates are visible according to volatile semantics, but increments can still be lost.",
+      "correct": true,
+      "explanation": "The field has volatile visibility semantics, while concurrent read-modify-write operations may race."
+    },
+    {
+      "key": "C",
+      "text": "The program cannot compile because volatile cannot be used with int.",
+      "correct": false,
+      "explanation": "Primitive fields, including int, may be declared volatile."
+    },
+    {
+      "key": "D",
+      "text": "Volatile makes count++ equivalent to synchronizing the whole statement.",
+      "correct": false,
+      "explanation": "No implicit monitor is acquired for the compound increment."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 17.4.5 Happens-before Order",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5"
+    }
+  ]
+}

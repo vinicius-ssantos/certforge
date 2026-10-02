@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires distinguishing ordinary module readability from the special compile-time/runtime meaning of a static requires modifier.",
+  "prompt": "What is the key effect of `requires static com.example.optional;` in a module declaration?",
+  "explanation": "A `requires static` dependency is required during compilation when the depending module is compiled, but it is optional during the run-time resolution of the depending module.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The dependency is optional at compile time but mandatory at run time.",
+      "correct": false,
+      "explanation": "That reverses the purpose of `requires static`."
+    },
+    {
+      "key": "B",
+      "text": "The dependency is required at compile time but optional at run time.",
+      "correct": true,
+      "explanation": "This is the special readability rule expressed by a static requires directive."
+    },
+    {
+      "key": "C",
+      "text": "The dependency is ignored at both compile time and run time.",
+      "correct": false,
+      "explanation": "The dependency still matters to compilation."
+    },
+    {
+      "key": "D",
+      "text": "The dependency is automatically re-exported to modules that require this module.",
+      "correct": false,
+      "explanation": "Re-exporting readability is the role of `requires transitive`, not `requires static`."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7.1 Dependences",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.1"
+    }
+  ]
+}

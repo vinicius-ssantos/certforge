@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests an API edge case of Path.resolve that differs from simply concatenating path components.",
+  "prompt": "For `base.resolve(other)`, what happens when `other` is an absolute `Path`?",
+  "explanation": "The `Path.resolve(Path)` contract says that if the other path is absolute, the method returns `other`; the base path is not prepended.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The absolute path is appended to base.",
+      "correct": false,
+      "explanation": "An absolute `other` path is not appended to the base."
+    },
+    {
+      "key": "B",
+      "text": "The method returns other.",
+      "correct": true,
+      "explanation": "An absolute `other` path is already resolved independently of the base."
+    },
+    {
+      "key": "C",
+      "text": "The method always throws IllegalArgumentException.",
+      "correct": false,
+      "explanation": "Being absolute is a documented case, not inherently an error."
+    },
+    {
+      "key": "D",
+      "text": "The method converts both paths to relative paths before combining them.",
+      "correct": false,
+      "explanation": "The API defines no such conversion."
+    }
+  ],
+  "references": [
+    {
+      "title": "Path.resolve(Path) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html#resolve(java.nio.file.Path)"
+    }
+  ]
+}
