@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests generic invariance, a core rule behind wildcard use and many collection-assignment errors.",
+  "prompt": "Given `List<Integer> integers = new ArrayList<>();`, can it be assigned directly to a variable of type `List<Number>`?",
+  "explanation": "No. Java generic types are invariant: even though `Integer` is a subtype of `Number`, `List<Integer>` is not a subtype of `List<Number>`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Yes, because Integer extends Number.",
+      "correct": false,
+      "explanation": "Subtype relationships between type arguments do not make the corresponding generic types covariant."
+    },
+    {
+      "key": "B",
+      "text": "No, because generic types such as List are invariant in their type argument.",
+      "correct": true,
+      "explanation": "A wildcard is needed when variance is desired."
+    },
+    {
+      "key": "C",
+      "text": "Yes, but only when the list is empty.",
+      "correct": false,
+      "explanation": "Generic assignment compatibility is compile-time and does not depend on runtime size."
+    },
+    {
+      "key": "D",
+      "text": "No, because ArrayList cannot be assigned to any List variable.",
+      "correct": false,
+      "explanation": "ArrayList implements List; the issue is the incompatible generic argument."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 4.10.2 Subtyping among Class and Interface Types",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.10.2"
+    }
+  ]
+}
