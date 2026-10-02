@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the Java 21 convenience API for starting a virtual thread and distinguishes starting from merely building one.",
+  "prompt": "What does `Thread.startVirtualThread(task)` do in Java 21?",
+  "explanation": "The method creates a virtual thread to execute the supplied Runnable, schedules it to begin execution, and returns the started Thread object.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It creates and starts a virtual thread, then returns that Thread.",
+      "correct": true,
+      "explanation": "The convenience method both constructs and starts the virtual thread."
+    },
+    {
+      "key": "B",
+      "text": "It creates an unstarted platform thread.",
+      "correct": false,
+      "explanation": "The method specifically creates a virtual thread and starts it."
+    },
+    {
+      "key": "C",
+      "text": "It runs task synchronously on the calling thread.",
+      "correct": false,
+      "explanation": "The task is executed by the new virtual thread."
+    },
+    {
+      "key": "D",
+      "text": "It returns an ExecutorService rather than a Thread.",
+      "correct": false,
+      "explanation": "The return type is Thread."
+    }
+  ],
+  "references": [
+    {
+      "title": "Thread.startVirtualThread(Runnable) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html#startVirtualThread(java.lang.Runnable)"
+    }
+  ]
+}
