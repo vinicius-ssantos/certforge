@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests Java's precise rethrow analysis for an effectively final catch parameter typed more broadly than the exceptions that can actually reach it.",
+  "prompt": "A try block can throw only `IOException` or `SQLException`. It is followed by `catch (Exception ex) { throw ex; }`, and `ex` is not reassigned. Which checked exceptions may the enclosing method need to declare?",
+  "explanation": "Precise rethrow analysis can infer the checked exception types that can actually reach the catch clause when the catch parameter is final or effectively final. The method can declare `IOException` and `SQLException` rather than the broader `Exception`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Only Exception; narrower declarations are impossible.",
+      "correct": false,
+      "explanation": "Precise rethrow can preserve the actual checked exception alternatives."
+    },
+    {
+      "key": "B",
+      "text": "IOException and SQLException.",
+      "correct": true,
+      "explanation": "Those are the checked exception types that can actually be rethrown from the catch."
+    },
+    {
+      "key": "C",
+      "text": "No checked exceptions, because catch always handles them.",
+      "correct": false,
+      "explanation": "The catch immediately rethrows the exception."
+    },
+    {
+      "key": "D",
+      "text": "Throwable.",
+      "correct": false,
+      "explanation": "The analysis does not broaden the requirement to Throwable."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 11.2.2 Exception Analysis of Statements",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2.2"
+    }
+  ]
+}
