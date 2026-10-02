@@ -1,0 +1,45 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks Java 21's sequenced-collection additions as exposed through List.",
+  "prompt": "What does this Java 21 program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`List` is a `SequencedCollection` in Java 21 and provides `getFirst()` and `getLast()`. For the list `a, b, c`, those elements are `a` and `c`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ab",
+      "correct": false,
+      "explanation": "The last element is c, not b."
+    },
+    {
+      "key": "B",
+      "text": "ac",
+      "correct": true,
+      "explanation": "getFirst returns a and getLast returns c."
+    },
+    {
+      "key": "C",
+      "text": "bc",
+      "correct": false,
+      "explanation": "getFirst does not skip the first element."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because List has no getFirst/getLast methods in Java 21.",
+      "correct": false,
+      "explanation": "Those methods are available through the sequenced-collection API in Java 21."
+    }
+  ],
+  "references": [
+    {
+      "title": "List (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html"
+    },
+    {
+      "title": "SequencedCollection (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/SequencedCollection.html"
+    }
+  ]
+}
