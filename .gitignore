@@ -18,6 +18,12 @@ replay_pid*
 .env.*
 !.env.example
 
+# A maintainer's own study material: content they hold a licence to but no right to redistribute.
+# This repository is public and Apache-2.0, so anything committed here would be published and
+# sublicensed to everyone. CI fails if a file under it is ever tracked, because .gitignore only
+# asks. The packs the project ships are authorial and live outside it.
+content/private/
+
 # OS
 .DS_Store
 Thumbs.db

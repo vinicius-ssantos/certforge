@@ -225,6 +225,10 @@ contract:
     @just _mvn --batch-mode --no-transfer-progress -Dtest=NoSuchTest -Dit.test=OpenApiContractIT -Dopenapi.update=true -Dsurefire.failIfNoSpecifiedTests=false -DfailIfNoTests=false verify
     cd web && npm run api:generate
 
+# The PNGs this writes are committed, so run it against the end-to-end test stack, whose questions
+# are the suite's own fixtures. Never run it against an instance holding content/private/ material:
+# a screenshot of a licensed question is a copy of it, in a public repository, in a form no text
+# search will find.
 # Recapture the screenshots in the demonstration scripts, against a running test stack.
 [group('content')]
 screenshots:

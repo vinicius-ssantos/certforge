@@ -4,6 +4,10 @@
 
 Content quality is a core product capability. A technically polished platform with unreliable questions does not satisfy the CertForge vision.
 
+## What this governs
+
+Content the project **publishes**: the packs in `content/`, which this repository distributes under its licence, and anything a deployment serves to learners. It is not a rule about what a maintainer may read or keep. Study material someone holds a licence to lives outside the repository, in `content/private/`, which is ignored by git and which CI refuses to let anyone track; see the [content authoring guide](../engineering/content-authoring.md).
+
 ## Allowed content
 
 - Original questions written for CertForge.

@@ -6,6 +6,10 @@
 
 A qualidade do conteúdo é uma capacidade central do produto. Uma plataforma tecnicamente polida, mas com questões pouco confiáveis, não cumpre a visão do CertForge.
 
+## O que esta política governa
+
+O conteúdo que o projeto **publica**: os pacotes em `content/`, que este repositório distribui sob a sua licença, e qualquer coisa que uma implantação sirva a alunos. Não é uma regra sobre o que um mantenedor pode ler ou guardar. Material de estudo de que alguém tem licença fica fora do repositório, em `content/private/`, que o git ignora e que o CI se recusa a deixar versionar; veja o [guia de autoria de conteúdo](../engineering/content-authoring.md).
+
 ## Conteúdo permitido
 
 - Questões originais escritas para o CertForge.
