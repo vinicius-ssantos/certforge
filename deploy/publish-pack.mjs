@@ -14,6 +14,12 @@
 //
 // What this automates is the typing, not the judgement.
 //
+// This script prints no email address. Its output is a provenance report that gets pasted into
+// issues and captured in CI logs, where an address outlives the run; the provenance identifier the
+// project uses is the handle in review.json, and the account-level detail is stored on each
+// revision and shown in the editorial desk. CodeQL flags the clear-text case, so a message that
+// names an account will fail the build rather than slip through.
+//
 // Usage: node deploy/publish-pack.mjs --reviewer-email ... --reviewer-password ...
 //                                     [--url http://localhost:8081] [--pack content/java-se-21] [--dry-run]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD are the author's and the publisher's.
@@ -100,7 +106,7 @@ if (!reviewerEmail || !reviewerPassword) {
 }
 if (reviewerEmail === adminEmail) {
   refuse(
-    `The reviewer cannot be the author: ${adminEmail} writes the questions here.`,
+    "The reviewer you passed is the administrator, which authors and publishes here, so it cannot review.",
     "\nThe release refuses it too (reviewer_must_differ_from_author). Use a second account.",
   );
 }
@@ -115,7 +121,7 @@ const reviewer = new Session(url);
 try {
   await reviewer.signIn(reviewerEmail, reviewerPassword);
 } catch (error) {
-  refuse(`The reviewer ${reviewerEmail} could not sign in: ${error.message}`);
+  refuse(`The reviewer account you passed could not sign in: ${error.message}`);
 }
 
 // Prompts already in the bank, in any state, so a second run tops up instead of duplicating.
@@ -156,7 +162,7 @@ for (const { question, status } of approved) {
     if (!response.ok) {
       const detail = await body(response);
       if (step === "approve" && response.status === 403) {
-        refuse(`${reviewerEmail} may not approve. Grant it the REVIEWER role, then run this again.\n${detail}`);
+        refuse(`The reviewer account may not approve. Grant it the REVIEWER role with 'just reviewer', then run this again.\n${detail}`);
       }
       refuse(`The ${step} of ${name} failed with ${response.status}: ${detail}`);
     }
@@ -166,8 +172,11 @@ for (const { question, status } of approved) {
 }
 
 console.log(`\npublished=${published} skipped=${skipped} held=${held.length} total=${questions.length}`);
-console.log(`Author of record: ${adminEmail}. Reviewer of record: ${reviewerEmail}, carrying the`);
-console.log(`verdict ${record.reviewer} recorded on ${record.reviewedOn}.`);
+// The provenance of record is the accounts, and it is stored on each revision; this summary names
+// the recorded reviewer, which is a handle, and prints no address. Output like this ends up pasted
+// into issues and CI logs, and an email address in one outlives the run.
+console.log(`Carrying the verdict ${record.reviewer} recorded on ${record.reviewedOn}.`);
+console.log("The author, reviewer and publisher of record are the accounts used; the editorial desk shows them per revision.");
 if (held.length > 0) {
   console.log(`\n${held.length} question(s) were held back; see above.`);
   process.exit(1);
