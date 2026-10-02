@@ -1,6 +1,6 @@
 # ADR 0010: Run v0.1.0 as one instance behind a TLS terminator, with daily off-host backups
 
-- Status: **Proposed.** These are the decisions the [readiness review](../release/v0.1.0-readiness.md) leaves to a person before the first deployment. They are written as recommendations with their reasoning so they can be accepted, or changed and then accepted. Nothing in the code depends on the answers yet.
+- Status: **Accepted** on 2026-10-02, as written. These are the decisions the [readiness review](../release/v0.1.0-readiness.md) left to a person before the first deployment. Accepting them does not deploy anything: a deployment must still be set up to match, and the operations guide says how.
 - Date: 2026-10-01
 
 ## Context

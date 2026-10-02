@@ -131,7 +131,9 @@ Uma questão ambígua ou contestada não deve ser publicada. Corrija-a ou deixe-
 
 ### Antes de publicar qualquer coisa nesta trilha
 
-Os nomes dos tópicos e o texto dos objetivos semeados por `V4__seed_java_certification_catalog.sql` estão apenas parcialmente verificados. O [anúncio da prova](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) pela Oracle University confirma as áreas que a prova cobre, mas o texto exato dos objetivos vem de resumos secundários, porque a página da prova é renderizada por JavaScript e bloqueia clientes automatizados. Compare antes os tópicos com a página oficial (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) em um navegador; veja o [catálogo de preparação](../architecture/preparation-catalog.md).
+**Feito.** Os nomes dos tópicos e o texto dos objetivos semeados por `V4__seed_java_certification_catalog.sql` foram comparados com a [página da prova](https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830) da Oracle em um navegador em 2026-10-02 e relatados como coincidentes, incluindo as três linhas sobre as quais os resumos secundários divergiam (#68). Nenhuma migration foi necessária.
+
+Exigiu uma pessoa porque a página é renderizada por JavaScript e recusa clientes automatizados, então isso não é algo que o CI mantenha verdadeiro. **Confira de novo quando uma nova versão de prova for adicionada**, e trate a coincidência como válida naquela data, não como propriedade permanente; veja o [catálogo de preparação](../architecture/preparation-catalog.md).
 
 ## O seu próprio material de estudo
 

@@ -129,7 +129,9 @@ It also refuses a reviewer that is the author, skips prompts already in the bank
 
 ### Before publishing anything in this track
 
-The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` are only partly verified. Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers, but the exact objective wording comes from secondary summaries, because the exam page is rendered by JavaScript and blocks automated clients. Compare the topics with the official page (`https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830`) in a browser first; see [preparation catalog](../architecture/preparation-catalog.md).
+**Done.** The topic names and objective wording seeded from `V4__seed_java_certification_catalog.sql` were compared with Oracle's [exam page](https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830) in a browser on 2026-10-02 and reported to match, including the three lines the secondary summaries disagreed about (#68). No migration was needed.
+
+It took a person because the page is rendered by JavaScript and refuses automated clients, so this is not something CI can keep true. **Re-check it when a new exam version is added**, and treat the match as of that date rather than as a permanent property; see [preparation catalog](../architecture/preparation-catalog.md).
 
 ## Your own study material
 

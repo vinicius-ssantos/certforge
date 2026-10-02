@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0010-first-deployment-posture.md`](../../docs/adr/0010-first-deployment-posture.md). O inglês é a fonte canônica.
 
-- Status: **Proposta.** Estas são as decisões que a [revisão de prontidão](../release/v0.1.0-readiness.md) deixa para uma pessoa antes da primeira implantação. Estão escritas como recomendações com o raciocínio, para poderem ser aceitas, ou alteradas e então aceitas. Nada no código depende ainda das respostas.
+- Status: **Aceita** em 2026-10-02, como escrita. Estas são as decisões que a [revisão de prontidão](../release/v0.1.0-readiness.md) deixou para uma pessoa antes da primeira implantação. Aceitá-las não implanta nada: uma implantação ainda precisa ser montada conforme, e o guia de operações diz como.
 - Data: 2026-10-01
 
 ## Contexto

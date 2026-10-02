@@ -13,8 +13,8 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0007](0007-generalize-preparation-catalog.md) | Generalize the catalog root without generalizing v0.1 behavior | Accepted |
 | [0008](0008-session-cookie-authentication.md) | Authenticate with server-side sessions and open registration | Accepted |
 | [0009](0009-web-frontend-stack.md) | Build the learner web app as a contract-first React SPA | Accepted |
-| [0010](0010-first-deployment-posture.md) | Run v0.1.0 as one instance behind a TLS terminator, with daily off-host backups | **Proposed** |
-| [0011](0011-grade-content-evidence.md) | Grade content evidence, and verify references mechanically | **Proposed** |
-| [0012](0012-interface-language.md) | Translate the interface, keep the question text in English | **Proposed** |
+| [0010](0010-first-deployment-posture.md) | Run v0.1.0 as one instance behind a TLS terminator, with daily off-host backups | Accepted |
+| [0011](0011-grade-content-evidence.md) | Grade content evidence, and verify references mechanically | Accepted |
+| [0012](0012-interface-language.md) | Translate the interface, keep the question text in English | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.

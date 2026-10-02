@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0012-interface-language.md`](../../docs/adr/0012-interface-language.md). O inglês é a fonte canônica.
 
-- Status: **Proposta.** Nada está traduzido ainda, e a decisão 3 diz que isto não é trabalho da `v0.1.0`. Está escrita como recomendação com o raciocínio, para poder ser aceita, ou alterada e então aceita.
+- Status: **Aceita** em 2026-10-02, como escrita. Nada está traduzido ainda: a decisão 3 mantém o trabalho fora da `v0.1.0`, e a #74 o carrega depois.
 - Data: 2026-10-02
 
 ## Contexto

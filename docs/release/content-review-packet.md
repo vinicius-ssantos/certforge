@@ -11,7 +11,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
-- The exam objective wording seeded in the catalog was not part of this review and is still unverified against Oracle's own page.
+- The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
 - Nothing is verified by the build in 3 of the 20 questions: `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-exports-and-opens`.
 
 ## How to review

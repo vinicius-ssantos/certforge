@@ -79,9 +79,9 @@ Each mapping stores the objective text in `objective_ref`, and the exam version 
 >
 > - The exam page URL is the canonical one declared by Oracle's own page metadata, and `V6__correct_java_exam_source.sql` corrected an earlier alias.
 > - Oracle University's [announcement of the exam](https://blogs.oracle.com/oracleuniversity/announcing-oracle-certified-professional-java-se-21-developer-exam-and-java-se-21-programming-complete-course) confirms the areas the exam covers: date, time, text, numeric and boolean values; program flow and exceptions; object-oriented and functional programming, inheritance, polymorphism, generics, records and lambdas; streams, arrays, collections, concurrency, I/O and localization; modules, packaging and deployment. The ten topics cover these areas.
-> - The announcement sends readers to the exam page for the exact list of objectives, and that page is rendered by JavaScript and blocks automated clients. The exact wording of each objective group, and the split into ten groups, therefore still comes from secondary summaries.
+> - The exact wording of each objective group, and the split into ten groups, was compared with the exam page in a browser on 2026-10-02 and reported to match (#68). That page is rendered by JavaScript and blocks automated clients, so no check keeps it true: it is a match as of that date, to be re-checked when an exam version is added.
 >
-> A reviewer must compare `objective_ref` and the topic list with the exam page in a browser and, if they differ, correct the display names and mappings (display names can be corrected without changing identity). Generics has no topic of its own; decide whether it needs one. No question may be published against these topics before that review.
+> That comparison was done, so questions may be published against these topics. Two things remain open and neither blocks publishing: Generics has no topic of its own, which is a product judgement rather than an error, and a new exam version needs the comparison repeating. Display names and mappings can be corrected without changing topic identity.
 
 ## Deferred
 

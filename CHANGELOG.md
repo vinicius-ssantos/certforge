@@ -2,9 +2,13 @@
 
 All notable changes to CertForge will be documented here.
 
-The project follows Semantic Versioning once application releases begin. During the documentation foundation phase, changes remain under `Unreleased`.
+The project follows Semantic Versioning. Changes land under `Unreleased` and move to a version when it is tagged.
 
 ## [Unreleased]
+
+## [0.1.0] - 2026-10-02
+
+The first release: Study Core. See the [release notes](docs/release/v0.1.0-release-notes.md) for what it does and what it does not.
 
 ### Fixed
 
