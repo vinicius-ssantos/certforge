@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests the special access rule for enum constructors, which differs from ordinary classes.",
+  "prompt": "Which statement about constructors declared in an enum class is correct?",
+  "explanation": "An enum constructor is implicitly private when no access modifier is written, and it is a compile-time error to declare an enum constructor `public` or `protected`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "An enum constructor may be public so callers can create new enum constants.",
+      "correct": false,
+      "explanation": "Enum constants are fixed by the declaration; public enum constructors are prohibited."
+    },
+    {
+      "key": "B",
+      "text": "An enum constructor may be protected for subclass use.",
+      "correct": false,
+      "explanation": "Enum constructors cannot be protected."
+    },
+    {
+      "key": "C",
+      "text": "An enum constructor is implicitly private when no access modifier is present.",
+      "correct": true,
+      "explanation": "That is the enum-specific constructor access rule."
+    },
+    {
+      "key": "D",
+      "text": "An enum cannot declare a constructor.",
+      "correct": false,
+      "explanation": "Enums can and commonly do declare constructors for their constants."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.9.2 Enum Body Declarations",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.9.2"
+    }
+  ]
+}

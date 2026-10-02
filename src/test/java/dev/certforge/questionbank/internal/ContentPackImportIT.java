@@ -50,7 +50,7 @@ class ContentPackImportIT {
 
   private static final String PASSWORD = "correct horse battery";
   private static final String SESSION_COOKIE = "CERTFORGE_SESSION";
-  private static final int PACK_SIZE = 60;
+  private static final int PACK_SIZE = 100;
 
   @Container @ServiceConnection
   static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine");

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests fluent StringBuilder mutation and the fact that reverse operates on the entire current sequence.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`append(12)` changes the builder from `ab` to `ab12`. `reverse()` then reverses the entire builder, producing `21ba`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ab12",
+      "correct": false,
+      "explanation": "That is the state after append, before reverse is applied."
+    },
+    {
+      "key": "B",
+      "text": "21ba",
+      "correct": true,
+      "explanation": "The entire sequence `ab12` is reversed."
+    },
+    {
+      "key": "C",
+      "text": "12ba",
+      "correct": false,
+      "explanation": "reverse does not reverse only the original text; it reverses the whole current sequence."
+    },
+    {
+      "key": "D",
+      "text": "ba12",
+      "correct": false,
+      "explanation": "This would reverse only `ab`, but reverse acts on all characters in the builder."
+    }
+  ],
+  "references": [
+    {
+      "title": "StringBuilder (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/StringBuilder.html"
+    }
+  ]
+}

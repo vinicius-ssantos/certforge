@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the special treatment of exception parameters in a multi-catch clause.",
+  "prompt": "Inside `catch (IOException | SQLException ex)`, which statement about assigning a new value to `ex` is correct?",
+  "explanation": "An exception parameter in a multi-catch clause is implicitly final. Assigning another value to that parameter is a compile-time error.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Reassignment is allowed because catch parameters are ordinary local variables.",
+      "correct": false,
+      "explanation": "Multi-catch parameters have the special rule that they are implicitly final."
+    },
+    {
+      "key": "B",
+      "text": "Reassignment is a compile-time error because the multi-catch parameter is implicitly final.",
+      "correct": true,
+      "explanation": "That restriction is part of the multi-catch language rules."
+    },
+    {
+      "key": "C",
+      "text": "Reassignment is allowed only to another IOException.",
+      "correct": false,
+      "explanation": "The issue is finality, not which alternative type the replacement value belongs to."
+    },
+    {
+      "key": "D",
+      "text": "Reassignment is allowed only when the catch body rethrows ex.",
+      "correct": false,
+      "explanation": "Rethrowing does not change the implicit-final rule."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20 The try statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20"
+    }
+  ]
+}

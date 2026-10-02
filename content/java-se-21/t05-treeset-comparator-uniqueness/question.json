@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the SortedSet rule that ordering equality determines element uniqueness, which can diverge from equals.",
+  "prompt": "A `TreeSet` uses a comparator that returns `0` when comparing two distinct objects. What does the set do when the second object is added while the first is already present?",
+  "explanation": "A TreeSet uses its ordering to determine element equality for set membership. If the comparator reports zero, the second object is treated as equal for set purposes and is not added as a distinct element.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It always stores both because Object.equals is the only rule for Set uniqueness.",
+      "correct": false,
+      "explanation": "TreeSet membership is governed by its ordering comparison."
+    },
+    {
+      "key": "B",
+      "text": "It treats the second object as a duplicate for set membership.",
+      "correct": true,
+      "explanation": "A comparison result of zero means the elements occupy the same ordering position."
+    },
+    {
+      "key": "C",
+      "text": "It throws ClassCastException even though a comparator was supplied.",
+      "correct": false,
+      "explanation": "A supplied comparator is precisely what the TreeSet uses to compare elements."
+    },
+    {
+      "key": "D",
+      "text": "It replaces the first object with the second automatically.",
+      "correct": false,
+      "explanation": "Set.add reports whether the set changed; it does not define replacement of the existing equal element."
+    }
+  ],
+  "references": [
+    {
+      "title": "TreeSet (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/TreeSet.html"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing how LocalDate resolves an invalid leap-day result after adding years.",
+  "prompt": "What date results from `LocalDate.of(2024, 2, 29).plusYears(1)`?",
+  "explanation": "Adding one year initially targets 2025-02-29, which is invalid because 2025 is not a leap year. `plusYears` resolves the result to the last valid day of the month, 2025-02-28.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2025-02-28",
+      "correct": true,
+      "explanation": "The invalid leap day is adjusted to the last valid day of February 2025."
+    },
+    {
+      "key": "B",
+      "text": "2025-03-01",
+      "correct": false,
+      "explanation": "The method adjusts to the last valid day of the target month rather than overflowing into March."
+    },
+    {
+      "key": "C",
+      "text": "2024-02-28",
+      "correct": false,
+      "explanation": "The year does advance by one."
+    },
+    {
+      "key": "D",
+      "text": "It throws DateTimeException.",
+      "correct": false,
+      "explanation": "`plusYears` defines an adjustment for this invalid target date."
+    }
+  ],
+  "references": [
+    {
+      "title": "LocalDate.plusYears(long) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/LocalDate.html#plusYears(long)"
+    }
+  ]
+}

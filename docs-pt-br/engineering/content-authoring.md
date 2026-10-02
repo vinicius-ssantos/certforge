@@ -6,9 +6,9 @@ Issue: #8 — Criar o pacote inicial de conteúdo autoral de certificação Java
 
 ## O que o pacote é, e o que não é
 
-`content/java-se-21/` contém 60 questões originais para a trilha Oracle Java SE 21 Developer: seis por tópico, de escolha única e de múltipla escolha, do fácil ao difícil. Cada questão tem uma explicação por alternativa, referências autoritativas e uma justificativa de dificuldade.
+`content/java-se-21/` contém 100 questões originais para a trilha Oracle Java SE 21 Developer: dez por tópico, de escolha única e de múltipla escolha, do fácil ao difícil. Cada questão tem uma explicação por alternativa, referências autoritativas e uma justificativa de dificuldade.
 
-**Status de revisão: misto.** As 20 questões iniciais foram revisadas tecnicamente em 2026-10-02 e mantêm esse veredito registrado. A expansão de 40 questões foi redigida com apoio de IA a partir das especificações e da documentação da API do Java SE 21 e ainda não foi revisada por uma pessoa. Nada no repositório publica uma questão não revisada: o importador cria rascunhos e os submete para revisão técnica, e publicar continua sendo uma decisão editorial humana.
+**Status de revisão: misto.** As 20 questões iniciais foram revisadas tecnicamente em 2026-10-02 e mantêm esse veredito registrado. As 80 questões adicionadas depois foram redigidas com apoio de IA a partir das especificações e da documentação da API do Java SE 21 e ainda não foram revisadas por uma pessoa. Nada no repositório publica uma questão não revisada: o importador cria rascunhos e os submete para revisão técnica, e publicar continua sendo uma decisão editorial humana.
 
 O que a ferramenta comprova automaticamente, a cada build:
 
@@ -173,7 +173,7 @@ Nenhum teste confere a segunda. É disciplina, e o único papel da automação a
 | 9 E/S em Java | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localização | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Entre as vinte questões iniciais já revisadas, três são conceituais e não têm código executável: `t01-integer-boxing-guarantee`, `t06-stream-facts` e `t07-exports-and-opens`. As quarenta questões adicionadas na expansão atual também são rascunhos conceituais por enquanto, então dependem das referências autoritativas e de futura revisão humana, em vez de um programa de verificação. O pacote de revisão deriva a lista completa atual em vez de repeti-la aqui, então ela não envelhece.
+Entre as vinte questões iniciais já revisadas, três são conceituais e não têm código executável: `t01-integer-boxing-guarantee`, `t06-stream-facts` e `t07-exports-and-opens`. A primeira expansão de quarenta questões é conceitual. As quarenta mais recentes adicionam dez programas de verificação executáveis — um por tópico — enquanto trinta continuam conceituais. Todas as oitenta questões posteriores ainda aguardam revisão técnica humana. O pacote de revisão deriva a lista completa atual em vez de repeti-la aqui, então ela não envelhece.
 
 A `t07-requires-transitive` era a quarta. Agora ela carrega um grafo de três módulos em `modules/`, em que `app` só declara `requires lib`, usa um tipo de `util`, e compila porque `lib` declara `requires transitive util` — tire o `transitive` e o build falha com `package u is not visible`. É a conversão que a [ADR 0011](../adr/0011-grade-content-evidence.md) pede, e ela manteve a revisão registrada, porque nada do que o revisor leu mudou.
 

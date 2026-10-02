@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Connects class-path execution with the runtime Module API and the distinction between named and unnamed modules.",
+  "prompt": "The program is launched from the class path, not as a named module. What does it print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Classes loaded from the ordinary class path belong to an unnamed module. `Module.isNamed()` therefore returns false.",
+  "options": [
+    {
+      "key": "A",
+      "text": "true",
+      "correct": false,
+      "explanation": "A class-path class is not in a named module merely because its class has a name."
+    },
+    {
+      "key": "B",
+      "text": "false",
+      "correct": true,
+      "explanation": "The class belongs to an unnamed module when launched from the class path."
+    },
+    {
+      "key": "C",
+      "text": "null",
+      "correct": false,
+      "explanation": "getModule returns a Module object, and isNamed returns primitive boolean."
+    },
+    {
+      "key": "D",
+      "text": "It throws IllegalStateException.",
+      "correct": false,
+      "explanation": "Querying the module of a class-path class is supported."
+    }
+  ],
+  "references": [
+    {
+      "title": "Module.isNamed() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Module.html#isNamed()"
+    }
+  ]
+}

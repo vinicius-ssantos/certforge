@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the control-flow distinction between arrow switch rules and traditional colon-labeled statement groups.",
+  "prompt": "Which statement about an arrow-form switch rule such as `case 1 -> action();` is correct?",
+  "explanation": "Arrow switch rules do not fall through into a following rule. After the selected rule completes normally, the switch completes.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Execution automatically falls through to the next case unless break is written.",
+      "correct": false,
+      "explanation": "That is the risk with colon-style statement groups, not arrow rules."
+    },
+    {
+      "key": "B",
+      "text": "The rule does not fall through into the next case.",
+      "correct": true,
+      "explanation": "Arrow rules have no implicit fall-through."
+    },
+    {
+      "key": "C",
+      "text": "Arrow rules are allowed only in switch expressions, never switch statements.",
+      "correct": false,
+      "explanation": "Arrow rules are available in both switch statements and switch expressions."
+    },
+    {
+      "key": "D",
+      "text": "The right side of an arrow rule must always be a block.",
+      "correct": false,
+      "explanation": "A rule may use an expression, a block, or a throw statement where the grammar permits."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.11 The switch Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11"
+    }
+  ]
+}

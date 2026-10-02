@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the signature that makes AutoCloseable broadly usable in try-with-resources.",
+  "prompt": "What checked exception type is the `AutoCloseable.close()` method declared to throw?",
+  "explanation": "`AutoCloseable.close()` is declared as `void close() throws Exception`. Implementations may narrow or omit that checked exception declaration.",
+  "options": [
+    {
+      "key": "A",
+      "text": "IOException only",
+      "correct": false,
+      "explanation": "`Closeable.close()` narrows to IOException, but AutoCloseable itself declares Exception."
+    },
+    {
+      "key": "B",
+      "text": "Exception",
+      "correct": true,
+      "explanation": "That is the declared checked exception type on AutoCloseable.close()."
+    },
+    {
+      "key": "C",
+      "text": "Throwable",
+      "correct": false,
+      "explanation": "The method is not declared to throw the broader Throwable type."
+    },
+    {
+      "key": "D",
+      "text": "No checked exception",
+      "correct": false,
+      "explanation": "The AutoCloseable interface declaration includes `throws Exception`."
+    }
+  ],
+  "references": [
+    {
+      "title": "AutoCloseable.close() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/AutoCloseable.html#close()"
+    }
+  ]
+}

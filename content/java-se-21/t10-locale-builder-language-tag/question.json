@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the builder API and normalized BCP 47 language-tag representation.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The builder creates a Locale with language `pt` and region `BR`. `toLanguageTag()` renders those components as the normalized BCP 47 tag `pt-BR`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "pt-BR",
+      "correct": true,
+      "explanation": "That is the normalized language-region tag."
+    },
+    {
+      "key": "B",
+      "text": "pt_BR",
+      "correct": false,
+      "explanation": "Underscore formatting is associated with Locale.toString-style representation, not BCP 47 toLanguageTag output."
+    },
+    {
+      "key": "C",
+      "text": "PT-br",
+      "correct": false,
+      "explanation": "The language and region are normalized using their conventional casing."
+    },
+    {
+      "key": "D",
+      "text": "Portuguese-Brazil",
+      "correct": false,
+      "explanation": "toLanguageTag uses language and region subtags, not display names."
+    }
+  ],
+  "references": [
+    {
+      "title": "Locale.Builder (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.Builder.html"
+    }
+  ]
+}

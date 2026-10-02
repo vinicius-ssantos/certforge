@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the primitive-stream average terminal operation and OptionalDouble fallback behavior.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The average of 1, 2, and 3 is 2.0. Because the stream is non-empty, `orElse(-1)` is not used.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2.0",
+      "correct": true,
+      "explanation": "The arithmetic mean is returned as a double value."
+    },
+    {
+      "key": "B",
+      "text": "2",
+      "correct": false,
+      "explanation": "IntStream.average returns OptionalDouble, so the printed numeric representation is 2.0."
+    },
+    {
+      "key": "C",
+      "text": "-1.0",
+      "correct": false,
+      "explanation": "The fallback is used only when the stream is empty."
+    },
+    {
+      "key": "D",
+      "text": "It throws NoSuchElementException.",
+      "correct": false,
+      "explanation": "orElse supplies a fallback and does not throw."
+    }
+  ],
+  "references": [
+    {
+      "title": "IntStream.average() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/IntStream.html#average()"
+    }
+  ]
+}

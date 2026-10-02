@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires understanding why interfaces can contain private helper methods without adding them to the implementing class's inherited API.",
+  "prompt": "Which statements about a `private` method declared in an interface are correct? Select all that apply.",
+  "explanation": "A private interface method is available only within the body of that interface. It is not inherited by implementing classes and is not part of their externally callable API.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It can be used as an implementation helper by methods declared in the same interface.",
+      "correct": true,
+      "explanation": "Private interface methods exist to share implementation details inside the interface."
+    },
+    {
+      "key": "B",
+      "text": "It is inherited as a private member by every implementing class.",
+      "correct": false,
+      "explanation": "Private interface methods are not inherited by implementing classes."
+    },
+    {
+      "key": "C",
+      "text": "It is not part of the implementing class's callable inherited API.",
+      "correct": true,
+      "explanation": "Its accessibility is confined to the interface that declares it."
+    },
+    {
+      "key": "D",
+      "text": "It is implicitly public because every interface method is public.",
+      "correct": false,
+      "explanation": "Interfaces may explicitly declare private methods; the blanket public rule does not apply to them."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 9.4 Method Declarations in Interfaces",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.4"
+    }
+  ]
+}

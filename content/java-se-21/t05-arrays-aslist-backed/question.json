@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing that Arrays.asList is fixed-size and backed by the original array, which differs from both an independent ArrayList and List.of.",
+  "prompt": "Given `String[] a = {\"x\", \"y\"}; List<String> list = Arrays.asList(a);`, which statements are correct? Select all that apply.",
+  "explanation": "The list returned by `Arrays.asList` is fixed-size and backed by the specified array. Replacing an element through `set` changes the corresponding array element, while structural size changes such as add/remove are unsupported.",
+  "options": [
+    {
+      "key": "A",
+      "text": "list.set(0, \"z\") changes a[0] to \"z\".",
+      "correct": true,
+      "explanation": "The list and array are backed by the same elements."
+    },
+    {
+      "key": "B",
+      "text": "list.add(\"z\") can grow the list and the original array.",
+      "correct": false,
+      "explanation": "The list is fixed-size and the underlying array cannot be grown this way."
+    },
+    {
+      "key": "C",
+      "text": "Structural operations that change the size are unsupported.",
+      "correct": true,
+      "explanation": "The returned list has a fixed size equal to the array length."
+    },
+    {
+      "key": "D",
+      "text": "The method always copies the array into an independent java.util.ArrayList.",
+      "correct": false,
+      "explanation": "The returned list is backed by the specified array."
+    }
+  ],
+  "references": [
+    {
+      "title": "Arrays.asList(T...) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Arrays.html#asList(T...)"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests flow-sensitive scope of a pattern variable across short-circuit boolean operators.",
+  "prompt": "Assume `obj` has type `Object`. Which condition validly uses pattern variable `s` on the right-hand side?",
+  "explanation": "With `&&`, the right operand is evaluated only if the pattern match succeeded, so `s` is definitely matched there. With `||`, `|`, or `^`, the right operand can be evaluated when the pattern did not match.",
+  "options": [
+    {
+      "key": "A",
+      "text": "obj instanceof String s && s.length() > 0",
+      "correct": true,
+      "explanation": "The right side executes only after the String pattern matched, so `s` is in scope."
+    },
+    {
+      "key": "B",
+      "text": "obj instanceof String s || s.length() > 0",
+      "correct": false,
+      "explanation": "The right side can execute after the pattern fails, so `s` is not definitely matched there."
+    },
+    {
+      "key": "C",
+      "text": "obj instanceof String s | s.length() > 0",
+      "correct": false,
+      "explanation": "Non-short-circuit `|` evaluates the right operand regardless of whether the pattern matched."
+    },
+    {
+      "key": "D",
+      "text": "obj instanceof String s ^ s.length() > 0",
+      "correct": false,
+      "explanation": "The right operand is not guarded by successful pattern matching."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 6.3.1 Scope of a Pattern Declaration",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-6.html#jls-6.3.1"
+    }
+  ]
+}

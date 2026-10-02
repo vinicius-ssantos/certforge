@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the rule that abrupt completion of finally replaces a pending return from the try block.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The `return 1` in the try block is pending, but the finally block then throws `IllegalStateException`. Because finally completes abruptly, the pending return is discarded and the exception propagates to main, which prints `thrown`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "1",
+      "correct": false,
+      "explanation": "The return does not complete because the finally block throws before control leaves the method."
+    },
+    {
+      "key": "B",
+      "text": "thrown",
+      "correct": true,
+      "explanation": "The exception from finally replaces the pending return."
+    },
+    {
+      "key": "C",
+      "text": "1thrown",
+      "correct": false,
+      "explanation": "The integer is never printed because `value()` never returns normally."
+    },
+    {
+      "key": "D",
+      "text": "Nothing; the exception is swallowed by finally.",
+      "correct": false,
+      "explanation": "The exception originates in finally and propagates outward."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20.2 Execution of try-finally and try-catch-finally",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.2"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests lexical path normalization without relying on platform-specific separator rendering.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`normalize()` removes redundant name elements such as `b/..` without accessing the file system. The resulting path has the two name elements `a` and `c`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "1",
+      "correct": false,
+      "explanation": "Two name elements remain after normalization."
+    },
+    {
+      "key": "B",
+      "text": "2",
+      "correct": true,
+      "explanation": "The normalized path consists of `a` and `c`."
+    },
+    {
+      "key": "C",
+      "text": "3",
+      "correct": false,
+      "explanation": "The `b/..` pair is eliminated by normalization."
+    },
+    {
+      "key": "D",
+      "text": "4",
+      "correct": false,
+      "explanation": "The parent-reference pair does not remain as two separate name elements after normalization."
+    }
+  ],
+  "references": [
+    {
+      "title": "Path.normalize() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html#normalize()"
+    }
+  ]
+}

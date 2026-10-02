@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires separating reflective openness from compile-time export accessibility at module granularity.",
+  "prompt": "Which statements about an `open module` declaration are correct? Select all that apply.",
+  "explanation": "An open module opens all of its packages for deep reflective access by other modules. Openness is not the same as exporting packages for ordinary compile-time access.",
+  "options": [
+    {
+      "key": "A",
+      "text": "All packages in the module are open for deep reflection.",
+      "correct": true,
+      "explanation": "That is the defining effect of declaring the whole module open."
+    },
+    {
+      "key": "B",
+      "text": "Every package is automatically exported for ordinary source-level access.",
+      "correct": false,
+      "explanation": "Opening and exporting are separate JPMS concepts."
+    },
+    {
+      "key": "C",
+      "text": "The module can still use exports directives to control ordinary API access.",
+      "correct": true,
+      "explanation": "An open module may still export selected packages while all packages remain open reflectively."
+    },
+    {
+      "key": "D",
+      "text": "An open module becomes an unnamed module.",
+      "correct": false,
+      "explanation": "It remains a named module; `open` changes reflective accessibility."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7.2 Exported and Opened Packages",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2"
+    }
+  ]
+}

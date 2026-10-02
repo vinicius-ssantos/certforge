@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the consumer side of lower-bounded wildcards and the safe type available when reading from them.",
+  "prompt": "Given `List<? super Integer> values`, which operations are type-safe and compile? Select all that apply.",
+  "explanation": "The captured element type is some unknown supertype of Integer, so adding an Integer is safe. Reading yields only Object without a cast because the actual supertype could be Integer, Number, or Object.",
+  "options": [
+    {
+      "key": "A",
+      "text": "values.add(Integer.valueOf(1));",
+      "correct": true,
+      "explanation": "Integer can be stored in any List whose element type is Integer or a supertype of Integer."
+    },
+    {
+      "key": "B",
+      "text": "Object x = values.get(0);",
+      "correct": true,
+      "explanation": "Object is the universally safe static type for a value read from the lower-bounded wildcard."
+    },
+    {
+      "key": "C",
+      "text": "Integer x = values.get(0);",
+      "correct": false,
+      "explanation": "The actual list could be a List<Object>, so the compiler cannot promise the retrieved value is an Integer."
+    },
+    {
+      "key": "D",
+      "text": "values.add(Double.valueOf(1.0));",
+      "correct": false,
+      "explanation": "The actual list could be List<Integer>, which cannot accept Double."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 4.5.1 Type Arguments of Parameterized Types",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.5.1"
+    }
+  ]
+}

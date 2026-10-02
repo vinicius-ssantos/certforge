@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks a key overriding rule: an overriding method can narrow a reference return type.",
+  "prompt": "A superclass declares `Number value()`. Which return type may an overriding instance method in a subclass declare?",
+  "explanation": "Java permits covariant return types for overriding methods. The overriding method may return a subtype of the overridden method's reference return type, such as `Integer` for `Number`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Integer",
+      "correct": true,
+      "explanation": "Integer is a subtype of Number, so it is a covariant return type."
+    },
+    {
+      "key": "B",
+      "text": "Object only",
+      "correct": false,
+      "explanation": "Object is broader than Number, not a covariant narrowing."
+    },
+    {
+      "key": "C",
+      "text": "String",
+      "correct": false,
+      "explanation": "String is not a subtype of Number."
+    },
+    {
+      "key": "D",
+      "text": "void",
+      "correct": false,
+      "explanation": "Changing a non-void return to void is not a valid override."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.5 Method Result",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.5"
+    }
+  ]
+}

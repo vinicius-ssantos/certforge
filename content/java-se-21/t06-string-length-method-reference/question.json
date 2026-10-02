@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests how an unbound instance method reference maps the receiver to the functional interface's input parameter.",
+  "prompt": "Which functional-interface target is compatible with the method reference `String::length`?",
+  "explanation": "`String::length` is an unbound instance method reference. The function receives a String instance and returns its primitive int length, matching `ToIntFunction<String>`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ToIntFunction<String>",
+      "correct": true,
+      "explanation": "Its abstract method takes a String and returns int."
+    },
+    {
+      "key": "B",
+      "text": "Supplier<String>",
+      "correct": false,
+      "explanation": "A Supplier takes no input and returns a String, which does not match."
+    },
+    {
+      "key": "C",
+      "text": "Consumer<Integer>",
+      "correct": false,
+      "explanation": "A Consumer returns no value and its input type is wrong."
+    },
+    {
+      "key": "D",
+      "text": "Predicate<String>",
+      "correct": false,
+      "explanation": "A Predicate<String> must return boolean, not int."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.13 Method Reference Expressions",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.13"
+    }
+  ]
+}
