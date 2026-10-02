@@ -1,6 +1,6 @@
 # Bootstrap do Backend
 
-> Tradução de [`docs/engineering/backend-bootstrap.md`](../../docs/engineering/backend-bootstrap.md). O inglês é a fonte canônica. As versões e os comandos abaixo refletem o commit `71ccf99` e podem ficar desatualizados; consulte o original.
+> Tradução de [`docs/engineering/backend-bootstrap.md`](../../docs/engineering/backend-bootstrap.md). O inglês é a fonte canônica.
 
 Issue: #3 — Bootstrap da plataforma de backend e dos quality gates de CI
 

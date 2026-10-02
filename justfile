@@ -37,7 +37,7 @@ _default:
 up:
     {{release}} up --build -d
     @just _wait
-    @echo "CertForge is at {{web_url}} — a fresh database has no questions yet, so try: just demo"
+    @echo "CertForge is at {{web_url}} — if it has no questions yet, run: just demo"
 
 # Start it and publish ten clearly labelled demo questions, so there is something to practise on.
 [group('run')]
