@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests resource management for lazily populated directory-tree streams.",
+  "prompt": "Which statements about the `Stream<Path>` returned by `Files.walk(path)` are correct? Select all that apply.",
+  "explanation": "The stream is lazily populated and holds open directory resources while traversing. It should be closed promptly, typically with try-with-resources.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It should normally be used in try-with-resources.",
+      "correct": true,
+      "explanation": "Closing the stream releases open directory resources."
+    },
+    {
+      "key": "B",
+      "text": "The stream is populated lazily.",
+      "correct": true,
+      "explanation": "Traversal occurs as the stream is consumed."
+    },
+    {
+      "key": "C",
+      "text": "A terminal operation always closes the stream automatically.",
+      "correct": false,
+      "explanation": "Terminal operations do not generally close a stream resource."
+    },
+    {
+      "key": "D",
+      "text": "It eagerly loads the entire tree before returning.",
+      "correct": false,
+      "explanation": "The traversal is lazy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Files.walk(Path, FileVisitOption...) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#walk(java.nio.file.Path,java.nio.file.FileVisitOption...)"
+    }
+  ]
+}
