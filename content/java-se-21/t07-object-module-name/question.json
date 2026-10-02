@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Connects a core platform class with the named module that contains it.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`Object` is defined in the `java.base` module. Its `Class` object therefore reports a named module whose name is `java.base`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "java.base",
+      "correct": true,
+      "explanation": "Object belongs to the fundamental java.base module."
+    },
+    {
+      "key": "B",
+      "text": "java.lang",
+      "correct": false,
+      "explanation": "java.lang is Object's package, not its module name."
+    },
+    {
+      "key": "C",
+      "text": "null",
+      "correct": false,
+      "explanation": "The module is named, so getName returns its name rather than null."
+    },
+    {
+      "key": "D",
+      "text": "unnamed",
+      "correct": false,
+      "explanation": "Platform classes such as Object are in named modules."
+    }
+  ],
+  "references": [
+    {
+      "title": "Module.getName() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Module.html#getName()"
+    }
+  ]
+}
