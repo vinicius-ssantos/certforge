@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the migration mechanism that lets an ordinary JAR participate on the module path without a module descriptor.",
+  "prompt": "An ordinary JAR has no `module-info.class` and is placed where the module system discovers modules. What kind of named module can it become?",
+  "explanation": "A JAR without a module descriptor can be treated as an automatic module when discovered on the module path. Its module name is derived rather than declared by module-info.",
+  "options": [
+    {
+      "key": "A",
+      "text": "An automatic module",
+      "correct": true,
+      "explanation": "Automatic modules support migration of non-modular JARs onto the module path."
+    },
+    {
+      "key": "B",
+      "text": "The java.base module",
+      "correct": false,
+      "explanation": "java.base is the platform's fundamental module, not a designation for ordinary JARs."
+    },
+    {
+      "key": "C",
+      "text": "An unnamed module only",
+      "correct": false,
+      "explanation": "An ordinary JAR on the class path is associated with an unnamed module; on the module path it can become automatic."
+    },
+    {
+      "key": "D",
+      "text": "A sealed module",
+      "correct": false,
+      "explanation": "Sealed is a class/interface concept, not a JPMS module category."
+    }
+  ],
+  "references": [
+    {
+      "title": "ModuleDescriptor.isAutomatic() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/module/ModuleDescriptor.html#isAutomatic()"
+    }
+  ]
+}
