@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests hierarchical ResourceBundle lookup rather than assuming only the most specific bundle is consulted.",
+  "prompt": "A resolved `ResourceBundle` does not define key `title` itself, but its parent bundle does. What does `bundle.getString(\"title\")` do?",
+  "explanation": "ResourceBundle lookup checks the bundle and, when necessary, its parent chain. If the parent defines the key, that value is returned.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns the parent's value for title.",
+      "correct": true,
+      "explanation": "Missing keys are looked up through the parent chain."
+    },
+    {
+      "key": "B",
+      "text": "It always throws MissingResourceException immediately.",
+      "correct": false,
+      "explanation": "The exception occurs only after the key cannot be found through the relevant bundle chain."
+    },
+    {
+      "key": "C",
+      "text": "It returns null without checking the parent.",
+      "correct": false,
+      "explanation": "ResourceBundle lookup supports parent fallback."
+    },
+    {
+      "key": "D",
+      "text": "It creates the key in the child bundle.",
+      "correct": false,
+      "explanation": "Lookup does not mutate resource bundles."
+    }
+  ],
+  "references": [
+    {
+      "title": "ResourceBundle (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ResourceBundle.html"
+    }
+  ]
+}
