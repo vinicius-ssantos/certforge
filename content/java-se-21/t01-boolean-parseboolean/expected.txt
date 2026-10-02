@@ -1,0 +1,4 @@
+lower=true
+upper=true
+mixed=true
+yes=false

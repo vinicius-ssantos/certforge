@@ -1,0 +1,3 @@
+outer=entered
+inner=entered
+deadlocked=false
