@@ -155,17 +155,21 @@ questions.forEach((q, index) => {
   add();
   if (state.state === "reviewed") {
     add(`**${state.verdict === "APPROVED" ? "Approved" : state.verdict}** by ${state.reviewer} on ${state.reviewedOn}. The question has not changed since, so that verdict still applies.`);
+    if (state.verificationAdded) {
+      add();
+      add("A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.");
+    }
     add();
     add("A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:");
   } else if (state.state === "changed") {
-    add(`**This question was edited after ${state.reviewer} reviewed it on ${state.reviewedOn}, so it is unreviewed again.** Review it and replace its digest in \`${pack}/review.json\` with the one below.`);
+    add(`**${state.whatChanged === "the verified output" ? "This question now prints something other than what it printed when" : "This question was edited after"} ${state.reviewer} reviewed it on ${state.reviewedOn}, so it is unreviewed again.** Review it and replace its entry in \`${pack}/review.json\` with the digests below.`);
   }
   add();
   CHECKS.forEach((check) => add(`- [ ] ${check}`));
   add();
   add("**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish");
   add();
-  add(`Digest of the question as it stands: \`${state.currentDigest ?? ""}\``);
+  add(`To record: \`"digest": "${state.currentDigest ?? ""}"\`, \`"verified": ${state.currentVerified === null || state.currentVerified === undefined ? "null" : `"${state.currentVerified}"`}\``);
   add();
   add("**Comments:**");
   add();

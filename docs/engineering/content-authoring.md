@@ -25,7 +25,7 @@ content/
   ContentImporter.java          standalone importer, no dependencies
   pack.mjs                      reading a pack, its catalog and its review record
   java-se-21/
-    review.json                 who reviewed which questions, when, and a digest of each
+    review.json                 who reviewed which questions, when, and digests of each
     t04-finally-return/
       question.json             the request body of POST /api/admin/questions
       Main.java                 code shown to learners and verified by the build
@@ -77,9 +77,23 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 The [content review packet](../release/content-review-packet.md) lays the whole pack out for a reviewer: each question as the learner sees it, then the answer key, reasons, references, the output the build verified, and either the verdict already recorded or the checks below as boxes to tick. It is generated (`node content/build-review-packet.mjs`) and CI fails if it is out of date.
 
-A finished review is recorded in the pack's `review.json`: the reviewer, the date, how they reviewed, what the review does not establish, and for each question a verdict and a digest of everything they judged — the prompt with its code, the options, the answer key, every explanation, the rationale, the references and the verified output. The packet prints the digest to record under each unreviewed question.
+A finished review is recorded in the pack's `review.json`: the reviewer, the date, how they reviewed, what the review does not establish, and for each question a verdict plus two digests. `digest` covers everything the reviewer judged — the prompt with its code, the options, the answer key, every explanation, the rationale and the references. `verified` covers the output the build proved, or is `null` for a question that carries no program. The packet prints both under each question, ready to paste.
 
-That digest is the point. **Edit a reviewed question and it counts as unreviewed again**: the packet marks it "changed since review" and prints a new digest, and because CI compares the committed packet with a fresh build, the change cannot reach `main` while still claiming the old verdict. Reindenting the JSON changes nothing, because the digest covers what was read rather than how the file was formatted. Recording a review for a question nobody read defeats all of this, so do not.
+Those digests are the point. **Edit a reviewed question and it counts as unreviewed again**: the packet marks it "changed since review" and prints new digests, and because CI compares the committed packet with a fresh build, the change cannot reach `main` while still claiming the old verdict.
+
+The two are weighed differently, because the two kinds of change are not the same:
+
+| What you do | The review |
+|---|---|
+| Change a word of the prompt, an option, the key, an explanation, the rationale or a reference | **lost** |
+| Make the program print something else | **lost** — the question no longer does what was reviewed |
+| Delete the program | **lost** — the evidence the packet showed is gone |
+| **Write a program for a question that had none** | **kept**, and noted as better supported than when the verdict was given |
+| Reindent the JSON | kept; the digest covers what was read, not how the file was written |
+
+That fourth row matters. Folding the verified output into one digest would mark a question unreviewed *for being verified*, which punishes exactly the move [ADR 0011](../adr/0011-grade-content-evidence.md) wants to encourage: nothing the reviewer read changed, and the claim now has a program behind it.
+
+Recording a review for a question nobody read defeats all of this, so do not.
 
 Review is done by a different account from the author by default (`reviewer_must_differ_from_author`; see the question-bank document to change this for a single-maintainer setup). The reviewer needs the `REVIEWER` role and the publisher the `ADMINISTRATOR` role.
 
