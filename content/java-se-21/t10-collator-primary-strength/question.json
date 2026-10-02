@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the meaning of Collator strength levels rather than only basic locale selection.",
+  "prompt": "What does setting a `Collator` to `Collator.PRIMARY` generally mean for comparison significance?",
+  "explanation": "PRIMARY strength compares only primary differences. Secondary and tertiary differences, such as many accent and case distinctions depending on the collation rules, are not considered at that strength.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Only primary collation differences are considered.",
+      "correct": true,
+      "explanation": "That is the definition of PRIMARY strength."
+    },
+    {
+      "key": "B",
+      "text": "All possible differences, including case and variants, must be considered.",
+      "correct": false,
+      "explanation": "That describes stronger comparison levels, not PRIMARY."
+    },
+    {
+      "key": "C",
+      "text": "Strings are compared only by Java UTF-16 code-unit values.",
+      "correct": false,
+      "explanation": "Collator applies locale-sensitive collation rules."
+    },
+    {
+      "key": "D",
+      "text": "The Collator stops being locale-sensitive.",
+      "correct": false,
+      "explanation": "Strength changes which collation differences matter; it does not disable locale-sensitive collation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Collator.PRIMARY (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Collator.html#PRIMARY"
+    }
+  ]
+}
