@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the failure contract of ResourceBundle lookup when a requested key is absent from the resolved bundle chain.",
+  "prompt": "What does `ResourceBundle.getString(\"missing\")` do when the requested key cannot be found in the bundle or its parents?",
+  "explanation": "ResourceBundle lookup throws `MissingResourceException` when the requested key cannot be resolved.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns null.",
+      "correct": false,
+      "explanation": "The API reports a missing key with an exception rather than null."
+    },
+    {
+      "key": "B",
+      "text": "It returns the key itself.",
+      "correct": false,
+      "explanation": "There is no automatic key-as-value fallback in ResourceBundle.getString."
+    },
+    {
+      "key": "C",
+      "text": "It throws MissingResourceException.",
+      "correct": true,
+      "explanation": "That is the documented failure for a missing resource key."
+    },
+    {
+      "key": "D",
+      "text": "It returns an empty String.",
+      "correct": false,
+      "explanation": "An absent key is not converted to an empty value."
+    }
+  ],
+  "references": [
+    {
+      "title": "ResourceBundle.getString(String) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ResourceBundle.html#getString(java.lang.String)"
+    }
+  ]
+}
