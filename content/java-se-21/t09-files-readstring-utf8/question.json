@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests the default charset specified by the convenience overload of Files.readString.",
+  "prompt": "Which charset does `Files.readString(path)` use when no charset argument is supplied?",
+  "explanation": "The one-argument `Files.readString(Path)` method decodes the file using UTF-8.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The platform default charset.",
+      "correct": false,
+      "explanation": "This convenience overload specifies UTF-8 rather than delegating to the platform default."
+    },
+    {
+      "key": "B",
+      "text": "UTF-8.",
+      "correct": true,
+      "explanation": "UTF-8 is the documented charset for the one-argument overload."
+    },
+    {
+      "key": "C",
+      "text": "UTF-16.",
+      "correct": false,
+      "explanation": "UTF-16 is not the default for this method."
+    },
+    {
+      "key": "D",
+      "text": "US-ASCII.",
+      "correct": false,
+      "explanation": "The method is specified to use UTF-8."
+    }
+  ],
+  "references": [
+    {
+      "title": "Files.readString(Path) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#readString(java.nio.file.Path)"
+    }
+  ]
+}
