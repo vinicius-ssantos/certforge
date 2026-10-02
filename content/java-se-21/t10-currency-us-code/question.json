@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks locale-to-currency lookup using a stable ISO currency code.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`Currency.getInstance(Locale.US)` resolves the currency used by the United States locale. Its ISO 4217 currency code is `USD`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "US",
+      "correct": false,
+      "explanation": "US is the region code, not the currency code."
+    },
+    {
+      "key": "B",
+      "text": "USD",
+      "correct": true,
+      "explanation": "USD is the ISO currency code for the United States dollar."
+    },
+    {
+      "key": "C",
+      "text": "$",
+      "correct": false,
+      "explanation": "That is a symbol, not the value returned by getCurrencyCode()."
+    },
+    {
+      "key": "D",
+      "text": "Dollar",
+      "correct": false,
+      "explanation": "getCurrencyCode returns the ISO code rather than a display name."
+    }
+  ],
+  "references": [
+    {
+      "title": "Currency.getInstance(Locale) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Currency.html#getInstance(java.util.Locale)"
+    }
+  ]
+}
