@@ -1,6 +1,6 @@
 # ADR 0012: Translate the interface, keep the question text in English
 
-- Status: **Proposed.** Nothing is translated yet, and decision 3 says this is not `v0.1.0` work. It is written as a recommendation with its reasoning so it can be accepted, or changed and then accepted.
+- Status: **Accepted** on 2026-10-02, as written. Nothing is translated yet: decision 3 keeps the work out of `v0.1.0`, and #74 carries it afterwards.
 - Date: 2026-10-02
 
 ## Context

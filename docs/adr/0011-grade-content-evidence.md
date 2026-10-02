@@ -1,6 +1,6 @@
 # ADR 0011: Grade content evidence, and verify references mechanically
 
-- Status: **Proposed.** It amends [ADR 0005](0005-ai-not-source-of-truth.md) rather than replacing it. Nothing in the code depends on the tiers until this is accepted. The reference check described in decision 2 ships ahead of acceptance, because it only enforces a requirement the [content policy](../product/content-policy.md) already makes.
+- Status: **Accepted** on 2026-10-02, as written. It amends [ADR 0005](0005-ai-not-source-of-truth.md) rather than replacing it. Decision 2, the reference check, was already in place; decision 1, the tiers, is now policy and the tooling should record a tier per question. `t07-requires-transitive` was converted from Asserted to Verified under it, which is the move decision 1 asks for.
 - Date: 2026-10-02
 
 ## Context

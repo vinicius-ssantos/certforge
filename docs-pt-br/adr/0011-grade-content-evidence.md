@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0011-grade-content-evidence.md`](../../docs/adr/0011-grade-content-evidence.md). O inglês é a fonte canônica.
 
-- Status: **Proposta.** Ela emenda a [ADR 0005](0005-ai-not-source-of-truth.md) em vez de substituí-la. Nada no código depende dos níveis até que isto seja aceito. A verificação de referências da decisão 2 entra antes da aceitação, porque apenas faz cumprir uma exigência que a [política de conteúdo](../product/content-policy.md) já faz.
+- Status: **Aceita** em 2026-10-02, como escrita. Ela emenda a [ADR 0005](0005-ai-not-source-of-truth.md) em vez de substituí-la. A decisão 2, a verificação de referências, já estava valendo; a decisão 1, os níveis, agora é política e a ferramenta deve registrar um nível por questão. A `t07-requires-transitive` foi convertida de Afirmada para Verificada sob ela, que é o movimento que a decisão 1 pede.
 - Data: 2026-10-02
 
 ## Contexto

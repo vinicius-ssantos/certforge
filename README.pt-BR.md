@@ -83,7 +83,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 
 ## Status do projeto
 
-**A `v0.1.0` Study Core está construída e ainda não foi lançada.** O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release existem e são testados de ponta a ponta no CI. O pacote inicial de questões passou pela [revisão técnica](content/java-se-21/review.json) em 2026-10-02. O que separa isto de uma release é o resto do trabalho que só uma pessoa pode fazer: uma passada manual de acessibilidade, um primeiro passeio pelo produto, conferir o texto dos objetivos do exame com a página da Oracle e as decisões da primeira implantação. A [revisão de prontidão](docs-pt-br/release/v0.1.0-readiness.md) lista as barreiras e os bloqueios.
+**A `v0.1.0` Study Core está lançada.** O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release são testados de ponta a ponta no CI, o pacote inicial de questões passou pela [revisão técnica](content/java-se-21/review.json), e as passadas que uma máquina não faz — julgamento de acessibilidade, um passeio pelo produto, o texto dos objetivos do exame contra a página da Oracle — foram feitas em 2026-10-02. A [revisão de prontidão](docs-pt-br/release/v0.1.0-readiness.md) registra cada barreira, o que uma pessoa conferiu à mão, e a que isso não equivale: um revisor, que também é o autor. As [notas de release](docs-pt-br/release/v0.1.0-release-notes.md) listam as limitações conhecidas.
 
 ### Experimente
 
