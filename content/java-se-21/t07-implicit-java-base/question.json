@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the implicit readability foundation that module declarations usually do not spell out.",
+  "prompt": "For a named module other than `java.base`, which dependency is implicitly present even when it is not written in `module-info.java`?",
+  "explanation": "Every module other than `java.base` implicitly depends on `java.base`, so ordinary module declarations do not need to write that requires directive.",
+  "options": [
+    {
+      "key": "A",
+      "text": "requires java.base;",
+      "correct": true,
+      "explanation": "java.base is implicitly required by every other named module."
+    },
+    {
+      "key": "B",
+      "text": "requires java.desktop;",
+      "correct": false,
+      "explanation": "java.desktop is needed only when a module actually depends on its APIs."
+    },
+    {
+      "key": "C",
+      "text": "requires java.sql;",
+      "correct": false,
+      "explanation": "java.sql is not implicitly required."
+    },
+    {
+      "key": "D",
+      "text": "requires transitive java.base;",
+      "correct": false,
+      "explanation": "The implicit dependency is not an implicit transitive re-export."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7.1 Dependences",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.1"
+    }
+  ]
+}
