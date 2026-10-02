@@ -19,5 +19,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0011](0011-grade-content-evidence.md) | Graduar a evidência do conteúdo e verificar referências mecanicamente | Aceita |
 | [0012](0012-interface-language.md) | Traduzir a interface e manter o texto das questões em inglês | Aceita |
 | [0013](0013-derived-review-queue.md) | Derivar a fila de revisão da evidência das tentativas, e dizer por que cada item está nela | **Proposta** |
+| [0014](0014-one-topic-one-track.md) | Manter um tópico em uma trilha só, e pôr os fundamentos na trilha de entrevista | **Proposta** |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.
