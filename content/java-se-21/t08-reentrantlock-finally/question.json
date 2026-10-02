@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the standard lock/unlock structure needed because Lock does not have synchronized's automatic monitor release.",
+  "prompt": "After successfully calling `lock.lock()`, where should `lock.unlock()` normally be placed so the lock is released even when protected code throws?",
+  "explanation": "The recommended structure acquires the lock before a try block and invokes `unlock()` in the corresponding finally block. This ensures release on both normal and abrupt completion.",
+  "options": [
+    {
+      "key": "A",
+      "text": "In a finally block.",
+      "correct": true,
+      "explanation": "finally executes when control leaves the protected region, including exceptional exits."
+    },
+    {
+      "key": "B",
+      "text": "Only after the try block on the normal path.",
+      "correct": false,
+      "explanation": "An exception could skip that unlock and leave the lock held."
+    },
+    {
+      "key": "C",
+      "text": "Inside a catch block only.",
+      "correct": false,
+      "explanation": "That would miss normal completion and possibly other abrupt paths."
+    },
+    {
+      "key": "D",
+      "text": "Nowhere; ReentrantLock releases itself automatically at method exit.",
+      "correct": false,
+      "explanation": "Explicit Lock implementations require explicit unlock calls."
+    }
+  ],
+  "references": [
+    {
+      "title": "Lock (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/locks/Lock.html"
+    }
+  ]
+}
