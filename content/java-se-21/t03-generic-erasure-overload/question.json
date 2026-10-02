@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests type erasure and the resulting restriction on overloads that differ only in generic type arguments.",
+  "prompt": "Can one class declare both `void process(List<String> x)` and `void process(List<Integer> x)`?",
+  "explanation": "No. After type erasure, both parameter types erase to `List`, so the two methods have the same erased signature and cause a name clash.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Yes, because String and Integer are unrelated types.",
+      "correct": false,
+      "explanation": "Generic type arguments are erased for the method signature used here."
+    },
+    {
+      "key": "B",
+      "text": "No, because both methods erase to the same signature.",
+      "correct": true,
+      "explanation": "Both parameterized List types erase to raw List."
+    },
+    {
+      "key": "C",
+      "text": "Yes, but only if one method is static.",
+      "correct": false,
+      "explanation": "Static versus instance does not solve the erased-signature clash."
+    },
+    {
+      "key": "D",
+      "text": "No, because Java forbids overloading methods named process.",
+      "correct": false,
+      "explanation": "Java permits overloading; the issue is the identical erasure."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.8.3 Requirements in Overriding and Hiding",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3"
+    }
+  ]
+}
