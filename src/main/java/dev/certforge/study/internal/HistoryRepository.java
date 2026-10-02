@@ -3,7 +3,9 @@ package dev.certforge.study.internal;
 import dev.certforge.identity.ActorId;
 import dev.certforge.platform.PageCursor;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.study.AttemptFact;
+import dev.certforge.study.Confidence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
@@ -136,7 +138,8 @@ class HistoryRepository {
   /** Every accepted attempt of a learner, oldest first, for deriving data from the evidence. */
   List<AttemptFact> facts(UUID learnerId) {
     return jdbc.sql(
-            "select a.id, a.session_id, s.topic_id, a.correct, a.submitted_at"
+            "select a.id, a.session_id, s.topic_id, a.revision_id, a.correct, a.confidence,"
+                + " a.submitted_at"
                 + " from certforge.study_attempt a"
                 + " join certforge.study_session s on s.id = a.session_id"
                 + " where a.learner_id = :learner order by a.submitted_at, a.id")
@@ -148,7 +151,9 @@ class HistoryRepository {
                     new ActorId(learnerId),
                     rs.getObject("session_id", UUID.class),
                     new TopicId(rs.getObject("topic_id", UUID.class)),
+                    new QuestionRevisionId(rs.getObject("revision_id", UUID.class)),
                     rs.getBoolean("correct"),
+                    Confidence.valueOf(rs.getString("confidence")),
                     rs.getObject("submitted_at", OffsetDateTime.class).toInstant()))
         .list();
   }

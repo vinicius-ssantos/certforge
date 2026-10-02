@@ -783,6 +783,73 @@
         "required" : [ "createdBy", "id", "revisions" ],
         "type" : "object"
       },
+      "Queue" : {
+        "properties" : {
+          "dueNow" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/QueueItem"
+            },
+            "type" : "array"
+          },
+          "neverAttempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "waiting" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "dueNow", "items", "neverAttempted", "waiting" ],
+        "type" : "object"
+      },
+      "QueueItem" : {
+        "properties" : {
+          "lastAnswerCorrect" : {
+            "type" : "boolean"
+          },
+          "lastAttemptedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "prompt" : {
+            "type" : "string"
+          },
+          "questionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "reason" : {
+            "enum" : [ "WRONG_WHILE_CONFIDENT", "WRONG", "RIGHT_BUT_UNSURE", "DUE_FOR_RECALL" ],
+            "type" : "string"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "timesAttempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "timesWrong" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicName" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "lastAnswerCorrect", "lastAttemptedAt", "prompt", "questionId", "reason", "revisionId", "timesAttempted", "timesWrong", "topicId", "topicName" ],
+        "type" : "object"
+      },
       "RebuildResult" : {
         "properties" : {
           "corrected" : {
@@ -2368,6 +2435,43 @@
           }
         },
         "tags" : [ "progress-controller" ]
+      }
+    },
+    "/api/review/queue" : {
+      "get" : {
+        "operationId" : "queue",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "topicId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "limit",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Queue"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "review-controller" ]
       }
     },
     "/api/study/history/attempts" : {

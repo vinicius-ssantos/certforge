@@ -1,5 +1,6 @@
 package dev.certforge.study.internal;
 
+import dev.certforge.study.Confidence;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.OffsetDateTime;
