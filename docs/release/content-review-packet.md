@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**All 20 questions were reviewed by vinicius-ssantos (project owner and maintainer) on 2026-10-02, and none has been edited since.** The reviewer read the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and reported no technical errors in any of the twenty.
+**20 of 60 questions carry a current review** by vinicius-ssantos, recorded on 2026-10-02. 0 have been edited since being reviewed and need a new one; 40 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 3 of the 20 questions: `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-exports-and-opens`.
+- Nothing is verified by the build in 43 of the 60 questions: `t01-bigdecimal-equals-scale`, `t01-boolean-parseboolean`, `t01-integer-boxing-guarantee`, `t01-numeric-promotion-byte-addition`, `t01-string-strip-vs-trim`, `t02-case-null-pattern-switch`, `t02-continue-for-update`, `t02-do-while-first-execution`, `t02-switch-yield-block`, `t03-default-method-conflict`, `t03-overload-most-specific`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t04-catch-order-unreachable`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-suppressed-exception`, `t05-map-of-null-rejection`, `t05-sequenced-collection-reversed`, `t05-set-of-duplicate-elements`, `t05-wildcard-extends-read`, `t06-flatmap-flatten`, `t06-lambda-effectively-final`, `t06-reduce-empty-identity`, `t06-stream-facts`, `t06-stream-single-use`, `t07-exports-and-opens`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-qualified-exports`, `t07-requires-static`, `t08-concurrenthashmap-null`, `t08-synchronized-reentrant`, `t08-thread-interrupted-clears`, `t08-volatile-increment`, `t09-bufferedreader-readline`, `t09-files-lines-close`, `t09-path-resolve-absolute`, `t09-serialization-transient-static`, `t10-collator-locale-sensitive`, `t10-datetimeformatter-locale-immutability`, `t10-locale-language-tag`, `t10-numberformat-currency-instance`.
 
 ## How to review
 
@@ -37,28 +37,180 @@ The checks, from the [content policy](../product/content-policy.md):
 
 | # | Question | Topic | Type | Difficulty | Runnable code | Review |
 |---:|---|---|---|---|---|---|
-| 1 | [`t01-integer-boxing-guarantee`](#1-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
-| 2 | [`t01-localdate-plus-months`](#2-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
-| 3 | [`t02-pattern-switch-guard`](#3-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
-| 4 | [`t02-switch-dominance`](#4-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
-| 5 | [`t03-overload-null`](#5-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
-| 6 | [`t03-record-facts`](#6-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
-| 7 | [`t04-finally-return`](#7-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
-| 8 | [`t04-try-with-resources-order`](#8-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
-| 9 | [`t05-immutable-and-fixed-size-lists`](#9-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 10 | [`t05-list-remove-overload`](#10-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 11 | [`t06-stream-facts`](#11-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
-| 12 | [`t06-stream-laziness`](#12-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
-| 13 | [`t07-exports-and-opens`](#13-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
-| 14 | [`t07-requires-transitive`](#14-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 15 | [`t08-executor-close`](#15-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
-| 16 | [`t08-virtual-thread-daemon`](#16-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 17 | [`t09-read-all-lines`](#17-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
-| 18 | [`t09-serialization-facts`](#18-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 19 | [`t10-locale-to-string`](#19-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
-| 20 | [`t10-resource-bundle-fallback`](#20-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
+| 1 | [`t01-bigdecimal-equals-scale`](#1-t01-bigdecimal-equals-scale) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 2 | [`t01-boolean-parseboolean`](#2-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | no (conceptual) | **not reviewed** |
+| 3 | [`t01-integer-boxing-guarantee`](#3-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
+| 4 | [`t01-localdate-plus-months`](#4-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
+| 5 | [`t01-numeric-promotion-byte-addition`](#5-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | no (conceptual) | **not reviewed** |
+| 6 | [`t01-string-strip-vs-trim`](#6-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 7 | [`t02-case-null-pattern-switch`](#7-t02-case-null-pattern-switch) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 8 | [`t02-continue-for-update`](#8-t02-continue-for-update) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 9 | [`t02-do-while-first-execution`](#9-t02-do-while-first-execution) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 10 | [`t02-pattern-switch-guard`](#10-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
+| 11 | [`t02-switch-dominance`](#11-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
+| 12 | [`t02-switch-yield-block`](#12-t02-switch-yield-block) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 13 | [`t03-default-method-conflict`](#13-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
+| 14 | [`t03-overload-most-specific`](#14-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 15 | [`t03-overload-null`](#15-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
+| 16 | [`t03-record-components-members`](#16-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 17 | [`t03-record-facts`](#17-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
+| 18 | [`t03-sealed-direct-subclass-modifier`](#18-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 19 | [`t04-catch-order-unreachable`](#19-t04-catch-order-unreachable) | Handling exceptions | single | easy | no (conceptual) | **not reviewed** |
+| 20 | [`t04-finally-return`](#20-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
+| 21 | [`t04-multicatch-related-types`](#21-t04-multicatch-related-types) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
+| 22 | [`t04-overriding-checked-exception`](#22-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
+| 23 | [`t04-suppressed-exception`](#23-t04-suppressed-exception) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 24 | [`t04-try-with-resources-order`](#24-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
+| 25 | [`t05-immutable-and-fixed-size-lists`](#25-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
+| 26 | [`t05-list-remove-overload`](#26-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
+| 27 | [`t05-map-of-null-rejection`](#27-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | no (conceptual) | **not reviewed** |
+| 28 | [`t05-sequenced-collection-reversed`](#28-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 29 | [`t05-set-of-duplicate-elements`](#29-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | no (conceptual) | **not reviewed** |
+| 30 | [`t05-wildcard-extends-read`](#30-t05-wildcard-extends-read) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 31 | [`t06-flatmap-flatten`](#31-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 32 | [`t06-lambda-effectively-final`](#32-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | no (conceptual) | **not reviewed** |
+| 33 | [`t06-reduce-empty-identity`](#33-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 34 | [`t06-stream-facts`](#34-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
+| 35 | [`t06-stream-laziness`](#35-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
+| 36 | [`t06-stream-single-use`](#36-t06-stream-single-use) | Streams and lambda expressions | single | easy | no (conceptual) | **not reviewed** |
+| 37 | [`t07-exports-and-opens`](#37-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
+| 38 | [`t07-java-module-launch`](#38-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 39 | [`t07-module-service-directives`](#39-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | no (conceptual) | **not reviewed** |
+| 40 | [`t07-qualified-exports`](#40-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 41 | [`t07-requires-static`](#41-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 42 | [`t07-requires-transitive`](#42-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 43 | [`t08-concurrenthashmap-null`](#43-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | no (conceptual) | **not reviewed** |
+| 44 | [`t08-executor-close`](#44-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
+| 45 | [`t08-synchronized-reentrant`](#45-t08-synchronized-reentrant) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 46 | [`t08-thread-interrupted-clears`](#46-t08-thread-interrupted-clears) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 47 | [`t08-virtual-thread-daemon`](#47-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 48 | [`t08-volatile-increment`](#48-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 49 | [`t09-bufferedreader-readline`](#49-t09-bufferedreader-readline) | Java I/O API | multiple | easy | no (conceptual) | **not reviewed** |
+| 50 | [`t09-files-lines-close`](#50-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 51 | [`t09-path-resolve-absolute`](#51-t09-path-resolve-absolute) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 52 | [`t09-read-all-lines`](#52-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
+| 53 | [`t09-serialization-facts`](#53-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
+| 54 | [`t09-serialization-transient-static`](#54-t09-serialization-transient-static) | Java I/O API | multiple | medium | no (conceptual) | **not reviewed** |
+| 55 | [`t10-collator-locale-sensitive`](#55-t10-collator-locale-sensitive) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 56 | [`t10-datetimeformatter-locale-immutability`](#56-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 57 | [`t10-locale-language-tag`](#57-t10-locale-language-tag) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
+| 58 | [`t10-locale-to-string`](#58-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
+| 59 | [`t10-numberformat-currency-instance`](#59-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
+| 60 | [`t10-resource-bundle-fallback`](#60-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
 
-## 1. t01-integer-boxing-guarantee
+## 1. t01-bigdecimal-equals-scale
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Given `BigDecimal a = new BigDecimal("1.0")` and `BigDecimal b = new BigDecimal("1.00")`, which statement is correct?
+
+- **A** a.equals(b) is true and a.compareTo(b) is 0.
+- **B** a.equals(b) is false and a.compareTo(b) is 0.
+- **C** a.equals(b) is true and a.compareTo(b) is nonzero.
+- **D** Both methods throw ArithmeticException because the scales differ.
+
+### Answer key and reasons
+
+- **A: incorrect.** `equals` also considers scale, and the scales differ.
+- **B: correct.** The scales differ for `equals`, while the numerical values compare as equal.
+- **C: incorrect.** This reverses both relevant contracts.
+- **D: incorrect.** Different scales are valid BigDecimal representations and do not cause these comparisons to throw.
+
+### Explanation
+
+`BigDecimal.equals` requires both numerical value and scale to be equal, so these values are not equal by `equals`. `compareTo` compares numerical value and therefore returns zero.
+
+### Why this difficulty
+
+Requires distinguishing BigDecimal's representation-sensitive equals contract from its numerical ordering comparison.
+
+### References
+
+- [BigDecimal (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigDecimal.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:9ef4fd637d6c94153ba2213f7b71028a6ee0cdb9613b5ff5af8fee0aeb9eb69a"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 2. t01-boolean-parseboolean
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which strings cause `Boolean.parseBoolean(value)` to return `true`? Select all that apply.
+
+- **A** "true"
+- **B** "TRUE"
+- **C** "TrUe"
+- **D** "yes"
+
+### Answer key and reasons
+
+- **A: correct.** It matches `true` exactly.
+- **B: correct.** The comparison is case-insensitive.
+- **C: correct.** Mixed case also matches because case is ignored.
+- **D: incorrect.** The method does not treat `yes` as a true value.
+
+### Explanation
+
+`Boolean.parseBoolean` returns true exactly when the argument is non-null and equals `"true"` ignoring case.
+
+### Why this difficulty
+
+Checks the exact text rule used by Boolean.parseBoolean rather than relying on common truthy-string conventions from other languages.
+
+### References
+
+- [Boolean.parseBoolean(String) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html#parseBoolean(java.lang.String))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:0b1e7623275f6a34616baa9b67706d684411c852f8fda72205d1a0a30cae7b2e"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 3. t01-integer-boxing-guarantee
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -119,7 +271,7 @@ To record: `"digest": "sha256:a2fbe740c9fa46fdb62cd9e5e9b5287d1abf6ebb534c3d4e67
 
 &nbsp;
 
-## 2. t01-localdate-plus-months
+## 4. t01-localdate-plus-months
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -193,7 +345,293 @@ To record: `"digest": "sha256:24805254eb5d6198170d923e3d1a25233edb90f634da9d21b9
 
 &nbsp;
 
-## 3. t02-pattern-switch-guard
+## 5. t01-numeric-promotion-byte-addition
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Given the declarations below, what is the compile-time type of `result`?
+>
+> ```java
+> byte a = 10;
+> byte b = 20;
+> var result = a + b;
+> ```
+
+- **A** byte
+- **B** short
+- **C** int
+- **D** long
+
+### Answer key and reasons
+
+- **A: incorrect.** The operands are bytes, but binary numeric promotion promotes them before the addition.
+- **B: incorrect.** The result is not promoted merely to short; integral promotion reaches int for byte and short operands.
+- **C: correct.** Binary numeric promotion converts both byte operands to int, so the addition expression has type int.
+- **D: incorrect.** No operand is long, so there is no reason for the expression to be promoted to long.
+
+### Explanation
+
+For binary numeric addition, operands narrower than int are promoted to int. Therefore `a + b` has type int, and `var` infers int.
+
+### Why this difficulty
+
+Tests binary numeric promotion, a frequent source of surprises when arithmetic is applied to byte and short operands.
+
+### References
+
+- [JLS 5.6 Numeric Contexts](https://docs.oracle.com/javase/specs/jls/se21/html/jls-5.html#jls-5.6)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:316807c7951d482af8c9258c8489c77a8b5155ec187a8d28e2970601f25f3ede"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 6. t01-string-strip-vs-trim
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statement best describes the difference between `String.strip()` and `String.trim()`?
+
+- **A** strip() is Unicode-aware through Character.isWhitespace, while trim() uses the older <= U+0020 rule.
+- **B** trim() removes all Unicode whitespace while strip() removes only ASCII spaces.
+- **C** strip() changes internal whitespace but trim() changes only leading whitespace.
+- **D** The two methods are specified to be identical for every possible string.
+
+### Answer key and reasons
+
+- **A: correct.** That is the key semantic difference documented by String.
+- **B: incorrect.** This reverses their relevant whitespace behavior.
+- **C: incorrect.** Both concern leading and trailing characters, not internal whitespace normalization.
+- **D: incorrect.** They can differ for whitespace characters outside the legacy trim range.
+
+### Explanation
+
+`strip()` removes leading and trailing characters considered whitespace by `Character.isWhitespace`. `trim()` uses the older definition based on characters whose code point is less than or equal to U+0020.
+
+### Why this difficulty
+
+Requires distinguishing legacy trim semantics from the Unicode-aware whitespace semantics of strip.
+
+### References
+
+- [String (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:18beae388763468f5c0a8093db0a0a07798a3cb1b3ae7c63534d8059465f34ec"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 7. t02-case-null-pattern-switch
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> In a Java 21 switch that needs to handle a null selector value explicitly, which label is designed for that case?
+
+- **A** case null ->
+- **B** case Object o ->
+- **C** default null ->
+- **D** case Optional.empty() ->
+
+### Answer key and reasons
+
+- **A: correct.** `case null` is the dedicated label for matching a null selector value.
+- **B: incorrect.** A type pattern is not the dedicated null label.
+- **C: incorrect.** This is not valid switch label syntax.
+- **D: incorrect.** Optional.empty() is an object value and is unrelated to a null selector.
+
+### Explanation
+
+Java 21 switch labels may use `case null` to handle a null selector explicitly instead of handling null outside the switch.
+
+### Why this difficulty
+
+Tests the Java 21 switch feature that lets null handling be expressed directly in the switch labels.
+
+### References
+
+- [JLS 14.11 The switch Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:dcfcf7cf389a01f97b7ed8330171a5309a501c0afc0d0288477f85119b250b76"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 8. t02-continue-for-update
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Inside a basic `for (init; condition; update)` loop, a `continue` statement targets that loop. What happens before the loop condition is tested again?
+
+- **A** The update expressions execute, then the condition is tested again.
+- **B** The condition is tested immediately and the update expressions are skipped.
+- **C** The initialization expressions execute again.
+- **D** The loop always terminates.
+
+### Answer key and reasons
+
+- **A: correct.** That is the continue behavior for the basic for statement.
+- **B: incorrect.** The update part is not skipped by a continue that targets the for loop.
+- **C: incorrect.** Initialization occurs only when the for loop is first entered.
+- **D: incorrect.** Continue starts the next iteration path; it does not inherently terminate the loop.
+
+### Explanation
+
+For a basic for statement, continuing the loop first executes the update expressions, then evaluates the condition for the next iteration.
+
+### Why this difficulty
+
+Requires knowing where a continue transfers control inside the basic for-loop execution sequence.
+
+### References
+
+- [JLS 14.14.1.3 Abrupt Completion of for Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.14.1.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:54629b7b4ee290d5f6db3807f98f71cd6ef7e8247d30cbacd8e325b424e9f295"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 9. t02-do-while-first-execution
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What guarantee does a `do { ... } while (condition);` loop make about its body?
+
+- **A** The body executes at least once before the first condition test.
+- **B** The condition is always tested before the body.
+- **C** The body executes exactly once.
+- **D** The body is skipped when the condition is initially false.
+
+### Answer key and reasons
+
+- **A: correct.** The condition follows the body in a do-while statement.
+- **B: incorrect.** That describes a while statement, not a do-while statement.
+- **C: incorrect.** It may repeat while the condition remains true.
+- **D: incorrect.** The first condition test occurs after one body execution.
+
+### Explanation
+
+The body of a do statement executes before the condition is evaluated, so it executes at least once whenever control reaches the statement normally.
+
+### Why this difficulty
+
+Checks the defining control-flow distinction between do-while and while.
+
+### References
+
+- [JLS 14.13 The do Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.13)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:afd742e7cc3ab7537a7f2cff562ba7b7b9e5426307690adafa1f61f651ecba1d"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 10. t02-pattern-switch-guard
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -272,7 +710,7 @@ To record: `"digest": "sha256:7b9f33bbab91807a0a5d1a72bcba7224065f0a6ee616a936fe
 
 &nbsp;
 
-## 4. t02-switch-dominance
+## 11. t02-switch-dominance
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -350,7 +788,175 @@ To record: `"digest": "sha256:1b08bfb104293ab6a09b7785345619c737e8b747e4c7e8ea8a
 
 &nbsp;
 
-## 5. t03-overload-null
+## 12. t02-switch-yield-block
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A `case` arm of a switch expression uses a block and must produce the value of that arm. Which statement is used to provide that value from the block?
+
+- **A** break value;
+- **B** return value;
+- **C** yield value;
+- **D** continue value;
+
+### Answer key and reasons
+
+- **A: incorrect.** `break` does not provide a result value for a switch expression block.
+- **B: incorrect.** `return` exits the enclosing method, not just the switch expression arm.
+- **C: correct.** `yield` transfers control out of the switch expression block while providing its value.
+- **D: incorrect.** `continue` applies to loops and does not produce a switch expression result.
+
+### Explanation
+
+A block in a switch expression uses `yield` to produce the value of the switch expression. `break` exits a switch statement but does not yield a value for a switch expression block.
+
+### Why this difficulty
+
+Requires distinguishing statement-style control transfer from producing a value from a block in a switch expression.
+
+### References
+
+- [JLS 14.21 The yield Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.21)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:1f903957483547db1a7824aebe113ae55eabdb87db3c96384d0eb2f1992e5573"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 13. t03-default-method-conflict
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> A class implements two unrelated interfaces, and both interfaces declare a default method with the same signature. Neither default is more specific. What must the class do to compile?
+
+- **A** Nothing; Java chooses the first interface listed in implements.
+- **B** Override the method and resolve the conflict explicitly.
+- **C** Mark the class final.
+- **D** Make both interface methods static.
+
+### Answer key and reasons
+
+- **A: incorrect.** The order of interfaces in the implements clause does not resolve a default-method conflict.
+- **B: correct.** An overriding declaration in the class removes the ambiguity.
+- **C: incorrect.** Final prevents subclassing but does not resolve inherited default methods.
+- **D: incorrect.** That would change the interfaces themselves; it is not the rule for resolving inherited defaults in the class.
+
+### Explanation
+
+When unrelated inherited defaults conflict and no rule selects one as more specific, the implementing class must provide an overriding method that resolves the conflict.
+
+### Why this difficulty
+
+Tests the conflict-resolution rule when a class inherits unrelated default methods with the same signature.
+
+### References
+
+- [JLS 9.4.1.3 Inheriting Methods with Override-Equivalent Signatures](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.4.1.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:eb4409af4125d56ff4a03527eb2e922dfd072622a1414b72cfc421f545166833"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 14. t03-overload-most-specific
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Suppose a class declares `m(Object)`, `m(String)`, and `m(String...)`. Which overload is selected by the call `m("x")`?
+
+- **A** m(Object)
+- **B** m(String)
+- **C** m(String...)
+- **D** The call is ambiguous.
+
+### Answer key and reasons
+
+- **A: incorrect.** String is a subtype of Object, so the String overload is more specific for this argument.
+- **B: correct.** It is the most specific applicable fixed-arity overload.
+- **C: incorrect.** The varargs overload is not chosen when the more specific fixed-arity String overload applies.
+- **D: incorrect.** Overload resolution can select the String overload unambiguously.
+
+### Explanation
+
+The fixed-arity `m(String)` overload is applicable and is more specific than `m(Object)`. The varargs method is not preferred over the more specific fixed-arity match.
+
+### Why this difficulty
+
+Requires applying overload resolution rather than assuming the broadest or varargs overload wins.
+
+### References
+
+- [JLS 15.12.2.5 Choosing the Most Specific Method](https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.12.2.5)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:1b6f352210c6837847f625af4e8baaaa292dfd33fe43182cc6ebd1bf46154355"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 15. t03-overload-null
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -433,7 +1039,64 @@ To record: `"digest": "sha256:610a17628ad547aed33f9478cf6b1d1d2d4d9757394de00e0c
 
 &nbsp;
 
-## 6. t03-record-facts
+## 16. t03-record-components-members
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> For a record component declared in a record header, which members are mandated by the record declaration? Select all that apply.
+
+- **A** A private final field corresponding to the component.
+- **B** A public accessor method with the same name as the component.
+- **C** A public setter method for the component.
+- **D** A protected mutable field corresponding to the component.
+
+### Answer key and reasons
+
+- **A: correct.** Each component is represented by a private final field.
+- **B: correct.** A public accessor is mandated for every record component.
+- **C: incorrect.** Record components are not given setters; the corresponding fields are final.
+- **D: incorrect.** The mandated field is private and final, not protected and mutable.
+
+### Explanation
+
+For each record component, the compiler provides a private final field and a public accessor with the component's name. A record also has a canonical constructor and is implicitly final as a class.
+
+### Why this difficulty
+
+Requires knowing which members the language mandates for a record instead of treating a record as only compact syntax.
+
+### References
+
+- [JLS 8.10 Record Classes](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10)
+- [Record (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:0ff6b907dc8f3ebd5c84b47981593c5acf73d18ad45fc74bbcd638d25717afb8"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 17. t03-record-facts
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -529,7 +1192,119 @@ To record: `"digest": "sha256:f5f4762b3f2a338b25cdba4922389326500e4fb5396487f286
 
 &nbsp;
 
-## 7. t04-finally-return
+## 18. t03-sealed-direct-subclass-modifier
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> For an ordinary class that directly extends a sealed class, which modifiers can satisfy the requirement that the subclass explicitly declare how sealing continues? Select all that apply.
+
+- **A** final
+- **B** sealed
+- **C** non-sealed
+- **D** abstract by itself
+
+### Answer key and reasons
+
+- **A: correct.** A final subclass closes that branch of the hierarchy.
+- **B: correct.** A sealed subclass continues to restrict which declarations may directly extend it.
+- **C: correct.** A non-sealed subclass reopens that branch to unrestricted subclassing.
+- **D: incorrect.** `abstract` alone does not state the sealing status required for a direct subclass of a sealed class.
+
+### Explanation
+
+A direct subclass of a sealed class must be declared `final`, `sealed`, or `non-sealed` (subject to the detailed rules for the kind of declaration). These modifiers state whether the hierarchy stops, continues with a restricted set, or becomes open again.
+
+### Why this difficulty
+
+Requires knowing the closure rules for direct subclasses of a sealed class rather than only the syntax of the permits clause.
+
+### References
+
+- [JLS 8.1.1.2 sealed, non-sealed, and final Classes](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.1.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e959d38c6a866d48a"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 19. t04-catch-order-unreachable
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Why is placing `catch (FileNotFoundException e)` after `catch (IOException e)` for the same try statement invalid?
+
+- **A** The later catch is unreachable because the superclass catch already handles that subtype.
+- **B** Java permits only one catch clause per try statement.
+- **C** Checked exceptions cannot be caught.
+- **D** FileNotFoundException is unrelated to IOException.
+
+### Answer key and reasons
+
+- **A: correct.** The broader IOException catch subsumes FileNotFoundException.
+- **B: incorrect.** A try statement may have multiple catch clauses.
+- **C: incorrect.** Checked exceptions are routinely caught; the issue is the ordering and subtype relationship.
+- **D: incorrect.** FileNotFoundException extends IOException.
+
+### Explanation
+
+`FileNotFoundException` is a subtype of `IOException`. The earlier catch for `IOException` already catches every FileNotFoundException, so the later subtype catch cannot be reached.
+
+### Why this difficulty
+
+Checks catch-clause reachability when exception types have an inheritance relationship.
+
+### References
+
+- [JLS 11.2.3 Exception Checking](https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:e3960611c7004121f66ad18889cfbca1a5397b083d8e94f24539f969cd9e7eda"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 20. t04-finally-return
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -608,7 +1383,175 @@ To record: `"digest": "sha256:b399a71cdc40ede1c57471984ea2bb491506700850485c6168
 
 &nbsp;
 
-## 8. t04-try-with-resources-order
+## 21. t04-multicatch-related-types
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statement about the alternatives in a multi-catch parameter such as `catch (A | B ex)` is correct?
+
+- **A** One alternative may be a subclass of another as long as it appears first.
+- **B** No alternative may be a subtype of another alternative.
+- **C** All alternatives must have the same direct superclass.
+- **D** Only unchecked exception types may be combined.
+
+### Answer key and reasons
+
+- **A: incorrect.** Ordering does not make subtype-related alternatives legal inside the same multi-catch parameter.
+- **B: correct.** The language rejects subtype-related alternatives in the same multi-catch parameter.
+- **C: incorrect.** There is no requirement that all alternatives share the same direct superclass.
+- **D: incorrect.** Multi-catch may combine checked exception types as well, provided the other rules are satisfied.
+
+### Explanation
+
+It is a compile-time error if one alternative in a multi-catch is a subtype of another alternative. The alternatives must not be related by subclassing in that way.
+
+### Why this difficulty
+
+Tests a compile-time restriction specific to multi-catch alternatives that is easy to miss when reasoning only from normal catch ordering.
+
+### References
+
+- [JLS 14.20 The try statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a1aeb4003a853b4838c8b30c803b2cabb36edad84a40cba6956339dfb850be01"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 22. t04-overriding-checked-exception
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A superclass method declares a checked exception in its `throws` clause. Which changes are allowed in a valid overriding method? Select all that apply.
+
+- **A** Omit the checked exception entirely.
+- **B** Declare a narrower checked exception subtype.
+- **C** Declare a broader checked exception superclass not permitted by the overridden method.
+- **D** Replace the checked exception with arbitrary unrelated checked exceptions.
+
+### Answer key and reasons
+
+- **A: correct.** An overriding method may declare fewer checked exceptions.
+- **B: correct.** A compatible narrower checked exception is permitted.
+- **C: incorrect.** That would widen the checked exception contract and is not allowed.
+- **D: incorrect.** Unrelated checked exceptions must still satisfy the overriding throws-clause restrictions.
+
+### Explanation
+
+An overriding method may omit the checked exception or declare a narrower checked exception compatible with the overridden declaration. It may not broaden the checked exception contract.
+
+### Why this difficulty
+
+Checks how the throws clause may change during method overriding, especially for checked exceptions.
+
+### References
+
+- [JLS 8.4.8.3 Requirements in Overriding and Hiding](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:8df117237acec009efb84ecffeaf663a6797508f33efdffed8fbf57c920ce86f"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 23. t04-suppressed-exception
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> In a try-with-resources statement, the try body throws exception `E1`, and then closing the resource throws exception `E2`. What is the usual result defined by the language translation?
+
+- **A** E2 replaces E1 completely.
+- **B** E1 is propagated and E2 is added to E1 as a suppressed exception.
+- **C** Both exceptions are discarded and execution continues normally.
+- **D** The JVM wraps both exceptions in an Error.
+
+### Answer key and reasons
+
+- **A: incorrect.** The close exception does not normally replace the exception already thrown by the try body.
+- **B: correct.** This preserves the primary failure while retaining the close failure for inspection.
+- **C: incorrect.** The primary exception is still thrown.
+- **D: incorrect.** Try-with-resources uses suppressed exceptions rather than an Error wrapper for this case.
+
+### Explanation
+
+The exception from the try body remains the primary exception. The exception thrown while closing the resource is recorded as a suppressed exception on the primary exception.
+
+### Why this difficulty
+
+Requires understanding the interaction between an exception from the try body and another exception thrown while an automatic resource is closed.
+
+### References
+
+- [JLS 14.20.3 try-with-resources](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:cd0599da3ec29c624c4da95798535333a9a8d079a228203e2eba8b0ec4920801"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 24. t04-try-with-resources-order
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -696,7 +1639,7 @@ To record: `"digest": "sha256:6e4d63f790dc1427e9bb3b63f0be08e6c7e0c9ab7dc0e5802e
 
 &nbsp;
 
-## 9. t05-immutable-and-fixed-size-lists
+## 25. t05-immutable-and-fixed-size-lists
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -784,7 +1727,7 @@ To record: `"digest": "sha256:fa5b94ce4a081fd1fc275bf77b3d633d5da2dfb89037ad27c7
 
 &nbsp;
 
-## 10. t05-list-remove-overload
+## 26. t05-list-remove-overload
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -862,7 +1805,399 @@ To record: `"digest": "sha256:aa3ad1790530cd56ef478623a373c5729f588f5b334bcac407
 
 &nbsp;
 
-## 11. t06-stream-facts
+## 27. t05-map-of-null-rejection
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements are true of maps created by `Map.of(...)`? Select all that apply.
+
+- **A** They reject null keys.
+- **B** They reject null values.
+- **C** They accept one null key as long as all values are non-null.
+- **D** Null entries are silently omitted.
+
+### Answer key and reasons
+
+- **A: correct.** The factory contract disallows null keys.
+- **B: correct.** The factory contract disallows null values.
+- **C: incorrect.** No null key is permitted.
+- **D: incorrect.** The factory throws rather than dropping null entries.
+
+### Explanation
+
+The unmodifiable maps created by `Map.of` disallow null keys and null values. Attempts to create them with either produce `NullPointerException`.
+
+### Why this difficulty
+
+Checks the null restrictions of the convenience factory methods for unmodifiable maps.
+
+### References
+
+- [Map (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:4f93455ea9bcd769eb8c704e4168711950095f2f6a3e4905e6c268c896433416"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 28. t05-sequenced-collection-reversed
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements describe the `reversed()` method of `SequencedCollection` in Java 21? Select all that apply.
+
+- **A** It returns a reverse-ordered view of the collection.
+- **B** The first element of the original is the last element of the reversed view.
+- **C** It must copy every element into a new independent collection.
+- **D** The reversed view has the same iteration order as the original.
+
+### Answer key and reasons
+
+- **A: correct.** The method is specified as producing a view with inverted encounter order.
+- **B: correct.** First and last are inverted by the reverse-ordered view.
+- **C: incorrect.** The API specifies a view, not a mandatory independent copy.
+- **D: incorrect.** Its encounter order is the inverse of the original.
+
+### Explanation
+
+`reversed()` returns a reverse-ordered view. In that view the encounter order is inverted, so first and last are exchanged and iteration proceeds in the reverse encounter order.
+
+### Why this difficulty
+
+Tests the Java 21 SequencedCollection contract and the meaning of its reverse-ordered view.
+
+### References
+
+- [SequencedCollection (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/SequencedCollection.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:faaaa171a52a8b5880abdb3bbc8f081f454bfa669ddb3aa7c967090b8a40b1de"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 29. t05-set-of-duplicate-elements
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What happens when `Set.of("a", "a")` is evaluated?
+
+- **A** It creates a set containing one element.
+- **B** It creates a two-element set.
+- **C** It throws IllegalArgumentException.
+- **D** It throws UnsupportedOperationException during creation.
+
+### Answer key and reasons
+
+- **A: incorrect.** Unlike adding twice to many mutable Set implementations, `Set.of` rejects duplicate arguments instead of silently keeping one.
+- **B: incorrect.** A Set cannot contain duplicate equal elements, and the factory does not preserve both arguments.
+- **C: correct.** The `Set.of` contract specifies `IllegalArgumentException` for duplicate elements.
+- **D: incorrect.** UnsupportedOperationException applies to mutation attempts on the created unmodifiable set, not duplicate arguments at creation time.
+
+### Explanation
+
+The unmodifiable sets created by `Set.of` reject duplicate elements at creation time. Passing duplicates causes `IllegalArgumentException`.
+
+### Why this difficulty
+
+Tests the documented creation-time contract of the immutable Set factory methods.
+
+### References
+
+- [Set (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:f55f5f7ac1729a0d85579fa56c110814d20e8aebdf3eb7efc1b2e91eb026df5d"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 30. t05-wildcard-extends-read
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Given `List<? extends Number> values`, which operation is guaranteed to be type-safe and compile?
+
+- **A** Number n = values.get(0);
+- **B** values.add(Integer.valueOf(1));
+- **C** values.add(Double.valueOf(1.0));
+- **D** values.add(new BigDecimal("1"));
+
+### Answer key and reasons
+
+- **A: correct.** Whatever the captured subtype is, every element is a Number.
+- **B: incorrect.** The captured element type might not be Integer, so adding an Integer is not generally allowed.
+- **C: incorrect.** The captured element type might not be Double.
+- **D: incorrect.** The captured element type might be some other Number subtype.
+
+### Explanation
+
+The wildcard says the list contains elements of some unknown subtype of Number. Reading an element as Number is safe. Adding a specific Number subtype is not generally safe because the actual element type might be a different subtype.
+
+### Why this difficulty
+
+Tests the producer side of upper-bounded wildcards and why they do not safely accept arbitrary Number values.
+
+### References
+
+- [JLS 4.5.1 Type Arguments of Parameterized Types](https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.5.1)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:8ec87ba3fc8e34ea91d56f057bcc827f26cd7422fab6d3dec176c257b1aa65cf"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 31. t06-flatmap-flatten
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What is the defining effect of `Stream.flatMap` compared with `Stream.map`?
+
+- **A** It maps each element to a stream and flattens the mapped streams into one stream.
+- **B** It sorts the stream before applying the mapper.
+- **C** It always executes the mapper in parallel.
+- **D** It converts every element to Optional.
+
+### Answer key and reasons
+
+- **A: correct.** That is the core flatMap operation.
+- **B: incorrect.** Sorting is unrelated to flatMap.
+- **C: incorrect.** Parallelism is a property of the stream pipeline, not an unconditional effect of flatMap.
+- **D: incorrect.** flatMap operates on streams returned by the mapper; Optional is not implicit.
+
+### Explanation
+
+`flatMap` maps each input element to a stream and then replaces each mapped stream with its contents in the resulting stream, effectively flattening one level.
+
+### Why this difficulty
+
+Requires distinguishing one-to-one mapping from one-to-many mapping followed by flattening.
+
+### References
+
+- [Stream.flatMap(Function) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#flatMap(java.util.function.Function))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:81a1d82b3b182549e43a2d4d1a5c38735f05ee764f2aaa461e8faba802341afc"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 32. t06-lambda-effectively-final
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> A lambda expression captures a local variable declared in its enclosing method. What must be true of that local variable?
+
+- **A** It must be declared static.
+- **B** It must be final or effectively final.
+- **C** It must have a primitive type.
+- **D** It must be assigned inside the lambda before being read.
+
+### Answer key and reasons
+
+- **A: incorrect.** Local variables cannot be made static, and static status is not the capture rule.
+- **B: correct.** This is the language rule for captured local variables and parameters.
+- **C: incorrect.** Both primitive and reference-typed locals may be captured.
+- **D: incorrect.** The capture rule is not satisfied by assigning the variable inside the lambda; captured locals are final or effectively final.
+
+### Explanation
+
+A local variable, method parameter, or exception parameter referenced from a lambda body must be final or effectively final, subject to the definite-assignment rules.
+
+### Why this difficulty
+
+Checks the capture rule for local variables used from a lambda body.
+
+### References
+
+- [JLS 15.27.2 Lambda Body](https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:e5ebba5c9d6aeaef72da6498990ea36c3a1b80e5266da18c242d5fc478e7c75e"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 33. t06-reduce-empty-identity
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does `Stream.<Integer>empty().reduce(10, Integer::sum)` return?
+
+- **A** 0
+- **B** 10
+- **C** Optional.empty()
+- **D** It throws NoSuchElementException.
+
+### Answer key and reasons
+
+- **A: incorrect.** The identity supplied by the caller is 10, not the additive identity chosen implicitly by the API.
+- **B: correct.** An empty stream returns the supplied identity for this overload.
+- **C: incorrect.** The overload without an identity returns Optional; the identity overload returns a value directly.
+- **D: incorrect.** The identity value defines the result even for an empty stream.
+
+### Explanation
+
+The two-argument `reduce(identity, accumulator)` form starts with the identity value. With no stream elements, there is nothing to accumulate, so the identity value is returned.
+
+### Why this difficulty
+
+Requires understanding the identity overload of reduce, especially its defined result for an empty stream.
+
+### References
+
+- [Stream.reduce(T, BinaryOperator) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#reduce(T,java.util.function.BinaryOperator))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:ece7c2a1eb9fcf982e92b36c2c350fe2c7809be39feb1fe1e90504b91691d6e9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 34. t06-stream-facts
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -924,7 +2259,7 @@ To record: `"digest": "sha256:6aefbf857ab03ebf0639c5df18fdf73d11544b50be59c6ec9f
 
 &nbsp;
 
-## 12. t06-stream-laziness
+## 35. t06-stream-laziness
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -1010,7 +2345,63 @@ To record: `"digest": "sha256:6bcb8ebb13ff8df307b70cee16d7a84159a68ad161012cde5b
 
 &nbsp;
 
-## 13. t07-exports-and-opens
+## 36. t06-stream-single-use
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which statement best describes the intended reuse model of a Java `Stream`?
+
+- **A** A Stream is a reusable container and can run terminal operations repeatedly.
+- **B** A Stream should be consumed once; create a new stream to traverse the source again.
+- **C** Only parallel streams are single-use.
+- **D** Calling close() resets a Stream so it can be reused.
+
+### Answer key and reasons
+
+- **A: incorrect.** Streams are pipelines, not reusable data containers.
+- **B: correct.** This matches the Stream contract and lifecycle.
+- **C: incorrect.** The single-use rule applies to streams generally.
+- **D: incorrect.** Closing a stream does not reset its pipeline for reuse.
+
+### Explanation
+
+A stream should be operated on only once. After a terminal operation, the same stream pipeline is not intended to be reused; attempting reuse may result in `IllegalStateException` when reuse is detected.
+
+### Why this difficulty
+
+Checks the fundamental lifecycle rule that distinguishes streams from reusable collections.
+
+### References
+
+- [Stream (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:80d54f91c7915d958a4f1c86e90cc2f3f3b7f5d9322012d1153d9047e0339099"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 37. t07-exports-and-opens
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -1072,7 +2463,231 @@ To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf
 
 &nbsp;
 
-## 14. t07-requires-transitive
+## 38. t07-java-module-launch
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which command form launches main class `p.Main` from named module `com.example.app` when the module is available under `mods`?
+
+- **A** java --module-path mods --module com.example.app/p.Main
+- **B** java --classpath mods --requires com.example.app p.Main
+- **C** java --exports com.example.app p.Main
+- **D** java module-info.java p.Main
+
+### Answer key and reasons
+
+- **A: correct.** This names both the module path and the module/main-class pair.
+- **B: incorrect.** `--requires` is not a java launcher option for selecting a module this way.
+- **C: incorrect.** Exports is a module declaration/access concept, not the normal launch syntax.
+- **D: incorrect.** The launcher does not launch a named module by passing its module-info source file.
+
+### Explanation
+
+The `java` launcher uses `--module-path` (or `-p`) to locate modules and `--module module[/mainclass]` (or `-m`) to name the module and optionally its main class.
+
+### Why this difficulty
+
+Checks the command-line form for launching a main class from a named module on a module path.
+
+### References
+
+- [java Command (JDK 21)](https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 39. t07-module-service-directives
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> In a module declaration using the Java service-loading mechanism, which directive pair is correct? Select all that apply.
+
+- **A** A consumer uses `uses com.example.Service;`.
+- **B** A provider uses `provides com.example.Service with com.example.ServiceImpl;`.
+- **C** A consumer must declare `exports com.example.Service;` to discover providers.
+- **D** A provider registers the implementation with `requires ServiceImpl;`.
+
+### Answer key and reasons
+
+- **A: correct.** The `uses` directive declares that the module discovers implementations of that service.
+- **B: correct.** The `provides ... with ...` directive registers the implementation for the service.
+- **C: incorrect.** Exports controls package access, not service consumption.
+- **D: incorrect.** `requires` names a module dependency, not a service implementation.
+
+### Explanation
+
+A consuming module declares `uses ServiceType`. A provider module declares `provides ServiceType with ImplementationType` for one or more provider implementations.
+
+### Why this difficulty
+
+Requires mapping service consumption and service implementation to the correct module declaration directives.
+
+### References
+
+- [JLS 7.7 Module Declarations](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 40. t07-qualified-exports
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does `exports com.example.internal to client.one, client.two;` mean in a module declaration?
+
+- **A** The package is exported only to client.one and client.two.
+- **B** The package is exported to every module except client.one and client.two.
+- **C** The package is opened for deep reflection to all modules.
+- **D** The two client modules are automatically required as dependencies.
+
+### Answer key and reasons
+
+- **A: correct.** The `to` clause names the target modules of the qualified export.
+- **B: incorrect.** The named modules are included targets, not exclusions.
+- **C: incorrect.** Opening for reflection is controlled by `opens`, not `exports`.
+- **D: incorrect.** Exports does not create requires directives.
+
+### Explanation
+
+A qualified exports directive makes the package accessible at compile time and run time only to the named target modules, rather than exporting it to every module that reads the exporting module.
+
+### Why this difficulty
+
+Tests the difference between an unqualified export and an export targeted to a fixed set of named modules.
+
+### References
+
+- [JLS 7.7.2 Exported and Opened Packages](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 41. t07-requires-static
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> What is the key effect of `requires static com.example.optional;` in a module declaration?
+
+- **A** The dependency is optional at compile time but mandatory at run time.
+- **B** The dependency is required at compile time but optional at run time.
+- **C** The dependency is ignored at both compile time and run time.
+- **D** The dependency is automatically re-exported to modules that require this module.
+
+### Answer key and reasons
+
+- **A: incorrect.** That reverses the purpose of `requires static`.
+- **B: correct.** This is the special readability rule expressed by a static requires directive.
+- **C: incorrect.** The dependency still matters to compilation.
+- **D: incorrect.** Re-exporting readability is the role of `requires transitive`, not `requires static`.
+
+### Explanation
+
+A `requires static` dependency is required during compilation when the depending module is compiled, but it is optional during the run-time resolution of the depending module.
+
+### Why this difficulty
+
+Requires distinguishing ordinary module readability from the special compile-time/runtime meaning of a static requires modifier.
+
+### References
+
+- [JLS 7.7.1 Dependences](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.1)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 42. t07-requires-transitive
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1212,7 +2827,63 @@ To record: `"digest": "sha256:af626b88c696999048debefb40bbe702accffa6ba8b6c839df
 
 &nbsp;
 
-## 15. t08-executor-close
+## 43. t08-concurrenthashmap-null
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about `ConcurrentHashMap` are correct? Select all that apply.
+
+- **A** Null keys are not allowed.
+- **B** Null values are not allowed.
+- **C** One null key is allowed, like HashMap.
+- **D** Null values are stored but ignored by get().
+
+### Answer key and reasons
+
+- **A: correct.** ConcurrentHashMap rejects null keys.
+- **B: correct.** ConcurrentHashMap rejects null values.
+- **C: incorrect.** ConcurrentHashMap deliberately does not support null keys.
+- **D: incorrect.** Null values cannot be inserted.
+
+### Explanation
+
+ConcurrentHashMap does not permit null keys or null values. This lets null from retrieval operations consistently represent the absence of a mapping.
+
+### Why this difficulty
+
+Checks a deliberate API restriction that affects how absence can be represented in concurrent maps.
+
+### References
+
+- [ConcurrentHashMap (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:b99d271cbeebe7c0b5f423208757f0a94ffa2ed5c743b121de4993d5ad04b15d"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 44. t08-executor-close
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1292,7 +2963,119 @@ To record: `"digest": "sha256:4a02b0bcaa676c452f8468022e676f0c2d5be448f8d239a884
 
 &nbsp;
 
-## 16. t08-virtual-thread-daemon
+## 45. t08-synchronized-reentrant
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A thread already owns an object's intrinsic monitor and, before releasing it, enters another `synchronized` block guarded by the same object. What happens?
+
+- **A** The thread deadlocks itself immediately.
+- **B** The thread can enter because monitor locking is reentrant.
+- **C** The second synchronized block is skipped.
+- **D** The JVM throws IllegalMonitorStateException on entry.
+
+### Answer key and reasons
+
+- **A: incorrect.** Intrinsic monitors are reentrant, so self-deadlock does not occur merely from reacquiring the same monitor.
+- **B: correct.** The same thread may acquire the monitor recursively.
+- **C: incorrect.** The block executes normally after the reentrant acquisition.
+- **D: incorrect.** Reentrant acquisition by the owner is legal.
+
+### Explanation
+
+Java intrinsic locks are reentrant. The owning thread can acquire the same monitor again and must perform the corresponding number of monitor exits before ownership is fully released.
+
+### Why this difficulty
+
+Tests a core monitor property that matters when synchronized methods call other synchronized code on the same object.
+
+### References
+
+- [JLS 17.1 Synchronization](https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.1)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:296d4d4085ed01b5f051a28e6f727b6062e7a83d81afc293ab18ededcd02fe41"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 46. t08-thread-interrupted-clears
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does the static method `Thread.interrupted()` do with the current thread's interrupt status?
+
+- **A** It returns the current status and clears that status.
+- **B** It returns the current status without changing it.
+- **C** It interrupts every live thread in the JVM.
+- **D** It throws InterruptedException whenever the status is set.
+
+### Answer key and reasons
+
+- **A: correct.** The static method both reports and clears the current thread's interrupted status.
+- **B: incorrect.** That behavior is associated with querying via `isInterrupted`; `Thread.interrupted()` clears the status.
+- **C: incorrect.** The method only examines the current thread's status.
+- **D: incorrect.** The method returns a boolean; it does not throw InterruptedException merely because the status is set.
+
+### Explanation
+
+`Thread.interrupted()` tests whether the current thread has been interrupted and clears its interrupted status as part of the operation.
+
+### Why this difficulty
+
+Tests the subtle difference between querying interruption with the static interrupted method and the instance isInterrupted method.
+
+### References
+
+- [Thread.interrupted() (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html#interrupted())
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:71375a89cf8aabd9cc8856353444ff8243a365043d557c5cfe86115164150af9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 47. t08-virtual-thread-daemon
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1381,7 +3164,231 @@ To record: `"digest": "sha256:1a524f8719b99f90a06295ef3391bf1d248e689b5dcfca3aef
 
 &nbsp;
 
-## 17. t09-read-all-lines
+## 48. t08-volatile-increment
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Suppose `count` is declared `volatile int count;` and multiple threads execute `count++`. Which statement is correct?
+
+- **A** Every increment is atomic because count is volatile.
+- **B** Updates are visible according to volatile semantics, but increments can still be lost.
+- **C** The program cannot compile because volatile cannot be used with int.
+- **D** Volatile makes count++ equivalent to synchronizing the whole statement.
+
+### Answer key and reasons
+
+- **A: incorrect.** Volatile does not turn a compound increment into one atomic action.
+- **B: correct.** The field has volatile visibility semantics, while concurrent read-modify-write operations may race.
+- **C: incorrect.** Primitive fields, including int, may be declared volatile.
+- **D: incorrect.** No implicit monitor is acquired for the compound increment.
+
+### Explanation
+
+Volatile reads and writes have visibility and ordering guarantees, but `count++` is a compound read-modify-write operation and is not made atomic merely because the field is volatile.
+
+### Why this difficulty
+
+Separates volatile visibility guarantees from atomicity of a compound read-modify-write operation.
+
+### References
+
+- [JLS 17.4.5 Happens-before Order](https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.4.5)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 49. t09-bufferedreader-readline
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about `BufferedReader.readLine()` are correct? Select all that apply.
+
+- **A** The returned string excludes the line-termination characters.
+- **B** It returns null when the end of the stream has been reached and no line remains.
+- **C** It always includes `\n` at the end of the returned string.
+- **D** It returns an empty string instead of null for end of stream.
+
+### Answer key and reasons
+
+- **A: correct.** The terminator is not part of the returned line.
+- **B: correct.** Null is the documented end-of-stream result.
+- **C: incorrect.** Line-termination characters are excluded.
+- **D: incorrect.** An empty line and end of stream are distinct; EOF is reported with null.
+
+### Explanation
+
+`readLine` returns a line of text without the line-termination characters. It returns null when the end of the stream has been reached without another line.
+
+### Why this difficulty
+
+Checks the exact return contract of one of the most common character-input methods.
+
+### References
+
+- [BufferedReader.readLine() (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html#readLine())
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:fcb833284302075e88da9b405e83b435dcaf7c0b287cbc63a2d7137a9d743252"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 50. t09-files-lines-close
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What is the recommended way to use the `Stream<String>` returned by `Files.lines(path)`?
+
+- **A** Use it in try-with-resources so the stream, and therefore the file, is closed.
+- **B** Never close it; terminal operations always close every stream automatically.
+- **C** Call System.gc() after the terminal operation instead of closing it.
+- **D** Convert the Path to File first; that removes the need to close the stream.
+
+### Answer key and reasons
+
+- **A: correct.** This follows the API contract for closing the file-backed stream.
+- **B: incorrect.** Terminal stream operations do not generally close streams automatically.
+- **C: incorrect.** Garbage collection is not a resource-management mechanism for an open file stream.
+- **D: incorrect.** Changing the path representation does not change the lifecycle of the stream returned by `Files.lines`.
+
+### Explanation
+
+The returned stream is lazily populated and encapsulates an open file, so it should be closed promptly, typically by placing the stream itself in a try-with-resources statement.
+
+### Why this difficulty
+
+Checks the resource-lifecycle requirement of a lazily populated stream backed by an open file.
+
+### References
+
+- [Files.lines(Path) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#lines(java.nio.file.Path))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 51. t09-path-resolve-absolute
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> For `base.resolve(other)`, what happens when `other` is an absolute `Path`?
+
+- **A** The absolute path is appended to base.
+- **B** The method returns other.
+- **C** The method always throws IllegalArgumentException.
+- **D** The method converts both paths to relative paths before combining them.
+
+### Answer key and reasons
+
+- **A: incorrect.** An absolute `other` path is not appended to the base.
+- **B: correct.** An absolute `other` path is already resolved independently of the base.
+- **C: incorrect.** Being absolute is a documented case, not inherently an error.
+- **D: incorrect.** The API defines no such conversion.
+
+### Explanation
+
+The `Path.resolve(Path)` contract says that if the other path is absolute, the method returns `other`; the base path is not prepended.
+
+### Why this difficulty
+
+Tests an API edge case of Path.resolve that differs from simply concatenating path components.
+
+### References
+
+- [Path.resolve(Path) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html#resolve(java.nio.file.Path))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:318920b7b1473dca3a6026de7b1fa03ac05160f8b68f49f2121dad39c11c51d9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 52. t09-read-all-lines
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1462,7 +3469,7 @@ To record: `"digest": "sha256:4e5421d645083af9e41ed10336eef3972945a5b8d2f3ff9bf2
 
 &nbsp;
 
-## 18. t09-serialization-facts
+## 53. t09-serialization-facts
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -1574,7 +3581,231 @@ To record: `"digest": "sha256:9879711d5575e507206e13321fa33849bdbfa5f5ca2e2634d6
 
 &nbsp;
 
-## 19. t10-locale-to-string
+## 54. t09-serialization-transient-static
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Under default Java object serialization, which fields are not part of the default serialized instance state? Select all that apply.
+
+- **A** static fields
+- **B** transient fields
+- **C** ordinary non-transient instance fields
+- **D** every final instance field
+
+### Answer key and reasons
+
+- **A: correct.** Static fields are class state, not default serialized instance state.
+- **B: correct.** The transient modifier excludes the field from default serialization.
+- **C: incorrect.** These are the core fields included by default serialization when their values are serializable as required.
+- **D: incorrect.** Final instance fields are not excluded merely because they are final.
+
+### Explanation
+
+Default serialization writes the non-static, non-transient fields of a serializable object. Static fields belong to the class rather than the individual object, and transient fields are explicitly excluded.
+
+### Why this difficulty
+
+Requires distinguishing persistent instance state from fields that default serialization does not save.
+
+### References
+
+- [Java Object Serialization Specification: Serializable Fields](https://docs.oracle.com/en/java/javase/21/docs/specs/serialization/serial-arch.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:8da42eededa956e63011fa2b3c1952447bd65e19649f6d9f4097914795f847ac"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 55. t10-collator-locale-sensitive
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which Java API is designed to compare strings according to locale-sensitive collation rules?
+
+- **A** Collator
+- **B** StringBuilder
+- **C** Scanner
+- **D** Formatter
+
+### Answer key and reasons
+
+- **A: correct.** Collator is the locale-sensitive comparison abstraction in java.text.
+- **B: incorrect.** StringBuilder is for mutable character sequences, not localized comparison.
+- **C: incorrect.** Scanner parses input; it is not the collation API.
+- **D: incorrect.** Formatter produces formatted text but is not the dedicated locale-sensitive comparison API.
+
+### Explanation
+
+`Collator` performs locale-sensitive String comparison. An instance for a desired locale can be obtained with `Collator.getInstance(locale)`.
+
+### Why this difficulty
+
+Tests the API intended for locale-sensitive string comparison rather than code-unit or natural String ordering.
+
+### References
+
+- [Collator (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Collator.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 56. t10-datetimeformatter-locale-immutability
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about `DateTimeFormatter` are correct? Select all that apply.
+
+- **A** DateTimeFormatter is immutable and thread-safe.
+- **B** withLocale(locale) returns a formatter with the locale override.
+- **C** withLocale(locale) mutates the original formatter in place.
+- **D** A DateTimeFormatter may only be used by one thread.
+
+### Answer key and reasons
+
+- **A: correct.** The API explicitly documents these properties.
+- **B: correct.** The method produces a formatter using the requested locale override.
+- **C: incorrect.** The formatter is immutable; configuration methods return another formatter.
+- **D: incorrect.** The class is thread-safe and can be shared.
+
+### Explanation
+
+`DateTimeFormatter` is immutable and thread-safe. Methods such as `withLocale` return a new formatter with an override rather than mutating the original formatter.
+
+### Why this difficulty
+
+Combines localization with the immutable, thread-safe design of DateTimeFormatter.
+
+### References
+
+- [DateTimeFormatter (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/format/DateTimeFormatter.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a0f737bdcf04c1464c89dfaa58036be7287af8ec3bfde4b8b11bdd4e23d2013e"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 57. t10-locale-language-tag
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> After `Locale locale = Locale.forLanguageTag("pt-BR");`, what do `locale.getLanguage()` and `locale.getCountry()` return?
+
+- **A** pt and BR
+- **B** PT and br
+- **C** pt-BR and an empty string
+- **D** Portuguese and Brazil
+
+### Answer key and reasons
+
+- **A: correct.** The language subtag is `pt` and the region subtag is `BR`.
+- **B: incorrect.** Locale language codes are normalized to lower case and country codes to upper case in these accessors.
+- **C: incorrect.** The language and country are exposed as separate components.
+- **D: incorrect.** The accessors return language and country codes, not localized display names.
+
+### Explanation
+
+`Locale.forLanguageTag` interprets the BCP 47 tag. For `pt-BR`, the language is `pt` and the country/region is `BR`.
+
+### Why this difficulty
+
+Checks how a standard BCP 47 language tag is represented by Locale.
+
+### References
+
+- [Locale (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:705582ca1e729220da81dd8a18408652f0ed6793c10aeb1945635f40ef18b15f"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 58. t10-locale-to-string
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -1649,7 +3880,63 @@ To record: `"digest": "sha256:52ba86a006fd5ca4762e840f473707568a5907be1fe1687faf
 
 &nbsp;
 
-## 20. t10-resource-bundle-fallback
+## 59. t10-numberformat-currency-instance
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which factory method is intended to create a locale-sensitive formatter for monetary values?
+
+- **A** NumberFormat.getCurrencyInstance(locale)
+- **B** NumberFormat.getIntegerInstance(locale)
+- **C** NumberFormat.getPercentInstance(locale)
+- **D** Locale.getCurrencyFormatter()
+
+### Answer key and reasons
+
+- **A: correct.** This is the currency-specific NumberFormat factory.
+- **B: incorrect.** That factory formats integers, not currency.
+- **C: incorrect.** That factory formats percentages.
+- **D: incorrect.** Locale does not provide such a factory method.
+
+### Explanation
+
+`NumberFormat.getCurrencyInstance(locale)` returns a number formatter configured for currency formatting according to the supplied locale.
+
+### Why this difficulty
+
+Tests selection of the locale-sensitive formatter intended specifically for monetary values.
+
+### References
+
+- [NumberFormat (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/NumberFormat.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 60. t10-resource-bundle-fallback
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -1729,24 +4016,64 @@ To record: `"digest": "sha256:faaf1a0cb99cf50d4449d2f3dd1ff0b185c6b3661dd9700b1d
 
 | # | Question | Verdict | Reviewer | Date |
 |---:|---|---|---|---|
-| 1 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
-| 2 | `t01-localdate-plus-months` | approved | vinicius-ssantos | 2026-10-02 |
-| 3 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
-| 4 | `t02-switch-dominance` | approved | vinicius-ssantos | 2026-10-02 |
-| 5 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
-| 6 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 7 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
-| 8 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
-| 9 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
-| 10 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
-| 11 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 12 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
-| 13 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
-| 14 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
-| 15 | `t08-executor-close` | approved | vinicius-ssantos | 2026-10-02 |
-| 16 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
-| 17 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
-| 18 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 19 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
-| 20 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
+| 1 | `t01-bigdecimal-equals-scale` |  |  |  |
+| 2 | `t01-boolean-parseboolean` |  |  |  |
+| 3 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
+| 4 | `t01-localdate-plus-months` | approved | vinicius-ssantos | 2026-10-02 |
+| 5 | `t01-numeric-promotion-byte-addition` |  |  |  |
+| 6 | `t01-string-strip-vs-trim` |  |  |  |
+| 7 | `t02-case-null-pattern-switch` |  |  |  |
+| 8 | `t02-continue-for-update` |  |  |  |
+| 9 | `t02-do-while-first-execution` |  |  |  |
+| 10 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
+| 11 | `t02-switch-dominance` | approved | vinicius-ssantos | 2026-10-02 |
+| 12 | `t02-switch-yield-block` |  |  |  |
+| 13 | `t03-default-method-conflict` |  |  |  |
+| 14 | `t03-overload-most-specific` |  |  |  |
+| 15 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
+| 16 | `t03-record-components-members` |  |  |  |
+| 17 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 18 | `t03-sealed-direct-subclass-modifier` |  |  |  |
+| 19 | `t04-catch-order-unreachable` |  |  |  |
+| 20 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
+| 21 | `t04-multicatch-related-types` |  |  |  |
+| 22 | `t04-overriding-checked-exception` |  |  |  |
+| 23 | `t04-suppressed-exception` |  |  |  |
+| 24 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
+| 25 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
+| 26 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
+| 27 | `t05-map-of-null-rejection` |  |  |  |
+| 28 | `t05-sequenced-collection-reversed` |  |  |  |
+| 29 | `t05-set-of-duplicate-elements` |  |  |  |
+| 30 | `t05-wildcard-extends-read` |  |  |  |
+| 31 | `t06-flatmap-flatten` |  |  |  |
+| 32 | `t06-lambda-effectively-final` |  |  |  |
+| 33 | `t06-reduce-empty-identity` |  |  |  |
+| 34 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 35 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
+| 36 | `t06-stream-single-use` |  |  |  |
+| 37 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
+| 38 | `t07-java-module-launch` |  |  |  |
+| 39 | `t07-module-service-directives` |  |  |  |
+| 40 | `t07-qualified-exports` |  |  |  |
+| 41 | `t07-requires-static` |  |  |  |
+| 42 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
+| 43 | `t08-concurrenthashmap-null` |  |  |  |
+| 44 | `t08-executor-close` | approved | vinicius-ssantos | 2026-10-02 |
+| 45 | `t08-synchronized-reentrant` |  |  |  |
+| 46 | `t08-thread-interrupted-clears` |  |  |  |
+| 47 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
+| 48 | `t08-volatile-increment` |  |  |  |
+| 49 | `t09-bufferedreader-readline` |  |  |  |
+| 50 | `t09-files-lines-close` |  |  |  |
+| 51 | `t09-path-resolve-absolute` |  |  |  |
+| 52 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
+| 53 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 54 | `t09-serialization-transient-static` |  |  |  |
+| 55 | `t10-collator-locale-sensitive` |  |  |  |
+| 56 | `t10-datetimeformatter-locale-immutability` |  |  |  |
+| 57 | `t10-locale-language-tag` |  |  |  |
+| 58 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
+| 59 | `t10-numberformat-currency-instance` |  |  |  |
+| 60 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
 
