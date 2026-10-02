@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the purpose of the root locale as a locale-neutral base rather than a user's regional preference.",
+  "prompt": "Which statements about `Locale.ROOT` are correct? Select all that apply.",
+  "explanation": "`Locale.ROOT` is the language-neutral, country-neutral root locale. It is useful as a base locale for locale-sensitive operations that should not depend on a user's language or region.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It is the language-neutral root locale.",
+      "correct": true,
+      "explanation": "ROOT represents the root of the locale hierarchy."
+    },
+    {
+      "key": "B",
+      "text": "It has no language or country component.",
+      "correct": true,
+      "explanation": "It is not tied to a particular language or region."
+    },
+    {
+      "key": "C",
+      "text": "It always equals Locale.getDefault().",
+      "correct": false,
+      "explanation": "The system/user default locale is independent of Locale.ROOT."
+    },
+    {
+      "key": "D",
+      "text": "It represents the United States locale.",
+      "correct": false,
+      "explanation": "Locale.US is the United States locale; ROOT is neutral."
+    }
+  ],
+  "references": [
+    {
+      "title": "Locale.ROOT (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html#ROOT"
+    }
+  ]
+}
