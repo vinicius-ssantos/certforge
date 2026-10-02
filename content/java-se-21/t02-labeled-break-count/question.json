@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires tracing nested loops and understanding that a labeled break exits the labeled statement rather than only the inner loop.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The first outer iteration increments `count` three times. On the second outer iteration it increments once for `j == 0`, then `break outer` exits both loops when `j == 1`. The final count is 4.",
+  "options": [
+    {
+      "key": "A",
+      "text": "3",
+      "correct": false,
+      "explanation": "There is one additional increment at `i == 1, j == 0` before the labeled break."
+    },
+    {
+      "key": "B",
+      "text": "4",
+      "correct": true,
+      "explanation": "Three increments occur for `i == 0`, then one more before the labeled break exits the outer loop."
+    },
+    {
+      "key": "C",
+      "text": "5",
+      "correct": false,
+      "explanation": "The increment after the break condition is never reached."
+    },
+    {
+      "key": "D",
+      "text": "9",
+      "correct": false,
+      "explanation": "The labeled break prevents the remaining loop iterations."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.15 The break Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.15"
+    }
+  ]
+}
