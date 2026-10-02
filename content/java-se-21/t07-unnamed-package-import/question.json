@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the special visibility limitation of types declared in the unnamed package.",
+  "prompt": "Can a type declared in a named package import a top-level type from the unnamed package?",
+  "explanation": "No. A type in the unnamed package cannot be imported by code in a named package. Unnamed-package use is therefore unsuitable for code intended to participate in ordinary packaged applications.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Yes, using import TypeName;",
+      "correct": false,
+      "explanation": "Import declarations name types through packages or canonical names; unnamed-package types cannot be imported into named packages."
+    },
+    {
+      "key": "B",
+      "text": "Yes, using import unnamed.TypeName;",
+      "correct": false,
+      "explanation": "There is no package named `unnamed` representing the unnamed package."
+    },
+    {
+      "key": "C",
+      "text": "No.",
+      "correct": true,
+      "explanation": "Named-package code cannot import a type from the unnamed package."
+    },
+    {
+      "key": "D",
+      "text": "Only if the type is public and final.",
+      "correct": false,
+      "explanation": "Access modifiers do not remove the unnamed-package import restriction."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.4.2 Unnamed Packages",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.4.2"
+    }
+  ]
+}
