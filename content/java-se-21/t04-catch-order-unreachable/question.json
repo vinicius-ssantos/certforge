@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks catch-clause reachability when exception types have an inheritance relationship.",
+  "prompt": "Why is placing `catch (FileNotFoundException e)` after `catch (IOException e)` for the same try statement invalid?",
+  "explanation": "`FileNotFoundException` is a subtype of `IOException`. The earlier catch for `IOException` already catches every FileNotFoundException, so the later subtype catch cannot be reached.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The later catch is unreachable because the superclass catch already handles that subtype.",
+      "correct": true,
+      "explanation": "The broader IOException catch subsumes FileNotFoundException."
+    },
+    {
+      "key": "B",
+      "text": "Java permits only one catch clause per try statement.",
+      "correct": false,
+      "explanation": "A try statement may have multiple catch clauses."
+    },
+    {
+      "key": "C",
+      "text": "Checked exceptions cannot be caught.",
+      "correct": false,
+      "explanation": "Checked exceptions are routinely caught; the issue is the ordering and subtype relationship."
+    },
+    {
+      "key": "D",
+      "text": "FileNotFoundException is unrelated to IOException.",
+      "correct": false,
+      "explanation": "FileNotFoundException extends IOException."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 11.2.3 Exception Checking",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2.3"
+    }
+  ]
+}

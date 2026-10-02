@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the API intended for locale-sensitive string comparison rather than code-unit or natural String ordering.",
+  "prompt": "Which Java API is designed to compare strings according to locale-sensitive collation rules?",
+  "explanation": "`Collator` performs locale-sensitive String comparison. An instance for a desired locale can be obtained with `Collator.getInstance(locale)`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Collator",
+      "correct": true,
+      "explanation": "Collator is the locale-sensitive comparison abstraction in java.text."
+    },
+    {
+      "key": "B",
+      "text": "StringBuilder",
+      "correct": false,
+      "explanation": "StringBuilder is for mutable character sequences, not localized comparison."
+    },
+    {
+      "key": "C",
+      "text": "Scanner",
+      "correct": false,
+      "explanation": "Scanner parses input; it is not the collation API."
+    },
+    {
+      "key": "D",
+      "text": "Formatter",
+      "correct": false,
+      "explanation": "Formatter produces formatted text but is not the dedicated locale-sensitive comparison API."
+    }
+  ],
+  "references": [
+    {
+      "title": "Collator (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Collator.html"
+    }
+  ]
+}

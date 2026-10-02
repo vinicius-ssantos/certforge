@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the Java 21 SequencedCollection contract and the meaning of its reverse-ordered view.",
+  "prompt": "Which statements describe the `reversed()` method of `SequencedCollection` in Java 21? Select all that apply.",
+  "explanation": "`reversed()` returns a reverse-ordered view. In that view the encounter order is inverted, so first and last are exchanged and iteration proceeds in the reverse encounter order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns a reverse-ordered view of the collection.",
+      "correct": true,
+      "explanation": "The method is specified as producing a view with inverted encounter order."
+    },
+    {
+      "key": "B",
+      "text": "The first element of the original is the last element of the reversed view.",
+      "correct": true,
+      "explanation": "First and last are inverted by the reverse-ordered view."
+    },
+    {
+      "key": "C",
+      "text": "It must copy every element into a new independent collection.",
+      "correct": false,
+      "explanation": "The API specifies a view, not a mandatory independent copy."
+    },
+    {
+      "key": "D",
+      "text": "The reversed view has the same iteration order as the original.",
+      "correct": false,
+      "explanation": "Its encounter order is the inverse of the original."
+    }
+  ],
+  "references": [
+    {
+      "title": "SequencedCollection (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/SequencedCollection.html"
+    }
+  ]
+}

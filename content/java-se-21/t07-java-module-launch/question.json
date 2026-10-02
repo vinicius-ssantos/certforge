@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the command-line form for launching a main class from a named module on a module path.",
+  "prompt": "Which command form launches main class `p.Main` from named module `com.example.app` when the module is available under `mods`?",
+  "explanation": "The `java` launcher uses `--module-path` (or `-p`) to locate modules and `--module module[/mainclass]` (or `-m`) to name the module and optionally its main class.",
+  "options": [
+    {
+      "key": "A",
+      "text": "java --module-path mods --module com.example.app/p.Main",
+      "correct": true,
+      "explanation": "This names both the module path and the module/main-class pair."
+    },
+    {
+      "key": "B",
+      "text": "java --classpath mods --requires com.example.app p.Main",
+      "correct": false,
+      "explanation": "`--requires` is not a java launcher option for selecting a module this way."
+    },
+    {
+      "key": "C",
+      "text": "java --exports com.example.app p.Main",
+      "correct": false,
+      "explanation": "Exports is a module declaration/access concept, not the normal launch syntax."
+    },
+    {
+      "key": "D",
+      "text": "java module-info.java p.Main",
+      "correct": false,
+      "explanation": "The launcher does not launch a named module by passing its module-info source file."
+    }
+  ],
+  "references": [
+    {
+      "title": "java Command (JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/specs/man/java.html"
+    }
+  ]
+}
