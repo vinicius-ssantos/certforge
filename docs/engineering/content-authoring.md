@@ -23,7 +23,9 @@ It does **not** prove that a question is well-written, unambiguous, or that its 
 ```
 content/
   ContentImporter.java          standalone importer, no dependencies
+  pack.mjs                      reading a pack, its catalog and its review record
   java-se-21/
+    review.json                 who reviewed which questions, when, and a digest of each
     t04-finally-return/
       question.json             the request body of POST /api/admin/questions
       Main.java                 code shown to learners and verified by the build
@@ -68,7 +70,11 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 ## Reviewing and publishing
 
-The [content review packet](../release/content-review-packet.md) lays the whole pack out for a reviewer: each question as the learner sees it, then the answer key, reasons, references, the output the build verified, and the checks below as boxes to tick. It is generated (`node content/build-review-packet.mjs`) and CI fails if it is out of date.
+The [content review packet](../release/content-review-packet.md) lays the whole pack out for a reviewer: each question as the learner sees it, then the answer key, reasons, references, the output the build verified, and either the verdict already recorded or the checks below as boxes to tick. It is generated (`node content/build-review-packet.mjs`) and CI fails if it is out of date.
+
+A finished review is recorded in the pack's `review.json`: the reviewer, the date, how they reviewed, what the review does not establish, and for each question a verdict and a digest of everything they judged — the prompt with its code, the options, the answer key, every explanation, the rationale, the references and the verified output. The packet prints the digest to record under each unreviewed question.
+
+That digest is the point. **Edit a reviewed question and it counts as unreviewed again**: the packet marks it "changed since review" and prints a new digest, and because CI compares the committed packet with a fresh build, the change cannot reach `main` while still claiming the old verdict. Reindenting the JSON changes nothing, because the digest covers what was read rather than how the file was formatted. Recording a review for a question nobody read defeats all of this, so do not.
 
 Review is done by a different account from the author by default (`reviewer_must_differ_from_author`; see the question-bank document to change this for a single-maintainer setup). The reviewer needs the `REVIEWER` role and the publisher the `ADMINISTRATOR` role.
 

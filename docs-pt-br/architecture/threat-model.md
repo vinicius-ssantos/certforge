@@ -93,7 +93,7 @@ Conhecidos, declarados e não escondidos pelos testes acima.
 - **O TLS não está nas imagens.** Termine-o na frente do container web e defina `SESSION_COOKIE_SECURE=true` (veja o documento do ambiente de release).
 - **A equipe vê o e-mail uns dos outros** como nomes de autor, revisor e publicador, em endpoints só da equipe. Alunos nunca veem.
 - **Backups têm hashes de senha e todas as respostas dos alunos** e devem ser protegidos de acordo; restaurar um pode reviver sessões revogadas, então encerre todas as sessões depois de uma restauração (veja o guia de operação).
-- **A correção do conteúdo é um julgamento humano.** O checklist que o revisor marca é registrado como evidência do que ele diz ter conferido; não faz uma questão estar certa. O pacote inicial de conteúdo ainda não passou por essa revisão humana.
+- **A correção do conteúdo é um julgamento humano.** O checklist que o revisor marca é registrado como evidência do que ele diz ter conferido; não faz uma questão estar certa. O pacote inicial de conteúdo já passou por essa revisão, feita pelo dono do projeto e não por um terceiro independente, e [o registro dela](../../content/java-se-21/review.json) diz isso com clareza, junto com o que ela não cobre.
 - **A varredura de vulnerabilidades cobre pacotes, não lógica.** Ela não substitui este documento.
 
 ## Ameaças futuras do runner

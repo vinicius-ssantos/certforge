@@ -1,16 +1,26 @@
 # Content review packet
 
-Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack.
+Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**None of these questions has been reviewed by a person.** They are AI-assisted drafts. The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what this review is for.
+**All 20 questions were reviewed by vinicius-ssantos (project owner and maintainer) on 2026-10-02, and none has been edited since.** The reviewer read the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and reported no technical errors in any of the twenty.
+
+The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
+
+## What this review does not establish
+
+- The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.
+- The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
+- Four questions have no runnable code, so the build verifies nothing about them and they rest entirely on this review and their references: t01-integer-boxing-guarantee, t06-stream-facts, t07-exports-and-opens, t07-requires-transitive.
+- The exam objective wording seeded in the catalog was not part of this review and is still unverified against Oracle's own page.
 
 ## How to review
 
 1. Read each question as a learner would, **without** looking at the answer key, and answer it yourself.
 2. Compare with the answer key and the reasons. Run the code if there is any doubt.
-3. Tick the checks you made yourself. A question that is ambiguous or disputed must not be published: write what is wrong under it.
-4. Record a verdict. Then, in the editorial desk, approve it (a person other than the author) or request changes with the comment you wrote here.
-5. Check the objective wording of the topics against Oracle's page for the exam (see "Before publishing anything in this track" in the [content authoring guide](../engineering/content-authoring.md)).
+3. Make the checks below yourself. A question that is ambiguous or disputed must not be published: write what is wrong under it.
+4. Record the verdict in `content/java-se-21/review.json`: your name, the date, and for each question its verdict and the digest printed under it. A question you did not look at must not get an entry.
+5. Then, in the editorial desk, approve it (a person other than the author) or request changes with the comment you wrote here.
+6. Check the objective wording of the topics against Oracle's page for the exam (see "Before publishing anything in this track" in the [content authoring guide](../engineering/content-authoring.md)).
 
 The checks, from the [content policy](../product/content-policy.md):
 
@@ -24,28 +34,28 @@ The checks, from the [content policy](../product/content-policy.md):
 
 ## Questions
 
-| # | Question | Topic | Type | Difficulty | Runnable code |
-|---:|---|---|---|---|---|
-| 1 | [`t01-integer-boxing-guarantee`](#1-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) |
-| 2 | [`t01-localdate-plus-months`](#2-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes |
-| 3 | [`t02-pattern-switch-guard`](#3-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes |
-| 4 | [`t02-switch-dominance`](#4-t02-switch-dominance) | Controlling program flow | single | hard | yes |
-| 5 | [`t03-overload-null`](#5-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes |
-| 6 | [`t03-record-facts`](#6-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes |
-| 7 | [`t04-finally-return`](#7-t04-finally-return) | Handling exceptions | single | easy | yes |
-| 8 | [`t04-try-with-resources-order`](#8-t04-try-with-resources-order) | Handling exceptions | single | medium | yes |
-| 9 | [`t05-immutable-and-fixed-size-lists`](#9-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes |
-| 10 | [`t05-list-remove-overload`](#10-t05-list-remove-overload) | Arrays and collections | single | medium | yes |
-| 11 | [`t06-stream-facts`](#11-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) |
-| 12 | [`t06-stream-laziness`](#12-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes |
-| 13 | [`t07-exports-and-opens`](#13-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) |
-| 14 | [`t07-requires-transitive`](#14-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) |
-| 15 | [`t08-executor-close`](#15-t08-executor-close) | Managing concurrent code execution | single | medium | yes |
-| 16 | [`t08-virtual-thread-daemon`](#16-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes |
-| 17 | [`t09-read-all-lines`](#17-t09-read-all-lines) | Java I/O API | single | medium | yes |
-| 18 | [`t09-serialization-facts`](#18-t09-serialization-facts) | Java I/O API | multiple | hard | yes |
-| 19 | [`t10-locale-to-string`](#19-t10-locale-to-string) | Implementing localization | single | easy | yes |
-| 20 | [`t10-resource-bundle-fallback`](#20-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes |
+| # | Question | Topic | Type | Difficulty | Runnable code | Review |
+|---:|---|---|---|---|---|---|
+| 1 | [`t01-integer-boxing-guarantee`](#1-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
+| 2 | [`t01-localdate-plus-months`](#2-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes | reviewed 2026-10-02 |
+| 3 | [`t02-pattern-switch-guard`](#3-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes | reviewed 2026-10-02 |
+| 4 | [`t02-switch-dominance`](#4-t02-switch-dominance) | Controlling program flow | single | hard | yes | reviewed 2026-10-02 |
+| 5 | [`t03-overload-null`](#5-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes | reviewed 2026-10-02 |
+| 6 | [`t03-record-facts`](#6-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes | reviewed 2026-10-02 |
+| 7 | [`t04-finally-return`](#7-t04-finally-return) | Handling exceptions | single | easy | yes | reviewed 2026-10-02 |
+| 8 | [`t04-try-with-resources-order`](#8-t04-try-with-resources-order) | Handling exceptions | single | medium | yes | reviewed 2026-10-02 |
+| 9 | [`t05-immutable-and-fixed-size-lists`](#9-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes | reviewed 2026-10-02 |
+| 10 | [`t05-list-remove-overload`](#10-t05-list-remove-overload) | Arrays and collections | single | medium | yes | reviewed 2026-10-02 |
+| 11 | [`t06-stream-facts`](#11-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
+| 12 | [`t06-stream-laziness`](#12-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes | reviewed 2026-10-02 |
+| 13 | [`t07-exports-and-opens`](#13-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
+| 14 | [`t07-requires-transitive`](#14-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | reviewed 2026-10-02 |
+| 15 | [`t08-executor-close`](#15-t08-executor-close) | Managing concurrent code execution | single | medium | yes | reviewed 2026-10-02 |
+| 16 | [`t08-virtual-thread-daemon`](#16-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes | reviewed 2026-10-02 |
+| 17 | [`t09-read-all-lines`](#17-t09-read-all-lines) | Java I/O API | single | medium | yes | reviewed 2026-10-02 |
+| 18 | [`t09-serialization-facts`](#18-t09-serialization-facts) | Java I/O API | multiple | hard | yes | reviewed 2026-10-02 |
+| 19 | [`t10-locale-to-string`](#19-t10-locale-to-string) | Implementing localization | single | easy | yes | reviewed 2026-10-02 |
+| 20 | [`t10-resource-bundle-fallback`](#20-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes | reviewed 2026-10-02 |
 
 ## 1. t01-integer-boxing-guarantee
 
@@ -84,9 +94,13 @@ Separates what the language specification guarantees about boxed Integer identit
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references, so read them with extra care.
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
 
 ### Review
+
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -97,6 +111,8 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:a57b48871984a632e9636cb314306fdcb0eac9e42d815ca1c7ab51862cd04c99`
 
 **Comments:**
 
@@ -156,6 +172,10 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -165,6 +185,8 @@ The code in the question compiles for Java 21 and prints:
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:d74789d624e7677a24ff6b5d5d7c34dfb9095dc81b7736140317c98eea9f54f6`
 
 **Comments:**
 
@@ -229,6 +251,10 @@ large
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -238,6 +264,8 @@ large
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:ddfe40ffe584357b0739920dce4ec6429e9568be1b3fa7faf0bce9e0279884ad`
 
 **Comments:**
 
@@ -301,6 +329,10 @@ COMPILE_ERROR: pattern.dominated
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -310,6 +342,8 @@ COMPILE_ERROR: pattern.dominated
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:29fcf3424d7bcba487f53c5f9872dd14653bda202d0e4f778a916434e95101f0`
 
 **Comments:**
 
@@ -378,6 +412,10 @@ Object String String
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -387,6 +425,8 @@ Object String String
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:aa481e073b7d659109b86429bfc3ee049d9e9e1017877967641d6334213b1b1a`
 
 **Comments:**
 
@@ -441,6 +481,10 @@ true
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -450,6 +494,8 @@ true
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:61c28256c551033dc333943831ceb11395906977bb53ad128dcce17912b97cb6`
 
 **Comments:**
 
@@ -514,6 +560,10 @@ cleanup 1
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -523,6 +573,8 @@ cleanup 1
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:240d4a5b10d6aaed53268e5b05286b90646d5ddf8676c3b64cd93579c13e41e7`
 
 **Comments:**
 
@@ -596,6 +648,10 @@ open-a open-b body close-b close-a
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -605,6 +661,8 @@ open-a open-b body close-b close-a
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:e5370850c99c87059999d0cb697f6bfb57f2d4a2b98bf4f6ec99c24fd178b0e8`
 
 **Comments:**
 
@@ -678,6 +736,10 @@ immutable fixed-size [q, y]
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -687,6 +749,8 @@ immutable fixed-size [q, y]
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:c830a32e3a2fd75245909fe4b6de1767e6b3c94b68355c5c0dd8cbdd7f0aeb67`
 
 **Comments:**
 
@@ -750,6 +814,10 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -759,6 +827,8 @@ The code in the question compiles for Java 21 and prints:
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:699e368bdfff61d605ed7e93781a510442445a7b1464bd2930d9c160ee91c3e8`
 
 **Comments:**
 
@@ -802,9 +872,13 @@ Each statement checks a different fact about stream pipelines: laziness, single 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references, so read them with extra care.
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
 
 ### Review
+
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -815,6 +889,8 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:4e50b71ca042574876c19d7ff95c1806433d6e0d1f7453cc80572566ca45fe46`
 
 **Comments:**
 
@@ -886,6 +962,10 @@ f1 f2 m2
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -895,6 +975,8 @@ f1 f2 m2
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:d9dd4f24053690761ca11551e8e10722f74786a4353b7c74b5f811e52f24691b`
 
 **Comments:**
 
@@ -938,9 +1020,13 @@ exports and opens look similar but differ in compile-time versus run-time access
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references, so read them with extra care.
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
 
 ### Review
+
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -951,6 +1037,8 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:00636d4776e9a6c083b4907dc663384ade4bf1c71cc0eb31838b3bb43be05c53`
 
 **Comments:**
 
@@ -991,9 +1079,13 @@ Requires distinguishing the four module directives that mention another module o
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references, so read them with extra care.
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
 
 ### Review
+
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -1004,6 +1096,8 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:71c8f4f376606029152d0834e99787b5fda7fa4a9a88d4c7e4e914fa7af122dc`
 
 **Comments:**
 
@@ -1069,6 +1163,10 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1078,6 +1176,8 @@ The code in the question compiles for Java 21 and prints:
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:fdd1544ac933ee4a3a948f8f06bd7dfed68463a76e8909b4f21d0cd7f1adb93c`
 
 **Comments:**
 
@@ -1129,6 +1229,10 @@ rejected
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1138,6 +1242,8 @@ rejected
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:29f1a00c81472433d1c499c677abd354aa39339a7db6c9920aa6ebd047f5ac10`
 
 **Comments:**
 
@@ -1204,6 +1310,10 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1213,6 +1323,8 @@ The code in the question compiles for Java 21 and prints:
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:c09f08cae31db96c648f3330e2b72053a7f3a9783122b0b1c5c78715f2ad29db`
 
 **Comments:**
 
@@ -1261,6 +1373,10 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1270,6 +1386,8 @@ The code in the question compiles for Java 21 and prints:
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:b8d138a023b826fae2e2b83fad45546fe47cff66dd120a9488d76cc1def6a4a0`
 
 **Comments:**
 
@@ -1330,6 +1448,10 @@ pt BR pt_BR
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1339,6 +1461,8 @@ pt BR pt_BR
 - [ ] The references let someone verify the answer independently.
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+Digest of the question as it stands: `sha256:2397c34f0ab2a7fbc06a26916aaa2b8de9f1e7f24ddc0c075b074f1ef887cda4`
 
 **Comments:**
 
@@ -1400,6 +1524,10 @@ en_US
 
 ### Review
 
+**Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
+
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1410,6 +1538,8 @@ en_US
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
+Digest of the question as it stands: `sha256:2e22b257f110f2ffb23a21e6ce7155cd90dba5360a6654bbfaee868ef6d1ccba`
+
 **Comments:**
 
 &nbsp;
@@ -1418,24 +1548,24 @@ en_US
 
 | # | Question | Verdict | Reviewer | Date |
 |---:|---|---|---|---|
-| 1 | `t01-integer-boxing-guarantee` | | | |
-| 2 | `t01-localdate-plus-months` | | | |
-| 3 | `t02-pattern-switch-guard` | | | |
-| 4 | `t02-switch-dominance` | | | |
-| 5 | `t03-overload-null` | | | |
-| 6 | `t03-record-facts` | | | |
-| 7 | `t04-finally-return` | | | |
-| 8 | `t04-try-with-resources-order` | | | |
-| 9 | `t05-immutable-and-fixed-size-lists` | | | |
-| 10 | `t05-list-remove-overload` | | | |
-| 11 | `t06-stream-facts` | | | |
-| 12 | `t06-stream-laziness` | | | |
-| 13 | `t07-exports-and-opens` | | | |
-| 14 | `t07-requires-transitive` | | | |
-| 15 | `t08-executor-close` | | | |
-| 16 | `t08-virtual-thread-daemon` | | | |
-| 17 | `t09-read-all-lines` | | | |
-| 18 | `t09-serialization-facts` | | | |
-| 19 | `t10-locale-to-string` | | | |
-| 20 | `t10-resource-bundle-fallback` | | | |
+| 1 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
+| 2 | `t01-localdate-plus-months` | approved | vinicius-ssantos | 2026-10-02 |
+| 3 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
+| 4 | `t02-switch-dominance` | approved | vinicius-ssantos | 2026-10-02 |
+| 5 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
+| 6 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 7 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
+| 8 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
+| 9 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
+| 10 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
+| 11 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 12 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
+| 13 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
+| 14 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
+| 15 | `t08-executor-close` | approved | vinicius-ssantos | 2026-10-02 |
+| 16 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
+| 17 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
+| 18 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 19 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
+| 20 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
 

@@ -83,7 +83,7 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 
 ## Status do projeto
 
-**A `v0.1.0` Study Core está construída e ainda não foi lançada.** O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release existem e são testados de ponta a ponta no CI. O que separa isto de uma release é trabalho que só uma pessoa pode fazer: revisar o pacote inicial de questões e uma passada manual de acessibilidade. A [revisão de prontidão](docs-pt-br/release/v0.1.0-readiness.md) lista as barreiras e os bloqueios.
+**A `v0.1.0` Study Core está construída e ainda não foi lançada.** O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release existem e são testados de ponta a ponta no CI. O pacote inicial de questões passou pela [revisão técnica](content/java-se-21/review.json) em 2026-10-02. O que separa isto de uma release é o resto do trabalho que só uma pessoa pode fazer: uma passada manual de acessibilidade, um primeiro passeio pelo produto, conferir o texto dos objetivos do exame com a página da Oracle e as decisões da primeira implantação. A [revisão de prontidão](docs-pt-br/release/v0.1.0-readiness.md) lista as barreiras e os bloqueios.
 
 ### Experimente
 
@@ -103,7 +103,7 @@ docker compose -f compose.release.yaml up --build -d       # http://localhost:80
 node deploy/seed-demo.mjs                                   # as questões de demonstração
 ```
 
-Essas questões de demonstração dizem no próprio texto que são dados de demonstração. O pacote real em `content/` nunca é publicado por automação e ainda aguarda a revisão humana, então uma instalação simples não tem questão nenhuma. Os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) percorrem o produto inteiro. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`; o build usa o wrapper do Maven (`./mvnw`), então não é preciso instalar o Maven.
+Essas questões de demonstração dizem no próprio texto que são dados de demonstração. O pacote real em `content/` nunca é publicado por automação: ele já passou pela [revisão técnica](content/java-se-21/review.json), mas um revisor ainda precisa aprová-lo e um administrador publicá-lo na mesa editorial, então uma instalação simples não tem questão nenhuma. Os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) percorrem o produto inteiro. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`; o build usa o wrapper do Maven (`./mvnw`), então não é preciso instalar o Maven.
 
 ## Contribuindo
 

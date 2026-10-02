@@ -91,7 +91,7 @@ Known, stated, and not hidden by the tests above.
 - **TLS is not in the images.** Terminate it in front of the web container and set `SESSION_COOKIE_SECURE=true` (see the release environment document).
 - **Staff see each other's email addresses** as author, reviewer and publisher names, in staff-only endpoints. Learners never do.
 - **Backups hold password hashes and every learner's answers** and must be protected accordingly; restoring one can revive revoked sessions, so end all sessions after a restore (see the operations guide).
-- **Content correctness is a human judgment.** The checklist a reviewer ticks is recorded as evidence of what they say they checked; it does not make a question right. The initial content pack has not yet had that human review.
+- **Content correctness is a human judgment.** The checklist a reviewer ticks is recorded as evidence of what they say they checked; it does not make a question right. The initial content pack has had that review, by the project owner rather than an independent third party, and [its record](../../content/java-se-21/review.json) says so plainly along with what it does not cover.
 - **The vulnerability scan covers packages, not logic.** It is not a substitute for this document.
 
 ## Future runner threats
