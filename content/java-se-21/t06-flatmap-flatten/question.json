@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing one-to-one mapping from one-to-many mapping followed by flattening.",
+  "prompt": "What is the defining effect of `Stream.flatMap` compared with `Stream.map`?",
+  "explanation": "`flatMap` maps each input element to a stream and then replaces each mapped stream with its contents in the resulting stream, effectively flattening one level.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It maps each element to a stream and flattens the mapped streams into one stream.",
+      "correct": true,
+      "explanation": "That is the core flatMap operation."
+    },
+    {
+      "key": "B",
+      "text": "It sorts the stream before applying the mapper.",
+      "correct": false,
+      "explanation": "Sorting is unrelated to flatMap."
+    },
+    {
+      "key": "C",
+      "text": "It always executes the mapper in parallel.",
+      "correct": false,
+      "explanation": "Parallelism is a property of the stream pipeline, not an unconditional effect of flatMap."
+    },
+    {
+      "key": "D",
+      "text": "It converts every element to Optional.",
+      "correct": false,
+      "explanation": "flatMap operates on streams returned by the mapper; Optional is not implicit."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stream.flatMap(Function) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#flatMap(java.util.function.Function)"
+    }
+  ]
+}

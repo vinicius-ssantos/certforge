@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires applying overload resolution rather than assuming the broadest or varargs overload wins.",
+  "prompt": "Suppose a class declares `m(Object)`, `m(String)`, and `m(String...)`. Which overload is selected by the call `m(\"x\")`?",
+  "explanation": "The fixed-arity `m(String)` overload is applicable and is more specific than `m(Object)`. The varargs method is not preferred over the more specific fixed-arity match.",
+  "options": [
+    {
+      "key": "A",
+      "text": "m(Object)",
+      "correct": false,
+      "explanation": "String is a subtype of Object, so the String overload is more specific for this argument."
+    },
+    {
+      "key": "B",
+      "text": "m(String)",
+      "correct": true,
+      "explanation": "It is the most specific applicable fixed-arity overload."
+    },
+    {
+      "key": "C",
+      "text": "m(String...)",
+      "correct": false,
+      "explanation": "The varargs overload is not chosen when the more specific fixed-arity String overload applies."
+    },
+    {
+      "key": "D",
+      "text": "The call is ambiguous.",
+      "correct": false,
+      "explanation": "Overload resolution can select the String overload unambiguously."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.12.2.5 Choosing the Most Specific Method",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.12.2.5"
+    }
+  ]
+}

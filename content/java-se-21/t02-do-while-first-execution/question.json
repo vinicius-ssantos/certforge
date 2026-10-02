@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the defining control-flow distinction between do-while and while.",
+  "prompt": "What guarantee does a `do { ... } while (condition);` loop make about its body?",
+  "explanation": "The body of a do statement executes before the condition is evaluated, so it executes at least once whenever control reaches the statement normally.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The body executes at least once before the first condition test.",
+      "correct": true,
+      "explanation": "The condition follows the body in a do-while statement."
+    },
+    {
+      "key": "B",
+      "text": "The condition is always tested before the body.",
+      "correct": false,
+      "explanation": "That describes a while statement, not a do-while statement."
+    },
+    {
+      "key": "C",
+      "text": "The body executes exactly once.",
+      "correct": false,
+      "explanation": "It may repeat while the condition remains true."
+    },
+    {
+      "key": "D",
+      "text": "The body is skipped when the condition is initially false.",
+      "correct": false,
+      "explanation": "The first condition test occurs after one body execution."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.13 The do Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.13"
+    }
+  ]
+}

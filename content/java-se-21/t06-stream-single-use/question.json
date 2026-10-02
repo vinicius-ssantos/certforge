@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the fundamental lifecycle rule that distinguishes streams from reusable collections.",
+  "prompt": "Which statement best describes the intended reuse model of a Java `Stream`?",
+  "explanation": "A stream should be operated on only once. After a terminal operation, the same stream pipeline is not intended to be reused; attempting reuse may result in `IllegalStateException` when reuse is detected.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A Stream is a reusable container and can run terminal operations repeatedly.",
+      "correct": false,
+      "explanation": "Streams are pipelines, not reusable data containers."
+    },
+    {
+      "key": "B",
+      "text": "A Stream should be consumed once; create a new stream to traverse the source again.",
+      "correct": true,
+      "explanation": "This matches the Stream contract and lifecycle."
+    },
+    {
+      "key": "C",
+      "text": "Only parallel streams are single-use.",
+      "correct": false,
+      "explanation": "The single-use rule applies to streams generally."
+    },
+    {
+      "key": "D",
+      "text": "Calling close() resets a Stream so it can be reused.",
+      "correct": false,
+      "explanation": "Closing a stream does not reset its pipeline for reuse."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stream (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html"
+    }
+  ]
+}

@@ -4,9 +4,9 @@ Issue: #8 — Create the initial authorial Java certification content pack. Poli
 
 ## What the pack is, and what it is not
 
-`content/java-se-21/` holds an initial pack of 20 original questions for the Oracle Java SE 21 Developer track: two per topic, single-choice and multiple-choice, easy to hard. Every question has a per-option explanation, authoritative references, and a difficulty rationale.
+`content/java-se-21/` holds 60 original questions for the Oracle Java SE 21 Developer track: six per topic, single-choice and multiple-choice, easy to hard. Every question has a per-option explanation, authoritative references, and a difficulty rationale.
 
-**Review status: not reviewed by a human.** The questions were drafted with AI assistance, which the content policy allows only when a person then reviews them technically. Nothing in the repository publishes them. The importer creates them as drafts and submits them for technical review; approving and publishing are decisions for people, through the editorial workflow. Until that happens no learner can see any of them.
+**Review status: mixed.** The initial 20 questions were technically reviewed on 2026-10-02 and retain that recorded verdict. The 40-question expansion was drafted with AI assistance from the Java SE 21 specifications and API documentation and has not been reviewed by a person yet. Nothing in the repository publishes an unreviewed question: the importer creates drafts and submits them for technical review, and publishing remains a human editorial decision.
 
 What the tooling does prove, automatically, on every build:
 
@@ -171,7 +171,7 @@ No test can check the second one. It is a discipline, and the only thing automat
 | 9 Java I/O | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localization | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Three questions are conceptual and have no runnable code, so the build cannot check them: `t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`. They rely on their references alone, so reviewers should read those references with extra care. The review packet derives that list rather than repeating it, so it cannot go stale.
+Among the initial twenty reviewed questions, three are conceptual and have no runnable code: `t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`. The forty questions added in the current expansion are also conceptual drafts for now, so they rely on their authoritative references and future human review rather than a verification program. The review packet derives the complete current list rather than repeating it here, so it cannot go stale.
 
 `t07-requires-transitive` used to be a fourth. It now carries a three-module graph under `modules/`, where `app` requires only `lib`, uses a type from `util`, and compiles because `lib` declares `requires transitive util` — remove the `transitive` and the build fails with `package u is not visible`. That is the conversion [ADR 0011](../adr/0011-grade-content-evidence.md) asks for, and it kept its recorded review, because nothing the reviewer read changed.
 

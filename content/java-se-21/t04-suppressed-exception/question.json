@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires understanding the interaction between an exception from the try body and another exception thrown while an automatic resource is closed.",
+  "prompt": "In a try-with-resources statement, the try body throws exception `E1`, and then closing the resource throws exception `E2`. What is the usual result defined by the language translation?",
+  "explanation": "The exception from the try body remains the primary exception. The exception thrown while closing the resource is recorded as a suppressed exception on the primary exception.",
+  "options": [
+    {
+      "key": "A",
+      "text": "E2 replaces E1 completely.",
+      "correct": false,
+      "explanation": "The close exception does not normally replace the exception already thrown by the try body."
+    },
+    {
+      "key": "B",
+      "text": "E1 is propagated and E2 is added to E1 as a suppressed exception.",
+      "correct": true,
+      "explanation": "This preserves the primary failure while retaining the close failure for inspection."
+    },
+    {
+      "key": "C",
+      "text": "Both exceptions are discarded and execution continues normally.",
+      "correct": false,
+      "explanation": "The primary exception is still thrown."
+    },
+    {
+      "key": "D",
+      "text": "The JVM wraps both exceptions in an Error.",
+      "correct": false,
+      "explanation": "Try-with-resources uses suppressed exceptions rather than an Error wrapper for this case."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20.3 try-with-resources",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3"
+    }
+  ]
+}

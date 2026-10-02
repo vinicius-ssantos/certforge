@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the null restrictions of the convenience factory methods for unmodifiable maps.",
+  "prompt": "Which statements are true of maps created by `Map.of(...)`? Select all that apply.",
+  "explanation": "The unmodifiable maps created by `Map.of` disallow null keys and null values. Attempts to create them with either produce `NullPointerException`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "They reject null keys.",
+      "correct": true,
+      "explanation": "The factory contract disallows null keys."
+    },
+    {
+      "key": "B",
+      "text": "They reject null values.",
+      "correct": true,
+      "explanation": "The factory contract disallows null values."
+    },
+    {
+      "key": "C",
+      "text": "They accept one null key as long as all values are non-null.",
+      "correct": false,
+      "explanation": "No null key is permitted."
+    },
+    {
+      "key": "D",
+      "text": "Null entries are silently omitted.",
+      "correct": false,
+      "explanation": "The factory throws rather than dropping null entries."
+    }
+  ],
+  "references": [
+    {
+      "title": "Map (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html"
+    }
+  ]
+}

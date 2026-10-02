@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the subtle difference between querying interruption with the static interrupted method and the instance isInterrupted method.",
+  "prompt": "What does the static method `Thread.interrupted()` do with the current thread's interrupt status?",
+  "explanation": "`Thread.interrupted()` tests whether the current thread has been interrupted and clears its interrupted status as part of the operation.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns the current status and clears that status.",
+      "correct": true,
+      "explanation": "The static method both reports and clears the current thread's interrupted status."
+    },
+    {
+      "key": "B",
+      "text": "It returns the current status without changing it.",
+      "correct": false,
+      "explanation": "That behavior is associated with querying via `isInterrupted`; `Thread.interrupted()` clears the status."
+    },
+    {
+      "key": "C",
+      "text": "It interrupts every live thread in the JVM.",
+      "correct": false,
+      "explanation": "The method only examines the current thread's status."
+    },
+    {
+      "key": "D",
+      "text": "It throws InterruptedException whenever the status is set.",
+      "correct": false,
+      "explanation": "The method returns a boolean; it does not throw InterruptedException merely because the status is set."
+    }
+  ],
+  "references": [
+    {
+      "title": "Thread.interrupted() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.html#interrupted()"
+    }
+  ]
+}

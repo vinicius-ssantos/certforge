@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing legacy trim semantics from the Unicode-aware whitespace semantics of strip.",
+  "prompt": "Which statement best describes the difference between `String.strip()` and `String.trim()`?",
+  "explanation": "`strip()` removes leading and trailing characters considered whitespace by `Character.isWhitespace`. `trim()` uses the older definition based on characters whose code point is less than or equal to U+0020.",
+  "options": [
+    {
+      "key": "A",
+      "text": "strip() is Unicode-aware through Character.isWhitespace, while trim() uses the older <= U+0020 rule.",
+      "correct": true,
+      "explanation": "That is the key semantic difference documented by String."
+    },
+    {
+      "key": "B",
+      "text": "trim() removes all Unicode whitespace while strip() removes only ASCII spaces.",
+      "correct": false,
+      "explanation": "This reverses their relevant whitespace behavior."
+    },
+    {
+      "key": "C",
+      "text": "strip() changes internal whitespace but trim() changes only leading whitespace.",
+      "correct": false,
+      "explanation": "Both concern leading and trailing characters, not internal whitespace normalization."
+    },
+    {
+      "key": "D",
+      "text": "The two methods are specified to be identical for every possible string.",
+      "correct": false,
+      "explanation": "They can differ for whitespace characters outside the legacy trim range."
+    }
+  ],
+  "references": [
+    {
+      "title": "String (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html"
+    }
+  ]
+}

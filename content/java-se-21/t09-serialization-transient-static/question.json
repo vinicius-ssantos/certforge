@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing persistent instance state from fields that default serialization does not save.",
+  "prompt": "Under default Java object serialization, which fields are not part of the default serialized instance state? Select all that apply.",
+  "explanation": "Default serialization writes the non-static, non-transient fields of a serializable object. Static fields belong to the class rather than the individual object, and transient fields are explicitly excluded.",
+  "options": [
+    {
+      "key": "A",
+      "text": "static fields",
+      "correct": true,
+      "explanation": "Static fields are class state, not default serialized instance state."
+    },
+    {
+      "key": "B",
+      "text": "transient fields",
+      "correct": true,
+      "explanation": "The transient modifier excludes the field from default serialization."
+    },
+    {
+      "key": "C",
+      "text": "ordinary non-transient instance fields",
+      "correct": false,
+      "explanation": "These are the core fields included by default serialization when their values are serializable as required."
+    },
+    {
+      "key": "D",
+      "text": "every final instance field",
+      "correct": false,
+      "explanation": "Final instance fields are not excluded merely because they are final."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java Object Serialization Specification: Serializable Fields",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/specs/serialization/serial-arch.html"
+    }
+  ]
+}

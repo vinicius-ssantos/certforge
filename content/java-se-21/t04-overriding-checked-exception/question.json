@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks how the throws clause may change during method overriding, especially for checked exceptions.",
+  "prompt": "A superclass method declares a checked exception in its `throws` clause. Which changes are allowed in a valid overriding method? Select all that apply.",
+  "explanation": "An overriding method may omit the checked exception or declare a narrower checked exception compatible with the overridden declaration. It may not broaden the checked exception contract.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Omit the checked exception entirely.",
+      "correct": true,
+      "explanation": "An overriding method may declare fewer checked exceptions."
+    },
+    {
+      "key": "B",
+      "text": "Declare a narrower checked exception subtype.",
+      "correct": true,
+      "explanation": "A compatible narrower checked exception is permitted."
+    },
+    {
+      "key": "C",
+      "text": "Declare a broader checked exception superclass not permitted by the overridden method.",
+      "correct": false,
+      "explanation": "That would widen the checked exception contract and is not allowed."
+    },
+    {
+      "key": "D",
+      "text": "Replace the checked exception with arbitrary unrelated checked exceptions.",
+      "correct": false,
+      "explanation": "Unrelated checked exceptions must still satisfy the overriding throws-clause restrictions."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.8.3 Requirements in Overriding and Hiding",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests selection of the locale-sensitive formatter intended specifically for monetary values.",
+  "prompt": "Which factory method is intended to create a locale-sensitive formatter for monetary values?",
+  "explanation": "`NumberFormat.getCurrencyInstance(locale)` returns a number formatter configured for currency formatting according to the supplied locale.",
+  "options": [
+    {
+      "key": "A",
+      "text": "NumberFormat.getCurrencyInstance(locale)",
+      "correct": true,
+      "explanation": "This is the currency-specific NumberFormat factory."
+    },
+    {
+      "key": "B",
+      "text": "NumberFormat.getIntegerInstance(locale)",
+      "correct": false,
+      "explanation": "That factory formats integers, not currency."
+    },
+    {
+      "key": "C",
+      "text": "NumberFormat.getPercentInstance(locale)",
+      "correct": false,
+      "explanation": "That factory formats percentages."
+    },
+    {
+      "key": "D",
+      "text": "Locale.getCurrencyFormatter()",
+      "correct": false,
+      "explanation": "Locale does not provide such a factory method."
+    }
+  ],
+  "references": [
+    {
+      "title": "NumberFormat (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/NumberFormat.html"
+    }
+  ]
+}

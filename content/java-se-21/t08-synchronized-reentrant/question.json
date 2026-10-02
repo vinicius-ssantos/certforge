@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests a core monitor property that matters when synchronized methods call other synchronized code on the same object.",
+  "prompt": "A thread already owns an object's intrinsic monitor and, before releasing it, enters another `synchronized` block guarded by the same object. What happens?",
+  "explanation": "Java intrinsic locks are reentrant. The owning thread can acquire the same monitor again and must perform the corresponding number of monitor exits before ownership is fully released.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The thread deadlocks itself immediately.",
+      "correct": false,
+      "explanation": "Intrinsic monitors are reentrant, so self-deadlock does not occur merely from reacquiring the same monitor."
+    },
+    {
+      "key": "B",
+      "text": "The thread can enter because monitor locking is reentrant.",
+      "correct": true,
+      "explanation": "The same thread may acquire the monitor recursively."
+    },
+    {
+      "key": "C",
+      "text": "The second synchronized block is skipped.",
+      "correct": false,
+      "explanation": "The block executes normally after the reentrant acquisition."
+    },
+    {
+      "key": "D",
+      "text": "The JVM throws IllegalMonitorStateException on entry.",
+      "correct": false,
+      "explanation": "Reentrant acquisition by the owner is legal."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 17.1 Synchronization",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html#jls-17.1"
+    }
+  ]
+}

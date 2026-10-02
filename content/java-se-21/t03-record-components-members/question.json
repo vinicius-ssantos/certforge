@@ -1,0 +1,45 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing which members the language mandates for a record instead of treating a record as only compact syntax.",
+  "prompt": "For a record component declared in a record header, which members are mandated by the record declaration? Select all that apply.",
+  "explanation": "For each record component, the compiler provides a private final field and a public accessor with the component's name. A record also has a canonical constructor and is implicitly final as a class.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A private final field corresponding to the component.",
+      "correct": true,
+      "explanation": "Each component is represented by a private final field."
+    },
+    {
+      "key": "B",
+      "text": "A public accessor method with the same name as the component.",
+      "correct": true,
+      "explanation": "A public accessor is mandated for every record component."
+    },
+    {
+      "key": "C",
+      "text": "A public setter method for the component.",
+      "correct": false,
+      "explanation": "Record components are not given setters; the corresponding fields are final."
+    },
+    {
+      "key": "D",
+      "text": "A protected mutable field corresponding to the component.",
+      "correct": false,
+      "explanation": "The mandated field is private and final, not protected and mutable."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.10 Record Classes",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.10"
+    },
+    {
+      "title": "Record (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html"
+    }
+  ]
+}

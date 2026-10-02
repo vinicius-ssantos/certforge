@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires mapping service consumption and service implementation to the correct module declaration directives.",
+  "prompt": "In a module declaration using the Java service-loading mechanism, which directive pair is correct? Select all that apply.",
+  "explanation": "A consuming module declares `uses ServiceType`. A provider module declares `provides ServiceType with ImplementationType` for one or more provider implementations.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A consumer uses `uses com.example.Service;`.",
+      "correct": true,
+      "explanation": "The `uses` directive declares that the module discovers implementations of that service."
+    },
+    {
+      "key": "B",
+      "text": "A provider uses `provides com.example.Service with com.example.ServiceImpl;`.",
+      "correct": true,
+      "explanation": "The `provides ... with ...` directive registers the implementation for the service."
+    },
+    {
+      "key": "C",
+      "text": "A consumer must declare `exports com.example.Service;` to discover providers.",
+      "correct": false,
+      "explanation": "Exports controls package access, not service consumption."
+    },
+    {
+      "key": "D",
+      "text": "A provider registers the implementation with `requires ServiceImpl;`.",
+      "correct": false,
+      "explanation": "`requires` names a module dependency, not a service implementation."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7 Module Declarations",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing the closure rules for direct subclasses of a sealed class rather than only the syntax of the permits clause.",
+  "prompt": "For an ordinary class that directly extends a sealed class, which modifiers can satisfy the requirement that the subclass explicitly declare how sealing continues? Select all that apply.",
+  "explanation": "A direct subclass of a sealed class must be declared `final`, `sealed`, or `non-sealed` (subject to the detailed rules for the kind of declaration). These modifiers state whether the hierarchy stops, continues with a restricted set, or becomes open again.",
+  "options": [
+    {
+      "key": "A",
+      "text": "final",
+      "correct": true,
+      "explanation": "A final subclass closes that branch of the hierarchy."
+    },
+    {
+      "key": "B",
+      "text": "sealed",
+      "correct": true,
+      "explanation": "A sealed subclass continues to restrict which declarations may directly extend it."
+    },
+    {
+      "key": "C",
+      "text": "non-sealed",
+      "correct": true,
+      "explanation": "A non-sealed subclass reopens that branch to unrestricted subclassing."
+    },
+    {
+      "key": "D",
+      "text": "abstract by itself",
+      "correct": false,
+      "explanation": "`abstract` alone does not state the sealing status required for a direct subclass of a sealed class."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.1.1.2 sealed, non-sealed, and final Classes",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.1.1.2"
+    }
+  ]
+}

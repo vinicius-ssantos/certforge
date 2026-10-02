@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Combines localization with the immutable, thread-safe design of DateTimeFormatter.",
+  "prompt": "Which statements about `DateTimeFormatter` are correct? Select all that apply.",
+  "explanation": "`DateTimeFormatter` is immutable and thread-safe. Methods such as `withLocale` return a new formatter with an override rather than mutating the original formatter.",
+  "options": [
+    {
+      "key": "A",
+      "text": "DateTimeFormatter is immutable and thread-safe.",
+      "correct": true,
+      "explanation": "The API explicitly documents these properties."
+    },
+    {
+      "key": "B",
+      "text": "withLocale(locale) returns a formatter with the locale override.",
+      "correct": true,
+      "explanation": "The method produces a formatter using the requested locale override."
+    },
+    {
+      "key": "C",
+      "text": "withLocale(locale) mutates the original formatter in place.",
+      "correct": false,
+      "explanation": "The formatter is immutable; configuration methods return another formatter."
+    },
+    {
+      "key": "D",
+      "text": "A DateTimeFormatter may only be used by one thread.",
+      "correct": false,
+      "explanation": "The class is thread-safe and can be shared."
+    }
+  ],
+  "references": [
+    {
+      "title": "DateTimeFormatter (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/format/DateTimeFormatter.html"
+    }
+  ]
+}

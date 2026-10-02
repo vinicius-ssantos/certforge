@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests binary numeric promotion, a frequent source of surprises when arithmetic is applied to byte and short operands.",
+  "prompt": "Given the declarations below, what is the compile-time type of `result`?\n\n```java\nbyte a = 10;\nbyte b = 20;\nvar result = a + b;\n```",
+  "explanation": "For binary numeric addition, operands narrower than int are promoted to int. Therefore `a + b` has type int, and `var` infers int.",
+  "options": [
+    {
+      "key": "A",
+      "text": "byte",
+      "correct": false,
+      "explanation": "The operands are bytes, but binary numeric promotion promotes them before the addition."
+    },
+    {
+      "key": "B",
+      "text": "short",
+      "correct": false,
+      "explanation": "The result is not promoted merely to short; integral promotion reaches int for byte and short operands."
+    },
+    {
+      "key": "C",
+      "text": "int",
+      "correct": true,
+      "explanation": "Binary numeric promotion converts both byte operands to int, so the addition expression has type int."
+    },
+    {
+      "key": "D",
+      "text": "long",
+      "correct": false,
+      "explanation": "No operand is long, so there is no reason for the expression to be promoted to long."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 5.6 Numeric Contexts",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-5.html#jls-5.6"
+    }
+  ]
+}
