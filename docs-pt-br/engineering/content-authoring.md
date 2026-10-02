@@ -92,6 +92,22 @@ A revisão é feita por uma conta diferente da do autor, por padrão (`reviewer_
 3. Aprove com `POST /api/admin/question-revisions/{revisionId}/approve`, ou devolva com `.../request-changes` e um comentário.
 4. Um publicador publica as revisões aprovadas com `.../publish`. Uma questão pode ser corrigida depois criando-se uma nova revisão; a publicada é substituída e mantida no histórico.
 
+### Fazendo tudo isso de uma vez
+
+Com uma revisão registrada no pacote, o `deploy/publish-pack.mjs` percorre o fluxo inteiro por você — criar, submeter, aprovar, publicar — levando o veredito registrado como comentário da aprovação e o `checklist` do registro como o que o revisor atesta:
+
+```sh
+just reviewer reviewer@example.com 'uma senha longa'   # uma vez: a segunda conta que a aprovação exige
+just publish-content reviewer@example.com 'uma senha longa'
+```
+
+Ele automatiza a digitação, não o julgamento, e recusa duas coisas para não poder alegar revisão que não existe:
+
+- **Questão cujo digest registrado não bate mais é segurada**, não publicada, porque ninguém revisou o texto que sairia. A execução relata e sai com código diferente de zero.
+- **A conta de revisor nunca é inventada.** O semeador de demonstração registra um revisor descartável porque as questões dele são dados descartáveis; aqui isso gravaria um revisor fictício na procedência de conteúdo real, então a conta é passada e precisa existir antes.
+
+Ele também recusa revisor que seja o autor, pula enunciados que já estão no banco (então rodar de novo completa em vez de duplicar) e imprime no fim o autor, o revisor e o publicador de registro. Com `--dry-run` ele relata o que publicaria sem contatar nada.
+
 Uma questão ambígua ou contestada não deve ser publicada. Corrija-a ou deixe-a em rascunho.
 
 ### Antes de publicar qualquer coisa nesta trilha

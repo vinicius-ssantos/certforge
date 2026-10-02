@@ -103,7 +103,14 @@ docker compose -f compose.release.yaml up --build -d       # http://localhost:80
 node deploy/seed-demo.mjs                                   # as questões de demonstração
 ```
 
-Essas questões de demonstração dizem no próprio texto que são dados de demonstração. O pacote real em `content/` nunca é publicado por automação: ele já passou pela [revisão técnica](content/java-se-21/review.json), mas um revisor ainda precisa aprová-lo e um administrador publicá-lo na mesa editorial, então uma instalação simples não tem questão nenhuma. Os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) percorrem o produto inteiro. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`; o build usa o wrapper do Maven (`./mvnw`), então não é preciso instalar o Maven.
+Essas questões de demonstração dizem no próprio texto que são dados de demonstração. Para o pacote real — vinte questões revisadas de Java SE 21 — dois comandos a mais o levam pelo fluxo editorial de verdade:
+
+```sh
+just reviewer reviewer@example.com 'uma senha longa'   # uma vez: a aprovação exige uma segunda conta
+just publish-content reviewer@example.com 'uma senha longa'
+```
+
+Isso publica só o que a [revisão técnica](content/java-se-21/review.json) registrada ainda cobre, e segura o que foi editado depois; nunca inventa o revisor que registra. Os [roteiros de demonstração](docs-pt-br/release/demo-scripts.md) percorrem o produto inteiro. Para desenvolvimento, em vez de uma execução parecida com a de release, veja o [bootstrap do backend](docs-pt-br/engineering/backend-bootstrap.md) e o `web/README.md`; o build usa o wrapper do Maven (`./mvnw`), então não é preciso instalar o Maven.
 
 ## Contribuindo
 

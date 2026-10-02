@@ -100,7 +100,14 @@ docker compose -f compose.release.yaml up --build -d       # http://localhost:80
 node deploy/seed-demo.mjs                                   # the demo questions
 ```
 
-Those demo questions say in their own text that they are demo data. The real pack in `content/` is never published by automation: it has had its [technical review](content/java-se-21/review.json), but a reviewer must still approve it and an administrator publish it in the editorial desk, so a plain install has no questions at all. The [demonstration scripts](docs/release/demo-scripts.md) walk the whole product. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`; the build uses the Maven wrapper (`./mvnw`), so Maven need not be installed.
+Those demo questions say in their own text that they are demo data. For the real pack — twenty reviewed Java SE 21 questions — two more commands take it through the real editorial workflow:
+
+```sh
+just reviewer reviewer@example.com 'a long password'   # once: approval needs a second account
+just publish-content reviewer@example.com 'a long password'
+```
+
+That publishes only what the recorded [technical review](content/java-se-21/review.json) still covers, and holds back anything edited since; it never invents the reviewer it records. The [demonstration scripts](docs/release/demo-scripts.md) walk the whole product. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`; the build uses the Maven wrapper (`./mvnw`), so Maven need not be installed.
 
 ## Contributing
 
