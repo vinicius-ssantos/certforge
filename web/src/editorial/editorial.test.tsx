@@ -161,7 +161,8 @@ describe("writing a draft", () => {
     await user.click(screen.getByRole("button", { name: "Save draft" }));
 
     expect(await screen.findByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
-    expect(await screen.findByText("Draft saved.")).toHaveFocus();
+    const saved = await screen.findByText("Draft saved.");
+    await waitFor(() => expect(saved).toHaveFocus());
     const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === "/api/admin/questions");
     expect(call?.body).toMatchObject({
       type: "SINGLE_CHOICE",

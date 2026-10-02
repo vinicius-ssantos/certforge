@@ -1,4 +1,4 @@
-import { screen, within } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
@@ -80,7 +80,11 @@ describe("reviewing", () => {
 
     await user.click(screen.getByRole("button", { name: "Approve" }));
 
-    expect(await screen.findByText(/^Approved\./)).toHaveFocus();
+    // findBy waits for the text to appear; the focus arrives in an effect, which can be a render
+    // later. Waiting for the focus itself is the actual requirement: the person ends up on the
+    // notice.
+    const approved = await screen.findByText(/^Approved\./);
+    await waitFor(() => expect(approved).toHaveFocus());
     expect(screen.getByText("Current status:")).toHaveTextContent("Approved");
     const call = fetch.calls.find((entry) => entry.path === `${REV}/approve`);
     expect(call?.body).toEqual({ comment: "Checked on JDK 21.", checklist: [] });
@@ -157,7 +161,8 @@ describe("reviewing", () => {
 
     await user.click(screen.getByRole("button", { name: "Request changes" }));
 
-    expect(await screen.findByText(/Sent back to the author/)).toHaveFocus();
+    const sentBack = await screen.findByText(/Sent back to the author/);
+    await waitFor(() => expect(sentBack).toHaveFocus());
     expect(fetch.calls.find((entry) => entry.path === `${REV}/request-changes`)?.body).toEqual({
       comment: "Option B needs a better reason.",
       checklist: [],
@@ -209,7 +214,8 @@ describe("publishing", () => {
     expect(yes).toHaveFocus();
     await user.click(yes);
 
-    expect(await screen.findByText(/^Published\./)).toHaveFocus();
+    const publishedNotice = await screen.findByText(/^Published\./);
+    await waitFor(() => expect(publishedNotice).toHaveFocus());
     expect(screen.getByText("Current status:")).toHaveTextContent("Published");
   });
 

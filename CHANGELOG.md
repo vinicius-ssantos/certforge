@@ -8,6 +8,7 @@ The project follows Semantic Versioning once application releases begin. During 
 
 ### Fixed
 
+- Four web tests asserted focus the instant a notice's text appeared, but the focus arrives in an effect, which can be a render later. One of them failed on a loaded CI runner while passing locally. They now wait for the focus, which is the actual requirement: the person ends up on the notice (#13, #14).
 - `just --list` showed the wrong description for any recipe with a multi-line comment, because `just` takes the **last** comment line: `scan` was listed as "it means nothing on other systems". The summary is now the last line of each of those blocks, which is what the listing reads.
 - Recipe arguments were interpolated into the shell unquoted, so `just import-content a@b.com 'a long password'` passed the password as four separate arguments and the command failed with a policy error that pointed nowhere near the cause. They now go through `quote()`.
 - The `justfile` recipes failed on Windows outside Git Bash: `bash` on the PATH there is the WSL launcher, and a WSL distribution has no Docker unless its integration is on, so `just demo` from PowerShell could not reach Docker at all. Git Bash is now named outright for Windows, with the override documented (#15).
