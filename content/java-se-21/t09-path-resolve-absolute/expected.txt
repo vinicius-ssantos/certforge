@@ -1,0 +1,3 @@
+isAbsolute=true
+resolveReturnsOther=true
+resolveRelativeAppends=true
