@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the negative return encoding of Arrays.binarySearch when a key is absent.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The missing value 4 would be inserted at index 2 to keep the array sorted. `binarySearch` encodes an absent key as `-(insertionPoint) - 1`, giving `-3`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2",
+      "correct": false,
+      "explanation": "2 is the insertion point, but an absent result is encoded as a negative value."
+    },
+    {
+      "key": "B",
+      "text": "-2",
+      "correct": false,
+      "explanation": "The return value is `-insertionPoint - 1`, not simply the negated insertion point."
+    },
+    {
+      "key": "C",
+      "text": "-3",
+      "correct": true,
+      "explanation": "With insertion point 2, the encoded result is -3."
+    },
+    {
+      "key": "D",
+      "text": "4",
+      "correct": false,
+      "explanation": "The method returns an index or encoded insertion point, not the search key."
+    }
+  ],
+  "references": [
+    {
+      "title": "Arrays.binarySearch(int[], int) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int)"
+    }
+  ]
+}
