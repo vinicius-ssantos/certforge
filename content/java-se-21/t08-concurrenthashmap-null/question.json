@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks a deliberate API restriction that affects how absence can be represented in concurrent maps.",
+  "prompt": "Which statements about `ConcurrentHashMap` are correct? Select all that apply.",
+  "explanation": "ConcurrentHashMap does not permit null keys or null values. This lets null from retrieval operations consistently represent the absence of a mapping.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Null keys are not allowed.",
+      "correct": true,
+      "explanation": "ConcurrentHashMap rejects null keys."
+    },
+    {
+      "key": "B",
+      "text": "Null values are not allowed.",
+      "correct": true,
+      "explanation": "ConcurrentHashMap rejects null values."
+    },
+    {
+      "key": "C",
+      "text": "One null key is allowed, like HashMap.",
+      "correct": false,
+      "explanation": "ConcurrentHashMap deliberately does not support null keys."
+    },
+    {
+      "key": "D",
+      "text": "Null values are stored but ignored by get().",
+      "correct": false,
+      "explanation": "Null values cannot be inserted."
+    }
+  ],
+  "references": [
+    {
+      "title": "ConcurrentHashMap (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html"
+    }
+  ]
+}

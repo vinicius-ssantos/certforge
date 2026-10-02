@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the exact return contract of one of the most common character-input methods.",
+  "prompt": "Which statements about `BufferedReader.readLine()` are correct? Select all that apply.",
+  "explanation": "`readLine` returns a line of text without the line-termination characters. It returns null when the end of the stream has been reached without another line.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The returned string excludes the line-termination characters.",
+      "correct": true,
+      "explanation": "The terminator is not part of the returned line."
+    },
+    {
+      "key": "B",
+      "text": "It returns null when the end of the stream has been reached and no line remains.",
+      "correct": true,
+      "explanation": "Null is the documented end-of-stream result."
+    },
+    {
+      "key": "C",
+      "text": "It always includes `\\n` at the end of the returned string.",
+      "correct": false,
+      "explanation": "Line-termination characters are excluded."
+    },
+    {
+      "key": "D",
+      "text": "It returns an empty string instead of null for end of stream.",
+      "correct": false,
+      "explanation": "An empty line and end of stream are distinct; EOF is reported with null."
+    }
+  ],
+  "references": [
+    {
+      "title": "BufferedReader.readLine() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/BufferedReader.html#readLine()"
+    }
+  ]
+}

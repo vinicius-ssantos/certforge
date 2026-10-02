@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires understanding the identity overload of reduce, especially its defined result for an empty stream.",
+  "prompt": "What does `Stream.<Integer>empty().reduce(10, Integer::sum)` return?",
+  "explanation": "The two-argument `reduce(identity, accumulator)` form starts with the identity value. With no stream elements, there is nothing to accumulate, so the identity value is returned.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0",
+      "correct": false,
+      "explanation": "The identity supplied by the caller is 10, not the additive identity chosen implicitly by the API."
+    },
+    {
+      "key": "B",
+      "text": "10",
+      "correct": true,
+      "explanation": "An empty stream returns the supplied identity for this overload."
+    },
+    {
+      "key": "C",
+      "text": "Optional.empty()",
+      "correct": false,
+      "explanation": "The overload without an identity returns Optional; the identity overload returns a value directly."
+    },
+    {
+      "key": "D",
+      "text": "It throws NoSuchElementException.",
+      "correct": false,
+      "explanation": "The identity value defines the result even for an empty stream."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stream.reduce(T, BinaryOperator) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#reduce(T,java.util.function.BinaryOperator)"
+    }
+  ]
+}

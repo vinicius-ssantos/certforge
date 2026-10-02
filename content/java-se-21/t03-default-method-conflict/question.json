@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the conflict-resolution rule when a class inherits unrelated default methods with the same signature.",
+  "prompt": "A class implements two unrelated interfaces, and both interfaces declare a default method with the same signature. Neither default is more specific. What must the class do to compile?",
+  "explanation": "When unrelated inherited defaults conflict and no rule selects one as more specific, the implementing class must provide an overriding method that resolves the conflict.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nothing; Java chooses the first interface listed in implements.",
+      "correct": false,
+      "explanation": "The order of interfaces in the implements clause does not resolve a default-method conflict."
+    },
+    {
+      "key": "B",
+      "text": "Override the method and resolve the conflict explicitly.",
+      "correct": true,
+      "explanation": "An overriding declaration in the class removes the ambiguity."
+    },
+    {
+      "key": "C",
+      "text": "Mark the class final.",
+      "correct": false,
+      "explanation": "Final prevents subclassing but does not resolve inherited default methods."
+    },
+    {
+      "key": "D",
+      "text": "Make both interface methods static.",
+      "correct": false,
+      "explanation": "That would change the interfaces themselves; it is not the rule for resolving inherited defaults in the class."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 9.4.1.3 Inheriting Methods with Override-Equivalent Signatures",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.4.1.3"
+    }
+  ]
+}

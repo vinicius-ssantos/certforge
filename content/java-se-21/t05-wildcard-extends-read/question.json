@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the producer side of upper-bounded wildcards and why they do not safely accept arbitrary Number values.",
+  "prompt": "Given `List<? extends Number> values`, which operation is guaranteed to be type-safe and compile?",
+  "explanation": "The wildcard says the list contains elements of some unknown subtype of Number. Reading an element as Number is safe. Adding a specific Number subtype is not generally safe because the actual element type might be a different subtype.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Number n = values.get(0);",
+      "correct": true,
+      "explanation": "Whatever the captured subtype is, every element is a Number."
+    },
+    {
+      "key": "B",
+      "text": "values.add(Integer.valueOf(1));",
+      "correct": false,
+      "explanation": "The captured element type might not be Integer, so adding an Integer is not generally allowed."
+    },
+    {
+      "key": "C",
+      "text": "values.add(Double.valueOf(1.0));",
+      "correct": false,
+      "explanation": "The captured element type might not be Double."
+    },
+    {
+      "key": "D",
+      "text": "values.add(new BigDecimal(\"1\"));",
+      "correct": false,
+      "explanation": "The captured element type might be some other Number subtype."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 4.5.1 Type Arguments of Parameterized Types",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.5.1"
+    }
+  ]
+}

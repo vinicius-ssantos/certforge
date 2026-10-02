@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the exact text rule used by Boolean.parseBoolean rather than relying on common truthy-string conventions from other languages.",
+  "prompt": "Which strings cause `Boolean.parseBoolean(value)` to return `true`? Select all that apply.",
+  "explanation": "`Boolean.parseBoolean` returns true exactly when the argument is non-null and equals `\"true\"` ignoring case.",
+  "options": [
+    {
+      "key": "A",
+      "text": "\"true\"",
+      "correct": true,
+      "explanation": "It matches `true` exactly."
+    },
+    {
+      "key": "B",
+      "text": "\"TRUE\"",
+      "correct": true,
+      "explanation": "The comparison is case-insensitive."
+    },
+    {
+      "key": "C",
+      "text": "\"TrUe\"",
+      "correct": true,
+      "explanation": "Mixed case also matches because case is ignored."
+    },
+    {
+      "key": "D",
+      "text": "\"yes\"",
+      "correct": false,
+      "explanation": "The method does not treat `yes` as a true value."
+    }
+  ],
+  "references": [
+    {
+      "title": "Boolean.parseBoolean(String) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html#parseBoolean(java.lang.String)"
+    }
+  ]
+}

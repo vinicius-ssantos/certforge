@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing where a continue transfers control inside the basic for-loop execution sequence.",
+  "prompt": "Inside a basic `for (init; condition; update)` loop, a `continue` statement targets that loop. What happens before the loop condition is tested again?",
+  "explanation": "For a basic for statement, continuing the loop first executes the update expressions, then evaluates the condition for the next iteration.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The update expressions execute, then the condition is tested again.",
+      "correct": true,
+      "explanation": "That is the continue behavior for the basic for statement."
+    },
+    {
+      "key": "B",
+      "text": "The condition is tested immediately and the update expressions are skipped.",
+      "correct": false,
+      "explanation": "The update part is not skipped by a continue that targets the for loop."
+    },
+    {
+      "key": "C",
+      "text": "The initialization expressions execute again.",
+      "correct": false,
+      "explanation": "Initialization occurs only when the for loop is first entered."
+    },
+    {
+      "key": "D",
+      "text": "The loop always terminates.",
+      "correct": false,
+      "explanation": "Continue starts the next iteration path; it does not inherently terminate the loop."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.14.1.3 Abrupt Completion of for Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.14.1.3"
+    }
+  ]
+}

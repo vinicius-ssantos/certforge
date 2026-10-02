@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the difference between an unqualified export and an export targeted to a fixed set of named modules.",
+  "prompt": "What does `exports com.example.internal to client.one, client.two;` mean in a module declaration?",
+  "explanation": "A qualified exports directive makes the package accessible at compile time and run time only to the named target modules, rather than exporting it to every module that reads the exporting module.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The package is exported only to client.one and client.two.",
+      "correct": true,
+      "explanation": "The `to` clause names the target modules of the qualified export."
+    },
+    {
+      "key": "B",
+      "text": "The package is exported to every module except client.one and client.two.",
+      "correct": false,
+      "explanation": "The named modules are included targets, not exclusions."
+    },
+    {
+      "key": "C",
+      "text": "The package is opened for deep reflection to all modules.",
+      "correct": false,
+      "explanation": "Opening for reflection is controlled by `opens`, not `exports`."
+    },
+    {
+      "key": "D",
+      "text": "The two client modules are automatically required as dependencies.",
+      "correct": false,
+      "explanation": "Exports does not create requires directives."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7.2 Exported and Opened Packages",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2"
+    }
+  ]
+}
