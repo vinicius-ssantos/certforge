@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing which monitor is acquired by synchronized instance and static methods.",
+  "prompt": "Which statements about `synchronized` methods are correct? Select all that apply.",
+  "explanation": "A synchronized instance method locks the monitor associated with the receiver object. A synchronized static method locks the monitor associated with the Class object representing the declaring class.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A synchronized instance method locks the receiver object's monitor.",
+      "correct": true,
+      "explanation": "The receiver is the monitor target for an instance synchronized method."
+    },
+    {
+      "key": "B",
+      "text": "A synchronized static method locks the Class object for the class.",
+      "correct": true,
+      "explanation": "Static synchronized methods synchronize on the class's Class object."
+    },
+    {
+      "key": "C",
+      "text": "Every synchronized method locks the same JVM-wide global monitor.",
+      "correct": false,
+      "explanation": "Synchronization is associated with particular object monitors, not one universal monitor."
+    },
+    {
+      "key": "D",
+      "text": "A synchronized static method locks an arbitrary instance of the class.",
+      "correct": false,
+      "explanation": "No instance receiver exists for a static method; the Class object is used."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.3.6 synchronized Methods",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.3.6"
+    }
+  ]
+}
