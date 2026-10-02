@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires tracing reverse resource-closing order and the order in which close failures become suppressed exceptions.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The body exception remains primary. Resources close in reverse declaration order, so B closes before A. Their exceptions are attached as suppressed exceptions in that same close order, producing `body B A`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "body A B",
+      "correct": false,
+      "explanation": "Resources do not close in declaration order."
+    },
+    {
+      "key": "B",
+      "text": "body B A",
+      "correct": true,
+      "explanation": "B closes first, then A, and their failures are suppressed on the body exception in that order."
+    },
+    {
+      "key": "C",
+      "text": "B A body",
+      "correct": false,
+      "explanation": "The body exception remains primary; close exceptions are suppressed."
+    },
+    {
+      "key": "D",
+      "text": "A B",
+      "correct": false,
+      "explanation": "The primary body exception is still present and printed first."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20.3.1 Basic try-with-resources",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3.1"
+    }
+  ]
+}
