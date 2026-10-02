@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the value returned by an atomic read-modify-write operation rather than only its side effect.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`updateAndGet` atomically applies the function to the current value, stores the result, and returns the updated value. Starting at 3 and doubling produces 6.",
+  "options": [
+    {
+      "key": "A",
+      "text": "3",
+      "correct": false,
+      "explanation": "That is the old value; updateAndGet returns the updated value."
+    },
+    {
+      "key": "B",
+      "text": "6",
+      "correct": true,
+      "explanation": "The update function doubles 3 and the method returns the new value."
+    },
+    {
+      "key": "C",
+      "text": "9",
+      "correct": false,
+      "explanation": "The function multiplies by 2, not by 3."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because lambdas cannot be used with AtomicInteger.",
+      "correct": false,
+      "explanation": "updateAndGet accepts an IntUnaryOperator, which a lambda can implement."
+    }
+  ],
+  "references": [
+    {
+      "title": "AtomicInteger.updateAndGet(IntUnaryOperator) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html#updateAndGet(java.util.function.IntUnaryOperator)"
+    }
+  ]
+}
