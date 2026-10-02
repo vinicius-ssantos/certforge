@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing that Java maintains category-specific default locales for display text and formatting.",
+  "prompt": "Which statements about `Locale.Category` are correct? Select all that apply.",
+  "explanation": "Java defines separate default-locale categories. `DISPLAY` is used for user-interface display information, while `FORMAT` is used for formatting dates, numbers, and similar locale-sensitive data.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Locale.Category.DISPLAY is associated with display-oriented locale data.",
+      "correct": true,
+      "explanation": "It is the category for user-interface display information."
+    },
+    {
+      "key": "B",
+      "text": "Locale.Category.FORMAT is associated with locale-sensitive formatting.",
+      "correct": true,
+      "explanation": "It is used by formatting-oriented APIs."
+    },
+    {
+      "key": "C",
+      "text": "Java has only one default Locale and no category-specific defaults.",
+      "correct": false,
+      "explanation": "Category-specific defaults are part of the Locale API."
+    },
+    {
+      "key": "D",
+      "text": "FORMAT controls module readability in JPMS.",
+      "correct": false,
+      "explanation": "Locale categories are unrelated to the module system."
+    }
+  ],
+  "references": [
+    {
+      "title": "Locale.Category (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.Category.html"
+    }
+  ]
+}
