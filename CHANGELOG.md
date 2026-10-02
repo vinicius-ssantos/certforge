@@ -9,6 +9,7 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 ### Added
 
 - Expanded the Java SE 21 (1Z0-830) authorial question pack from 20 to 60 questions, six per topic. The 40 additions are original questions grounded in the Java SE 21 specifications and API documentation rather than copied or derived from third-party practice banks; they remain explicitly unreviewed until a person completes the technical review recorded by the generated packet.
+- Expanded the same pack again from 60 to 100 questions, reaching ten questions per topic. The newest 40 remain original, specification-backed drafts; ten include runnable Java 21 verification programs (one per topic) and thirty are conceptual. All 80 post-initial-pack questions remain explicitly unreviewed until a person records a technical review.
 
 ## [0.1.0] - 2026-10-02
 
