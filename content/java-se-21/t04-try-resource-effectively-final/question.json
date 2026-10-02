@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the Java language rule that an existing local variable can appear in a resource specification only when it is final or effectively final.",
+  "prompt": "Suppose `BufferedReader reader` is declared before a try-with-resources statement. Which statements are correct if the code uses `try (reader) { ... }`? Select all that apply.",
+  "explanation": "An existing local variable can be used directly as a resource when it is final or effectively final and has an AutoCloseable-compatible type. The resource is closed automatically when the try-with-resources statement exits.",
+  "options": [
+    {
+      "key": "A",
+      "text": "reader must be final or effectively final.",
+      "correct": true,
+      "explanation": "That is required for an existing variable used as a resource."
+    },
+    {
+      "key": "B",
+      "text": "reader is closed automatically when the try-with-resources statement exits.",
+      "correct": true,
+      "explanation": "The usual automatic closing semantics apply."
+    },
+    {
+      "key": "C",
+      "text": "reader must be reassigned inside the try body.",
+      "correct": false,
+      "explanation": "Reassignment would conflict with the effective-final requirement."
+    },
+    {
+      "key": "D",
+      "text": "Only variables declared inside the resource header can ever be resources.",
+      "correct": false,
+      "explanation": "Java permits suitable existing final/effectively-final variables in the header."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20.3 try-with-resources",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3"
+    }
+  ]
+}
