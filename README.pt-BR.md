@@ -93,7 +93,7 @@ Você precisa do Docker e, para a forma curta, do [just](https://github.com/case
 just demo          # constrói, sobe e publica dez questões de demonstração claramente identificadas
 ```
 
-Ele fica em `http://localhost:8081`; entre como `admin@example.com` com `a long local password`. O `just` sozinho lista o resto: `just down`, `just logs app`, `just check`, `just verify`.
+Ele fica em `http://localhost:8081`; entre como `admin@example.com` com `a long local password`. O `just` sozinho lista o resto: `just down`, `just logs app`, `just check`, `just verify`. No Windows as receitas rodam sob o Git Bash, que o `justfile` nomeia explicitamente porque o `bash` do PATH ali costuma ser o lançador do WSL, e uma distribuição WSL não tem Docker a menos que a integração esteja ligada.
 
 Sem o `just`, a mesma coisa:
 
