@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests two documented guarantees of the unmodifiable-list collector, including its null rejection.",
+  "prompt": "Which statements about `Collectors.toUnmodifiableList()` are correct? Select all that apply.",
+  "explanation": "The collector accumulates elements into an unmodifiable List and disallows null values. A null input element causes `NullPointerException` during collection.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The resulting List is unmodifiable.",
+      "correct": true,
+      "explanation": "Mutation operations are not supported on the result."
+    },
+    {
+      "key": "B",
+      "text": "Null input elements are disallowed.",
+      "correct": true,
+      "explanation": "The collector rejects null values."
+    },
+    {
+      "key": "C",
+      "text": "The resulting List is guaranteed to be an ArrayList.",
+      "correct": false,
+      "explanation": "The API does not guarantee a specific implementation class."
+    },
+    {
+      "key": "D",
+      "text": "The collector silently drops null elements.",
+      "correct": false,
+      "explanation": "Nulls are rejected rather than filtered out."
+    }
+  ],
+  "references": [
+    {
+      "title": "Collectors.toUnmodifiableList() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html#toUnmodifiableList()"
+    }
+  ]
+}
