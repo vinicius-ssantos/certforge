@@ -12,7 +12,7 @@ Issue: #8 — Criar o pacote inicial de conteúdo autoral de certificação Java
 
 O que a ferramenta comprova automaticamente, a cada build:
 
-- cada questão está completa segundo as invariantes do banco de questões (alternativas, exatamente uma correta em escolha única, explicações, referências https, Java 21);
+- cada questão está completa segundo as invariantes do banco de questões (alternativas, exatamente uma correta em escolha única, explicações, referências, Java 21);
 - cada trecho de código compila com `--release 21` e produz exatamente a saída, ou o erro de compilação, que a questão afirma;
 - o gabarito concorda com essa saída: quando uma alternativa tem o texto que o programa imprime, é ela que está marcada como correta, então a questão não pode imprimir uma coisa e apontar outra;
 - o pacote cobre os dez tópicos, com os dois tipos de questão e todas as dificuldades, e não há dois enunciados idênticos;
@@ -47,7 +47,12 @@ content/
 3. Mire somente em Java 21 (`javaRelease` deve ser 21 nesta trilha) e evite comportamentos que a especificação deixa sem definição. Uma questão sobre algo que a linguagem não garante é ambígua por construção.
 4. Mantenha o código determinístico e independente do sistema operacional, da hora, do locale padrão, da ordem de hash e de threads. A saída deve ser idêntica em todo JDK suportado.
 5. Dê 4 ou 5 alternativas. Cada alternativa precisa de uma explicação de por que está correta ou incorreta. Os distratores devem ser erros plausíveis, não pegadinhas de redação.
-6. Adicione referências autoritativas com URLs `https` (JLS, JEPs, a API do Java SE 21). Prefira âncoras estáveis.
+6. Adicione referências autoritativas. Só três fontes são aceitas, e o build faz cumprir (ADR 0011):
+   - as especificações do Java SE, `https://docs.oracle.com/javase/specs/...`, escopadas em `se21`;
+   - a documentação da API, `https://docs.oracle.com/en/java/javase/21/...`;
+   - um JEP, `https://openjdk.org/jeps/...`, que não precisa de escopo porque descreve uma release.
+
+   Prefira âncoras estáveis. Referência a outra release, ou a qualquer outro site por bom que seja, quebra o build: antes da ADR 0011 a única checagem era o prefixo `https://`, que um link morto ou a página do Java 17 satisfazem igual. O que nenhuma checagem faz é dizer se a referência sustenta a afirmação — isso fica com o revisor.
 7. Informe a dificuldade e o porquê.
 8. Rode a verificação do pacote:
 
