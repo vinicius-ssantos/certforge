@@ -3129,7 +3129,7 @@ To record: `"digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e95
 
 ### As the learner sees it
 
-> A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but references a subclass object, which declaration is selected by `variable.method()`?
+> A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but holds a subclass instance, which declaration is selected by `variable.method()`?
 
 - **A** The subclass method, because the object is a subclass instance.
 - **B** The superclass method, because the variable's compile-time type controls static method selection.
@@ -3172,7 +3172,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:bde8dce156cb68f81b12cde6bbab10877af2b088963b5137a0ecd2cc184d6e4f"`, `"verified": null`
+To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": null`
 
 **Comments:**
 
