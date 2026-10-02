@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing assignment to the enhanced-for iteration variable from mutation of the array element it was initialized from.",
+  "prompt": "Given `int[] values = {1, 2, 3};`, what happens to the array after `for (int value : values) { value++; }` completes?",
+  "explanation": "For each iteration, the current array element is assigned to the local iteration variable. Incrementing that local variable does not write a new primitive value back into the array.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The array becomes {2, 3, 4}.",
+      "correct": false,
+      "explanation": "The loop variable is incremented, not the corresponding array element."
+    },
+    {
+      "key": "B",
+      "text": "The array remains {1, 2, 3}.",
+      "correct": true,
+      "explanation": "Each primitive element is copied into the iteration variable."
+    },
+    {
+      "key": "C",
+      "text": "The array becomes {2, 2, 3}.",
+      "correct": false,
+      "explanation": "No element is written through the loop variable."
+    },
+    {
+      "key": "D",
+      "text": "The code does not compile because enhanced-for variables are implicitly final.",
+      "correct": false,
+      "explanation": "The iteration variable can be reassigned."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.14.2 The enhanced for statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.14.2"
+    }
+  ]
+}
