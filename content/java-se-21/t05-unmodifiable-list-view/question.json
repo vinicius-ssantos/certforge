@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes an unmodifiable view from an immutable independent copy.",
+  "prompt": "Suppose `view = Collections.unmodifiableList(backing)`. Which statements are correct? Select all that apply.",
+  "explanation": "The returned list is an unmodifiable view of the specified backing list. Mutation through the view is blocked, but changes made directly to the backing list are visible through the view.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Calling view.add(...) throws UnsupportedOperationException.",
+      "correct": true,
+      "explanation": "The view does not support mutating operations."
+    },
+    {
+      "key": "B",
+      "text": "Changes made directly to backing can be observed through view.",
+      "correct": true,
+      "explanation": "The wrapper is a view over the same backing list."
+    },
+    {
+      "key": "C",
+      "text": "The method always makes a detached copy of backing.",
+      "correct": false,
+      "explanation": "It wraps the supplied list rather than necessarily copying its contents."
+    },
+    {
+      "key": "D",
+      "text": "The backing list itself becomes unmodifiable.",
+      "correct": false,
+      "explanation": "Only access through the returned wrapper is restricted."
+    }
+  ],
+  "references": [
+    {
+      "title": "Collections.unmodifiableList(List) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html#unmodifiableList(java.util.List)"
+    }
+  ]
+}
