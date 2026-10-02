@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the capability that distinguishes RandomAccessFile from sequential stream abstractions.",
+  "prompt": "What is the purpose of `RandomAccessFile.seek(long pos)`?",
+  "explanation": "`seek` sets the file-pointer offset, measured from the beginning of the file, so subsequent reads or writes occur at that position.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It changes the file pointer to the specified byte offset from the beginning.",
+      "correct": true,
+      "explanation": "That is the documented purpose of seek."
+    },
+    {
+      "key": "B",
+      "text": "It scans forward until it finds the specified byte value.",
+      "correct": false,
+      "explanation": "The argument is a position, not a byte to search for."
+    },
+    {
+      "key": "C",
+      "text": "It truncates the file to the specified length.",
+      "correct": false,
+      "explanation": "Changing file length is handled by setLength, not seek."
+    },
+    {
+      "key": "D",
+      "text": "It changes the character encoding used by the file.",
+      "correct": false,
+      "explanation": "seek controls position, not encoding."
+    }
+  ],
+  "references": [
+    {
+      "title": "RandomAccessFile.seek(long) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/RandomAccessFile.html#seek(long)"
+    }
+  ]
+}
