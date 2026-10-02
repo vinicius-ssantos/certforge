@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires connecting encounter order with the semantics of the short-circuiting findFirst terminal operation.",
+  "prompt": "For an ordered stream with elements `a`, `b`, `c`, what does `findFirst()` promise when the stream is non-empty?",
+  "explanation": "`findFirst` returns an Optional describing the first element of the stream. On an ordered stream, that means the first element in encounter order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It returns an Optional containing a.",
+      "correct": true,
+      "explanation": "a is first in the stream's encounter order."
+    },
+    {
+      "key": "B",
+      "text": "It may return any element even though the stream is ordered.",
+      "correct": false,
+      "explanation": "That freedom belongs to findAny; findFirst respects encounter order when one exists."
+    },
+    {
+      "key": "C",
+      "text": "It returns all three elements in a List.",
+      "correct": false,
+      "explanation": "findFirst is a short-circuiting terminal operation returning one Optional."
+    },
+    {
+      "key": "D",
+      "text": "It can be used only on sequential streams.",
+      "correct": false,
+      "explanation": "findFirst also works on parallel streams while preserving first-element semantics for ordered streams."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stream.findFirst() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#findFirst()"
+    }
+  ]
+}
