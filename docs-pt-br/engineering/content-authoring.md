@@ -25,7 +25,9 @@ Ele **não** comprova que uma questão está bem escrita, que não é ambígua n
 ```
 content/
   ContentImporter.java          importador independente, sem dependências
+  pack.mjs                      leitura de um pacote, do catálogo e do registro de revisão
   java-se-21/
+    review.json                 quem revisou quais questões, quando, e um digest de cada
     t04-finally-return/
       question.json             o corpo da requisição de POST /api/admin/questions
       Main.java                 código mostrado ao aluno e verificado pelo build
@@ -70,7 +72,11 @@ java content/ContentImporter.java --base-url http://localhost:8080 --email edito
 
 ## Revisando e publicando
 
-O [pacote de revisão de conteúdo](../../docs/release/content-review-packet.md) (em inglês, como as questões) expõe o pacote inteiro para o revisor: cada questão como o aluno a vê, depois o gabarito, as razões, as referências, a saída que o build verificou e as conferências abaixo como caixas para marcar. Ele é gerado (`node content/build-review-packet.mjs`) e o CI falha se estiver desatualizado.
+O [pacote de revisão de conteúdo](../../docs/release/content-review-packet.md) (em inglês, como as questões) expõe o pacote inteiro para o revisor: cada questão como o aluno a vê, depois o gabarito, as razões, as referências, a saída que o build verificou e, por questão, ou o veredito já registrado ou as conferências abaixo como caixas para marcar. Ele é gerado (`node content/build-review-packet.mjs`) e o CI falha se estiver desatualizado.
+
+Uma revisão concluída é registrada no `review.json` do pacote: o revisor, a data, como revisou, o que a revisão **não** estabelece e, para cada questão, um veredito e um digest de tudo o que ele julgou — o enunciado com seu código, as alternativas, o gabarito, cada explicação, a justificativa de dificuldade, as referências e a saída verificada. O pacote imprime o digest a registrar embaixo de cada questão não revisada.
+
+Esse digest é o ponto. **Edite uma questão revisada e ela volta a contar como não revisada**: o pacote a marca como "changed since review" e imprime um digest novo, e como o CI compara o pacote comitado com um build novo, a mudança não chega à `main` ainda alegando o veredito antigo. Reindentar o JSON não muda nada, porque o digest cobre o que foi lido, não como o arquivo foi formatado. Registrar revisão de uma questão que ninguém leu derruba tudo isso, então não faça.
 
 A revisão é feita por uma conta diferente da do autor, por padrão (`reviewer_must_differ_from_author`; veja o documento do banco de questões para mudar isso em uma instalação com um único mantenedor). O revisor precisa do papel `REVIEWER` e o publicador do papel `ADMINISTRATOR`.
 

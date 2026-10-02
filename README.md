@@ -80,7 +80,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 
 ## Project status
 
-**`v0.1.0` Study Core is built and not yet released.** The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment exist and are tested end to end in CI. What stands between this and a release is work only a person can do: reviewing the initial question pack and a manual accessibility pass. The [readiness review](docs/release/v0.1.0-readiness.md) lists the gates and the blockers.
+**`v0.1.0` Study Core is built and not yet released.** The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment exist and are tested end to end in CI. The initial question pack had its [technical review](content/java-se-21/review.json) on 2026-10-02. What stands between this and a release is the rest of the work only a person can do: a manual accessibility pass, a first walkthrough, checking the exam objective wording against Oracle's page, and the first-deployment decisions. The [readiness review](docs/release/v0.1.0-readiness.md) lists the gates and the blockers.
 
 ### Try it
 
@@ -100,7 +100,7 @@ docker compose -f compose.release.yaml up --build -d       # http://localhost:80
 node deploy/seed-demo.mjs                                   # the demo questions
 ```
 
-Those demo questions say in their own text that they are demo data. The real pack in `content/` is never published by automation and still waits for its human review, so a plain install has no questions at all. The [demonstration scripts](docs/release/demo-scripts.md) walk the whole product. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`; the build uses the Maven wrapper (`./mvnw`), so Maven need not be installed.
+Those demo questions say in their own text that they are demo data. The real pack in `content/` is never published by automation: it has had its [technical review](content/java-se-21/review.json), but a reviewer must still approve it and an administrator publish it in the editorial desk, so a plain install has no questions at all. The [demonstration scripts](docs/release/demo-scripts.md) walk the whole product. For development rather than a release-like run, see [backend bootstrap](docs/engineering/backend-bootstrap.md) and `web/README.md`; the build uses the Maven wrapper (`./mvnw`), so Maven need not be installed.
 
 ## Contributing
 

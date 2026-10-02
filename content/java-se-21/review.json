@@ -1,0 +1,95 @@
+{
+  "reviewer": "vinicius-ssantos",
+  "reviewerRole": "project owner and maintainer",
+  "reviewedOn": "2026-10-02",
+  "packet": "docs/release/content-review-packet.md",
+  "method": "The reviewer read the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and reported no technical errors in any of the twenty.",
+  "caveats": [
+    "The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.",
+    "The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.",
+    "Four questions have no runnable code, so the build verifies nothing about them and they rest entirely on this review and their references: t01-integer-boxing-guarantee, t06-stream-facts, t07-exports-and-opens, t07-requires-transitive.",
+    "The exam objective wording seeded in the catalog was not part of this review and is still unverified against Oracle's own page."
+  ],
+  "questions": {
+    "t01-integer-boxing-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a57b48871984a632e9636cb314306fdcb0eac9e42d815ca1c7ab51862cd04c99"
+    },
+    "t01-localdate-plus-months": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d74789d624e7677a24ff6b5d5d7c34dfb9095dc81b7736140317c98eea9f54f6"
+    },
+    "t02-pattern-switch-guard": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ddfe40ffe584357b0739920dce4ec6429e9568be1b3fa7faf0bce9e0279884ad"
+    },
+    "t02-switch-dominance": {
+      "verdict": "APPROVED",
+      "digest": "sha256:29fcf3424d7bcba487f53c5f9872dd14653bda202d0e4f778a916434e95101f0"
+    },
+    "t03-overload-null": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aa481e073b7d659109b86429bfc3ee049d9e9e1017877967641d6334213b1b1a"
+    },
+    "t03-record-facts": {
+      "verdict": "APPROVED",
+      "digest": "sha256:61c28256c551033dc333943831ceb11395906977bb53ad128dcce17912b97cb6"
+    },
+    "t04-finally-return": {
+      "verdict": "APPROVED",
+      "digest": "sha256:240d4a5b10d6aaed53268e5b05286b90646d5ddf8676c3b64cd93579c13e41e7"
+    },
+    "t04-try-with-resources-order": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e5370850c99c87059999d0cb697f6bfb57f2d4a2b98bf4f6ec99c24fd178b0e8"
+    },
+    "t05-immutable-and-fixed-size-lists": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c830a32e3a2fd75245909fe4b6de1767e6b3c94b68355c5c0dd8cbdd7f0aeb67"
+    },
+    "t05-list-remove-overload": {
+      "verdict": "APPROVED",
+      "digest": "sha256:699e368bdfff61d605ed7e93781a510442445a7b1464bd2930d9c160ee91c3e8"
+    },
+    "t06-stream-facts": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4e50b71ca042574876c19d7ff95c1806433d6e0d1f7453cc80572566ca45fe46"
+    },
+    "t06-stream-laziness": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d9dd4f24053690761ca11551e8e10722f74786a4353b7c74b5f811e52f24691b"
+    },
+    "t07-exports-and-opens": {
+      "verdict": "APPROVED",
+      "digest": "sha256:00636d4776e9a6c083b4907dc663384ade4bf1c71cc0eb31838b3bb43be05c53"
+    },
+    "t07-requires-transitive": {
+      "verdict": "APPROVED",
+      "digest": "sha256:71c8f4f376606029152d0834e99787b5fda7fa4a9a88d4c7e4e914fa7af122dc"
+    },
+    "t08-executor-close": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fdd1544ac933ee4a3a948f8f06bd7dfed68463a76e8909b4f21d0cd7f1adb93c"
+    },
+    "t08-virtual-thread-daemon": {
+      "verdict": "APPROVED",
+      "digest": "sha256:29f1a00c81472433d1c499c677abd354aa39339a7db6c9920aa6ebd047f5ac10"
+    },
+    "t09-read-all-lines": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c09f08cae31db96c648f3330e2b72053a7f3a9783122b0b1c5c78715f2ad29db"
+    },
+    "t09-serialization-facts": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b8d138a023b826fae2e2b83fad45546fe47cff66dd120a9488d76cc1def6a4a0"
+    },
+    "t10-locale-to-string": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2397c34f0ab2a7fbc06a26916aaa2b8de9f1e7f24ddc0c075b074f1ef887cda4"
+    },
+    "t10-resource-bundle-fallback": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2e22b257f110f2ffb23a21e6ce7155cd90dba5360a6654bbfaee868ef6d1ccba"
+    }
+  }
+}

@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 // Builds the packet a technical reviewer works from: every question of a pack exactly as a learner
 // will see it, then the answer key, the reasons, the references, the output the build verified, and
-// the content policy's checks as boxes to tick. The packet is generated, never edited by hand, so it
-// always matches the pack.
+// either the recorded human review or the content policy's checks as boxes to tick. The packet is
+// generated, never edited by hand, so it always matches the pack and its review record.
+//
+// A question edited after it was reviewed shows up here as needing a new review, because the digest
+// recorded in review.json no longer matches what the question now says. CI compares this file with
+// a fresh build, so that change cannot reach main unnoticed.
 //
 // Usage: node content/build-review-packet.mjs [--pack content/java-se-21] [--out docs/release/content-review-packet.md]
-import { readdirSync, readFileSync as readRaw, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
-
-// Read as LF whatever the checkout used, so the packet is the same on every machine and in CI.
-const readFileSync = (path, encoding) => readRaw(path, encoding).replace(/\r\n/g, "\n");
+import { writeFileSync } from "node:fs";
+import { readPack, readTopics, readReviewRecord, reviewStatusOf, orphansIn } from "./pack.mjs";
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -18,20 +19,6 @@ const option = (name, fallback) => {
 };
 const pack = option("pack", "content/java-se-21");
 const out = option("out", "docs/release/content-review-packet.md");
-
-// Topic names and the exam objective each is mapped to, from the seeded catalog.
-const seed = readFileSync("src/main/resources/db/migration/V4__seed_java_certification_catalog.sql", "utf8");
-const topics = new Map();
-for (const match of seed.matchAll(/\('(a3000000-[0-9a-f-]+)', 'a1000000-[0-9a-f-]+', '[^']+', '([^']+)'\)/g)) {
-  topics.set(match[1], { name: match[2] });
-}
-for (const match of seed.matchAll(/\('a2000000-[0-9a-f-]+', '(a3000000-[0-9a-f-]+)', '([^']+)', (\d+)\)/g)) {
-  const topic = topics.get(match[1]);
-  if (topic) {
-    topic.objective = match[2];
-    topic.position = Number(match[3]);
-  }
-}
 
 const CHECKS = [
   "There is one defensible interpretation of the prompt.",
@@ -43,43 +30,59 @@ const CHECKS = [
   "The references let someone verify the answer independently.",
 ];
 
-const directories = readdirSync(pack, { withFileTypes: true })
-  .filter((entry) => entry.isDirectory())
-  .map((entry) => entry.name)
-  .sort();
+const topics = readTopics();
+const questions = readPack(pack, topics);
+const record = readReviewRecord(pack);
 
-const questions = directories.map((name) => {
-  const dir = join(pack, name);
-  let raw = readFileSync(join(dir, "question.json"), "utf8");
-  const main = join(dir, "Main.java");
-  const code = existsSync(main) ? readFileSync(main, "utf8").trimEnd() : null;
-  const expected = existsSync(join(dir, "expected.txt")) ? readFileSync(join(dir, "expected.txt"), "utf8").trimEnd() : null;
-  if (raw.includes("{{snippet}}")) {
-    raw = raw.replace("{{snippet}}", () => JSON.stringify(code).slice(1, -1));
-  }
-  return { name, code, expected, ...JSON.parse(raw) };
-});
+const orphans = orphansIn(record, questions);
+if (orphans.length > 0) {
+  console.error(`review.json reviews questions that are not in ${pack}: ${orphans.join(", ")}`);
+  console.error("Remove them from the record, or restore the questions.");
+  process.exit(1);
+}
 
-questions.sort(
-  (a, b) => (topics.get(a.topicId)?.position ?? 99) - (topics.get(b.topicId)?.position ?? 99) || a.name.localeCompare(b.name),
-);
+const status = new Map(questions.map((question) => [question.name, reviewStatusOf(record, question)]));
+const withState = (state) => questions.filter((question) => status.get(question.name).state === state);
+const reviewed = withState("reviewed");
+const changed = withState("changed");
+const unreviewed = withState("unreviewed");
 
 const lines = [];
 const add = (text = "") => lines.push(text);
 
 add("# Content review packet");
 add();
-add(`Generated from \`${pack}\` by \`content/build-review-packet.mjs\`. **Do not edit by hand**: regenerate it, and make changes in the pack.`);
+add(`Generated from \`${pack}\` by \`content/build-review-packet.mjs\`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in \`${pack}/review.json\`.`);
 add();
-add("**None of these questions has been reviewed by a person.** They are AI-assisted drafts. The build checks that every code snippet compiles for Java 21 and prints what the question says (the \"Verified by the build\" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what this review is for.");
+
+// The state of the review, as the record and the questions themselves say it is — never as prose
+// someone remembered to update.
+if (reviewed.length === questions.length) {
+  add(`**All ${questions.length} questions were reviewed by ${record.reviewer} (${record.reviewerRole}) on ${record.reviewedOn}, and none has been edited since.** ${record.method}`);
+} else if (reviewed.length === 0) {
+  add(`**None of these ${questions.length} questions has been reviewed by a person.** They are AI-assisted drafts.`);
+} else {
+  add(`**${reviewed.length} of ${questions.length} questions carry a current review** by ${record.reviewer}, recorded on ${record.reviewedOn}. ${changed.length} ${changed.length === 1 ? "has" : "have"} been edited since being reviewed and ${changed.length === 1 ? "needs" : "need"} a new one; ${unreviewed.length} ${unreviewed.length === 1 ? "has" : "have"} never been reviewed. Each is marked below.`);
+}
 add();
+add("The build checks that every code snippet compiles for Java 21 and prints what the question says (the \"Verified by the build\" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.");
+add();
+
+if (record?.caveats?.length) {
+  add("## What this review does not establish");
+  add();
+  record.caveats.forEach((caveat) => add(`- ${caveat}`));
+  add();
+}
+
 add("## How to review");
 add();
 add("1. Read each question as a learner would, **without** looking at the answer key, and answer it yourself.");
 add("2. Compare with the answer key and the reasons. Run the code if there is any doubt.");
-add("3. Tick the checks you made yourself. A question that is ambiguous or disputed must not be published: write what is wrong under it.");
-add("4. Record a verdict. Then, in the editorial desk, approve it (a person other than the author) or request changes with the comment you wrote here.");
-add("5. Check the objective wording of the topics against Oracle's page for the exam (see \"Before publishing anything in this track\" in the [content authoring guide](../engineering/content-authoring.md)).");
+add("3. Make the checks below yourself. A question that is ambiguous or disputed must not be published: write what is wrong under it.");
+add(`4. Record the verdict in \`${pack}/review.json\`: your name, the date, and for each question its verdict and the digest printed under it. A question you did not look at must not get an entry.`);
+add("5. Then, in the editorial desk, approve it (a person other than the author) or request changes with the comment you wrote here.");
+add("6. Check the objective wording of the topics against Oracle's page for the exam (see \"Before publishing anything in this track\" in the [content authoring guide](../engineering/content-authoring.md)).");
 add();
 add("The checks, from the [content policy](../product/content-policy.md):");
 add();
@@ -87,15 +90,26 @@ CHECKS.forEach((check, index) => add(`${index + 1}. ${check}`));
 add();
 add("## Questions");
 add();
-add("| # | Question | Topic | Type | Difficulty | Runnable code |");
-add("|---:|---|---|---|---|---|");
+
+const MARK = {
+  reviewed: (state) => `reviewed ${state.reviewedOn}`,
+  changed: () => "**changed since review**",
+  unreviewed: () => "**not reviewed**",
+};
+
+add("| # | Question | Topic | Type | Difficulty | Runnable code | Review |");
+add("|---:|---|---|---|---|---|---|");
 questions.forEach((q, index) => {
-  add(`| ${index + 1} | [\`${q.name}\`](#${index + 1}-${q.name}) | ${topics.get(q.topicId)?.name ?? q.topicId} | ${q.type === "SINGLE_CHOICE" ? "single" : "multiple"} | ${q.difficulty.toLowerCase()} | ${q.code ? "yes" : "no (conceptual)"} |`);
+  const state = status.get(q.name);
+  add(
+    `| ${index + 1} | [\`${q.name}\`](#${index + 1}-${q.name}) | ${topics.get(q.topicId)?.name ?? q.topicId} | ${q.type === "SINGLE_CHOICE" ? "single" : "multiple"} | ${q.difficulty.toLowerCase()} | ${q.code ? "yes" : "no (conceptual)"} | ${MARK[state.state](state)} |`,
+  );
 });
 add();
 
 questions.forEach((q, index) => {
   const topic = topics.get(q.topicId);
+  const state = status.get(q.name);
   add(`## ${index + 1}. ${q.name}`);
   add();
   add(`**Topic:** ${topic?.name ?? q.topicId}${topic?.objective ? ` (exam objective: "${topic.objective}")` : ""}  `);
@@ -134,14 +148,24 @@ questions.forEach((q, index) => {
     add(q.expected ?? "(no output)");
     add("```");
   } else {
-    add("Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references, so read them with extra care.");
+    add("Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.");
   }
   add();
   add("### Review");
   add();
+  if (state.state === "reviewed") {
+    add(`**${state.verdict === "APPROVED" ? "Approved" : state.verdict}** by ${state.reviewer} on ${state.reviewedOn}. The question has not changed since, so that verdict still applies.`);
+    add();
+    add("A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:");
+  } else if (state.state === "changed") {
+    add(`**This question was edited after ${state.reviewer} reviewed it on ${state.reviewedOn}, so it is unreviewed again.** Review it and replace its digest in \`${pack}/review.json\` with the one below.`);
+  }
+  add();
   CHECKS.forEach((check) => add(`- [ ] ${check}`));
   add();
   add("**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish");
+  add();
+  add(`Digest of the question as it stands: \`${state.currentDigest ?? ""}\``);
   add();
   add("**Comments:**");
   add();
@@ -153,8 +177,17 @@ add("## Summary of the review");
 add();
 add("| # | Question | Verdict | Reviewer | Date |");
 add("|---:|---|---|---|---|");
-questions.forEach((q, index) => add(`| ${index + 1} | \`${q.name}\` | | | |`));
+questions.forEach((q, index) => {
+  const state = status.get(q.name);
+  const cells =
+    state.state === "reviewed"
+      ? [state.verdict?.toLowerCase() ?? "", state.reviewer ?? "", state.reviewedOn ?? ""]
+      : [state.state === "changed" ? "needs a new review" : "", "", ""];
+  add(`| ${index + 1} | \`${q.name}\` | ${cells[0]} | ${cells[1]} | ${cells[2]} |`);
+});
 add();
 
 writeFileSync(out, `${lines.join("\n")}\n`);
-console.log(`${questions.length} questions written to ${out}`);
+console.log(
+  `${questions.length} questions written to ${out}: ${reviewed.length} reviewed, ${changed.length} changed since review, ${unreviewed.length} never reviewed`,
+);
