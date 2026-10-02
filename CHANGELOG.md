@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Added
+
+- Expanded the Java SE 21 (1Z0-830) authorial question pack from 20 to 60 questions, six per topic. The 40 additions are original questions grounded in the Java SE 21 specifications and API documentation rather than copied or derived from third-party practice banks; they remain explicitly unreviewed until a person completes the technical review recorded by the generated packet.
+
 ## [0.1.0] - 2026-10-02
 
 The first release: Study Core. See the [release notes](docs/release/v0.1.0-release-notes.md) for what it does and what it does not.
