@@ -171,7 +171,14 @@ Nenhum teste confere a segunda. É disciplina, e o único papel da automação a
 | 9 E/S em Java | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localização | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Quatro questões são conceituais e não têm código executável, então o build não consegue verificá-las: `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-requires-transitive` e `t07-exports-and-opens`. Elas dependem apenas das referências, então os revisores devem ler essas referências com atenção redobrada.
+Três questões são conceituais e não têm código executável, então o build não consegue verificá-las: `t01-integer-boxing-guarantee`, `t06-stream-facts` e `t07-exports-and-opens`. Elas dependem apenas das referências, então os revisores devem ler essas referências com atenção redobrada. O pacote de revisão deriva essa lista em vez de repeti-la, então ela não envelhece.
+
+A `t07-requires-transitive` era a quarta. Agora ela carrega um grafo de três módulos em `modules/`, em que `app` só declara `requires lib`, usa um tipo de `util`, e compila porque `lib` declara `requires transitive util` — tire o `transitive` e o build falha com `package u is not visible`. É a conversão que a [ADR 0011](../adr/0011-grade-content-evidence.md) pede, e ela manteve a revisão registrada, porque nada do que o revisor leu mudou.
+
+As outras três são mais difíceis, e duas delas talvez não valham a conversão:
+
+- A `t01-integer-boxing-guarantee` provavelmente não dá para converter. Ela pergunta o que a especificação **garante**, e um programa só mostra o que uma JVM fez; o cache acima de 127 é explicitamente não especificado, então um programa imprimindo `false` para 1000 não provaria nada sobre a regra.
+- A `t06-stream-facts` e a `t07-exports-and-opens` são listas de fatos em que um programa mostra algumas afirmações, não todas. O `peek` existir "principalmente para depuração" é afirmação sobre intenção, e `opens` não dar acesso em tempo de compilação precisa de uma compilação que **falhe**. Verificar isso com honestidade exige várias verificações por questão, positivas e negativas, o que o harness ainda não faz — e um programa que provasse três de cinco alternativas enquanto o pacote dissesse "um programa sustenta esta questão" seria pior do que nenhum.
 
 ## Adiado
 

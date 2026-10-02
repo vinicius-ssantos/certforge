@@ -10,8 +10,9 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 
 - The questions are AI-assisted drafts written in this repository, and the reviewer is the project owner rather than an independent third party. The content policy allows exactly this, but a second reviewer would be stronger evidence.
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
-- Four questions have no runnable code, so the build verifies nothing about them and they rest entirely on this review and their references: t01-integer-boxing-guarantee, t06-stream-facts, t07-exports-and-opens, t07-requires-transitive.
+- A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review and is still unverified against Oracle's own page.
+- Nothing is verified by the build in 3 of the 20 questions: `t01-integer-boxing-guarantee`, `t06-stream-facts`, `t07-exports-and-opens`.
 
 ## How to review
 
@@ -37,25 +38,25 @@ The checks, from the [content policy](../product/content-policy.md):
 | # | Question | Topic | Type | Difficulty | Runnable code | Review |
 |---:|---|---|---|---|---|---|
 | 1 | [`t01-integer-boxing-guarantee`](#1-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
-| 2 | [`t01-localdate-plus-months`](#2-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes | reviewed 2026-10-02 |
-| 3 | [`t02-pattern-switch-guard`](#3-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes | reviewed 2026-10-02 |
-| 4 | [`t02-switch-dominance`](#4-t02-switch-dominance) | Controlling program flow | single | hard | yes | reviewed 2026-10-02 |
-| 5 | [`t03-overload-null`](#5-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes | reviewed 2026-10-02 |
-| 6 | [`t03-record-facts`](#6-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes | reviewed 2026-10-02 |
-| 7 | [`t04-finally-return`](#7-t04-finally-return) | Handling exceptions | single | easy | yes | reviewed 2026-10-02 |
-| 8 | [`t04-try-with-resources-order`](#8-t04-try-with-resources-order) | Handling exceptions | single | medium | yes | reviewed 2026-10-02 |
-| 9 | [`t05-immutable-and-fixed-size-lists`](#9-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes | reviewed 2026-10-02 |
-| 10 | [`t05-list-remove-overload`](#10-t05-list-remove-overload) | Arrays and collections | single | medium | yes | reviewed 2026-10-02 |
+| 2 | [`t01-localdate-plus-months`](#2-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
+| 3 | [`t02-pattern-switch-guard`](#3-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
+| 4 | [`t02-switch-dominance`](#4-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
+| 5 | [`t03-overload-null`](#5-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
+| 6 | [`t03-record-facts`](#6-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
+| 7 | [`t04-finally-return`](#7-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
+| 8 | [`t04-try-with-resources-order`](#8-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
+| 9 | [`t05-immutable-and-fixed-size-lists`](#9-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
+| 10 | [`t05-list-remove-overload`](#10-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
 | 11 | [`t06-stream-facts`](#11-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
-| 12 | [`t06-stream-laziness`](#12-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes | reviewed 2026-10-02 |
+| 12 | [`t06-stream-laziness`](#12-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
 | 13 | [`t07-exports-and-opens`](#13-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
-| 14 | [`t07-requires-transitive`](#14-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | reviewed 2026-10-02 |
-| 15 | [`t08-executor-close`](#15-t08-executor-close) | Managing concurrent code execution | single | medium | yes | reviewed 2026-10-02 |
-| 16 | [`t08-virtual-thread-daemon`](#16-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes | reviewed 2026-10-02 |
-| 17 | [`t09-read-all-lines`](#17-t09-read-all-lines) | Java I/O API | single | medium | yes | reviewed 2026-10-02 |
-| 18 | [`t09-serialization-facts`](#18-t09-serialization-facts) | Java I/O API | multiple | hard | yes | reviewed 2026-10-02 |
-| 19 | [`t10-locale-to-string`](#19-t10-locale-to-string) | Implementing localization | single | easy | yes | reviewed 2026-10-02 |
-| 20 | [`t10-resource-bundle-fallback`](#20-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes | reviewed 2026-10-02 |
+| 14 | [`t07-requires-transitive`](#14-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 15 | [`t08-executor-close`](#15-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
+| 16 | [`t08-virtual-thread-daemon`](#16-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 17 | [`t09-read-all-lines`](#17-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
+| 18 | [`t09-serialization-facts`](#18-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
+| 19 | [`t10-locale-to-string`](#19-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
+| 20 | [`t10-resource-bundle-fallback`](#20-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
 
 ## 1. t01-integer-boxing-guarantee
 
@@ -469,7 +470,7 @@ Each statement targets a distinct rule about what a record may and may not decla
 
 ### Verified by the build
 
-The code in the question compiles for Java 21 and prints:
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
 
 ```text
 true
@@ -477,6 +478,33 @@ java.lang.Record
 true
 true
 2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+
+public class Main {
+  record Point(int x, int y) implements Comparable<Point> {
+    public int compareTo(Point other) {
+      return Integer.compare(x, other.x);
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    Class<?> type = Point.class;
+    Field x = type.getDeclaredField("x");
+    System.out.println(Modifier.isFinal(type.getModifiers()));
+    System.out.println(type.getSuperclass().getName());
+    System.out.println(Modifier.isPrivate(x.getModifiers()) && Modifier.isFinal(x.getModifiers()));
+    System.out.println(Comparable.class.isAssignableFrom(type));
+    System.out.println(type.getDeclaredFields().length);
+  }
+}
 ```
 
 ### Review
@@ -1079,11 +1107,92 @@ Requires distinguishing the four module directives that mention another module o
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+read implicitly
+```
+
+That program, across 6 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import l.Service;
+import u.Box;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Box box = Service.make("read implicitly");
+    System.out.println(box.value());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// app requires lib and nothing else. It never names util, yet it uses u.Box below.
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/l/Service.java`:
+
+```java
+package l;
+
+import u.Box;
+
+public class Service {
+
+  private Service() {}
+
+  /** Returns a type from another module, which is why lib has to pass util on to its readers. */
+  public static Box make(String value) {
+    return new Box(value);
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// requires transitive, not plain requires: every module that reads lib also reads util, which is
+// what lets app compile without naming util itself.
+module lib {
+  requires transitive util;
+
+  exports l;
+}
+```
+
+`modules/util/module-info.java`:
+
+```java
+module util {
+  exports u;
+}
+```
+
+`modules/util/u/Box.java`:
+
+```java
+package u;
+
+/** A type that appears in lib's public signatures, so app must be able to read it. */
+public record Box(String value) {}
+```
 
 ### Review
 
 **Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.
 
 A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
@@ -1097,7 +1206,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:af626b88c696999048debefb40bbe702accffa6ba8b6c839dfd0f6498351a9cb"`, `"verified": null`
+To record: `"digest": "sha256:af626b88c696999048debefb40bbe702accffa6ba8b6c839dfd0f6498351a9cb"`, `"verified": "sha256:967d9925394070035c9816174b90c4fc1ce5975e3240f24321c739f95a223f36"`
 
 **Comments:**
 
@@ -1219,12 +1328,35 @@ Virtual threads are a Java 21 feature and several plausible statements about the
 
 ### Verified by the build
 
-The code in the question compiles for Java 21 and prints:
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
 
 ```text
 true true
 false false
 rejected
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+  public static void main(String[] args) {
+    Thread virtual = Thread.ofVirtual().unstarted(() -> {});
+    System.out.println(virtual.isVirtual() + " " + virtual.isDaemon());
+
+    Thread platform = Thread.ofPlatform().unstarted(() -> {});
+    System.out.println(platform.isVirtual() + " " + platform.isDaemon());
+
+    try {
+      virtual.setDaemon(false);
+      System.out.println("accepted");
+    } catch (IllegalArgumentException e) {
+      System.out.println("rejected");
+    }
+  }
+}
 ```
 
 ### Review
@@ -1365,10 +1497,59 @@ Deserialization bypasses the constructors of serializable classes but not of the
 
 ### Verified by the build
 
-The code in the question compiles for Java 21 and prints:
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
 
 ```text
 7 0 42
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
+public class Main {
+  static class Base {
+    int base = 1;
+
+    Base() {
+      base = 7;
+    }
+  }
+
+  static class Item extends Base implements Serializable {
+    private static final long serialVersionUID = 1L;
+    transient int cache = 5;
+    int value = 3;
+
+    Item() {
+      value = 9;
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    Item original = new Item();
+    original.base = 100;
+    original.value = 42;
+    original.cache = 55;
+
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    try (ObjectOutputStream out = new ObjectOutputStream(bytes)) {
+      out.writeObject(original);
+    }
+    try (ObjectInputStream in =
+        new ObjectInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+      Item copy = (Item) in.readObject();
+      System.out.println(copy.base + " " + copy.cache + " " + copy.value);
+    }
+  }
+}
 ```
 
 ### Review
