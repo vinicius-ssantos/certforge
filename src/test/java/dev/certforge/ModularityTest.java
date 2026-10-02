@@ -21,6 +21,7 @@ class ModularityTest {
           "questionbank",
           "study",
           "progress",
+          "review",
           "audit");
 
   private final ApplicationModules modules = ApplicationModules.of(CertForgeApplication.class);

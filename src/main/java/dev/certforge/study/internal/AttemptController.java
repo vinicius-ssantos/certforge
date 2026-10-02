@@ -1,5 +1,6 @@
 package dev.certforge.study.internal;
 
+import dev.certforge.study.Confidence;
 import dev.certforge.study.internal.AttemptService.Outcome;
 import dev.certforge.study.internal.AttemptService.Submission;
 import dev.certforge.study.internal.AttemptViews.AttemptResult;

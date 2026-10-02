@@ -533,6 +533,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/review/queue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["queue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/history/attempts": {
         parameters: {
             query?: never;
@@ -908,6 +924,34 @@ export interface components {
             /** Format: uuid */
             id: string;
             revisions: components["schemas"]["RevisionView"][];
+        };
+        Queue: {
+            /** Format: int32 */
+            dueNow: number;
+            items: components["schemas"]["QueueItem"][];
+            /** Format: int32 */
+            neverAttempted: number;
+            /** Format: int32 */
+            waiting: number;
+        };
+        QueueItem: {
+            lastAnswerCorrect: boolean;
+            /** Format: date-time */
+            lastAttemptedAt: string;
+            prompt: string;
+            /** Format: uuid */
+            questionId: string;
+            /** @enum {string} */
+            reason: "WRONG_WHILE_CONFIDENT" | "WRONG" | "RIGHT_BUT_UNSURE" | "DUE_FOR_RECALL";
+            /** Format: uuid */
+            revisionId: string;
+            /** Format: int32 */
+            timesAttempted: number;
+            /** Format: int32 */
+            timesWrong: number;
+            /** Format: uuid */
+            topicId: string;
+            topicName: string | null;
         };
         RebuildResult: {
             /** Format: int32 */
@@ -1920,6 +1964,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TopicProgress"][];
+                };
+            };
+        };
+    };
+    queue: {
+        parameters: {
+            query?: {
+                topicId?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["Queue"];
                 };
             };
         };

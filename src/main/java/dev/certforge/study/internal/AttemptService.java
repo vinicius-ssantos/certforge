@@ -8,6 +8,7 @@ import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.study.AttemptRecorded;
+import dev.certforge.study.Confidence;
 import dev.certforge.study.internal.AttemptViews.Answer;
 import dev.certforge.study.internal.AttemptViews.AttemptResult;
 import dev.certforge.study.internal.AttemptViews.OptionAnswer;
