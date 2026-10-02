@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks superclass-constructor invocation order during object construction.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "A subclass constructor invokes a superclass constructor before executing its own body. Therefore constructing `B` prints `A` first and `B` second.",
+  "options": [
+    {
+      "key": "A",
+      "text": "AB",
+      "correct": true,
+      "explanation": "The superclass constructor runs before the subclass constructor body."
+    },
+    {
+      "key": "B",
+      "text": "BA",
+      "correct": false,
+      "explanation": "The subclass body does not run before superclass construction."
+    },
+    {
+      "key": "C",
+      "text": "B",
+      "correct": false,
+      "explanation": "The superclass constructor is still invoked."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because B does not explicitly call super().",
+      "correct": false,
+      "explanation": "The compiler inserts an implicit no-argument super() call when permitted."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.8.7 Constructor Body",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.8.7"
+    }
+  ]
+}
