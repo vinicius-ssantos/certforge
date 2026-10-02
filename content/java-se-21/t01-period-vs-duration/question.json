@@ -1,0 +1,45 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires separating date-based amounts from time-based amounts in the java.time model.",
+  "prompt": "Which statements correctly distinguish `Period` and `Duration`? Select all that apply.",
+  "explanation": "`Period` models a date-based amount in years, months, and days. `Duration` models a time-based amount in seconds and nanoseconds.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Period is date-based and uses years, months, and days.",
+      "correct": true,
+      "explanation": "Those are the components represented by Period."
+    },
+    {
+      "key": "B",
+      "text": "Duration is time-based and represents seconds plus a nanosecond adjustment.",
+      "correct": true,
+      "explanation": "That is the representation documented for Duration."
+    },
+    {
+      "key": "C",
+      "text": "Period is intended to represent nanosecond-precision elapsed time.",
+      "correct": false,
+      "explanation": "Nanosecond-precision elapsed time belongs to Duration, not Period."
+    },
+    {
+      "key": "D",
+      "text": "Duration stores years and months directly.",
+      "correct": false,
+      "explanation": "Duration is based on seconds and nanoseconds, not calendar years and months."
+    }
+  ],
+  "references": [
+    {
+      "title": "Period (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Period.html"
+    },
+    {
+      "title": "Duration (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Duration.html"
+    }
+  ]
+}
