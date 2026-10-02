@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks static import syntax and how it lets a static member be referenced by simple name.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The single-static-import declaration imports `Math.max`, so the method can be called by simple name. `max(4, 5)` returns 5.",
+  "options": [
+    {
+      "key": "A",
+      "text": "4",
+      "correct": false,
+      "explanation": "Math.max returns the larger argument."
+    },
+    {
+      "key": "B",
+      "text": "5",
+      "correct": true,
+      "explanation": "The imported static method returns the larger value."
+    },
+    {
+      "key": "C",
+      "text": "Math.max",
+      "correct": false,
+      "explanation": "The method is invoked; its name is not printed."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because static methods cannot be imported.",
+      "correct": false,
+      "explanation": "Single-static-import declarations are part of Java's import syntax."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.5.3 Single-Static-Import Declarations",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.5.3"
+    }
+  ]
+}
