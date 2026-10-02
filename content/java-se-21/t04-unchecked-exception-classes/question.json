@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the exception-analysis distinction between checked exceptions and RuntimeException/Error subclasses.",
+  "prompt": "Which exception categories are unchecked for Java compile-time exception checking? Select all that apply.",
+  "explanation": "Subclasses of `RuntimeException` and subclasses of `Error` are unchecked exception classes. Other subclasses of `Throwable` are checked unless they fall into those categories.",
+  "options": [
+    {
+      "key": "A",
+      "text": "RuntimeException and its subclasses",
+      "correct": true,
+      "explanation": "RuntimeException is the root of one unchecked exception branch."
+    },
+    {
+      "key": "B",
+      "text": "Error and its subclasses",
+      "correct": true,
+      "explanation": "Error is the other unchecked exception branch."
+    },
+    {
+      "key": "C",
+      "text": "Every subclass of Exception",
+      "correct": false,
+      "explanation": "Many Exception subclasses are checked; RuntimeException is the unchecked branch under Exception."
+    },
+    {
+      "key": "D",
+      "text": "Every subclass of Throwable",
+      "correct": false,
+      "explanation": "Throwable also includes checked exception classes."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 11.1.1 The Kinds and Causes of Exceptions",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.1.1"
+    }
+  ]
+}
