@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the default replacement behavior of Files.copy, a common source of incorrect assumptions.",
+  "prompt": "What normally happens when `Files.copy(source, target)` is called and `target` already exists, with no copy options supplied?",
+  "explanation": "By default an existing target is not replaced. The operation fails with `FileAlreadyExistsException`; replacing it requires an option such as `StandardCopyOption.REPLACE_EXISTING`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The target is silently overwritten.",
+      "correct": false,
+      "explanation": "Replacement is not the default behavior."
+    },
+    {
+      "key": "B",
+      "text": "The source and target are automatically merged.",
+      "correct": false,
+      "explanation": "Files.copy defines copying, not merging."
+    },
+    {
+      "key": "C",
+      "text": "FileAlreadyExistsException is thrown.",
+      "correct": true,
+      "explanation": "That is the documented default when the target exists."
+    },
+    {
+      "key": "D",
+      "text": "The target is renamed and the copy succeeds.",
+      "correct": false,
+      "explanation": "The API does not automatically choose another target name."
+    }
+  ],
+  "references": [
+    {
+      "title": "Files.copy(Path, Path, CopyOption...) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#copy(java.nio.file.Path,java.nio.file.Path,java.nio.file.CopyOption...)"
+    }
+  ]
+}
