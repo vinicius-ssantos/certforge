@@ -1,0 +1,45 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the fundamental byte-stream versus character-stream split in java.io.",
+  "prompt": "Which statements correctly distinguish `InputStream` and `Reader`? Select all that apply.",
+  "explanation": "InputStream is the abstract base for reading bytes. Reader is the abstract base for reading character streams.",
+  "options": [
+    {
+      "key": "A",
+      "text": "InputStream is byte-oriented.",
+      "correct": true,
+      "explanation": "Its read methods fundamentally operate on bytes represented as int values or byte arrays."
+    },
+    {
+      "key": "B",
+      "text": "Reader is character-oriented.",
+      "correct": true,
+      "explanation": "Reader is the base abstraction for character input."
+    },
+    {
+      "key": "C",
+      "text": "Reader is the required base type for arbitrary binary file data.",
+      "correct": false,
+      "explanation": "Binary data is normally handled through byte streams such as InputStream."
+    },
+    {
+      "key": "D",
+      "text": "InputStream automatically decodes bytes with a character set.",
+      "correct": false,
+      "explanation": "Character decoding is performed by bridges such as InputStreamReader."
+    }
+  ],
+  "references": [
+    {
+      "title": "InputStream (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/InputStream.html"
+    },
+    {
+      "title": "Reader (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Reader.html"
+    }
+  ]
+}
