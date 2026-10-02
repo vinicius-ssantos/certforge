@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests MessageFormat's quoting syntax, which is easy to confuse with ordinary String quoting.",
+  "prompt": "In a `MessageFormat` pattern, what is the role of a pair of single quotes surrounding text such as `'{0}'`?",
+  "explanation": "Single quotes quote pattern syntax in MessageFormat. The braces inside the quoted section are treated as literal text instead of an argument placeholder.",
+  "options": [
+    {
+      "key": "A",
+      "text": "They make {0} literal text rather than an argument placeholder.",
+      "correct": true,
+      "explanation": "Quoted pattern syntax is emitted literally."
+    },
+    {
+      "key": "B",
+      "text": "They force argument 0 to be formatted as a String.",
+      "correct": false,
+      "explanation": "Single quotes do not choose an argument formatter."
+    },
+    {
+      "key": "C",
+      "text": "They are always emitted as visible quote characters.",
+      "correct": false,
+      "explanation": "The quote characters serve pattern syntax and are not simply copied to the result."
+    },
+    {
+      "key": "D",
+      "text": "They cause argument 0 to be omitted from the pattern completely.",
+      "correct": false,
+      "explanation": "The characters `{0}` remain as literal text when quoted."
+    }
+  ],
+  "references": [
+    {
+      "title": "MessageFormat (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/MessageFormat.html"
+    }
+  ]
+}
