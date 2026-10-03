@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-03
+
+Adaptive Review. See the [release notes](docs/release/v0.2.0-release-notes.md) for what it does and what it does not.
+
 ### Fixed
 
 - The deploy scripts explain a failed administrator sign-in instead of printing a stack trace. The bootstrap administrator is created only when the database has none, so pointing BOOTSTRAP_ADMIN_EMAIL at a different address later does nothing at all, silently, and the 401 that follows looks like a wrong password. The scripts now say that and suggest the fix, and the release environment guide calls the trap out next to the sentence that hides it.
