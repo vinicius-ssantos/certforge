@@ -23,7 +23,7 @@
 // Usage: node deploy/publish-pack.mjs --reviewer-email ... --reviewer-password ...
 //                                     [--url http://localhost:8081] [--pack content/java-se-21] [--dry-run]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD are the author's and the publisher's.
-import { Session } from "./lib/session.mjs";
+import { Session, signInAdmin } from "./lib/session.mjs";
 import { readPack, readReviewRecord, reviewStatusOf } from "../content/pack.mjs";
 
 const args = process.argv.slice(2);
@@ -116,7 +116,7 @@ async function body(response) {
 }
 
 const admin = new Session(url);
-await admin.signIn(adminEmail, adminPassword);
+await signInAdmin(admin, adminEmail, adminPassword);
 const reviewer = new Session(url);
 try {
   await reviewer.signIn(reviewerEmail, reviewerPassword);

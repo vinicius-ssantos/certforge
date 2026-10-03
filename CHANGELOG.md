@@ -8,6 +8,7 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Fixed
 
+- The deploy scripts explain a failed administrator sign-in instead of printing a stack trace. The bootstrap administrator is created only when the database has none, so pointing BOOTSTRAP_ADMIN_EMAIL at a different address later does nothing at all, silently, and the 401 that follows looks like a wrong password. The scripts now say that and suggest the fix, and the release environment guide calls the trap out next to the sentence that hides it.
 - Answering a question did not refresh the review queue, the misconception counts, progress or history, which are all derived from attempts. Queries stay fresh for 30 seconds, and practising one question takes less, so a learner who practised a queued question and went straight back to the queue was shown the state from before they answered. Found by the new end-to-end test of the loop, which is the only place the two halves meet.
 
 ### Added

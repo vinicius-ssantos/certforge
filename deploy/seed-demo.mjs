@@ -13,7 +13,7 @@
 //
 // Usage: node deploy/seed-demo.mjs [--url http://localhost:8081] [--count 10]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD must be the administrator's.
-import { Session } from "./lib/session.mjs";
+import { Session, signInAdmin } from "./lib/session.mjs";
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -64,7 +64,7 @@ function fail(what, response, body) {
 }
 
 const admin = new Session(url);
-await admin.signIn(adminEmail, adminPassword);
+await signInAdmin(admin, adminEmail, adminPassword);
 
 // How many demo questions are already published, so running this again tops up instead of piling up.
 const published = await json(await admin.call("GET", "/api/admin/questions?status=PUBLISHED"));

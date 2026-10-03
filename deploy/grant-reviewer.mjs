@@ -8,7 +8,7 @@
 //
 // Usage: node deploy/grant-reviewer.mjs --email ... --password ... [--url http://localhost:8081]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD must be the administrator's.
-import { Session } from "./lib/session.mjs";
+import { Session, signInAdmin } from "./lib/session.mjs";
 
 const args = process.argv.slice(2);
 const option = (name, fallback) => {
@@ -38,7 +38,7 @@ if (email === adminEmail) {
 }
 
 const admin = new Session(url);
-await admin.signIn(adminEmail, adminPassword);
+await signInAdmin(admin, adminEmail, adminPassword);
 
 // Sign-in tells us the account and its current roles; registration is only for one that is missing.
 let account;
