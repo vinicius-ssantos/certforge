@@ -23,6 +23,8 @@ DB_PASSWORD=... BOOTSTRAP_ADMIN_EMAIL=... BOOTSTRAP_ADMIN_PASSWORD=... \
 
 `DB_PASSWORD` não tem valor padrão, então um segredo ausente interrompe a subida em vez de rodar com um segredo conhecido. O administrador inicial só é criado quando não existe nenhum; defina as duas variáveis na primeira subida e depois remova-as.
 
+> **A armadilha nessa frase.** Apontar `BOOTSTRAP_ADMIN_EMAIL` para outro endereço depois não faz absolutamente nada, em silêncio: a conta criada na primeira subida continua sendo o único administrador, e entrar com o endereço novo dá um 401 que parece senha errada. Use a conta original, ou recomece com um banco vazio (`just reset`). Os scripts de deploy dizem isso quando a autenticação falha, em vez de imprimir um stack trace.
+
 ## O que o container web garante
 
 - **Uma origem.** O navegador fala com o `web` tanto para o app quanto para a API, então o cookie de sessão nunca cruza origens.
