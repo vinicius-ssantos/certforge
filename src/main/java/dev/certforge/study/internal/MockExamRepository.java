@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Repository;
@@ -78,8 +78,7 @@ class MockExamRepository {
     }
   }
 
-  private static void validateSnapshot(
-      MockExamSession session, List<SnapshotQuestion> questions) {
+  private static void validateSnapshot(MockExamSession session, List<SnapshotQuestion> questions) {
     if (questions.size() != session.questionCount()) {
       throw new IllegalArgumentException(
           "Mock exam snapshot must contain exactly " + session.questionCount() + " questions");
@@ -259,8 +258,7 @@ class MockExamRepository {
 
   private static MockExamResponse mapResponse(ResultSet rs, int rowNum) throws SQLException {
     String encoded = rs.getString("selected_options");
-    List<String> selected =
-        encoded.isEmpty() ? List.of() : Arrays.asList(encoded.split(","));
+    List<String> selected = encoded.isEmpty() ? List.of() : Arrays.asList(encoded.split(","));
     return new MockExamResponse(
         rs.getObject(ID, UUID.class),
         rs.getObject("session_id", UUID.class),
