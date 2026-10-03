@@ -1116,6 +1116,7 @@ export interface components {
         StartRequest: {
             /** Format: int32 */
             questionCount?: number;
+            revisionIds?: string[];
             /** Format: uuid */
             topicId: string;
         };
