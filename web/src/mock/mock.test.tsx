@@ -128,7 +128,8 @@ describe("mock exam entry", () => {
 
     await user.click(await screen.findByRole("button", { name: "Start 1Z0-830 mock" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Mock exam" })).toBeInTheDocument();
+    expect(await screen.findByText("Which option compiles?")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Mock exam" })).toBeInTheDocument();
     const start = fetch.calls.find(
       (call) => call.method === "POST" && call.path === "/api/study/mock-exams",
     );
@@ -151,9 +152,7 @@ describe("mock exam entry", () => {
 
     await user.click(await screen.findByRole("button", { name: "Start 1Z0-830 mock" }));
 
-    expect(await screen.findByRole("status")).toHaveTextContent(
-      "already had this mock in progress",
-    );
+    expect(await screen.findByText(/already had this mock in progress/)).toBeInTheDocument();
   });
 });
 
@@ -255,7 +254,7 @@ describe("mock result", () => {
     await userEvent.setup().click(
       screen.getByText("Question 1: Correct"),
     );
-    expect(screen.getByText("The specification makes the first option correct.")).toBeInTheDocument();
+    expect(screen.getAllByText("The specification makes the first option correct.")).toHaveLength(2);
     expect(screen.getByRole("link", { name: "Java SE 21 documentation" })).toHaveAttribute(
       "rel",
       "noopener noreferrer",
