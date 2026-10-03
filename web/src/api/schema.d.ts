@@ -993,6 +993,9 @@ export interface components {
             /** Format: uuid */
             trackId: string;
         };
+        MockExamStartRequest: {
+            trackSlug: string;
+        };
         MockExamView: {
             /** Format: int32 */
             answeredCount: number;
@@ -2263,7 +2266,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["StartRequest"];
+                "application/json": components["schemas"]["MockExamStartRequest"];
             };
         };
         responses: {

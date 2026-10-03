@@ -14,6 +14,8 @@ import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
 import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
+import { MockExamPage } from "./mock/MockExamPage";
+import { MockExamResultPage } from "./mock/MockExamResultPage";
 import { ReviewPage } from "./review/ReviewPage";
 import { SessionPage } from "./study/SessionPage";
 import { Layout } from "./ui/Layout";
@@ -44,6 +46,8 @@ export function App() {
           <Route index element={<TracksPage />} />
           <Route path="/tracks/:slug" element={<TrackPage />} />
           <Route path="/sessions/:sessionId" element={<SessionPage />} />
+          <Route path="/mock-exams/:sessionId" element={<MockExamPage />} />
+          <Route path="/mock-exams/:sessionId/result" element={<MockExamResultPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/sessions/:sessionId" element={<SessionReviewPage />} />
           <Route path="/review" element={<ReviewPage />} />

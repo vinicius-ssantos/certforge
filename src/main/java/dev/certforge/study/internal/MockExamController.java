@@ -41,7 +41,7 @@ class MockExamController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  MockExamView start(@Valid @RequestBody StartRequest request) {
+  MockExamView start(@Valid @RequestBody MockExamStartRequest request) {
     return service.start(request.trackSlug());
   }
 
@@ -77,7 +77,7 @@ class MockExamController {
     return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.result(sessionId));
   }
 
-  record StartRequest(@NotBlank String trackSlug) {}
+  record MockExamStartRequest(@NotBlank String trackSlug) {}
 
   record ResponseRequest(
       @NotEmpty @Size(min = 1, max = 8)
