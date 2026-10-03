@@ -74,7 +74,7 @@ Mock responses initially remain separate from ordinary topic-practice attempts. 
 
 The timed lifecycle is exposed under `/api/study/mock-exams`:
 
-- `POST /api/study/mock-exams` starts a balanced run. A second start for the same learner and track returns the existing session id rather than silently replacing its snapshot or deadline.
+- `POST /api/study/mock-exams` starts a balanced run. A second start for the same learner and track returns a conflict carrying the existing session id rather than silently replacing its snapshot or deadline.
 - `GET /api/study/mock-exams/{sessionId}` resumes the exact stored order and server deadline.
 - `POST /api/study/mock-exams/{sessionId}/questions/{position}/response` accepts one idempotent response. Its response is only a receipt: it deliberately contains no correctness, answer key, explanations or references.
 - `POST /api/study/mock-exams/{sessionId}/finish` closes a live run.
