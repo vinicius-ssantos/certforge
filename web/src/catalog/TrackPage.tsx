@@ -43,6 +43,10 @@ function isActiveSession(error: unknown): error is ApiError {
   return error instanceof ApiError && error.code === "active_session_exists";
 }
 
+function isActiveMock(error: unknown): error is ApiError {
+  return error instanceof ApiError && error.code === "active_mock_exam_exists";
+}
+
 export function TrackPage() {
   const { slug = "" } = useParams();
   const api = useApi();
@@ -63,6 +67,18 @@ export function TrackPage() {
       const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
         navigate(`/sessions/${existing}`, { state: { resumed: true } });
+      }
+    },
+  });
+
+  const startMock = useMutation({
+    mutationFn: () =>
+      unwrap(api.POST("/api/study/mock-exams", { body: { trackSlug: slug } })),
+    onSuccess: (mock) => navigate(`/mock-exams/${mock.id}`),
+    onError: (error) => {
+      const existing = isActiveMock(error) ? error.details["sessionId"] : undefined;
+      if (typeof existing === "string") {
+        navigate(`/mock-exams/${existing}`);
       }
     },
   });
@@ -93,6 +109,24 @@ export function TrackPage() {
               Official exam objectives (opens in a new tab)
             </a>
           </p>
+          {track.data.kind === "CERTIFICATION" ? (
+            <section className="mock-entry" aria-labelledby="mock-entry-heading">
+              <h2 id="mock-entry-heading">Full mock exam</h2>
+              <p>
+                Simulate the complete exam with 50 questions, a 120-minute server-enforced timer,
+                delayed feedback and a final topic breakdown.
+              </p>
+              <p className="muted">
+                The 68% target is a CertForge practice threshold, not an Oracle score prediction.
+              </p>
+              {startMock.isError && !isActiveMock(startMock.error) ? (
+                <ErrorState error={startMock.error} />
+              ) : null}
+              <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
+                {startMock.isPending ? "Starting…" : "Start 1Z0-830 mock"}
+              </button>
+            </section>
+          ) : null}
           <h2>Topics</h2>
           {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
           <TopicList
