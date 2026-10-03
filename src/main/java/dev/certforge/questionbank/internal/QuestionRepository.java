@@ -8,7 +8,10 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -140,6 +143,30 @@ class QuestionRepository {
     return jdbc.sql(SELECT_REVISION + " where question_id = :questionId order by revision_number")
         .param(QUESTION_ID, questionId)
         .query(this::mapRevision)
+        .list();
+  }
+
+  /**
+   * Loads exact revisions and all of their children in three queries total, instead of two child
+   * queries per revision.
+   */
+  List<Revision> findRevisionsByIds(List<UUID> ids) {
+    if (ids.isEmpty()) {
+      return List.of();
+    }
+    Map<UUID, List<RevisionContent.Option>> options = options(ids);
+    Map<UUID, List<RevisionContent.Reference>> references = references(ids);
+    return jdbc.sql(SELECT_REVISION + " where id in (:ids)")
+        .param("ids", ids)
+        .query(
+            (rs, n) -> {
+              UUID id = rs.getObject("id", UUID.class);
+              return mapRevision(
+                  rs,
+                  id,
+                  options.getOrDefault(id, List.of()),
+                  references.getOrDefault(id, List.of()));
+            })
         .list();
   }
 
@@ -298,6 +325,15 @@ class QuestionRepository {
 
   private Revision mapRevision(ResultSet rs, int rowNum) throws SQLException {
     UUID id = rs.getObject("id", UUID.class);
+    return mapRevision(rs, id, options(id), references(id));
+  }
+
+  private Revision mapRevision(
+      ResultSet rs,
+      UUID id,
+      List<RevisionContent.Option> options,
+      List<RevisionContent.Reference> references)
+      throws SQLException {
     String difficulty = rs.getString("difficulty");
     Integer release = (Integer) rs.getObject("java_release");
     RevisionContent content =
@@ -309,8 +345,8 @@ class QuestionRepository {
             rs.getString("difficulty_rationale"),
             rs.getString("prompt"),
             rs.getString("explanation"),
-            options(id),
-            references(id));
+            options,
+            references);
     return new Revision(
         id,
         rs.getObject("question_id", UUID.class),
@@ -349,6 +385,55 @@ class QuestionRepository {
         .query((rs, n) -> new RevisionContent.Reference(rs.getString("title"), rs.getString("url")))
         .list();
   }
+
+  private Map<UUID, List<RevisionContent.Option>> options(List<UUID> revisionIds) {
+    Map<UUID, List<RevisionContent.Option>> grouped = new LinkedHashMap<>();
+    jdbc.sql(
+            "select revision_id, option_key, text, correct, explanation"
+                + " from certforge.qb_revision_option where revision_id in (:revisionIds)"
+                + " order by revision_id, position")
+        .param("revisionIds", revisionIds)
+        .query(
+            (rs, n) ->
+                new OptionRow(
+                    rs.getObject("revision_id", UUID.class),
+                    new RevisionContent.Option(
+                        rs.getString("option_key"),
+                        rs.getString("text"),
+                        rs.getBoolean("correct"),
+                        rs.getString("explanation"))))
+        .list()
+        .forEach(
+            row ->
+                grouped
+                    .computeIfAbsent(row.revisionId(), ignored -> new ArrayList<>())
+                    .add(row.option()));
+    return grouped;
+  }
+
+  private Map<UUID, List<RevisionContent.Reference>> references(List<UUID> revisionIds) {
+    Map<UUID, List<RevisionContent.Reference>> grouped = new LinkedHashMap<>();
+    jdbc.sql(
+            "select revision_id, title, url from certforge.qb_revision_reference"
+                + " where revision_id in (:revisionIds) order by revision_id, position")
+        .param("revisionIds", revisionIds)
+        .query(
+            (rs, n) ->
+                new ReferenceRow(
+                    rs.getObject("revision_id", UUID.class),
+                    new RevisionContent.Reference(rs.getString("title"), rs.getString("url"))))
+        .list()
+        .forEach(
+            row ->
+                grouped
+                    .computeIfAbsent(row.revisionId(), ignored -> new ArrayList<>())
+                    .add(row.reference()));
+    return grouped;
+  }
+
+  private record OptionRow(UUID revisionId, RevisionContent.Option option) {}
+
+  private record ReferenceRow(UUID revisionId, RevisionContent.Reference reference) {}
 
   private static OffsetDateTime utc(Instant instant) {
     return OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
