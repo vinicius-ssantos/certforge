@@ -171,9 +171,15 @@ class MockExamHistoryServiceTest {
             "Explanation",
             List.of(
                 new RevisionEvidence.Option(
-                    "A", "Alpha", correctKey.equals("A"), correctKey.equals("A") ? "Correct" : "Wrong"),
+                    "A",
+                    "Alpha",
+                    correctKey.equals("A"),
+                    correctKey.equals("A") ? "Correct" : "Wrong"),
                 new RevisionEvidence.Option(
-                    "B", "Beta", correctKey.equals("B"), correctKey.equals("B") ? "Correct" : "Wrong")),
+                    "B",
+                    "Beta",
+                    correctKey.equals("B"),
+                    correctKey.equals("B") ? "Correct" : "Wrong")),
             List.of());
     return new QuestionFixture(revision, evidence);
   }
