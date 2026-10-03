@@ -33,10 +33,7 @@ class MockExamPlannerTest {
     Fixture fixture = fixture(15);
     MockExamPlanner planner =
         new MockExamPlanner(
-            fixture.catalog,
-            fixture.questionBank,
-            new MockExamBlueprintCatalog(),
-            new Random(42));
+            fixture.catalog, fixture.questionBank, new MockExamBlueprintCatalog(), new Random(42));
 
     MockExamPlanner.Plan plan = planner.plan("java-se-21");
 
@@ -60,22 +57,14 @@ class MockExamPlannerTest {
                 fixture.questionBank,
                 new MockExamBlueprintCatalog(),
                 new Random(7))
-            .plan("java-se-21")
-            .questions()
-            .stream()
-            .map(q -> q.question().revisionId())
-            .toList();
+            .plan("java-se-21").questions().stream().map(q -> q.question().revisionId()).toList();
     List<QuestionRevisionId> second =
         new MockExamPlanner(
                 fixture.catalog,
                 fixture.questionBank,
                 new MockExamBlueprintCatalog(),
                 new Random(7))
-            .plan("java-se-21")
-            .questions()
-            .stream()
-            .map(q -> q.question().revisionId())
-            .toList();
+            .plan("java-se-21").questions().stream().map(q -> q.question().revisionId()).toList();
 
     assertThat(first).isEqualTo(second).doesNotHaveDuplicates();
   }
@@ -115,8 +104,7 @@ class MockExamPlannerTest {
 
     assertThatThrownBy(
             () ->
-                new MockExamPlanner(
-                        catalog, bank, new MockExamBlueprintCatalog(), new Random(1))
+                new MockExamPlanner(catalog, bank, new MockExamBlueprintCatalog(), new Random(1))
                     .plan("future"))
         .isInstanceOfSatisfying(
             StudyException.class,
@@ -132,8 +120,7 @@ class MockExamPlannerTest {
 
     assertThatThrownBy(
             () ->
-                new MockExamPlanner(
-                        catalog, bank, new MockExamBlueprintCatalog(), new Random(1))
+                new MockExamPlanner(catalog, bank, new MockExamBlueprintCatalog(), new Random(1))
                     .plan("java-se-21"))
         .isInstanceOfSatisfying(
             StudyException.class,
