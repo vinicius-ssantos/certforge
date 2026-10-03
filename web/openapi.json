@@ -1538,6 +1538,16 @@
         "required" : [ "topics" ],
         "type" : "object"
       },
+      "MockExamStartRequest" : {
+        "properties" : {
+          "trackSlug" : {
+            "minLength" : 1,
+            "type" : "string"
+          }
+        },
+        "required" : [ "trackSlug" ],
+        "type" : "object"
+      },
       "StartRequest" : {
         "properties" : {
           "questionCount" : {
@@ -2842,7 +2852,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/StartRequest"
+                "$ref" : "#/components/schemas/MockExamStartRequest"
               }
             }
           },
