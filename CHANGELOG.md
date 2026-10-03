@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-03
+
+Adaptive Review. See the [release notes](docs/release/v0.2.0-release-notes.md) for what it does and what it does not.
+
 ### Fixed
 
 - Answering a question did not refresh the review queue, the misconception counts, progress or history, which are all derived from attempts. Queries stay fresh for 30 seconds, and practising one question takes less, so a learner who practised a queued question and went straight back to the queue was shown the state from before they answered. Found by the new end-to-end test of the loop, which is the only place the two halves meet.
