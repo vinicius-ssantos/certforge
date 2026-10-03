@@ -18,6 +18,7 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -28,6 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.random.RandomGenerator;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,9 @@ class StudySessionIT {
 
   /** "Localization": never given any published question. */
   private static final String EMPTY_TOPIC = "a3000000-0000-4000-8000-000000000010";
+
+  /** Used by one test only, so publishing into it cannot change what another test counts. */
+  private static final String SEPARATE_TOPIC = "a3000000-0000-4000-8000-000000000007";
 
   @Container @ServiceConnection
   static final PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:18.6-alpine");
@@ -190,6 +195,48 @@ class StudySessionIT {
         .andExpect(jsonPath("$.questions[2].position").value(2))
         .andExpect(jsonPath("$.questions[0].question.options.length()").value(2))
         .andExpect(jsonPath("$.closedAt").doesNotExist());
+  }
+
+  /** Starting with the questions named, which is how a learner acts on the review queue. */
+  private ResultActions startChosen(Account as, String topic, String... revisionIds)
+      throws Exception {
+    String ids =
+        Arrays.stream(revisionIds).map(id -> "\"" + id + "\"").collect(Collectors.joining(","));
+    return mvc.perform(
+        post("/api/study/sessions")
+            .with(csrf())
+            .cookie(as.session())
+            .contentType("application/json")
+            .content("{\"topicId\":\"" + topic + "\",\"revisionIds\":[" + ids + "]}"));
+  }
+
+  @Test
+  void startsASessionWithExactlyTheQuestionsAskedFor() throws Exception {
+    startChosen(learner, CHANGING_TOPIC, changing3.revisionId(), changing1.revisionId())
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.requestedCount").value(2))
+        .andExpect(jsonPath("$.questions.length()").value(2))
+        // The order asked for is the order practised.
+        .andExpect(jsonPath("$.questions[0].question.revisionId").value(changing3.revisionId()))
+        .andExpect(jsonPath("$.questions[1].question.revisionId").value(changing1.revisionId()));
+  }
+
+  @Test
+  void refusesAQuestionThatIsNotPublishedInThatTopic() throws Exception {
+    // Published, but in another topic: choosing is not a way around the eligibility rule. Its own
+    // topic, because publishing into one another test counts questions in would break that test.
+    String elsewhere = fixtures.publish(SEPARATE_TOPIC, "Published somewhere else").revisionId();
+
+    startChosen(learner, CHANGING_TOPIC, changing1.revisionId(), elsewhere)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("question_not_available"));
+  }
+
+  @Test
+  void refusesTheSameQuestionTwice() throws Exception {
+    startChosen(learner, CHANGING_TOPIC, changing1.revisionId(), changing1.revisionId())
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("duplicate_question"));
   }
 
   @Test

@@ -48,6 +48,7 @@ export function Layout() {
               <NavLink to="/" end>
                 Tracks
               </NavLink>
+              <NavLink to="/review">Review</NavLink>
               <NavLink to="/progress">Progress</NavLink>
               <NavLink to="/history">History</NavLink>
               {editorial ? <NavLink to="/editorial">Editorial</NavLink> : null}

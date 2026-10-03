@@ -14,6 +14,7 @@ import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
 import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
+import { ReviewPage } from "./review/ReviewPage";
 import { SessionPage } from "./study/SessionPage";
 import { Layout } from "./ui/Layout";
 import { EmptyState } from "./ui/States";
@@ -45,6 +46,7 @@ export function App() {
           <Route path="/sessions/:sessionId" element={<SessionPage />} />
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/history/sessions/:sessionId" element={<SessionReviewPage />} />
+          <Route path="/review" element={<ReviewPage />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route element={<RequireEditorial />}>
             <Route path="/editorial" element={<QueuePage />} />

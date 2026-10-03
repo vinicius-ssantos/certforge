@@ -18,9 +18,11 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -89,14 +91,41 @@ class StudyService {
    * Starts a session for the current learner. The transaction is scoped to the insert so that a
    * concurrent start, rejected by the unique index, can be answered with the session that won.
    */
-  SessionView start(UUID topicId, Integer requestedCount) {
-    return Observation.createNotStarted("certforge.session.start", observations)
-        .observe(() -> doStart(topicId, requestedCount));
+  /** The chosen revisions, in the order asked for, refusing any that is not published here. */
+  private static List<PublishedQuestion> only(List<PublishedQuestion> eligible, List<UUID> chosen) {
+    Map<UUID, PublishedQuestion> byRevision = new HashMap<>();
+    eligible.forEach(question -> byRevision.put(question.revisionId().value(), question));
+    List<PublishedQuestion> selected = new ArrayList<>(chosen.size());
+    for (UUID revision : chosen) {
+      PublishedQuestion question = byRevision.get(revision);
+      if (question == null) {
+        throw StudyException.conflict(
+            "question_not_available",
+            "A chosen question is not published in this topic",
+            Map.of("revisionId", revision));
+      }
+      selected.add(question);
+    }
+    return selected;
   }
 
-  private SessionView doStart(UUID topicId, Integer requestedCount) {
+  SessionView start(UUID topicId, Integer requestedCount, List<UUID> chosenRevisions) {
+    return Observation.createNotStarted("certforge.session.start", observations)
+        .observe(() -> doStart(topicId, requestedCount, chosenRevisions));
+  }
+
+  private SessionView doStart(UUID topicId, Integer requestedCount, List<UUID> chosenRevisions) {
     ActorId learner = currentActor.require();
-    int count = requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
+    List<UUID> chosen = chosenRevisions == null ? List.of() : chosenRevisions;
+    if (chosen.size() != Set.copyOf(chosen).size()) {
+      throw StudyException.invalid(
+          "duplicate_question", "The same question was asked for more than once");
+    }
+    // Choosing the questions replaces the count rather than arguing with it.
+    int count =
+        !chosen.isEmpty()
+            ? chosen.size()
+            : requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
     if (count < 1 || count > properties.maxQuestionCount()) {
       throw StudyException.invalid(
           "question_count_out_of_range",
@@ -116,13 +145,16 @@ class StudyService {
     }
 
     List<PublishedQuestion> eligible = questionBank.eligibleForTopic(new TopicId(topicId));
-    if (eligible.size() < count) {
+    if (chosen.isEmpty() && eligible.size() < count) {
       throw StudyException.conflict(
           "insufficient_content",
           "Not enough published questions for this topic",
           Map.of("requested", count, "available", eligible.size()));
     }
-    List<PublishedQuestion> selected = selector.select(eligible, count);
+    // A chosen question is held to the same rule as a selected one: it must be published in this
+    // topic right now. That is what stops a caller naming a retired, draft or foreign revision.
+    List<PublishedQuestion> selected =
+        chosen.isEmpty() ? selector.select(eligible, count) : only(eligible, chosen);
     StudySession session =
         new StudySession(
             UUID.randomUUID(),

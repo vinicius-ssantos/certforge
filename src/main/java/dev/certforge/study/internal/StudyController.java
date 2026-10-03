@@ -32,7 +32,7 @@ class StudyController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   SessionView start(@Valid @RequestBody StartRequest request) {
-    return service.start(request.topicId(), request.questionCount());
+    return service.start(request.topicId(), request.questionCount(), request.revisionIds());
   }
 
   @GetMapping
@@ -56,5 +56,5 @@ class StudyController {
   }
 
   /** {@code questionCount} is optional; the server applies its default and limits. */
-  record StartRequest(@NotNull UUID topicId, Integer questionCount) {}
+  record StartRequest(@NotNull UUID topicId, Integer questionCount, List<UUID> revisionIds) {}
 }

@@ -1321,6 +1321,13 @@
             "format" : "int32",
             "type" : "integer"
           },
+          "revisionIds" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
           "topicId" : {
             "format" : "uuid",
             "type" : "string"
