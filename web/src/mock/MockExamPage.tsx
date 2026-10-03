@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { MockExam, Question } from "../api/types";
@@ -43,6 +43,7 @@ export function MockExamPage() {
   const api = useApi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const resumed = (useLocation().state as { resumed?: boolean } | null)?.resumed === true;
   useDocumentTitle("Mock exam");
 
   const exam = useQuery({
@@ -64,11 +65,20 @@ export function MockExamPage() {
   }, [flags, sessionId]);
 
   useEffect(() => {
-    if (!exam.data || exam.data.status !== "IN_PROGRESS") return;
-    if (Date.parse(exam.data.expiresAt) <= now) {
+    if (
+      exam.data?.status === "IN_PROGRESS"
+      && Date.parse(exam.data.expiresAt) <= now
+      && !exam.isFetching
+    ) {
       void exam.refetch();
     }
-  }, [exam, now]);
+  }, [exam.data?.expiresAt, exam.data?.status, exam.isFetching, exam.refetch, now]);
+
+  useEffect(() => {
+    if (exam.data && exam.data.status !== "IN_PROGRESS") {
+      localStorage.removeItem(flagKey(sessionId));
+    }
+  }, [exam.data, sessionId]);
 
   const respond = useMutation({
     mutationFn: ({ at, selected, key }: { at: number; selected: string[]; key: string }) =>
@@ -123,7 +133,6 @@ export function MockExamPage() {
     return <><h1>Mock exam</h1><ErrorState error={exam.error} onRetry={() => void exam.refetch()} /></>;
   }
   if (exam.data.status !== "IN_PROGRESS") {
-    localStorage.removeItem(flagKey(sessionId));
     return (
       <>
         <h1>Mock exam</h1>
@@ -143,8 +152,14 @@ export function MockExamPage() {
     <>
       <div className="mock-head">
         <div>
-          <h1>1Z0-830 mock exam</h1>
-          <p className="muted">{exam.data.answeredCount} of {exam.data.questionCount} answered</p>
+          <h1>Mock exam</h1>
+          {resumed ? (
+            <p role="status">You already had this mock in progress, so you are continuing it.</p>
+          ) : null}
+          <p className="muted">
+            {exam.data.answeredCount} of {exam.data.questionCount} answered · Practice target{" "}
+            {exam.data.passingPercentage}%
+          </p>
         </div>
         <div className="mock-timer" role="timer" aria-label={`Time remaining ${remaining}`}>
           <span className="muted">Time remaining</span>
