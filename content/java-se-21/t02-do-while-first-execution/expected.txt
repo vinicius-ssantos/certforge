@@ -1,0 +1,2 @@
+runsWithFalseCondition=1
+whileRunsWithFalseCondition=0

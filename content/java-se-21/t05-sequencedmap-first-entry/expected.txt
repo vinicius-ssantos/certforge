@@ -1,0 +1,3 @@
+first=a
+last=c
+reversed=[c, b, a]

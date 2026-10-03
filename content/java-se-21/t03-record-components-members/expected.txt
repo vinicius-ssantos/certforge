@@ -1,0 +1,6 @@
+fieldPrivate=true
+fieldFinal=true
+accessorNamedAfterComponent=x
+accessorPublic=true
+hasSetter=false
+classFinal=true
