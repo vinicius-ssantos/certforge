@@ -267,6 +267,51 @@ class ReviewQueueIT {
     assertThat(count(learner, "neverAttempted")).isEqualTo(IN_TOPIC - 1);
   }
 
+  // ---- recurring misconceptions --------------------------------------------------------------
+
+  private String misconceptions(Account as) throws Exception {
+    return mvc.perform(get("/api/review/misconceptions").cookie(as.session()))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+  }
+
+  @Test
+  void countsAttemptsAndDistinctQuestionsSeparately() throws Exception {
+    // The same question wrong twice while confident: one misconception, repeated.
+    answer(published.get(0).revisionId(), "HIGH", "B");
+    answer(published.get(0).revisionId(), "HIGH", "B");
+
+    String one = misconceptions(learner);
+    assertThat((int) JsonPath.read(one, "$[0].attempts")).isEqualTo(2);
+    assertThat((int) JsonPath.read(one, "$[0].questions")).isEqualTo(1);
+
+    // A second question makes it a weak area rather than one stuck idea.
+    answer(published.get(1).revisionId(), "HIGH", "B");
+
+    String two = misconceptions(learner);
+    assertThat((int) JsonPath.read(two, "$[0].attempts")).isEqualTo(3);
+    assertThat((int) JsonPath.read(two, "$[0].questions")).isEqualTo(2);
+  }
+
+  @Test
+  void countsOnlyWrongAnswersGivenConfidently() throws Exception {
+    answer(published.get(0).revisionId(), "LOW", "B"); // wrong, but unsure
+    answer(published.get(1).revisionId(), "HIGH", "A"); // confident and right
+
+    assertThat(JsonPath.<List<Object>>read(misconceptions(learner), "$")).isEmpty();
+  }
+
+  @Test
+  void misconceptionsAreOnlyYourOwn() throws Exception {
+    answer(published.get(0).revisionId(), "HIGH", "B");
+    Account somebodyElse = fixtures.user();
+
+    assertThat(JsonPath.<List<Object>>read(misconceptions(learner), "$")).hasSize(1);
+    assertThat(JsonPath.<List<Object>>read(misconceptions(somebodyElse), "$")).isEmpty();
+  }
+
   @Test
   void aLearnerWithNoAttemptsHasAnEmptyQueueRatherThanAnError() throws Exception {
     assertThat(reasons(learner)).isEmpty();

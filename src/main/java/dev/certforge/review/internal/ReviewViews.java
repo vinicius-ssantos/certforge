@@ -38,4 +38,20 @@ interface ReviewViews {
    * yet" rather than "you have nothing to review".
    */
   record Queue(List<QueueItem> items, int dueNow, int waiting, int neverAttempted) {}
+
+  /**
+   * Where a learner has been wrong while saying they were confident, per topic.
+   *
+   * <p>{@code attempts} and {@code questions} are both here because they mean different things:
+   * three confident wrong answers to one question is one misconception being repeated, and three to
+   * three questions is a weak area. A single number could not tell those apart.
+   *
+   * <p>It is evidence, not a prediction. Nothing here says whether anyone is ready for an exam.
+   */
+  record Misconception(
+      TopicId topicId,
+      @Schema(nullable = true) String topicName,
+      int attempts,
+      int questions,
+      Instant lastAt) {}
 }
