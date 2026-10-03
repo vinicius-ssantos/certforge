@@ -112,7 +112,8 @@ describe("mock exam flow", () => {
 
     await user.click(await screen.findByRole("button", { name: "Start 1Z0-830 mock" }));
 
-    expect(await screen.findByRole("heading", { name: "Mock exam" })).toBeInTheDocument();
+    expect(await screen.findByText("Mock question 1?")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Mock exam" })).toBeInTheDocument();
     const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === "/api/study/mock-exams");
     expect(call?.body).toEqual({ trackSlug: "java-certification" });
   });
