@@ -55,8 +55,7 @@ class MockExamPersistenceIT {
     assertThatThrownBy(
             () ->
                 jdbc.update(
-                    "delete from certforge.mock_exam_question where session_id = ?",
-                    session.id()))
+                    "delete from certforge.mock_exam_question where session_id = ?", session.id()))
         .hasMessageContaining("immutable");
     assertThatThrownBy(
             () ->
@@ -81,8 +80,10 @@ class MockExamPersistenceIT {
     assertThatThrownBy(() -> insert(duplicate, questions(3)))
         .isInstanceOf(DuplicateKeyException.class);
 
-    assertThat(repository.close(first.id(), MockExamStatus.COMPLETED, now.plusSeconds(30))).isTrue();
-    assertThat(repository.close(first.id(), MockExamStatus.COMPLETED, now.plusSeconds(31))).isFalse();
+    assertThat(repository.close(first.id(), MockExamStatus.COMPLETED, now.plusSeconds(30)))
+        .isTrue();
+    assertThat(repository.close(first.id(), MockExamStatus.COMPLETED, now.plusSeconds(31)))
+        .isFalse();
 
     MockExamSession next = session(learner, track, now.plusSeconds(40));
     insert(next, questions(3));
@@ -139,7 +140,8 @@ class MockExamPersistenceIT {
                     response.id()))
         .hasMessageContaining("immutable evidence");
     assertThatThrownBy(
-            () -> jdbc.update("delete from certforge.mock_exam_response where id = ?", response.id()))
+            () ->
+                jdbc.update("delete from certforge.mock_exam_response where id = ?", response.id()))
         .hasMessageContaining("immutable evidence");
 
     MockExamResponse wrongRevision =
@@ -156,7 +158,8 @@ class MockExamPersistenceIT {
     assertThatThrownBy(() -> repository.insertResponse(wrongRevision))
         .hasMessageContaining("does not match the snapshot");
 
-    assertThat(repository.close(session.id(), MockExamStatus.COMPLETED, now.plusSeconds(30))).isTrue();
+    assertThat(repository.close(session.id(), MockExamStatus.COMPLETED, now.plusSeconds(30)))
+        .isTrue();
     SnapshotQuestion third = questions.get(2);
     MockExamResponse afterClose =
         new MockExamResponse(
@@ -220,9 +223,7 @@ class MockExamPersistenceIT {
 
   private static List<SnapshotQuestion> questions(int count) {
     return java.util.stream.IntStream.range(0, count)
-        .mapToObj(
-            position ->
-                new SnapshotQuestion(position, UUID.randomUUID(), UUID.randomUUID()))
+        .mapToObj(position -> new SnapshotQuestion(position, UUID.randomUUID(), UUID.randomUUID()))
         .toList();
   }
 }
