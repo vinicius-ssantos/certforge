@@ -24,7 +24,7 @@ The values live in `MockExamBlueprintCatalog`. A future exam version must opt in
 
 The equal five-per-topic distribution is a CertForge practice blueprint. It deliberately gives every published objective meaningful exposure and is not presented as an Oracle-published objective weighting.
 
-## Foundation implemented in this slice
+## Foundation
 
 `MockExamPlanner` resolves the active track, requires an explicit blueprint for its active exam version and reads only learner-safe published questions from `QuestionBank`.
 
@@ -40,11 +40,17 @@ The planner fails instead of silently shortening or rebalancing a mock. Tests us
 
 The current Java SE 21 authorial pack contains 15 questions per topic, but most later additions still await technical review. The mock becomes startable only after enough questions in every topic are actually published.
 
-## Persistence contract for the next slice
+## Persistence
 
-The persisted aggregate will contain learner, track and exam-version ids; status; the blueprint values used for that run; `createdAt`, fixed `expiresAt`, and `closedAt`; an immutable ordered snapshot of `(position, topicId, revisionId)`; and one immutable submitted response per position.
+The persisted aggregate contains learner, track and exam-version ids; status; the blueprint values used for that run; `createdAt`, fixed `expiresAt`, and `closedAt`; an immutable ordered snapshot of `(position, topicId, revisionId)`; and one immutable submitted response per position.
 
-A started run never gains newly published questions and never swaps a deprecated revision. The exact revision the learner saw remains recoverable for post-exam review.
+`V12__mock_exams.sql` introduces separate `mock_exam_session`, `mock_exam_question` and `mock_exam_response` tables. There is at most one in-progress mock per learner and track, which gives the later start endpoint a safe resume contract even under concurrent requests.
+
+The snapshot can be inserted only in the same database transaction that creates the aggregate root and cannot later be updated, deleted or extended. The repository also rejects incomplete, non-contiguous, duplicate or topic-unbalanced plans before persistence.
+
+Response rows are immutable evidence. The database verifies that a response belongs to the learner, targets the exact revision snapshotted at that position, is written only while the mock is in progress, and is not timestamped after the persisted deadline. Idempotency keys are unique per learner. Closing the mock and inserting a response synchronize on the session row so a response cannot slip in after the run is closed.
+
+A started run therefore never gains newly published questions and never swaps a deprecated revision. The exact revision the learner saw remains recoverable for post-exam review.
 
 ## Delayed-feedback API rule
 
@@ -66,8 +72,7 @@ Mock responses initially remain separate from ordinary topic-practice attempts. 
 
 ## Remaining delivery
 
-1. Persist the mock aggregate and immutable response evidence.
-2. Add start/resume/answer/finish/result API endpoints with idempotent answer submission.
-3. Add the web flow: timer, question navigation, flag for review, submit confirmation.
-4. Add result and history screens with topic breakdown and post-close explanations.
-5. Measure the flow and add operational/contract tests before release.
+1. Add start/resume/answer/finish/result API endpoints with idempotent answer submission.
+2. Add the web flow: timer, question navigation, flag for review, submit confirmation.
+3. Add result and history screens with topic breakdown and post-close explanations.
+4. Measure the flow and add operational/contract tests before release.
