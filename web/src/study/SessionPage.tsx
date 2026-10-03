@@ -64,6 +64,13 @@ export function SessionPage() {
     onSuccess: (result, { position, question }) => {
       setFailure(null);
       setFeedback({ position, question, result });
+      // An attempt is the evidence the review queue, the misconception counts, progress and
+      // history are all derived from, so answering has just changed every one of them. Without
+      // this a learner who practises a queued question and goes back to the queue is shown the
+      // state from before they answered, for as long as the cache stays fresh.
+      void queryClient.invalidateQueries({ queryKey: ["review"] });
+      void queryClient.invalidateQueries({ queryKey: ["progress"] });
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
       const current = queryClient.getQueryData<Session>(sessionKey(sessionId));
       if (current) {
         store({
