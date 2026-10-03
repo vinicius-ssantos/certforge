@@ -55,10 +55,7 @@ class MockExamHistoryService {
     List<MockExamSession> rows =
         repository.findByLearner(learner, PageCursor.decodeOrNull(cursor), limit + 1);
     return Page.of(
-        rows,
-        limit,
-        this::toItem,
-        session -> new PageCursor(session.createdAt(), session.id()));
+        rows, limit, this::toItem, session -> new PageCursor(session.createdAt(), session.id()));
   }
 
   private MockExamHistoryItem toItem(MockExamSession session) {
@@ -81,7 +78,9 @@ class MockExamHistoryService {
 
     List<SnapshotQuestion> snapshot = repository.snapshot(session.id());
     Map<Integer, MockExamResponse> responses = new HashMap<>();
-    repository.responses(session.id()).forEach(response -> responses.put(response.position(), response));
+    repository
+        .responses(session.id())
+        .forEach(response -> responses.put(response.position(), response));
 
     int correct = 0;
     Map<UUID, TopicAccumulator> perTopic = new LinkedHashMap<>();
@@ -89,7 +88,9 @@ class MockExamHistoryService {
       MockExamResponse response = responses.get(item.position());
       boolean answered = response != null;
       boolean isCorrect =
-          answered && MockExamScoring.grade(evidence(item.revisionId()), response.selectedOptions());
+          answered
+              && MockExamScoring.grade(
+                  evidence(item.revisionId()), response.selectedOptions());
       if (isCorrect) {
         correct++;
       }
