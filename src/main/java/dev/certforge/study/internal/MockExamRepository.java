@@ -167,6 +167,13 @@ class MockExamRepository {
         .list();
   }
 
+  List<MockExamResponse> responses(UUID sessionId) {
+    return jdbc.sql(SELECT_RESPONSE + " where session_id = :session order by position")
+        .param(SESSION, sessionId)
+        .query(MockExamRepository::mapResponse)
+        .list();
+  }
+
   Optional<MockExamResponse> findResponse(UUID sessionId, int position) {
     return jdbc.sql(SELECT_RESPONSE + " where session_id = :session and position = :position")
         .param(SESSION, sessionId)

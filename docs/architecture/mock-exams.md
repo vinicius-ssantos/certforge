@@ -70,9 +70,20 @@ A mock result describes that run. It is not a readiness forecast or a probabilit
 
 Mock responses initially remain separate from ordinary topic-practice attempts. Mixing them into the existing progress projection would silently change the meaning of `attempted`, `correct` and confidence-based review evidence.
 
+## Learner API
+
+The timed lifecycle is exposed under `/api/study/mock-exams`:
+
+- `POST /api/study/mock-exams` starts a balanced run. A second start for the same learner and track returns a conflict carrying the existing session id rather than silently replacing its snapshot or deadline.
+- `GET /api/study/mock-exams/{sessionId}` resumes the exact stored order and server deadline.
+- `POST /api/study/mock-exams/{sessionId}/questions/{position}/response` accepts one idempotent response. Its response is only a receipt: it deliberately contains no correctness, answer key, explanations or references.
+- `POST /api/study/mock-exams/{sessionId}/finish` closes a live run.
+- `GET /api/study/mock-exams/{sessionId}/result` is available only after completion or expiration. It then exposes the score, topic breakdown and full revision evidence needed for review.
+
+Expiration is based on the persisted deadline and the server clock. Unanswered items remain unanswered evidence and count against the full question-count denominator rather than disappearing from the score. The OpenAPI contract test explicitly checks that active-run schemas do not grow answer material by accident.
+
 ## Remaining delivery
 
-1. Add start/resume/answer/finish/result API endpoints with idempotent answer submission.
-2. Add the web flow: timer, question navigation, flag for review, submit confirmation.
-3. Add result and history screens with topic breakdown and post-close explanations.
-4. Measure the flow and add operational/contract tests before release.
+1. Add the web flow: timer, question navigation, flag for review, submit confirmation.
+2. Add result and history screens with topic breakdown and post-close explanations.
+3. Measure the flow and add operational tests before release.
