@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**20 of 100 questions carry a current review** by vinicius-ssantos, recorded on 2026-10-02. 0 have been edited since being reviewed and need a new one; 80 have never been reviewed. Each is marked below.
+**20 of 150 questions carry a current review** by vinicius-ssantos, recorded on 2026-10-02. 0 have been edited since being reviewed and need a new one; 130 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 51 of the 100 questions: `t01-bigdecimal-nonterminating-divide`, `t01-integer-boxing-guarantee`, `t01-localdate-plus-years-leap-day`, `t01-period-vs-duration`, `t02-case-null-pattern-switch`, `t02-do-while-first-execution`, `t02-enhanced-for-variable-assignment`, `t02-pattern-variable-and-scope`, `t02-switch-rule-no-fallthrough`, `t03-covariant-return`, `t03-default-method-conflict`, `t03-enum-constructor-access`, `t03-private-interface-method`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t04-autocloseable-close-contract`, `t04-catch-order-unreachable`, `t04-multicatch-parameter-reassignment`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-unchecked-exception-classes`, `t05-arrays-aslist-backed`, `t05-treeset-comparator-uniqueness`, `t05-wildcard-extends-read`, `t05-wildcard-super-integer`, `t06-findfirst-ordered-stream`, `t06-lambda-effectively-final`, `t06-stream-facts`, `t06-string-length-method-reference`, `t06-to-unmodifiable-list-null`, `t07-automatic-module-jar`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t08-completablefuture-join-vs-get`, `t08-start-virtual-thread`, `t08-synchronized-method-lock`, `t08-volatile-increment`, `t09-files-copy-existing-target`, `t09-files-lines-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t10-collator-locale-sensitive`, `t10-locale-default-categories`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`, `t10-resourcebundle-missing-key`.
+- Nothing is verified by the build in 81 of the 150 questions: `t01-bigdecimal-nonterminating-divide`, `t01-bigdecimal-striptrailingzeros-scale`, `t01-integer-boxing-guarantee`, `t01-localdate-invalid-withday`, `t01-localdate-plus-years-leap-day`, `t01-math-round-negative`, `t01-period-vs-duration`, `t02-case-null-pattern-switch`, `t02-dangling-else`, `t02-do-while-first-execution`, `t02-enhanced-for-variable-assignment`, `t02-pattern-variable-and-scope`, `t02-switch-expression-exhaustive`, `t02-switch-null-default-combination`, `t02-switch-rule-no-fallthrough`, `t03-class-method-beats-default`, `t03-covariant-return`, `t03-default-method-conflict`, `t03-enum-constructor-access`, `t03-generic-erasure-overload`, `t03-private-interface-method`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t03-static-method-hiding`, `t04-autocloseable-close-contract`, `t04-catch-order-unreachable`, `t04-multicatch-parameter-reassignment`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-precise-rethrow`, `t04-throw-null`, `t04-try-resource-effectively-final`, `t04-unchecked-exception-classes`, `t05-arrays-aslist-backed`, `t05-generic-invariance`, `t05-sequencedmap-first-entry`, `t05-treeset-comparator-uniqueness`, `t05-unmodifiable-list-view`, `t05-wildcard-extends-read`, `t05-wildcard-super-integer`, `t06-collectors-tomap-duplicate-key`, `t06-findfirst-ordered-stream`, `t06-functional-interface-extra-methods`, `t06-lambda-effectively-final`, `t06-lambda-this-enclosing-instance`, `t06-stream-facts`, `t06-string-length-method-reference`, `t06-to-unmodifiable-list-null`, `t07-automatic-module-jar`, `t07-export-does-not-make-type-public`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-import-wildcard-no-subpackages`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t07-unnamed-package-import`, `t08-completablefuture-join-vs-get`, `t08-computeifabsent-null-result`, `t08-reentrantlock-finally`, `t08-start-virtual-thread`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-copy-existing-target`, `t09-files-lines-close`, `t09-files-readstring-utf8`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`, `t10-resourcebundle-missing-key`, `t10-resourcebundle-parent-lookup`.
 
 ## How to review
 
@@ -39,104 +39,154 @@ The checks, from the [content policy](../product/content-policy.md):
 |---:|---|---|---|---|---|---|
 | 1 | [`t01-bigdecimal-equals-scale`](#1-t01-bigdecimal-equals-scale) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
-| 3 | [`t01-boolean-parseboolean`](#3-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | yes, not shown | **not reviewed** |
-| 4 | [`t01-integer-boxing-guarantee`](#4-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
-| 5 | [`t01-localdate-plus-months`](#5-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
-| 6 | [`t01-localdate-plus-years-leap-day`](#6-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
-| 7 | [`t01-numeric-promotion-byte-addition`](#7-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | yes, not shown | **not reviewed** |
-| 8 | [`t01-period-vs-duration`](#8-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | no (conceptual) | **not reviewed** |
-| 9 | [`t01-string-strip-vs-trim`](#9-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
-| 10 | [`t01-stringbuilder-reverse-chain`](#10-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
-| 11 | [`t02-case-null-pattern-switch`](#11-t02-case-null-pattern-switch) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
-| 12 | [`t02-continue-for-update`](#12-t02-continue-for-update) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
-| 13 | [`t02-do-while-first-execution`](#13-t02-do-while-first-execution) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
-| 14 | [`t02-enhanced-for-variable-assignment`](#14-t02-enhanced-for-variable-assignment) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
-| 15 | [`t02-labeled-break-count`](#15-t02-labeled-break-count) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
-| 16 | [`t02-pattern-switch-guard`](#16-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
-| 17 | [`t02-pattern-variable-and-scope`](#17-t02-pattern-variable-and-scope) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
-| 18 | [`t02-switch-dominance`](#18-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
-| 19 | [`t02-switch-rule-no-fallthrough`](#19-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
-| 20 | [`t02-switch-yield-block`](#20-t02-switch-yield-block) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
-| 21 | [`t03-covariant-return`](#21-t03-covariant-return) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
-| 22 | [`t03-default-method-conflict`](#22-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
-| 23 | [`t03-enum-constructor-access`](#23-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | no (conceptual) | **not reviewed** |
-| 24 | [`t03-overload-most-specific`](#24-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
-| 25 | [`t03-overload-null`](#25-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
-| 26 | [`t03-private-interface-method`](#26-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
-| 27 | [`t03-record-compact-normalization`](#27-t03-record-compact-normalization) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
-| 28 | [`t03-record-components-members`](#28-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
-| 29 | [`t03-record-facts`](#29-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
-| 30 | [`t03-sealed-direct-subclass-modifier`](#30-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
-| 31 | [`t04-autocloseable-close-contract`](#31-t04-autocloseable-close-contract) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 32 | [`t04-catch-order-unreachable`](#32-t04-catch-order-unreachable) | Handling exceptions | single | easy | no (conceptual) | **not reviewed** |
-| 33 | [`t04-finally-abrupt-completion`](#33-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
-| 34 | [`t04-finally-return`](#34-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
-| 35 | [`t04-multicatch-parameter-reassignment`](#35-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 36 | [`t04-multicatch-related-types`](#36-t04-multicatch-related-types) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 37 | [`t04-overriding-checked-exception`](#37-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
-| 38 | [`t04-suppressed-exception`](#38-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
-| 39 | [`t04-try-with-resources-order`](#39-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
-| 40 | [`t04-unchecked-exception-classes`](#40-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | no (conceptual) | **not reviewed** |
-| 41 | [`t05-arrays-aslist-backed`](#41-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
-| 42 | [`t05-immutable-and-fixed-size-lists`](#42-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 43 | [`t05-list-first-last`](#43-t05-list-first-last) | Arrays and collections | single | easy | yes, shown | **not reviewed** |
-| 44 | [`t05-list-remove-overload`](#44-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 45 | [`t05-map-of-null-rejection`](#45-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | yes, not shown | **not reviewed** |
-| 46 | [`t05-sequenced-collection-reversed`](#46-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
-| 47 | [`t05-set-of-duplicate-elements`](#47-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | **not reviewed** |
-| 48 | [`t05-treeset-comparator-uniqueness`](#48-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | no (conceptual) | **not reviewed** |
-| 49 | [`t05-wildcard-extends-read`](#49-t05-wildcard-extends-read) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
-| 50 | [`t05-wildcard-super-integer`](#50-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
-| 51 | [`t06-findfirst-ordered-stream`](#51-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 52 | [`t06-flatmap-flatten`](#52-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 53 | [`t06-intstream-average`](#53-t06-intstream-average) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
-| 54 | [`t06-lambda-effectively-final`](#54-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | no (conceptual) | **not reviewed** |
-| 55 | [`t06-reduce-empty-identity`](#55-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 56 | [`t06-stream-facts`](#56-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
-| 57 | [`t06-stream-laziness`](#57-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
-| 58 | [`t06-stream-single-use`](#58-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
-| 59 | [`t06-string-length-method-reference`](#59-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 60 | [`t06-to-unmodifiable-list-null`](#60-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | no (conceptual) | **not reviewed** |
-| 61 | [`t07-automatic-module-jar`](#61-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 62 | [`t07-exports-and-opens`](#62-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
-| 63 | [`t07-implicit-java-base`](#63-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | no (conceptual) | **not reviewed** |
-| 64 | [`t07-java-module-launch`](#64-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 65 | [`t07-module-service-directives`](#65-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | no (conceptual) | **not reviewed** |
-| 66 | [`t07-open-module-semantics`](#66-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | **not reviewed** |
-| 67 | [`t07-qualified-exports`](#67-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 68 | [`t07-requires-static`](#68-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
-| 69 | [`t07-requires-transitive`](#69-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 70 | [`t07-unnamed-module-isnamed`](#70-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | **not reviewed** |
-| 71 | [`t08-atomicinteger-update-and-get`](#71-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
-| 72 | [`t08-completablefuture-join-vs-get`](#72-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | no (conceptual) | **not reviewed** |
-| 73 | [`t08-concurrenthashmap-null`](#73-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | yes, not shown | **not reviewed** |
-| 74 | [`t08-executor-close`](#74-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
-| 75 | [`t08-start-virtual-thread`](#75-t08-start-virtual-thread) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
-| 76 | [`t08-synchronized-method-lock`](#76-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
-| 77 | [`t08-synchronized-reentrant`](#77-t08-synchronized-reentrant) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
-| 78 | [`t08-thread-interrupted-clears`](#78-t08-thread-interrupted-clears) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
-| 79 | [`t08-virtual-thread-daemon`](#79-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 80 | [`t08-volatile-increment`](#80-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
-| 81 | [`t09-bufferedreader-readline`](#81-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
-| 82 | [`t09-files-copy-existing-target`](#82-t09-files-copy-existing-target) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
-| 83 | [`t09-files-lines-close`](#83-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
-| 84 | [`t09-path-normalize-namecount`](#84-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 85 | [`t09-path-resolve-absolute`](#85-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 86 | [`t09-randomaccessfile-seek`](#86-t09-randomaccessfile-seek) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
-| 87 | [`t09-read-all-lines`](#87-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
-| 88 | [`t09-reader-vs-inputstream`](#88-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | no (conceptual) | **not reviewed** |
-| 89 | [`t09-serialization-facts`](#89-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 90 | [`t09-serialization-transient-static`](#90-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
-| 91 | [`t10-collator-locale-sensitive`](#91-t10-collator-locale-sensitive) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
-| 92 | [`t10-datetimeformatter-locale-immutability`](#92-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
-| 93 | [`t10-locale-builder-language-tag`](#93-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | **not reviewed** |
-| 94 | [`t10-locale-default-categories`](#94-t10-locale-default-categories) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
-| 95 | [`t10-locale-language-tag`](#95-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
-| 96 | [`t10-locale-to-string`](#96-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
-| 97 | [`t10-messageformat-apostrophe`](#97-t10-messageformat-apostrophe) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
-| 98 | [`t10-numberformat-currency-instance`](#98-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
-| 99 | [`t10-resource-bundle-fallback`](#99-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
-| 100 | [`t10-resourcebundle-missing-key`](#100-t10-resourcebundle-missing-key) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 3 | [`t01-bigdecimal-striptrailingzeros-scale`](#3-t01-bigdecimal-striptrailingzeros-scale) | Date, time, text, numeric and boolean values | single | hard | no (conceptual) | **not reviewed** |
+| 4 | [`t01-boolean-parseboolean`](#4-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | yes, not shown | **not reviewed** |
+| 5 | [`t01-integer-boxing-guarantee`](#5-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
+| 6 | [`t01-integer-division-assignment`](#6-t01-integer-division-assignment) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
+| 7 | [`t01-localdate-invalid-withday`](#7-t01-localdate-invalid-withday) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 8 | [`t01-localdate-plus-months`](#8-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
+| 9 | [`t01-localdate-plus-years-leap-day`](#9-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 11 | [`t01-numeric-promotion-byte-addition`](#11-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | yes, not shown | **not reviewed** |
+| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | no (conceptual) | **not reviewed** |
+| 13 | [`t01-string-repeat`](#13-t01-string-repeat) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
+| 14 | [`t01-string-strip-vs-trim`](#14-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
+| 15 | [`t01-stringbuilder-reverse-chain`](#15-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
+| 16 | [`t02-case-null-pattern-switch`](#16-t02-case-null-pattern-switch) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 17 | [`t02-continue-for-update`](#17-t02-continue-for-update) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
+| 18 | [`t02-dangling-else`](#18-t02-dangling-else) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 19 | [`t02-do-while-first-execution`](#19-t02-do-while-first-execution) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 20 | [`t02-enhanced-for-variable-assignment`](#20-t02-enhanced-for-variable-assignment) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 21 | [`t02-for-update-order`](#21-t02-for-update-order) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
+| 22 | [`t02-labeled-break-count`](#22-t02-labeled-break-count) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
+| 23 | [`t02-labeled-continue`](#23-t02-labeled-continue) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
+| 24 | [`t02-pattern-switch-guard`](#24-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
+| 25 | [`t02-pattern-variable-and-scope`](#25-t02-pattern-variable-and-scope) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
+| 26 | [`t02-switch-dominance`](#26-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
+| 27 | [`t02-switch-expression-exhaustive`](#27-t02-switch-expression-exhaustive) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 28 | [`t02-switch-null-default-combination`](#28-t02-switch-null-default-combination) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
+| 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 30 | [`t02-switch-yield-block`](#30-t02-switch-yield-block) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
+| 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 32 | [`t03-constructor-order-super-first`](#32-t03-constructor-order-super-first) | Object-oriented concepts in Java | single | easy | yes, shown | **not reviewed** |
+| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
+| 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | no (conceptual) | **not reviewed** |
+| 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
+| 37 | [`t03-overload-most-specific`](#37-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
+| 38 | [`t03-overload-null`](#38-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
+| 39 | [`t03-private-interface-method`](#39-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 40 | [`t03-record-compact-normalization`](#40-t03-record-compact-normalization) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
+| 41 | [`t03-record-components-members`](#41-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 42 | [`t03-record-facts`](#42-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
+| 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
+| 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
+| 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | no (conceptual) | **not reviewed** |
+| 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
+| 49 | [`t04-finally-return`](#49-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
+| 50 | [`t04-finally-return-overrides`](#50-t04-finally-return-overrides) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
+| 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
+| 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
+| 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
+| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 55 | [`t04-suppressed-exception`](#55-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
+| 56 | [`t04-suppressed-order-multiple-resources`](#56-t04-suppressed-order-multiple-resources) | Handling exceptions | single | hard | yes, shown | **not reviewed** |
+| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
+| 59 | [`t04-try-with-resources-order`](#59-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
+| 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | no (conceptual) | **not reviewed** |
+| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
+| 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 64 | [`t05-immutable-and-fixed-size-lists`](#64-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
+| 65 | [`t05-list-first-last`](#65-t05-list-first-last) | Arrays and collections | single | easy | yes, shown | **not reviewed** |
+| 66 | [`t05-list-remove-overload`](#66-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
+| 67 | [`t05-map-merge-null-removes`](#67-t05-map-merge-null-removes) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
+| 68 | [`t05-map-of-null-rejection`](#68-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | yes, not shown | **not reviewed** |
+| 69 | [`t05-sequenced-collection-reversed`](#69-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
+| 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 71 | [`t05-set-of-duplicate-elements`](#71-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | **not reviewed** |
+| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | no (conceptual) | **not reviewed** |
+| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | no (conceptual) | **not reviewed** |
+| 80 | [`t06-generate-limit-count`](#80-t06-generate-limit-count) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
+| 81 | [`t06-intstream-average`](#81-t06-intstream-average) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
+| 82 | [`t06-lambda-effectively-final`](#82-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | no (conceptual) | **not reviewed** |
+| 83 | [`t06-lambda-this-enclosing-instance`](#83-t06-lambda-this-enclosing-instance) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 84 | [`t06-parallel-foreachordered`](#84-t06-parallel-foreachordered) | Streams and lambda expressions | single | medium | yes, shown | **not reviewed** |
+| 85 | [`t06-reduce-empty-identity`](#85-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 86 | [`t06-stream-facts`](#86-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
+| 87 | [`t06-stream-laziness`](#87-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
+| 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
+| 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | no (conceptual) | **not reviewed** |
+| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
+| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | no (conceptual) | **not reviewed** |
+| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | no (conceptual) | **not reviewed** |
+| 98 | [`t07-object-module-name`](#98-t07-object-module-name) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
+| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | **not reviewed** |
+| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
+| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 102 | [`t07-requires-transitive`](#102-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 103 | [`t07-static-import-member`](#103-t07-static-import-member) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
+| 104 | [`t07-unnamed-module-isnamed`](#104-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | **not reviewed** |
+| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 106 | [`t08-atomic-compare-and-set`](#106-t08-atomic-compare-and-set) | Managing concurrent code execution | single | medium | yes, shown | **not reviewed** |
+| 107 | [`t08-atomicinteger-update-and-get`](#107-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
+| 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | no (conceptual) | **not reviewed** |
+| 109 | [`t08-computeifabsent-null-result`](#109-t08-computeifabsent-null-result) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 110 | [`t08-concurrenthashmap-null`](#110-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | yes, not shown | **not reviewed** |
+| 111 | [`t08-countdownlatch-count`](#111-t08-countdownlatch-count) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
+| 112 | [`t08-executor-close`](#112-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
+| 113 | [`t08-reentrantlock-finally`](#113-t08-reentrantlock-finally) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 114 | [`t08-start-virtual-thread`](#114-t08-start-virtual-thread) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 115 | [`t08-synchronized-method-lock`](#115-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 116 | [`t08-synchronized-reentrant`](#116-t08-synchronized-reentrant) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
+| 117 | [`t08-thread-interrupted-clears`](#117-t08-thread-interrupted-clears) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
+| 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 119 | [`t08-virtual-thread-daemon`](#119-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
+| 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
+| 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | **not reviewed** |
+| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | no (conceptual) | **not reviewed** |
+| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | no (conceptual) | **not reviewed** |
+| 127 | [`t09-path-normalize-namecount`](#127-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | **not reviewed** |
+| 128 | [`t09-path-relativize`](#128-t09-path-relativize) | Java I/O API | single | medium | yes, shown | **not reviewed** |
+| 129 | [`t09-path-resolve-absolute`](#129-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
+| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 131 | [`t09-read-all-lines`](#131-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
+| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | no (conceptual) | **not reviewed** |
+| 133 | [`t09-serialization-facts`](#133-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
+| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
+| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
+| 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | **not reviewed** |
+| 139 | [`t10-datetimeformatter-locale-immutability`](#139-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
+| 140 | [`t10-locale-builder-language-tag`](#140-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | **not reviewed** |
+| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 142 | [`t10-locale-language-tag`](#142-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
+| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 144 | [`t10-locale-to-string`](#144-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
+| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
+| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
+| 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | **not reviewed** |
+| 148 | [`t10-resource-bundle-fallback`](#148-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
+| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
 
 ## 1. t01-bigdecimal-equals-scale
 
@@ -273,7 +323,63 @@ To record: `"digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05dd
 
 &nbsp;
 
-## 3. t01-boolean-parseboolean
+## 3. t01-bigdecimal-striptrailingzeros-scale
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> What is the scale of `new BigDecimal("1000").stripTrailingZeros()`?
+
+- **A** 0
+- **B** 3
+- **C** -3
+- **D** The operation throws ArithmeticException.
+
+### Answer key and reasons
+
+- **A: incorrect.** The original value has scale 0, but stripping trailing zeroes can change the scale.
+- **B: incorrect.** A positive scale would place digits to the right of the decimal point.
+- **C: correct.** The stripped representation is numerically 1 × 10^3, represented with scale -3.
+- **D: incorrect.** Removing trailing zeroes is defined for this value.
+
+### Explanation
+
+`stripTrailingZeros()` removes insignificant trailing zeroes while preserving numerical value. `1000` can be represented as `1E+3`, whose scale is `-3`.
+
+### Why this difficulty
+
+Tests the non-obvious fact that stripping trailing zeroes can produce a negative scale.
+
+### References
+
+- [BigDecimal.stripTrailingZeros() (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigDecimal.html#stripTrailingZeros())
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:d42b42ab33f68334c08037053831c48a49912aa790e2fddb5b9092ec1efb21da"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 4. t01-boolean-parseboolean
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -352,7 +458,7 @@ To record: `"digest": "sha256:0b1e7623275f6a34616baa9b67706d684411c852f8fda72205
 
 &nbsp;
 
-## 4. t01-integer-boxing-guarantee
+## 5. t01-integer-boxing-guarantee
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -413,7 +519,132 @@ To record: `"digest": "sha256:a2fbe740c9fa46fdb62cd9e5e9b5287d1abf6ebb534c3d4e67
 
 &nbsp;
 
-## 5. t01-localdate-plus-months
+## 6. t01-integer-division-assignment
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   public static void main(String[] args) {
+>     double value = 5 / 2;
+>     System.out.println(value);
+>   }
+> }
+> ```
+
+- **A** 2.5
+- **B** 2.0
+- **C** 2
+- **D** It does not compile because int cannot be assigned to double.
+
+### Answer key and reasons
+
+- **A: incorrect.** A floating-point operand would be needed before division for the fractional part to be preserved.
+- **B: correct.** Integer division produces 2, then assignment widens it to double.
+- **C: incorrect.** The value is stored in a double and println uses its double representation.
+- **D: incorrect.** Widening primitive conversion from int to double is allowed.
+
+### Explanation
+
+Both operands of `5 / 2` are `int`, so integer division happens first and produces `2`. Only then is the result widened to `double`, producing `2.0`.
+
+### Why this difficulty
+
+Tests whether arithmetic is performed before assignment conversion to a wider floating-point type.
+
+### References
+
+- [JLS 15.17.2 Division Operator /](https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.17.2)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+2.0
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:4fca205d6666e3e341d125ac4a9890bc6db852fe884413562d746155476e139f"`, `"verified": "sha256:d84bdb34d4eeef4034d77e5403f850e35bc4a51b1143e3a83510e1aaad839748"`
+
+**Comments:**
+
+&nbsp;
+
+## 7. t01-localdate-invalid-withday
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What happens when `LocalDate.of(2026, 4, 15).withDayOfMonth(31)` is evaluated?
+
+- **A** It returns 2026-04-30.
+- **B** It returns 2026-05-01.
+- **C** It throws DateTimeException.
+- **D** It returns the original date unchanged.
+
+### Answer key and reasons
+
+- **A: incorrect.** withDayOfMonth does not clamp an explicitly requested invalid day.
+- **B: incorrect.** The operation does not overflow an invalid day into the next month.
+- **C: correct.** Day 31 is invalid for April.
+- **D: incorrect.** An invalid requested day is reported rather than ignored.
+
+### Explanation
+
+April has only 30 days. `withDayOfMonth` validates the requested day for the resulting year/month and throws `DateTimeException` when it is invalid.
+
+### Why this difficulty
+
+Distinguishes date-adjustment methods that clamp invalid dates from methods that reject an invalid requested day.
+
+### References
+
+- [LocalDate.withDayOfMonth(int) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/LocalDate.html#withDayOfMonth(int))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:53d34a71752f9abcc061cf58e769cb6cce68c3438e03778a47b7acf798d80baa"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 8. t01-localdate-plus-months
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -487,7 +718,7 @@ To record: `"digest": "sha256:24805254eb5d6198170d923e3d1a25233edb90f634da9d21b9
 
 &nbsp;
 
-## 6. t01-localdate-plus-years-leap-day
+## 9. t01-localdate-plus-years-leap-day
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -543,7 +774,63 @@ To record: `"digest": "sha256:443fbe5186672dfe196388a78b2d33cb5a269f4d958d29769d
 
 &nbsp;
 
-## 7. t01-numeric-promotion-byte-addition
+## 10. t01-math-round-negative
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What value is returned by `Math.round(-1.5d)`?
+
+- **A** -2
+- **B** -1
+- **C** 0
+- **D** It throws ArithmeticException.
+
+### Answer key and reasons
+
+- **A: incorrect.** Math.round does not round negative halves away from zero.
+- **B: correct.** The specified calculation yields -1 for -1.5.
+- **C: incorrect.** The value remains negative after rounding.
+- **D: incorrect.** This finite input is valid for Math.round.
+
+### Explanation
+
+`Math.round(double)` is equivalent to taking the floor of `a + 0.5` and converting to long. For -1.5, that gives floor(-1.0), which is -1.
+
+### Why this difficulty
+
+Tests Math.round's exact definition for a negative half value, which is often confused with rounding away from zero.
+
+### References
+
+- [Math.round(double) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Math.html#round(double))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 11. t01-numeric-promotion-byte-addition
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -626,7 +913,7 @@ To record: `"digest": "sha256:316807c7951d482af8c9258c8489c77a8b5155ec187a8d28e2
 
 &nbsp;
 
-## 8. t01-period-vs-duration
+## 12. t01-period-vs-duration
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -683,7 +970,75 @@ To record: `"digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46
 
 &nbsp;
 
-## 9. t01-string-strip-vs-trim
+## 13. t01-string-repeat
+
+**Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   public static void main(String[] args) {
+>     System.out.println("ab".repeat(3));
+>   }
+> }
+> ```
+
+- **A** ab3
+- **B** ababab
+- **C** aaabbb
+- **D** It throws IllegalArgumentException for counts greater than 1.
+
+### Answer key and reasons
+
+- **A: incorrect.** repeat does not append the count.
+- **B: correct.** Three copies of `ab` are concatenated.
+- **C: incorrect.** The entire string is repeated each time; characters are not grouped.
+- **D: incorrect.** Positive repeat counts are valid.
+
+### Explanation
+
+`String.repeat(3)` concatenates three copies of the receiver string, so `ab` becomes `ababab`.
+
+### Why this difficulty
+
+Checks the exact behavior of String.repeat, including that it repeats the whole receiver.
+
+### References
+
+- [String.repeat(int) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html#repeat(int))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+ababab
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:893373158293234ca3bf8d443a29fa1d83b63b1d4e9cdcec90b6746b02c8e1ed"`, `"verified": "sha256:36ff120f98d1ca85de299f65314b3b968d132cee69f8f8bb6a6d4e1058313355"`
+
+**Comments:**
+
+&nbsp;
+
+## 14. t01-string-strip-vs-trim
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -762,7 +1117,7 @@ To record: `"digest": "sha256:18beae388763468f5c0a8093db0a0a07798a3cb1b3ae7c6353
 
 &nbsp;
 
-## 10. t01-stringbuilder-reverse-chain
+## 15. t01-stringbuilder-reverse-chain
 
 **Topic:** Date, time, text, numeric and boolean values (exam objective: "Handling date, time, text, numeric and boolean values")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -832,7 +1187,7 @@ To record: `"digest": "sha256:aea8331fa93333dfad0351da8c4cbbfd9232762f383669c610
 
 &nbsp;
 
-## 11. t02-case-null-pattern-switch
+## 16. t02-case-null-pattern-switch
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -888,7 +1243,7 @@ To record: `"digest": "sha256:dcfcf7cf389a01f97b7ed8330171a5309a501c0afc0d028847
 
 &nbsp;
 
-## 12. t02-continue-for-update
+## 17. t02-continue-for-update
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -971,7 +1326,63 @@ To record: `"digest": "sha256:54629b7b4ee290d5f6db3807f98f71cd6ef7e8247d30cbacd8
 
 &nbsp;
 
-## 13. t02-do-while-first-execution
+## 18. t02-dangling-else
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> In nested `if` statements without braces, which `if` does an `else` associate with?
+
+- **A** Always the outermost if.
+- **B** The nearest unmatched if.
+- **C** Whichever if has the longer condition.
+- **D** It is always a compile-time ambiguity.
+
+### Answer key and reasons
+
+- **A: incorrect.** That would require braces or restructuring when the nearest if should not receive the else.
+- **B: correct.** This is the standard dangling-else rule.
+- **C: incorrect.** Condition length has no role in parsing.
+- **D: incorrect.** The grammar resolves the association deterministically.
+
+### Explanation
+
+The Java grammar associates an `else` with the nearest preceding `if` that is allowed to receive it and does not already have an `else`.
+
+### Why this difficulty
+
+Tests the classic grammar rule for matching an else to the nearest unmatched if.
+
+### References
+
+- [JLS 14.5 Statements](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.5)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:bd4ec731cc3036e485f0e5cdc8248786afd74c800fa033932d0ee6e9ff823865"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 19. t02-do-while-first-execution
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -1027,7 +1438,7 @@ To record: `"digest": "sha256:afd742e7cc3ab7537a7f2cff562ba7b7b9e5426307690adafa
 
 &nbsp;
 
-## 14. t02-enhanced-for-variable-assignment
+## 20. t02-enhanced-for-variable-assignment
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1083,7 +1494,77 @@ To record: `"digest": "sha256:dfe236fb2fbacc249157abb42b1791277c5cb0251fd49f8500
 
 &nbsp;
 
-## 15. t02-labeled-break-count
+## 21. t02-for-update-order
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   public static void main(String[] args) {
+>     for (int i = 0; i < 3; i++) {
+>       System.out.print(i);
+>     }
+>   }
+> }
+> ```
+
+- **A** 012
+- **B** 123
+- **C** 01
+- **D** 0123
+
+### Answer key and reasons
+
+- **A: correct.** Each body executes before the corresponding update expression.
+- **B: incorrect.** The update does not run before the first body execution.
+- **C: incorrect.** The body still executes when i is 2.
+- **D: incorrect.** The loop stops once i becomes 3 because `i < 3` is then false.
+
+### Explanation
+
+The body prints the current `i`, then the update expression increments it. The iterations therefore print 0, 1, and 2 before the condition fails at 3.
+
+### Why this difficulty
+
+Tests the execution order of a basic for loop by making the update expression observable.
+
+### References
+
+- [JLS 14.14.1 The basic for Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.14.1)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+012
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:cc945c8da3c37608f079dc4449a615d6c1cae3f4dfafe94ae2cca0180f04ca19"`, `"verified": "sha256:bf6aaaab7c143ca12ae448c69fb72bb4cf1b29154b9086a927a0a91ae334cdf7"`
+
+**Comments:**
+
+&nbsp;
+
+## 22. t02-labeled-break-count
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1161,7 +1642,85 @@ To record: `"digest": "sha256:c01c05f1a2c10ad9dd3156dbc7ca74feae974a0b396d6d727f
 
 &nbsp;
 
-## 16. t02-pattern-switch-guard
+## 23. t02-labeled-continue
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   public static void main(String[] args) {
+>     int count = 0;
+>     outer:
+>     for (int i = 0; i < 3; i++) {
+>       for (int j = 0; j < 3; j++) {
+>         if (j == 1) {
+>           continue outer;
+>         }
+>         count++;
+>       }
+>     }
+>     System.out.println(count);
+>   }
+> }
+> ```
+
+- **A** 3
+- **B** 6
+- **C** 9
+- **D** 0
+
+### Answer key and reasons
+
+- **A: correct.** Exactly one increment occurs for each of the three outer-loop iterations.
+- **B: incorrect.** The labeled continue prevents the `j == 1` and `j == 2` paths from incrementing.
+- **C: incorrect.** Most inner-loop iterations are skipped by the labeled continue.
+- **D: incorrect.** The increment at `j == 0` happens before the continue condition is reached.
+
+### Explanation
+
+For each outer iteration, `j == 0` increments `count` once. When `j == 1`, `continue outer` starts the next outer iteration immediately. That happens three times, so the count is 3.
+
+### Why this difficulty
+
+Requires tracing a labeled continue that skips the remainder of the inner loop and advances the outer loop.
+
+### References
+
+- [JLS 14.16 The continue Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.16)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+3
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:01a4cf76956cb0fe57648df74044fc8e78e915186453bb32a42eb57094ecabdc"`, `"verified": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"`
+
+**Comments:**
+
+&nbsp;
+
+## 24. t02-pattern-switch-guard
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1240,7 +1799,7 @@ To record: `"digest": "sha256:7b9f33bbab91807a0a5d1a72bcba7224065f0a6ee616a936fe
 
 &nbsp;
 
-## 17. t02-pattern-variable-and-scope
+## 25. t02-pattern-variable-and-scope
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -1296,7 +1855,7 @@ To record: `"digest": "sha256:a22c81aba1df224d02f15fca5e50fd29f7d02134896da423c0
 
 &nbsp;
 
-## 18. t02-switch-dominance
+## 26. t02-switch-dominance
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -1374,7 +1933,119 @@ To record: `"digest": "sha256:1b08bfb104293ab6a09b7785345619c737e8b747e4c7e8ea8a
 
 &nbsp;
 
-## 19. t02-switch-rule-no-fallthrough
+## 27. t02-switch-expression-exhaustive
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statement about a Java 21 `switch` expression is correct?
+
+- **A** It may omit all unmatched values and implicitly return null.
+- **B** It must be exhaustive.
+- **C** It must always contain a default label, even when enum cases are exhaustive.
+- **D** Only integer selectors can be used in switch expressions.
+
+### Answer key and reasons
+
+- **A: incorrect.** There is no implicit null result for unmatched selector values.
+- **B: correct.** Every switch expression must cover all possible selector values.
+- **C: incorrect.** A default label is not mandatory when exhaustiveness can be proven another way.
+- **D: incorrect.** Other supported selector types include enum, String, and reference types with pattern matching.
+
+### Explanation
+
+A switch expression must be exhaustive: every possible selector value must be handled by a matching label or by a construct the compiler can prove exhaustive.
+
+### Why this difficulty
+
+Checks the compile-time exhaustiveness requirement of switch expressions.
+
+### References
+
+- [JLS 15.28 switch Expressions](https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.28)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:34d860bc322ca0879d9023b6fc43d36f9c1cb9f5f07cf9bf723b317b6469d2a9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 28. t02-switch-null-default-combination
+
+**Topic:** Controlling program flow (exam objective: "Controlling program flow")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> Which switch label is valid Java 21 syntax for one arm that handles both a null selector and all otherwise-unmatched selector values?
+
+- **A** case null, default ->
+- **B** default, null ->
+- **C** case default, null ->
+- **D** case null || default ->
+
+### Answer key and reasons
+
+- **A: correct.** This combined label is supported.
+- **B: incorrect.** The grammar uses the special `case null, default` form, not the reversed order.
+- **C: incorrect.** `default` is not written as a constant after `case` in this form.
+- **D: incorrect.** Boolean operators are not switch-label separators.
+
+### Explanation
+
+Java 21 permits `case null, default` as a combined label. This provides explicit null handling together with the catch-all default in one switch rule or statement group.
+
+### Why this difficulty
+
+Tests a Java 21 switch-label form that combines handling null with the catch-all default in one label.
+
+### References
+
+- [JLS 14.11.1 The Selector Expression](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.11.1)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:2ba5dac0053a90e357381ada001d6818ecaf5e7bd433883c11bcf2535404f95d"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 29. t02-switch-rule-no-fallthrough
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -1430,7 +2101,7 @@ To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef8193
 
 &nbsp;
 
-## 20. t02-switch-yield-block
+## 30. t02-switch-yield-block
 
 **Topic:** Controlling program flow (exam objective: "Controlling program flow")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1511,7 +2182,143 @@ To record: `"digest": "sha256:1f903957483547db1a7824aebe113ae55eabdb87db3c96384d
 
 &nbsp;
 
-## 21. t03-covariant-return
+## 31. t03-class-method-beats-default
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A superclass provides a concrete instance method `run()`, and an implemented interface provides a default `run()` with the same signature. Which implementation is inherited by the subclass if it declares no `run()`?
+
+- **A** The interface default always wins.
+- **B** The superclass method wins.
+- **C** The subclass must always override run() or compilation fails.
+- **D** Both implementations run in declaration order.
+
+### Answer key and reasons
+
+- **A: incorrect.** Defaults do not override an applicable concrete class method.
+- **B: correct.** Class methods take precedence over interface defaults.
+- **C: incorrect.** There is no conflict requiring an override when a concrete class method already resolves it.
+- **D: incorrect.** Method invocation selects one implementation.
+
+### Explanation
+
+A concrete method inherited from a class takes precedence over an interface default method with the same signature. This is commonly summarized as 'class wins'.
+
+### Why this difficulty
+
+Tests the class-over-interface precedence rule for inherited concrete instance methods and interface defaults.
+
+### References
+
+- [JLS 8.4.8.4 Inheriting Methods with Override-Equivalent Signatures](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.4)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a09b6917beb7f093ff3abb555a96fabc70f9dd5ab7c0f222b21461173f92398f"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 32. t03-constructor-order-super-first
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> class A {
+>   A() {
+>     System.out.print("A");
+>   }
+> }
+>
+> class B extends A {
+>   B() {
+>     System.out.print("B");
+>   }
+> }
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     new B();
+>   }
+> }
+> ```
+
+- **A** AB
+- **B** BA
+- **C** B
+- **D** It does not compile because B does not explicitly call super().
+
+### Answer key and reasons
+
+- **A: correct.** The superclass constructor runs before the subclass constructor body.
+- **B: incorrect.** The subclass body does not run before superclass construction.
+- **C: incorrect.** The superclass constructor is still invoked.
+- **D: incorrect.** The compiler inserts an implicit no-argument super() call when permitted.
+
+### Explanation
+
+A subclass constructor invokes a superclass constructor before executing its own body. Therefore constructing `B` prints `A` first and `B` second.
+
+### Why this difficulty
+
+Checks superclass-constructor invocation order during object construction.
+
+### References
+
+- [JLS 8.8.7 Constructor Body](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.8.7)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+AB
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:215053665d7d437cf0e91cc9e9682017b2a9359da1f94b2a8cddcf0366837a4e"`, `"verified": "sha256:38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153"`
+
+**Comments:**
+
+&nbsp;
+
+## 33. t03-covariant-return
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1567,7 +2374,7 @@ To record: `"digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e
 
 &nbsp;
 
-## 22. t03-default-method-conflict
+## 34. t03-default-method-conflict
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -1623,7 +2430,7 @@ To record: `"digest": "sha256:eb4409af4125d56ff4a03527eb2e922dfd072622a1414b72cf
 
 &nbsp;
 
-## 23. t03-enum-constructor-access
+## 35. t03-enum-constructor-access
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -1679,7 +2486,63 @@ To record: `"digest": "sha256:c116ca78accd40bbd6dbc8e897375631b0e7d4f7dceea2f4a4
 
 &nbsp;
 
-## 24. t03-overload-most-specific
+## 36. t03-generic-erasure-overload
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> Can one class declare both `void process(List<String> x)` and `void process(List<Integer> x)`?
+
+- **A** Yes, because String and Integer are unrelated types.
+- **B** No, because both methods erase to the same signature.
+- **C** Yes, but only if one method is static.
+- **D** No, because Java forbids overloading methods named process.
+
+### Answer key and reasons
+
+- **A: incorrect.** Generic type arguments are erased for the method signature used here.
+- **B: correct.** Both parameterized List types erase to raw List.
+- **C: incorrect.** Static versus instance does not solve the erased-signature clash.
+- **D: incorrect.** Java permits overloading; the issue is the identical erasure.
+
+### Explanation
+
+No. After type erasure, both parameter types erase to `List`, so the two methods have the same erased signature and cause a name clash.
+
+### Why this difficulty
+
+Tests type erasure and the resulting restriction on overloads that differ only in generic type arguments.
+
+### References
+
+- [JLS 8.4.8.3 Requirements in Overriding and Hiding](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:c10264da266c0d458545ecbae1e1aa6f1206963eaae65158999fe50e55fee02c"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 37. t03-overload-most-specific
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1764,7 +2627,7 @@ To record: `"digest": "sha256:1b6f352210c6837847f625af4e8baaaa292dfd33fe43182cc6
 
 &nbsp;
 
-## 25. t03-overload-null
+## 38. t03-overload-null
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1847,7 +2710,7 @@ To record: `"digest": "sha256:610a17628ad547aed33f9478cf6b1d1d2d4d9757394de00e0c
 
 &nbsp;
 
-## 26. t03-private-interface-method
+## 39. t03-private-interface-method
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -1903,7 +2766,7 @@ To record: `"digest": "sha256:cb5b92dca6b5a7d30cff7a1bdb4f8c2824df319cd28332d32d
 
 &nbsp;
 
-## 27. t03-record-compact-normalization
+## 40. t03-record-compact-normalization
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -1977,7 +2840,7 @@ To record: `"digest": "sha256:df04a9d6024d47016bfe1f545c0be5e73b773d6309724d67b6
 
 &nbsp;
 
-## 28. t03-record-components-members
+## 41. t03-record-components-members
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -2034,7 +2897,7 @@ To record: `"digest": "sha256:0ff6b907dc8f3ebd5c84b47981593c5acf73d18ad45fc74bbc
 
 &nbsp;
 
-## 29. t03-record-facts
+## 42. t03-record-facts
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -2130,7 +2993,80 @@ To record: `"digest": "sha256:f5f4762b3f2a338b25cdba4922389326500e4fb5396487f286
 
 &nbsp;
 
-## 30. t03-sealed-direct-subclass-modifier
+## 43. t03-record-pattern-destructuring
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this Java 21 program print?
+>
+> ```java
+> record Point(int x, int y) {}
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     Object value = new Point(2, 3);
+>     if (value instanceof Point(int x, int y)) {
+>       System.out.println(x + y);
+>     }
+>   }
+> }
+> ```
+
+- **A** 2
+- **B** 3
+- **C** 5
+- **D** It does not compile because record patterns are not final in Java 21.
+
+### Answer key and reasons
+
+- **A: incorrect.** Only the x component is 2; the program adds both components.
+- **B: incorrect.** Only the y component is 3.
+- **C: correct.** The record pattern binds x=2 and y=3, then adds them.
+- **D: incorrect.** Record patterns are a final Java 21 language feature.
+
+### Explanation
+
+The record pattern matches the `Point` instance and destructures its two components into `x` and `y`. Their sum is 5.
+
+### Why this difficulty
+
+Exercises Java 21 record patterns by destructuring a record directly in instanceof.
+
+### References
+
+- [JLS 14.30.2 Record Patterns](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.30.2)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+5
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:2d81362b7973114d78b82a45730f51fcc36af4f20570da3711a89060723ebca5"`, `"verified": "sha256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"`
+
+**Comments:**
+
+&nbsp;
+
+## 44. t03-sealed-direct-subclass-modifier
 
 **Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -2186,7 +3122,63 @@ To record: `"digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e95
 
 &nbsp;
 
-## 31. t04-autocloseable-close-contract
+## 45. t03-static-method-hiding
+
+**Topic:** Object-oriented concepts in Java (exam objective: "Using object-oriented concepts in Java")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but holds a subclass instance, which declaration is selected by `variable.method()`?
+
+- **A** The subclass method, because the object is a subclass instance.
+- **B** The superclass method, because the variable's compile-time type controls static method selection.
+- **C** Both methods are invoked.
+- **D** The call is always ambiguous.
+
+### Answer key and reasons
+
+- **A: incorrect.** That dynamic dispatch rule applies to overridden instance methods, not hidden static methods.
+- **B: correct.** Static methods are resolved from the qualifying type.
+- **C: incorrect.** Only one method invocation occurs.
+- **D: incorrect.** The compile-time type resolves the hidden static method.
+
+### Explanation
+
+Static methods are hidden, not overridden. Method selection is based on the compile-time type of the qualifying expression, so the superclass static method is selected.
+
+### Why this difficulty
+
+Distinguishes static method hiding from dynamic dispatch of overridden instance methods.
+
+### References
+
+- [JLS 8.4.8.2 Hiding (by Class Methods)](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 46. t04-autocloseable-close-contract
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -2242,7 +3234,7 @@ To record: `"digest": "sha256:5ab0f4c702acf4f07745dea13ba6aee30aa0aa83a65f39c3b2
 
 &nbsp;
 
-## 32. t04-catch-order-unreachable
+## 47. t04-catch-order-unreachable
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -2298,7 +3290,7 @@ To record: `"digest": "sha256:e3960611c7004121f66ad18889cfbca1a5397b083d8e94f245
 
 &nbsp;
 
-## 33. t04-finally-abrupt-completion
+## 48. t04-finally-abrupt-completion
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -2378,7 +3370,7 @@ To record: `"digest": "sha256:9dbca48fc750ec8264bdb1aa0f6e7ed476b1ecf903b1ebcf00
 
 &nbsp;
 
-## 34. t04-finally-return
+## 49. t04-finally-return
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -2457,7 +3449,83 @@ To record: `"digest": "sha256:b399a71cdc40ede1c57471984ea2bb491506700850485c6168
 
 &nbsp;
 
-## 35. t04-multicatch-parameter-reassignment
+## 50. t04-finally-return-overrides
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   static int value() {
+>     try {
+>       return 1;
+>     } finally {
+>       return 2;
+>     }
+>   }
+>
+>   public static void main(String[] args) {
+>     System.out.println(value());
+>   }
+> }
+> ```
+
+- **A** 1
+- **B** 2
+- **C** 12
+- **D** It does not compile because finally cannot return.
+
+### Answer key and reasons
+
+- **A: incorrect.** The pending return from try is discarded when finally returns.
+- **B: correct.** The return from finally determines the method result.
+- **C: incorrect.** Only one value is returned from the method.
+- **D: incorrect.** A return in finally is legal, though often discouraged because it replaces prior abrupt completion.
+
+### Explanation
+
+The try block prepares to return 1, but the finally block itself returns 2. Abrupt completion of finally replaces the pending return from try, so the method returns 2.
+
+### Why this difficulty
+
+Tests that abrupt completion of finally by return replaces a pending return from the try block.
+
+### References
+
+- [JLS 14.20.2 Execution of try-finally and try-catch-finally](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.2)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+2
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a43c494c1b43844f14542816074a36c70d2ac84f89ff9c2b2643e31d1f3e0275"`, `"verified": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"`
+
+**Comments:**
+
+&nbsp;
+
+## 51. t04-multicatch-parameter-reassignment
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -2513,7 +3581,7 @@ To record: `"digest": "sha256:fa6d1845fdb457fa94622d83cf09f8eb88382f4efab0da5f5a
 
 &nbsp;
 
-## 36. t04-multicatch-related-types
+## 52. t04-multicatch-related-types
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -2569,7 +3637,7 @@ To record: `"digest": "sha256:a1aeb4003a853b4838c8b30c803b2cabb36edad84a40cba695
 
 &nbsp;
 
-## 37. t04-overriding-checked-exception
+## 53. t04-overriding-checked-exception
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -2625,7 +3693,63 @@ To record: `"digest": "sha256:8df117237acec009efb84ecffeaf663a6797508f33efdffed8
 
 &nbsp;
 
-## 38. t04-suppressed-exception
+## 54. t04-precise-rethrow
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> A try block can throw only `IOException` or `SQLException`. It is followed by `catch (Exception ex) { throw ex; }`, and `ex` is not reassigned. Which checked exceptions may the enclosing method need to declare?
+
+- **A** Only Exception; narrower declarations are impossible.
+- **B** IOException and SQLException.
+- **C** No checked exceptions, because catch always handles them.
+- **D** Throwable.
+
+### Answer key and reasons
+
+- **A: incorrect.** Precise rethrow can preserve the actual checked exception alternatives.
+- **B: correct.** Those are the checked exception types that can actually be rethrown from the catch.
+- **C: incorrect.** The catch immediately rethrows the exception.
+- **D: incorrect.** The analysis does not broaden the requirement to Throwable.
+
+### Explanation
+
+Precise rethrow analysis can infer the checked exception types that can actually reach the catch clause when the catch parameter is final or effectively final. The method can declare `IOException` and `SQLException` rather than the broader `Exception`.
+
+### Why this difficulty
+
+Tests Java's precise rethrow analysis for an effectively final catch parameter typed more broadly than the exceptions that can actually reach it.
+
+### References
+
+- [JLS 11.2.2 Exception Analysis of Statements](https://docs.oracle.com/javase/specs/jls/se21/html/jls-11.html#jls-11.2.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 55. t04-suppressed-exception
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -2715,7 +3839,202 @@ To record: `"digest": "sha256:cd0599da3ec29c624c4da95798535333a9a8d079a228203e2e
 
 &nbsp;
 
-## 39. t04-try-with-resources-order
+## 56. t04-suppressed-order-multiple-resources
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   static class R implements AutoCloseable {
+>     private final String name;
+>     R(String name) { this.name = name; }
+>     @Override public void close() throws Exception {
+>       throw new Exception(name);
+>     }
+>   }
+>
+>   public static void main(String[] args) {
+>     try (R a = new R("A"); R b = new R("B")) {
+>       throw new Exception("body");
+>     } catch (Exception ex) {
+>       System.out.print(ex.getMessage());
+>       for (Throwable suppressed : ex.getSuppressed()) {
+>         System.out.print(" " + suppressed.getMessage());
+>       }
+>     }
+>   }
+> }
+> ```
+
+- **A** body A B
+- **B** body B A
+- **C** B A body
+- **D** A B
+
+### Answer key and reasons
+
+- **A: incorrect.** Resources do not close in declaration order.
+- **B: correct.** B closes first, then A, and their failures are suppressed on the body exception in that order.
+- **C: incorrect.** The body exception remains primary; close exceptions are suppressed.
+- **D: incorrect.** The primary body exception is still present and printed first.
+
+### Explanation
+
+The body exception remains primary. Resources close in reverse declaration order, so B closes before A. Their exceptions are attached as suppressed exceptions in that same close order, producing `body B A`.
+
+### Why this difficulty
+
+Requires tracing reverse resource-closing order and the order in which close failures become suppressed exceptions.
+
+### References
+
+- [JLS 14.20.3.1 Basic try-with-resources](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3.1)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+body B A
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:e2afec415f841ba095bf49077be501f107cc048be213badd67d0f5b03c200d58"`, `"verified": "sha256:a5186120410130f105bfeefc2d996f16fdb4811641c073fb2282b43b72ca7c85"`
+
+**Comments:**
+
+&nbsp;
+
+## 57. t04-throw-null
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> What happens at runtime when the statement `throw null;` is executed?
+
+- **A** It throws a NullPointerException.
+- **B** It silently returns from the method.
+- **C** It throws a generic Exception instance created automatically.
+- **D** It is always a compile-time error.
+
+### Answer key and reasons
+
+- **A: correct.** The JVM reports a null throwable reference with NullPointerException.
+- **B: incorrect.** A throw statement never means normal return.
+- **C: incorrect.** No replacement Exception object is created.
+- **D: incorrect.** The null type is compatible with the reference-type requirement; the failure occurs at runtime.
+
+### Explanation
+
+The null reference is permitted by the type rules for a throw expression, but attempting to throw it causes a `NullPointerException` at runtime.
+
+### Why this difficulty
+
+Tests the special runtime behavior of a throw statement whose expression evaluates to null.
+
+### References
+
+- [JLS 14.18 The throw Statement](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.18)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 58. t04-try-resource-effectively-final
+
+**Topic:** Handling exceptions (exam objective: "Handling exceptions")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Suppose `BufferedReader reader` is declared before a try-with-resources statement. Which statements are correct if the code uses `try (reader) { ... }`? Select all that apply.
+
+- **A** reader must be final or effectively final.
+- **B** reader is closed automatically when the try-with-resources statement exits.
+- **C** reader must be reassigned inside the try body.
+- **D** Only variables declared inside the resource header can ever be resources.
+
+### Answer key and reasons
+
+- **A: correct.** That is required for an existing variable used as a resource.
+- **B: correct.** The usual automatic closing semantics apply.
+- **C: incorrect.** Reassignment would conflict with the effective-final requirement.
+- **D: incorrect.** Java permits suitable existing final/effectively-final variables in the header.
+
+### Explanation
+
+An existing local variable can be used directly as a resource when it is final or effectively final and has an AutoCloseable-compatible type. The resource is closed automatically when the try-with-resources statement exits.
+
+### Why this difficulty
+
+Tests the Java language rule that an existing local variable can appear in a resource specification only when it is final or effectively final.
+
+### References
+
+- [JLS 14.20.3 try-with-resources](https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.3)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:db2ba98db1d5be314931368482ebace892c0c97439bf3e587e636a582557ee78"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 59. t04-try-with-resources-order
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -2803,7 +4122,7 @@ To record: `"digest": "sha256:6e4d63f790dc1427e9bb3b63f0be08e6c7e0c9ab7dc0e5802e
 
 &nbsp;
 
-## 40. t04-unchecked-exception-classes
+## 60. t04-unchecked-exception-classes
 
 **Topic:** Handling exceptions (exam objective: "Handling exceptions")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -2859,7 +4178,7 @@ To record: `"digest": "sha256:f3298bb15abaf556983f5edaf62617f681d111db362c160d98
 
 &nbsp;
 
-## 41. t05-arrays-aslist-backed
+## 61. t05-arrays-aslist-backed
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -2915,7 +4234,134 @@ To record: `"digest": "sha256:78ae48555284a939204e7fd0a0c9ec06a2868315ed215f48a0
 
 &nbsp;
 
-## 42. t05-immutable-and-fixed-size-lists
+## 62. t05-arrays-binarysearch-insertion-point
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.Arrays;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     int[] values = {1, 3, 5, 7};
+>     System.out.println(Arrays.binarySearch(values, 4));
+>   }
+> }
+> ```
+
+- **A** 2
+- **B** -2
+- **C** -3
+- **D** 4
+
+### Answer key and reasons
+
+- **A: incorrect.** 2 is the insertion point, but an absent result is encoded as a negative value.
+- **B: incorrect.** The return value is `-insertionPoint - 1`, not simply the negated insertion point.
+- **C: correct.** With insertion point 2, the encoded result is -3.
+- **D: incorrect.** The method returns an index or encoded insertion point, not the search key.
+
+### Explanation
+
+The missing value 4 would be inserted at index 2 to keep the array sorted. `binarySearch` encodes an absent key as `-(insertionPoint) - 1`, giving `-3`.
+
+### Why this difficulty
+
+Tests the negative return encoding of Arrays.binarySearch when a key is absent.
+
+### References
+
+- [Arrays.binarySearch(int[], int) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Arrays.html#binarySearch(int%5B%5D,int))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+-3
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:f1feb974278902e5ed8928de3bcd4122368551cda2963692a8fe1b3e88cca7ec"`, `"verified": "sha256:615bdd17c2556f82f384392ea8557f8cc88b03501c759e23093ab0b2a9b5cd48"`
+
+**Comments:**
+
+&nbsp;
+
+## 63. t05-generic-invariance
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Given `List<Integer> integers = new ArrayList<>();`, can it be assigned directly to a variable of type `List<Number>`?
+
+- **A** Yes, because Integer extends Number.
+- **B** No, because generic types such as List are invariant in their type argument.
+- **C** Yes, but only when the list is empty.
+- **D** No, because ArrayList cannot be assigned to any List variable.
+
+### Answer key and reasons
+
+- **A: incorrect.** Subtype relationships between type arguments do not make the corresponding generic types covariant.
+- **B: correct.** A wildcard is needed when variance is desired.
+- **C: incorrect.** Generic assignment compatibility is compile-time and does not depend on runtime size.
+- **D: incorrect.** ArrayList implements List; the issue is the incompatible generic argument.
+
+### Explanation
+
+No. Java generic types are invariant: even though `Integer` is a subtype of `Number`, `List<Integer>` is not a subtype of `List<Number>`.
+
+### Why this difficulty
+
+Tests generic invariance, a core rule behind wildcard use and many collection-assignment errors.
+
+### References
+
+- [JLS 4.10.2 Subtyping among Class and Interface Types](https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.10.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:094a1e2203407a95692132fcad51deac056d2c528ed0a4ba8b86d2bec730fa3b"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 64. t05-immutable-and-fixed-size-lists
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3003,7 +4449,7 @@ To record: `"digest": "sha256:fa5b94ce4a081fd1fc275bf77b3d633d5da2dfb89037ad27c7
 
 &nbsp;
 
-## 43. t05-list-first-last
+## 65. t05-list-first-last
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -3075,7 +4521,7 @@ To record: `"digest": "sha256:5011a402c13171a198c9977bed4882dff5c0a452e5050bb161
 
 &nbsp;
 
-## 44. t05-list-remove-overload
+## 66. t05-list-remove-overload
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3153,7 +4599,80 @@ To record: `"digest": "sha256:aa3ad1790530cd56ef478623a373c5729f588f5b334bcac407
 
 &nbsp;
 
-## 45. t05-map-of-null-rejection
+## 67. t05-map-merge-null-removes
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.HashMap;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     var map = new HashMap<String, Integer>();
+>     map.put("x", 1);
+>     map.merge("x", 2, (oldValue, newValue) -> null);
+>     System.out.println(map.containsKey("x"));
+>   }
+> }
+> ```
+
+- **A** true
+- **B** false
+- **C** null
+- **D** It throws NullPointerException because the remapping function returns null.
+
+### Answer key and reasons
+
+- **A: incorrect.** A null remapping result removes the existing mapping.
+- **B: correct.** The mapping for x is removed by merge.
+- **C: incorrect.** containsKey returns primitive boolean.
+- **D: incorrect.** A null result is a defined signal to remove the mapping.
+
+### Explanation
+
+The key `x` already has a non-null value. `merge` invokes the remapping function; because that function returns null, the mapping is removed. `containsKey("x")` is therefore false.
+
+### Why this difficulty
+
+Tests Map.merge's removal rule when the remapping function returns null.
+
+### References
+
+- [Map.merge(K, V, BiFunction) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html#merge(K,V,java.util.function.BiFunction))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+false
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:671e2d9f69f61cf91749124ed9414c2e803642a10b949f01c198eb9cda795f33"`, `"verified": "sha256:fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"`
+
+**Comments:**
+
+&nbsp;
+
+## 68. t05-map-of-null-rejection
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -3239,7 +4758,7 @@ To record: `"digest": "sha256:4f93455ea9bcd769eb8c704e4168711950095f2f6a3e4905e6
 
 &nbsp;
 
-## 46. t05-sequenced-collection-reversed
+## 69. t05-sequenced-collection-reversed
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -3323,7 +4842,64 @@ To record: `"digest": "sha256:faaaa171a52a8b5880abdb3bbc8f081f454bfa669ddb3aa7c9
 
 &nbsp;
 
-## 47. t05-set-of-duplicate-elements
+## 70. t05-sequencedmap-first-entry
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A `LinkedHashMap` receives mappings for keys `a`, `b`, and `c` in that order. What key is returned by `map.firstEntry().getKey()` in Java 21?
+
+- **A** a
+- **B** b
+- **C** c
+- **D** The result is unspecified because maps never have encounter order.
+
+### Answer key and reasons
+
+- **A: correct.** a is the first mapping in insertion encounter order.
+- **B: incorrect.** b is the second inserted key.
+- **C: incorrect.** c is the last inserted key.
+- **D: incorrect.** LinkedHashMap is specifically encounter-ordered and implements SequencedMap.
+
+### Explanation
+
+LinkedHashMap has insertion encounter order by default and implements `SequencedMap`. `firstEntry()` returns the first mapping in that encounter order, whose key is `a`.
+
+### Why this difficulty
+
+Checks Java 21's SequencedMap encounter-order API using LinkedHashMap's insertion order.
+
+### References
+
+- [LinkedHashMap (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html)
+- [SequencedMap (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/SequencedMap.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:5550cddfb25d8027408ced0a592c9595a6985d775b16064dd2f079c54ddda8c2"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 71. t05-set-of-duplicate-elements
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -3403,7 +4979,7 @@ To record: `"digest": "sha256:f55f5f7ac1729a0d85579fa56c110814d20e8aebdf3eb7efc1
 
 &nbsp;
 
-## 48. t05-treeset-comparator-uniqueness
+## 72. t05-treeset-comparator-uniqueness
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -3459,7 +5035,63 @@ To record: `"digest": "sha256:bb2c3d99cea36775c4a9c9e4d3f64fab7b9f9d7d868385bb5a
 
 &nbsp;
 
-## 49. t05-wildcard-extends-read
+## 73. t05-unmodifiable-list-view
+
+**Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Suppose `view = Collections.unmodifiableList(backing)`. Which statements are correct? Select all that apply.
+
+- **A** Calling view.add(...) throws UnsupportedOperationException.
+- **B** Changes made directly to backing can be observed through view.
+- **C** The method always makes a detached copy of backing.
+- **D** The backing list itself becomes unmodifiable.
+
+### Answer key and reasons
+
+- **A: correct.** The view does not support mutating operations.
+- **B: correct.** The wrapper is a view over the same backing list.
+- **C: incorrect.** It wraps the supplied list rather than necessarily copying its contents.
+- **D: incorrect.** Only access through the returned wrapper is restricted.
+
+### Explanation
+
+The returned list is an unmodifiable view of the specified backing list. Mutation through the view is blocked, but changes made directly to the backing list are visible through the view.
+
+### Why this difficulty
+
+Distinguishes an unmodifiable view from an immutable independent copy.
+
+### References
+
+- [Collections.unmodifiableList(List) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collections.html#unmodifiableList(java.util.List))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:841c4f88777e1d2214370df5e28556c09978e2a01750b1529d8083e8279fddd9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 74. t05-wildcard-extends-read
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3515,7 +5147,7 @@ To record: `"digest": "sha256:8ec87ba3fc8e34ea91d56f057bcc827f26cd7422fab6d3dec1
 
 &nbsp;
 
-## 50. t05-wildcard-super-integer
+## 75. t05-wildcard-super-integer
 
 **Topic:** Arrays and collections (exam objective: "Working with arrays and collections")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -3571,7 +5203,63 @@ To record: `"digest": "sha256:649993028d41fe35da8524352275a5c01a381387399a0007ff
 
 &nbsp;
 
-## 51. t06-findfirst-ordered-stream
+## 76. t06-collectors-tomap-duplicate-key
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What happens when `Collectors.toMap(keyMapper, valueMapper)` encounters two stream elements that map to the same key?
+
+- **A** The later value silently replaces the earlier one.
+- **B** The earlier value always wins silently.
+- **C** IllegalStateException is thrown.
+- **D** Both values are automatically stored in a List.
+
+### Answer key and reasons
+
+- **A: incorrect.** Replacement requires an explicit merge policy or a different collection strategy.
+- **B: incorrect.** No silent first-wins policy is defined.
+- **C: correct.** Duplicate mapped keys are an error for this overload.
+- **D: incorrect.** toMap produces a Map value per key, not an automatic collection of duplicate values.
+
+### Explanation
+
+The overload without a merge function does not define how to combine duplicate values. It throws `IllegalStateException` when duplicate keys are encountered.
+
+### Why this difficulty
+
+Tests the duplicate-key behavior of the two-function toMap collector when no merge function is supplied.
+
+### References
+
+- [Collectors.toMap(Function, Function) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html#toMap(java.util.function.Function,java.util.function.Function))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 77. t06-findfirst-ordered-stream
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3627,7 +5315,7 @@ To record: `"digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c
 
 &nbsp;
 
-## 52. t06-flatmap-flatten
+## 78. t06-flatmap-flatten
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3705,7 +5393,134 @@ To record: `"digest": "sha256:81a1d82b3b182549e43a2d4d1a5c38735f05ee764f2aaa461e
 
 &nbsp;
 
-## 53. t06-intstream-average
+## 79. t06-functional-interface-extra-methods
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> Which declarations can coexist with the single function method in a functional interface without preventing it from being functional? Select all that apply.
+
+- **A** default methods
+- **B** static methods
+- **C** an abstract declaration matching a public method of Object, such as boolean equals(Object)
+- **D** two unrelated abstract instance methods with different signatures
+
+### Answer key and reasons
+
+- **A: correct.** Default methods have implementations and do not add abstract function methods.
+- **B: correct.** Static interface methods are not instance abstract methods.
+- **C: correct.** Such declarations are excluded from the count used to determine the function method.
+- **D: incorrect.** That generally leaves more than one abstract method and prevents functional-interface status.
+
+### Explanation
+
+A functional interface has one abstract method for the purpose of lambda conversion. It may also declare default methods and static methods, and certain methods corresponding to public methods of Object do not count as additional function methods.
+
+### Why this difficulty
+
+Tests the formal functional-interface definition rather than the oversimplified rule that an interface must contain exactly one method total.
+
+### References
+
+- [JLS 9.8 Functional Interfaces](https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.8)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a7c2eeed5b5430583895ba7bcc5741a85d8baa0e1d28600f8919a5197ec642dd"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 80. t06-generate-limit-count
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.stream.Stream;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     long count = Stream.generate(() -> "x").limit(3).count();
+>     System.out.println(count);
+>   }
+> }
+> ```
+
+- **A** 0
+- **B** 3
+- **C** The program never terminates.
+- **D** It throws IllegalStateException because generate is infinite.
+
+### Answer key and reasons
+
+- **A: incorrect.** The supplier can provide elements and limit allows three of them.
+- **B: correct.** limit makes the stream finite with three elements.
+- **C: incorrect.** limit bounds the otherwise infinite stream before count consumes it.
+- **D: incorrect.** Infinite streams are valid when paired with a short-circuiting or bounding operation.
+
+### Explanation
+
+`Stream.generate` creates an unbounded stream, but `limit(3)` truncates it to at most three elements. `count()` therefore returns 3.
+
+### Why this difficulty
+
+Checks how a short-circuiting size bound makes an otherwise infinite generated stream finite.
+
+### References
+
+- [Stream.generate(Supplier) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#generate(java.util.function.Supplier))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+3
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:f091d17ace9ae04839d3867d74e1cc9d199443fff810a4fc40a970d374b8ab3f"`, `"verified": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"`
+
+**Comments:**
+
+&nbsp;
+
+## 81. t06-intstream-average
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -3776,7 +5591,7 @@ To record: `"digest": "sha256:1c43a1fd4bd129da4acc8db59e518230410c27b8053a2ff783
 
 &nbsp;
 
-## 54. t06-lambda-effectively-final
+## 82. t06-lambda-effectively-final
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -3832,7 +5647,133 @@ To record: `"digest": "sha256:e5ebba5c9d6aeaef72da6498990ea36c3a1b80e5266da18c24
 
 &nbsp;
 
-## 55. t06-reduce-empty-identity
+## 83. t06-lambda-this-enclosing-instance
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Inside an instance method, what does `this` refer to within a lambda expression declared by that method?
+
+- **A** A new hidden lambda object.
+- **B** The enclosing instance.
+- **C** The current Thread object.
+- **D** this is forbidden inside lambdas.
+
+### Answer key and reasons
+
+- **A: incorrect.** A lambda does not introduce its own this binding.
+- **B: correct.** Lambda expressions use lexical this semantics.
+- **C: incorrect.** Thread identity is unrelated to the meaning of this.
+- **D: incorrect.** It is allowed and refers to the enclosing context.
+
+### Explanation
+
+Lambda bodies are lexically scoped. They do not introduce a new `this`; `this` refers to the same enclosing instance as it does outside the lambda.
+
+### Why this difficulty
+
+Distinguishes lambda lexical scoping from anonymous-class scoping.
+
+### References
+
+- [JLS 15.27.2 Lambda Body](https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:1a0fa4c0cdeafcc273869919ee6d954b9b3f67ee60d3bc0a0bcb6930fdf7e600"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 84. t06-parallel-foreachordered
+
+**Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.stream.IntStream;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     IntStream.range(0, 4).parallel().forEachOrdered(System.out::print);
+>   }
+> }
+> ```
+
+- **A** 0123
+- **B** The order is necessarily random.
+- **C** 3210
+- **D** It does not compile because parallel streams cannot use forEachOrdered.
+
+### Answer key and reasons
+
+- **A: correct.** forEachOrdered preserves encounter order.
+- **B: incorrect.** That would be a concern with forEach, not forEachOrdered on an ordered stream.
+- **C: incorrect.** Parallel execution does not imply reverse encounter order.
+- **D: incorrect.** forEachOrdered is specifically defined for streams, including parallel streams.
+
+### Explanation
+
+Although the stream is parallel, `forEachOrdered` performs the action in encounter order for an ordered stream. The range therefore prints 0, 1, 2, 3 in order.
+
+### Why this difficulty
+
+Distinguishes parallel execution from encounter-order guarantees of forEachOrdered.
+
+### References
+
+- [BaseStream and IntStream forEachOrdered (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/IntStream.html#forEachOrdered(java.util.function.IntConsumer))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+0123
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:efd8e2428504e30d4d844daf0c730dc85c4d85b7720eb301d4ab5a639f6229bd"`, `"verified": "sha256:1be2e452b46d7a0d9656bbb1f768e8248eba1b75baed65f5d99eafa948899a6a"`
+
+**Comments:**
+
+&nbsp;
+
+## 85. t06-reduce-empty-identity
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -3909,7 +5850,7 @@ To record: `"digest": "sha256:ece7c2a1eb9fcf982e92b36c2c350fe2c7809be39feb1fe1e9
 
 &nbsp;
 
-## 56. t06-stream-facts
+## 86. t06-stream-facts
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -3971,7 +5912,7 @@ To record: `"digest": "sha256:6aefbf857ab03ebf0639c5df18fdf73d11544b50be59c6ec9f
 
 &nbsp;
 
-## 57. t06-stream-laziness
+## 87. t06-stream-laziness
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -4057,7 +5998,7 @@ To record: `"digest": "sha256:6bcb8ebb13ff8df307b70cee16d7a84159a68ad161012cde5b
 
 &nbsp;
 
-## 58. t06-stream-single-use
+## 88. t06-stream-single-use
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -4140,7 +6081,7 @@ To record: `"digest": "sha256:80d54f91c7915d958a4f1c86e90cc2f3f3b7f5d9322012d115
 
 &nbsp;
 
-## 59. t06-string-length-method-reference
+## 89. t06-string-length-method-reference
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4196,7 +6137,7 @@ To record: `"digest": "sha256:f37197deee9a5b4d33b7e31daae1b23fbcca2f567c2d568a72
 
 &nbsp;
 
-## 60. t06-to-unmodifiable-list-null
+## 90. t06-to-unmodifiable-list-null
 
 **Topic:** Streams and lambda expressions (exam objective: "Working with streams and lambda expressions")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -4252,7 +6193,7 @@ To record: `"digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216c
 
 &nbsp;
 
-## 61. t07-automatic-module-jar
+## 91. t07-automatic-module-jar
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4308,7 +6249,63 @@ To record: `"digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c5605
 
 &nbsp;
 
-## 62. t07-exports-and-opens
+## 92. t07-export-does-not-make-type-public
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A named module exports package `p`, but class `p.Helper` has package-private access. Can code in another module access `Helper` merely because `p` is exported?
+
+- **A** Yes; export makes every type in the package public.
+- **B** No; Helper remains package-private.
+- **C** Yes, but only through reflection.
+- **D** No, because exported packages can never be accessed by another module.
+
+### Answer key and reasons
+
+- **A: incorrect.** Module export does not rewrite the class's access modifier.
+- **B: correct.** Normal Java accessibility rules still apply inside an exported package.
+- **C: incorrect.** An export by itself does not grant deep reflective access to non-public members.
+- **D: incorrect.** Export exists precisely to expose accessible package API to reading modules.
+
+### Explanation
+
+No. Exporting a package makes its public and otherwise-accessible API available subject to module readability; it does not change Java access modifiers on individual declarations.
+
+### Why this difficulty
+
+Separates module-level package export from Java language access modifiers on individual types.
+
+### References
+
+- [JLS 7.7.2 Exported and Opened Packages](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 93. t07-exports-and-opens
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -4370,7 +6367,7 @@ To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf
 
 &nbsp;
 
-## 63. t07-implicit-java-base
+## 94. t07-implicit-java-base
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -4426,7 +6423,63 @@ To record: `"digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40
 
 &nbsp;
 
-## 64. t07-java-module-launch
+## 95. t07-import-wildcard-no-subpackages
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does `import java.util.*;` make available by simple name?
+
+- **A** Accessible top-level types directly in java.util, but not types in java.util.concurrent.
+- **B** Every type in java.util and all of its subpackages.
+- **C** Only static members declared by classes in java.util.
+- **D** Nothing; wildcard imports are not valid Java.
+
+### Answer key and reasons
+
+- **A: correct.** On-demand package imports are not recursive.
+- **B: incorrect.** Subpackages are separate packages and are not imported recursively.
+- **C: incorrect.** That would involve static imports, not a type-import-on-demand declaration.
+- **D: incorrect.** Type-import-on-demand declarations using `*` are valid.
+
+### Explanation
+
+A type-import-on-demand declaration imports accessible top-level types declared directly in the named package. It does not recursively import types from subpackages such as `java.util.concurrent`.
+
+### Why this difficulty
+
+Tests the scope of on-demand type imports and the fact that packages are not recursively imported.
+
+### References
+
+- [JLS 7.5.2 Type-Import-on-Demand Declarations](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.5.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 96. t07-java-module-launch
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4482,7 +6535,7 @@ To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8c
 
 &nbsp;
 
-## 65. t07-module-service-directives
+## 97. t07-module-service-directives
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -4538,7 +6591,75 @@ To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f095686
 
 &nbsp;
 
-## 66. t07-open-module-semantics
+## 98. t07-object-module-name
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> public class Main {
+>   public static void main(String[] args) {
+>     System.out.println(Object.class.getModule().getName());
+>   }
+> }
+> ```
+
+- **A** java.base
+- **B** java.lang
+- **C** null
+- **D** unnamed
+
+### Answer key and reasons
+
+- **A: correct.** Object belongs to the fundamental java.base module.
+- **B: incorrect.** java.lang is Object's package, not its module name.
+- **C: incorrect.** The module is named, so getName returns its name rather than null.
+- **D: incorrect.** Platform classes such as Object are in named modules.
+
+### Explanation
+
+`Object` is defined in the `java.base` module. Its `Class` object therefore reports a named module whose name is `java.base`.
+
+### Why this difficulty
+
+Connects a core platform class with the named module that contains it.
+
+### References
+
+- [Module.getName() (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Module.html#getName())
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+java.base
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:f2314933ad3a586df114dfd06231ac646b061a82ddc11f5db92da391129d46ac"`, `"verified": "sha256:15ddf5da1c7c9d5569e10556cc6458d01ca6143fea0a2289e698be96195a473e"`
+
+**Comments:**
+
+&nbsp;
+
+## 99. t07-open-module-semantics
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -4594,7 +6715,7 @@ To record: `"digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5
 
 &nbsp;
 
-## 67. t07-qualified-exports
+## 100. t07-qualified-exports
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4650,7 +6771,7 @@ To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa
 
 &nbsp;
 
-## 68. t07-requires-static
+## 101. t07-requires-static
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -4706,7 +6827,7 @@ To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f1
 
 &nbsp;
 
-## 69. t07-requires-transitive
+## 102. t07-requires-transitive
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4846,7 +6967,77 @@ To record: `"digest": "sha256:af626b88c696999048debefb40bbe702accffa6ba8b6c839df
 
 &nbsp;
 
-## 70. t07-unnamed-module-isnamed
+## 103. t07-static-import-member
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import static java.lang.Math.max;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     System.out.println(max(4, 5));
+>   }
+> }
+> ```
+
+- **A** 4
+- **B** 5
+- **C** Math.max
+- **D** It does not compile because static methods cannot be imported.
+
+### Answer key and reasons
+
+- **A: incorrect.** Math.max returns the larger argument.
+- **B: correct.** The imported static method returns the larger value.
+- **C: incorrect.** The method is invoked; its name is not printed.
+- **D: incorrect.** Single-static-import declarations are part of Java's import syntax.
+
+### Explanation
+
+The single-static-import declaration imports `Math.max`, so the method can be called by simple name. `max(4, 5)` returns 5.
+
+### Why this difficulty
+
+Checks static import syntax and how it lets a static member be referenced by simple name.
+
+### References
+
+- [JLS 7.5.3 Single-Static-Import Declarations](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.5.3)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+5
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:2b5edd88a0ea0ace6a570e0f0b3b200abb61bdedba4943bdc4493ebff7ff00cb"`, `"verified": "sha256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"`
+
+**Comments:**
+
+&nbsp;
+
+## 104. t07-unnamed-module-isnamed
 
 **Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -4914,7 +7105,135 @@ To record: `"digest": "sha256:64c9d9597f36df9fb522b9a919b4e3e022e013fcdb9061ccd8
 
 &nbsp;
 
-## 71. t08-atomicinteger-update-and-get
+## 105. t07-unnamed-package-import
+
+**Topic:** Packaging, deploying and the Java Platform Module System (exam objective: "Packaging and deploying Java code and using the Java Platform Module System")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> Can a type declared in a named package import a top-level type from the unnamed package?
+
+- **A** Yes, using import TypeName;
+- **B** Yes, using import unnamed.TypeName;
+- **C** No.
+- **D** Only if the type is public and final.
+
+### Answer key and reasons
+
+- **A: incorrect.** Import declarations name types through packages or canonical names; unnamed-package types cannot be imported into named packages.
+- **B: incorrect.** There is no package named `unnamed` representing the unnamed package.
+- **C: correct.** Named-package code cannot import a type from the unnamed package.
+- **D: incorrect.** Access modifiers do not remove the unnamed-package import restriction.
+
+### Explanation
+
+No. A type in the unnamed package cannot be imported by code in a named package. Unnamed-package use is therefore unsuitable for code intended to participate in ordinary packaged applications.
+
+### Why this difficulty
+
+Tests the special visibility limitation of types declared in the unnamed package.
+
+### References
+
+- [JLS 7.4.2 Unnamed Packages](https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.4.2)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 106. t08-atomic-compare-and-set
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.concurrent.atomic.AtomicInteger;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     var value = new AtomicInteger(10);
+>     boolean changed = value.compareAndSet(10, 20);
+>     System.out.println(changed + " " + value.get());
+>   }
+> }
+> ```
+
+- **A** true 20
+- **B** false 10
+- **C** true 10
+- **D** false 20
+
+### Answer key and reasons
+
+- **A: correct.** The expected value matches, so the update succeeds and the new value is 20.
+- **B: incorrect.** That would happen if the expected value did not match.
+- **C: incorrect.** A successful compareAndSet also updates the stored value.
+- **D: incorrect.** A false result means the update did not occur.
+
+### Explanation
+
+The AtomicInteger starts at 10. `compareAndSet(10, 20)` observes the expected value, updates it to 20, and returns true.
+
+### Why this difficulty
+
+Tests both the success condition and side effect of an atomic compare-and-set operation.
+
+### References
+
+- [AtomicInteger.compareAndSet(int, int) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html#compareAndSet(int,int))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+true 20
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:17c17ce269af9930b241c1e49b43b7fb7bb4bd4a09ac2928284c564c1045516e"`, `"verified": "sha256:e6740d09a48abfcf5cb7342913a1e15938b5b57cac05bd201367c4ea63a84dea"`
+
+**Comments:**
+
+&nbsp;
+
+## 107. t08-atomicinteger-update-and-get
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -4985,7 +7304,7 @@ To record: `"digest": "sha256:aa0cb64474b787f8cd89175c40f0752e93b0e5036cc4223311
 
 &nbsp;
 
-## 72. t08-completablefuture-join-vs-get
+## 108. t08-completablefuture-join-vs-get
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -5042,7 +7361,63 @@ To record: `"digest": "sha256:14321ec79b2165f614edf4f2d5ddc7317f2864917e3401e01d
 
 &nbsp;
 
-## 73. t08-concurrenthashmap-null
+## 109. t08-computeifabsent-null-result
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> For a `ConcurrentHashMap<String, Integer> map` with no mapping for `x`, what is the result if `map.computeIfAbsent("x", k -> null)` is called?
+
+- **A** The key x is mapped to null.
+- **B** No mapping is added and the method returns null.
+- **C** The key is mapped to 0 automatically.
+- **D** The map is cleared.
+
+### Answer key and reasons
+
+- **A: incorrect.** ConcurrentHashMap does not permit null values, and a null computed result means no mapping is recorded.
+- **B: correct.** A null mapping-function result leaves the key absent.
+- **C: incorrect.** No default numeric value is synthesized.
+- **D: incorrect.** The operation concerns only the requested key.
+
+### Explanation
+
+If the mapping function returns null, no mapping is established for the key and the method returns null.
+
+### Why this difficulty
+
+Tests ConcurrentHashMap.computeIfAbsent semantics when the mapping function declines to create a value by returning null.
+
+### References
+
+- [ConcurrentHashMap.computeIfAbsent(K, Function) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html#computeIfAbsent(K,java.util.function.Function))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 110. t08-concurrenthashmap-null
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -5129,7 +7504,80 @@ To record: `"digest": "sha256:b99d271cbeebe7c0b5f423208757f0a94ffa2ed5c743b121de
 
 &nbsp;
 
-## 74. t08-executor-close
+## 111. t08-countdownlatch-count
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.concurrent.CountDownLatch;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     var latch = new CountDownLatch(2);
+>     latch.countDown();
+>     latch.countDown();
+>     System.out.println(latch.getCount());
+>   }
+> }
+> ```
+
+- **A** 0
+- **B** 1
+- **C** 2
+- **D** -1
+
+### Answer key and reasons
+
+- **A: correct.** Two countdowns reduce the initial count of 2 to zero.
+- **B: incorrect.** That would be the value after only one countDown call.
+- **C: incorrect.** The count changes when countDown is invoked.
+- **D: incorrect.** A CountDownLatch count does not become negative.
+
+### Explanation
+
+The latch starts at 2. Each `countDown()` decrements the count until it reaches zero. After two calls, `getCount()` returns 0.
+
+### Why this difficulty
+
+Checks CountDownLatch's one-way count semantics without introducing nondeterministic thread scheduling.
+
+### References
+
+- [CountDownLatch (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CountDownLatch.html)
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+0
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:67e34440e89aaf31b59c484b5398a1595ad7febd0a1db59916e5938583dee299"`, `"verified": "sha256:5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"`
+
+**Comments:**
+
+&nbsp;
+
+## 112. t08-executor-close
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5209,7 +7657,63 @@ To record: `"digest": "sha256:4a02b0bcaa676c452f8468022e676f0c2d5be448f8d239a884
 
 &nbsp;
 
-## 75. t08-start-virtual-thread
+## 113. t08-reentrantlock-finally
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> After successfully calling `lock.lock()`, where should `lock.unlock()` normally be placed so the lock is released even when protected code throws?
+
+- **A** In a finally block.
+- **B** Only after the try block on the normal path.
+- **C** Inside a catch block only.
+- **D** Nowhere; ReentrantLock releases itself automatically at method exit.
+
+### Answer key and reasons
+
+- **A: correct.** finally executes when control leaves the protected region, including exceptional exits.
+- **B: incorrect.** An exception could skip that unlock and leave the lock held.
+- **C: incorrect.** That would miss normal completion and possibly other abrupt paths.
+- **D: incorrect.** Explicit Lock implementations require explicit unlock calls.
+
+### Explanation
+
+The recommended structure acquires the lock before a try block and invokes `unlock()` in the corresponding finally block. This ensures release on both normal and abrupt completion.
+
+### Why this difficulty
+
+Checks the standard lock/unlock structure needed because Lock does not have synchronized's automatic monitor release.
+
+### References
+
+- [Lock (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/locks/Lock.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 114. t08-start-virtual-thread
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5265,7 +7769,7 @@ To record: `"digest": "sha256:1b132edc5296249a8b8757c486af2aee1fcc34c6da91c2d9b7
 
 &nbsp;
 
-## 76. t08-synchronized-method-lock
+## 115. t08-synchronized-method-lock
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -5321,7 +7825,7 @@ To record: `"digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb2238
 
 &nbsp;
 
-## 77. t08-synchronized-reentrant
+## 116. t08-synchronized-reentrant
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5405,7 +7909,7 @@ To record: `"digest": "sha256:296d4d4085ed01b5f051a28e6f727b6062e7a83d81afc293ab
 
 &nbsp;
 
-## 78. t08-thread-interrupted-clears
+## 117. t08-thread-interrupted-clears
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5482,7 +7986,63 @@ To record: `"digest": "sha256:71375a89cf8aabd9cc8856353444ff8243a365043d557c5cfe
 
 &nbsp;
 
-## 79. t08-virtual-thread-daemon
+## 118. t08-virtual-thread-builder-unstarted
+
+**Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about `Thread.ofVirtual().unstarted(task)` are correct in Java 21? Select all that apply.
+
+- **A** It returns a virtual Thread.
+- **B** The returned thread has not been started yet.
+- **C** The task runs synchronously before unstarted returns.
+- **D** The returned value is an ExecutorService.
+
+### Answer key and reasons
+
+- **A: correct.** The builder is specifically the virtual-thread builder.
+- **B: correct.** The `unstarted` method creates without starting.
+- **C: incorrect.** The thread has not begun execution.
+- **D: incorrect.** The builder returns a Thread object.
+
+### Explanation
+
+The builder creates a new virtual Thread in the unstarted state. Calling `start()` later schedules it to execute its task.
+
+### Why this difficulty
+
+Tests the distinction between constructing and starting a virtual thread with the Thread builder API.
+
+### References
+
+- [Thread.Builder.OfVirtual (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.Builder.OfVirtual.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 119. t08-virtual-thread-daemon
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5571,7 +8131,7 @@ To record: `"digest": "sha256:1a524f8719b99f90a06295ef3391bf1d248e689b5dcfca3aef
 
 &nbsp;
 
-## 80. t08-volatile-increment
+## 120. t08-volatile-increment
 
 **Topic:** Managing concurrent code execution (exam objective: "Managing concurrent code execution")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5627,7 +8187,7 @@ To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2c
 
 &nbsp;
 
-## 81. t09-bufferedreader-readline
+## 121. t09-bufferedreader-readline
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -5709,7 +8269,87 @@ To record: `"digest": "sha256:fcb833284302075e88da9b405e83b435dcaf7c0b287cbc63a2
 
 &nbsp;
 
-## 82. t09-files-copy-existing-target
+## 122. t09-dataoutput-readutf
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.io.ByteArrayInputStream;
+> import java.io.ByteArrayOutputStream;
+> import java.io.DataInputStream;
+> import java.io.DataOutputStream;
+>
+> public class Main {
+>   public static void main(String[] args) throws Exception {
+>     var bytes = new ByteArrayOutputStream();
+>     try (var out = new DataOutputStream(bytes)) {
+>       out.writeUTF("Java");
+>     }
+>     try (var in = new DataInputStream(new ByteArrayInputStream(bytes.toByteArray()))) {
+>       System.out.println(in.readUTF());
+>     }
+>   }
+> }
+> ```
+
+- **A** Java
+- **B** 4
+- **C** J
+- **D** It throws EOFException.
+
+### Answer key and reasons
+
+- **A: correct.** readUTF decodes the value written by writeUTF.
+- **B: incorrect.** The program prints the decoded string, not its length.
+- **C: incorrect.** readUTF reads the complete encoded string.
+- **D: incorrect.** The byte array contains the complete output of writeUTF.
+
+### Explanation
+
+`writeUTF` writes a length-prefixed modified UTF-8 representation that `readUTF` understands. Reading the bytes back reproduces the original string `Java`.
+
+### Why this difficulty
+
+Checks the paired DataOutputStream/DataInputStream UTF methods using an in-memory deterministic stream.
+
+### References
+
+- [DataOutputStream.writeUTF(String) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/DataOutputStream.html#writeUTF(java.lang.String))
+- [DataInputStream.readUTF() (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/DataInputStream.html#readUTF())
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+Java
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:3e2c82dfb7891e2b7d70aa7bf82b7ae32d26eacc904ce5e2210eb1e7aae4be1d"`, `"verified": "sha256:c1ba60ce13586503a21a05e9ef0bb959f1ba74a1d37bcfcbf5fc6bfb548f684d"`
+
+**Comments:**
+
+&nbsp;
+
+## 123. t09-files-copy-existing-target
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5765,7 +8405,7 @@ To record: `"digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a7
 
 &nbsp;
 
-## 83. t09-files-lines-close
+## 124. t09-files-lines-close
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5821,7 +8461,119 @@ To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0
 
 &nbsp;
 
-## 84. t09-path-normalize-namecount
+## 125. t09-files-readstring-utf8
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> Which charset does `Files.readString(path)` use when no charset argument is supplied?
+
+- **A** The platform default charset.
+- **B** UTF-8.
+- **C** UTF-16.
+- **D** US-ASCII.
+
+### Answer key and reasons
+
+- **A: incorrect.** This convenience overload specifies UTF-8 rather than delegating to the platform default.
+- **B: correct.** UTF-8 is the documented charset for the one-argument overload.
+- **C: incorrect.** UTF-16 is not the default for this method.
+- **D: incorrect.** The method is specified to use UTF-8.
+
+### Explanation
+
+The one-argument `Files.readString(Path)` method decodes the file using UTF-8.
+
+### Why this difficulty
+
+Tests the default charset specified by the convenience overload of Files.readString.
+
+### References
+
+- [Files.readString(Path) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#readString(java.nio.file.Path))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:e9a22d566e7a8783558af0b1a6bcea1fceabc6d10bd22fd202c2a7e9a1b0766a"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 126. t09-files-walk-close
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about the `Stream<Path>` returned by `Files.walk(path)` are correct? Select all that apply.
+
+- **A** It should normally be used in try-with-resources.
+- **B** The stream is populated lazily.
+- **C** A terminal operation always closes the stream automatically.
+- **D** It eagerly loads the entire tree before returning.
+
+### Answer key and reasons
+
+- **A: correct.** Closing the stream releases open directory resources.
+- **B: correct.** Traversal occurs as the stream is consumed.
+- **C: incorrect.** Terminal operations do not generally close a stream resource.
+- **D: incorrect.** The traversal is lazy.
+
+### Explanation
+
+The stream is lazily populated and holds open directory resources while traversing. It should be closed promptly, typically with try-with-resources.
+
+### Why this difficulty
+
+Tests resource management for lazily populated directory-tree streams.
+
+### References
+
+- [Files.walk(Path, FileVisitOption...) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Files.html#walk(java.nio.file.Path,java.nio.file.FileVisitOption...))
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 127. t09-path-normalize-namecount
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5892,7 +8644,79 @@ To record: `"digest": "sha256:02a1596e2429d19d205c95aedfeee8ef892c44a5b32cdc2cf2
 
 &nbsp;
 
-## 85. t09-path-resolve-absolute
+## 128. t09-path-relativize
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.nio.file.Path;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     Path from = Path.of("a", "b");
+>     Path to = Path.of("a", "c", "d");
+>     System.out.println(from.relativize(to).getNameCount());
+>   }
+> }
+> ```
+
+- **A** 2
+- **B** 3
+- **C** 4
+- **D** It throws IllegalArgumentException because the paths differ.
+
+### Answer key and reasons
+
+- **A: incorrect.** The result also contains the parent element `..`, so it has three name elements.
+- **B: correct.** The relative result contains `..`, `c`, and `d`.
+- **C: incorrect.** The shared prefix `a` is not part of the relativized result.
+- **D: incorrect.** Relativize is defined for compatible path kinds such as these two relative paths.
+
+### Explanation
+
+Both paths are relative and share the prefix `a`. To get from `a/b` to `a/c/d`, move up once from `b`, then descend through `c/d`, producing `../c/d`. The program prints the name count of that relative path, which is 3.
+
+### Why this difficulty
+
+Tests lexical path relativization without depending on the host file system.
+
+### References
+
+- [Path.relativize(Path) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html#relativize(java.nio.file.Path))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+3
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:47f4978490c788ecb3e77fb477ea5f6cecc077cf483abdfe0a81a92053a09e1d"`, `"verified": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"`
+
+**Comments:**
+
+&nbsp;
+
+## 129. t09-path-resolve-absolute
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -5974,7 +8798,7 @@ To record: `"digest": "sha256:318920b7b1473dca3a6026de7b1fa03ac05160f8b68f49f212
 
 &nbsp;
 
-## 86. t09-randomaccessfile-seek
+## 130. t09-randomaccessfile-seek
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -6030,7 +8854,7 @@ To record: `"digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc04
 
 &nbsp;
 
-## 87. t09-read-all-lines
+## 131. t09-read-all-lines
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -6111,7 +8935,7 @@ To record: `"digest": "sha256:4e5421d645083af9e41ed10336eef3972945a5b8d2f3ff9bf2
 
 &nbsp;
 
-## 88. t09-reader-vs-inputstream
+## 132. t09-reader-vs-inputstream
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** multiple choice, select all that apply · **Difficulty:** easy · **Java release:** 21
@@ -6168,7 +8992,7 @@ To record: `"digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec6274
 
 &nbsp;
 
-## 89. t09-serialization-facts
+## 133. t09-serialization-facts
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** multiple choice, select all that apply · **Difficulty:** hard · **Java release:** 21
@@ -6280,7 +9104,63 @@ To record: `"digest": "sha256:9879711d5575e507206e13321fa33849bdbfa5f5ca2e2634d6
 
 &nbsp;
 
-## 90. t09-serialization-transient-static
+## 134. t09-serialization-serialversionuid
+
+**Topic:** Java I/O API (exam objective: "Using Java I/O API")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> What is the main role of a declared `serialVersionUID` in a `Serializable` class?
+
+- **A** It uniquely identifies each individual object instance.
+- **B** It participates in checking serialized-class version compatibility.
+- **C** It encrypts the serialized byte stream.
+- **D** It forces every field to be serialized, including static fields.
+
+### Answer key and reasons
+
+- **A: incorrect.** All instances of a class share the class's serial version UID.
+- **B: correct.** A mismatched UID can cause InvalidClassException during deserialization.
+- **C: incorrect.** serialVersionUID provides no encryption.
+- **D: incorrect.** It does not change the default field-selection rules.
+
+### Explanation
+
+The serialization runtime associates a serial version UID with each serializable class and uses it during deserialization to verify compatibility between the sender's and receiver's class versions.
+
+### Why this difficulty
+
+Tests the purpose of serialVersionUID in Java's built-in serialization compatibility mechanism.
+
+### References
+
+- [Serializable (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 135. t09-serialization-transient-static
 
 **Topic:** Java I/O API (exam objective: "Using Java I/O API")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -6380,7 +9260,7 @@ To record: `"digest": "sha256:8da42eededa956e63011fa2b3c1952447bd65e19649f6d9f40
 
 &nbsp;
 
-## 91. t10-collator-locale-sensitive
+## 136. t10-collator-locale-sensitive
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -6436,7 +9316,134 @@ To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4
 
 &nbsp;
 
-## 92. t10-datetimeformatter-locale-immutability
+## 137. t10-collator-primary-strength
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** hard · **Java release:** 21
+
+### As the learner sees it
+
+> What does setting a `Collator` to `Collator.PRIMARY` generally mean for comparison significance?
+
+- **A** Only primary collation differences are considered.
+- **B** All possible differences, including case and variants, must be considered.
+- **C** Strings are compared only by Java UTF-16 code-unit values.
+- **D** The Collator stops being locale-sensitive.
+
+### Answer key and reasons
+
+- **A: correct.** That is the definition of PRIMARY strength.
+- **B: incorrect.** That describes stronger comparison levels, not PRIMARY.
+- **C: incorrect.** Collator applies locale-sensitive collation rules.
+- **D: incorrect.** Strength changes which collation differences matter; it does not disable locale-sensitive collation.
+
+### Explanation
+
+PRIMARY strength compares only primary differences. Secondary and tertiary differences, such as many accent and case distinctions depending on the collation rules, are not considered at that strength.
+
+### Why this difficulty
+
+Tests the meaning of Collator strength levels rather than only basic locale selection.
+
+### References
+
+- [Collator.PRIMARY (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/Collator.html#PRIMARY)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 138. t10-currency-us-code
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.util.Currency;
+> import java.util.Locale;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     System.out.println(Currency.getInstance(Locale.US).getCurrencyCode());
+>   }
+> }
+> ```
+
+- **A** US
+- **B** USD
+- **C** $
+- **D** Dollar
+
+### Answer key and reasons
+
+- **A: incorrect.** US is the region code, not the currency code.
+- **B: correct.** USD is the ISO currency code for the United States dollar.
+- **C: incorrect.** That is a symbol, not the value returned by getCurrencyCode().
+- **D: incorrect.** getCurrencyCode returns the ISO code rather than a display name.
+
+### Explanation
+
+`Currency.getInstance(Locale.US)` resolves the currency used by the United States locale. Its ISO 4217 currency code is `USD`.
+
+### Why this difficulty
+
+Checks locale-to-currency lookup using a stable ISO currency code.
+
+### References
+
+- [Currency.getInstance(Locale) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Currency.html#getInstance(java.util.Locale))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+USD
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:a3689e4003c1638ba7b4cb620463c619e58bd8cedda3f07fe8a17bbb999f8bcb"`, `"verified": "sha256:a26cdf3a6e709124385d4d7eb9bff6b897a58ed5597fbab779b89849dbe81b21"`
+
+**Comments:**
+
+&nbsp;
+
+## 139. t10-datetimeformatter-locale-immutability
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -6518,7 +9525,7 @@ To record: `"digest": "sha256:a0f737bdcf04c1464c89dfaa58036be7287af8ec3bfde4b8b1
 
 &nbsp;
 
-## 93. t10-locale-builder-language-tag
+## 140. t10-locale-builder-language-tag
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -6592,7 +9599,7 @@ To record: `"digest": "sha256:bbc010b1c5eafda18d1edd11cb4c80b2da043bccb3749905d3
 
 &nbsp;
 
-## 94. t10-locale-default-categories
+## 141. t10-locale-default-categories
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
@@ -6648,7 +9655,7 @@ To record: `"digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145
 
 &nbsp;
 
-## 95. t10-locale-language-tag
+## 142. t10-locale-language-tag
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -6726,7 +9733,63 @@ To record: `"digest": "sha256:705582ca1e729220da81dd8a18408652f0ed6793c10aeb1945
 
 &nbsp;
 
-## 96. t10-locale-to-string
+## 143. t10-locale-root
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** multiple choice, select all that apply · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> Which statements about `Locale.ROOT` are correct? Select all that apply.
+
+- **A** It is the language-neutral root locale.
+- **B** It has no language or country component.
+- **C** It always equals Locale.getDefault().
+- **D** It represents the United States locale.
+
+### Answer key and reasons
+
+- **A: correct.** ROOT represents the root of the locale hierarchy.
+- **B: correct.** It is not tied to a particular language or region.
+- **C: incorrect.** The system/user default locale is independent of Locale.ROOT.
+- **D: incorrect.** Locale.US is the United States locale; ROOT is neutral.
+
+### Explanation
+
+`Locale.ROOT` is the language-neutral, country-neutral root locale. It is useful as a base locale for locale-sensitive operations that should not depend on a user's language or region.
+
+### Why this difficulty
+
+Tests the purpose of the root locale as a locale-neutral base rather than a user's regional preference.
+
+### References
+
+- [Locale.ROOT (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Locale.html#ROOT)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
+## 144. t10-locale-to-string
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -6801,7 +9864,7 @@ To record: `"digest": "sha256:52ba86a006fd5ca4762e840f473707568a5907be1fe1687faf
 
 &nbsp;
 
-## 97. t10-messageformat-apostrophe
+## 145. t10-messageformat-apostrophe
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -6857,7 +9920,7 @@ To record: `"digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff77526205400
 
 &nbsp;
 
-## 98. t10-numberformat-currency-instance
+## 146. t10-numberformat-currency-instance
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** easy · **Java release:** 21
@@ -6913,7 +9976,78 @@ To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed036187729787
 
 &nbsp;
 
-## 99. t10-resource-bundle-fallback
+## 147. t10-percent-format-us
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** easy · **Java release:** 21
+
+### As the learner sees it
+
+> What does this program print?
+>
+> ```java
+> import java.text.NumberFormat;
+> import java.util.Locale;
+>
+> public class Main {
+>   public static void main(String[] args) {
+>     System.out.println(NumberFormat.getPercentInstance(Locale.US).format(0.25));
+>   }
+> }
+> ```
+
+- **A** 0.25%
+- **B** 25%
+- **C** 2500%
+- **D** 25
+
+### Answer key and reasons
+
+- **A: incorrect.** Percent formatting scales the numeric value by 100.
+- **B: correct.** 0.25 represents twenty-five percent.
+- **C: incorrect.** The value is multiplied by 100 once, not by 10,000.
+- **D: incorrect.** The percent formatter includes the percent symbol.
+
+### Explanation
+
+The US percent formatter multiplies the numeric value by 100 and appends the percent sign using locale conventions. Formatting 0.25 produces `25%`.
+
+### Why this difficulty
+
+Tests a locale-explicit percentage formatter with an exact simple value.
+
+### References
+
+- [NumberFormat.getPercentInstance(Locale) (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/NumberFormat.html#getPercentInstance(java.util.Locale))
+
+### Verified by the build
+
+The code in the question compiles for Java 21 and prints:
+
+```text
+25%
+```
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:ccc0d3d7e6cf41fcabc6526ff72e3731a61acdec7a23047da01ce3e390792a64"`, `"verified": "sha256:72da55d317fd997b93138b8646a2238e806a4c4566d1e854277b5a583d8aef23"`
+
+**Comments:**
+
+&nbsp;
+
+## 148. t10-resource-bundle-fallback
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** hard · **Java release:** 21
@@ -6989,7 +10123,7 @@ To record: `"digest": "sha256:faaf1a0cb99cf50d4449d2f3dd1ff0b185c6b3661dd9700b1d
 
 &nbsp;
 
-## 100. t10-resourcebundle-missing-key
+## 149. t10-resourcebundle-missing-key
 
 **Topic:** Implementing localization (exam objective: "Implementing localization")  
 **Type:** single choice · **Difficulty:** medium · **Java release:** 21
@@ -7045,108 +10179,214 @@ To record: `"digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e44387
 
 &nbsp;
 
+## 150. t10-resourcebundle-parent-lookup
+
+**Topic:** Implementing localization (exam objective: "Implementing localization")  
+**Type:** single choice · **Difficulty:** medium · **Java release:** 21
+
+### As the learner sees it
+
+> A resolved `ResourceBundle` does not define key `title` itself, but its parent bundle does. What does `bundle.getString("title")` do?
+
+- **A** It returns the parent's value for title.
+- **B** It always throws MissingResourceException immediately.
+- **C** It returns null without checking the parent.
+- **D** It creates the key in the child bundle.
+
+### Answer key and reasons
+
+- **A: correct.** Missing keys are looked up through the parent chain.
+- **B: incorrect.** The exception occurs only after the key cannot be found through the relevant bundle chain.
+- **C: incorrect.** ResourceBundle lookup supports parent fallback.
+- **D: incorrect.** Lookup does not mutate resource bundles.
+
+### Explanation
+
+ResourceBundle lookup checks the bundle and, when necessary, its parent chain. If the parent defines the key, that value is returned.
+
+### Why this difficulty
+
+Tests hierarchical ResourceBundle lookup rather than assuming only the most specific bundle is consulted.
+
+### References
+
+- [ResourceBundle (Java SE 21)](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ResourceBundle.html)
+
+### Verified by the build
+
+Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+
+### Review
+
+
+- [ ] There is one defensible interpretation of the prompt.
+- [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
+- [ ] There is no hidden dependency on the environment or on unspecified behavior.
+- [ ] The wrong options are plausible, and not tricks unrelated to the objective.
+- [ ] Every explanation is complete and right, including the reasons for the wrong options.
+- [ ] Code and prose are readable with assistive technology.
+- [ ] The references let someone verify the answer independently.
+
+**Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
+
+To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a573de6bbbdb78b"`, `"verified": null`
+
+**Comments:**
+
+&nbsp;
+
 ## Summary of the review
 
 | # | Question | Verdict | Reviewer | Date |
 |---:|---|---|---|---|
 | 1 | `t01-bigdecimal-equals-scale` |  |  |  |
 | 2 | `t01-bigdecimal-nonterminating-divide` |  |  |  |
-| 3 | `t01-boolean-parseboolean` |  |  |  |
-| 4 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
-| 5 | `t01-localdate-plus-months` | approved | vinicius-ssantos | 2026-10-02 |
-| 6 | `t01-localdate-plus-years-leap-day` |  |  |  |
-| 7 | `t01-numeric-promotion-byte-addition` |  |  |  |
-| 8 | `t01-period-vs-duration` |  |  |  |
-| 9 | `t01-string-strip-vs-trim` |  |  |  |
-| 10 | `t01-stringbuilder-reverse-chain` |  |  |  |
-| 11 | `t02-case-null-pattern-switch` |  |  |  |
-| 12 | `t02-continue-for-update` |  |  |  |
-| 13 | `t02-do-while-first-execution` |  |  |  |
-| 14 | `t02-enhanced-for-variable-assignment` |  |  |  |
-| 15 | `t02-labeled-break-count` |  |  |  |
-| 16 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
-| 17 | `t02-pattern-variable-and-scope` |  |  |  |
-| 18 | `t02-switch-dominance` | approved | vinicius-ssantos | 2026-10-02 |
-| 19 | `t02-switch-rule-no-fallthrough` |  |  |  |
-| 20 | `t02-switch-yield-block` |  |  |  |
-| 21 | `t03-covariant-return` |  |  |  |
-| 22 | `t03-default-method-conflict` |  |  |  |
-| 23 | `t03-enum-constructor-access` |  |  |  |
-| 24 | `t03-overload-most-specific` |  |  |  |
-| 25 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
-| 26 | `t03-private-interface-method` |  |  |  |
-| 27 | `t03-record-compact-normalization` |  |  |  |
-| 28 | `t03-record-components-members` |  |  |  |
-| 29 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 30 | `t03-sealed-direct-subclass-modifier` |  |  |  |
-| 31 | `t04-autocloseable-close-contract` |  |  |  |
-| 32 | `t04-catch-order-unreachable` |  |  |  |
-| 33 | `t04-finally-abrupt-completion` |  |  |  |
-| 34 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
-| 35 | `t04-multicatch-parameter-reassignment` |  |  |  |
-| 36 | `t04-multicatch-related-types` |  |  |  |
-| 37 | `t04-overriding-checked-exception` |  |  |  |
-| 38 | `t04-suppressed-exception` |  |  |  |
-| 39 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
-| 40 | `t04-unchecked-exception-classes` |  |  |  |
-| 41 | `t05-arrays-aslist-backed` |  |  |  |
-| 42 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
-| 43 | `t05-list-first-last` |  |  |  |
-| 44 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
-| 45 | `t05-map-of-null-rejection` |  |  |  |
-| 46 | `t05-sequenced-collection-reversed` |  |  |  |
-| 47 | `t05-set-of-duplicate-elements` |  |  |  |
-| 48 | `t05-treeset-comparator-uniqueness` |  |  |  |
-| 49 | `t05-wildcard-extends-read` |  |  |  |
-| 50 | `t05-wildcard-super-integer` |  |  |  |
-| 51 | `t06-findfirst-ordered-stream` |  |  |  |
-| 52 | `t06-flatmap-flatten` |  |  |  |
-| 53 | `t06-intstream-average` |  |  |  |
-| 54 | `t06-lambda-effectively-final` |  |  |  |
-| 55 | `t06-reduce-empty-identity` |  |  |  |
-| 56 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 57 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
-| 58 | `t06-stream-single-use` |  |  |  |
-| 59 | `t06-string-length-method-reference` |  |  |  |
-| 60 | `t06-to-unmodifiable-list-null` |  |  |  |
-| 61 | `t07-automatic-module-jar` |  |  |  |
-| 62 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
-| 63 | `t07-implicit-java-base` |  |  |  |
-| 64 | `t07-java-module-launch` |  |  |  |
-| 65 | `t07-module-service-directives` |  |  |  |
-| 66 | `t07-open-module-semantics` |  |  |  |
-| 67 | `t07-qualified-exports` |  |  |  |
-| 68 | `t07-requires-static` |  |  |  |
-| 69 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
-| 70 | `t07-unnamed-module-isnamed` |  |  |  |
-| 71 | `t08-atomicinteger-update-and-get` |  |  |  |
-| 72 | `t08-completablefuture-join-vs-get` |  |  |  |
-| 73 | `t08-concurrenthashmap-null` |  |  |  |
-| 74 | `t08-executor-close` | approved | vinicius-ssantos | 2026-10-02 |
-| 75 | `t08-start-virtual-thread` |  |  |  |
-| 76 | `t08-synchronized-method-lock` |  |  |  |
-| 77 | `t08-synchronized-reentrant` |  |  |  |
-| 78 | `t08-thread-interrupted-clears` |  |  |  |
-| 79 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
-| 80 | `t08-volatile-increment` |  |  |  |
-| 81 | `t09-bufferedreader-readline` |  |  |  |
-| 82 | `t09-files-copy-existing-target` |  |  |  |
-| 83 | `t09-files-lines-close` |  |  |  |
-| 84 | `t09-path-normalize-namecount` |  |  |  |
-| 85 | `t09-path-resolve-absolute` |  |  |  |
-| 86 | `t09-randomaccessfile-seek` |  |  |  |
-| 87 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
-| 88 | `t09-reader-vs-inputstream` |  |  |  |
-| 89 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 90 | `t09-serialization-transient-static` |  |  |  |
-| 91 | `t10-collator-locale-sensitive` |  |  |  |
-| 92 | `t10-datetimeformatter-locale-immutability` |  |  |  |
-| 93 | `t10-locale-builder-language-tag` |  |  |  |
-| 94 | `t10-locale-default-categories` |  |  |  |
-| 95 | `t10-locale-language-tag` |  |  |  |
-| 96 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
-| 97 | `t10-messageformat-apostrophe` |  |  |  |
-| 98 | `t10-numberformat-currency-instance` |  |  |  |
-| 99 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
-| 100 | `t10-resourcebundle-missing-key` |  |  |  |
+| 3 | `t01-bigdecimal-striptrailingzeros-scale` |  |  |  |
+| 4 | `t01-boolean-parseboolean` |  |  |  |
+| 5 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
+| 6 | `t01-integer-division-assignment` |  |  |  |
+| 7 | `t01-localdate-invalid-withday` |  |  |  |
+| 8 | `t01-localdate-plus-months` | approved | vinicius-ssantos | 2026-10-02 |
+| 9 | `t01-localdate-plus-years-leap-day` |  |  |  |
+| 10 | `t01-math-round-negative` |  |  |  |
+| 11 | `t01-numeric-promotion-byte-addition` |  |  |  |
+| 12 | `t01-period-vs-duration` |  |  |  |
+| 13 | `t01-string-repeat` |  |  |  |
+| 14 | `t01-string-strip-vs-trim` |  |  |  |
+| 15 | `t01-stringbuilder-reverse-chain` |  |  |  |
+| 16 | `t02-case-null-pattern-switch` |  |  |  |
+| 17 | `t02-continue-for-update` |  |  |  |
+| 18 | `t02-dangling-else` |  |  |  |
+| 19 | `t02-do-while-first-execution` |  |  |  |
+| 20 | `t02-enhanced-for-variable-assignment` |  |  |  |
+| 21 | `t02-for-update-order` |  |  |  |
+| 22 | `t02-labeled-break-count` |  |  |  |
+| 23 | `t02-labeled-continue` |  |  |  |
+| 24 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
+| 25 | `t02-pattern-variable-and-scope` |  |  |  |
+| 26 | `t02-switch-dominance` | approved | vinicius-ssantos | 2026-10-02 |
+| 27 | `t02-switch-expression-exhaustive` |  |  |  |
+| 28 | `t02-switch-null-default-combination` |  |  |  |
+| 29 | `t02-switch-rule-no-fallthrough` |  |  |  |
+| 30 | `t02-switch-yield-block` |  |  |  |
+| 31 | `t03-class-method-beats-default` |  |  |  |
+| 32 | `t03-constructor-order-super-first` |  |  |  |
+| 33 | `t03-covariant-return` |  |  |  |
+| 34 | `t03-default-method-conflict` |  |  |  |
+| 35 | `t03-enum-constructor-access` |  |  |  |
+| 36 | `t03-generic-erasure-overload` |  |  |  |
+| 37 | `t03-overload-most-specific` |  |  |  |
+| 38 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
+| 39 | `t03-private-interface-method` |  |  |  |
+| 40 | `t03-record-compact-normalization` |  |  |  |
+| 41 | `t03-record-components-members` |  |  |  |
+| 42 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 43 | `t03-record-pattern-destructuring` |  |  |  |
+| 44 | `t03-sealed-direct-subclass-modifier` |  |  |  |
+| 45 | `t03-static-method-hiding` |  |  |  |
+| 46 | `t04-autocloseable-close-contract` |  |  |  |
+| 47 | `t04-catch-order-unreachable` |  |  |  |
+| 48 | `t04-finally-abrupt-completion` |  |  |  |
+| 49 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
+| 50 | `t04-finally-return-overrides` |  |  |  |
+| 51 | `t04-multicatch-parameter-reassignment` |  |  |  |
+| 52 | `t04-multicatch-related-types` |  |  |  |
+| 53 | `t04-overriding-checked-exception` |  |  |  |
+| 54 | `t04-precise-rethrow` |  |  |  |
+| 55 | `t04-suppressed-exception` |  |  |  |
+| 56 | `t04-suppressed-order-multiple-resources` |  |  |  |
+| 57 | `t04-throw-null` |  |  |  |
+| 58 | `t04-try-resource-effectively-final` |  |  |  |
+| 59 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
+| 60 | `t04-unchecked-exception-classes` |  |  |  |
+| 61 | `t05-arrays-aslist-backed` |  |  |  |
+| 62 | `t05-arrays-binarysearch-insertion-point` |  |  |  |
+| 63 | `t05-generic-invariance` |  |  |  |
+| 64 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
+| 65 | `t05-list-first-last` |  |  |  |
+| 66 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
+| 67 | `t05-map-merge-null-removes` |  |  |  |
+| 68 | `t05-map-of-null-rejection` |  |  |  |
+| 69 | `t05-sequenced-collection-reversed` |  |  |  |
+| 70 | `t05-sequencedmap-first-entry` |  |  |  |
+| 71 | `t05-set-of-duplicate-elements` |  |  |  |
+| 72 | `t05-treeset-comparator-uniqueness` |  |  |  |
+| 73 | `t05-unmodifiable-list-view` |  |  |  |
+| 74 | `t05-wildcard-extends-read` |  |  |  |
+| 75 | `t05-wildcard-super-integer` |  |  |  |
+| 76 | `t06-collectors-tomap-duplicate-key` |  |  |  |
+| 77 | `t06-findfirst-ordered-stream` |  |  |  |
+| 78 | `t06-flatmap-flatten` |  |  |  |
+| 79 | `t06-functional-interface-extra-methods` |  |  |  |
+| 80 | `t06-generate-limit-count` |  |  |  |
+| 81 | `t06-intstream-average` |  |  |  |
+| 82 | `t06-lambda-effectively-final` |  |  |  |
+| 83 | `t06-lambda-this-enclosing-instance` |  |  |  |
+| 84 | `t06-parallel-foreachordered` |  |  |  |
+| 85 | `t06-reduce-empty-identity` |  |  |  |
+| 86 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 87 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
+| 88 | `t06-stream-single-use` |  |  |  |
+| 89 | `t06-string-length-method-reference` |  |  |  |
+| 90 | `t06-to-unmodifiable-list-null` |  |  |  |
+| 91 | `t07-automatic-module-jar` |  |  |  |
+| 92 | `t07-export-does-not-make-type-public` |  |  |  |
+| 93 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
+| 94 | `t07-implicit-java-base` |  |  |  |
+| 95 | `t07-import-wildcard-no-subpackages` |  |  |  |
+| 96 | `t07-java-module-launch` |  |  |  |
+| 97 | `t07-module-service-directives` |  |  |  |
+| 98 | `t07-object-module-name` |  |  |  |
+| 99 | `t07-open-module-semantics` |  |  |  |
+| 100 | `t07-qualified-exports` |  |  |  |
+| 101 | `t07-requires-static` |  |  |  |
+| 102 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
+| 103 | `t07-static-import-member` |  |  |  |
+| 104 | `t07-unnamed-module-isnamed` |  |  |  |
+| 105 | `t07-unnamed-package-import` |  |  |  |
+| 106 | `t08-atomic-compare-and-set` |  |  |  |
+| 107 | `t08-atomicinteger-update-and-get` |  |  |  |
+| 108 | `t08-completablefuture-join-vs-get` |  |  |  |
+| 109 | `t08-computeifabsent-null-result` |  |  |  |
+| 110 | `t08-concurrenthashmap-null` |  |  |  |
+| 111 | `t08-countdownlatch-count` |  |  |  |
+| 112 | `t08-executor-close` | approved | vinicius-ssantos | 2026-10-02 |
+| 113 | `t08-reentrantlock-finally` |  |  |  |
+| 114 | `t08-start-virtual-thread` |  |  |  |
+| 115 | `t08-synchronized-method-lock` |  |  |  |
+| 116 | `t08-synchronized-reentrant` |  |  |  |
+| 117 | `t08-thread-interrupted-clears` |  |  |  |
+| 118 | `t08-virtual-thread-builder-unstarted` |  |  |  |
+| 119 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
+| 120 | `t08-volatile-increment` |  |  |  |
+| 121 | `t09-bufferedreader-readline` |  |  |  |
+| 122 | `t09-dataoutput-readutf` |  |  |  |
+| 123 | `t09-files-copy-existing-target` |  |  |  |
+| 124 | `t09-files-lines-close` |  |  |  |
+| 125 | `t09-files-readstring-utf8` |  |  |  |
+| 126 | `t09-files-walk-close` |  |  |  |
+| 127 | `t09-path-normalize-namecount` |  |  |  |
+| 128 | `t09-path-relativize` |  |  |  |
+| 129 | `t09-path-resolve-absolute` |  |  |  |
+| 130 | `t09-randomaccessfile-seek` |  |  |  |
+| 131 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
+| 132 | `t09-reader-vs-inputstream` |  |  |  |
+| 133 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
+| 134 | `t09-serialization-serialversionuid` |  |  |  |
+| 135 | `t09-serialization-transient-static` |  |  |  |
+| 136 | `t10-collator-locale-sensitive` |  |  |  |
+| 137 | `t10-collator-primary-strength` |  |  |  |
+| 138 | `t10-currency-us-code` |  |  |  |
+| 139 | `t10-datetimeformatter-locale-immutability` |  |  |  |
+| 140 | `t10-locale-builder-language-tag` |  |  |  |
+| 141 | `t10-locale-default-categories` |  |  |  |
+| 142 | `t10-locale-language-tag` |  |  |  |
+| 143 | `t10-locale-root` |  |  |  |
+| 144 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
+| 145 | `t10-messageformat-apostrophe` |  |  |  |
+| 146 | `t10-numberformat-currency-instance` |  |  |  |
+| 147 | `t10-percent-format-us` |  |  |  |
+| 148 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
+| 149 | `t10-resourcebundle-missing-key` |  |  |  |
+| 150 | `t10-resourcebundle-parent-lookup` |  |  |  |
 

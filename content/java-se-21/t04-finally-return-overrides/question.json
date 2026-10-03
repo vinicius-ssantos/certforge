@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests that abrupt completion of finally by return replaces a pending return from the try block.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The try block prepares to return 1, but the finally block itself returns 2. Abrupt completion of finally replaces the pending return from try, so the method returns 2.",
+  "options": [
+    {
+      "key": "A",
+      "text": "1",
+      "correct": false,
+      "explanation": "The pending return from try is discarded when finally returns."
+    },
+    {
+      "key": "B",
+      "text": "2",
+      "correct": true,
+      "explanation": "The return from finally determines the method result."
+    },
+    {
+      "key": "C",
+      "text": "12",
+      "correct": false,
+      "explanation": "Only one value is returned from the method."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because finally cannot return.",
+      "correct": false,
+      "explanation": "A return in finally is legal, though often discouraged because it replaces prior abrupt completion."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.20.2 Execution of try-finally and try-catch-finally",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.20.2"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests Math.round's exact definition for a negative half value, which is often confused with rounding away from zero.",
+  "prompt": "What value is returned by `Math.round(-1.5d)`?",
+  "explanation": "`Math.round(double)` is equivalent to taking the floor of `a + 0.5` and converting to long. For -1.5, that gives floor(-1.0), which is -1.",
+  "options": [
+    {
+      "key": "A",
+      "text": "-2",
+      "correct": false,
+      "explanation": "Math.round does not round negative halves away from zero."
+    },
+    {
+      "key": "B",
+      "text": "-1",
+      "correct": true,
+      "explanation": "The specified calculation yields -1 for -1.5."
+    },
+    {
+      "key": "C",
+      "text": "0",
+      "correct": false,
+      "explanation": "The value remains negative after rounding."
+    },
+    {
+      "key": "D",
+      "text": "It throws ArithmeticException.",
+      "correct": false,
+      "explanation": "This finite input is valid for Math.round."
+    }
+  ],
+  "references": [
+    {
+      "title": "Math.round(double) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Math.html#round(double)"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes static method hiding from dynamic dispatch of overridden instance methods.",
+  "prompt": "A superclass and subclass declare static methods with the same signature. If a variable has the superclass type but holds a subclass instance, which declaration is selected by `variable.method()`?",
+  "explanation": "Static methods are hidden, not overridden. Method selection is based on the compile-time type of the qualifying expression, so the superclass static method is selected.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The subclass method, because the object is a subclass instance.",
+      "correct": false,
+      "explanation": "That dynamic dispatch rule applies to overridden instance methods, not hidden static methods."
+    },
+    {
+      "key": "B",
+      "text": "The superclass method, because the variable's compile-time type controls static method selection.",
+      "correct": true,
+      "explanation": "Static methods are resolved from the qualifying type."
+    },
+    {
+      "key": "C",
+      "text": "Both methods are invoked.",
+      "correct": false,
+      "explanation": "Only one method invocation occurs."
+    },
+    {
+      "key": "D",
+      "text": "The call is always ambiguous.",
+      "correct": false,
+      "explanation": "The compile-time type resolves the hidden static method."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.8.2 Hiding (by Class Methods)",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.2"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Separates module-level package export from Java language access modifiers on individual types.",
+  "prompt": "A named module exports package `p`, but class `p.Helper` has package-private access. Can code in another module access `Helper` merely because `p` is exported?",
+  "explanation": "No. Exporting a package makes its public and otherwise-accessible API available subject to module readability; it does not change Java access modifiers on individual declarations.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Yes; export makes every type in the package public.",
+      "correct": false,
+      "explanation": "Module export does not rewrite the class's access modifier."
+    },
+    {
+      "key": "B",
+      "text": "No; Helper remains package-private.",
+      "correct": true,
+      "explanation": "Normal Java accessibility rules still apply inside an exported package."
+    },
+    {
+      "key": "C",
+      "text": "Yes, but only through reflection.",
+      "correct": false,
+      "explanation": "An export by itself does not grant deep reflective access to non-public members."
+    },
+    {
+      "key": "D",
+      "text": "No, because exported packages can never be accessed by another module.",
+      "correct": false,
+      "explanation": "Export exists precisely to expose accessible package API to reading modules."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.7.2 Exported and Opened Packages",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.7.2"
+    }
+  ]
+}

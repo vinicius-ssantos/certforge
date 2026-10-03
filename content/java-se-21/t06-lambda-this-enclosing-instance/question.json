@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes lambda lexical scoping from anonymous-class scoping.",
+  "prompt": "Inside an instance method, what does `this` refer to within a lambda expression declared by that method?",
+  "explanation": "Lambda bodies are lexically scoped. They do not introduce a new `this`; `this` refers to the same enclosing instance as it does outside the lambda.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A new hidden lambda object.",
+      "correct": false,
+      "explanation": "A lambda does not introduce its own this binding."
+    },
+    {
+      "key": "B",
+      "text": "The enclosing instance.",
+      "correct": true,
+      "explanation": "Lambda expressions use lexical this semantics."
+    },
+    {
+      "key": "C",
+      "text": "The current Thread object.",
+      "correct": false,
+      "explanation": "Thread identity is unrelated to the meaning of this."
+    },
+    {
+      "key": "D",
+      "text": "this is forbidden inside lambdas.",
+      "correct": false,
+      "explanation": "It is allowed and refers to the enclosing context."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 15.27.2 Lambda Body",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-15.html#jls-15.27.2"
+    }
+  ]
+}

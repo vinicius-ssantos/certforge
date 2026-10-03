@@ -1,0 +1,41 @@
+{
+  "type": "MULTIPLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the formal functional-interface definition rather than the oversimplified rule that an interface must contain exactly one method total.",
+  "prompt": "Which declarations can coexist with the single function method in a functional interface without preventing it from being functional? Select all that apply.",
+  "explanation": "A functional interface has one abstract method for the purpose of lambda conversion. It may also declare default methods and static methods, and certain methods corresponding to public methods of Object do not count as additional function methods.",
+  "options": [
+    {
+      "key": "A",
+      "text": "default methods",
+      "correct": true,
+      "explanation": "Default methods have implementations and do not add abstract function methods."
+    },
+    {
+      "key": "B",
+      "text": "static methods",
+      "correct": true,
+      "explanation": "Static interface methods are not instance abstract methods."
+    },
+    {
+      "key": "C",
+      "text": "an abstract declaration matching a public method of Object, such as boolean equals(Object)",
+      "correct": true,
+      "explanation": "Such declarations are excluded from the count used to determine the function method."
+    },
+    {
+      "key": "D",
+      "text": "two unrelated abstract instance methods with different signatures",
+      "correct": false,
+      "explanation": "That generally leaves more than one abstract method and prevents functional-interface status."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 9.8 Functional Interfaces",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-9.html#jls-9.8"
+    }
+  ]
+}

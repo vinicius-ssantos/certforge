@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the purpose of serialVersionUID in Java's built-in serialization compatibility mechanism.",
+  "prompt": "What is the main role of a declared `serialVersionUID` in a `Serializable` class?",
+  "explanation": "The serialization runtime associates a serial version UID with each serializable class and uses it during deserialization to verify compatibility between the sender's and receiver's class versions.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It uniquely identifies each individual object instance.",
+      "correct": false,
+      "explanation": "All instances of a class share the class's serial version UID."
+    },
+    {
+      "key": "B",
+      "text": "It participates in checking serialized-class version compatibility.",
+      "correct": true,
+      "explanation": "A mismatched UID can cause InvalidClassException during deserialization."
+    },
+    {
+      "key": "C",
+      "text": "It encrypts the serialized byte stream.",
+      "correct": false,
+      "explanation": "serialVersionUID provides no encryption."
+    },
+    {
+      "key": "D",
+      "text": "It forces every field to be serialized, including static fields.",
+      "correct": false,
+      "explanation": "It does not change the default field-selection rules."
+    }
+  ],
+  "references": [
+    {
+      "title": "Serializable (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/Serializable.html"
+    }
+  ]
+}

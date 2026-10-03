@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000010",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests a locale-explicit percentage formatter with an exact simple value.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The US percent formatter multiplies the numeric value by 100 and appends the percent sign using locale conventions. Formatting 0.25 produces `25%`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0.25%",
+      "correct": false,
+      "explanation": "Percent formatting scales the numeric value by 100."
+    },
+    {
+      "key": "B",
+      "text": "25%",
+      "correct": true,
+      "explanation": "0.25 represents twenty-five percent."
+    },
+    {
+      "key": "C",
+      "text": "2500%",
+      "correct": false,
+      "explanation": "The value is multiplied by 100 once, not by 10,000."
+    },
+    {
+      "key": "D",
+      "text": "25",
+      "correct": false,
+      "explanation": "The percent formatter includes the percent symbol."
+    }
+  ],
+  "references": [
+    {
+      "title": "NumberFormat.getPercentInstance(Locale) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/text/NumberFormat.html#getPercentInstance(java.util.Locale)"
+    }
+  ]
+}

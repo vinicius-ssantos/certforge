@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests ConcurrentHashMap.computeIfAbsent semantics when the mapping function declines to create a value by returning null.",
+  "prompt": "For a `ConcurrentHashMap<String, Integer> map` with no mapping for `x`, what is the result if `map.computeIfAbsent(\"x\", k -> null)` is called?",
+  "explanation": "If the mapping function returns null, no mapping is established for the key and the method returns null.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The key x is mapped to null.",
+      "correct": false,
+      "explanation": "ConcurrentHashMap does not permit null values, and a null computed result means no mapping is recorded."
+    },
+    {
+      "key": "B",
+      "text": "No mapping is added and the method returns null.",
+      "correct": true,
+      "explanation": "A null mapping-function result leaves the key absent."
+    },
+    {
+      "key": "C",
+      "text": "The key is mapped to 0 automatically.",
+      "correct": false,
+      "explanation": "No default numeric value is synthesized."
+    },
+    {
+      "key": "D",
+      "text": "The map is cleared.",
+      "correct": false,
+      "explanation": "The operation concerns only the requested key."
+    }
+  ],
+  "references": [
+    {
+      "title": "ConcurrentHashMap.computeIfAbsent(K, Function) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html#computeIfAbsent(K,java.util.function.Function)"
+    }
+  ]
+}

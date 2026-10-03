@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks CountDownLatch's one-way count semantics without introducing nondeterministic thread scheduling.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The latch starts at 2. Each `countDown()` decrements the count until it reaches zero. After two calls, `getCount()` returns 0.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0",
+      "correct": true,
+      "explanation": "Two countdowns reduce the initial count of 2 to zero."
+    },
+    {
+      "key": "B",
+      "text": "1",
+      "correct": false,
+      "explanation": "That would be the value after only one countDown call."
+    },
+    {
+      "key": "C",
+      "text": "2",
+      "correct": false,
+      "explanation": "The count changes when countDown is invoked."
+    },
+    {
+      "key": "D",
+      "text": "-1",
+      "correct": false,
+      "explanation": "A CountDownLatch count does not become negative."
+    }
+  ],
+  "references": [
+    {
+      "title": "CountDownLatch (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CountDownLatch.html"
+    }
+  ]
+}

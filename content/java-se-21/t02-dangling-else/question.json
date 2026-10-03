@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests the classic grammar rule for matching an else to the nearest unmatched if.",
+  "prompt": "In nested `if` statements without braces, which `if` does an `else` associate with?",
+  "explanation": "The Java grammar associates an `else` with the nearest preceding `if` that is allowed to receive it and does not already have an `else`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Always the outermost if.",
+      "correct": false,
+      "explanation": "That would require braces or restructuring when the nearest if should not receive the else."
+    },
+    {
+      "key": "B",
+      "text": "The nearest unmatched if.",
+      "correct": true,
+      "explanation": "This is the standard dangling-else rule."
+    },
+    {
+      "key": "C",
+      "text": "Whichever if has the longer condition.",
+      "correct": false,
+      "explanation": "Condition length has no role in parsing."
+    },
+    {
+      "key": "D",
+      "text": "It is always a compile-time ambiguity.",
+      "correct": false,
+      "explanation": "The grammar resolves the association deterministically."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.5 Statements",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.5"
+    }
+  ]
+}

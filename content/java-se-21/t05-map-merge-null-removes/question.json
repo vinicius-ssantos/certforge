@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests Map.merge's removal rule when the remapping function returns null.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The key `x` already has a non-null value. `merge` invokes the remapping function; because that function returns null, the mapping is removed. `containsKey(\"x\")` is therefore false.",
+  "options": [
+    {
+      "key": "A",
+      "text": "true",
+      "correct": false,
+      "explanation": "A null remapping result removes the existing mapping."
+    },
+    {
+      "key": "B",
+      "text": "false",
+      "correct": true,
+      "explanation": "The mapping for x is removed by merge."
+    },
+    {
+      "key": "C",
+      "text": "null",
+      "correct": false,
+      "explanation": "containsKey returns primitive boolean."
+    },
+    {
+      "key": "D",
+      "text": "It throws NullPointerException because the remapping function returns null.",
+      "correct": false,
+      "explanation": "A null result is a defined signal to remove the mapping."
+    }
+  ],
+  "references": [
+    {
+      "title": "Map.merge(K, V, BiFunction) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html#merge(K,V,java.util.function.BiFunction)"
+    }
+  ]
+}

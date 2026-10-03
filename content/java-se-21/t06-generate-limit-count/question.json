@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks how a short-circuiting size bound makes an otherwise infinite generated stream finite.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`Stream.generate` creates an unbounded stream, but `limit(3)` truncates it to at most three elements. `count()` therefore returns 3.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0",
+      "correct": false,
+      "explanation": "The supplier can provide elements and limit allows three of them."
+    },
+    {
+      "key": "B",
+      "text": "3",
+      "correct": true,
+      "explanation": "limit makes the stream finite with three elements."
+    },
+    {
+      "key": "C",
+      "text": "The program never terminates.",
+      "correct": false,
+      "explanation": "limit bounds the otherwise infinite stream before count consumes it."
+    },
+    {
+      "key": "D",
+      "text": "It throws IllegalStateException because generate is infinite.",
+      "correct": false,
+      "explanation": "Infinite streams are valid when paired with a short-circuiting or bounding operation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stream.generate(Supplier) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#generate(java.util.function.Supplier)"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires tracing a labeled continue that skips the remainder of the inner loop and advances the outer loop.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "For each outer iteration, `j == 0` increments `count` once. When `j == 1`, `continue outer` starts the next outer iteration immediately. That happens three times, so the count is 3.",
+  "options": [
+    {
+      "key": "A",
+      "text": "3",
+      "correct": true,
+      "explanation": "Exactly one increment occurs for each of the three outer-loop iterations."
+    },
+    {
+      "key": "B",
+      "text": "6",
+      "correct": false,
+      "explanation": "The labeled continue prevents the `j == 1` and `j == 2` paths from incrementing."
+    },
+    {
+      "key": "C",
+      "text": "9",
+      "correct": false,
+      "explanation": "Most inner-loop iterations are skipped by the labeled continue."
+    },
+    {
+      "key": "D",
+      "text": "0",
+      "correct": false,
+      "explanation": "The increment at `j == 0` happens before the continue condition is reached."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.16 The continue Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.16"
+    }
+  ]
+}

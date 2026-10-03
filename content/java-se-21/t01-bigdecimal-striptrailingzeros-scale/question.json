@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the non-obvious fact that stripping trailing zeroes can produce a negative scale.",
+  "prompt": "What is the scale of `new BigDecimal(\"1000\").stripTrailingZeros()`?",
+  "explanation": "`stripTrailingZeros()` removes insignificant trailing zeroes while preserving numerical value. `1000` can be represented as `1E+3`, whose scale is `-3`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "0",
+      "correct": false,
+      "explanation": "The original value has scale 0, but stripping trailing zeroes can change the scale."
+    },
+    {
+      "key": "B",
+      "text": "3",
+      "correct": false,
+      "explanation": "A positive scale would place digits to the right of the decimal point."
+    },
+    {
+      "key": "C",
+      "text": "-3",
+      "correct": true,
+      "explanation": "The stripped representation is numerically 1 × 10^3, represented with scale -3."
+    },
+    {
+      "key": "D",
+      "text": "The operation throws ArithmeticException.",
+      "correct": false,
+      "explanation": "Removing trailing zeroes is defined for this value."
+    }
+  ],
+  "references": [
+    {
+      "title": "BigDecimal.stripTrailingZeros() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/math/BigDecimal.html#stripTrailingZeros()"
+    }
+  ]
+}

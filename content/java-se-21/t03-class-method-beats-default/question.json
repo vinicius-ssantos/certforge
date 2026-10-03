@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the class-over-interface precedence rule for inherited concrete instance methods and interface defaults.",
+  "prompt": "A superclass provides a concrete instance method `run()`, and an implemented interface provides a default `run()` with the same signature. Which implementation is inherited by the subclass if it declares no `run()`?",
+  "explanation": "A concrete method inherited from a class takes precedence over an interface default method with the same signature. This is commonly summarized as 'class wins'.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The interface default always wins.",
+      "correct": false,
+      "explanation": "Defaults do not override an applicable concrete class method."
+    },
+    {
+      "key": "B",
+      "text": "The superclass method wins.",
+      "correct": true,
+      "explanation": "Class methods take precedence over interface defaults."
+    },
+    {
+      "key": "C",
+      "text": "The subclass must always override run() or compilation fails.",
+      "correct": false,
+      "explanation": "There is no conflict requiring an override when a concrete class method already resolves it."
+    },
+    {
+      "key": "D",
+      "text": "Both implementations run in declaration order.",
+      "correct": false,
+      "explanation": "Method invocation selects one implementation."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 8.4.8.4 Inheriting Methods with Override-Equivalent Signatures",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.4"
+    }
+  ]
+}

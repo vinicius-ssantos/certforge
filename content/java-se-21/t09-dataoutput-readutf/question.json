@@ -1,0 +1,45 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the paired DataOutputStream/DataInputStream UTF methods using an in-memory deterministic stream.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`writeUTF` writes a length-prefixed modified UTF-8 representation that `readUTF` understands. Reading the bytes back reproduces the original string `Java`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Java",
+      "correct": true,
+      "explanation": "readUTF decodes the value written by writeUTF."
+    },
+    {
+      "key": "B",
+      "text": "4",
+      "correct": false,
+      "explanation": "The program prints the decoded string, not its length."
+    },
+    {
+      "key": "C",
+      "text": "J",
+      "correct": false,
+      "explanation": "readUTF reads the complete encoded string."
+    },
+    {
+      "key": "D",
+      "text": "It throws EOFException.",
+      "correct": false,
+      "explanation": "The byte array contains the complete output of writeUTF."
+    }
+  ],
+  "references": [
+    {
+      "title": "DataOutputStream.writeUTF(String) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/DataOutputStream.html#writeUTF(java.lang.String)"
+    },
+    {
+      "title": "DataInputStream.readUTF() (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/DataInputStream.html#readUTF()"
+    }
+  ]
+}

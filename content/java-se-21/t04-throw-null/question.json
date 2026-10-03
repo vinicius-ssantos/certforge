@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000004",
+  "javaRelease": 21,
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the special runtime behavior of a throw statement whose expression evaluates to null.",
+  "prompt": "What happens at runtime when the statement `throw null;` is executed?",
+  "explanation": "The null reference is permitted by the type rules for a throw expression, but attempting to throw it causes a `NullPointerException` at runtime.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It throws a NullPointerException.",
+      "correct": true,
+      "explanation": "The JVM reports a null throwable reference with NullPointerException."
+    },
+    {
+      "key": "B",
+      "text": "It silently returns from the method.",
+      "correct": false,
+      "explanation": "A throw statement never means normal return."
+    },
+    {
+      "key": "C",
+      "text": "It throws a generic Exception instance created automatically.",
+      "correct": false,
+      "explanation": "No replacement Exception object is created."
+    },
+    {
+      "key": "D",
+      "text": "It is always a compile-time error.",
+      "correct": false,
+      "explanation": "The null type is compatible with the reference-type requirement; the failure occurs at runtime."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.18 The throw Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.18"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000005",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks Java 21's SequencedMap encounter-order API using LinkedHashMap's insertion order.",
+  "prompt": "A `LinkedHashMap` receives mappings for keys `a`, `b`, and `c` in that order. What key is returned by `map.firstEntry().getKey()` in Java 21?",
+  "explanation": "LinkedHashMap has insertion encounter order by default and implements `SequencedMap`. `firstEntry()` returns the first mapping in that encounter order, whose key is `a`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "a",
+      "correct": true,
+      "explanation": "a is the first mapping in insertion encounter order."
+    },
+    {
+      "key": "B",
+      "text": "b",
+      "correct": false,
+      "explanation": "b is the second inserted key."
+    },
+    {
+      "key": "C",
+      "text": "c",
+      "correct": false,
+      "explanation": "c is the last inserted key."
+    },
+    {
+      "key": "D",
+      "text": "The result is unspecified because maps never have encounter order.",
+      "correct": false,
+      "explanation": "LinkedHashMap is specifically encounter-ordered and implements SequencedMap."
+    }
+  ],
+  "references": [
+    {
+      "title": "LinkedHashMap (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html"
+    },
+    {
+      "title": "SequencedMap (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/SequencedMap.html"
+    }
+  ]
+}

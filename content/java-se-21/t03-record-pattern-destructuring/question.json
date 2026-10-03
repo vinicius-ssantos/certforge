@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000003",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exercises Java 21 record patterns by destructuring a record directly in instanceof.",
+  "prompt": "What does this Java 21 program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The record pattern matches the `Point` instance and destructures its two components into `x` and `y`. Their sum is 5.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2",
+      "correct": false,
+      "explanation": "Only the x component is 2; the program adds both components."
+    },
+    {
+      "key": "B",
+      "text": "3",
+      "correct": false,
+      "explanation": "Only the y component is 3."
+    },
+    {
+      "key": "C",
+      "text": "5",
+      "correct": true,
+      "explanation": "The record pattern binds x=2 and y=3, then adds them."
+    },
+    {
+      "key": "D",
+      "text": "It does not compile because record patterns are not final in Java 21.",
+      "correct": false,
+      "explanation": "Record patterns are a final Java 21 language feature."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.30.2 Record Patterns",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.30.2"
+    }
+  ]
+}

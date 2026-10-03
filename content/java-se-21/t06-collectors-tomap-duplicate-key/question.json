@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000006",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the duplicate-key behavior of the two-function toMap collector when no merge function is supplied.",
+  "prompt": "What happens when `Collectors.toMap(keyMapper, valueMapper)` encounters two stream elements that map to the same key?",
+  "explanation": "The overload without a merge function does not define how to combine duplicate values. It throws `IllegalStateException` when duplicate keys are encountered.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The later value silently replaces the earlier one.",
+      "correct": false,
+      "explanation": "Replacement requires an explicit merge policy or a different collection strategy."
+    },
+    {
+      "key": "B",
+      "text": "The earlier value always wins silently.",
+      "correct": false,
+      "explanation": "No silent first-wins policy is defined."
+    },
+    {
+      "key": "C",
+      "text": "IllegalStateException is thrown.",
+      "correct": true,
+      "explanation": "Duplicate mapped keys are an error for this overload."
+    },
+    {
+      "key": "D",
+      "text": "Both values are automatically stored in a List.",
+      "correct": false,
+      "explanation": "toMap produces a Map value per key, not an automatic collection of duplicate values."
+    }
+  ],
+  "references": [
+    {
+      "title": "Collectors.toMap(Function, Function) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Collectors.html#toMap(java.util.function.Function,java.util.function.Function)"
+    }
+  ]
+}

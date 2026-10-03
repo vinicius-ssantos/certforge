@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000002",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the execution order of a basic for loop by making the update expression observable.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The body prints the current `i`, then the update expression increments it. The iterations therefore print 0, 1, and 2 before the condition fails at 3.",
+  "options": [
+    {
+      "key": "A",
+      "text": "012",
+      "correct": true,
+      "explanation": "Each body executes before the corresponding update expression."
+    },
+    {
+      "key": "B",
+      "text": "123",
+      "correct": false,
+      "explanation": "The update does not run before the first body execution."
+    },
+    {
+      "key": "C",
+      "text": "01",
+      "correct": false,
+      "explanation": "The body still executes when i is 2."
+    },
+    {
+      "key": "D",
+      "text": "0123",
+      "correct": false,
+      "explanation": "The loop stops once i becomes 3 because `i < 3` is then false."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 14.14.1 The basic for Statement",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-14.html#jls-14.14.1"
+    }
+  ]
+}

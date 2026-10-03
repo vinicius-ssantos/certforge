@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000007",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the scope of on-demand type imports and the fact that packages are not recursively imported.",
+  "prompt": "What does `import java.util.*;` make available by simple name?",
+  "explanation": "A type-import-on-demand declaration imports accessible top-level types declared directly in the named package. It does not recursively import types from subpackages such as `java.util.concurrent`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Accessible top-level types directly in java.util, but not types in java.util.concurrent.",
+      "correct": true,
+      "explanation": "On-demand package imports are not recursive."
+    },
+    {
+      "key": "B",
+      "text": "Every type in java.util and all of its subpackages.",
+      "correct": false,
+      "explanation": "Subpackages are separate packages and are not imported recursively."
+    },
+    {
+      "key": "C",
+      "text": "Only static members declared by classes in java.util.",
+      "correct": false,
+      "explanation": "That would involve static imports, not a type-import-on-demand declaration."
+    },
+    {
+      "key": "D",
+      "text": "Nothing; wildcard imports are not valid Java.",
+      "correct": false,
+      "explanation": "Type-import-on-demand declarations using `*` are valid."
+    }
+  ],
+  "references": [
+    {
+      "title": "JLS 7.5.2 Type-Import-on-Demand Declarations",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-7.html#jls-7.5.2"
+    }
+  ]
+}

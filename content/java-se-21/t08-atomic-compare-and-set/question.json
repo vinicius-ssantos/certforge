@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000008",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests both the success condition and side effect of an atomic compare-and-set operation.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "The AtomicInteger starts at 10. `compareAndSet(10, 20)` observes the expected value, updates it to 20, and returns true.",
+  "options": [
+    {
+      "key": "A",
+      "text": "true 20",
+      "correct": true,
+      "explanation": "The expected value matches, so the update succeeds and the new value is 20."
+    },
+    {
+      "key": "B",
+      "text": "false 10",
+      "correct": false,
+      "explanation": "That would happen if the expected value did not match."
+    },
+    {
+      "key": "C",
+      "text": "true 10",
+      "correct": false,
+      "explanation": "A successful compareAndSet also updates the stored value."
+    },
+    {
+      "key": "D",
+      "text": "false 20",
+      "correct": false,
+      "explanation": "A false result means the update did not occur."
+    }
+  ],
+  "references": [
+    {
+      "title": "AtomicInteger.compareAndSet(int, int) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html#compareAndSet(int,int)"
+    }
+  ]
+}

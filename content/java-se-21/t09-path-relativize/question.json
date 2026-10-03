@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000009",
+  "javaRelease": 21,
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests lexical path relativization without depending on the host file system.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "Both paths are relative and share the prefix `a`. To get from `a/b` to `a/c/d`, move up once from `b`, then descend through `c/d`, producing `../c/d`. The program prints the name count of that relative path, which is 3.",
+  "options": [
+    {
+      "key": "A",
+      "text": "2",
+      "correct": false,
+      "explanation": "The result also contains the parent element `..`, so it has three name elements."
+    },
+    {
+      "key": "B",
+      "text": "3",
+      "correct": true,
+      "explanation": "The relative result contains `..`, `c`, and `d`."
+    },
+    {
+      "key": "C",
+      "text": "4",
+      "correct": false,
+      "explanation": "The shared prefix `a` is not part of the relativized result."
+    },
+    {
+      "key": "D",
+      "text": "It throws IllegalArgumentException because the paths differ.",
+      "correct": false,
+      "explanation": "Relativize is defined for compatible path kinds such as these two relative paths."
+    }
+  ],
+  "references": [
+    {
+      "title": "Path.relativize(Path) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html#relativize(java.nio.file.Path)"
+    }
+  ]
+}

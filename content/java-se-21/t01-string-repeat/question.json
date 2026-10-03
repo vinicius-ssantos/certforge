@@ -1,0 +1,41 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000001",
+  "javaRelease": 21,
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the exact behavior of String.repeat, including that it repeats the whole receiver.",
+  "prompt": "What does this program print?\n\n```java\n{{snippet}}\n```",
+  "explanation": "`String.repeat(3)` concatenates three copies of the receiver string, so `ab` becomes `ababab`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ab3",
+      "correct": false,
+      "explanation": "repeat does not append the count."
+    },
+    {
+      "key": "B",
+      "text": "ababab",
+      "correct": true,
+      "explanation": "Three copies of `ab` are concatenated."
+    },
+    {
+      "key": "C",
+      "text": "aaabbb",
+      "correct": false,
+      "explanation": "The entire string is repeated each time; characters are not grouped."
+    },
+    {
+      "key": "D",
+      "text": "It throws IllegalArgumentException for counts greater than 1.",
+      "correct": false,
+      "explanation": "Positive repeat counts are valid."
+    }
+  ],
+  "references": [
+    {
+      "title": "String.repeat(int) (Java SE 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html#repeat(int)"
+    }
+  ]
+}
