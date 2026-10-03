@@ -8,6 +8,15 @@ import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { useTopicNames } from "../history/useTopicNames";
 
+function formatElapsed(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  return hours > 0
+    ? `${hours}h ${minutes}m ${seconds}s`
+    : `${minutes}m ${seconds}s`;
+}
+
 export function MockExamResultPage() {
   const { sessionId = "" } = useParams();
   const api = useApi();
@@ -31,6 +40,7 @@ export function MockExamResultPage() {
         <p className="mock-score-value">{data.percentage}%</p>
         <p>{data.correct} correct of {data.total} questions; {data.answered} answered.</p>
         <p>Practice target: {data.passingPercentage}% ({data.passingCorrectCount} correct).</p>
+        <p>Elapsed time: {formatElapsed(data.elapsedSeconds)}.</p>
         <p className="muted">This score describes this CertForge practice run; it is not a forecast of the real exam.</p>
       </section>
 
