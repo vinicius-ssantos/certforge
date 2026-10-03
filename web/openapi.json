@@ -231,7 +231,7 @@
               "type" : "string"
             },
             "maxItems" : 8,
-            "minItems" : 1,
+            "minItems" : 0,
             "type" : "array"
           }
         },
@@ -1183,7 +1183,7 @@
               "type" : "string"
             },
             "maxItems" : 8,
-            "minItems" : 0,
+            "minItems" : 1,
             "type" : "array"
           }
         },
