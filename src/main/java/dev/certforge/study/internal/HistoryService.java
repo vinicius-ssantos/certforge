@@ -16,7 +16,6 @@ import dev.certforge.study.internal.HistoryViews.AttemptHistoryItem;
 import dev.certforge.study.internal.HistoryViews.HistoricalOption;
 import dev.certforge.study.internal.HistoryViews.HistoricalQuestion;
 import dev.certforge.study.internal.HistoryViews.HistoricalReference;
-import dev.certforge.study.internal.HistoryViews.MockExamHistoryItem;
 import dev.certforge.study.internal.HistoryViews.SessionHistoryItem;
 import java.time.Clock;
 import java.util.List;
@@ -35,8 +34,6 @@ class HistoryService implements StudyEvidence {
 
   private final HistoryRepository history;
   private final StudyRepository sessionStore;
-  private final MockExamRepository mockExamStore;
-  private final MockExamService mockExamService;
   private final QuestionBank questionBank;
   private final CurrentActor currentActor;
   private final Clock clock;
@@ -44,15 +41,11 @@ class HistoryService implements StudyEvidence {
   HistoryService(
       HistoryRepository history,
       StudyRepository sessions,
-      MockExamRepository mockExamStore,
-      MockExamService mockExamService,
       QuestionBank questionBank,
       CurrentActor currentActor,
       Clock clock) {
     this.history = history;
     this.sessionStore = sessions;
-    this.mockExamStore = mockExamStore;
-    this.mockExamService = mockExamService;
     this.questionBank = questionBank;
     this.currentActor = currentActor;
     this.clock = clock;
@@ -83,21 +76,6 @@ class HistoryService implements StudyEvidence {
         row -> new PageCursor(row.createdAt(), row.id()));
   }
 
-  /** Terminal mock exams newest first. Active runs stay on the mock runner, not score history. */
-  @Transactional
-  Page<MockExamHistoryItem> mockExams(String cursor, Integer size) {
-    UUID learner = currentActor.require().value();
-    mockExamStore.expireDue(learner, clock.instant());
-    int limit = Page.size(size);
-    List<MockExamSession> rows =
-        mockExamStore.history(learner, PageCursor.decodeOrNull(cursor), limit + 1);
-    return Page.of(
-        rows,
-        limit,
-        this::toMockHistoryItem,
-        row -> new PageCursor(row.createdAt(), row.id()));
-  }
-
   /** Accepted attempts newest first, each with the revision that was answered. */
   Page<AttemptHistoryItem> attempts(UUID topicId, UUID sessionId, String cursor, Integer size) {
     UUID learner = currentActor.require().value();
@@ -105,24 +83,6 @@ class HistoryService implements StudyEvidence {
     List<AttemptRow> rows =
         history.attempts(learner, topicId, sessionId, PageCursor.decodeOrNull(cursor), limit + 1);
     return Page.of(rows, limit, this::toItem, row -> new PageCursor(row.submittedAt(), row.id()));
-  }
-
-  private MockExamHistoryItem toMockHistoryItem(MockExamSession session) {
-    var result = mockExamService.result(session.id());
-    return new MockExamHistoryItem(
-        result.id(),
-        result.trackId(),
-        result.status(),
-        result.total(),
-        result.answered(),
-        result.correct(),
-        result.percentage(),
-        result.passingPercentage(),
-        result.passed(),
-        result.elapsedSeconds(),
-        session.createdAt(),
-        session.closedAt(),
-        result.topics());
   }
 
   private AttemptHistoryItem toItem(AttemptRow row) {
