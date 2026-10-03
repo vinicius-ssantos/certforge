@@ -181,7 +181,7 @@ export function MockExamPage() {
           <p className="mock-legend muted">Answered · Flagged · Current</p>
         </aside>
 
-        <main className="mock-question" aria-labelledby="mock-question-heading">
+        <section className="mock-question" aria-labelledby="mock-question-heading">
           <h2 id="mock-question-heading">Question {current.position + 1} of {ordered.length}</h2>
           <button
             type="button"
@@ -208,7 +208,7 @@ export function MockExamPage() {
             <button type="button" className="secondary" disabled={current.position === ordered.length - 1}
               onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>Next</button>
           </div>
-        </main>
+        </section>
       </div>
 
       <div className="session-actions">
