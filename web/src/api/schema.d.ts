@@ -2325,7 +2325,7 @@ export interface operations {
     respond: {
         parameters: {
             query?: never;
-            header?: {
+            header: {
                 "Idempotency-Key": string;
             };
             path: {
