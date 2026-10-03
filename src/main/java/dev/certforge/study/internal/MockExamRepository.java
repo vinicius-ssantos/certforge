@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import dev.certforge.platform.PageCursor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -128,6 +129,27 @@ class MockExamRepository {
         .param(LEARNER, learnerId)
         .query(MockExamRepository::mapSession)
         .list();
+  }
+
+  /** Terminal mock exams newest first, strictly after the cursor. */
+  List<MockExamSession> history(UUID learnerId, PageCursor after, int limit) {
+    String paging =
+        after == null ? "" : " and (created_at, id) < (:cursorAt, :cursorId)";
+    var statement =
+        jdbc.sql(
+                SELECT_SESSION
+                    + " where learner_id = :learner and status <> 'IN_PROGRESS'"
+                    + paging
+                    + " order by created_at desc, id desc limit :limit")
+            .param(LEARNER, learnerId)
+            .param("limit", limit);
+    if (after != null) {
+      statement =
+          statement
+              .param("cursorAt", utc(after.at()))
+              .param("cursorId", after.id());
+    }
+    return statement.query(MockExamRepository::mapSession).list();
   }
 
   List<SnapshotQuestion> snapshot(UUID sessionId) {
