@@ -22,6 +22,10 @@ Encadear sessões normais quebraria essa garantia: o endpoint comum de tentativa
 | Questões por tópico | 5 |
 | Acertos necessários nessa meta | 34 |
 
+> **De onde vêm os três primeiros números não foi verificado.** A quantidade de questões, o limite de tempo e a meta de aprovação descrevem a prova da Oracle, não uma escolha do CertForge, e nada neste repositório registra uma fonte para eles nem uma data em que alguém os conferiu. Eles são apresentados ao aluno como a forma da prova real, e quem treina numa rodada de 50 questões em 120 minutos calibra o ritmo por ela — então errar aqui engana ativamente, não em silêncio.
+>
+> É a mesma lacuna que o texto dos objetivos tinha antes da #68, e é rastreada do mesmo jeito. Até ser conferido com a página de prova da Oracle em um navegador, trate os três como não verificados.
+
 Os valores ficam em `MockExamBlueprintCatalog`. Uma futura versão de exame precisa aderir explicitamente; ela nunca herda duração ou distribuição de outra prova por acidente.
 
 A distribuição uniforme de cinco questões por tópico é um blueprint de prática do CertForge. Ela dá exposição significativa a cada objetivo publicado e não é apresentada como ponderação oficial da Oracle.

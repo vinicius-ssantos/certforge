@@ -20,6 +20,10 @@ Chaining ordinary practice sessions would break that invariant: the ordinary att
 | Questions per topic | 5 |
 | Correct answers needed at that threshold | 34 |
 
+> **Where the first three numbers come from has not been verified.** The question count, the time limit and the pass threshold describe Oracle's exam, not a CertForge choice, and nothing in this repository records a source for them or a date on which a person checked them. They are presented to a learner as the shape of the real exam, and a learner practising a 50-question, 120-minute run calibrates their pacing to it, so being wrong here misleads actively rather than quietly.
+>
+> This is the same gap the exam objective wording had before #68, and it is tracked the same way. Until it is checked against Oracle's exam page in a browser, treat the three as unverified.
+
 The values live in `MockExamBlueprintCatalog`. A future exam version must opt in explicitly; it never inherits another exam's timing or distribution by accident.
 
 The equal five-per-topic distribution is a CertForge practice blueprint. It deliberately gives every published objective meaningful exposure and is not presented as an Oracle-published objective weighting.
