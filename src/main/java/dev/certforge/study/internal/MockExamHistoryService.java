@@ -15,8 +15,10 @@ import java.time.Clock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,11 +56,31 @@ class MockExamHistoryService {
     int limit = Page.size(size);
     List<MockExamSession> rows =
         repository.findByLearner(learner, PageCursor.decodeOrNull(cursor), limit + 1);
+    List<MockExamSession> visible = rows.size() > limit ? rows.subList(0, limit) : rows;
+
+    Map<UUID, List<SnapshotQuestion>> snapshots = new HashMap<>();
+    Set<QuestionRevisionId> revisionIds = new LinkedHashSet<>();
+    for (MockExamSession session : visible) {
+      if (session.status() != MockExamStatus.IN_PROGRESS) {
+        List<SnapshotQuestion> snapshot = repository.snapshot(session.id());
+        snapshots.put(session.id(), snapshot);
+        snapshot.forEach(item -> revisionIds.add(new QuestionRevisionId(item.revisionId())));
+      }
+    }
+    Map<QuestionRevisionId, RevisionEvidence> evidence =
+        revisionIds.isEmpty() ? Map.of() : questionBank.findRevisions(revisionIds);
+
     return Page.of(
-        rows, limit, this::toItem, session -> new PageCursor(session.createdAt(), session.id()));
+        rows,
+        limit,
+        session -> toItem(session, snapshots.get(session.id()), evidence),
+        session -> new PageCursor(session.createdAt(), session.id()));
   }
 
-  private MockExamHistoryItem toItem(MockExamSession session) {
+  private MockExamHistoryItem toItem(
+      MockExamSession session,
+      List<SnapshotQuestion> snapshot,
+      Map<QuestionRevisionId, RevisionEvidence> evidence) {
     if (session.status() == MockExamStatus.IN_PROGRESS) {
       return new MockExamHistoryItem(
           session.id(),
@@ -76,7 +98,9 @@ class MockExamHistoryService {
           List.of());
     }
 
-    List<SnapshotQuestion> snapshot = repository.snapshot(session.id());
+    if (snapshot == null) {
+      throw new IllegalStateException("Terminal mock " + session.id() + " has no snapshot");
+    }
     Map<Integer, MockExamResponse> responses = new HashMap<>();
     repository
         .responses(session.id())
@@ -90,7 +114,7 @@ class MockExamHistoryService {
       boolean isCorrect =
           answered
               && MockExamScoring.grade(
-                  evidence(item.revisionId()), response.selectedOptions());
+                  evidence(item.revisionId(), evidence), response.selectedOptions());
       if (isCorrect) {
         correct++;
       }
@@ -139,11 +163,13 @@ class MockExamHistoryService {
         List.copyOf(topics));
   }
 
-  private RevisionEvidence evidence(UUID revisionId) {
-    return questionBank
-        .findRevision(new QuestionRevisionId(revisionId))
-        .orElseThrow(
-            () -> new IllegalStateException("Revision " + revisionId + " is no longer readable"));
+  private static RevisionEvidence evidence(
+      UUID revisionId, Map<QuestionRevisionId, RevisionEvidence> evidence) {
+    RevisionEvidence found = evidence.get(new QuestionRevisionId(revisionId));
+    if (found == null) {
+      throw new IllegalStateException("Revision " + revisionId + " is no longer readable");
+    }
+    return found;
   }
 
   private static final class TopicAccumulator {
