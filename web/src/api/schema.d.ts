@@ -993,6 +993,9 @@ export interface components {
             /** Format: uuid */
             trackId: string;
         };
+        MockExamStartRequest: {
+            trackSlug: string;
+        };
         MockExamView: {
             /** Format: int32 */
             answeredCount: number;
@@ -1294,9 +1297,6 @@ export interface components {
         };
         SetMappingsRequest: {
             topics: components["schemas"]["MappingEntry"][];
-        };
-        MockExamStartRequest: {
-            trackSlug: string;
         };
         StartRequest: {
             /** Format: int32 */
