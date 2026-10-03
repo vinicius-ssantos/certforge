@@ -124,8 +124,7 @@ class MockExamRepository {
   }
 
   List<MockExamSession> findByLearner(UUID learnerId) {
-    return jdbc.sql(
-            SELECT_SESSION + " where learner_id = :learner order by created_at desc, id")
+    return jdbc.sql(SELECT_SESSION + " where learner_id = :learner order by created_at desc, id")
         .param(LEARNER, learnerId)
         .query(MockExamRepository::mapSession)
         .list();
@@ -177,8 +176,7 @@ class MockExamRepository {
   }
 
   Optional<MockExamResponse> findResponseByKey(UUID learnerId, String key) {
-    return jdbc.sql(
-            SELECT_RESPONSE + " where learner_id = :learner and idempotency_key = :key")
+    return jdbc.sql(SELECT_RESPONSE + " where learner_id = :learner and idempotency_key = :key")
         .param(LEARNER, learnerId)
         .param("key", key)
         .query(MockExamRepository::mapResponse)
