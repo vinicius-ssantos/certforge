@@ -16,22 +16,25 @@ record MockExamBlueprint(
     int passingPercentage,
     int questionsPerTopic) {
 
+  private static final int MINIMUM_POSITIVE_VALUE = 1;
+  private static final int MAXIMUM_PERCENTAGE = 100;
+
   MockExamBlueprint {
     Objects.requireNonNull(examCode, "examCode");
     Objects.requireNonNull(timeLimit, "timeLimit");
     if (examCode.isBlank()) {
       throw new IllegalArgumentException("examCode must not be blank");
     }
-    if (questionCount < 1) {
+    if (questionCount < MINIMUM_POSITIVE_VALUE) {
       throw new IllegalArgumentException("questionCount must be positive");
     }
     if (timeLimit.isZero() || timeLimit.isNegative()) {
       throw new IllegalArgumentException("timeLimit must be positive");
     }
-    if (passingPercentage < 1 || passingPercentage > 100) {
+    if (passingPercentage < MINIMUM_POSITIVE_VALUE || passingPercentage > MAXIMUM_PERCENTAGE) {
       throw new IllegalArgumentException("passingPercentage must be between 1 and 100");
     }
-    if (questionsPerTopic < 1 || questionCount % questionsPerTopic != 0) {
+    if (questionsPerTopic < MINIMUM_POSITIVE_VALUE || questionCount % questionsPerTopic != 0) {
       throw new IllegalArgumentException(
           "questionsPerTopic must be positive and divide questionCount exactly");
     }
