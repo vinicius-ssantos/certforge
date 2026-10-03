@@ -600,6 +600,133 @@
         "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
         "type" : "object"
       },
+      "MockExamQuestionView" : {
+        "properties" : {
+          "answered" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answered", "position", "question", "topicId" ],
+        "type" : "object"
+      },
+      "MockExamResult" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "elapsedSeconds" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passed" : {
+            "type" : "boolean"
+          },
+          "passingCorrectCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/QuestionResult"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicResult"
+            },
+            "type" : "array"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answered", "correct", "elapsedSeconds", "id", "passed", "passingCorrectCount", "passingPercentage", "percentage", "questions", "status", "topics", "total", "trackId" ],
+        "type" : "object"
+      },
+      "MockExamView" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamQuestionView"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "passingPercentage", "questionCount", "questions", "status", "trackId" ],
+        "type" : "object"
+      },
       "OptionAnswer" : {
         "properties" : {
           "correct" : {
@@ -758,6 +885,38 @@
           }
         },
         "required" : [ "difficulty", "javaRelease", "options", "prompt", "questionId", "revisionId", "revisionNumber", "topicId", "type" ],
+        "type" : "object"
+      },
+      "QuestionResult" : {
+        "properties" : {
+          "answer" : {
+            "$ref" : "#/components/schemas/Answer"
+          },
+          "answered" : {
+            "type" : "boolean"
+          },
+          "correct" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answer", "answered", "correct", "position", "question", "selectedOptions", "topicId" ],
         "type" : "object"
       },
       "QuestionSummary" : {
@@ -990,6 +1149,45 @@
           }
         },
         "required" : [ "comment" ],
+        "type" : "object"
+      },
+      "ResponseReceipt" : {
+        "properties" : {
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "position", "revisionId", "selectedOptions", "submittedAt" ],
+        "type" : "object"
+      },
+      "ResponseRequest" : {
+        "properties" : {
+          "selectedOptions" : {
+            "items" : {
+              "pattern" : "^[A-Z]$",
+              "type" : "string"
+            },
+            "maxItems" : 8,
+            "minItems" : 0,
+            "type" : "array"
+          }
+        },
+        "required" : [ "selectedOptions" ],
         "type" : "object"
       },
       "ReviewRequest" : {
@@ -1394,6 +1592,32 @@
           }
         },
         "required" : [ "accuracy", "attempted", "correct", "incorrect", "lastActivityAt", "topicId", "topicName", "trackSlug" ],
+        "type" : "object"
+      },
+      "TopicResult" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "answered", "correct", "percentage", "topicId", "total" ],
         "type" : "object"
       },
       "TopicView" : {
@@ -2198,7 +2422,7 @@
     },
     "/api/admin/questions/{questionId}" : {
       "get" : {
-        "operationId" : "get_2",
+        "operationId" : "get_3",
         "parameters" : [ {
           "in" : "path",
           "name" : "questionId",
@@ -2609,6 +2833,167 @@
           }
         },
         "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/mock-exams" : {
+      "post" : {
+        "operationId" : "start_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}" : {
+      "get" : {
+        "operationId" : "get_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/finish" : {
+      "post" : {
+        "operationId" : "finish",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/questions/{position}/response" : {
+      "post" : {
+        "operationId" : "respond",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResponseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseReceipt"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/result" : {
+      "get" : {
+        "operationId" : "result",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamResult"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
       }
     },
     "/api/study/sessions" : {
