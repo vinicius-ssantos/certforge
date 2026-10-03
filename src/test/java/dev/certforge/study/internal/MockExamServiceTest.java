@@ -24,7 +24,6 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +49,7 @@ class MockExamServiceTest {
 
   @BeforeEach
   void setUp() {
-    when(currentActor.find()).thenReturn(Optional.of(new ActorId(learner)));
+    when(currentActor.require()).thenReturn(new ActorId(learner));
     service =
         new MockExamService(
             repository,
