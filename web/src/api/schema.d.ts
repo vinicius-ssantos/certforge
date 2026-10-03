@@ -2326,7 +2326,7 @@ export interface operations {
         parameters: {
             query?: never;
             header?: {
-                "Idempotency-Key"?: string;
+                "Idempotency-Key": string;
             };
             path: {
                 sessionId: string;
