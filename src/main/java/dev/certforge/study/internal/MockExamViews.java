@@ -26,6 +26,29 @@ interface MockExamViews {
   record MockExamQuestionView(
       int position, TopicId topicId, PublishedQuestion question, boolean answered) {}
 
+  record MockExamHistoryItem(
+      UUID id,
+      PreparationTrackId trackId,
+      String status,
+      int questionCount,
+      int answeredCount,
+      @Schema(nullable = true) Integer correctCount,
+      @Schema(nullable = true) Integer percentage,
+      int passingPercentage,
+      @Schema(nullable = true) Boolean passed,
+      Instant createdAt,
+      Instant expiresAt,
+      @Schema(nullable = true) Instant closedAt,
+      List<MockExamTopicHistoryItem> topics) {}
+
+  record MockExamTopicHistoryItem(
+      TopicId topicId,
+      int total,
+      int answered,
+      int correct,
+      int percentage,
+      boolean needsReview) {}
+
   record ResponseReceipt(
       int position, UUID revisionId, List<String> selectedOptions, Instant submittedAt) {}
 
