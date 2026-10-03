@@ -125,5 +125,25 @@ class OpenApiContractIT {
     assertThat(receipt.isMissingNode()).isFalse();
     assertThat(receipt.path("properties").propertyNames())
         .doesNotContain("correct", "answer", "explanation", "references");
+
+    JsonNode responseRequest = schemas.path("ResponseRequest");
+    assertThat(responseRequest.path("properties").path("selectedOptions").path("minItems").asInt())
+        .isEqualTo(1);
+
+    JsonNode responseOperation =
+        canonical
+            .readTree(contract)
+            .path("paths")
+            .path("/api/study/mock-exams/{sessionId}/questions/{position}/response")
+            .path("post");
+    JsonNode idempotencyHeader = null;
+    for (JsonNode parameter : responseOperation.path("parameters")) {
+      if ("Idempotency-Key".equals(parameter.path("name").asText())) {
+        idempotencyHeader = parameter;
+        break;
+      }
+    }
+    assertThat(idempotencyHeader).isNotNull();
+    assertThat(idempotencyHeader.path("required").asBoolean()).isTrue();
   }
 }
