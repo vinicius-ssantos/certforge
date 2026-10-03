@@ -5,7 +5,9 @@ import java.util.Map;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 
-/** Known mock-exam formats. New certification versions opt in here instead of inheriting guesses. */
+/**
+ * Known mock-exam formats. New certification versions opt in here instead of inheriting guesses.
+ */
 @Component
 class MockExamBlueprintCatalog {
 
