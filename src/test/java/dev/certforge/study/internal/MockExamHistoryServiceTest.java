@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import dev.certforge.identity.ActorId;
@@ -21,7 +22,8 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,10 +94,19 @@ class MockExamHistoryServiceTest {
     when(repository.findByLearner(learner, null, 21)).thenReturn(List.of(completed));
     when(repository.snapshot(completed.id())).thenReturn(snapshot);
     when(repository.responses(completed.id())).thenReturn(responses);
-    for (QuestionFixture fixture : List.of(q0, q1, q2, q3)) {
-      when(questionBank.findRevision(new QuestionRevisionId(fixture.revisionId())))
-          .thenReturn(Optional.of(fixture.evidence()));
-    }
+    Set<QuestionRevisionId> requested =
+        Set.of(
+            new QuestionRevisionId(q0.revisionId()),
+            new QuestionRevisionId(q1.revisionId()),
+            new QuestionRevisionId(q2.revisionId()),
+            new QuestionRevisionId(q3.revisionId()));
+    when(questionBank.findRevisions(requested))
+        .thenReturn(
+            Map.of(
+                new QuestionRevisionId(q0.revisionId()), q0.evidence(),
+                new QuestionRevisionId(q1.revisionId()), q1.evidence(),
+                new QuestionRevisionId(q2.revisionId()), q2.evidence(),
+                new QuestionRevisionId(q3.revisionId()), q3.evidence()));
 
     MockExamHistoryItem item = service.list(null, 20).items().getFirst();
 
@@ -119,6 +130,8 @@ class MockExamHistoryServiceTest {
               assertThat(topic.percentage()).isZero();
               assertThat(topic.needsReview()).isTrue();
             });
+    verify(questionBank).findRevisions(requested);
+    verifyNoMoreInteractions(questionBank);
   }
 
   private MockExamSession session(
