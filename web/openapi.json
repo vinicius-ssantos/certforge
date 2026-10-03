@@ -575,6 +575,31 @@
         "required" : [ "objectiveRef", "position", "topicId" ],
         "type" : "object"
       },
+      "Misconception" : {
+        "properties" : {
+          "attempts" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lastAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "questions" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicName" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
+        "type" : "object"
+      },
       "OptionAnswer" : {
         "properties" : {
           "correct" : {
@@ -2442,6 +2467,27 @@
           }
         },
         "tags" : [ "progress-controller" ]
+      }
+    },
+    "/api/review/misconceptions" : {
+      "get" : {
+        "operationId" : "misconceptions",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/Misconception"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "review-controller" ]
       }
     },
     "/api/review/queue" : {

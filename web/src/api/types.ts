@@ -24,6 +24,7 @@ export type TopicProgress = Schemas["TopicProgress"];
 export type ReviewQueue = Schemas["Queue"];
 export type ReviewQueueItem = Schemas["QueueItem"];
 export type ReviewReason = ReviewQueueItem["reason"];
+export type Misconception = Schemas["Misconception"];
 export type HistoricalQuestion = Schemas["HistoricalQuestion"];
 export type Confidence = AttemptRequest["confidence"];
 export type QuestionSummary = Schemas["QuestionSummary"];

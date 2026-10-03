@@ -9,6 +9,7 @@ import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionId;
 import dev.certforge.questionbank.QuestionRevisionId;
+import dev.certforge.review.internal.ReviewViews.Misconception;
 import dev.certforge.review.internal.ReviewViews.Queue;
 import dev.certforge.review.internal.ReviewViews.QueueItem;
 import dev.certforge.study.AttemptFact;
@@ -25,6 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -193,5 +195,56 @@ class ReviewService {
         attempts.size(),
         wrong,
         last.correct());
+  }
+
+  /**
+   * Where the learner has been wrong while saying they were confident, per topic, most recent
+   * first. Derived from the attempts like the queue, and for the same reason: it is evidence they
+   * can already see, so it cannot disagree with itself.
+   *
+   * <p>Attempts and distinct questions are counted separately because they mean different things.
+   * It needs the question bank rather than the revision alone, so that a question corrected between
+   * two wrong answers still counts as one question rather than two.
+   */
+  @Transactional(readOnly = true)
+  List<Misconception> misconceptions() {
+    ActorId learner = currentActor.require();
+    List<AttemptFact> confidentlyWrong =
+        evidence.attemptsOf(learner).stream()
+            .filter(attempt -> !attempt.correct() && attempt.confidence() == Confidence.HIGH)
+            .toList();
+
+    Map<QuestionRevisionId, Optional<PublishedQuestion>> snapshots = new HashMap<>();
+    for (AttemptFact attempt : confidentlyWrong) {
+      snapshots.computeIfAbsent(attempt.revision(), questions::findSnapshotQuestion);
+    }
+
+    Map<TopicId, Integer> attemptsPerTopic = new LinkedHashMap<>();
+    Map<TopicId, Set<QuestionId>> questionsPerTopic = new HashMap<>();
+    Map<TopicId, Instant> lastPerTopic = new HashMap<>();
+    for (AttemptFact attempt : confidentlyWrong) {
+      Optional<PublishedQuestion> snapshot = snapshots.get(attempt.revision());
+      if (snapshot.isEmpty()) {
+        continue;
+      }
+      TopicId topic = snapshot.get().topicId();
+      attemptsPerTopic.merge(topic, 1, Integer::sum);
+      questionsPerTopic
+          .computeIfAbsent(topic, id -> new HashSet<>())
+          .add(snapshot.get().questionId());
+      lastPerTopic.merge(topic, attempt.submittedAt(), (a, b) -> b.isAfter(a) ? b : a);
+    }
+
+    return attemptsPerTopic.entrySet().stream()
+        .map(
+            entry ->
+                new Misconception(
+                    entry.getKey(),
+                    catalog.findActiveTopic(entry.getKey()).map(TopicView::name).orElse(null),
+                    entry.getValue(),
+                    questionsPerTopic.get(entry.getKey()).size(),
+                    lastPerTopic.get(entry.getKey())))
+        .sorted(Comparator.comparing(Misconception::lastAt).reversed())
+        .toList();
   }
 }

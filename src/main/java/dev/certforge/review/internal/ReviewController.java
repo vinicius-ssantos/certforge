@@ -1,9 +1,11 @@
 package dev.certforge.review.internal;
 
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.review.internal.ReviewViews.Misconception;
 import dev.certforge.review.internal.ReviewViews.Queue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -38,5 +40,14 @@ class ReviewController {
       @RequestParam(required = false) @Min(1) @Max(100) Integer limit) {
     return service.queue(
         Optional.ofNullable(topicId).map(TopicId::new), limit == null ? DEFAULT_LIMIT : limit);
+  }
+
+  /**
+   * Where the learner has been repeatedly wrong while confident, per topic. Evidence rather than a
+   * prediction: it says where a misconception is likely, not whether anyone is ready for anything.
+   */
+  @GetMapping("/misconceptions")
+  List<Misconception> misconceptions() {
+    return service.misconceptions();
   }
 }
