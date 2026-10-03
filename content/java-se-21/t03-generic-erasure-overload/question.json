@@ -34,8 +34,12 @@
   ],
   "references": [
     {
-      "title": "JLS 8.4.8.3 Requirements in Overriding and Hiding",
-      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3"
+      "title": "JLS 4.6 Type Erasure",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.6"
+    },
+    {
+      "title": "JLS 8.4.9 Overloading",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.9"
     }
   ]
 }
