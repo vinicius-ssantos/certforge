@@ -6,10 +6,12 @@ import type { MockExamQuestionResult } from "../api/types";
 import { Prompt } from "../ui/Prompt";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
+import { useTopicNames } from "../history/useTopicNames";
 
 export function MockExamResultPage() {
   const { sessionId = "" } = useParams();
   const api = useApi();
+  const topicNames = useTopicNames();
   useDocumentTitle("Mock exam result");
   const result = useQuery({
     queryKey: ["mock-exam-result", sessionId],
@@ -36,9 +38,9 @@ export function MockExamResultPage() {
       <table>
         <thead><tr><th>Topic</th><th>Correct</th><th>Answered</th><th>Score</th></tr></thead>
         <tbody>
-          {data.topics.map((topic, index) => (
+          {data.topics.map((topic) => (
             <tr key={topic.topicId}>
-              <th scope="row">Topic {index + 1}</th>
+              <th scope="row">{topicNames.get(topic.topicId) ?? "Topic"}</th>
               <td>{topic.correct} / {topic.total}</td>
               <td>{topic.answered} / {topic.total}</td>
               <td>{topic.percentage}%</td>
