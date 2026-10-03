@@ -8,6 +8,7 @@ import dev.certforge.preparationcatalog.TopicView;
 import dev.certforge.preparationcatalog.TrackView;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
+import dev.certforge.questionbank.QuestionRevisionId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -74,7 +75,7 @@ class MockExamPlanner {
     }
 
     List<PlannedQuestion> selected = new ArrayList<>(blueprint.questionCount());
-    Set<Object> revisionIds = new HashSet<>();
+    Set<QuestionRevisionId> revisionIds = new HashSet<>();
     for (TopicView topic : topics) {
       List<PublishedQuestion> eligible = questionBank.eligibleForTopic(topic.id());
       if (eligible.size() < blueprint.questionsPerTopic()) {
@@ -88,8 +89,7 @@ class MockExamPlanner {
       }
       List<PublishedQuestion> shuffled = new ArrayList<>(eligible);
       Collections.shuffle(shuffled, random);
-      for (PublishedQuestion question :
-          shuffled.subList(0, blueprint.questionsPerTopic())) {
+      for (PublishedQuestion question : shuffled.subList(0, blueprint.questionsPerTopic())) {
         if (!revisionIds.add(question.revisionId())) {
           throw new IllegalStateException(
               "A revision was selected more than once across mock-exam topics");
@@ -99,7 +99,6 @@ class MockExamPlanner {
     }
 
     Collections.shuffle(selected, random);
-    return new Plan(
-        track.id(), track.examVersion().id(), blueprint, List.copyOf(selected));
+    return new Plan(track.id(), track.examVersion().id(), blueprint, List.copyOf(selected));
   }
 }
