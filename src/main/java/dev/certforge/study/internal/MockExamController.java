@@ -54,7 +54,7 @@ class MockExamController {
   ResponseEntity<ResponseReceipt> respond(
       @PathVariable UUID sessionId,
       @PathVariable int position,
-      @RequestHeader(name = IDEMPOTENCY_KEY, required = false) String idempotencyKey,
+      @RequestHeader(name = IDEMPOTENCY_KEY, required = true) String idempotencyKey,
       @Valid @RequestBody ResponseRequest request) {
     ResponseOutcome outcome =
         service.respond(sessionId, position, idempotencyKey, request.selectedOptions());
@@ -80,5 +80,5 @@ class MockExamController {
   record StartRequest(@NotBlank String trackSlug) {}
 
   record ResponseRequest(
-      @NotEmpty @Size(max = 8) List<@Pattern(regexp = "^[A-Z]$") String> selectedOptions) {}
+      @NotEmpty @Size(min = 1, max = 8) List<@Pattern(regexp = "^[A-Z]$") String> selectedOptions) {}
 }
