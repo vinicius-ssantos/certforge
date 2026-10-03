@@ -268,7 +268,8 @@ class MockExamService {
                         entry.getValue().total,
                         entry.getValue().answered,
                         entry.getValue().correct,
-                        MockExamScoring.percentage(entry.getValue().correct, entry.getValue().total)))
+                        MockExamScoring.percentage(
+                            entry.getValue().correct, entry.getValue().total)))
             .toList();
 
     Instant effectiveClose =
