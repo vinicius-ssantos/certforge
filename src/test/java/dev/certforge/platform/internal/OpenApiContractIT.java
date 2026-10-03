@@ -136,12 +136,14 @@ class OpenApiContractIT {
             .path("paths")
             .path("/api/study/mock-exams/{sessionId}/questions/{position}/response")
             .path("post");
-    JsonNode idempotencyHeader =
-        responseOperation.path("parameters").findValues("name").stream()
-            .filter(node -> "Idempotency-Key".equals(node.asText()))
-            .findFirst()
-            .map(JsonNode::parent)
-            .orElseThrow();
+    JsonNode idempotencyHeader = null;
+    for (JsonNode parameter : responseOperation.path("parameters")) {
+      if ("Idempotency-Key".equals(parameter.path("name").asText())) {
+        idempotencyHeader = parameter;
+        break;
+      }
+    }
+    assertThat(idempotencyHeader).isNotNull();
     assertThat(idempotencyHeader.path("required").asBoolean()).isTrue();
   }
 }
