@@ -3,6 +3,8 @@ package dev.certforge.study.internal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
+
+import org.mockito.ArgumentCaptor;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -80,7 +82,63 @@ class MockExamServiceTest {
             Arrays.stream(outcome.receipt().getClass().getRecordComponents())
                 .map(component -> component.getName()))
         .doesNotContain("correct", "answer", "explanation", "references");
-    verify(repository).insertResponse(org.mockito.ArgumentMatchers.any(MockExamResponse.class));
+    ArgumentCaptor<MockExamResponse> persisted = ArgumentCaptor.forClass(MockExamResponse.class);
+    verify(repository).insertResponse(persisted.capture());
+
+    when(repository.findResponseByKey(learner, "response_0001"))
+        .thenReturn(Optional.of(persisted.getValue()));
+    MockExamService.ResponseOutcome replay =
+        service.respond(sessionId, 0, "response_0001", List.of("A"));
+
+    assertThat(replay.replayed()).isTrue();
+    assertThat(replay.receipt()).isEqualTo(outcome.receipt());
+  }
+
+  @Test
+  void expirationIsEnforcedByTheServerClockWhenTheRunIsRead() {
+    UUID sessionId = UUID.randomUUID();
+    QuestionFixture question = question("Deadline", "A");
+    MockExamSession due =
+        new MockExamSession(
+            sessionId,
+            learner,
+            track,
+            exam,
+            MockExamStatus.IN_PROGRESS,
+            1,
+            60,
+            68,
+            1,
+            now.minusSeconds(60),
+            now,
+            null);
+    MockExamSession expired =
+        new MockExamSession(
+            sessionId,
+            learner,
+            track,
+            exam,
+            MockExamStatus.EXPIRED,
+            1,
+            60,
+            68,
+            1,
+            now.minusSeconds(60),
+            now,
+            now);
+    SnapshotQuestion snapshot =
+        new SnapshotQuestion(0, question.published().topicId().value(), question.revisionId());
+
+    when(repository.find(sessionId)).thenReturn(Optional.of(due), Optional.of(expired));
+    when(repository.snapshot(sessionId)).thenReturn(List.of(snapshot));
+    when(repository.answeredPositions(sessionId)).thenReturn(List.of());
+    when(questionBank.findSnapshotQuestion(new QuestionRevisionId(question.revisionId())))
+        .thenReturn(Optional.of(question.published()));
+
+    MockExamViews.MockExamView view = service.get(sessionId);
+
+    assertThat(view.status()).isEqualTo("EXPIRED");
+    verify(repository).close(sessionId, MockExamStatus.EXPIRED, now);
   }
 
   @Test
