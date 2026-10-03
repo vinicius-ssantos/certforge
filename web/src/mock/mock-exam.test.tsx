@@ -143,7 +143,9 @@ describe("mock exam flow", () => {
     await user.click(screen.getByRole("radio", { name: /First option/ }));
     await user.click(screen.getByRole("button", { name: "Save answer" }));
 
-    expect(await screen.findByRole("status")).toHaveTextContent("Feedback stays hidden");
+    expect(await screen.findByText("Mock question 2?")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Question 1, answered" })).toBeInTheDocument();
+    expect(screen.queryByText(/correct answer/i)).not.toBeInTheDocument();
     const call = fetch.calls.find((entry) => entry.path === responsePath);
     expect(call?.headers.get("Idempotency-Key")).toMatch(/^[0-9a-f-]{36}$/);
     expect(call?.body).toEqual({ selectedOptions: ["A"] });
@@ -160,7 +162,7 @@ describe("mock exam flow", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Practice target not reached" })).toBeInTheDocument();
-    expect(screen.getByText("50%")).toBeInTheDocument();
+    expect(screen.getAllByText("50%")).toHaveLength(2);
     expect(screen.getByRole("row", { name: /Handling exceptions/ })).toBeInTheDocument();
     await userEvent.setup().click(screen.getByText(/Question 1: Correct/));
     expect(screen.getByText("A is correct because the specification says so.")).toBeInTheDocument();
