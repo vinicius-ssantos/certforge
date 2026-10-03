@@ -287,7 +287,7 @@ jobs:
       - name: Measure the performance baseline
         run: |
           docker compose -f compose.release.yaml -f compose.e2e.yaml logs --no-color app > app-start.log
-          node deploy/measure-baseline.mjs --rounds 20 --startup-log app-start.log --enforce | tee baseline.md
+          node deploy/measure-baseline.mjs --rounds 20 --history 200 --startup-log app-start.log --enforce | tee baseline.md
 
       # Backs up the database that has just seen all that traffic, restores it into a new PostgreSQL
       # and compares every table.
