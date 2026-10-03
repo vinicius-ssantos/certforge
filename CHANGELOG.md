@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Added
+
+- Seventeen more questions of the expansion carry a verification program, taking the pack from 69 to 86 of 150 proved by the build. Among them: `BigDecimal` division without a rounding mode throwing rather than guessing a precision, `Math.round(-1.5)` being -1 and not -2, `throw null` compiling and then throwing, precise rethrow letting a method declare the two exceptions its body can actually throw, `Arrays.asList` writing through to the array while refusing to grow, a `TreeSet` comparator deciding membership instead of equals, an unmodifiable view seeing changes to the list behind it, `toMap` refusing a duplicate key, `computeIfAbsent` recording nothing when the function returns null, and `Files.copy` refusing an existing target. Each program prints booleans and ASCII tokens only, so the expected output does not depend on the platform or the default locale (#84).
+
 ## [0.2.0] - 2026-10-03
 
 Adaptive Review. See the [release notes](docs/release/v0.2.0-release-notes.md) for what it does and what it does not.

@@ -1,0 +1,4 @@
+periodUnits=[Years, Months, Days]
+durationUnits=[Seconds, Nanos]
+durationSeconds=90
+durationNanos=500
