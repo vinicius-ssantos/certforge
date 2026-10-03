@@ -1295,6 +1295,9 @@ export interface components {
         SetMappingsRequest: {
             topics: components["schemas"]["MappingEntry"][];
         };
+        MockExamStartRequest: {
+            trackSlug: string;
+        };
         StartRequest: {
             /** Format: int32 */
             questionCount?: number;
@@ -2263,7 +2266,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["StartRequest"];
+                "application/json": components["schemas"]["MockExamStartRequest"];
             };
         };
         responses: {
