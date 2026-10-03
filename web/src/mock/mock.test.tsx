@@ -255,9 +255,10 @@ describe("mock result", () => {
       screen.getByText("Question 1: Correct"),
     );
     expect(screen.getAllByText("The specification makes the first option correct.")).toHaveLength(2);
-    expect(screen.getByRole("link", { name: "Java SE 21 documentation" })).toHaveAttribute(
-      "rel",
-      "noopener noreferrer",
-    );
+    const referenceLinks = screen.getAllByRole("link", { name: "Java SE 21 documentation" });
+    expect(referenceLinks).toHaveLength(2);
+    for (const link of referenceLinks) {
+      expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    }
   });
 });
