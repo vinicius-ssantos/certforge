@@ -231,7 +231,7 @@
               "type" : "string"
             },
             "maxItems" : 8,
-            "minItems" : 0,
+            "minItems" : 1,
             "type" : "array"
           }
         },
@@ -2939,7 +2939,7 @@
         }, {
           "in" : "header",
           "name" : "Idempotency-Key",
-          "required" : false,
+          "required" : true,
           "schema" : {
             "type" : "string"
           }
