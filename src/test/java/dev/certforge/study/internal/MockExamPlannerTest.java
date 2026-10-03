@@ -126,7 +126,9 @@ class MockExamPlannerTest {
             StudyException.class,
             error -> {
               assertThat(error.code()).isEqualTo("mock_exam_topic_mismatch");
-              assertThat(error.details()).containsEntry("expected", 10).containsEntry("available", 9);
+              assertThat(error.details())
+                  .containsEntry("expected", 10)
+                  .containsEntry("available", 9);
             });
   }
 
