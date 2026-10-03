@@ -2,6 +2,7 @@ package dev.certforge.study.internal;
 
 import dev.certforge.platform.Page;
 import dev.certforge.study.internal.HistoryViews.AttemptHistoryItem;
+import dev.certforge.study.internal.HistoryViews.MockExamHistoryItem;
 import dev.certforge.study.internal.HistoryViews.SessionHistoryItem;
 import java.util.UUID;
 import org.springframework.http.CacheControl;
@@ -33,6 +34,14 @@ class HistoryController {
     return ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
         .body(service.sessions(cursor, size));
+  }
+
+  @GetMapping("/mock-exams")
+  ResponseEntity<Page<MockExamHistoryItem>> mockExams(
+      @RequestParam(required = false) String cursor, @RequestParam(required = false) Integer size) {
+    return ResponseEntity.ok()
+        .cacheControl(CacheControl.noStore())
+        .body(service.mockExams(cursor, size));
   }
 
   @GetMapping("/attempts")
