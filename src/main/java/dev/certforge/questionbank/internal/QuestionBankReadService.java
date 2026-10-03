@@ -9,8 +9,12 @@ import dev.certforge.questionbank.QuestionId;
 import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.questionbank.RevisionStatus;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +68,21 @@ class QuestionBankReadService implements QuestionBank {
   @Override
   public Optional<RevisionEvidence> findRevision(QuestionRevisionId revisionId) {
     return repository.findRevision(revisionId.value()).map(QuestionBankReadService::evidence);
+  }
+
+  @Override
+  public Map<QuestionRevisionId, RevisionEvidence> findRevisions(
+      Set<QuestionRevisionId> revisionIds) {
+    if (revisionIds.isEmpty()) {
+      return Map.of();
+    }
+    List<UUID> ids = revisionIds.stream().map(QuestionRevisionId::value).toList();
+    Map<QuestionRevisionId, RevisionEvidence> found = new HashMap<>();
+    for (Revision revision : repository.findRevisionsByIds(ids)) {
+      RevisionEvidence evidence = evidence(revision);
+      found.put(evidence.revisionId(), evidence);
+    }
+    return Map.copyOf(found);
   }
 
   private static PublishedQuestion learnerView(Revision revision) {
