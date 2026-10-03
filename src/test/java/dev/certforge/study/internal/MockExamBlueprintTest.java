@@ -22,8 +22,7 @@ class MockExamBlueprintTest {
 
   @Test
   void rejectsBlueprintsThatCannotBeDistributedExactlyAcrossTopics() {
-    assertThatThrownBy(
-            () -> new MockExamBlueprint("TEST", 50, Duration.ofMinutes(90), 70, 6))
+    assertThatThrownBy(() -> new MockExamBlueprint("TEST", 50, Duration.ofMinutes(90), 70, 6))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("divide questionCount");
   }
