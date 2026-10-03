@@ -42,12 +42,7 @@ interface MockExamViews {
       List<MockExamTopicHistoryItem> topics) {}
 
   record MockExamTopicHistoryItem(
-      TopicId topicId,
-      int total,
-      int answered,
-      int correct,
-      int percentage,
-      boolean needsReview) {}
+      TopicId topicId, int total, int answered, int correct, int percentage, boolean needsReview) {}
 
   record ResponseReceipt(
       int position, UUID revisionId, List<String> selectedOptions, Instant submittedAt) {}
