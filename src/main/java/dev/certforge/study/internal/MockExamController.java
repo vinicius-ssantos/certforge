@@ -80,5 +80,6 @@ class MockExamController {
   record StartRequest(@NotBlank String trackSlug) {}
 
   record ResponseRequest(
-      @NotEmpty @Size(min = 1, max = 8) List<@Pattern(regexp = "^[A-Z]$") String> selectedOptions) {}
+      @NotEmpty @Size(min = 1, max = 8)
+          List<@Pattern(regexp = "^[A-Z]$") String> selectedOptions) {}
 }
