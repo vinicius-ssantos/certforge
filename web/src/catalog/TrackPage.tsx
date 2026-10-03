@@ -78,7 +78,7 @@ export function TrackPage() {
     onError: (error) => {
       const existing = isActiveMock(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
-        navigate(`/mock-exams/${existing}`);
+        navigate(`/mock-exams/${existing}`, { state: { resumed: true } });
       }
     },
   });
@@ -113,17 +113,18 @@ export function TrackPage() {
             <section className="mock-entry" aria-labelledby="mock-entry-heading">
               <h2 id="mock-entry-heading">Full mock exam</h2>
               <p>
-                Simulate the complete exam with 50 questions, a 120-minute server-enforced timer,
-                delayed feedback and a final topic breakdown.
+                Run a timed full mock with a server-enforced deadline, delayed feedback and a final
+                topic breakdown. The current CertForge blueprint controls the question count,
+                duration and practice target.
               </p>
               <p className="muted">
-                The 68% target is a CertForge practice threshold, not an Oracle score prediction.
+                The practice target is for study guidance and is not an Oracle score prediction.
               </p>
               {startMock.isError && !isActiveMock(startMock.error) ? (
                 <ErrorState error={startMock.error} />
               ) : null}
               <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
-                {startMock.isPending ? "Starting…" : "Start 1Z0-830 mock"}
+                {startMock.isPending ? "Starting…" : `Start ${track.data.examVersion.examCode} mock`}
               </button>
             </section>
           ) : null}
