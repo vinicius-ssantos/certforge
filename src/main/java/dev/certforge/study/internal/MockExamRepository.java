@@ -6,7 +6,11 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -39,6 +43,7 @@ class MockExamRepository {
 
   /** Inserts the aggregate root and its complete immutable question snapshot. */
   void insert(MockExamSession session, List<SnapshotQuestion> questions) {
+    validateSnapshot(session, questions);
     jdbc.sql(
             "insert into certforge.mock_exam_session"
                 + " (id, learner_id, track_id, exam_version_id, status, question_count,"
@@ -70,6 +75,34 @@ class MockExamRepository {
           .param("topic", question.topicId())
           .param("revision", question.revisionId())
           .update();
+    }
+  }
+
+  private static void validateSnapshot(
+      MockExamSession session, List<SnapshotQuestion> questions) {
+    if (questions.size() != session.questionCount()) {
+      throw new IllegalArgumentException(
+          "Mock exam snapshot must contain exactly " + session.questionCount() + " questions");
+    }
+
+    Set<UUID> revisions = new HashSet<>();
+    Map<UUID, Integer> perTopic = new HashMap<>();
+    for (int index = 0; index < questions.size(); index++) {
+      SnapshotQuestion question = questions.get(index);
+      if (question.position() != index) {
+        throw new IllegalArgumentException("Mock exam snapshot positions must be contiguous");
+      }
+      if (!revisions.add(question.revisionId())) {
+        throw new IllegalArgumentException("Mock exam snapshot revisions must be distinct");
+      }
+      perTopic.merge(question.topicId(), 1, Integer::sum);
+    }
+
+    int expectedTopics = session.questionCount() / session.questionsPerTopic();
+    if (perTopic.size() != expectedTopics
+        || perTopic.values().stream().anyMatch(count -> count != session.questionsPerTopic())) {
+      throw new IllegalArgumentException(
+          "Mock exam snapshot must match the persisted topic distribution");
     }
   }
 
