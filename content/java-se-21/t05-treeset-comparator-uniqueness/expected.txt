@@ -1,0 +1,4 @@
+areEqual=false
+secondAdded=false
+size=1
+kept=first

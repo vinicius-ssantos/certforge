@@ -1,0 +1,2 @@
+throughVariable=parent
+throughType=child

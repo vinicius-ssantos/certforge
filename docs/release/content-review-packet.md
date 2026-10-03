@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 81 of the 150 questions: `t01-bigdecimal-nonterminating-divide`, `t01-bigdecimal-striptrailingzeros-scale`, `t01-integer-boxing-guarantee`, `t01-localdate-invalid-withday`, `t01-localdate-plus-years-leap-day`, `t01-math-round-negative`, `t01-period-vs-duration`, `t02-case-null-pattern-switch`, `t02-dangling-else`, `t02-do-while-first-execution`, `t02-enhanced-for-variable-assignment`, `t02-pattern-variable-and-scope`, `t02-switch-expression-exhaustive`, `t02-switch-null-default-combination`, `t02-switch-rule-no-fallthrough`, `t03-class-method-beats-default`, `t03-covariant-return`, `t03-default-method-conflict`, `t03-enum-constructor-access`, `t03-generic-erasure-overload`, `t03-private-interface-method`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t03-static-method-hiding`, `t04-autocloseable-close-contract`, `t04-catch-order-unreachable`, `t04-multicatch-parameter-reassignment`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-precise-rethrow`, `t04-throw-null`, `t04-try-resource-effectively-final`, `t04-unchecked-exception-classes`, `t05-arrays-aslist-backed`, `t05-generic-invariance`, `t05-sequencedmap-first-entry`, `t05-treeset-comparator-uniqueness`, `t05-unmodifiable-list-view`, `t05-wildcard-extends-read`, `t05-wildcard-super-integer`, `t06-collectors-tomap-duplicate-key`, `t06-findfirst-ordered-stream`, `t06-functional-interface-extra-methods`, `t06-lambda-effectively-final`, `t06-lambda-this-enclosing-instance`, `t06-stream-facts`, `t06-string-length-method-reference`, `t06-to-unmodifiable-list-null`, `t07-automatic-module-jar`, `t07-export-does-not-make-type-public`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-import-wildcard-no-subpackages`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t07-unnamed-package-import`, `t08-completablefuture-join-vs-get`, `t08-computeifabsent-null-result`, `t08-reentrantlock-finally`, `t08-start-virtual-thread`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-copy-existing-target`, `t09-files-lines-close`, `t09-files-readstring-utf8`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`, `t10-resourcebundle-missing-key`, `t10-resourcebundle-parent-lookup`.
+- Nothing is verified by the build in 64 of the 150 questions: `t01-bigdecimal-striptrailingzeros-scale`, `t01-integer-boxing-guarantee`, `t01-localdate-invalid-withday`, `t01-localdate-plus-years-leap-day`, `t02-case-null-pattern-switch`, `t02-dangling-else`, `t02-do-while-first-execution`, `t02-enhanced-for-variable-assignment`, `t02-pattern-variable-and-scope`, `t02-switch-expression-exhaustive`, `t02-switch-null-default-combination`, `t03-class-method-beats-default`, `t03-default-method-conflict`, `t03-enum-constructor-access`, `t03-generic-erasure-overload`, `t03-private-interface-method`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t04-autocloseable-close-contract`, `t04-catch-order-unreachable`, `t04-multicatch-parameter-reassignment`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-try-resource-effectively-final`, `t04-unchecked-exception-classes`, `t05-generic-invariance`, `t05-sequencedmap-first-entry`, `t05-wildcard-extends-read`, `t05-wildcard-super-integer`, `t06-functional-interface-extra-methods`, `t06-lambda-effectively-final`, `t06-lambda-this-enclosing-instance`, `t06-stream-facts`, `t06-string-length-method-reference`, `t07-automatic-module-jar`, `t07-export-does-not-make-type-public`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-import-wildcard-no-subpackages`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t07-unnamed-package-import`, `t08-completablefuture-join-vs-get`, `t08-reentrantlock-finally`, `t08-start-virtual-thread`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-lines-close`, `t09-files-readstring-utf8`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`, `t10-resourcebundle-parent-lookup`.
 
 ## How to review
 
@@ -38,7 +38,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | # | Question | Topic | Type | Difficulty | Runnable code | Review |
 |---:|---|---|---|---|---|---|
 | 1 | [`t01-bigdecimal-equals-scale`](#1-t01-bigdecimal-equals-scale) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
-| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 3 | [`t01-bigdecimal-striptrailingzeros-scale`](#3-t01-bigdecimal-striptrailingzeros-scale) | Date, time, text, numeric and boolean values | single | hard | no (conceptual) | **not reviewed** |
 | 4 | [`t01-boolean-parseboolean`](#4-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | yes, not shown | **not reviewed** |
 | 5 | [`t01-integer-boxing-guarantee`](#5-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
@@ -46,9 +46,9 @@ The checks, from the [content policy](../product/content-policy.md):
 | 7 | [`t01-localdate-invalid-withday`](#7-t01-localdate-invalid-withday) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
 | 8 | [`t01-localdate-plus-months`](#8-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
 | 9 | [`t01-localdate-plus-years-leap-day`](#9-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
-| 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 11 | [`t01-numeric-promotion-byte-addition`](#11-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | yes, not shown | **not reviewed** |
-| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | no (conceptual) | **not reviewed** |
+| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | yes, not shown | **not reviewed** |
 | 13 | [`t01-string-repeat`](#13-t01-string-repeat) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
 | 14 | [`t01-string-strip-vs-trim`](#14-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 15 | [`t01-stringbuilder-reverse-chain`](#15-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
@@ -65,11 +65,11 @@ The checks, from the [content policy](../product/content-policy.md):
 | 26 | [`t02-switch-dominance`](#26-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
 | 27 | [`t02-switch-expression-exhaustive`](#27-t02-switch-expression-exhaustive) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
 | 28 | [`t02-switch-null-default-combination`](#28-t02-switch-null-default-combination) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
-| 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
 | 30 | [`t02-switch-yield-block`](#30-t02-switch-yield-block) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
 | 32 | [`t03-constructor-order-super-first`](#32-t03-constructor-order-super-first) | Object-oriented concepts in Java | single | easy | yes, shown | **not reviewed** |
-| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
 | 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
 | 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | no (conceptual) | **not reviewed** |
 | 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
@@ -81,7 +81,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | 42 | [`t03-record-facts`](#42-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
 | 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
 | 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
-| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
 | 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
 | 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | no (conceptual) | **not reviewed** |
 | 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
@@ -90,14 +90,14 @@ The checks, from the [content policy](../product/content-policy.md):
 | 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
 | 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
 | 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
-| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
 | 55 | [`t04-suppressed-exception`](#55-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
 | 56 | [`t04-suppressed-order-multiple-resources`](#56-t04-suppressed-order-multiple-resources) | Handling exceptions | single | hard | yes, shown | **not reviewed** |
-| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
 | 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
 | 59 | [`t04-try-with-resources-order`](#59-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
 | 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | no (conceptual) | **not reviewed** |
-| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
 | 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
 | 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
 | 64 | [`t05-immutable-and-fixed-size-lists`](#64-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
@@ -108,12 +108,12 @@ The checks, from the [content policy](../product/content-policy.md):
 | 69 | [`t05-sequenced-collection-reversed`](#69-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
 | 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
 | 71 | [`t05-set-of-duplicate-elements`](#71-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | **not reviewed** |
-| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | no (conceptual) | **not reviewed** |
-| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | yes, not shown | **not reviewed** |
+| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
 | 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
 | 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
-| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | no (conceptual) | **not reviewed** |
 | 80 | [`t06-generate-limit-count`](#80-t06-generate-limit-count) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
@@ -126,7 +126,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | 87 | [`t06-stream-laziness`](#87-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
 | 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
 | 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | no (conceptual) | **not reviewed** |
+| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | **not reviewed** |
 | 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
 | 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
 | 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
@@ -145,7 +145,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | 106 | [`t08-atomic-compare-and-set`](#106-t08-atomic-compare-and-set) | Managing concurrent code execution | single | medium | yes, shown | **not reviewed** |
 | 107 | [`t08-atomicinteger-update-and-get`](#107-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | no (conceptual) | **not reviewed** |
-| 109 | [`t08-computeifabsent-null-result`](#109-t08-computeifabsent-null-result) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 109 | [`t08-computeifabsent-null-result`](#109-t08-computeifabsent-null-result) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 110 | [`t08-concurrenthashmap-null`](#110-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | yes, not shown | **not reviewed** |
 | 111 | [`t08-countdownlatch-count`](#111-t08-countdownlatch-count) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 112 | [`t08-executor-close`](#112-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
@@ -159,7 +159,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
 | 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
 | 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
 | 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | no (conceptual) | **not reviewed** |
 | 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | no (conceptual) | **not reviewed** |
@@ -185,7 +185,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
 | 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | **not reviewed** |
 | 148 | [`t10-resource-bundle-fallback`](#148-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
-| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
 | 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
 
 ## 1. t01-bigdecimal-equals-scale
@@ -302,7 +302,35 @@ Tests the exact division contract of BigDecimal when no rounding mode is supplie
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=ArithmeticException
+withScale=0.3333
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.math.BigDecimal;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      new BigDecimal("1").divide(new BigDecimal("3"));
+      System.out.println("thrown=none");
+    } catch (ArithmeticException e) {
+      System.out.println("thrown=" + e.getClass().getSimpleName());
+    }
+    // With a rounding mode there is a representable answer, so the exception is about the
+    // non-terminating expansion rather than about division itself.
+    System.out.println("withScale=" + new BigDecimal("1").divide(new BigDecimal("3"), 4, java.math.RoundingMode.HALF_UP));
+  }
+}
+```
 
 ### Review
 
@@ -317,7 +345,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8"`, `"verified": null`
+To record: `"digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8"`, `"verified": "sha256:b23b0fa047fe57d8726e0b481c7a1e79a60e6c1c6705391034558c4211615c87"`
 
 **Comments:**
 
@@ -809,7 +837,29 @@ Tests Math.round's exact definition for a negative half value, which is often co
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+negativeHalf=-1
+positiveHalf=2
+negativeBelowHalf=-2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    // Math.round adds a half and floors, so a negative exact half rounds towards positive infinity.
+    System.out.println("negativeHalf=" + Math.round(-1.5d));
+    System.out.println("positiveHalf=" + Math.round(1.5d));
+    System.out.println("negativeBelowHalf=" + Math.round(-1.6d));
+  }
+}
+```
 
 ### Review
 
@@ -824,7 +874,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d"`, `"verified": null`
+To record: `"digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d"`, `"verified": "sha256:1fac75f60eb4010872b7b076db3e876cdc3fee63e0dd47dc207ba22cc5fe2a2b"`
 
 **Comments:**
 
@@ -949,7 +999,35 @@ Requires separating date-based amounts from time-based amounts in the java.time 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+periodUnits=[Years, Months, Days]
+durationUnits=[Seconds, Nanos]
+durationSeconds=90
+durationNanos=500
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.time.Duration;
+import java.time.Period;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The units each type supports are the distinction, and each reports its own.
+    System.out.println("periodUnits=" + Period.of(1, 2, 3).getUnits());
+    System.out.println("durationUnits=" + Duration.ofSeconds(90, 500).getUnits());
+    Duration duration = Duration.ofSeconds(90, 500);
+    System.out.println("durationSeconds=" + duration.getSeconds());
+    System.out.println("durationNanos=" + duration.getNano());
+  }
+}
+```
 
 ### Review
 
@@ -964,7 +1042,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f"`, `"verified": null`
+To record: `"digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f"`, `"verified": "sha256:5b00062cd21846f16baba295fd23d0decff43aeb756da933c14b97b99fe9b013"`
 
 **Comments:**
 
@@ -2080,7 +2158,31 @@ Checks the control-flow distinction between arrow switch rules and traditional c
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+ran=one
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    StringBuilder ran = new StringBuilder();
+    switch (1) {
+      case 1 -> ran.append("one");
+      // No break is written, and the next arm still does not run.
+      case 2 -> ran.append("two");
+      default -> ran.append("other");
+    }
+    System.out.println("ran=" + ran);
+  }
+}
+```
 
 ### Review
 
@@ -2095,7 +2197,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef81931e0ee3d68ce33e"`, `"verified": null`
+To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef81931e0ee3d68ce33e"`, `"verified": "sha256:8833ddbfbebc9db9c534438480c06a1e43626ccd24ac5d41500b60178e0bbd50"`
 
 **Comments:**
 
@@ -2353,7 +2455,41 @@ Checks a key overriding rule: an overriding method can narrow a reference return
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+throughParent=2
+declaredType=Integer
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static class Parent {
+    Number value() {
+      return 1;
+    }
+  }
+
+  static class Child extends Parent {
+    // A subtype of the overridden return type is allowed; this file compiling is the proof.
+    @Override
+    Integer value() {
+      return 2;
+    }
+  }
+
+  public static void main(String[] args) {
+    Parent asParent = new Child();
+    System.out.println("throughParent=" + asParent.value());
+    System.out.println("declaredType=" + new Child().value().getClass().getSimpleName());
+  }
+}
+```
 
 ### Review
 
@@ -2368,7 +2504,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e2f5059bd22b95c"`, `"verified": null`
+To record: `"digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e2f5059bd22b95c"`, `"verified": "sha256:5f8456bc6933e830d9bf618baaba6b4de30fb8f3a54565bafcb224ec005f12ac"`
 
 **Comments:**
 
@@ -3158,7 +3294,40 @@ Distinguishes static method hiding from dynamic dispatch of overridden instance 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+throughVariable=parent
+throughType=child
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static class Parent {
+    static String who() {
+      return "parent";
+    }
+  }
+
+  static class Child extends Parent {
+    static String who() {
+      return "child";
+    }
+  }
+
+  public static void main(String[] args) {
+    Parent variable = new Child();
+    // The variable's compile-time type decides, so the instance being a Child changes nothing.
+    System.out.println("throughVariable=" + variable.who());
+    System.out.println("throughType=" + Child.who());
+  }
+}
+```
 
 ### Review
 
@@ -3173,7 +3342,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": null`
+To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": "sha256:145ac6a9fe5a81caccbfd546f5ad24e46b1783ad847662c871a6a36a7c2e43db"`
 
 **Comments:**
 
@@ -3729,7 +3898,53 @@ Tests Java's precise rethrow analysis for an effectively final catch parameter t
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+io=IOException
+sql=SQLException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+import java.sql.SQLException;
+
+public class Main {
+
+  /**
+   * Precise rethrow: the compiler knows ex can only be one of the two the body can throw, so the
+   * method declares those rather than Exception. This file compiling is the proof.
+   */
+  static void run(boolean io) throws IOException, SQLException {
+    try {
+      if (io) {
+        throw new IOException("io");
+      }
+      throw new SQLException("sql");
+    } catch (Exception ex) {
+      throw ex;
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println("io=" + caught(true));
+    System.out.println("sql=" + caught(false));
+  }
+
+  static String caught(boolean io) {
+    try {
+      run(io);
+      return "none";
+    } catch (Exception e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3744,7 +3959,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a"`, `"verified": null`
+To record: `"digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a"`, `"verified": "sha256:5b6c01404af159275127e5426fa81f74c45a7a073e30fc7858285bd2b6fbfca1"`
 
 **Comments:**
 
@@ -3958,7 +4173,35 @@ Tests the special runtime behavior of a throw statement whose expression evaluat
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=NullPointerException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      throwNull();
+      System.out.println("thrown=none");
+    } catch (Throwable thrown) {
+      System.out.println("thrown=" + thrown.getClass().getSimpleName());
+    }
+  }
+
+  static void throwNull() {
+    // The null literal needs no throws clause: its static type carries no checked exception,
+    // which is why this compiles at all. The failure happens when it is thrown.
+    throw null;
+  }
+}
+```
 
 ### Review
 
@@ -3973,7 +4216,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea"`, `"verified": null`
+To record: `"digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea"`, `"verified": "sha256:f0ea31173b30fc8f6659dbb196761b5a87cba2a5599d8ef252b6549a90acfeca"`
 
 **Comments:**
 
@@ -4214,7 +4457,44 @@ Requires knowing that Arrays.asList is fixed-size and backed by the original arr
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+writesThroughToArray=z
+add=UnsupportedOperationException
+remove=UnsupportedOperationException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    String[] array = {"x", "y"};
+    List<String> list = Arrays.asList(array);
+
+    list.set(0, "z");
+    System.out.println("writesThroughToArray=" + array[0]);
+    System.out.println("add=" + thrownBy(() -> list.add("z")));
+    System.out.println("remove=" + thrownBy(() -> list.remove(0)));
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -4229,7 +4509,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:78ae48555284a939204e7fd0a0c9ec06a2868315ed215f48a0bead672ec7c70f"`, `"verified": null`
+To record: `"digest": "sha256:78ae48555284a939204e7fd0a0c9ec06a2868315ed215f48a0bead672ec7c70f"`, `"verified": "sha256:3ca8f77e3e8dda4129c5dab4327208a26a63ea9cfc6bc95ed7a7767e6cf9eb79"`
 
 **Comments:**
 
@@ -5015,7 +5295,39 @@ Tests the SortedSet rule that ordering equality determines element uniqueness, w
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+areEqual=false
+secondAdded=false
+size=1
+kept=first
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.TreeSet;
+
+public class Main {
+
+  record Item(String id) {}
+
+  public static void main(String[] args) {
+    // The comparator decides membership for a sorted set, not equals.
+    TreeSet<Item> set = new TreeSet<>((a, b) -> 0);
+    set.add(new Item("first"));
+    Item second = new Item("second");
+
+    System.out.println("areEqual=" + new Item("first").equals(second));
+    System.out.println("secondAdded=" + set.add(second));
+    System.out.println("size=" + set.size());
+    System.out.println("kept=" + set.first().id());
+  }
+}
+```
 
 ### Review
 
@@ -5030,7 +5342,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:bb2c3d99cea36775c4a9c9e4d3f64fab7b9f9d7d868385bb5ae7526d14aca3f8"`, `"verified": null`
+To record: `"digest": "sha256:bb2c3d99cea36775c4a9c9e4d3f64fab7b9f9d7d868385bb5ae7526d14aca3f8"`, `"verified": "sha256:f8d953b82ae460272c52275ab89e9cd2cc47daa9ff148d98ff34b92a4b041e23"`
 
 **Comments:**
 
@@ -5071,7 +5383,46 @@ Distinguishes an unmodifiable view from an immutable independent copy.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+addThroughView=UnsupportedOperationException
+viewSeesBackingChange=2
+backingStillModifiable=2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> backing = new ArrayList<>(List.of("a"));
+    List<String> view = Collections.unmodifiableList(backing);
+
+    System.out.println("addThroughView=" + thrownBy(() -> view.add("b")));
+    backing.add("b");
+    // A copy would not have noticed, and the backing list is not itself frozen.
+    System.out.println("viewSeesBackingChange=" + view.size());
+    System.out.println("backingStillModifiable=" + backing.size());
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -5086,7 +5437,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:841c4f88777e1d2214370df5e28556c09978e2a01750b1529d8083e8279fddd9"`, `"verified": null`
+To record: `"digest": "sha256:841c4f88777e1d2214370df5e28556c09978e2a01750b1529d8083e8279fddd9"`, `"verified": "sha256:dc4aa67860f06cad84df4161672a72a6f5156d93dd50d684671cacfd15b8f953"`
 
 **Comments:**
 
@@ -5239,7 +5590,37 @@ Tests the duplicate-key behavior of the two-function toMap collector when no mer
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=IllegalStateException
+withMergeFunction={a=ab}
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      List.of("aa", "ab").stream().collect(Collectors.toMap(s -> s.charAt(0), s -> s));
+      System.out.println("thrown=none");
+    } catch (IllegalStateException e) {
+      System.out.println("thrown=" + e.getClass().getSimpleName());
+    }
+    // The three-argument form is the way to say which value wins.
+    System.out.println(
+        "withMergeFunction="
+            + List.of("aa", "ab").stream().collect(Collectors.toMap(s -> s.charAt(0), s -> s, (a, b) -> b)));
+  }
+}
+```
 
 ### Review
 
@@ -5254,7 +5635,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b"`, `"verified": null`
+To record: `"digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b"`, `"verified": "sha256:bc985617b6e5969c4dd2a4fbbf129eeece5a38f6d180e56723a04039a844b0a6"`
 
 **Comments:**
 
@@ -5295,7 +5676,30 @@ Requires connecting encounter order with the semantics of the short-circuiting f
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+sequential=a
+parallel=a
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> ordered = List.of("a", "b", "c");
+    System.out.println("sequential=" + ordered.stream().findFirst().orElseThrow());
+    // Ordered means first, even in parallel; findAny is the one that may return any element.
+    System.out.println("parallel=" + ordered.stream().parallel().findFirst().orElseThrow());
+  }
+}
+```
 
 ### Review
 
@@ -5310,7 +5714,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c36ab357793803d"`, `"verified": null`
+To record: `"digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c36ab357793803d"`, `"verified": "sha256:919b1feae12cce04d4be8a2db134dcc55918835923581f04b314f67827a1fd79"`
 
 **Comments:**
 
@@ -6173,7 +6577,42 @@ Tests two documented guarantees of the unmodifiable-list collector, including it
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+add=UnsupportedOperationException
+withNullElement=NullPointerException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> collected = List.of("a").stream().collect(Collectors.toUnmodifiableList());
+    System.out.println("add=" + thrownBy(() -> collected.add("b")));
+    System.out.println(
+        "withNullElement="
+            + thrownBy(() -> Arrays.asList("a", null).stream().collect(Collectors.toUnmodifiableList())));
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -6188,7 +6627,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216ccc8578dfbc6940"`, `"verified": null`
+To record: `"digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216ccc8578dfbc6940"`, `"verified": "sha256:defc11ffa0d793417c6cfb30e889baaa84e03c2208ef85397506ffdac57ca5d9"`
 
 **Comments:**
 
@@ -7397,7 +7836,34 @@ Tests ConcurrentHashMap.computeIfAbsent semantics when the mapping function decl
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+returned=null
+containsKey=false
+size=0
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Main {
+
+  public static void main(String[] args) {
+    ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+    Integer returned = map.computeIfAbsent("x", key -> null);
+
+    System.out.println("returned=" + returned);
+    // No mapping is recorded, which is what lets null from get() mean absence.
+    System.out.println("containsKey=" + map.containsKey("x"));
+    System.out.println("size=" + map.size());
+  }
+}
+```
 
 ### Review
 
@@ -7412,7 +7878,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f"`, `"verified": null`
+To record: `"digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f"`, `"verified": "sha256:add2dc8e9babb3791c67936bbfe5048020ba1ce96cefef971defb3434283a662"`
 
 **Comments:**
 
@@ -8385,7 +8851,46 @@ Checks the default replacement behavior of Files.copy, a common source of incorr
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=FileAlreadyExistsException
+afterReplaceExisting=from the source
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
+public class Main {
+
+  public static void main(String[] args) throws IOException {
+    Path source = Files.createTempFile("certforge-source", ".txt");
+    Path target = Files.createTempFile("certforge-target", ".txt");
+    Files.writeString(source, "from the source");
+    try {
+      try {
+        Files.copy(source, target);
+        System.out.println("thrown=none");
+      } catch (IOException e) {
+        System.out.println("thrown=" + e.getClass().getSimpleName());
+      }
+      // Overwriting is opt-in rather than the default.
+      Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+      System.out.println("afterReplaceExisting=" + Files.readString(target));
+    } finally {
+      Files.deleteIfExists(source);
+      Files.deleteIfExists(target);
+    }
+  }
+}
+```
 
 ### Review
 
@@ -8400,7 +8905,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a787e081b9567d47"`, `"verified": null`
+To record: `"digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a787e081b9567d47"`, `"verified": "sha256:81107834f27d0803fc4d530c928a5e15cc7129e72e362b9263b49b918ff9cfd5"`
 
 **Comments:**
 
@@ -10159,7 +10664,46 @@ Checks the failure contract of ResourceBundle lookup when a requested key is abs
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+present=a value
+missing=MissingResourceException
+containsKey=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ListResourceBundle;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+public class Main {
+
+  public static class Messages extends ListResourceBundle {
+    @Override
+    protected Object[][] getContents() {
+      return new Object[][] {{"present", "a value"}};
+    }
+  }
+
+  public static void main(String[] args) {
+    ResourceBundle bundle = new Messages();
+    System.out.println("present=" + bundle.getString("present"));
+    try {
+      bundle.getString("missing");
+      System.out.println("missing=none");
+    } catch (MissingResourceException e) {
+      System.out.println("missing=" + e.getClass().getSimpleName());
+    }
+    // containsKey is the way to ask without the exception.
+    System.out.println("containsKey=" + bundle.containsKey("missing"));
+  }
+}
+```
 
 ### Review
 
@@ -10174,7 +10718,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e4438722201546ae9803"`, `"verified": null`
+To record: `"digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e4438722201546ae9803"`, `"verified": "sha256:917956b3fc18810b8cbe30669a2be82ff1b3ef85d7b17c9107191f833464560c"`
 
 **Comments:**
 

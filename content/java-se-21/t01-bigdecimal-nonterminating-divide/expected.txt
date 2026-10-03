@@ -1,0 +1,2 @@
+thrown=ArithmeticException
+withScale=0.3333
