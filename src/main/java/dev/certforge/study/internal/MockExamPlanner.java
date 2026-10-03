@@ -21,9 +21,10 @@ import org.springframework.stereotype.Component;
 /**
  * Builds the immutable question plan that a mock-exam session will persist.
  *
- * <p>No answers are exposed here. The planner reads only learner-safe published questions, takes the
- * configured number from each top-level exam topic, then shuffles the combined set. The caller will
- * persist the exact revision ids and order in the mock-exam aggregate introduced by the next slice.
+ * <p>No answers are exposed here. The planner reads only learner-safe published questions, takes
+ * the configured number from each top-level exam topic, then shuffles the combined set. The caller
+ * will persist the exact revision ids and order in the mock-exam aggregate introduced by the next
+ * slice.
  */
 @Component
 class MockExamPlanner {
