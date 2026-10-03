@@ -347,7 +347,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_2"];
+        get: operations["get_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -589,6 +589,86 @@ export interface paths {
             cookie?: never;
         };
         get: operations["sessions"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/mock-exams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["start_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/mock-exams/{sessionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/mock-exams/{sessionId}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["finish"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/mock-exams/{sessionId}/questions/{position}/response": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["respond"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/mock-exams/{sessionId}/result": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["result"];
         put?: never;
         post?: never;
         delete?: never;
@@ -881,6 +961,58 @@ export interface components {
             topicId: string;
             topicName: string | null;
         };
+        MockExamQuestionView: {
+            answered: boolean;
+            /** Format: int32 */
+            position: number;
+            question: components["schemas"]["PublishedQuestion"];
+            /** Format: uuid */
+            topicId: string;
+        };
+        MockExamResult: {
+            /** Format: int32 */
+            answered: number;
+            /** Format: int32 */
+            correct: number;
+            /** Format: int64 */
+            elapsedSeconds: number;
+            /** Format: uuid */
+            id: string;
+            passed: boolean;
+            /** Format: int32 */
+            passingCorrectCount: number;
+            /** Format: int32 */
+            passingPercentage: number;
+            /** Format: int32 */
+            percentage: number;
+            questions: components["schemas"]["QuestionResult"][];
+            status: string;
+            topics: components["schemas"]["TopicResult"][];
+            /** Format: int32 */
+            total: number;
+            /** Format: uuid */
+            trackId: string;
+        };
+        MockExamView: {
+            /** Format: int32 */
+            answeredCount: number;
+            /** Format: date-time */
+            closedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            passingPercentage: number;
+            /** Format: int32 */
+            questionCount: number;
+            questions: components["schemas"]["MockExamQuestionView"][];
+            status: string;
+            /** Format: uuid */
+            trackId: string;
+        };
         OptionAnswer: {
             correct: boolean;
             explanation: string;
@@ -932,6 +1064,17 @@ export interface components {
             topicId: string;
             /** @enum {string} */
             type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+        };
+        QuestionResult: {
+            answer: components["schemas"]["Answer"];
+            answered: boolean;
+            correct: boolean;
+            /** Format: int32 */
+            position: number;
+            question: components["schemas"]["PublishedQuestion"];
+            selectedOptions: string[];
+            /** Format: uuid */
+            topicId: string;
         };
         QuestionSummary: {
             /** Format: uuid */
@@ -1013,6 +1156,18 @@ export interface components {
         RequiredReviewRequest: {
             checklist?: string[];
             comment: string;
+        };
+        ResponseReceipt: {
+            /** Format: int32 */
+            position: number;
+            /** Format: uuid */
+            revisionId: string;
+            selectedOptions: string[];
+            /** Format: date-time */
+            submittedAt: string;
+        };
+        ResponseRequest: {
+            selectedOptions: string[];
         };
         ReviewRequest: {
             checklist?: string[];
@@ -1161,6 +1316,18 @@ export interface components {
             topicId: string;
             topicName: string | null;
             trackSlug: string | null;
+        };
+        TopicResult: {
+            /** Format: int32 */
+            answered: number;
+            /** Format: int32 */
+            correct: number;
+            /** Format: int32 */
+            percentage: number;
+            /** Format: uuid */
+            topicId: string;
+            /** Format: int32 */
+            total: number;
         };
         TopicView: {
             /** Format: uuid */
@@ -1735,7 +1902,7 @@ export interface operations {
             };
         };
     };
-    get_2: {
+    get_3: {
         parameters: {
             query?: never;
             header?: never;
@@ -2083,6 +2250,125 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["PageSessionHistoryItem"];
+                };
+            };
+        };
+    };
+    start_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MockExamView"];
+                };
+            };
+        };
+    };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MockExamView"];
+                };
+            };
+        };
+    };
+    finish: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MockExamView"];
+                };
+            };
+        };
+    };
+    respond: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string;
+            };
+            path: {
+                sessionId: string;
+                position: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResponseRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ResponseReceipt"];
+                };
+            };
+        };
+    };
+    result: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MockExamResult"];
                 };
             };
         };

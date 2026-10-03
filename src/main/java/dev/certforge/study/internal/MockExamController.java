@@ -74,9 +74,7 @@ class MockExamController {
 
   @GetMapping("/{sessionId}/result")
   ResponseEntity<MockExamResult> result(@PathVariable UUID sessionId) {
-    return ResponseEntity.ok()
-        .cacheControl(CacheControl.noStore())
-        .body(service.result(sessionId));
+    return ResponseEntity.ok().cacheControl(CacheControl.noStore()).body(service.result(sessionId));
   }
 
   record StartRequest(@NotBlank String trackSlug) {}

@@ -92,8 +92,7 @@ class MockExamService {
         catalog
             .activeTrack(trackSlug)
             .orElseThrow(() -> StudyException.notFound("track_not_found", "Track not found"));
-    Optional<MockExamSession> active =
-        repository.findActive(learner.value(), track.id().value());
+    Optional<MockExamSession> active = repository.findActive(learner.value(), track.id().value());
     if (active.isPresent()) {
       throw activeMockExists(active.get());
     }
@@ -120,9 +119,7 @@ class MockExamService {
       MockExamPlanner.PlannedQuestion planned = plan.questions().get(position);
       snapshot.add(
           new SnapshotQuestion(
-              position,
-              planned.topicId().value(),
-              planned.question().revisionId().value()));
+              position, planned.topicId().value(), planned.question().revisionId().value()));
     }
 
     try {
@@ -135,7 +132,8 @@ class MockExamService {
               StudyException.conflict(
                   "active_mock_exam_exists", "A mock exam is already in progress"));
     }
-    return view(session, plan.questions().stream().map(MockExamPlanner.PlannedQuestion::question).toList());
+    return view(
+        session, plan.questions().stream().map(MockExamPlanner.PlannedQuestion::question).toList());
   }
 
   MockExamView get(UUID sessionId) {
@@ -143,8 +141,7 @@ class MockExamService {
     return view(session, snapshotQuestions(session));
   }
 
-  ResponseOutcome respond(
-      UUID sessionId, int position, String key, List<String> requestedOptions) {
+  ResponseOutcome respond(UUID sessionId, int position, String key, List<String> requestedOptions) {
     ActorId learner = currentActor.require();
     requireKey(key);
     List<String> selected = normalize(requestedOptions);
@@ -160,8 +157,7 @@ class MockExamService {
     SnapshotQuestion snapshot =
         repository
             .snapshotAt(sessionId, position)
-            .orElseThrow(
-                () -> StudyException.notFound("question_not_found", "Question not found"));
+            .orElseThrow(() -> StudyException.notFound("question_not_found", "Question not found"));
     RevisionEvidence evidence = evidence(snapshot.revisionId());
     validate(evidence, selected);
 
@@ -218,7 +214,9 @@ class MockExamService {
 
     List<SnapshotQuestion> snapshot = repository.snapshot(sessionId);
     Map<Integer, MockExamResponse> responses = new HashMap<>();
-    repository.responses(sessionId).forEach(response -> responses.put(response.position(), response));
+    repository
+        .responses(sessionId)
+        .forEach(response -> responses.put(response.position(), response));
 
     int correct = 0;
     List<QuestionResult> questions = new ArrayList<>(snapshot.size());
@@ -259,8 +257,7 @@ class MockExamService {
     int total = session.questionCount();
     int answered = responses.size();
     int percentage = percentage(correct, total);
-    int passingCorrectCount =
-        (total * session.passingPercentage() + 99) / 100;
+    int passingCorrectCount = (total * session.passingPercentage() + 99) / 100;
     List<TopicResult> topics =
         perTopic.entrySet().stream()
             .map(
@@ -383,8 +380,7 @@ class MockExamService {
     return questionBank
         .findRevision(new QuestionRevisionId(revisionId))
         .orElseThrow(
-            () ->
-                new IllegalStateException("Revision " + revisionId + " is no longer readable"));
+            () -> new IllegalStateException("Revision " + revisionId + " is no longer readable"));
   }
 
   private ResponseOutcome replay(MockExamResponse earlier, String fingerprint) {
@@ -455,10 +451,7 @@ class MockExamService {
             .map(
                 option ->
                     new OptionAnswer(
-                        option.key(),
-                        option.text(),
-                        option.correct(),
-                        option.explanation()))
+                        option.key(), option.text(), option.correct(), option.explanation()))
             .toList();
     List<Reference> references =
         evidence.references().stream()
@@ -487,8 +480,7 @@ class MockExamService {
     String canonical = sessionId + "|" + position + "|" + String.join(",", selected);
     try {
       byte[] hash =
-          MessageDigest.getInstance("SHA-256")
-              .digest(canonical.getBytes(StandardCharsets.UTF_8));
+          MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8));
       return HexFormat.of().formatHex(hash);
     } catch (NoSuchAlgorithmException e) {
       throw new IllegalStateException("SHA-256 is required", e);

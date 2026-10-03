@@ -53,13 +53,7 @@ class MockExamServiceTest {
     when(currentActor.require()).thenReturn(new ActorId(learner));
     service =
         new MockExamService(
-            repository,
-            planner,
-            catalog,
-            questionBank,
-            currentActor,
-            clock,
-            transactionManager);
+            repository, planner, catalog, questionBank, currentActor, clock, transactionManager);
   }
 
   @Test
