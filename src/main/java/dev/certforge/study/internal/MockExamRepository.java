@@ -3,6 +3,7 @@ package dev.certforge.study.internal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import dev.certforge.platform.PageCursor;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import dev.certforge.platform.PageCursor;
@@ -129,6 +130,26 @@ class MockExamRepository {
         .param(LEARNER, learnerId)
         .query(MockExamRepository::mapSession)
         .list();
+  }
+
+  /** Mock runs newest first, strictly after the cursor, at most {@code limit} rows. */
+  List<MockExamSession> findByLearner(UUID learnerId, PageCursor after, int limit) {
+    String paging = after == null ? "" : " and (created_at, id) < (:cursorAt, :cursorId)";
+    var statement =
+        jdbc.sql(
+                SELECT_SESSION
+                    + " where learner_id = :learner"
+                    + paging
+                    + " order by created_at desc, id desc limit :limit")
+            .param(LEARNER, learnerId)
+            .param("limit", limit);
+    if (after != null) {
+      statement =
+          statement
+              .param("cursorAt", OffsetDateTime.ofInstant(after.at(), ZoneOffset.UTC))
+              .param("cursorId", after.id());
+    }
+    return statement.query(MockExamRepository::mapSession).list();
   }
 
   /** Terminal mock exams newest first, strictly after the cursor. */
