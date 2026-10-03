@@ -228,7 +228,7 @@ class MockExamService {
       MockExamResponse response = responses.get(item.position());
       List<String> selected = response == null ? List.of() : response.selectedOptions();
       boolean answered = response != null;
-      boolean isCorrect = answered && grade(evidence, selected);
+      boolean isCorrect = answered && MockExamScoring.grade(evidence, selected);
       if (isCorrect) {
         correct++;
       }
@@ -256,8 +256,9 @@ class MockExamService {
 
     int total = session.questionCount();
     int answered = responses.size();
-    int percentage = percentage(correct, total);
-    int passingCorrectCount = (total * session.passingPercentage() + 99) / 100;
+    int percentage = MockExamScoring.percentage(correct, total);
+    int passingCorrectCount =
+        MockExamScoring.passingCorrectCount(total, session.passingPercentage());
     List<TopicResult> topics =
         perTopic.entrySet().stream()
             .map(
@@ -267,7 +268,7 @@ class MockExamService {
                         entry.getValue().total,
                         entry.getValue().answered,
                         entry.getValue().correct,
-                        percentage(entry.getValue().correct, entry.getValue().total)))
+                        MockExamScoring.percentage(entry.getValue().correct, entry.getValue().total)))
             .toList();
 
     Instant effectiveClose =
@@ -431,14 +432,6 @@ class MockExamService {
     }
   }
 
-  private static boolean grade(RevisionEvidence evidence, List<String> selected) {
-    Set<String> correct = new HashSet<>();
-    evidence.options().stream()
-        .filter(RevisionEvidence.Option::correct)
-        .forEach(option -> correct.add(option.key()));
-    return correct.equals(new HashSet<>(selected));
-  }
-
   private static Answer answer(RevisionEvidence evidence) {
     List<String> correctOptions =
         evidence.options().stream()
@@ -458,10 +451,6 @@ class MockExamService {
             .map(reference -> new Reference(reference.title(), reference.url()))
             .toList();
     return new Answer(correctOptions, evidence.explanation(), options, references);
-  }
-
-  private static int percentage(int correct, int total) {
-    return total == 0 ? 0 : (correct * 100) / total;
   }
 
   private static void requireKey(String key) {
