@@ -97,6 +97,11 @@ class OpenApiContractIT {
           "/api/catalog/tracks",
           "/api/study/sessions",
           "/api/study/sessions/{sessionId}/questions/{position}/attempt",
+          "/api/study/mock-exams",
+          "/api/study/mock-exams/{sessionId}",
+          "/api/study/mock-exams/{sessionId}/questions/{position}/response",
+          "/api/study/mock-exams/{sessionId}/finish",
+          "/api/study/mock-exams/{sessionId}/result",
           "/api/study/history/attempts",
           "/api/progress/topics"
         }) {
@@ -110,5 +115,15 @@ class OpenApiContractIT {
         .doesNotContain("correct", "explanation", "references");
     JsonNode option = schemas.path("PublishedOption");
     assertThat(option.path("properties").propertyNames()).doesNotContain("correct", "explanation");
+
+    JsonNode activeMock = schemas.path("MockExamView");
+    assertThat(activeMock.isMissingNode()).isFalse();
+    assertThat(activeMock.path("properties").propertyNames())
+        .doesNotContain("correct", "answer", "explanation", "references");
+
+    JsonNode receipt = schemas.path("ResponseReceipt");
+    assertThat(receipt.isMissingNode()).isFalse();
+    assertThat(receipt.path("properties").propertyNames())
+        .doesNotContain("correct", "answer", "explanation", "references");
   }
 }
