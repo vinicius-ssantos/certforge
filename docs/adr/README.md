@@ -18,5 +18,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0012](0012-interface-language.md) | Translate the interface, keep the question text in English | Accepted |
 | [0013](0013-derived-review-queue.md) | Derive the review queue from attempt evidence, and say why each item is in it | **Proposed** |
 | [0014](0014-one-topic-one-track.md) | Keep one topic in one track, and put fundamentals in the interview track | **Proposed** |
+| [0015](0015-separate-mock-exam-aggregate.md) | Model mock exams as a separate study aggregate | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.
