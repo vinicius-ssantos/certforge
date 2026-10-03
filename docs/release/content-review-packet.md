@@ -2480,7 +2480,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c116ca78accd40bbd6dbc8e897375631b0e7d4f7dceea2f4a44267192f53df2e"`, `"verified": null`
+To record: `"digest": "sha256:af0d595ad57d2ddebe8eca2b73029cc48ba82e3ecded0f39b758852aaa5458be"`, `"verified": null`
 
 **Comments:**
 
@@ -2517,7 +2517,8 @@ Tests type erasure and the resulting restriction on overloads that differ only i
 
 ### References
 
-- [JLS 8.4.8.3 Requirements in Overriding and Hiding](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.8.3)
+- [JLS 4.6 Type Erasure](https://docs.oracle.com/javase/specs/jls/se21/html/jls-4.html#jls-4.6)
+- [JLS 8.4.9 Overloading](https://docs.oracle.com/javase/specs/jls/se21/html/jls-8.html#jls-8.4.9)
 
 ### Verified by the build
 
