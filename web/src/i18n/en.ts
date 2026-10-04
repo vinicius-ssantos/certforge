@@ -1,3 +1,5 @@
+import { plural } from "./plural";
+
 /**
  * Every string the interface shows, in English, which is the canonical catalog: the shape of this
  * object is the contract every other locale has to satisfy, and `Catalog` is derived from it so
@@ -14,7 +16,16 @@
  * Strings that take a value are written as functions rather than as templates with placeholders,
  * so the argument list is part of the type and a locale cannot quietly drop one.
  */
+/** This locale's own tag, which is what its plural rules are resolved against. */
+const TAG = "en";
+
 export const en = {
+  language: {
+    label: "Language",
+    /** Each language is named in itself, which is what a reader scanning the list looks for. */
+    change: "Change language",
+  },
+
   layout: {
     skipToMain: "Skip to main content",
     brand: "CertForge",
@@ -121,7 +132,8 @@ export const en = {
     emptyTitle: "No tracks are available yet",
     emptyBody: "Check back soon. Tracks appear here once they are published.",
     javaRelease: (release: number) => `Java ${release}`,
-    topicCount: (count: number) => `${count} topics`,
+    topicCount: (count: number) =>
+      `${count} ${plural(TAG, count, { one: "topic", other: "topics" })}`,
   },
 
   track: {
@@ -172,7 +184,8 @@ export const en = {
     loading: "Loading session",
     backToAll: "Back to all tracks",
     resumed: "You already had a session in progress for this topic, so you are continuing it.",
-    answeredCount: (answered: number, total: number) => `${answered} of ${total} questions answered`,
+    answeredCount: (answered: number, total: number) =>
+      `${answered} of ${total} ${plural(TAG, total, { one: "question", other: "questions" })} answered`,
     finish: "Finish session",
     next: "Next question",
     allAnswered: "All questions answered",
@@ -190,10 +203,10 @@ export const en = {
     expiredText:
       "Sessions close after a period without activity. Answers you already gave were kept; start a new session to continue practising.",
     answeredOf: (answered: number, total: number) =>
-      `You answered ${answered} of ${total} questions.`,
+      `You answered ${answered} of ${total} ${plural(TAG, total, { one: "question", other: "questions" })}.`,
     countingCorrect: "Counting your correct answers",
     correctOf: (correct: number, answered: number) =>
-      `${correct} of ${answered} answers were correct.`,
+      `${correct} of ${answered} ${plural(TAG, answered, { one: "answer was", other: "answers were" })} correct.`,
   },
   /**
    * Counts are written as functions of the count rather than as a string plus a plural suffix, so
@@ -206,20 +219,20 @@ export const en = {
     nothingToReviewTitle: "Nothing to review yet",
     nothingHereTitle: "Nothing here yet",
     resting: (waiting: number) =>
-      `You have answered ${waiting} ${waiting === 1 ? "question" : "questions"} correctly and confidently, and they are resting. Each comes back after a gap that grows every time you get it right.`,
+      `You have answered ${waiting} ${plural(TAG, waiting, { one: "question", other: "questions" })} correctly and confidently, and ${plural(TAG, waiting, { one: "it is resting", other: "they are resting" })}. Each comes back after a gap that grows every time you get it right.`,
     neverAttempted: (count: number) =>
-      `${count} ${count === 1 ? "question" : "questions"} in the topics you have studied have never been attempted. Review is for revisiting, so start from the `,
+      `${count} ${plural(TAG, count, { one: "question", other: "questions" })} in the topics you have studied ${plural(TAG, count, { one: "has", other: "have" })} never been attempted. Review is for revisiting, so start from the `,
     startFromTracks: "Answer some questions and the ones worth revisiting appear here, with the reason. Start from the ",
     tracksPageLink: "tracks page",
     dueNow: (dueNow: number) =>
-      `${dueNow} ${dueNow === 1 ? "question is" : "questions are"} worth revisiting`,
+      `${dueNow} ${plural(TAG, dueNow, { one: "question is", other: "questions are" })} worth revisiting`,
     showingFirst: (shown: number) => `, showing the first ${shown}`,
     restingMore: (waiting: number) =>
-      ` ${waiting} more ${waiting === 1 ? "is" : "are"} resting until their next recall.`,
+      ` ${waiting} more ${plural(TAG, waiting, { one: "is", other: "are" })} resting until their next recall.`,
     practise: (count: number, topic: string) =>
-      `Practise ${count} ${count === 1 ? "question" : "questions"} in ${topic}`,
+      `Practise ${count} ${plural(TAG, count, { one: "question", other: "questions" })} in ${topic}`,
     attemptSummary: (attempts: number, wrong: number) =>
-      `Answered ${attempts} ${attempts === 1 ? "time" : "times"}, ${wrong} wrong. Last answered `,
+      `Answered ${attempts} ${plural(TAG, attempts, { one: "time", other: "times" })}, ${wrong} wrong. Last answered `,
     fallbackTopic: "Topic",
     reasons: {
       wrongWhileConfident: {
@@ -339,7 +352,7 @@ export const en = {
     next: "Next",
     submitTitle: "Submit mock exam",
     submitExplain: (unanswered: number) =>
-      `Submit now? ${unanswered} unanswered questions will count as incorrect. You cannot change answers after submitting.`,
+      `Submit now? ${unanswered} unanswered ${plural(TAG, unanswered, { one: "question will", other: "questions will" })} count as incorrect. You cannot change answers after submitting.`,
     submitConfirm: "Submit mock exam",
     submitCancel: "Keep working",
     submitTrigger: "Finish and score mock",
@@ -356,7 +369,7 @@ export const en = {
     notReached: "Practice target not reached",
     percentage: (percentage: number) => `${percentage}%`,
     correctOf: (correct: number, total: number, answered: number) =>
-      `${correct} correct of ${total} questions; ${answered} answered.`,
+      `${correct} correct of ${total} ${plural(TAG, total, { one: "question", other: "questions" })}; ${answered} answered.`,
     target: (percentage: number, correct: number) =>
       `Practice target: ${percentage}% (${correct} correct).`,
     elapsed: (elapsed: string) => `Elapsed time: ${elapsed}.`,
@@ -513,7 +526,7 @@ export const en = {
       noActiveVersion:
         "No exam version is active, so nothing can be published on this track at all: publishing binds a revision to the topic's active exam version.",
       unmapped: (count: number) =>
-        `${count} ${count === 1 ? "topic is" : "topics are"} not mapped to the active exam version. A question on ${count === 1 ? "it" : "them"} can be written and approved, but publishing it is refused.`,
+        `${count} ${plural(TAG, count, { one: "topic is", other: "topics are" })} not mapped to the active exam version. A question on ${plural(TAG, count, { one: "it", other: "them" })} can be written and approved, but publishing it is refused.`,
       versionsHeading: "Exam versions",
       noVersions: "This track has no exam version.",
     },

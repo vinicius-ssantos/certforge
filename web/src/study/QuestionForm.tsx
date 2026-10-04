@@ -2,6 +2,7 @@ import { Prompt } from "../ui/Prompt";
 import { useMemo, useState, type FormEvent } from "react";
 import type { AttemptRequest, Confidence, Question } from "../api/types";
 import { useText } from "../i18n/useText";
+import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { ErrorSummary } from "../ui/Form";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
@@ -115,7 +116,7 @@ export function QuestionForm({
               />
               <label htmlFor={`option-${option.key}`}>
                 <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
-                {option.text}
+                <English>{option.text}</English>
               </label>
             </div>
           ))}

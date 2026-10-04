@@ -23,6 +23,13 @@ export default defineConfig({
   use: {
     baseURL: EXTERNAL ?? `http://localhost:${WEB_PORT}`,
     trace: "retain-on-failure",
+    /**
+     * Pinned, because the interface now follows the browser's preferred language: without this the
+     * suite would read English or Portuguese depending on the machine running it, and every
+     * assertion here is written against the English wording. `portuguese.spec.ts` switches
+     * deliberately rather than relying on the environment.
+     */
+    locale: "en-US",
   },
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },

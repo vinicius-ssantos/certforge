@@ -1,5 +1,6 @@
 import { Prompt } from "../ui/Prompt";
 import type { AttemptResult, Question } from "../api/types";
+import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
 
@@ -33,14 +34,14 @@ export function AnswerFeedback({
           <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
             <p>
               <strong>
-                {option.key}. {option.text}
+                {option.key}. <English>{option.text}</English>
               </strong>
             </p>
             <p className="muted">
               {chosen.has(option.key) ? t.feedback.yourAnswer : ""}
               {correctKeys.has(option.key) ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
             </p>
-            {option.explanation ? <p>{option.explanation}</p> : null}
+            {option.explanation ? <English as="p">{option.explanation}</English> : null}
           </li>
         ))}
       </ul>
@@ -55,7 +56,7 @@ export function AnswerFeedback({
             {result.answer.references.map((reference) => (
               <li key={reference.url}>
                 <a href={reference.url} target="_blank" rel="noopener noreferrer">
-                  {t.feedback.referenceLink(reference.title)}
+                  <English>{t.feedback.referenceLink(reference.title)}</English>
                 </a>
               </li>
             ))}

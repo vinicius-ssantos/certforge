@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router";
 import { App } from "./App";
 import { ApiProvider } from "./api/ApiProvider";
 import { AuthProvider, ME_KEY } from "./auth/AuthContext";
+import { TextProvider } from "./i18n/TextProvider";
 import { createQueryClient } from "./queryClient";
 import "@fontsource/ibm-plex-sans/400.css";
 import "@fontsource/ibm-plex-sans/500.css";
@@ -36,10 +37,12 @@ if (!root) {
 
 createRoot(root).render(
   <StrictMode>
-    <ApiProvider>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ApiProvider>
+    <TextProvider>
+      <ApiProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ApiProvider>
+    </TextProvider>
   </StrictMode>,
 );

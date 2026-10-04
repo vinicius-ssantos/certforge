@@ -4,7 +4,7 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { ReviewQueueItem } from "../api/types";
 import { formatDateTime } from "../history/format";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { reasonExplanation, reasonLabel } from "./reasons";
@@ -28,6 +28,7 @@ function summarise(prompt: string): string {
  */
 export function ReviewPage() {
   const t = useText();
+  const { locale } = useLocale();
   useDocumentTitle(t.review.title);
   const api = useApi();
   const navigate = useNavigate();
@@ -123,7 +124,7 @@ export function ReviewPage() {
                     <p className="muted">
                       {t.review.attemptSummary(item.timesAttempted, item.timesWrong)}
                       <time dateTime={item.lastAttemptedAt}>
-                        {formatDateTime(item.lastAttemptedAt)}
+                        {formatDateTime(item.lastAttemptedAt, locale)}
                       </time>
                       .
                     </p>

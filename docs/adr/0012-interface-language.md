@@ -1,6 +1,7 @@
 # ADR 0012: Translate the interface, keep the question text in English
 
-- Status: **Accepted** on 2026-10-02, as written. Nothing is translated yet: decision 3 keeps the work out of `v0.1.0`, and #74 carries it afterwards.
+- Status: **Accepted** on 2026-10-02, as written, and **carried out** in #74 after `v0.2.0`: the strings were extracted into a typed catalog (#122) and Brazilian Portuguese was added alongside English, with the browser's preferred language as the default and a remembered switcher. The Portuguese wording has not yet had a native-speaker review; until it does, that half of the decision is implemented but not validated.
+- Date: 2026-10-02
 - Date: 2026-10-02
 
 ## Context

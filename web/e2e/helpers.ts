@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, type Page } from "@playwright/test";
+import { en, type Catalog } from "../src/i18n/en";
 
 /** A new learner for each test, so runs never depend on one another. */
 export function newLearner() {
@@ -7,12 +8,17 @@ export function newLearner() {
   return { email: `learner-${unique}@example.com`, password: "a long e2e password" };
 }
 
-export async function register(page: Page, learner = newLearner()) {
+/**
+ * Registers and lands on the tracks page. The catalog is a parameter so that one test can run
+ * against a Portuguese browser; everything else takes the default, and the suite is pinned to
+ * English in `playwright.config.ts`.
+ */
+export async function register(page: Page, learner = newLearner(), t: Catalog = en) {
   await page.goto("/register");
-  await page.getByLabel("Email").fill(learner.email);
-  await page.getByLabel("Password").fill(learner.password);
-  await page.getByRole("button", { name: "Create account" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeVisible();
+  await page.getByLabel(t.auth.email).fill(learner.email);
+  await page.getByLabel(t.auth.password).fill(learner.password);
+  await page.getByRole("button", { name: t.auth.createAccount }).click();
+  await expect(page.getByRole("heading", { level: 1, name: t.tracks.title })).toBeVisible();
   return learner;
 }
 

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { MockExam, Question } from "../api/types";
+import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
@@ -312,7 +313,7 @@ function MockQuestion({
                   onChange={() => toggle(option.key)}
                 />
                 <label htmlFor={`mock-${question.revisionId}-${option.key}`}>
-                  <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>{option.text}
+                  <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span><English>{option.text}</English>
                 </label>
               </div>
             ))}

@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
 import type { Revision } from "../api/types";
 import { formatDateTime } from "../history/format";
+import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
 import { Prompt } from "../ui/Prompt";
 import { checklist, difficultyLabels, typeLabels } from "./labels";
 import { RevisionDiff } from "./RevisionDiff";
@@ -36,6 +37,7 @@ export function RevisionView({
   topicNameOf?: (id: string) => string | undefined;
 }) {
   const t = useText();
+  const { locale } = useLocale();
   const view = t.editorial.revisionView;
   const types = typeLabels(t);
   const difficulties = difficultyLabels(t);
@@ -66,7 +68,7 @@ export function RevisionView({
                 <strong aria-hidden="true">{option.key}</strong>
                 <span>
                   <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
-                  {option.text}
+                  <English>{option.text}</English>
                 </span>
               </li>
             ))}
@@ -81,7 +83,7 @@ export function RevisionView({
                 <strong className={option.correct ? "yes" : "no"}>
                   {view.optionVerdict(option.key, option.correct)}
                 </strong>
-                <p>{option.explanation}</p>
+                <English as="p">{option.explanation}</English>
               </li>
             ))}
           </ul>
@@ -98,7 +100,7 @@ export function RevisionView({
             {revision.references.map((reference) => (
               <li key={reference.url}>
                 <a href={reference.url} target="_blank" rel="noopener noreferrer">
-                  {t.feedback.referenceLink(reference.title)}
+                  <English>{t.feedback.referenceLink(reference.title)}</English>
                 </a>
               </li>
             ))}
@@ -113,7 +115,7 @@ export function RevisionView({
                 <li key={`${review.reviewerId}-${review.decidedAt}`}>
                   <strong>{decisionLabel(review.decision, t)}</strong>
                   {review.reviewerName ? view.decidedBy(review.reviewerName) : ""}{" "}
-                  <time dateTime={review.decidedAt}>{formatDateTime(review.decidedAt)}</time>
+                  <time dateTime={review.decidedAt}>{formatDateTime(review.decidedAt, locale)}</time>
                   {review.comment ? <p>{review.comment}</p> : null}
                   {review.checklist.length > 0 ? (
                     <p className="muted">
