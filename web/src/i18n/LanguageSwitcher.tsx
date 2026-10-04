@@ -15,11 +15,15 @@ export function LanguageSwitcher() {
 
   return (
     <span className="language">
-      <label htmlFor="language" className="visually-hidden">
-        {t.language.label}
-      </label>
+      {/*
+       * aria-label rather than a visually-hidden <label>: a label element's text is a text node of
+       * the banner too, so the accessibility tree read "CertForge Language" and announced
+       * "Language" twice -- once as banner text and once as the control's name. The e2e aria
+       * snapshot in screen-reader.spec.ts is what showed that.
+       */}
       <select
         id="language"
+        aria-label={t.language.label}
         value={locale}
         onChange={(event) => {
           if (isLocale(event.target.value)) {

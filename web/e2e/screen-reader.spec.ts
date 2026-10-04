@@ -23,7 +23,11 @@ test.describe("what a screen reader is given", () => {
 
     await expect(page.locator("body")).toMatchAriaSnapshot(`
       - link "Skip to main content"
-      - banner: CertForge
+      - banner:
+        - text: CertForge
+        - combobox "Language":
+          - option "English" [selected]
+          - option "Português (Brasil)"
       - main:
         - heading "Sign in" [level=1]
         - text: Email
