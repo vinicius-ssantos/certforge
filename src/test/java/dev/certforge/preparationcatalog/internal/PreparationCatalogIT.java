@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.jayway.jsonpath.JsonPath;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.preparationcatalog.TrackKind;
 import jakarta.servlet.http.Cookie;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -251,8 +252,54 @@ class PreparationCatalogIT {
     assertThat(catalog.activeTrack("java-certification")).isPresent();
     var context = catalog.findActiveTopicContext(new TopicId(UUID.fromString(SEEDED_TOPIC_ID)));
     assertThat(context).isPresent();
-    assertThat(context.orElseThrow().javaRelease()).isEqualTo(21);
+    assertThat(context.orElseThrow().kind()).isEqualTo(TrackKind.CERTIFICATION);
+    assertThat(context.orElseThrow().javaRelease()).contains(21);
     assertThat(catalog.findActiveTopicContext(new TopicId(UUID.randomUUID()))).isEmpty();
+
+    assertThat(catalog.findTrackKindOfTopic(new TopicId(UUID.fromString(SEEDED_TOPIC_ID))))
+        .contains(TrackKind.CERTIFICATION);
+    assertThat(catalog.findTrackKindOfTopic(new TopicId(UUID.randomUUID()))).isEmpty();
+  }
+
+  /**
+   * The context of an interview topic, which is what decision 6 made possible: a version with no
+   * exam produces a context all the same, and it carries no Java release rather than a nullable one
+   * a reader has to interpret.
+   */
+  @Test
+  void anInterviewTopicHasAContextWithNoJavaRelease() {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'interview-"
+            + slug()
+            + "', 'Java Backend', 'INTERVIEW', 'ACTIVE')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'system-design', 'System design')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 2)",
+        versionId,
+        topicId);
+
+    var context = catalog.findActiveTopicContext(new TopicId(topicId));
+
+    assertThat(context).isPresent();
+    assertThat(context.orElseThrow().kind()).isEqualTo(TrackKind.INTERVIEW);
+    assertThat(context.orElseThrow().trackVersionId().value()).isEqualTo(versionId);
+    assertThat(context.orElseThrow().javaRelease()).isEmpty();
   }
 
   // ---- lifecycle -----------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 package dev.certforge.questionbank.internal;
 
+import static dev.certforge.preparationcatalog.TrackKind.CERTIFICATION;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
@@ -106,7 +107,7 @@ class ContentPackTest {
                     dir.getFileName().toString(),
                     () -> {
                       RevisionRequest request = withSnippet(dir);
-                      assertThat(RevisionRules.violations(request.toContent()))
+                      assertThat(RevisionRules.violations(request.toContent(), CERTIFICATION))
                           .as("completeness of %s", dir.getFileName())
                           .isEmpty();
                       assertThat(request.javaRelease()).isEqualTo(21);

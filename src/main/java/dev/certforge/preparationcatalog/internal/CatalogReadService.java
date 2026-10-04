@@ -6,6 +6,7 @@ import dev.certforge.preparationcatalog.PreparationTrackId;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
+import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.preparationcatalog.TrackVersionId;
 import dev.certforge.preparationcatalog.TrackView;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
@@ -54,17 +55,28 @@ class CatalogReadService implements PreparationCatalog {
         .flatMap(track -> find(track.topics(), id));
   }
 
+  /**
+   * Read straight from the mapping rather than by building a learner track view and taking an id
+   * out of it. The view is certification-shaped -- it names an exam -- so going through it was what
+   * made an interview topic produce no context at all (ADR 0016).
+   */
   @Override
   public Optional<TopicContext> findActiveTopicContext(TopicId id) {
     return repository
-        .findActiveTopic(id.value())
-        .flatMap(row -> repository.findTrack(row.trackId()))
-        .flatMap(this::toView)
-        .filter(track -> find(track.topics(), id).isPresent())
+        .findActiveTopicContextRow(id.value())
         .map(
-            track ->
+            row ->
                 new TopicContext(
-                    id, track.id(), track.examVersion().id(), track.examVersion().javaRelease()));
+                    new TopicId(row.topicId()),
+                    new PreparationTrackId(row.trackId()),
+                    new TrackVersionId(row.versionId()),
+                    row.kind(),
+                    row.javaRelease()));
+  }
+
+  @Override
+  public Optional<TrackKind> findTrackKindOfTopic(TopicId id) {
+    return repository.findTrackKindOfTopic(id.value());
   }
 
   private Optional<TrackView> toView(TrackRow track) {

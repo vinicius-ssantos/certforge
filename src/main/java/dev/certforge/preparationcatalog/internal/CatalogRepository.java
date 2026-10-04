@@ -240,6 +240,51 @@ class CatalogRepository {
         .optional();
   }
 
+  /**
+   * The publishing context of a topic: its track, that track's kind, the active version it is
+   * mapped in, and the Java release the exam targets when there is an exam.
+   *
+   * <p>The join to the exam is a LEFT JOIN, which is the point of ADR 0016: an interview version
+   * has no exam row and must still produce a context. Before this, no exam meant no context, and
+   * therefore nothing publishable.
+   */
+  Optional<ContextRow> findActiveTopicContextRow(UUID topicId) {
+    return jdbc.sql(
+            "select tp.id as topic_id, t.id as track_id, t.kind, v.id as version_id,"
+                + " e.java_release"
+                + " from certforge.catalog_topic tp"
+                + " join certforge.catalog_track_version_topic m on m.topic_id = tp.id"
+                + " join certforge.catalog_track_version v on v.id = m.track_version_id"
+                + " join certforge.catalog_track t on t.id = v.track_id"
+                + " left join certforge.catalog_certification_exam e on e.track_version_id = v.id"
+                + " where tp.id = :id and v.status = 'ACTIVE' and t.status = 'ACTIVE'")
+        .param("id", topicId)
+        .query(
+            (rs, rowNum) ->
+                new ContextRow(
+                    rs.getObject("topic_id", UUID.class),
+                    rs.getObject("track_id", UUID.class),
+                    TrackKind.valueOf(rs.getString("kind")),
+                    rs.getObject("version_id", UUID.class),
+                    rs.getObject("java_release", Integer.class)))
+        .optional();
+  }
+
+  /** The kind of the topic's track, whatever state either of them is in. */
+  Optional<TrackKind> findTrackKindOfTopic(UUID topicId) {
+    return jdbc.sql(
+            "select t.kind from certforge.catalog_track t"
+                + " join certforge.catalog_topic tp on tp.track_id = t.id"
+                + " where tp.id = :id")
+        .param("id", topicId)
+        .query((rs, rowNum) -> TrackKind.valueOf(rs.getString("kind")))
+        .optional();
+  }
+
+  /** What {@link #findActiveTopicContextRow} returns. Never leaves the module. */
+  record ContextRow(
+      UUID topicId, UUID trackId, TrackKind kind, UUID versionId, Integer javaRelease) {}
+
   // ---- mapping helpers -----------------------------------------------------------------------
 
   private static TrackRow mapTrack(ResultSet rs, int rowNum) throws SQLException {

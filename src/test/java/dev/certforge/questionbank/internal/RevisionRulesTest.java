@@ -1,5 +1,7 @@
 package dev.certforge.questionbank.internal;
 
+import static dev.certforge.preparationcatalog.TrackKind.CERTIFICATION;
+import static dev.certforge.preparationcatalog.TrackKind.INTERVIEW;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.certforge.questionbank.Difficulty;
@@ -35,7 +37,7 @@ class RevisionRulesTest {
     var content =
         content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false)));
 
-    assertThat(RevisionRules.violations(content)).isEmpty();
+    assertThat(RevisionRules.violations(content, CERTIFICATION)).isEmpty();
   }
 
   @Test
@@ -45,7 +47,7 @@ class RevisionRulesTest {
             QuestionType.MULTIPLE_CHOICE,
             List.of(option("A", true), option("B", true), option("C", false)));
 
-    assertThat(RevisionRules.violations(content)).isEmpty();
+    assertThat(RevisionRules.violations(content, CERTIFICATION)).isEmpty();
   }
 
   @Test
@@ -53,9 +55,9 @@ class RevisionRulesTest {
     var none = content(QuestionType.SINGLE_CHOICE, List.of(option("A", false), option("B", false)));
     var two = content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", true)));
 
-    assertThat(RevisionRules.violations(none))
+    assertThat(RevisionRules.violations(none, CERTIFICATION))
         .containsExactly("single_choice_requires_exactly_one_correct_option");
-    assertThat(RevisionRules.violations(two))
+    assertThat(RevisionRules.violations(two, CERTIFICATION))
         .containsExactly("single_choice_requires_exactly_one_correct_option");
   }
 
@@ -64,7 +66,7 @@ class RevisionRulesTest {
     var content =
         content(QuestionType.MULTIPLE_CHOICE, List.of(option("A", false), option("B", false)));
 
-    assertThat(RevisionRules.violations(content))
+    assertThat(RevisionRules.violations(content, CERTIFICATION))
         .containsExactly("multiple_choice_requires_a_correct_option");
   }
 
@@ -74,8 +76,8 @@ class RevisionRulesTest {
     var duplicate =
         content(QuestionType.MULTIPLE_CHOICE, List.of(option("A", true), option("A", false)));
 
-    assertThat(RevisionRules.violations(one)).contains("options_too_few");
-    assertThat(RevisionRules.violations(duplicate)).contains("option_key_duplicate");
+    assertThat(RevisionRules.violations(one, CERTIFICATION)).contains("options_too_few");
+    assertThat(RevisionRules.violations(duplicate, CERTIFICATION)).contains("option_key_duplicate");
   }
 
   @Test
@@ -85,7 +87,7 @@ class RevisionRulesTest {
             QuestionType.SINGLE_CHOICE,
             List.of(option("A", true), new RevisionContent.Option("B", " ", false, null)));
 
-    assertThat(RevisionRules.violations(content))
+    assertThat(RevisionRules.violations(content, CERTIFICATION))
         .contains("option_text_missing", "option_explanation_missing");
   }
 
@@ -115,8 +117,9 @@ class RevisionRulesTest {
             options,
             List.of(new RevisionContent.Reference("Doc", "http://example.com")));
 
-    assertThat(RevisionRules.violations(none)).containsExactly("references_missing");
-    assertThat(RevisionRules.violations(insecure)).containsExactly("reference_invalid");
+    assertThat(RevisionRules.violations(none, CERTIFICATION)).containsExactly("references_missing");
+    assertThat(RevisionRules.violations(insecure, CERTIFICATION))
+        .containsExactly("reference_invalid");
   }
 
   @Test
@@ -125,7 +128,7 @@ class RevisionRulesTest {
         new RevisionContent(
             QuestionType.SINGLE_CHOICE, null, null, null, null, null, null, List.of(), List.of());
 
-    assertThat(RevisionRules.violations(empty))
+    assertThat(RevisionRules.violations(empty, CERTIFICATION))
         .contains(
             "prompt_missing",
             "topic_missing",
@@ -135,5 +138,62 @@ class RevisionRulesTest {
             "explanation_missing",
             "options_too_few",
             "references_missing");
+  }
+
+  // ---- the Java release, which only a certification question states (ADR 0016 decision 6) -----
+
+  @Test
+  void anInterviewQuestionNeedsNoJavaRelease() {
+    RevisionContent withoutRelease =
+        new RevisionContent(
+            QuestionType.SINGLE_CHOICE,
+            UUID.randomUUID(),
+            null,
+            Difficulty.MEDIUM,
+            "Asked at this depth in most backend screens",
+            "How would you make a consumer idempotent?",
+            "Explanation",
+            List.of(option("A", true), option("B", false)),
+            List.of(REFERENCE));
+
+    assertThat(RevisionRules.violations(withoutRelease, INTERVIEW)).isEmpty();
+    // The same content is incomplete for a certification track, which is the point of the rule
+    // being conditional rather than simply relaxed.
+    assertThat(RevisionRules.violations(withoutRelease, CERTIFICATION))
+        .containsExactly("java_release_missing");
+  }
+
+  @Test
+  void anInterviewQuestionIsRefusedAJavaRelease() {
+    var withRelease =
+        content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false)));
+
+    assertThat(RevisionRules.violations(withRelease, INTERVIEW))
+        .containsExactly("java_release_not_applicable");
+  }
+
+  @Test
+  void anUnknownKindIsTreatedAsCertification() {
+    var complete =
+        content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false)));
+
+    // A draft with no topic yet, or one naming a topic that does not exist, reports exactly what
+    // it reported before this rule existed. Nothing silently becomes acceptable.
+    assertThat(RevisionRules.violations(complete, null)).isEmpty();
+    assertThat(RevisionRules.violations(withoutRelease(), null))
+        .containsExactly("java_release_missing");
+  }
+
+  private static RevisionContent withoutRelease() {
+    return new RevisionContent(
+        QuestionType.SINGLE_CHOICE,
+        UUID.randomUUID(),
+        null,
+        Difficulty.MEDIUM,
+        "Requires knowing switch patterns",
+        "What is printed?",
+        "Explanation",
+        List.of(option("A", true), option("B", false)),
+        List.of(REFERENCE));
   }
 }
