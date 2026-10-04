@@ -1,4 +1,5 @@
 import type { Revision } from "../api/types";
+import { useText } from "../i18n/useText";
 import { diffRevisions } from "./diff";
 
 /**
@@ -15,12 +16,13 @@ export function RevisionDiff({
   revision: Revision;
   topicName: (id: string) => string | undefined;
 }) {
-  const changes = diffRevisions(previous, revision, topicName);
+  const t = useText();
+  const changes = diffRevisions(previous, revision, topicName, t);
   return (
     <section className="diff" aria-labelledby="diff-heading">
-      <h2 id="diff-heading">What changed since revision {previous.number}</h2>
+      <h2 id="diff-heading">{t.editorial.diff.heading(previous.number)}</h2>
       {changes.length === 0 ? (
-        <p className="muted">Nothing differs from revision {previous.number}.</p>
+        <p className="muted">{t.editorial.diff.nothingDiffers(previous.number)}</p>
       ) : (
         <dl>
           {changes.map((change) => (
@@ -32,15 +34,15 @@ export function RevisionDiff({
                     <span key={index}>{piece.text}</span>
                   ) : piece.kind === "added" ? (
                     <ins key={index}>
-                      <span className="visually-hidden">[added: </span>
+                      <span className="visually-hidden">{t.editorial.diff.added}</span>
                       {piece.text}
-                      <span className="visually-hidden">]</span>
+                      <span className="visually-hidden">{t.editorial.diff.closeBracket}</span>
                     </ins>
                   ) : (
                     <del key={index}>
-                      <span className="visually-hidden">[removed: </span>
+                      <span className="visually-hidden">{t.editorial.diff.removed}</span>
                       {piece.text}
-                      <span className="visually-hidden">]</span>
+                      <span className="visually-hidden">{t.editorial.diff.closeBracket}</span>
                     </del>
                   ),
                 )}

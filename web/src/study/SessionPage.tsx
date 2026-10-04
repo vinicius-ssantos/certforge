@@ -4,6 +4,8 @@ import { Link, useLocation, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { AttemptRequest, AttemptResult, Question, Session } from "../api/types";
+import type { Catalog } from "../i18n/en";
+import { useText } from "../i18n/useText";
 import { Confirm } from "../ui/Confirm";
 import { ErrorState, Loading } from "../ui/States";
 import { errorMessage } from "../ui/messages";
@@ -26,11 +28,12 @@ function sessionKey(sessionId: string) {
 }
 
 export function SessionPage() {
+  const t = useText();
   const { sessionId = "" } = useParams();
   const api = useApi();
   const queryClient = useQueryClient();
   const resumed = (useLocation().state as { resumed?: boolean } | null)?.resumed === true;
-  useDocumentTitle("Practice session");
+  useDocumentTitle(t.session.title);
 
   const session = useQuery({
     queryKey: sessionKey(sessionId),
@@ -82,7 +85,7 @@ export function SessionPage() {
       }
     },
     onError: (error) => {
-      setFailure(errorMessage(error));
+      setFailure(errorMessage(error, t));
       if (error instanceof ApiError && SESSION_CHANGED.has(error.code)) {
         void queryClient.invalidateQueries({ queryKey: sessionKey(sessionId) });
       }
@@ -113,18 +116,18 @@ export function SessionPage() {
   if (session.isPending) {
     return (
       <>
-        <h1>Practice session</h1>
-        <Loading label="Loading session" />
+        <h1>{t.session.title}</h1>
+        <Loading label={t.session.loading} />
       </>
     );
   }
   if (session.isError) {
     return (
       <>
-        <h1>Practice session</h1>
+        <h1>{t.session.title}</h1>
         <ErrorState error={session.error} onRetry={() => void session.refetch()} />
         <p>
-          <Link to="/">Back to all tracks</Link>
+          <Link to="/">{t.session.backToAll}</Link>
         </p>
       </>
     );
@@ -149,7 +152,7 @@ export function SessionPage() {
         question={feedback.question}
         result={feedback.result}
         action={{
-          label: isLast ? "Finish session" : "Next question",
+          label: isLast ? t.session.finish : t.session.next,
           busy: closing,
           onClick: () => (isLast ? finish.mutate("complete") : setFeedback(null)),
         }}
@@ -175,26 +178,22 @@ export function SessionPage() {
 
   return (
     <>
-      <h1>Practice session</h1>
-      {resumed ? (
-        <p role="status">You already had a session in progress for this topic, so you are continuing it.</p>
-      ) : null}
-      <p className="muted">
-        {answered} of {ordered.length} questions answered
-      </p>
+      <h1>{t.session.title}</h1>
+      {resumed ? <p role="status">{t.session.resumed}</p> : null}
+      <p className="muted">{t.session.answeredCount(answered, ordered.length)}</p>
       {finish.isError ? <ErrorState error={finish.error} /> : null}
       {body}
       <div className="session-actions">
         <Confirm
           triggerClassName="link-button"
-          title="Confirm ending the session"
-          explain="End this session now? The answers you already gave are kept."
-          confirmLabel="Yes, end the session"
-          cancelLabel="Keep practising"
+          title={t.session.endTitle}
+          explain={t.session.endExplain}
+          confirmLabel={t.session.endConfirm}
+          cancelLabel={t.session.endCancel}
           busy={closing}
           onConfirm={() => finish.mutate("abandon")}
         >
-          End session without finishing
+          {t.session.endTrigger}
         </Confirm>
       </div>
     </>
@@ -202,33 +201,36 @@ export function SessionPage() {
 }
 
 function AllAnswered({ busy, onFinish }: { busy: boolean; onFinish: () => void }) {
+  const t = useText();
   const heading = useFocusOnMount<HTMLHeadingElement>();
   return (
     <section aria-labelledby="all-answered">
       <h2 id="all-answered" ref={heading} tabIndex={-1}>
-        All questions answered
+        {t.session.allAnswered}
       </h2>
-      <p>Finish the session to see how it went.</p>
+      <p>{t.session.allAnsweredBody}</p>
       <button type="button" onClick={onFinish} disabled={busy}>
-        Finish session
+        {t.session.finish}
       </button>
     </section>
   );
 }
 
-const ENDED: Record<string, { title: string; text: string }> = {
-  COMPLETED: { title: "Session finished", text: "Well done. Here is how it went." },
-  ABANDONED: { title: "Session ended", text: "You ended this session early. Your answers were kept." },
-  EXPIRED: {
-    title: "This session expired",
-    text: "Sessions close after a period without activity. Answers you already gave were kept; start a new session to continue practising.",
-  },
-};
+/** How each terminal status is announced. Unknown statuses read as a completed one, as before. */
+function endedWording(t: Catalog): Record<string, { title: string; text: string }> {
+  return {
+    COMPLETED: { title: t.session.completedTitle, text: t.session.completedText },
+    ABANDONED: { title: t.session.abandonedTitle, text: t.session.abandonedText },
+    EXPIRED: { title: t.session.expiredTitle, text: t.session.expiredText },
+  };
+}
 
 function SessionEnded({ session }: { session: Session }) {
+  const t = useText();
   const api = useApi();
   const heading = useFocusOnMount<HTMLHeadingElement>();
-  const ended = ENDED[session.status] ?? ENDED.COMPLETED!;
+  const wording = endedWording(t);
+  const ended = wording[session.status] ?? wording.COMPLETED!;
   const answered = session.questions.filter((entry) => entry.answered).length;
 
   const attempts = useQuery({
@@ -243,24 +245,25 @@ function SessionEnded({ session }: { session: Session }) {
 
   return (
     <>
-      <h1>Practice session</h1>
+      <h1>{t.session.title}</h1>
       <section aria-labelledby="ended-heading">
         <h2 id="ended-heading" ref={heading} tabIndex={-1}>
           {ended.title}
         </h2>
         <p>{ended.text}</p>
-        <p>
-          You answered {answered} of {session.questions.length} questions.
-        </p>
-        {attempts.isPending ? <Loading label="Counting your correct answers" /> : null}
+        <p>{t.session.answeredOf(answered, session.questions.length)}</p>
+        {attempts.isPending ? <Loading label={t.session.countingCorrect} /> : null}
         {attempts.isError ? <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} /> : null}
         {attempts.data ? (
           <p>
-            {attempts.data.items.filter((attempt) => attempt.correct).length} of {answered} answers were correct.
+            {t.session.correctOf(
+              attempts.data.items.filter((attempt) => attempt.correct).length,
+              answered,
+            )}
           </p>
         ) : null}
         <p>
-          <Link to="/">Back to all tracks</Link>
+          <Link to="/">{t.session.backToAll}</Link>
         </p>
       </section>
     </>

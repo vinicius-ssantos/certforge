@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { useAuth } from "../auth/AuthContext";
+import { useText } from "../i18n/useText";
 import { useHasAny } from "../auth/permissions";
 
 /**
@@ -31,6 +32,7 @@ function useRouteFocus(mainRef: RefObject<HTMLElement | null>) {
 
 export function Layout() {
   const mainRef = useRef<HTMLElement>(null);
+  const t = useText();
   const { state, logout } = useAuth();
   const editorial = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH");
   useRouteFocus(mainRef);
@@ -38,22 +40,22 @@ export function Layout() {
   return (
     <>
       <a className="skip-link" href="#main">
-        Skip to main content
+        {t.layout.skipToMain}
       </a>
       <header className="site-header">
         <div className="bar">
-          <span className="brand">CertForge</span>
+          <span className="brand">{t.layout.brand}</span>
           {state.status === "authenticated" ? (
-            <nav aria-label="Main">
+            <nav aria-label={t.layout.mainNavigation}>
               <NavLink to="/" end>
-                Tracks
+                {t.layout.tracks}
               </NavLink>
-              <NavLink to="/review">Review</NavLink>
-              <NavLink to="/progress">Progress</NavLink>
-              <NavLink to="/history">History</NavLink>
-              {editorial ? <NavLink to="/editorial">Editorial</NavLink> : null}
+              <NavLink to="/review">{t.layout.review}</NavLink>
+              <NavLink to="/progress">{t.layout.progress}</NavLink>
+              <NavLink to="/history">{t.layout.history}</NavLink>
+              {editorial ? <NavLink to="/editorial">{t.layout.editorial}</NavLink> : null}
               <button type="button" className="link-button" onClick={() => void logout()}>
-                Sign out
+                {t.layout.signOut}
               </button>
             </nav>
           ) : null}

@@ -12,6 +12,7 @@ import { QueuePage } from "./editorial/QueuePage";
 import { RequireCatalogManage } from "./editorial/RequireCatalogManage";
 import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
+import { useText } from "./i18n/useText";
 import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
 import { MockExamPage } from "./mock/MockExamPage";
@@ -23,13 +24,15 @@ import { EmptyState } from "./ui/States";
 import { useDocumentTitle } from "./ui/useDocumentTitle";
 
 function NotFound() {
-  useDocumentTitle("Page not found");
+  const t = useText();
+  useDocumentTitle(t.notFound.title);
   return (
     <>
-      <h1>Page not found</h1>
-      <EmptyState title="There is nothing at this address">
+      <h1>{t.notFound.title}</h1>
+      <EmptyState title={t.notFound.emptyTitle}>
         <p>
-          Go back to the <a href="/">list of tracks</a>.
+          {t.notFound.bodyStart}
+          <a href="/">{t.notFound.tracksLink}</a>.
         </p>
       </EmptyState>
     </>
