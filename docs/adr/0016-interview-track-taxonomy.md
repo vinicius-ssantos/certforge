@@ -1,6 +1,6 @@
 # ADR 0016: Shape the interview track as a versioned taxonomy, and keep it small
 
-- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decisions 1, 2, 6, 7 and 8 are implemented, and a question on an interview topic really does publish. Decision 3 (the taxonomy rows) and decision 5 (seniority on a revision) are still to come. Each decision below says what exists.
+- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decisions 1, 2, 3, 6, 7 and 8 are implemented: the taxonomy exists as a DRAFT track and a DRAFT taxonomy version, and a question on an interview topic really does publish once both are activated. Decision 5 (seniority on a revision) is still to come, and so is making the taxonomy reachable from the editorial desk — see the consequences. Each decision below says what exists.
 - Date: 2026-10-04
 
 ## Context
@@ -95,6 +95,14 @@ So: when a certification objective and an interview topic cover the same ground,
 ## Consequences
 
 - **Nothing in this ADR is buildable without decision 1**, which is a migration on live tables. The honest ordering is: generalise the track version, then make the two rules conditional, then insert the taxonomy, then author content. An interview track inserted before that would be a track that cannot hold a question.
+- **The editorial desk cannot author against the taxonomy yet, and that was not foreseen here.**
+  `useTopics` in the web app reads `/api/catalog/tracks` — the *learner* endpoint, which serves
+  only an active track with an active version. So while the interview track is `DRAFT`, its topics
+  do not appear in the question editor's topic list, and content cannot be written for it. That is a
+  latent coupling that only never mattered because there was one permanently active track: the
+  editorial desk should not be able to see only what learners can see. Fixing it means an editorial
+  topic endpoint, permitted to the content roles rather than to `CATALOG_MANAGE`, and is the next
+  step before any interview content can be authored.
 - **The interview track will be visibly empty for a long time.** Twelve topics with no reviewed questions is what this produces at first, and the tracks page would show a track a learner cannot practise. Either the track stays `DRAFT` until some topics have content, or the interface says plainly that a topic has none — the second is more honest and is what the empty states already do elsewhere.
 - ADR 0014's naming problem gets worse, not better: a track called "interview" now owns data structures, SOLID and system design. "Java Backend — Pleno/Sênior" as the track *name*, with `INTERVIEW` as the kind, is the least-bad reading, and the kind is the thing the code branches on.
 - Deferring behavioural communication means the first interview track does not do the thing the epic's name most suggests to a reader. That should be said in the product documentation rather than discovered.
