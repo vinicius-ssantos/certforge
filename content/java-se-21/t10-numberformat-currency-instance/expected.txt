@@ -1,0 +1,7 @@
+usCurrency=USD
+usFractionDigits=2
+usSymbolPresent=true
+japanCurrency=JPY
+japanFractionDigits=0
+currenciesDiffer=true
+formatsDiffer=true

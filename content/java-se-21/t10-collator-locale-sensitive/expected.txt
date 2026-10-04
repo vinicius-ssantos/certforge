@@ -1,0 +1,6 @@
+stringCompareTo_a_B=after
+collator_a_B=before
+theyDisagree=true
+german_umlautA_z=before
+swedish_umlautA_z=after
+sameInputDifferentOrder=true

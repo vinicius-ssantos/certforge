@@ -1,0 +1,6 @@
+streamIsAutoCloseable=true
+totalEntries=12
+visitedWhenThreeTaken=3 taken=3
+depthOneEntries=7
+afterClose=IllegalStateException
+cleanedUp=true

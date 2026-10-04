@@ -1,0 +1,4 @@
+streamIsAutoCloseable=true
+read=[one, two, three]
+afterClose=IllegalStateException
+firstOnly=one

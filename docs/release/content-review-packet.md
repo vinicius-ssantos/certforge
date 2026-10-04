@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 15 of the 150 questions: `t08-reentrantlock-finally`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-lines-close`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`.
+- Every question in this pack now carries a program the build runs.
 
 ## How to review
 
@@ -149,40 +149,40 @@ The checks, from the [content policy](../product/content-policy.md):
 | 110 | [`t08-concurrenthashmap-null`](#110-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | yes, not shown | **not reviewed** |
 | 111 | [`t08-countdownlatch-count`](#111-t08-countdownlatch-count) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 112 | [`t08-executor-close`](#112-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
-| 113 | [`t08-reentrantlock-finally`](#113-t08-reentrantlock-finally) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 113 | [`t08-reentrantlock-finally`](#113-t08-reentrantlock-finally) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 114 | [`t08-start-virtual-thread`](#114-t08-start-virtual-thread) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
-| 115 | [`t08-synchronized-method-lock`](#115-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 115 | [`t08-synchronized-method-lock`](#115-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | yes, not shown | **not reviewed** |
 | 116 | [`t08-synchronized-reentrant`](#116-t08-synchronized-reentrant) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 117 | [`t08-thread-interrupted-clears`](#117-t08-thread-interrupted-clears) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
-| 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | yes, not shown | **not reviewed** |
 | 119 | [`t08-virtual-thread-daemon`](#119-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
 | 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | **not reviewed** |
 | 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | yes, not shown | **not reviewed** |
-| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | no (conceptual) | **not reviewed** |
+| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
 | 127 | [`t09-path-normalize-namecount`](#127-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | **not reviewed** |
 | 128 | [`t09-path-relativize`](#128-t09-path-relativize) | Java I/O API | single | medium | yes, shown | **not reviewed** |
 | 129 | [`t09-path-resolve-absolute`](#129-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 131 | [`t09-read-all-lines`](#131-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
-| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | no (conceptual) | **not reviewed** |
+| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
 | 133 | [`t09-serialization-facts`](#133-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
-| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
-| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
+| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
+| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
 | 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | **not reviewed** |
 | 139 | [`t10-datetimeformatter-locale-immutability`](#139-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 140 | [`t10-locale-builder-language-tag`](#140-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | **not reviewed** |
-| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 142 | [`t10-locale-language-tag`](#142-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
-| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 144 | [`t10-locale-to-string`](#144-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
-| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
-| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
+| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
+| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
 | 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | **not reviewed** |
 | 148 | [`t10-resource-bundle-fallback`](#148-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
 | 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
@@ -10244,7 +10244,90 @@ Checks the standard lock/unlock structure needed because Lock does not have sync
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+threw=boom
+lockedAfterFinally=false
+holdCountAfterFinally=0
+holdCountAfterTwoLocks=2
+holdCountAfterOneUnlock=1
+stillLocked=true
+holdCountAtEnd=0
+catchVariantAlsoReleases=true
+unlockWithoutLock=IllegalMonitorStateException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Main {
+
+  static final ReentrantLock LOCK = new ReentrantLock();
+
+  static void protectedWork() {
+    LOCK.lock();
+    try {
+      throw new IllegalStateException("boom");
+    } finally {
+      // finally runs whether the body returns or throws, which is the only placement that
+      // releases the lock on both paths.
+      LOCK.unlock();
+    }
+  }
+
+  static void withoutFinally() {
+    LOCK.lock();
+    try {
+      throw new IllegalStateException("boom");
+    } catch (IllegalStateException e) {
+      // The unlock here is skipped by the throw above in the common shape of this mistake:
+      // placing it after the protected code, inside the try, instead of in a finally.
+      LOCK.unlock();
+      throw e;
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      protectedWork();
+    } catch (IllegalStateException e) {
+      System.out.println("threw=" + e.getMessage());
+    }
+    System.out.println("lockedAfterFinally=" + LOCK.isLocked());
+    System.out.println("holdCountAfterFinally=" + LOCK.getHoldCount());
+
+    // Reentrant: the same thread may lock repeatedly, and owes one unlock for each lock, which
+    // is why the hold count and not a boolean is what finally has to bring back to zero.
+    LOCK.lock();
+    LOCK.lock();
+    System.out.println("holdCountAfterTwoLocks=" + LOCK.getHoldCount());
+    LOCK.unlock();
+    System.out.println("holdCountAfterOneUnlock=" + LOCK.getHoldCount());
+    System.out.println("stillLocked=" + LOCK.isLocked());
+    LOCK.unlock();
+    System.out.println("holdCountAtEnd=" + LOCK.getHoldCount());
+
+    try {
+      withoutFinally();
+    } catch (IllegalStateException e) {
+      System.out.println("catchVariantAlsoReleases=" + !LOCK.isLocked());
+    }
+    // Unlocking a lock this thread does not hold is itself an error, so an unbalanced finally
+    // cannot be patched by unlocking twice.
+    try {
+      LOCK.unlock();
+      System.out.println("unlockWithoutLock=allowed");
+    } catch (IllegalMonitorStateException e) {
+      System.out.println("unlockWithoutLock=" + e.getClass().getSimpleName());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -10259,7 +10342,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5"`, `"verified": null`
+To record: `"digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5"`, `"verified": "sha256:9b8a0b697e5b54cbe9f4885e4c58cc9a2c128e4e32959150c59a7f1c4ad5aa70"`
 
 **Comments:**
 
@@ -10393,7 +10476,55 @@ Requires knowing which monitor is acquired by synchronized instance and static m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+beforeAnyLock=false,false
+instanceHoldsReceiver=true
+instanceHoldsClass=false
+staticHoldsClass=true
+staticHoldsInstance=false
+blockOnThisHoldsReceiver=true
+afterAllLocks=false,false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  // A synchronized instance method acquires the receiver's monitor: the same lock as
+  // synchronized (this).
+  synchronized void instanceMethod() {
+    System.out.println("instanceHoldsReceiver=" + Thread.holdsLock(this));
+    System.out.println("instanceHoldsClass=" + Thread.holdsLock(Main.class));
+  }
+
+  // A synchronized static method acquires the monitor of the Class object, because there is no
+  // receiver. The two therefore do not exclude each other.
+  static synchronized void staticMethod(Main instance) {
+    System.out.println("staticHoldsClass=" + Thread.holdsLock(Main.class));
+    System.out.println("staticHoldsInstance=" + Thread.holdsLock(instance));
+  }
+
+  void explicitBlock() {
+    synchronized (this) {
+      System.out.println("blockOnThisHoldsReceiver=" + Thread.holdsLock(this));
+    }
+  }
+
+  public static void main(String[] args) {
+    Main instance = new Main();
+    System.out.println("beforeAnyLock=" + Thread.holdsLock(instance) + "," + Thread.holdsLock(Main.class));
+    instance.instanceMethod();
+    staticMethod(instance);
+    instance.explicitBlock();
+    System.out.println("afterAllLocks=" + Thread.holdsLock(instance) + "," + Thread.holdsLock(Main.class));
+  }
+}
+```
 
 ### Review
 
@@ -10408,7 +10539,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb22389d94b43b89ca9d"`, `"verified": null`
+To record: `"digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb22389d94b43b89ca9d"`, `"verified": "sha256:f4472e283f026d84223166eeb17f09bebf26af1daf55d2417f5a1b368195d246"`
 
 **Comments:**
 
@@ -10610,7 +10741,58 @@ Tests the distinction between constructing and starting a virtual thread with th
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+isVirtual=true
+state=NEW
+alive=false
+daemon=true
+stateAfterJoin=TERMINATED
+aliveAfterJoin=false
+restarted=IllegalThreadStateException
+startVirtualThreadIsNew=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) throws InterruptedException {
+    Runnable task = () -> {};
+    Thread thread = Thread.ofVirtual().unstarted(task);
+
+    // unstarted builds the thread and hands it back without running it, which is the whole
+    // difference from start() and from Thread.startVirtualThread.
+    System.out.println("isVirtual=" + thread.isVirtual());
+    System.out.println("state=" + thread.getState());
+    System.out.println("alive=" + thread.isAlive());
+    // A virtual thread is always a daemon and always has normal priority.
+    System.out.println("daemon=" + thread.isDaemon());
+
+    thread.start();
+    thread.join();
+    System.out.println("stateAfterJoin=" + thread.getState());
+    System.out.println("aliveAfterJoin=" + thread.isAlive());
+
+    // Starting it a second time is refused, so unstarted hands out a one-shot thread.
+    try {
+      thread.start();
+      System.out.println("restarted=allowed");
+    } catch (IllegalThreadStateException e) {
+      System.out.println("restarted=" + e.getClass().getSimpleName());
+    }
+
+    // For contrast, the thread Thread.startVirtualThread returns is already running or finished.
+    Thread started = Thread.startVirtualThread(task);
+    System.out.println("startVirtualThreadIsNew=" + (started.getState() == Thread.State.NEW));
+    started.join();
+  }
+}
+```
 
 ### Review
 
@@ -10625,7 +10807,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7"`, `"verified": null`
+To record: `"digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7"`, `"verified": "sha256:343e0e1342de3a34bdf2df42d3acf889d593391dfe164e715bfb11b78b832d64"`
 
 **Comments:**
 
@@ -10755,7 +10937,65 @@ Separates volatile visibility guarantees from atomicity of a compound read-modif
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+volatileWriteBecameVisible=true
+incrementsPerformed=200000
+neverExceedsExpected=true
+atLeastOne=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static volatile boolean flag = false;
+  static volatile int count = 0;
+
+  public static void main(String[] args) throws InterruptedException {
+    // The visibility half of the claim, deterministically: this spin ends only because a
+    // volatile write by another thread is guaranteed to become visible to this one.
+    Thread writer = new Thread(() -> flag = true);
+    writer.start();
+    while (!flag) {
+      Thread.onSpinWait();
+    }
+    System.out.println("volatileWriteBecameVisible=" + flag);
+    writer.join();
+
+    // The lost-update half cannot be made deterministic. count++ is a read, an add and a write,
+    // so two threads can read the same value and one increment can vanish -- but whether that
+    // happens in any given run is up to the scheduler. Asserting that a loss was observed would
+    // be a test that passes most of the time, which is worse than not asserting it. What is
+    // always true, and is what this prints, is that increments are never gained: the total can
+    // come out below the number of increments performed and never above it.
+    int threads = 4;
+    int perThread = 50_000;
+    Thread[] workers = new Thread[threads];
+    for (int i = 0; i < threads; i++) {
+      workers[i] =
+          new Thread(
+              () -> {
+                for (int n = 0; n < perThread; n++) {
+                  count++;
+                }
+              });
+      workers[i].start();
+    }
+    for (Thread worker : workers) {
+      worker.join();
+    }
+    int expected = threads * perThread;
+    System.out.println("incrementsPerformed=" + expected);
+    System.out.println("neverExceedsExpected=" + (count <= expected));
+    System.out.println("atLeastOne=" + (count > 0));
+  }
+}
+```
 
 ### Review
 
@@ -10770,7 +11010,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb"`, `"verified": null`
+To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb"`, `"verified": "sha256:f54950daca7e5deae007690cf5e471c9ebb80c8b0a62386a786f615f5964384c"`
 
 **Comments:**
 
@@ -11068,7 +11308,63 @@ Checks the resource-lifecycle requirement of a lazily populated stream backed by
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+streamIsAutoCloseable=true
+read=[one, two, three]
+afterClose=IllegalStateException
+firstOnly=one
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path file = Files.createTempFile("lines", ".txt");
+    Files.writeString(file, "one\ntwo\nthree\n", StandardCharsets.UTF_8);
+
+    // The stream a Files method returns is closeable, which is what makes try-with-resources
+    // applicable to it at all. An ordinary Stream from a collection has nothing to release.
+    System.out.println("streamIsAutoCloseable=" + AutoCloseable.class.isAssignableFrom(Stream.class));
+
+    try (Stream<String> lines = Files.lines(file)) {
+      List<String> read = lines.toList();
+      System.out.println("read=" + read);
+    }
+
+    // Leaving the block closed the stream, and a closed stream refuses further use. That is the
+    // observable half; that closing is also what releases the file handle is what the javadoc
+    // states and is the reason the resource block matters rather than being tidy.
+    Stream<String> leaked = Files.lines(file);
+    leaked.close();
+    try {
+      leaked.findFirst();
+      System.out.println("afterClose=usable");
+    } catch (IllegalStateException e) {
+      System.out.println("afterClose=" + e.getClass().getSimpleName());
+    }
+
+    // It is lazy: a short-circuiting terminal operation reads the first line and stops, so the
+    // whole file is never held in memory and never fully read.
+    try (Stream<String> lines = Files.lines(file)) {
+      System.out.println("firstOnly=" + lines.findFirst().orElseThrow());
+    }
+
+    Files.delete(file);
+  }
+}
+```
 
 ### Review
 
@@ -11083,7 +11379,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c"`, `"verified": null`
+To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c"`, `"verified": "sha256:6375607bfe48fdf99823980353f91b7ad971d1d7a92cd17ac447476b8de6886b"`
 
 **Comments:**
 
@@ -11215,7 +11511,83 @@ Tests resource management for lazily populated directory-tree streams.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+streamIsAutoCloseable=true
+totalEntries=12
+visitedWhenThreeTaken=3 taken=3
+depthOneEntries=7
+afterClose=IllegalStateException
+cleanedUp=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path root = Files.createTempDirectory("walk");
+    Path nested = Files.createDirectory(root.resolve("nested"));
+    for (int i = 0; i < 5; i++) {
+      Files.createFile(root.resolve("file" + i + ".txt"));
+      Files.createFile(nested.resolve("deep" + i + ".txt"));
+    }
+
+    // Closeable, so try-with-resources applies: the walk holds directory handles open as it
+    // descends, and closing is what releases them.
+    System.out.println("streamIsAutoCloseable=" + AutoCloseable.class.isAssignableFrom(Stream.class));
+
+    try (Stream<Path> walk = Files.walk(root)) {
+      // The start directory, nested, and ten files.
+      System.out.println("totalEntries=" + walk.count());
+    }
+
+    // Populated lazily: with a limit the walk visits only as many entries as the pipeline asks
+    // for, rather than building the whole tree first. Counting visits rather than naming them,
+    // because the order a directory is iterated in is not specified.
+    List<Path> visited = new ArrayList<>();
+    try (Stream<Path> walk = Files.walk(root)) {
+      List<Path> taken = walk.peek(visited::add).limit(3).toList();
+      System.out.println("visitedWhenThreeTaken=" + visited.size() + " taken=" + taken.size());
+    }
+
+    // maxDepth bounds the descent, so the nested files are never visited at depth 1.
+    try (Stream<Path> walk = Files.walk(root, 1)) {
+      System.out.println("depthOneEntries=" + walk.count());
+    }
+
+    Stream<Path> leaked = Files.walk(root);
+    leaked.close();
+    try {
+      leaked.findFirst();
+      System.out.println("afterClose=usable");
+    } catch (IllegalStateException e) {
+      System.out.println("afterClose=" + e.getClass().getSimpleName());
+    }
+
+    try (Stream<Path> walk = Files.walk(root)) {
+      walk.sorted(java.util.Comparator.reverseOrder()).forEach(p -> {
+        try {
+          Files.delete(p);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+    }
+    System.out.println("cleanedUp=" + !Files.exists(root));
+  }
+}
+```
 
 ### Review
 
@@ -11230,7 +11602,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9"`, `"verified": null`
+To record: `"digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9"`, `"verified": "sha256:8353460381256744b9d2aadd5057dd4efcfcc9c3ba259c8fbb1d7ed1a61458d1"`
 
 **Comments:**
 
@@ -11496,7 +11868,67 @@ Tests the capability that distinguishes RandomAccessFile from sequential stream 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+pointerAfterSeek=3
+readAt3=D
+pointerAfterRead=4
+readAt3Again=D
+readAt0=A
+content=AxCDEFGH
+lengthAfterSeekPastEnd=8
+readPastEnd=-1
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path file = Files.createTempFile("seek", ".bin");
+    try (RandomAccessFile raf = new RandomAccessFile(file.toFile(), "rw")) {
+      raf.write("ABCDEFGH".getBytes("US-ASCII"));
+
+      // seek moves the file pointer to an absolute byte offset counted from the beginning of
+      // the file, not relative to where the pointer happens to be.
+      raf.seek(3);
+      System.out.println("pointerAfterSeek=" + raf.getFilePointer());
+      System.out.println("readAt3=" + (char) raf.read());
+      System.out.println("pointerAfterRead=" + raf.getFilePointer());
+
+      // Absolute, not relative: seeking to 3 again returns to the same byte.
+      raf.seek(3);
+      System.out.println("readAt3Again=" + (char) raf.read());
+
+      raf.seek(0);
+      System.out.println("readAt0=" + (char) raf.read());
+
+      // Writing is positional too, so a seek plus a write replaces bytes in place.
+      raf.seek(1);
+      raf.write('x');
+      raf.seek(0);
+      byte[] all = new byte[8];
+      raf.readFully(all);
+      System.out.println("content=" + new String(all, "US-ASCII"));
+
+      // Seeking past the end is allowed and does not extend the file until something is
+      // written there; a read at that position reports end of file.
+      raf.seek(100);
+      System.out.println("lengthAfterSeekPastEnd=" + raf.length());
+      System.out.println("readPastEnd=" + raf.read());
+    }
+    Files.delete(file);
+  }
+}
+```
 
 ### Review
 
@@ -11511,7 +11943,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc040db21eb4bbde37"`, `"verified": null`
+To record: `"digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc040db21eb4bbde37"`, `"verified": "sha256:74518199e6d506170aaa15e747d4bd2a0ed7d49e2f2e5732363ed542cc8ff78b"`
 
 **Comments:**
 
@@ -11634,7 +12066,63 @@ Checks the fundamental byte-stream versus character-stream split in java.io.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+chars=2 bytes=3
+inputStreamRead=[97, 195, 169]
+readerRead=[97, 233]
+decodedMatchesSource=true
+byteCountDiffersFromCharCount=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // One character that is not ASCII, written as an escape so this source file stays ASCII:
+    // U+00E9, which UTF-8 encodes as two bytes.
+    String text = "aé";
+    byte[] utf8 = text.getBytes(StandardCharsets.UTF_8);
+    System.out.println("chars=" + text.length() + " bytes=" + utf8.length);
+
+    // An InputStream is byte-oriented: read() returns one byte at a time, so the single
+    // character arrives as two separate values and neither is the character.
+    List<Integer> bytes = new ArrayList<>();
+    try (InputStream in = new ByteArrayInputStream(utf8)) {
+      for (int b = in.read(); b != -1; b = in.read()) {
+        bytes.add(b);
+      }
+    }
+    System.out.println("inputStreamRead=" + bytes);
+
+    // A Reader is character-oriented: it decodes bytes with a charset and returns code units,
+    // so the same input arrives as two characters, the second being the one byte pair decoded.
+    List<Integer> chars = new ArrayList<>();
+    try (Reader reader =
+        new InputStreamReader(new ByteArrayInputStream(utf8), StandardCharsets.UTF_8)) {
+      for (int c = reader.read(); c != -1; c = reader.read()) {
+        chars.add(c);
+      }
+    }
+    System.out.println("readerRead=" + chars);
+    System.out.println("decodedMatchesSource=" + (chars.get(1) == (int) text.charAt(1)));
+    System.out.println("byteCountDiffersFromCharCount=" + (bytes.size() != chars.size()));
+  }
+}
+```
 
 ### Review
 
@@ -11649,7 +12137,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec627496aee4e9baa40a"`, `"verified": null`
+To record: `"digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec627496aee4e9baa40a"`, `"verified": "sha256:e6ed654adf7c0254cd594ba503ac3fbf64c92d2f38eccb98503776569369df19"`
 
 **Comments:**
 
@@ -11802,7 +12290,96 @@ Tests the purpose of serialVersionUID in Java's built-in serialization compatibi
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+declared=102030405060708
+computedIsNonZero=true
+roundTrip=kept
+identifierFoundInStream=true
+mismatch=InvalidClassException
+mentionsIncompatible=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.Serializable;
+
+public class Main {
+
+  /** Declares its own version identifier, with a recognisable value. */
+  static class Versioned implements Serializable {
+    private static final long serialVersionUID = 0x0102030405060708L;
+
+    final String value = "kept";
+  }
+
+  /** Declares none, so the runtime computes one from the class structure. */
+  static class Unversioned implements Serializable {
+    final String value = "computed";
+  }
+
+  public static void main(String[] args) throws Exception {
+    long declared = ObjectStreamClass.lookup(Versioned.class).getSerialVersionUID();
+    System.out.println("declared=" + Long.toHexString(declared));
+    System.out.println("computedIsNonZero=" + (ObjectStreamClass.lookup(Unversioned.class).getSerialVersionUID() != 0));
+
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    try (ObjectOutputStream out = new ObjectOutputStream(buffer)) {
+      out.writeObject(new Versioned());
+    }
+    byte[] stream = buffer.toByteArray();
+
+    // A round trip with the identifier intact succeeds.
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(stream))) {
+      System.out.println("roundTrip=" + ((Versioned) in.readObject()).value);
+    }
+
+    // The identifier is written into the stream, so it can be found there and altered. Changing
+    // it is what a class whose version moved on would look like to a reader holding old bytes.
+    int at = indexOfVersion(stream, declared);
+    System.out.println("identifierFoundInStream=" + (at >= 0));
+    stream[at + 7] ^= 0x01;
+
+    // Deserializing now fails, and it fails on the version check rather than on the data, which
+    // is what the identifier participates in.
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(stream))) {
+      in.readObject();
+      System.out.println("mismatch=accepted");
+    } catch (InvalidClassException e) {
+      System.out.println("mismatch=" + e.getClass().getSimpleName());
+      System.out.println("mentionsIncompatible=" + e.getMessage().contains("incompatible"));
+    }
+  }
+
+  /** Where the eight big-endian bytes of the identifier sit in the stream. */
+  private static int indexOfVersion(byte[] stream, long version) {
+    byte[] wanted = new byte[8];
+    for (int i = 0; i < 8; i++) {
+      wanted[i] = (byte) (version >>> (56 - 8 * i));
+    }
+    outer:
+    for (int start = 0; start + 8 <= stream.length; start++) {
+      for (int i = 0; i < 8; i++) {
+        if (stream[start + i] != wanted[i]) {
+          continue outer;
+        }
+      }
+      return start;
+    }
+    return -1;
+  }
+}
+```
 
 ### Review
 
@@ -11817,7 +12394,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660"`, `"verified": null`
+To record: `"digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660"`, `"verified": "sha256:4b93b8dec6265fd8f14bf5c9d1158f3bb0ef9461909916abfb52167d0c3bc689"`
 
 **Comments:**
 
@@ -11958,7 +12535,55 @@ Tests the API intended for locale-sensitive string comparison rather than code-u
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+stringCompareTo_a_B=after
+collator_a_B=before
+theyDisagree=true
+german_umlautA_z=before
+swedish_umlautA_z=after
+sameInputDifferentOrder=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.Collator;
+import java.util.Locale;
+
+public class Main {
+
+  /** Only the sign matters for an ordering, and only the sign is stable to print. */
+  static String sign(int value) {
+    return value < 0 ? "before" : value > 0 ? "after" : "equal";
+  }
+
+  public static void main(String[] args) {
+    // String.compareTo compares UTF-16 code units, so every uppercase letter comes before every
+    // lowercase one and "a" lands after "B". That is an encoding order, not an alphabetical one.
+    System.out.println("stringCompareTo_a_B=" + sign("a".compareTo("B")));
+
+    // A Collator compares by collation rules, so "a" comes before "B" the way a reader of a
+    // dictionary expects. Same two strings, opposite answer.
+    Collator english = Collator.getInstance(Locale.ENGLISH);
+    System.out.println("collator_a_B=" + sign(english.compare("a", "B")));
+    System.out.println("theyDisagree="
+        + (Integer.signum("a".compareTo("B")) != Integer.signum(english.compare("a", "B"))));
+
+    // And the rules are locale-sensitive: German treats a-umlaut as a variant of a, so it sorts
+    // before z, while Swedish treats it as a letter of its own that follows z.
+    Collator german = Collator.getInstance(Locale.GERMAN);
+    Collator swedish = Collator.getInstance(Locale.of("sv", "SE"));
+    System.out.println("german_umlautA_z=" + sign(german.compare("ä", "z")));
+    System.out.println("swedish_umlautA_z=" + sign(swedish.compare("ä", "z")));
+    System.out.println("sameInputDifferentOrder="
+        + (Integer.signum(german.compare("ä", "z")) != Integer.signum(swedish.compare("ä", "z"))));
+  }
+}
+```
 
 ### Review
 
@@ -11973,7 +12598,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2"`, `"verified": null`
+To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2"`, `"verified": "sha256:96478308144957575b0e3a31315fca8385a7e3c55c1732ce34c8193b4af27582"`
 
 **Comments:**
 
@@ -12014,7 +12639,54 @@ Tests the meaning of Collator strength levels rather than only basic locale sele
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+primaryStrength=true
+primaryIgnoresCase=true
+primaryIgnoresAccent=true
+primarySeesBaseLetters=false
+secondarySeesAccent=true
+secondaryIgnoresCase=true
+tertiarySeesCase=true
+primaryCompareZero=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.Collator;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
+
+    // At PRIMARY strength only base-letter differences count. Case is a tertiary difference and
+    // an accent is a secondary one, so both are ignored and the strings compare as equal.
+    collator.setStrength(Collator.PRIMARY);
+    System.out.println("primaryStrength=" + (collator.getStrength() == Collator.PRIMARY));
+    System.out.println("primaryIgnoresCase=" + collator.equals("abc", "ABC"));
+    System.out.println("primaryIgnoresAccent=" + collator.equals("resume", "résume"));
+    System.out.println("primarySeesBaseLetters=" + collator.equals("abc", "abd"));
+
+    // Raising the strength makes the finer differences count again.
+    collator.setStrength(Collator.SECONDARY);
+    System.out.println("secondarySeesAccent=" + !collator.equals("resume", "résume"));
+    System.out.println("secondaryIgnoresCase=" + collator.equals("abc", "ABC"));
+
+    collator.setStrength(Collator.TERTIARY);
+    System.out.println("tertiarySeesCase=" + !collator.equals("abc", "ABC"));
+
+    // equals is defined as compare returning zero, so the same holds for ordering.
+    collator.setStrength(Collator.PRIMARY);
+    System.out.println("primaryCompareZero=" + (collator.compare("abc", "ABC") == 0));
+  }
+}
+```
 
 ### Review
 
@@ -12029,7 +12701,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c"`, `"verified": null`
+To record: `"digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c"`, `"verified": "sha256:fd1fca3ad0ca08f90bcc5c51e7051ae1a8fd4021c3a9f511df4097d181a50b09"`
 
 **Comments:**
 
@@ -12297,7 +12969,62 @@ Requires knowing that Java maintains category-specific default locales for displ
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+categories=[DISPLAY, FORMAT]
+displayAfterSet=fr_FR
+formatAfterSet=ja_JP
+categoriesDiffer=true
+bothAfterPlainSet=de_DE,de_DE
+plainGetDefault=de_DE
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // Two categories, so the locale used to *show* things can differ from the one used to
+    // *format* them.
+    System.out.println("categories=" + Arrays.toString(Locale.Category.values()));
+
+    Locale plain = Locale.getDefault();
+    Locale display = Locale.getDefault(Locale.Category.DISPLAY);
+    Locale format = Locale.getDefault(Locale.Category.FORMAT);
+    try {
+      Locale.setDefault(Locale.Category.DISPLAY, Locale.FRANCE);
+      Locale.setDefault(Locale.Category.FORMAT, Locale.JAPAN);
+
+      // Setting one category leaves the other alone, which is the point of having two.
+      System.out.println("displayAfterSet=" + Locale.getDefault(Locale.Category.DISPLAY));
+      System.out.println("formatAfterSet=" + Locale.getDefault(Locale.Category.FORMAT));
+      System.out.println(
+          "categoriesDiffer="
+              + !Locale.getDefault(Locale.Category.DISPLAY)
+                  .equals(Locale.getDefault(Locale.Category.FORMAT)));
+
+      // The no-argument setDefault sets both, and it is the one that moves getDefault().
+      Locale.setDefault(Locale.GERMANY);
+      System.out.println("bothAfterPlainSet=" + Locale.getDefault(Locale.Category.DISPLAY) + "," + Locale.getDefault(Locale.Category.FORMAT));
+      System.out.println("plainGetDefault=" + Locale.getDefault());
+    } finally {
+      // Restored, because these are process-wide. setDefault(Category, ...) does not put back the
+      // plain default that setDefault(Locale) moved, so that one is restored first and then the
+      // two categories on top of it.
+      Locale.setDefault(plain);
+      Locale.setDefault(Locale.Category.DISPLAY, display);
+      Locale.setDefault(Locale.Category.FORMAT, format);
+    }
+  }
+}
+```
 
 ### Review
 
@@ -12312,7 +13039,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145b6394f588181be"`, `"verified": null`
+To record: `"digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145b6394f588181be"`, `"verified": "sha256:57b3deaa6b51167f7c9c17fd1298b65c1a53d8ded9085082a23072bc86af00de"`
 
 **Comments:**
 
@@ -12431,7 +13158,42 @@ Tests the purpose of the root locale as a locale-neutral base rather than a user
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+language=[]
+country=[]
+variant=[]
+toString=[]
+toLanguageTag=und
+equalsEnglish=false
+sameAsEmptyBuilt=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // Locale.ROOT is the language-neutral locale: it names no language and no country, which is
+    // what makes it the base every other locale falls back to.
+    System.out.println("language=[" + Locale.ROOT.getLanguage() + "]");
+    System.out.println("country=[" + Locale.ROOT.getCountry() + "]");
+    System.out.println("variant=[" + Locale.ROOT.getVariant() + "]");
+    System.out.println("toString=[" + Locale.ROOT + "]");
+    System.out.println("toLanguageTag=" + Locale.ROOT.toLanguageTag());
+
+    // It is not the same thing as the English locale, and not the same as the JVM default.
+    System.out.println("equalsEnglish=" + Locale.ROOT.equals(Locale.ENGLISH));
+    System.out.println("sameAsEmptyBuilt=" + Locale.ROOT.equals(Locale.of("", "")));
+  }
+}
+```
 
 ### Review
 
@@ -12446,7 +13208,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3"`, `"verified": null`
+To record: `"digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3"`, `"verified": "sha256:92026d263d35c3acfce8d5516c4f006533d4ec28ad295be0e46e64a45d6181f1"`
 
 **Comments:**
 
@@ -12562,7 +13324,40 @@ Tests MessageFormat's quoting syntax, which is easy to confuse with ordinary Str
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+placeholder=value is x
+quoted=value is {0}
+doubled=it's x
+loneQuote=its {0}
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.MessageFormat;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // An explicit locale throughout, so none of this depends on the machine's default.
+    // Without quotes, {0} is an argument placeholder and is substituted.
+    System.out.println("placeholder=" + new MessageFormat("value is {0}", Locale.ROOT).format(new Object[] {"x"}));
+
+    // A pair of single quotes around it makes the braces literal text: the argument is not
+    // substituted, and the quotes themselves do not appear in the output.
+    System.out.println("quoted=" + new MessageFormat("value is '{0}'", Locale.ROOT).format(new Object[] {"x"}));
+
+    // Which is why a real apostrophe has to be doubled, and a lone one quotes what follows.
+    System.out.println("doubled=" + new MessageFormat("it''s {0}", Locale.ROOT).format(new Object[] {"x"}));
+    System.out.println("loneQuote=" + new MessageFormat("it's {0}", Locale.ROOT).format(new Object[] {"x"}));
+  }
+}
+```
 
 ### Review
 
@@ -12577,7 +13372,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff775262054005453d31faa2437"`, `"verified": null`
+To record: `"digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff775262054005453d31faa2437"`, `"verified": "sha256:b9f7156261b46d9435dbb860deb5393b0e12af4ffc52d2006a670d167b2a3cb5"`
 
 **Comments:**
 
@@ -12618,7 +13413,47 @@ Tests selection of the locale-sensitive formatter intended specifically for mone
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+usCurrency=USD
+usFractionDigits=2
+usSymbolPresent=true
+japanCurrency=JPY
+japanFractionDigits=0
+currenciesDiffer=true
+formatsDiffer=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // getCurrencyInstance returns a formatter configured for money in the given locale: the
+    // currency of that locale, its symbol, and its conventional number of fraction digits.
+    NumberFormat us = NumberFormat.getCurrencyInstance(Locale.US);
+    System.out.println("usCurrency=" + us.getCurrency().getCurrencyCode());
+    System.out.println("usFractionDigits=" + us.getMaximumFractionDigits());
+    System.out.println("usSymbolPresent=" + us.format(1).contains("$"));
+
+    NumberFormat japan = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+    System.out.println("japanCurrency=" + japan.getCurrency().getCurrencyCode());
+    // The yen has no minor unit, which the formatter knows without being told.
+    System.out.println("japanFractionDigits=" + japan.getMaximumFractionDigits());
+
+    // The locale decides, so the same amount formats differently and the currency differs.
+    System.out.println("currenciesDiffer=" + !us.getCurrency().equals(japan.getCurrency()));
+    System.out.println("formatsDiffer=" + !us.format(1234.5).equals(japan.format(1234.5)));
+  }
+}
+```
 
 ### Review
 
@@ -12633,7 +13468,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8"`, `"verified": null`
+To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8"`, `"verified": "sha256:7faae9f5d63a20a372562eab6417ef6b3cf33adb324ca361868946da2432e932"`
 
 **Comments:**
 
