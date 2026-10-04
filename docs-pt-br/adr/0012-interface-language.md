@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0012-interface-language.md`](../../docs/adr/0012-interface-language.md). O inglês é a fonte canônica.
 
-- Status: **Aceita** em 2026-10-02, como escrita. Nada está traduzido ainda: a decisão 3 mantém o trabalho fora da `v0.1.0`, e a #74 o carrega depois.
+- Status: **Aceita** em 2026-10-02, como escrita, e **executada** na #74 depois da `v0.2.0`: as strings foram extraídas para um catálogo tipado (#122) e o português do Brasil foi adicionado ao lado do inglês, com o idioma preferido do navegador como padrão e um seletor que é lembrado (#123). A redação em português foi lida por vinicius-ssantos, falante nativo, em 2026-10-04. É o autor do projeto revisando a tradução do próprio projeto, não um revisor independente — a mesma limitação que a [ADR 0011](0011-grade-content-evidence.md) registra para o pacote de questões.
 - Data: 2026-10-02
 
 ## Contexto
