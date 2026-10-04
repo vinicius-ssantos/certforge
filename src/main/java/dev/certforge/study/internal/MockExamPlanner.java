@@ -1,10 +1,10 @@
 package dev.certforge.study.internal;
 
-import dev.certforge.preparationcatalog.ExamVersionId;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
+import dev.certforge.preparationcatalog.TrackVersionId;
 import dev.certforge.preparationcatalog.TrackView;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
@@ -33,7 +33,7 @@ class MockExamPlanner {
 
   record Plan(
       PreparationTrackId trackId,
-      ExamVersionId examVersionId,
+      TrackVersionId examVersionId,
       MockExamBlueprint blueprint,
       List<PlannedQuestion> questions) {}
 

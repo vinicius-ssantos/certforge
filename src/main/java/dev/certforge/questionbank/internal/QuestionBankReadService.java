@@ -38,7 +38,7 @@ class QuestionBankReadService implements QuestionBank {
         .map(
             context ->
                 repository
-                    .findPublishedByTopic(topicId.value(), context.examVersionId().value())
+                    .findPublishedByTopic(topicId.value(), context.trackVersionId().value())
                     .stream()
                     .map(QuestionBankReadService::learnerView)
                     .toList())

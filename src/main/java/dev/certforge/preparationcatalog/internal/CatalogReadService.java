@@ -1,17 +1,17 @@
 package dev.certforge.preparationcatalog.internal;
 
-import dev.certforge.preparationcatalog.ExamVersionId;
 import dev.certforge.preparationcatalog.ExamVersionView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
+import dev.certforge.preparationcatalog.TrackVersionId;
 import dev.certforge.preparationcatalog.TrackView;
-import dev.certforge.preparationcatalog.internal.CatalogRows.ExamVersionRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +70,10 @@ class CatalogReadService implements PreparationCatalog {
   private Optional<TrackView> toView(TrackRow track) {
     return repository
         .findActiveExamVersion(track.id())
+        // A learner track view names an exam, so a version without one cannot produce it. Today
+        // only certification tracks are served, and this is what keeps that true by construction
+        // rather than by unboxing a null into a Java release of 0.
+        .filter(TrackVersionRow::isCertification)
         .map(
             version ->
                 new TrackView(
@@ -83,9 +87,10 @@ class CatalogReadService implements PreparationCatalog {
                     topicTree(track.id(), version.id())));
   }
 
-  private static ExamVersionView toView(ExamVersionRow version) {
+  /** Only called for a version that {@link TrackVersionRow#isCertification()} vouched for. */
+  private static ExamVersionView toView(TrackVersionRow version) {
     return new ExamVersionView(
-        new ExamVersionId(version.id()),
+        new TrackVersionId(version.id()),
         version.label(),
         version.examCode(),
         version.examName(),

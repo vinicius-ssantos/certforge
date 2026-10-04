@@ -11,7 +11,7 @@ record Revision(
     int number,
     RevisionStatus status,
     UUID authorId,
-    UUID examVersionId,
+    UUID trackVersionId,
     Instant createdAt,
     Instant submittedAt,
     Instant publishedAt,

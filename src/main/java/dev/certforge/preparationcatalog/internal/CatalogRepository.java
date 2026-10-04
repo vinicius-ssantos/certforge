@@ -1,10 +1,10 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.TrackKind;
-import dev.certforge.preparationcatalog.internal.CatalogRows.ExamVersionRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -25,9 +25,12 @@ class CatalogRepository {
       "select t.id, t.slug, t.name, t.kind, t.status, p.provider, p.certification_name"
           + " from certforge.catalog_track t"
           + " join certforge.catalog_certification_profile p on p.track_id = t.id";
+  // LEFT JOIN: an interview version has no exam row, and must still be read rather than vanish.
   private static final String SELECT_VERSION =
-      "select id, track_id, label, exam_code, exam_name, java_release, objectives_url, status"
-          + " from certforge.catalog_exam_version";
+      "select v.id, v.track_id, v.label, v.status,"
+          + " e.exam_code, e.exam_name, e.java_release, e.objectives_url"
+          + " from certforge.catalog_track_version v"
+          + " left join certforge.catalog_certification_exam e on e.track_version_id = v.id";
   private static final String SELECT_TOPIC =
       "select id, track_id, parent_id, slug, name from certforge.catalog_topic";
 
@@ -95,50 +98,56 @@ class CatalogRepository {
 
   // ---- exam versions -------------------------------------------------------------------------
 
-  List<ExamVersionRow> findExamVersions(UUID trackId) {
-    return jdbc.sql(SELECT_VERSION + " where track_id = :trackId order by label")
+  List<TrackVersionRow> findExamVersions(UUID trackId) {
+    return jdbc.sql(SELECT_VERSION + " where v.track_id = :trackId order by v.label")
         .param(TRACK_ID, trackId)
         .query(CatalogRepository::mapVersion)
         .list();
   }
 
-  Optional<ExamVersionRow> findActiveExamVersion(UUID trackId) {
-    return jdbc.sql(SELECT_VERSION + " where track_id = :trackId and status = 'ACTIVE'")
+  Optional<TrackVersionRow> findActiveExamVersion(UUID trackId) {
+    return jdbc.sql(SELECT_VERSION + " where v.track_id = :trackId and v.status = 'ACTIVE'")
         .param(TRACK_ID, trackId)
         .query(CatalogRepository::mapVersion)
         .optional();
   }
 
-  Optional<ExamVersionRow> findExamVersion(UUID id) {
-    return jdbc.sql(SELECT_VERSION + " where id = :id")
+  Optional<TrackVersionRow> findExamVersion(UUID id) {
+    return jdbc.sql(SELECT_VERSION + " where v.id = :id")
         .param("id", id)
         .query(CatalogRepository::mapVersion)
         .optional();
   }
 
-  void insertExamVersion(ExamVersionRow row) {
+  /** A certification version is two rows: the version, and the exam it is a revision of. */
+  void insertExamVersion(TrackVersionRow row) {
     try {
       jdbc.sql(
-              "insert into certforge.catalog_exam_version"
-                  + " (id, track_id, label, exam_code, exam_name, java_release, objectives_url)"
-                  + " values (:id, :trackId, :label, :code, :name, :release, :url)")
+              "insert into certforge.catalog_track_version (id, track_id, label)"
+                  + " values (:id, :trackId, :label)")
           .param("id", row.id())
           .param(TRACK_ID, row.trackId())
           .param("label", row.label())
-          .param("code", row.examCode())
-          .param(NAME, row.examName())
-          .param("release", row.javaRelease())
-          .param("url", row.objectivesUrl())
           .update();
     } catch (DuplicateKeyException e) {
       throw CatalogException.conflict(
           "exam_version_already_exists", "An exam version with this label exists");
     }
+    jdbc.sql(
+            "insert into certforge.catalog_certification_exam"
+                + " (track_version_id, exam_code, exam_name, java_release, objectives_url)"
+                + " values (:id, :code, :name, :release, :url)")
+        .param("id", row.id())
+        .param("code", row.examCode())
+        .param(NAME, row.examName())
+        .param("release", row.javaRelease())
+        .param("url", row.objectivesUrl())
+        .update();
   }
 
   void setExamVersionStatus(UUID id, CatalogStatus status) {
     try {
-      jdbc.sql("update certforge.catalog_exam_version set status = :status where id = :id")
+      jdbc.sql("update certforge.catalog_track_version set status = :status where id = :id")
           .param(STATUS, status.name())
           .param("id", id)
           .update();
@@ -189,29 +198,30 @@ class CatalogRepository {
 
   // ---- mappings ------------------------------------------------------------------------------
 
-  List<MappingRow> findMappings(UUID examVersionId) {
+  List<MappingRow> findMappings(UUID trackVersionId) {
     return jdbc.sql(
-            "select exam_version_id, topic_id, objective_ref, position"
-                + " from certforge.catalog_exam_version_topic"
-                + " where exam_version_id = :id order by position")
-        .param("id", examVersionId)
+            "select track_version_id, topic_id, objective_ref, position, weight"
+                + " from certforge.catalog_track_version_topic"
+                + " where track_version_id = :id order by position")
+        .param("id", trackVersionId)
         .query(CatalogRepository::mapMapping)
         .list();
   }
 
-  void replaceMappings(UUID examVersionId, List<MappingRow> mappings) {
-    jdbc.sql("delete from certforge.catalog_exam_version_topic where exam_version_id = :id")
-        .param("id", examVersionId)
+  void replaceMappings(UUID trackVersionId, List<MappingRow> mappings) {
+    jdbc.sql("delete from certforge.catalog_track_version_topic where track_version_id = :id")
+        .param("id", trackVersionId)
         .update();
     for (MappingRow mapping : mappings) {
       jdbc.sql(
-              "insert into certforge.catalog_exam_version_topic"
-                  + " (exam_version_id, topic_id, objective_ref, position)"
-                  + " values (:version, :topic, :ref, :position)")
-          .param("version", examVersionId)
+              "insert into certforge.catalog_track_version_topic"
+                  + " (track_version_id, topic_id, objective_ref, position, weight)"
+                  + " values (:version, :topic, :ref, :position, :weight)")
+          .param("version", trackVersionId)
           .param("topic", mapping.topicId())
           .param("ref", mapping.objectiveRef())
           .param("position", mapping.position())
+          .param("weight", mapping.weight())
           .update();
     }
   }
@@ -221,8 +231,8 @@ class CatalogRepository {
     return jdbc.sql(
             "select tp.id, tp.track_id, tp.parent_id, tp.slug, tp.name"
                 + " from certforge.catalog_topic tp"
-                + " join certforge.catalog_exam_version_topic m on m.topic_id = tp.id"
-                + " join certforge.catalog_exam_version v on v.id = m.exam_version_id"
+                + " join certforge.catalog_track_version_topic m on m.topic_id = tp.id"
+                + " join certforge.catalog_track_version v on v.id = m.track_version_id"
                 + " join certforge.catalog_track t on t.id = v.track_id"
                 + " where tp.id = :id and v.status = 'ACTIVE' and t.status = 'ACTIVE'")
         .param("id", topicId)
@@ -243,16 +253,18 @@ class CatalogRepository {
         rs.getString("certification_name"));
   }
 
-  private static ExamVersionRow mapVersion(ResultSet rs, int rowNum) throws SQLException {
-    return new ExamVersionRow(
+  private static TrackVersionRow mapVersion(ResultSet rs, int rowNum) throws SQLException {
+    return new TrackVersionRow(
         rs.getObject("id", UUID.class),
         rs.getObject("track_id", UUID.class),
         rs.getString("label"),
+        CatalogStatus.valueOf(rs.getString("status")),
         rs.getString("exam_code"),
         rs.getString("exam_name"),
-        rs.getInt("java_release"),
-        rs.getString("objectives_url"),
-        CatalogStatus.valueOf(rs.getString("status")));
+        // getObject rather than getInt: an interview version has no exam row, and getInt would
+        // read a null as 0 and quietly claim the version targets Java 0.
+        rs.getObject("java_release", Integer.class),
+        rs.getString("objectives_url"));
   }
 
   private static TopicRow mapTopic(ResultSet rs, int rowNum) throws SQLException {
@@ -266,9 +278,10 @@ class CatalogRepository {
 
   private static MappingRow mapMapping(ResultSet rs, int rowNum) throws SQLException {
     return new MappingRow(
-        rs.getObject("exam_version_id", UUID.class),
+        rs.getObject("track_version_id", UUID.class),
         rs.getObject("topic_id", UUID.class),
         rs.getString("objective_ref"),
-        rs.getInt("position"));
+        rs.getInt("position"),
+        rs.getObject("weight", Integer.class));
   }
 }

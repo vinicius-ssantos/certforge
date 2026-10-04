@@ -29,7 +29,7 @@ class QuestionRepository {
   private static final String STATUS = "status";
   private static final String SELECT_REVISION =
       "select id, question_id, revision_number, status, question_type, topic_id, java_release,"
-          + " difficulty, difficulty_rationale, prompt, explanation, author_id, exam_version_id,"
+          + " difficulty, difficulty_rationale, prompt, explanation, author_id, track_version_id,"
           + " created_at, submitted_at, published_at, published_by, deprecated_at"
           + " from certforge.qb_question_revision";
 
@@ -171,24 +171,24 @@ class QuestionRepository {
   }
 
   /** Published revisions of a topic that are bound to the given (current) exam version. */
-  List<Revision> findPublishedByTopic(UUID topicId, UUID examVersionId) {
+  List<Revision> findPublishedByTopic(UUID topicId, UUID trackVersionId) {
     return jdbc.sql(
             SELECT_REVISION
-                + " where topic_id = :topic and exam_version_id = :exam"
+                + " where topic_id = :topic and track_version_id = :version"
                 + " and status = 'PUBLISHED' order by published_at, revision_number")
         .param("topic", topicId)
-        .param("exam", examVersionId)
+        .param("version", trackVersionId)
         .query(this::mapRevision)
         .list();
   }
 
-  Optional<Revision> findPublishedForContext(UUID questionId, UUID examVersionId) {
+  Optional<Revision> findPublishedForContext(UUID questionId, UUID trackVersionId) {
     return jdbc.sql(
             SELECT_REVISION
-                + " where question_id = :questionId and exam_version_id = :exam"
+                + " where question_id = :questionId and track_version_id = :version"
                 + " and status = 'PUBLISHED'")
         .param(QUESTION_ID, questionId)
-        .param("exam", examVersionId)
+        .param("version", trackVersionId)
         .query(this::mapRevision)
         .optional();
   }
@@ -260,12 +260,12 @@ class QuestionRepository {
         .update();
   }
 
-  void markPublished(UUID id, UUID examVersionId, UUID publishedBy, Instant now) {
+  void markPublished(UUID id, UUID trackVersionId, UUID publishedBy, Instant now) {
     jdbc.sql(
             "update certforge.qb_question_revision set status = 'PUBLISHED',"
-                + " exam_version_id = :exam, published_by = :by, published_at = :now"
+                + " track_version_id = :version, published_by = :by, published_at = :now"
                 + " where id = :id")
-        .param("exam", examVersionId)
+        .param("version", trackVersionId)
         .param("by", publishedBy)
         .param(NOW, utc(now))
         .param(ID, id)
@@ -353,7 +353,7 @@ class QuestionRepository {
         rs.getInt("revision_number"),
         RevisionStatus.valueOf(rs.getString(STATUS)),
         rs.getObject("author_id", UUID.class),
-        rs.getObject("exam_version_id", UUID.class),
+        rs.getObject("track_version_id", UUID.class),
         instant(rs, "created_at"),
         instant(rs, "submitted_at"),
         instant(rs, "published_at"),

@@ -27,6 +27,13 @@ interface AdminQuestionViews {
       List<ReferenceView> references,
       UUID authorId,
       @Schema(nullable = true) String authorName,
+      /**
+       * The track version this revision was published against. The field keeps the name {@code
+       * examVersionId} on purpose: nothing can be published to a non-certification track until ADR
+       * 0016 decision 6 makes the content rules conditional, so today it only ever carries an exam
+       * version. Renaming it would be a contract change for a lie that does not exist yet, and
+       * belongs with the change that makes it one.
+       */
       @Schema(nullable = true) UUID examVersionId,
       Instant createdAt,
       @Schema(nullable = true) Instant submittedAt,

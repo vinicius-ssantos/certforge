@@ -19,7 +19,7 @@ class StudyRepository {
   private static final String STATUS = "status";
   private static final String NOW = "now";
   private static final String SELECT_SESSION =
-      "select id, learner_id, topic_id, exam_version_id, status, requested_count, created_at,"
+      "select id, learner_id, topic_id, track_version_id, status, requested_count, created_at,"
           + " expires_at, closed_at from certforge.study_session";
 
   private final JdbcClient jdbc;
@@ -31,13 +31,13 @@ class StudyRepository {
   /** Inserts a session and its snapshot. Fails with a duplicate key if one is already active. */
   void insert(StudySession session, List<UUID> revisionIds) {
     jdbc.sql(
-            "insert into certforge.study_session (id, learner_id, topic_id, exam_version_id,"
+            "insert into certforge.study_session (id, learner_id, topic_id, track_version_id,"
                 + " requested_count, created_at, expires_at)"
-                + " values (:id, :learner, :topic, :exam, :count, :created, :expires)")
+                + " values (:id, :learner, :topic, :version, :count, :created, :expires)")
         .param(ID, session.id())
         .param(LEARNER, session.learnerId())
         .param("topic", session.topicId())
-        .param("exam", session.examVersionId())
+        .param("version", session.trackVersionId())
         .param("count", session.requestedCount())
         .param("created", utc(session.createdAt()))
         .param("expires", utc(session.expiresAt()))
@@ -136,7 +136,7 @@ class StudyRepository {
         rs.getObject("id", UUID.class),
         rs.getObject("learner_id", UUID.class),
         rs.getObject("topic_id", UUID.class),
-        rs.getObject("exam_version_id", UUID.class),
+        rs.getObject("track_version_id", UUID.class),
         SessionStatus.valueOf(rs.getString(STATUS)),
         rs.getInt("requested_count"),
         rs.getObject("created_at", OffsetDateTime.class).toInstant(),

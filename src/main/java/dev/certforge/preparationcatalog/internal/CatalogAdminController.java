@@ -89,7 +89,11 @@ class CatalogAdminController {
                         examVersionId,
                         entry.topicId(),
                         entry.objectiveRef().trim(),
-                        entry.position()))
+                        entry.position(),
+                        // A canonical weight is interview-track material (ADR 0016 decision 7).
+                        // This endpoint maps an exam's objectives, where position is the ordering
+                        // and every topic carries the same weight by definition.
+                        null))
             .toList();
     return service.setMappings(examVersionId, rows);
   }
