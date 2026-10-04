@@ -1,3372 +1,3371 @@
 {
-    "components" : {
-      "schemas" : {
-        "AccountView" : {
-          "properties" : {
-            "email" : {
-              "type" : "string"
-            },
-            "enabled" : {
-              "type" : "boolean"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "permissions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "roles" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            }
+  "components" : {
+    "schemas" : {
+      "AccountView" : {
+        "properties" : {
+          "email" : {
+            "type" : "string"
           },
-          "required" : [ "email", "enabled", "id", "permissions", "roles" ],
-          "type" : "object"
-        },
-        "AdminExamVersionView" : {
-          "properties" : {
-            "examCode" : {
-              "type" : "string"
-            },
-            "examName" : {
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "label" : {
-              "type" : "string"
-            },
-            "objectivesUrl" : {
-              "type" : "string"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/AdminMappingView"
-              },
-              "type" : "array"
-            }
+          "enabled" : {
+            "type" : "boolean"
           },
-          "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl", "status", "topics" ],
-          "type" : "object"
-        },
-        "AdminMappingView" : {
-          "properties" : {
-            "objectiveRef" : {
-              "type" : "string"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
           },
-          "required" : [ "objectiveRef", "position", "topicId" ],
-          "type" : "object"
-        },
-        "AdminTopicView" : {
-          "properties" : {
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "name" : {
-              "type" : "string"
-            },
-            "parentId" : {
-              "format" : "uuid",
-              "type" : [ "string", "null" ]
-            },
-            "slug" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "id", "name", "parentId", "slug" ],
-          "type" : "object"
-        },
-        "AdminTrackView" : {
-          "properties" : {
-            "certificationName" : {
-              "type" : "string"
-            },
-            "examVersions" : {
-              "items" : {
-                "$ref" : "#/components/schemas/AdminExamVersionView"
-              },
-              "type" : "array"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "kind" : {
-              "type" : "string"
-            },
-            "name" : {
-              "type" : "string"
-            },
-            "provider" : {
-              "type" : "string"
-            },
-            "slug" : {
-              "type" : "string"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/AdminTopicView"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "certificationName", "examVersions", "id", "kind", "name", "provider", "slug", "status", "topics" ],
-          "type" : "object"
-        },
-        "Answer" : {
-          "properties" : {
-            "correctOptions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "explanation" : {
-              "type" : "string"
-            },
-            "options" : {
-              "items" : {
-                "$ref" : "#/components/schemas/OptionAnswer"
-              },
-              "type" : "array"
-            },
-            "references" : {
-              "items" : {
-                "$ref" : "#/components/schemas/Reference"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "correctOptions", "explanation", "options", "references" ],
-          "type" : "object"
-        },
-        "AttemptHistoryItem" : {
-          "properties" : {
-            "confidence" : {
-              "type" : "string"
-            },
-            "correct" : {
-              "type" : "boolean"
-            },
-            "elapsedMillis" : {
-              "format" : "int64",
-              "type" : "integer"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "question" : {
-              "$ref" : "#/components/schemas/HistoricalQuestion"
-            },
-            "selectedOptions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "sessionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "submittedAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "confidence", "correct", "elapsedMillis", "id", "position", "question", "selectedOptions", "sessionId", "submittedAt", "topicId" ],
-          "type" : "object"
-        },
-        "AttemptRequest" : {
-          "properties" : {
-            "confidence" : {
-              "enum" : [ "LOW", "MEDIUM", "HIGH" ],
-              "type" : "string"
-            },
-            "elapsedMillis" : {
-              "format" : "int64",
-              "maximum" : 86400000,
-              "minimum" : 0,
-              "type" : "integer"
-            },
-            "selectedOptions" : {
-              "items" : {
-                "pattern" : "^[A-Z]$",
-                "type" : "string"
-              },
-              "maxItems" : 8,
-              "minItems" : 0,
-              "type" : "array"
-            }
-          },
-          "required" : [ "confidence", "elapsedMillis", "selectedOptions" ],
-          "type" : "object"
-        },
-        "AttemptResult" : {
-          "properties" : {
-            "answer" : {
-              "$ref" : "#/components/schemas/Answer"
-            },
-            "confidence" : {
-              "type" : "string"
-            },
-            "correct" : {
-              "type" : "boolean"
-            },
-            "elapsedMillis" : {
-              "format" : "int64",
-              "type" : "integer"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "revisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "selectedOptions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "submittedAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answer", "confidence", "correct", "elapsedMillis", "position", "revisionId", "selectedOptions", "submittedAt" ],
-          "type" : "object"
-        },
-        "AuditEventView" : {
-          "properties" : {
-            "action" : {
-              "type" : "string"
-            },
-            "actorId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "occurredAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "requestId" : {
-              "type" : [ "string", "null" ]
-            },
-            "subject" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "action", "actorId", "id", "occurredAt", "requestId", "subject" ],
-          "type" : "object"
-        },
-        "CountsView" : {
-          "properties" : {
-            "attempted" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "lastActivityAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            }
-          },
-          "required" : [ "attempted", "correct", "lastActivityAt" ],
-          "type" : "object"
-        },
-        "CreateExamVersionRequest" : {
-          "properties" : {
-            "examCode" : {
-              "maxLength" : 32,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "examName" : {
-              "maxLength" : 200,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "minimum" : 1,
-              "type" : "integer"
-            },
-            "label" : {
-              "maxLength" : 100,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "objectivesUrl" : {
-              "maxLength" : 500,
-              "minLength" : 0,
-              "pattern" : "^https://\\S+$",
-              "type" : "string"
-            }
-          },
-          "required" : [ "examCode", "examName", "label", "objectivesUrl" ],
-          "type" : "object"
-        },
-        "CreateTopicRequest" : {
-          "properties" : {
-            "name" : {
-              "maxLength" : 200,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "parentId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "slug" : {
-              "maxLength" : 64,
-              "minLength" : 0,
-              "pattern" : "^[a-z0-9]+(-[a-z0-9]+)*$",
-              "type" : "string"
-            }
-          },
-          "required" : [ "name", "slug" ],
-          "type" : "object"
-        },
-        "CreateTrackRequest" : {
-          "properties" : {
-            "certificationName" : {
-              "maxLength" : 200,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "name" : {
-              "maxLength" : 200,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "provider" : {
-              "maxLength" : 100,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "slug" : {
-              "maxLength" : 64,
-              "minLength" : 0,
-              "pattern" : "^[a-z0-9]+(-[a-z0-9]+)*$",
-              "type" : "string"
-            }
-          },
-          "required" : [ "certificationName", "name", "provider", "slug" ],
-          "type" : "object"
-        },
-        "CsrfToken" : {
-          "properties" : {
-            "headerName" : {
-              "type" : "string"
-            },
-            "parameterName" : {
-              "type" : "string"
-            },
-            "token" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "headerName", "parameterName", "token" ],
-          "type" : "object"
-        },
-        "CsrfView" : {
-          "properties" : {
-            "headerName" : {
-              "type" : "string"
-            },
-            "token" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "headerName", "token" ],
-          "type" : "object"
-        },
-        "Difference" : {
-          "properties" : {
-            "expected" : {
-              "$ref" : "#/components/schemas/CountsView",
-              "type" : "null"
-            },
-            "stored" : {
-              "$ref" : "#/components/schemas/CountsView",
-              "type" : "null"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "expected", "stored", "topicId" ],
-          "type" : "object"
-        },
-        "ExamVersionView" : {
-          "properties" : {
-            "examCode" : {
-              "type" : "string"
-            },
-            "examName" : {
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "label" : {
-              "type" : "string"
-            },
-            "objectivesUrl" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl" ],
-          "type" : "object"
-        },
-        "HistoricalOption" : {
-          "properties" : {
-            "correct" : {
-              "type" : "boolean"
-            },
-            "explanation" : {
-              "type" : "string"
-            },
-            "key" : {
-              "type" : "string"
-            },
-            "text" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "correct", "explanation", "key", "text" ],
-          "type" : "object"
-        },
-        "HistoricalQuestion" : {
-          "properties" : {
-            "explanation" : {
-              "type" : "string"
-            },
-            "options" : {
-              "items" : {
-                "$ref" : "#/components/schemas/HistoricalOption"
-              },
-              "type" : "array"
-            },
-            "prompt" : {
-              "type" : "string"
-            },
-            "references" : {
-              "items" : {
-                "$ref" : "#/components/schemas/HistoricalReference"
-              },
-              "type" : "array"
-            },
-            "revisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "revisionNumber" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "revisionStatus" : {
-              "type" : "string"
-            },
-            "type" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "explanation", "options", "prompt", "references", "revisionId", "revisionNumber", "revisionStatus", "type" ],
-          "type" : "object"
-        },
-        "HistoricalReference" : {
-          "properties" : {
-            "title" : {
-              "type" : "string"
-            },
-            "url" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "title", "url" ],
-          "type" : "object"
-        },
-        "LoginRequest" : {
-          "properties" : {
-            "email" : {
-              "maxLength" : 254,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "password" : {
-              "maxLength" : 128,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "required" : [ "email", "password" ],
-          "type" : "object"
-        },
-        "MappingEntry" : {
-          "properties" : {
-            "objectiveRef" : {
-              "maxLength" : 300,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "position" : {
-              "format" : "int32",
-              "minimum" : 0,
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "objectiveRef", "position", "topicId" ],
-          "type" : "object"
-        },
-        "Misconception" : {
-          "properties" : {
-            "attempts" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "lastAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "questions" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "topicName" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
-          "type" : "object"
-        },
-        "MockExamHistoryItem" : {
-          "properties" : {
-            "answeredCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "closedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "correctCount" : {
-              "format" : "int32",
-              "type" : [ "integer", "null" ]
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "expiresAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "passed" : {
-              "type" : [ "boolean", "null" ]
-            },
-            "passingPercentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "percentage" : {
-              "format" : "int32",
-              "type" : [ "integer", "null" ]
-            },
-            "questionCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/MockExamTopicHistoryItem"
-              },
-              "type" : "array"
-            },
-            "trackId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "expiresAt", "id", "passed", "passingPercentage", "percentage", "questionCount", "status", "topics", "trackId" ],
-          "type" : "object"
-        },
-        "MockExamQuestionView" : {
-          "properties" : {
-            "answered" : {
-              "type" : "boolean"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "question" : {
-              "$ref" : "#/components/schemas/PublishedQuestion"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answered", "position", "question", "topicId" ],
-          "type" : "object"
-        },
-        "MockExamResult" : {
-          "properties" : {
-            "answered" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "elapsedSeconds" : {
-              "format" : "int64",
-              "type" : "integer"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "passed" : {
-              "type" : "boolean"
-            },
-            "passingCorrectCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "passingPercentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "percentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "questions" : {
-              "items" : {
-                "$ref" : "#/components/schemas/QuestionResult"
-              },
-              "type" : "array"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/TopicResult"
-              },
-              "type" : "array"
-            },
-            "total" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "trackId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answered", "correct", "elapsedSeconds", "id", "passed", "passingCorrectCount", "passingPercentage", "percentage", "questions", "status", "topics", "total", "trackId" ],
-          "type" : "object"
-        },
-        "MockExamStartRequest" : {
-          "properties" : {
-            "trackSlug" : {
-              "minLength" : 1,
-              "type" : "string"
-            }
-          },
-          "required" : [ "trackSlug" ],
-          "type" : "object"
-        },
-        "MockExamTopicHistoryItem" : {
-          "properties" : {
-            "answered" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "needsReview" : {
-              "type" : "boolean"
-            },
-            "percentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "total" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          },
-          "required" : [ "answered", "correct", "needsReview", "percentage", "topicId", "total" ],
-          "type" : "object"
-        },
-        "MockExamView" : {
-          "properties" : {
-            "answeredCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "closedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "expiresAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "passingPercentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "questionCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "questions" : {
-              "items" : {
-                "$ref" : "#/components/schemas/MockExamQuestionView"
-              },
-              "type" : "array"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "trackId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "passingPercentage", "questionCount", "questions", "status", "trackId" ],
-          "type" : "object"
-        },
-        "OptionAnswer" : {
-          "properties" : {
-            "correct" : {
-              "type" : "boolean"
-            },
-            "explanation" : {
-              "type" : "string"
-            },
-            "key" : {
-              "type" : "string"
-            },
-            "text" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "correct", "explanation", "key", "text" ],
-          "type" : "object"
-        },
-        "OptionRequest" : {
-          "properties" : {
-            "correct" : {
-              "type" : "boolean"
-            },
-            "explanation" : {
-              "maxLength" : 2000,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "key" : {
-              "minLength" : 1,
-              "pattern" : "^[A-H]$",
-              "type" : "string"
-            },
-            "text" : {
-              "maxLength" : 2000,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "required" : [ "key", "text" ],
-          "type" : "object"
-        },
-        "OptionView" : {
-          "properties" : {
-            "correct" : {
-              "type" : "boolean"
-            },
-            "explanation" : {
-              "type" : "string"
-            },
-            "key" : {
-              "type" : "string"
-            },
-            "text" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "correct", "explanation", "key", "text" ],
-          "type" : "object"
-        },
-        "PageAttemptHistoryItem" : {
-          "properties" : {
+          "permissions" : {
             "items" : {
-              "items" : {
-                "$ref" : "#/components/schemas/AttemptHistoryItem"
-              },
-              "type" : "array"
+              "type" : "string"
             },
-            "nextCursor" : {
-              "type" : [ "string", "null" ]
-            }
+            "type" : "array"
           },
-          "required" : [ "items", "nextCursor" ],
-          "type" : "object"
-        },
-        "PageAuditEventView" : {
-          "properties" : {
+          "roles" : {
             "items" : {
-              "items" : {
-                "$ref" : "#/components/schemas/AuditEventView"
-              },
-              "type" : "array"
+              "type" : "string"
             },
-            "nextCursor" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "items", "nextCursor" ],
-          "type" : "object"
+            "type" : "array"
+          }
         },
-        "PageMockExamHistoryItem" : {
-          "properties" : {
-            "items" : {
-              "items" : {
-                "$ref" : "#/components/schemas/MockExamHistoryItem"
-              },
-              "type" : "array"
-            },
-            "nextCursor" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "items", "nextCursor" ],
-          "type" : "object"
-        },
-        "PageSessionHistoryItem" : {
-          "properties" : {
-            "items" : {
-              "items" : {
-                "$ref" : "#/components/schemas/SessionHistoryItem"
-              },
-              "type" : "array"
-            },
-            "nextCursor" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "items", "nextCursor" ],
-          "type" : "object"
-        },
-        "PublishedOption" : {
-          "properties" : {
-            "key" : {
-              "type" : "string"
-            },
-            "text" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "key", "text" ],
-          "type" : "object"
-        },
-        "PublishedQuestion" : {
-          "properties" : {
-            "difficulty" : {
-              "enum" : [ "EASY", "MEDIUM", "HARD" ],
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "options" : {
-              "items" : {
-                "$ref" : "#/components/schemas/PublishedOption"
-              },
-              "type" : "array"
-            },
-            "prompt" : {
-              "type" : "string"
-            },
-            "questionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "revisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "revisionNumber" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "type" : {
-              "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
-              "type" : "string"
-            }
-          },
-          "required" : [ "difficulty", "javaRelease", "options", "prompt", "questionId", "revisionId", "revisionNumber", "topicId", "type" ],
-          "type" : "object"
-        },
-        "QuestionResult" : {
-          "properties" : {
-            "answer" : {
-              "$ref" : "#/components/schemas/Answer"
-            },
-            "answered" : {
-              "type" : "boolean"
-            },
-            "correct" : {
-              "type" : "boolean"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "question" : {
-              "$ref" : "#/components/schemas/PublishedQuestion"
-            },
-            "selectedOptions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answer", "answered", "correct", "position", "question", "selectedOptions", "topicId" ],
-          "type" : "object"
-        },
-        "QuestionSummary" : {
-          "properties" : {
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "latestRevisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "latestRevisionNumber" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "latestStatus" : {
-              "type" : "string"
-            },
-            "prompt" : {
-              "type" : [ "string", "null" ]
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "id", "latestRevisionId", "latestRevisionNumber", "latestStatus", "prompt", "topicId" ],
-          "type" : "object"
-        },
-        "QuestionView" : {
-          "properties" : {
-            "createdBy" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "revisions" : {
-              "items" : {
-                "$ref" : "#/components/schemas/RevisionView"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "createdBy", "id", "revisions" ],
-          "type" : "object"
-        },
-        "Queue" : {
-          "properties" : {
-            "dueNow" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "items" : {
-              "items" : {
-                "$ref" : "#/components/schemas/QueueItem"
-              },
-              "type" : "array"
-            },
-            "neverAttempted" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "waiting" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          },
-          "required" : [ "dueNow", "items", "neverAttempted", "waiting" ],
-          "type" : "object"
-        },
-        "QueueItem" : {
-          "properties" : {
-            "lastAnswerCorrect" : {
-              "type" : "boolean"
-            },
-            "lastAttemptedAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "prompt" : {
-              "type" : "string"
-            },
-            "questionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "reason" : {
-              "enum" : [ "WRONG_WHILE_CONFIDENT", "WRONG", "RIGHT_BUT_UNSURE", "DUE_FOR_RECALL" ],
-              "type" : "string"
-            },
-            "revisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "timesAttempted" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "timesWrong" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "topicName" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "lastAnswerCorrect", "lastAttemptedAt", "prompt", "questionId", "reason", "revisionId", "timesAttempted", "timesWrong", "topicId", "topicName" ],
-          "type" : "object"
-        },
-        "RebuildResult" : {
-          "properties" : {
-            "corrected" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topics" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          },
-          "required" : [ "corrected", "topics" ],
-          "type" : "object"
-        },
-        "Reconciliation" : {
-          "properties" : {
-            "consistent" : {
-              "type" : "boolean"
-            },
-            "differences" : {
-              "items" : {
-                "$ref" : "#/components/schemas/Difference"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "consistent", "differences" ],
-          "type" : "object"
-        },
-        "Reference" : {
-          "properties" : {
-            "title" : {
-              "type" : "string"
-            },
-            "url" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "title", "url" ],
-          "type" : "object"
-        },
-        "ReferenceRequest" : {
-          "properties" : {
-            "title" : {
-              "maxLength" : 300,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "url" : {
-              "maxLength" : 500,
-              "minLength" : 0,
-              "pattern" : "^https://\\S+$",
-              "type" : "string"
-            }
-          },
-          "required" : [ "title", "url" ],
-          "type" : "object"
-        },
-        "ReferenceView" : {
-          "properties" : {
-            "title" : {
-              "type" : "string"
-            },
-            "url" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "title", "url" ],
-          "type" : "object"
-        },
-        "RegisterRequest" : {
-          "properties" : {
-            "email" : {
-              "format" : "email",
-              "maxLength" : 254,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "password" : {
-              "maxLength" : 128,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "required" : [ "email", "password" ],
-          "type" : "object"
-        },
-        "RenameTopicRequest" : {
-          "properties" : {
-            "name" : {
-              "maxLength" : 200,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "required" : [ "name" ],
-          "type" : "object"
-        },
-        "RequiredReviewRequest" : {
-          "properties" : {
-            "checklist" : {
-              "items" : {
-                "type" : "string"
-              },
-              "maxItems" : 10,
-              "minItems" : 0,
-              "type" : "array"
-            },
-            "comment" : {
-              "maxLength" : 4000,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "required" : [ "comment" ],
-          "type" : "object"
-        },
-        "ResponseReceipt" : {
-          "properties" : {
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "revisionId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "selectedOptions" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "submittedAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            }
-          },
-          "required" : [ "position", "revisionId", "selectedOptions", "submittedAt" ],
-          "type" : "object"
-        },
-        "ResponseRequest" : {
-          "properties" : {
-            "selectedOptions" : {
-              "items" : {
-                "pattern" : "^[A-Z]$",
-                "type" : "string"
-              },
-              "maxItems" : 8,
-              "minItems" : 1,
-              "type" : "array"
-            }
-          },
-          "required" : [ "selectedOptions" ],
-          "type" : "object"
-        },
-        "ReviewRequest" : {
-          "properties" : {
-            "checklist" : {
-              "items" : {
-                "type" : "string"
-              },
-              "maxItems" : 10,
-              "minItems" : 0,
-              "type" : "array"
-            },
-            "comment" : {
-              "maxLength" : 4000,
-              "minLength" : 0,
-              "type" : "string"
-            }
-          },
-          "type" : "object"
-        },
-        "ReviewView" : {
-          "properties" : {
-            "checklist" : {
-              "items" : {
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "comment" : {
-              "type" : [ "string", "null" ]
-            },
-            "decidedAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "decision" : {
-              "type" : "string"
-            },
-            "reviewerId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "reviewerName" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "checklist", "comment", "decidedAt", "decision", "reviewerId", "reviewerName" ],
-          "type" : "object"
-        },
-        "RevisionRequest" : {
-          "properties" : {
-            "difficulty" : {
-              "enum" : [ "EASY", "MEDIUM", "HARD" ],
-              "type" : "string"
-            },
-            "difficultyRationale" : {
-              "maxLength" : 2000,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "explanation" : {
-              "maxLength" : 10000,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "minimum" : 1,
-              "type" : "integer"
-            },
-            "options" : {
-              "items" : {
-                "$ref" : "#/components/schemas/OptionRequest"
-              },
-              "maxItems" : 8,
-              "minItems" : 0,
-              "type" : "array"
-            },
-            "prompt" : {
-              "maxLength" : 10000,
-              "minLength" : 0,
-              "type" : "string"
-            },
-            "references" : {
-              "items" : {
-                "$ref" : "#/components/schemas/ReferenceRequest"
-              },
-              "maxItems" : 10,
-              "minItems" : 0,
-              "type" : "array"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "type" : {
-              "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
-              "type" : "string"
-            }
-          },
-          "required" : [ "type" ],
-          "type" : "object"
-        },
-        "RevisionView" : {
-          "properties" : {
-            "authorId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "authorName" : {
-              "type" : [ "string", "null" ]
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "deprecatedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "difficulty" : {
-              "type" : [ "string", "null" ]
-            },
-            "difficultyRationale" : {
-              "type" : [ "string", "null" ]
-            },
-            "examVersionId" : {
-              "format" : "uuid",
-              "type" : [ "string", "null" ]
-            },
-            "explanation" : {
-              "type" : [ "string", "null" ]
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "javaRelease" : {
-              "format" : "int32",
-              "type" : [ "integer", "null" ]
-            },
-            "number" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "options" : {
-              "items" : {
-                "$ref" : "#/components/schemas/OptionView"
-              },
-              "type" : "array"
-            },
-            "prompt" : {
-              "type" : [ "string", "null" ]
-            },
-            "publishedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "publishedBy" : {
-              "format" : "uuid",
-              "type" : [ "string", "null" ]
-            },
-            "publishedByName" : {
-              "type" : [ "string", "null" ]
-            },
-            "references" : {
-              "items" : {
-                "$ref" : "#/components/schemas/ReferenceView"
-              },
-              "type" : "array"
-            },
-            "reviews" : {
-              "items" : {
-                "$ref" : "#/components/schemas/ReviewView"
-              },
-              "type" : "array"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "submittedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : [ "string", "null" ]
-            },
-            "type" : {
-              "type" : "string"
-            }
-          },
-          "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "status", "submittedAt", "topicId", "type" ],
-          "type" : "object"
-        },
-        "RolesRequest" : {
-          "properties" : {
-            "roles" : {
-              "items" : {
-                "enum" : [ "LEARNER", "EDITOR", "REVIEWER", "ADMINISTRATOR" ],
-                "type" : "string"
-              },
-              "type" : "array",
-              "uniqueItems" : true
-            }
-          },
-          "required" : [ "roles" ],
-          "type" : "object"
-        },
-        "SessionHistoryItem" : {
-          "properties" : {
-            "answeredCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "closedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "correctCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "requestedCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "id", "requestedCount", "status", "topicId" ],
-          "type" : "object"
-        },
-        "SessionQuestionView" : {
-          "properties" : {
-            "answered" : {
-              "type" : "boolean"
-            },
-            "position" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "question" : {
-              "$ref" : "#/components/schemas/PublishedQuestion"
-            }
-          },
-          "required" : [ "answered", "position", "question" ],
-          "type" : "object"
-        },
-        "SessionSummary" : {
-          "properties" : {
-            "answeredCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "closedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "expiresAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "questionCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "questionCount", "status", "topicId" ],
-          "type" : "object"
-        },
-        "SessionView" : {
-          "properties" : {
-            "closedAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "createdAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "expiresAt" : {
-              "format" : "date-time",
-              "type" : "string"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "questions" : {
-              "items" : {
-                "$ref" : "#/components/schemas/SessionQuestionView"
-              },
-              "type" : "array"
-            },
-            "requestedCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "status" : {
-              "type" : "string"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "closedAt", "createdAt", "expiresAt", "id", "questions", "requestedCount", "status", "topicId" ],
-          "type" : "object"
-        },
-        "SetMappingsRequest" : {
-          "properties" : {
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/MappingEntry"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "topics" ],
-          "type" : "object"
-        },
-        "StartRequest" : {
-          "properties" : {
-            "questionCount" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "revisionIds" : {
-              "items" : {
-                "format" : "uuid",
-                "type" : "string"
-              },
-              "type" : "array"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          },
-          "required" : [ "topicId" ],
-          "type" : "object"
-        },
-        "TopicProgress" : {
-          "properties" : {
-            "accuracy" : {
-              "type" : [ "number", "null" ]
-            },
-            "attempted" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "incorrect" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "lastActivityAt" : {
-              "format" : "date-time",
-              "type" : [ "string", "null" ]
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "topicName" : {
-              "type" : [ "string", "null" ]
-            },
-            "trackSlug" : {
-              "type" : [ "string", "null" ]
-            }
-          },
-          "required" : [ "accuracy", "attempted", "correct", "incorrect", "lastActivityAt", "topicId", "topicName", "trackSlug" ],
-          "type" : "object"
-        },
-        "TopicResult" : {
-          "properties" : {
-            "answered" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "percentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "total" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          },
-          "required" : [ "answered", "correct", "percentage", "topicId", "total" ],
-          "type" : "object"
-        },
-        "TopicView" : {
-          "properties" : {
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "name" : {
-              "type" : "string"
-            },
-            "objectiveRef" : {
-              "type" : "string"
-            },
-            "slug" : {
-              "type" : "string"
-            },
-            "subtopics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/TopicView"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "id", "name", "objectiveRef", "slug", "subtopics" ],
-          "type" : "object"
-        },
-        "TrackView" : {
-          "properties" : {
-            "certificationName" : {
-              "type" : "string"
-            },
-            "examVersion" : {
-              "$ref" : "#/components/schemas/ExamVersionView"
-            },
-            "id" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "kind" : {
-              "enum" : [ "CERTIFICATION", "INTERVIEW" ],
-              "type" : "string"
-            },
-            "name" : {
-              "type" : "string"
-            },
-            "provider" : {
-              "type" : "string"
-            },
-            "slug" : {
-              "type" : "string"
-            },
-            "topics" : {
-              "items" : {
-                "$ref" : "#/components/schemas/TopicView"
-              },
-              "type" : "array"
-            }
-          },
-          "required" : [ "certificationName", "examVersion", "id", "kind", "name", "provider", "slug", "topics" ],
-          "type" : "object"
-        }
+        "required" : [ "email", "enabled", "id", "permissions", "roles" ],
+        "type" : "object"
       },
-      "securitySchemes" : {
-        "sessionCookie" : {
-          "description" : "Server-side session cookie. State-changing requests also need the X-XSRF-TOKEN header; call GET /api/auth/csrf first.",
-          "in" : "cookie",
-          "name" : "CERTFORGE_SESSION",
-          "type" : "apiKey"
-        }
+      "AdminExamVersionView" : {
+        "properties" : {
+          "examCode" : {
+            "type" : "string"
+          },
+          "examName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "objectivesUrl" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AdminMappingView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl", "status", "topics" ],
+        "type" : "object"
+      },
+      "AdminMappingView" : {
+        "properties" : {
+          "objectiveRef" : {
+            "type" : "string"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "objectiveRef", "position", "topicId" ],
+        "type" : "object"
+      },
+      "AdminTopicView" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "parentId" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "slug" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "name", "parentId", "slug" ],
+        "type" : "object"
+      },
+      "AdminTrackView" : {
+        "properties" : {
+          "certificationName" : {
+            "type" : "string"
+          },
+          "examVersions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AdminExamVersionView"
+            },
+            "type" : "array"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AdminTopicView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "certificationName", "examVersions", "id", "kind", "name", "provider", "slug", "status", "topics" ],
+        "type" : "object"
+      },
+      "Answer" : {
+        "properties" : {
+          "correctOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "explanation" : {
+            "type" : "string"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OptionAnswer"
+            },
+            "type" : "array"
+          },
+          "references" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Reference"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "correctOptions", "explanation", "options", "references" ],
+        "type" : "object"
+      },
+      "AttemptHistoryItem" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "string"
+          },
+          "correct" : {
+            "type" : "boolean"
+          },
+          "elapsedMillis" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/HistoricalQuestion"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "sessionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "confidence", "correct", "elapsedMillis", "id", "position", "question", "selectedOptions", "sessionId", "submittedAt", "topicId" ],
+        "type" : "object"
+      },
+      "AttemptRequest" : {
+        "properties" : {
+          "confidence" : {
+            "enum" : [ "LOW", "MEDIUM", "HIGH" ],
+            "type" : "string"
+          },
+          "elapsedMillis" : {
+            "format" : "int64",
+            "maximum" : 86400000,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "pattern" : "^[A-Z]$",
+              "type" : "string"
+            },
+            "maxItems" : 8,
+            "minItems" : 0,
+            "type" : "array"
+          }
+        },
+        "required" : [ "confidence", "elapsedMillis", "selectedOptions" ],
+        "type" : "object"
+      },
+      "AttemptResult" : {
+        "properties" : {
+          "answer" : {
+            "$ref" : "#/components/schemas/Answer"
+          },
+          "confidence" : {
+            "type" : "string"
+          },
+          "correct" : {
+            "type" : "boolean"
+          },
+          "elapsedMillis" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answer", "confidence", "correct", "elapsedMillis", "position", "revisionId", "selectedOptions", "submittedAt" ],
+        "type" : "object"
+      },
+      "AuditEventView" : {
+        "properties" : {
+          "action" : {
+            "type" : "string"
+          },
+          "actorId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "occurredAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "requestId" : {
+            "type" : [ "string", "null" ]
+          },
+          "subject" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "action", "actorId", "id", "occurredAt", "requestId", "subject" ],
+        "type" : "object"
+      },
+      "CountsView" : {
+        "properties" : {
+          "attempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lastActivityAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "attempted", "correct", "lastActivityAt" ],
+        "type" : "object"
+      },
+      "CreateExamVersionRequest" : {
+        "properties" : {
+          "examCode" : {
+            "maxLength" : 32,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "examName" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "label" : {
+            "maxLength" : 100,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "objectivesUrl" : {
+            "maxLength" : 500,
+            "minLength" : 0,
+            "pattern" : "^https://\\S+$",
+            "type" : "string"
+          }
+        },
+        "required" : [ "examCode", "examName", "label", "objectivesUrl" ],
+        "type" : "object"
+      },
+      "CreateTopicRequest" : {
+        "properties" : {
+          "name" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "parentId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "slug" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "pattern" : "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "type" : "string"
+          }
+        },
+        "required" : [ "name", "slug" ],
+        "type" : "object"
+      },
+      "CreateTrackRequest" : {
+        "properties" : {
+          "certificationName" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "name" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "provider" : {
+            "maxLength" : 100,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "slug" : {
+            "maxLength" : 64,
+            "minLength" : 0,
+            "pattern" : "^[a-z0-9]+(-[a-z0-9]+)*$",
+            "type" : "string"
+          }
+        },
+        "required" : [ "certificationName", "name", "provider", "slug" ],
+        "type" : "object"
+      },
+      "CsrfToken" : {
+        "properties" : {
+          "headerName" : {
+            "type" : "string"
+          },
+          "parameterName" : {
+            "type" : "string"
+          },
+          "token" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "headerName", "parameterName", "token" ],
+        "type" : "object"
+      },
+      "CsrfView" : {
+        "properties" : {
+          "headerName" : {
+            "type" : "string"
+          },
+          "token" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "headerName", "token" ],
+        "type" : "object"
+      },
+      "Difference" : {
+        "properties" : {
+          "expected" : {
+            "$ref" : "#/components/schemas/CountsView",
+            "type" : "null"
+          },
+          "stored" : {
+            "$ref" : "#/components/schemas/CountsView",
+            "type" : "null"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "expected", "stored", "topicId" ],
+        "type" : "object"
+      },
+      "ExamVersionView" : {
+        "properties" : {
+          "examCode" : {
+            "type" : "string"
+          },
+          "examName" : {
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "objectivesUrl" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl" ],
+        "type" : "object"
+      },
+      "HistoricalOption" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          },
+          "key" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "correct", "explanation", "key", "text" ],
+        "type" : "object"
+      },
+      "HistoricalQuestion" : {
+        "properties" : {
+          "explanation" : {
+            "type" : "string"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/HistoricalOption"
+            },
+            "type" : "array"
+          },
+          "prompt" : {
+            "type" : "string"
+          },
+          "references" : {
+            "items" : {
+              "$ref" : "#/components/schemas/HistoricalReference"
+            },
+            "type" : "array"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "revisionNumber" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionStatus" : {
+            "type" : "string"
+          },
+          "type" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "explanation", "options", "prompt", "references", "revisionId", "revisionNumber", "revisionStatus", "type" ],
+        "type" : "object"
+      },
+      "HistoricalReference" : {
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "url" ],
+        "type" : "object"
+      },
+      "LoginRequest" : {
+        "properties" : {
+          "email" : {
+            "maxLength" : 254,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "password" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "password" ],
+        "type" : "object"
+      },
+      "MappingEntry" : {
+        "properties" : {
+          "objectiveRef" : {
+            "maxLength" : 300,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "position" : {
+            "format" : "int32",
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "objectiveRef", "position", "topicId" ],
+        "type" : "object"
+      },
+      "Misconception" : {
+        "properties" : {
+          "attempts" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lastAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "questions" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicName" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
+        "type" : "object"
+      },
+      "MockExamHistoryItem" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "correctCount" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passed" : {
+            "type" : [ "boolean", "null" ]
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamTopicHistoryItem"
+            },
+            "type" : "array"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "expiresAt", "id", "passed", "passingPercentage", "percentage", "questionCount", "status", "topics", "trackId" ],
+        "type" : "object"
+      },
+      "MockExamQuestionView" : {
+        "properties" : {
+          "answered" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answered", "position", "question", "topicId" ],
+        "type" : "object"
+      },
+      "MockExamResult" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "elapsedSeconds" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passed" : {
+            "type" : "boolean"
+          },
+          "passingCorrectCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/QuestionResult"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicResult"
+            },
+            "type" : "array"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answered", "correct", "elapsedSeconds", "id", "passed", "passingCorrectCount", "passingPercentage", "percentage", "questions", "status", "topics", "total", "trackId" ],
+        "type" : "object"
+      },
+      "MockExamStartRequest" : {
+        "properties" : {
+          "trackSlug" : {
+            "minLength" : 1,
+            "type" : "string"
+          }
+        },
+        "required" : [ "trackSlug" ],
+        "type" : "object"
+      },
+      "MockExamTopicHistoryItem" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "needsReview" : {
+            "type" : "boolean"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "answered", "correct", "needsReview", "percentage", "topicId", "total" ],
+        "type" : "object"
+      },
+      "MockExamView" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamQuestionView"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "passingPercentage", "questionCount", "questions", "status", "trackId" ],
+        "type" : "object"
+      },
+      "OptionAnswer" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          },
+          "key" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "correct", "explanation", "key", "text" ],
+        "type" : "object"
+      },
+      "OptionRequest" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "maxLength" : 2000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "key" : {
+            "minLength" : 1,
+            "pattern" : "^[A-H]$",
+            "type" : "string"
+          },
+          "text" : {
+            "maxLength" : 2000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "text" ],
+        "type" : "object"
+      },
+      "OptionView" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : "string"
+          },
+          "key" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "correct", "explanation", "key", "text" ],
+        "type" : "object"
+      },
+      "PageAttemptHistoryItem" : {
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AttemptHistoryItem"
+            },
+            "type" : "array"
+          },
+          "nextCursor" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "items", "nextCursor" ],
+        "type" : "object"
+      },
+      "PageAuditEventView" : {
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AuditEventView"
+            },
+            "type" : "array"
+          },
+          "nextCursor" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "items", "nextCursor" ],
+        "type" : "object"
+      },
+      "PageMockExamHistoryItem" : {
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamHistoryItem"
+            },
+            "type" : "array"
+          },
+          "nextCursor" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "items", "nextCursor" ],
+        "type" : "object"
+      },
+      "PageSessionHistoryItem" : {
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/SessionHistoryItem"
+            },
+            "type" : "array"
+          },
+          "nextCursor" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "items", "nextCursor" ],
+        "type" : "object"
+      },
+      "PublishedOption" : {
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "text" ],
+        "type" : "object"
+      },
+      "PublishedQuestion" : {
+        "properties" : {
+          "difficulty" : {
+            "enum" : [ "EASY", "MEDIUM", "HARD" ],
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/PublishedOption"
+            },
+            "type" : "array"
+          },
+          "prompt" : {
+            "type" : "string"
+          },
+          "questionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "revisionNumber" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "type" : {
+            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "difficulty", "javaRelease", "options", "prompt", "questionId", "revisionId", "revisionNumber", "topicId", "type" ],
+        "type" : "object"
+      },
+      "QuestionResult" : {
+        "properties" : {
+          "answer" : {
+            "$ref" : "#/components/schemas/Answer"
+          },
+          "answered" : {
+            "type" : "boolean"
+          },
+          "correct" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answer", "answered", "correct", "position", "question", "selectedOptions", "topicId" ],
+        "type" : "object"
+      },
+      "QuestionSummary" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "latestRevisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "latestRevisionNumber" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "latestStatus" : {
+            "type" : "string"
+          },
+          "prompt" : {
+            "type" : [ "string", "null" ]
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "id", "latestRevisionId", "latestRevisionNumber", "latestStatus", "prompt", "topicId" ],
+        "type" : "object"
+      },
+      "QuestionView" : {
+        "properties" : {
+          "createdBy" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "revisions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RevisionView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "createdBy", "id", "revisions" ],
+        "type" : "object"
+      },
+      "Queue" : {
+        "properties" : {
+          "dueNow" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/QueueItem"
+            },
+            "type" : "array"
+          },
+          "neverAttempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "waiting" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "dueNow", "items", "neverAttempted", "waiting" ],
+        "type" : "object"
+      },
+      "QueueItem" : {
+        "properties" : {
+          "lastAnswerCorrect" : {
+            "type" : "boolean"
+          },
+          "lastAttemptedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "prompt" : {
+            "type" : "string"
+          },
+          "questionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "reason" : {
+            "enum" : [ "WRONG_WHILE_CONFIDENT", "WRONG", "RIGHT_BUT_UNSURE", "DUE_FOR_RECALL" ],
+            "type" : "string"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "timesAttempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "timesWrong" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicName" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "lastAnswerCorrect", "lastAttemptedAt", "prompt", "questionId", "reason", "revisionId", "timesAttempted", "timesWrong", "topicId", "topicName" ],
+        "type" : "object"
+      },
+      "RebuildResult" : {
+        "properties" : {
+          "corrected" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topics" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "corrected", "topics" ],
+        "type" : "object"
+      },
+      "Reconciliation" : {
+        "properties" : {
+          "consistent" : {
+            "type" : "boolean"
+          },
+          "differences" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Difference"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "consistent", "differences" ],
+        "type" : "object"
+      },
+      "Reference" : {
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "url" ],
+        "type" : "object"
+      },
+      "ReferenceRequest" : {
+        "properties" : {
+          "title" : {
+            "maxLength" : 300,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "url" : {
+            "maxLength" : 500,
+            "minLength" : 0,
+            "pattern" : "^https://\\S+$",
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "url" ],
+        "type" : "object"
+      },
+      "ReferenceView" : {
+        "properties" : {
+          "title" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "title", "url" ],
+        "type" : "object"
+      },
+      "RegisterRequest" : {
+        "properties" : {
+          "email" : {
+            "format" : "email",
+            "maxLength" : 254,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "password" : {
+            "maxLength" : 128,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "email", "password" ],
+        "type" : "object"
+      },
+      "RenameTopicRequest" : {
+        "properties" : {
+          "name" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "name" ],
+        "type" : "object"
+      },
+      "RequiredReviewRequest" : {
+        "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "comment" : {
+            "maxLength" : 4000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "comment" ],
+        "type" : "object"
+      },
+      "ResponseReceipt" : {
+        "properties" : {
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "position", "revisionId", "selectedOptions", "submittedAt" ],
+        "type" : "object"
+      },
+      "ResponseRequest" : {
+        "properties" : {
+          "selectedOptions" : {
+            "items" : {
+              "pattern" : "^[A-Z]$",
+              "type" : "string"
+            },
+            "maxItems" : 8,
+            "minItems" : 1,
+            "type" : "array"
+          }
+        },
+        "required" : [ "selectedOptions" ],
+        "type" : "object"
+      },
+      "ReviewRequest" : {
+        "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "comment" : {
+            "maxLength" : 4000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ReviewView" : {
+        "properties" : {
+          "checklist" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "comment" : {
+            "type" : [ "string", "null" ]
+          },
+          "decidedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "decision" : {
+            "type" : "string"
+          },
+          "reviewerId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "reviewerName" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "checklist", "comment", "decidedAt", "decision", "reviewerId", "reviewerName" ],
+        "type" : "object"
+      },
+      "RevisionRequest" : {
+        "properties" : {
+          "difficulty" : {
+            "enum" : [ "EASY", "MEDIUM", "HARD" ],
+            "type" : "string"
+          },
+          "difficultyRationale" : {
+            "maxLength" : 2000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "explanation" : {
+            "maxLength" : 10000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "minimum" : 1,
+            "type" : "integer"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OptionRequest"
+            },
+            "maxItems" : 8,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "prompt" : {
+            "maxLength" : 10000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "references" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ReferenceRequest"
+            },
+            "maxItems" : 10,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "type" : {
+            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
+            "type" : "string"
+          }
+        },
+        "required" : [ "type" ],
+        "type" : "object"
+      },
+      "RevisionView" : {
+        "properties" : {
+          "authorId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "authorName" : {
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "deprecatedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "difficulty" : {
+            "type" : [ "string", "null" ]
+          },
+          "difficultyRationale" : {
+            "type" : [ "string", "null" ]
+          },
+          "examVersionId" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "explanation" : {
+            "type" : [ "string", "null" ]
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "javaRelease" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
+          },
+          "number" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OptionView"
+            },
+            "type" : "array"
+          },
+          "prompt" : {
+            "type" : [ "string", "null" ]
+          },
+          "publishedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "publishedBy" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "publishedByName" : {
+            "type" : [ "string", "null" ]
+          },
+          "references" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ReferenceView"
+            },
+            "type" : "array"
+          },
+          "reviews" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ReviewView"
+            },
+            "type" : "array"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "type" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "status", "submittedAt", "topicId", "type" ],
+        "type" : "object"
+      },
+      "RolesRequest" : {
+        "properties" : {
+          "roles" : {
+            "items" : {
+              "enum" : [ "LEARNER", "EDITOR", "REVIEWER", "ADMINISTRATOR" ],
+              "type" : "string"
+            },
+            "type" : "array",
+            "uniqueItems" : true
+          }
+        },
+        "required" : [ "roles" ],
+        "type" : "object"
+      },
+      "SessionHistoryItem" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "correctCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "requestedCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "id", "requestedCount", "status", "topicId" ],
+        "type" : "object"
+      },
+      "SessionQuestionView" : {
+        "properties" : {
+          "answered" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          }
+        },
+        "required" : [ "answered", "position", "question" ],
+        "type" : "object"
+      },
+      "SessionSummary" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "questionCount", "status", "topicId" ],
+        "type" : "object"
+      },
+      "SessionView" : {
+        "properties" : {
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "questions" : {
+            "items" : {
+              "$ref" : "#/components/schemas/SessionQuestionView"
+            },
+            "type" : "array"
+          },
+          "requestedCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "closedAt", "createdAt", "expiresAt", "id", "questions", "requestedCount", "status", "topicId" ],
+        "type" : "object"
+      },
+      "SetMappingsRequest" : {
+        "properties" : {
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MappingEntry"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "topics" ],
+        "type" : "object"
+      },
+      "StartRequest" : {
+        "properties" : {
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionIds" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "topicId" ],
+        "type" : "object"
+      },
+      "TopicProgress" : {
+        "properties" : {
+          "accuracy" : {
+            "type" : [ "number", "null" ]
+          },
+          "attempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "incorrect" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lastActivityAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicName" : {
+            "type" : [ "string", "null" ]
+          },
+          "trackSlug" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "accuracy", "attempted", "correct", "incorrect", "lastActivityAt", "topicId", "topicName", "trackSlug" ],
+        "type" : "object"
+      },
+      "TopicResult" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "answered", "correct", "percentage", "topicId", "total" ],
+        "type" : "object"
+      },
+      "TopicView" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "objectiveRef" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "subtopics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "id", "name", "objectiveRef", "slug", "subtopics" ],
+        "type" : "object"
+      },
+      "TrackView" : {
+        "properties" : {
+          "certificationName" : {
+            "type" : "string"
+          },
+          "examVersion" : {
+            "$ref" : "#/components/schemas/ExamVersionView"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "kind" : {
+            "enum" : [ "CERTIFICATION", "INTERVIEW" ],
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "provider" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "certificationName", "examVersion", "id", "kind", "name", "provider", "slug", "topics" ],
+        "type" : "object"
       }
     },
-    "info" : {
-      "title" : "OpenAPI definition",
-      "version" : "v0"
+    "securitySchemes" : {
+      "sessionCookie" : {
+        "description" : "Server-side session cookie. State-changing requests also need the X-XSRF-TOKEN header; call GET /api/auth/csrf first.",
+        "in" : "cookie",
+        "name" : "CERTFORGE_SESSION",
+        "type" : "apiKey"
+      }
+    }
+  },
+  "info" : {
+    "title" : "OpenAPI definition",
+    "version" : "v0"
+  },
+  "openapi" : "3.1.0",
+  "paths" : {
+    "/api/admin/accounts/{id}/disable" : {
+      "post" : {
+        "operationId" : "disable",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "admin-account-controller" ]
+      }
     },
-    "openapi" : "3.1.0",
-    "paths" : {
-      "/api/admin/accounts/{id}/disable" : {
-        "post" : {
-          "operationId" : "disable",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "id",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "admin-account-controller" ]
-        }
-      },
-      "/api/admin/accounts/{id}/enable" : {
-        "post" : {
-          "operationId" : "enable",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "id",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "admin-account-controller" ]
-        }
-      },
-      "/api/admin/accounts/{id}/roles" : {
-        "put" : {
-          "operationId" : "assignRoles",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "id",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
+    "/api/admin/accounts/{id}/enable" : {
+      "post" : {
+        "operationId" : "enable",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/RolesRequest"
+                  "$ref" : "#/components/schemas/AccountView"
                 }
               }
             },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "admin-account-controller" ]
-        }
-      },
-      "/api/admin/audit" : {
-        "get" : {
-          "operationId" : "events",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "subject",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "actorId",
-            "required" : false,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "action",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "cursor",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "size",
-            "required" : false,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/PageAuditEventView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "audit-controller" ]
-        }
-      },
-      "/api/admin/catalog/exam-versions/{examVersionId}/activate" : {
-        "post" : {
-          "operationId" : "activateExamVersion",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "examVersionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/exam-versions/{examVersionId}/deactivate" : {
-        "post" : {
-          "operationId" : "deactivateExamVersion",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "examVersionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/exam-versions/{examVersionId}/topics" : {
-        "put" : {
-          "operationId" : "setMappings",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "examVersionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/SetMappingsRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/topics/{topicId}" : {
-        "put" : {
-          "operationId" : "renameTopic",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "topicId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/RenameTopicRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks" : {
-        "get" : {
-          "operationId" : "tracks",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/AdminTrackView"
-                    },
-                    "type" : "array"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
+            "description" : "OK"
+          }
         },
-        "post" : {
-          "operationId" : "createTrack",
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CreateTrackRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks/{trackId}" : {
-        "get" : {
-          "operationId" : "track_1",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "trackId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks/{trackId}/activate" : {
-        "post" : {
-          "operationId" : "activateTrack",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "trackId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks/{trackId}/deactivate" : {
-        "post" : {
-          "operationId" : "deactivateTrack",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "trackId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks/{trackId}/exam-versions" : {
-        "post" : {
-          "operationId" : "createExamVersion",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "trackId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CreateExamVersionRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/catalog/tracks/{trackId}/topics" : {
-        "post" : {
-          "operationId" : "createTopic",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "trackId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/CreateTopicRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AdminTrackView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "catalog-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}" : {
-        "put" : {
-          "operationId" : "edit",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/RevisionRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}/approve" : {
-        "post" : {
-          "operationId" : "approve",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ReviewRequest"
-                }
+        "tags" : [ "admin-account-controller" ]
+      }
+    },
+    "/api/admin/accounts/{id}/roles" : {
+      "put" : {
+        "operationId" : "assignRoles",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RolesRequest"
               }
             }
           },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}/deprecate" : {
-        "post" : {
-          "operationId" : "deprecate",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}/publish" : {
-        "post" : {
-          "operationId" : "publish",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}/request-changes" : {
-        "post" : {
-          "operationId" : "requestChanges",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/RequiredReviewRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/question-revisions/{revisionId}/submit" : {
-        "post" : {
-          "operationId" : "submit_1",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "revisionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/questions" : {
-        "get" : {
-          "operationId" : "list_1",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "status",
-            "required" : false,
-            "schema" : {
-              "enum" : [ "DRAFT", "TECHNICAL_REVIEW", "APPROVED", "PUBLISHED", "DEPRECATED" ],
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/QuestionSummary"
-                    },
-                    "type" : "array"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
+          "required" : true
         },
-        "post" : {
-          "operationId" : "create",
-          "requestBody" : {
+        "responses" : {
+          "200" : {
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/RevisionRequest"
+                  "$ref" : "#/components/schemas/AccountView"
                 }
               }
             },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/questions/{questionId}" : {
-        "get" : {
-          "operationId" : "get_3",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "questionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/admin/questions/{questionId}/revisions" : {
-        "post" : {
-          "operationId" : "newRevision",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "questionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/QuestionView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "question-admin-controller" ]
-        }
-      },
-      "/api/auth/csrf" : {
-        "get" : {
-          "operationId" : "csrf",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "token",
-            "required" : true,
-            "schema" : {
-              "$ref" : "#/components/schemas/CsrfToken"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/CsrfView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "auth-controller" ]
-        }
-      },
-      "/api/auth/login" : {
-        "post" : {
-          "operationId" : "login",
-          "requestBody" : {
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "admin-account-controller" ]
+      }
+    },
+    "/api/admin/audit" : {
+      "get" : {
+        "operationId" : "events",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "subject",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "actorId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "action",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "cursor",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/LoginRequest"
+                  "$ref" : "#/components/schemas/PageAuditEventView"
                 }
               }
             },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "auth-controller" ]
-        }
-      },
-      "/api/auth/logout" : {
-        "post" : {
-          "operationId" : "logout",
-          "responses" : {
-            "204" : {
-              "description" : "Signed out"
-            },
-            "403" : {
-              "description" : "CSRF token missing or invalid"
-            }
-          },
-          "summary" : "End the current session",
-          "tags" : [ "auth-controller" ]
-        }
-      },
-      "/api/auth/me" : {
-        "get" : {
-          "operationId" : "me",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "auth-controller" ]
-        }
-      },
-      "/api/auth/register" : {
-        "post" : {
-          "operationId" : "register",
-          "requestBody" : {
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "audit-controller" ]
+      }
+    },
+    "/api/admin/catalog/exam-versions/{examVersionId}/activate" : {
+      "post" : {
+        "operationId" : "activateExamVersion",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "examVersionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/RegisterRequest"
+                  "$ref" : "#/components/schemas/AdminTrackView"
                 }
               }
             },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AccountView"
-                  }
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/exam-versions/{examVersionId}/deactivate" : {
+      "post" : {
+        "operationId" : "deactivateExamVersion",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "examVersionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
                 }
-              },
-              "description" : "OK"
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/exam-versions/{examVersionId}/topics" : {
+      "put" : {
+        "operationId" : "setMappings",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "examVersionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SetMappingsRequest"
+              }
             }
           },
-          "tags" : [ "auth-controller" ]
-        }
-      },
-      "/api/catalog/tracks" : {
-        "get" : {
-          "operationId" : "tracks_1",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/TrackView"
-                    },
-                    "type" : "array"
-                  }
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
                 }
-              },
-              "description" : "OK"
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/topics/{topicId}" : {
+      "put" : {
+        "operationId" : "renameTopic",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "topicId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RenameTopicRequest"
+              }
             }
           },
-          "tags" : [ "catalog-controller" ]
-        }
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks" : {
+      "get" : {
+        "operationId" : "tracks",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/AdminTrackView"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
       },
-      "/api/catalog/tracks/{slug}" : {
-        "get" : {
-          "operationId" : "track",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "slug",
-            "required" : true,
-            "schema" : {
-              "type" : "string"
+      "post" : {
+        "operationId" : "createTrack",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTrackRequest"
+              }
             }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks/{trackId}" : {
+      "get" : {
+        "operationId" : "track_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "trackId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks/{trackId}/activate" : {
+      "post" : {
+        "operationId" : "activateTrack",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "trackId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks/{trackId}/deactivate" : {
+      "post" : {
+        "operationId" : "deactivateTrack",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "trackId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks/{trackId}/exam-versions" : {
+      "post" : {
+        "operationId" : "createExamVersion",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "trackId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateExamVersionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/tracks/{trackId}/topics" : {
+      "post" : {
+        "operationId" : "createTopic",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "trackId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateTopicRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}" : {
+      "put" : {
+        "operationId" : "edit",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RevisionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/approve" : {
+      "post" : {
+        "operationId" : "approve",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReviewRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/deprecate" : {
+      "post" : {
+        "operationId" : "deprecate",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/publish" : {
+      "post" : {
+        "operationId" : "publish",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/request-changes" : {
+      "post" : {
+        "operationId" : "requestChanges",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RequiredReviewRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/submit" : {
+      "post" : {
+        "operationId" : "submit_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/questions" : {
+      "get" : {
+        "operationId" : "list_1",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "enum" : [ "DRAFT", "TECHNICAL_REVIEW", "APPROVED", "PUBLISHED", "DEPRECATED" ],
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/QuestionSummary"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      },
+      "post" : {
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RevisionRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/questions/{questionId}" : {
+      "get" : {
+        "operationId" : "get_3",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "questionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/questions/{questionId}/revisions" : {
+      "post" : {
+        "operationId" : "newRevision",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "questionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/auth/csrf" : {
+      "get" : {
+        "operationId" : "csrf",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "token",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/components/schemas/CsrfToken"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/CsrfView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/auth/login" : {
+      "post" : {
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/auth/logout" : {
+      "post" : {
+        "operationId" : "logout",
+        "responses" : {
+          "204" : {
+            "description" : "Signed out"
+          },
+          "403" : {
+            "description" : "CSRF token missing or invalid"
+          }
+        },
+        "summary" : "End the current session",
+        "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/auth/me" : {
+      "get" : {
+        "operationId" : "me",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/auth/register" : {
+      "post" : {
+        "operationId" : "register",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/RegisterRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AccountView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/catalog/tracks" : {
+      "get" : {
+        "operationId" : "tracks_1",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
                     "$ref" : "#/components/schemas/TrackView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "catalog-controller" ]
-        }
-      },
-      "/api/progress/rebuild" : {
-        "post" : {
-          "operationId" : "rebuild",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/RebuildResult"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "progress-controller" ]
-        }
-      },
-      "/api/progress/reconciliation" : {
-        "get" : {
-          "operationId" : "reconciliation",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/Reconciliation"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "progress-controller" ]
-        }
-      },
-      "/api/progress/topics" : {
-        "get" : {
-          "operationId" : "topics",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/TopicProgress"
-                    },
-                    "type" : "array"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "progress-controller" ]
-        }
-      },
-      "/api/review/misconceptions" : {
-        "get" : {
-          "operationId" : "misconceptions",
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/Misconception"
-                    },
-                    "type" : "array"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "review-controller" ]
-        }
-      },
-      "/api/review/queue" : {
-        "get" : {
-          "operationId" : "queue",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "topicId",
-            "required" : false,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "limit",
-            "required" : false,
-            "schema" : {
-              "format" : "int32",
-              "maximum" : 100,
-              "minimum" : 1,
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/Queue"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "review-controller" ]
-        }
-      },
-      "/api/study/history/attempts" : {
-        "get" : {
-          "operationId" : "attempts",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "topicId",
-            "required" : false,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "sessionId",
-            "required" : false,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "cursor",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "size",
-            "required" : false,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/PageAttemptHistoryItem"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "history-controller" ]
-        }
-      },
-      "/api/study/history/mock-exams" : {
-        "get" : {
-          "operationId" : "mockExams",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "cursor",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "size",
-            "required" : false,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/PageMockExamHistoryItem"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "history-controller" ]
-        }
-      },
-      "/api/study/history/sessions" : {
-        "get" : {
-          "operationId" : "sessions",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "cursor",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          }, {
-            "in" : "query",
-            "name" : "size",
-            "required" : false,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/PageSessionHistoryItem"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "history-controller" ]
-        }
-      },
-      "/api/study/mock-exams" : {
-        "post" : {
-          "operationId" : "start_1",
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/MockExamStartRequest"
+                  },
+                  "type" : "array"
                 }
               }
             },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/MockExamView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "mock-exam-controller" ]
-        }
-      },
-      "/api/study/mock-exams/{sessionId}" : {
-        "get" : {
-          "operationId" : "get_2",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/MockExamView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "mock-exam-controller" ]
-        }
-      },
-      "/api/study/mock-exams/{sessionId}/finish" : {
-        "post" : {
-          "operationId" : "finish",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/MockExamView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "mock-exam-controller" ]
-        }
-      },
-      "/api/study/mock-exams/{sessionId}/questions/{position}/response" : {
-        "post" : {
-          "operationId" : "respond",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "path",
-            "name" : "position",
-            "required" : true,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          }, {
-            "in" : "header",
-            "name" : "Idempotency-Key",
-            "required" : true,
-            "schema" : {
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/ResponseRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/ResponseReceipt"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "mock-exam-controller" ]
-        }
-      },
-      "/api/study/mock-exams/{sessionId}/result" : {
-        "get" : {
-          "operationId" : "result",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/MockExamResult"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "mock-exam-controller" ]
-        }
-      },
-      "/api/study/sessions" : {
-        "get" : {
-          "operationId" : "list",
-          "parameters" : [ {
-            "in" : "query",
-            "name" : "status",
-            "required" : false,
-            "schema" : {
-              "enum" : [ "IN_PROGRESS", "COMPLETED", "ABANDONED", "EXPIRED" ],
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "items" : {
-                      "$ref" : "#/components/schemas/SessionSummary"
-                    },
-                    "type" : "array"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "study-controller" ]
+            "description" : "OK"
+          }
         },
-        "post" : {
-          "operationId" : "start",
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/StartRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "201" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/SessionView"
-                  }
-                }
-              },
-              "description" : "Created"
-            }
-          },
-          "tags" : [ "study-controller" ]
-        }
-      },
-      "/api/study/sessions/{sessionId}" : {
-        "get" : {
-          "operationId" : "get_1",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/SessionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "study-controller" ]
-        }
-      },
-      "/api/study/sessions/{sessionId}/abandon" : {
-        "post" : {
-          "operationId" : "abandon",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/SessionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "study-controller" ]
-        }
-      },
-      "/api/study/sessions/{sessionId}/complete" : {
-        "post" : {
-          "operationId" : "complete",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/SessionView"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "study-controller" ]
-        }
-      },
-      "/api/study/sessions/{sessionId}/questions/{position}/attempt" : {
-        "get" : {
-          "operationId" : "get",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "path",
-            "name" : "position",
-            "required" : true,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          } ],
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AttemptResult"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "attempt-controller" ]
-        },
-        "post" : {
-          "operationId" : "submit",
-          "parameters" : [ {
-            "in" : "path",
-            "name" : "sessionId",
-            "required" : true,
-            "schema" : {
-              "format" : "uuid",
-              "type" : "string"
-            }
-          }, {
-            "in" : "path",
-            "name" : "position",
-            "required" : true,
-            "schema" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          }, {
-            "in" : "header",
-            "name" : "Idempotency-Key",
-            "required" : false,
-            "schema" : {
-              "type" : "string"
-            }
-          } ],
-          "requestBody" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/AttemptRequest"
-                }
-              }
-            },
-            "required" : true
-          },
-          "responses" : {
-            "200" : {
-              "content" : {
-                "*/*" : {
-                  "schema" : {
-                    "$ref" : "#/components/schemas/AttemptResult"
-                  }
-                }
-              },
-              "description" : "OK"
-            }
-          },
-          "tags" : [ "attempt-controller" ]
-        }
+        "tags" : [ "catalog-controller" ]
       }
     },
-    "security" : [ {
-      "sessionCookie" : [ ]
-    } ]
-  }
-  
+    "/api/catalog/tracks/{slug}" : {
+      "get" : {
+        "operationId" : "track",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "slug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/TrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-controller" ]
+      }
+    },
+    "/api/progress/rebuild" : {
+      "post" : {
+        "operationId" : "rebuild",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/RebuildResult"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "progress-controller" ]
+      }
+    },
+    "/api/progress/reconciliation" : {
+      "get" : {
+        "operationId" : "reconciliation",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Reconciliation"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "progress-controller" ]
+      }
+    },
+    "/api/progress/topics" : {
+      "get" : {
+        "operationId" : "topics",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/TopicProgress"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "progress-controller" ]
+      }
+    },
+    "/api/review/misconceptions" : {
+      "get" : {
+        "operationId" : "misconceptions",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/Misconception"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "review-controller" ]
+      }
+    },
+    "/api/review/queue" : {
+      "get" : {
+        "operationId" : "queue",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "topicId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "limit",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "maximum" : 100,
+            "minimum" : 1,
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Queue"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "review-controller" ]
+      }
+    },
+    "/api/study/history/attempts" : {
+      "get" : {
+        "operationId" : "attempts",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "topicId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "sessionId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "cursor",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageAttemptHistoryItem"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/history/mock-exams" : {
+      "get" : {
+        "operationId" : "mockExams",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "cursor",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageMockExamHistoryItem"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/history/sessions" : {
+      "get" : {
+        "operationId" : "sessions",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "cursor",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageSessionHistoryItem"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/mock-exams" : {
+      "post" : {
+        "operationId" : "start_1",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MockExamStartRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}" : {
+      "get" : {
+        "operationId" : "get_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/finish" : {
+      "post" : {
+        "operationId" : "finish",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/questions/{position}/response" : {
+      "post" : {
+        "operationId" : "respond",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ResponseRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ResponseReceipt"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/{sessionId}/result" : {
+      "get" : {
+        "operationId" : "result",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamResult"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/sessions" : {
+      "get" : {
+        "operationId" : "list",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "enum" : [ "IN_PROGRESS", "COMPLETED", "ABANDONED", "EXPIRED" ],
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/SessionSummary"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      },
+      "post" : {
+        "operationId" : "start",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SessionView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      }
+    },
+    "/api/study/sessions/{sessionId}" : {
+      "get" : {
+        "operationId" : "get_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      }
+    },
+    "/api/study/sessions/{sessionId}/abandon" : {
+      "post" : {
+        "operationId" : "abandon",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      }
+    },
+    "/api/study/sessions/{sessionId}/complete" : {
+      "post" : {
+        "operationId" : "complete",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/SessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      }
+    },
+    "/api/study/sessions/{sessionId}/questions/{position}/attempt" : {
+      "get" : {
+        "operationId" : "get",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AttemptResult"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "attempt-controller" ]
+      },
+      "post" : {
+        "operationId" : "submit",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AttemptRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AttemptResult"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "attempt-controller" ]
+      }
+    }
+  },
+  "security" : [ {
+    "sessionCookie" : [ ]
+  } ]
+}
