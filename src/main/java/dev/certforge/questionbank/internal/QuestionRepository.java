@@ -344,7 +344,7 @@ class QuestionRepository {
             difficulty == null ? null : Difficulty.valueOf(difficulty),
             rs.getString("difficulty_rationale"),
             rs.getString("prompt"),
-            rs.getString("explanation"),
+            rs.getString(EXPLANATION),
             options,
             references);
     return new Revision(
@@ -373,7 +373,7 @@ class QuestionRepository {
                     rs.getString("option_key"),
                     rs.getString("text"),
                     rs.getBoolean("correct"),
-                    rs.getString("explanation")))
+                    rs.getString(EXPLANATION)))
         .list();
   }
 
@@ -401,7 +401,7 @@ class QuestionRepository {
                         rs.getString("option_key"),
                         rs.getString("text"),
                         rs.getBoolean("correct"),
-                        rs.getString("explanation"))))
+                        rs.getString(EXPLANATION))))
         .list()
         .forEach(
             row ->
