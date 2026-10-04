@@ -1,0 +1,3 @@
+lambda=true:enclosing:enclosing
+anonymous=false:true:enclosing
+lambdaThisIsEnclosing=true

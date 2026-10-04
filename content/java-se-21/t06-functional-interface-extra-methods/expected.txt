@@ -1,0 +1,8 @@
+ana
+BRUNO
+declared=equals abstract=true static=false default=false
+declared=hashCode abstract=true static=false default=false
+declared=name abstract=true static=false default=false
+declared=of abstract=false static=true default=false
+declared=shout abstract=false static=false default=true
+declared=toString abstract=true static=false default=false

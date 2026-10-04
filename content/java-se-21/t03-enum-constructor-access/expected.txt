@@ -1,0 +1,6 @@
+declaredCount=1
+isPrivate=true
+isPublic=false
+isProtected=false
+sourceParameters=1,reflected=3
+constants=1,2

@@ -1,0 +1,1 @@
+COMPILE_ERROR: multicatch.parameter.may.not.be.assigned

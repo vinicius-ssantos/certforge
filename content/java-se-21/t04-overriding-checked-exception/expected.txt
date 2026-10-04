@@ -1,0 +1,4 @@
+quiet=saved
+caughtAsIOException=FileNotFoundException
+quietThrows=0
+narrowThrows=FileNotFoundException

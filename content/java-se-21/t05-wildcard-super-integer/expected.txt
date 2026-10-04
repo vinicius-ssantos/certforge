@@ -1,0 +1,4 @@
+listOfInteger added=1 readAsObject=Integer
+listOfNumber added=1 readAsObject=Integer
+listOfObject added=1 readAsObject=Integer
+listOfComparable added=1 readAsObject=Integer
