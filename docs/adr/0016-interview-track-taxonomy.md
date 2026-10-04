@@ -1,6 +1,6 @@
 # ADR 0016: Shape the interview track as a versioned taxonomy, and keep it small
 
-- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decision 1 is implemented; decisions 2 and 5 to 8 are implemented only as far as the schema allows them, and the rules in decision 6 and the taxonomy in decision 3 are still to come. Each decision below says what exists.
+- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decisions 1, 2, 6, 7 and 8 are implemented, and a question on an interview topic really does publish. Decision 3 (the taxonomy rows) and decision 5 (seniority on a revision) are still to come. Each decision below says what exists.
 - Date: 2026-10-04
 
 ## Context

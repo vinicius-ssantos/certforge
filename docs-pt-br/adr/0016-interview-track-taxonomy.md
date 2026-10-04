@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0016-interview-track-taxonomy.md`](../../docs/adr/0016-interview-track-taxonomy.md). O inglês é a fonte canônica.
 
-- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. A decisão 1 está implementada; as decisões 2 e 5 a 8 estão implementadas só até onde o schema as permite, e as regras da decisão 6 e a taxonomia da decisão 3 ainda estão por vir. Cada decisão abaixo diz o que existe.
+- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. As decisões 1, 2, 6, 7 e 8 estão implementadas, e uma questão em um tópico de entrevista realmente publica. A decisão 3 (as linhas da taxonomia) e a decisão 5 (senioridade na revisão) ainda estão por vir. Cada decisão abaixo diz o que existe.
 - Data: 2026-10-04
 
 ## Contexto

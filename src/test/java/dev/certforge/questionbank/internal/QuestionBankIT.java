@@ -519,6 +519,107 @@ class QuestionBankIT {
         .andExpect(jsonPath("$.code").value("java_release_mismatch"));
   }
 
+  /**
+   * What ADR 0016 was for. Before decisions 1 and 6, a question on a track with no exam could not
+   * be published at all: the publish path demanded an active exam version, and the completeness
+   * rules demanded a Java release the question has no business stating.
+   *
+   * <p>The interview track is built with SQL because no endpoint creates one yet. That is the
+   * honest state of the feature, and it is better to say so here than to leave the capability
+   * claimed and unproven.
+   */
+  @Test
+  void aQuestionOnAnInterviewTopicPublishesWithNoExamAndNoJavaRelease() throws Exception {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'interview-"
+            + UUID.randomUUID()
+            + "', 'Java Backend', 'INTERVIEW',"
+            + " 'ACTIVE')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'messaging', 'Messaging')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+
+    String noRelease =
+        body(
+                "How would you make a consumer idempotent?",
+                "SINGLE_CHOICE",
+                topicId.toString(),
+                0,
+                true,
+                false)
+            .replace(",\"javaRelease\":0", "");
+    String[] ids = publishableWith(noRelease);
+
+    publish(ids[1]).andExpect(status().isOk());
+    assertThat(
+            jdbc.queryForObject(
+                "select track_version_id from certforge.qb_question_revision where id = ?",
+                UUID.class,
+                UUID.fromString(ids[1])))
+        .as("published against the interview track's version, not an exam")
+        .isEqualTo(versionId);
+  }
+
+  @Test
+  void anInterviewQuestionIsRefusedAJavaRelease() throws Exception {
+    UUID trackId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'interview-"
+            + UUID.randomUUID()
+            + "', 'Java Backend', 'INTERVIEW',"
+            + " 'ACTIVE')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'messaging', 'Messaging')",
+        topicId,
+        trackId);
+
+    ResultActions created =
+        send(
+                post("/api/admin/questions"),
+                editor,
+                body(
+                    "Stating a release it has no business stating",
+                    "SINGLE_CHOICE",
+                    topicId.toString(),
+                    21,
+                    true,
+                    false))
+            .andExpect(status().isCreated());
+
+    // Saving a draft is allowed; sending it for review is where completeness is checked, and the
+    // release is refused rather than ignored.
+    send(
+            post("/api/admin/question-revisions/" + firstRevisionId(created, 0) + "/submit"),
+            editor,
+            null)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("revision_incomplete"))
+        .andExpect(
+            jsonPath("$.violations", org.hamcrest.Matchers.hasItem("java_release_not_applicable")));
+  }
+
   /** Creates, submits and approves a revision with the given body and returns its ids. */
   private String[] publishableWith(String requestBody) throws Exception {
     ResultActions created =

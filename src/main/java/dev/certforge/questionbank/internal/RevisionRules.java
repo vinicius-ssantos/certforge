@@ -1,5 +1,6 @@
 package dev.certforge.questionbank.internal;
 
+import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.questionbank.QuestionType;
 import java.util.HashSet;
 import java.util.List;
@@ -16,8 +17,16 @@ final class RevisionRules {
 
   private RevisionRules() {}
 
-  /** Stable, sorted violation codes; empty when the content is complete and consistent. */
-  static List<String> violations(RevisionContent content) {
+  /**
+   * Stable, sorted violation codes; empty when the content is complete and consistent.
+   *
+   * <p>{@code kind} is the kind of preparation the content's topic belongs to, or null when it
+   * cannot be determined -- a revision with no topic yet, or one naming a topic that does not
+   * exist. It decides one rule: a certification question states the Java release its answer is true
+   * for, and an interview question has no release to state (ADR 0016 decision 6). Unknown is
+   * treated as certification, so a draft without a topic reports exactly what it reported before.
+   */
+  static List<String> violations(RevisionContent content, TrackKind kind) {
     Set<String> found = new TreeSet<>();
     if (isBlank(content.prompt())) {
       found.add("prompt_missing");
@@ -25,7 +34,13 @@ final class RevisionRules {
     if (content.topicId() == null) {
       found.add("topic_missing");
     }
-    if (content.javaRelease() == null || content.javaRelease() < 1) {
+    if (kind == TrackKind.INTERVIEW) {
+      // Giving an interview question a Java release to satisfy a validator would be a lie in a
+      // field the certification path trusts, so it is refused rather than ignored.
+      if (content.javaRelease() != null) {
+        found.add("java_release_not_applicable");
+      }
+    } else if (content.javaRelease() == null || content.javaRelease() < 1) {
       found.add("java_release_missing");
     }
     if (content.difficulty() == null) {

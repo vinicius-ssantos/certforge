@@ -7,6 +7,7 @@ import dev.certforge.identity.CurrentActor;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.questionbank.RevisionStatus;
 import dev.certforge.questionbank.internal.AdminQuestionViews.OptionView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionSummary;
@@ -22,6 +23,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -193,8 +195,11 @@ class QuestionBankService {
             .orElseThrow(
                 () ->
                     QuestionBankException.conflict(
-                        "topic_not_active", "The topic is not part of an active exam version"));
-    if (revision.content().javaRelease() != context.javaRelease()) {
+                        "topic_not_active", "The topic is not part of an active track version"));
+    // Only a certification context has a release to agree with. An interview version has no exam,
+    // so there is nothing to match and the revision carries no release to match it with.
+    Integer required = context.javaRelease().orElse(null);
+    if (!Objects.equals(revision.content().javaRelease(), required)) {
       throw QuestionBankException.conflict(
           "java_release_mismatch", "The revision targets a different Java release than the exam");
     }
@@ -258,11 +263,21 @@ class QuestionBankService {
     }
   }
 
-  private static void requireComplete(Revision revision) {
-    List<String> violations = RevisionRules.violations(revision.content());
+  private void requireComplete(Revision revision) {
+    List<String> violations = RevisionRules.violations(revision.content(), kindOf(revision));
     if (!violations.isEmpty()) {
       throw QuestionBankException.incomplete(violations);
     }
+  }
+
+  /**
+   * The kind of preparation the revision's topic belongs to, or null when there is no topic yet or
+   * it names one that does not exist. Null is reported as a missing topic by the rules themselves,
+   * so it needs no separate error here.
+   */
+  private TrackKind kindOf(Revision revision) {
+    UUID topicId = revision.content().topicId();
+    return topicId == null ? null : catalog.findTrackKindOfTopic(new TopicId(topicId)).orElse(null);
   }
 
   private void audit(ActorId actor, String action, UUID revisionId, Instant at) {
