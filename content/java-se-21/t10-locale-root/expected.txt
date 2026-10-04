@@ -1,0 +1,7 @@
+language=[]
+country=[]
+variant=[]
+toString=[]
+toLanguageTag=und
+equalsEnglish=false
+sameAsEmptyBuilt=true

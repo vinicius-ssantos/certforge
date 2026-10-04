@@ -1,0 +1,9 @@
+threw=boom
+lockedAfterFinally=false
+holdCountAfterFinally=0
+holdCountAfterTwoLocks=2
+holdCountAfterOneUnlock=1
+stillLocked=true
+holdCountAtEnd=0
+catchVariantAlsoReleases=true
+unlockWithoutLock=IllegalMonitorStateException

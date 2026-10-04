@@ -1,0 +1,8 @@
+pointerAfterSeek=3
+readAt3=D
+pointerAfterRead=4
+readAt3Again=D
+readAt0=A
+content=AxCDEFGH
+lengthAfterSeekPastEnd=8
+readPastEnd=-1

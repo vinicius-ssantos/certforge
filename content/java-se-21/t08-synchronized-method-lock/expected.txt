@@ -1,0 +1,7 @@
+beforeAnyLock=false,false
+instanceHoldsReceiver=true
+instanceHoldsClass=false
+staticHoldsClass=true
+staticHoldsInstance=false
+blockOnThisHoldsReceiver=true
+afterAllLocks=false,false

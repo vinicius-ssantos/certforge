@@ -1,0 +1,8 @@
+primaryStrength=true
+primaryIgnoresCase=true
+primaryIgnoresAccent=true
+primarySeesBaseLetters=false
+secondarySeesAccent=true
+secondaryIgnoresCase=true
+tertiarySeesCase=true
+primaryCompareZero=true

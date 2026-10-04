@@ -1,0 +1,8 @@
+isVirtual=true
+state=NEW
+alive=false
+daemon=true
+stateAfterJoin=TERMINATED
+aliveAfterJoin=false
+restarted=IllegalThreadStateException
+startVirtualThreadIsNew=false
