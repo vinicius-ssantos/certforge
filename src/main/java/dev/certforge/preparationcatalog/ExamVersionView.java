@@ -2,7 +2,7 @@ package dev.certforge.preparationcatalog;
 
 /** An active certification exam version. */
 public record ExamVersionView(
-    ExamVersionId id,
+    TrackVersionId id,
     String label,
     String examCode,
     String examName,

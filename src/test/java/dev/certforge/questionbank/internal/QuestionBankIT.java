@@ -657,9 +657,9 @@ class QuestionBankIT {
         .extracting(q -> q.revisionId().value().toString())
         .contains(ids[1]);
 
-    // Simulate the exam version having been replaced since this revision was published.
+    // Simulate the track version having been replaced since this revision was published.
     jdbc.update(
-        "update certforge.qb_question_revision set exam_version_id = ? where id = ?",
+        "update certforge.qb_question_revision set track_version_id = ? where id = ?",
         UUID.randomUUID(),
         UUID.fromString(ids[1]));
 

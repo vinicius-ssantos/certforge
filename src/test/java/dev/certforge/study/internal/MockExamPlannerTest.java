@@ -5,13 +5,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import dev.certforge.preparationcatalog.ExamVersionId;
 import dev.certforge.preparationcatalog.ExamVersionView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
 import dev.certforge.preparationcatalog.TrackKind;
+import dev.certforge.preparationcatalog.TrackVersionId;
 import dev.certforge.preparationcatalog.TrackView;
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.PublishedQuestion;
@@ -157,7 +157,7 @@ class MockExamPlannerTest {
         "Oracle",
         "Java SE 21 Developer Professional",
         new ExamVersionView(
-            new ExamVersionId(UUID.randomUUID()),
+            new TrackVersionId(UUID.randomUUID()),
             "Java SE 21",
             examCode,
             "Java SE 21 Developer Professional",

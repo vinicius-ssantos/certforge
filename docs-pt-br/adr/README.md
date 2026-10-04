@@ -21,6 +21,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0013](0013-derived-review-queue.md) | Derivar a fila de revisão da evidência das tentativas, e dizer por que cada item está nela | **Proposta** |
 | [0014](0014-one-topic-one-track.md) | Manter um tópico em uma trilha só, e pôr os fundamentos na trilha de entrevista | **Proposta** |
 | [0015](0015-separate-mock-exam-aggregate.md) | Modelar simulados como um agregado de estudo separado | Aceita |
-| [0016](0016-interview-track-taxonomy.md) | Modelar a trilha de entrevista como uma taxonomia versionada, e mantê-la pequena | **Proposta** |
+| [0016](0016-interview-track-taxonomy.md) | Modelar a trilha de entrevista como uma taxonomia versionada, e mantê-la pequena | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.

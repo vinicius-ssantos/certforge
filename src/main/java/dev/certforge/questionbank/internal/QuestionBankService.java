@@ -200,14 +200,14 @@ class QuestionBankService {
     }
     Instant now = clock.instant();
     repository
-        .findPublishedForContext(revision.questionId(), context.examVersionId().value())
+        .findPublishedForContext(revision.questionId(), context.trackVersionId().value())
         .ifPresent(
             previous -> {
               repository.markDeprecated(previous.id(), now);
               audit(actor, ACTION_REPLACED, previous.id(), now);
               metrics.counter(TRANSITIONS, ACTION, "replaced").increment();
             });
-    repository.markPublished(revisionId, context.examVersionId().value(), actor.value(), now);
+    repository.markPublished(revisionId, context.trackVersionId().value(), actor.value(), now);
     audit(actor, ACTION_PUBLISHED, revisionId, now);
     return transitioned("published", revision.questionId());
   }
@@ -296,7 +296,7 @@ class QuestionBankService {
         c.references().stream().map(ref -> new ReferenceView(ref.title(), ref.url())).toList(),
         r.authorId(),
         names.get(r.authorId()),
-        r.examVersionId(),
+        r.trackVersionId(),
         r.createdAt(),
         r.submittedAt(),
         r.publishedAt(),

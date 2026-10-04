@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -422,15 +421,95 @@ class PreparationCatalogIT {
         .andExpect(jsonPath("$.fields[0]").value("objectivesUrl"));
   }
 
+  // ---- what a track version is, now that it is not only an exam (ADR 0016) -------------------
+
+  /**
+   * The point of generalising the exam version: a track with no exam can hold a version, map topics
+   * into it without inventing objectives, and carry canonical weights. Written against the schema
+   * rather than through the API because there is no endpoint that creates an interview track yet —
+   * which is the honest state of this change, and is why it is asserted here instead of claimed.
+   */
   @Test
-  void onlyCertificationTracksExistInTheDatabase() {
+  void anInterviewTrackCanHoldAVersionWithWeightedTopicsAndNoObjectives() {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'interview-"
+            + slug()
+            + "', 'Java Backend', 'INTERVIEW', 'DRAFT')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label)"
+            + " values (?, ?, 'Taxonomy 1')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'concurrency', 'Concurrency')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+
+    assertThat(
+            jdbc.queryForObject(
+                "select weight from certforge.catalog_track_version_topic"
+                    + " where track_version_id = ? and topic_id = ?",
+                Integer.class,
+                versionId,
+                topicId))
+        .isEqualTo(3);
+    // No exam row, which is what makes it an interview version rather than a certification one.
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_certification_exam"
+                    + " where track_version_id = ?",
+                Integer.class,
+                versionId))
+        .isZero();
+  }
+
+  /**
+   * The other half of the same decision: dropping NOT NULL from {@code objective_ref} must not let
+   * a certification version stop citing its objectives. That rule spans two tables, so a CHECK
+   * cannot express it and a trigger does.
+   */
+  @Test
+  void aCertificationVersionStillCannotMapATopicWithoutAnObjective() {
+    UUID versionId =
+        jdbc.queryForObject(
+            "select id from certforge.catalog_track_version where status = 'ACTIVE' limit 1",
+            UUID.class);
+
     assertThatThrownBy(
             () ->
                 jdbc.update(
-                    "insert into certforge.catalog_track (id, slug, name, kind)"
-                        + " values (?, 'interview-x', 'Interview', 'INTERVIEW')",
-                    UUID.randomUUID()))
-        .isInstanceOf(DataIntegrityViolationException.class);
+                    "update certforge.catalog_track_version_topic set objective_ref = null"
+                        + " where track_version_id = ?",
+                    versionId))
+        // The message, not the exception type: a plpgsql RAISE arrives as SQLSTATE P0001, which
+        // Spring translates to UncategorizedSQLException rather than a constraint violation. The
+        // other trigger tests in this repository assert the same way, for the same reason.
+        .hasMessageContaining("needs an objective_ref");
+  }
+
+  /** The exam identity moved to its own table and must still read back unchanged. */
+  @Test
+  void theSeededExamKeptItsIdentityThroughTheMigration() {
+    assertThat(
+            jdbc.queryForObject(
+                "select e.exam_code from certforge.catalog_certification_exam e"
+                    + " join certforge.catalog_track_version v on v.id = e.track_version_id"
+                    + " join certforge.catalog_track t on t.id = v.track_id"
+                    + " where t.slug = 'java-certification' and v.status = 'ACTIVE'",
+                String.class))
+        .isEqualTo("1Z0-830");
   }
 
   // ---- authorization -------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 # ADR 0016: Shape the interview track as a versioned taxonomy, and keep it small
 
-- Status: **Proposed.** Nothing is built. It is written as a recommendation with its reasoning so it can be accepted, or changed and then accepted.
+- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decision 1 is implemented; decisions 2 and 5 to 8 are implemented only as far as the schema allows them, and the rules in decision 6 and the taxonomy in decision 3 are still to come. Each decision below says what exists.
 - Date: 2026-10-04
 
 ## Context

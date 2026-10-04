@@ -160,7 +160,7 @@ class StudyService {
             UUID.randomUUID(),
             learner.value(),
             topicId,
-            context.examVersionId().value(),
+            context.trackVersionId().value(),
             SessionStatus.IN_PROGRESS,
             count,
             now,

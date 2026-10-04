@@ -4,10 +4,10 @@ import dev.certforge.preparationcatalog.internal.AdminViews.AdminExamVersionView
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminMappingView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminTopicView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminTrackView;
-import dev.certforge.preparationcatalog.internal.CatalogRows.ExamVersionRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -85,15 +85,15 @@ class CatalogAdminService {
       String objectivesUrl) {
     track(trackId);
     repository.insertExamVersion(
-        new ExamVersionRow(
+        new TrackVersionRow(
             UUID.randomUUID(),
             trackId,
             label.trim(),
+            CatalogStatus.DRAFT,
             examCode.trim(),
             examName.trim(),
             javaRelease,
-            objectivesUrl.trim(),
-            CatalogStatus.DRAFT));
+            objectivesUrl.trim()));
     return getTrack(trackId);
   }
 
@@ -103,7 +103,7 @@ class CatalogAdminService {
    */
   @Transactional
   AdminTrackView setMappings(UUID examVersionId, List<MappingRow> mappings) {
-    ExamVersionRow version = examVersion(examVersionId);
+    TrackVersionRow version = examVersion(examVersionId);
     if (version.status() == CatalogStatus.ACTIVE) {
       throw CatalogException.conflict(
           "exam_version_not_editable", "An active exam version cannot change its topics");
@@ -115,7 +115,7 @@ class CatalogAdminService {
 
   @Transactional
   AdminTrackView activateExamVersion(UUID examVersionId) {
-    ExamVersionRow version = examVersion(examVersionId);
+    TrackVersionRow version = examVersion(examVersionId);
     if (version.status() == CatalogStatus.ACTIVE) {
       return getTrack(version.trackId());
     }
@@ -138,7 +138,7 @@ class CatalogAdminService {
 
   @Transactional
   AdminTrackView deactivateExamVersion(UUID examVersionId) {
-    ExamVersionRow version = examVersion(examVersionId);
+    TrackVersionRow version = examVersion(examVersionId);
     if (version.status() == CatalogStatus.DRAFT) {
       throw CatalogException.conflict(
           "invalid_status_transition", "A draft exam version cannot be deactivated");
@@ -183,7 +183,7 @@ class CatalogAdminService {
 
   // ---- internals -----------------------------------------------------------------------------
 
-  private void validateMappings(ExamVersionRow version, List<MappingRow> mappings) {
+  private void validateMappings(TrackVersionRow version, List<MappingRow> mappings) {
     Set<UUID> topicIds = new HashSet<>();
     Set<Integer> positions = new HashSet<>();
     for (MappingRow mapping : mappings) {
@@ -223,7 +223,7 @@ class CatalogAdminService {
         .orElseThrow(() -> CatalogException.notFound("track_not_found", "Track not found"));
   }
 
-  private ExamVersionRow examVersion(UUID id) {
+  private TrackVersionRow examVersion(UUID id) {
     return repository
         .findExamVersion(id)
         .orElseThrow(

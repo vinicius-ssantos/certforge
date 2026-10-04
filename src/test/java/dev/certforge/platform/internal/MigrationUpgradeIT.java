@@ -130,4 +130,83 @@ class MigrationUpgradeIT {
       assertThat(rows.next()).isFalse();
     }
   }
+
+  /**
+   * The claim V13 has to earn. It renames the column a published revision is bound to, and the
+   * whole of ADR 0003 rests on that binding: a published revision points at exactly the context it
+   * was approved for, and nothing may silently move it. So this starts from a database as version
+   * 12 left it, with a question published against an exam version, and checks the binding is the
+   * same id afterwards under the new name — and that the exam identity V13 moved to its own table
+   * went with it rather than being recreated.
+   */
+  @Test
+  void aPublishedRevisionKeepsItsBindingWhenTheExamVersionBecomesATrackVersion() throws Exception {
+    try (Connection connection = connect();
+        Statement statement = connection.createStatement()) {
+      statement.execute("drop schema if exists certforge cascade");
+      statement.execute("drop schema public cascade");
+      statement.execute("create schema public");
+    }
+    assertThat(flyway("12").migrate().success).isTrue();
+
+    UUID question = UUID.randomUUID();
+    UUID revision = UUID.randomUUID();
+    UUID author = UUID.randomUUID();
+    UUID examVersion;
+    try (Connection connection = connect();
+        Statement statement = connection.createStatement()) {
+      // The seeded Java SE 21 exam version, which V4 inserted and V13 will rename around.
+      try (ResultSet active =
+          statement.executeQuery(
+              "select id from certforge.catalog_exam_version where status = 'ACTIVE'")) {
+        assertThat(active.next()).as("version 12 seeds an active exam version").isTrue();
+        examVersion = active.getObject("id", UUID.class);
+      }
+      statement.execute(
+          "insert into certforge.qb_question (id, created_by) values ('"
+              + question
+              + "', '"
+              + author
+              + "')");
+      statement.execute(
+          "insert into certforge.qb_question_revision"
+              + " (id, question_id, revision_number, status, question_type, author_id, prompt,"
+              + " exam_version_id, published_by, published_at)"
+              + " values ('"
+              + revision
+              + "', '"
+              + question
+              + "', 1, 'PUBLISHED', 'SINGLE_CHOICE', '"
+              + author
+              + "', 'Published before the upgrade', '"
+              + examVersion
+              + "', '"
+              + author
+              + "', now())");
+    }
+
+    assertThat(flyway("latest").migrate().success).isTrue();
+
+    try (Connection connection = connect();
+        Statement statement = connection.createStatement();
+        ResultSet rows =
+            statement.executeQuery(
+                "select r.status, r.track_version_id, v.label, e.exam_code"
+                    + " from certforge.qb_question_revision r"
+                    + " join certforge.catalog_track_version v on v.id = r.track_version_id"
+                    + " join certforge.catalog_certification_exam e on e.track_version_id = v.id"
+                    + " where r.id = '"
+                    + revision
+                    + "'")) {
+      assertThat(rows.next()).as("the published revision is still bound to its context").isTrue();
+      assertThat(rows.getString("status")).isEqualTo("PUBLISHED");
+      assertThat(rows.getObject("track_version_id", UUID.class))
+          .as("the same id, under the new column name")
+          .isEqualTo(examVersion);
+      assertThat(rows.getString("exam_code"))
+          .as("the exam identity moved to its own table with the version it belongs to")
+          .isEqualTo("1Z0-830");
+      assertThat(rows.next()).isFalse();
+    }
+  }
 }

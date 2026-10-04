@@ -8,7 +8,7 @@ record StudySession(
     UUID id,
     UUID learnerId,
     UUID topicId,
-    UUID examVersionId,
+    UUID trackVersionId,
     SessionStatus status,
     int requestedCount,
     Instant createdAt,
