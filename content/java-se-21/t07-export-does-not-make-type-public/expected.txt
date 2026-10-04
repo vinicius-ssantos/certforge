@@ -1,0 +1,1 @@
+COMPILE_ERROR: not.def.public.cant.access

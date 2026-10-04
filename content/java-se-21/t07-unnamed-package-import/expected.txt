@@ -1,0 +1,1 @@
+COMPILE_ERROR: cant.resolve.location
