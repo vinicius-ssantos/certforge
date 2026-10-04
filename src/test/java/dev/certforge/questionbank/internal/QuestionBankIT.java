@@ -20,6 +20,8 @@ import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.questionbank.RevisionStatus;
 import jakarta.servlet.http.Cookie;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
@@ -665,6 +667,27 @@ class QuestionBankIT {
         .extracting(q -> q.revisionId().value().toString())
         .doesNotContain(ids[1]);
     assertThat(bank.eligibleForTopic(new TopicId(UUID.randomUUID()))).isEmpty();
+  }
+
+  @Test
+  void exactHistoricalRevisionsCanBeLoadedAsOneBatch() throws Exception {
+    String[] first = publishNew("Bulk historical one");
+    String[] second = publishNew("Bulk historical two");
+    QuestionRevisionId firstId = new QuestionRevisionId(UUID.fromString(first[1]));
+    QuestionRevisionId secondId = new QuestionRevisionId(UUID.fromString(second[1]));
+
+    Map<QuestionRevisionId, RevisionEvidence> evidence =
+        bank.findRevisions(Set.of(firstId, secondId));
+
+    assertThat(evidence).containsOnlyKeys(firstId, secondId);
+    assertThat(evidence.get(firstId).prompt()).isEqualTo("Bulk historical one");
+    assertThat(evidence.get(secondId).prompt()).isEqualTo("Bulk historical two");
+    assertThat(evidence.values())
+        .allSatisfy(
+            revision -> {
+              assertThat(revision.options()).hasSize(2);
+              assertThat(revision.references()).hasSize(1);
+            });
   }
 
   @Test

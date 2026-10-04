@@ -2,7 +2,9 @@ package dev.certforge.questionbank;
 
 import dev.certforge.preparationcatalog.TopicId;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /** Read contract of the question bank for other modules (for example study sessions). */
 public interface QuestionBank {
@@ -30,4 +32,10 @@ public interface QuestionBank {
    * historical attempt with the revision the learner actually saw.
    */
   Optional<RevisionEvidence> findRevision(QuestionRevisionId revisionId);
+
+  /**
+   * Exact historical revisions with answer evidence, loaded as one batch for aggregate read models.
+   * Missing ids are omitted from the result.
+   */
+  Map<QuestionRevisionId, RevisionEvidence> findRevisions(Set<QuestionRevisionId> revisionIds);
 }

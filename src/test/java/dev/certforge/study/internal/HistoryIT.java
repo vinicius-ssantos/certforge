@@ -315,9 +315,12 @@ class HistoryIT {
   @Test
   void pageSizeAndCursorAreValidated() throws Exception {
     for (String bad : new String[] {"0", "-1", "51", "1000"}) {
-      mvc.perform(get("/api/study/history/sessions?size=" + bad).cookie(learner.session()))
-          .andExpect(status().isBadRequest())
-          .andExpect(jsonPath("$.code").value("invalid_page_size"));
+      for (String path :
+          new String[] {"/api/study/history/sessions", "/api/study/history/mock-exams"}) {
+        mvc.perform(get(path + "?size=" + bad).cookie(learner.session()))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("invalid_page_size"));
+      }
     }
     for (String bad : new String[] {"garbage", "MTIzNDU", "!!!"}) {
       mvc.perform(get("/api/study/history/attempts?cursor=" + bad).cookie(learner.session()))
@@ -352,6 +355,7 @@ class HistoryIT {
   @Test
   void historyRequiresAuthentication() throws Exception {
     mvc.perform(get("/api/study/history/sessions")).andExpect(status().isUnauthorized());
+    mvc.perform(get("/api/study/history/mock-exams")).andExpect(status().isUnauthorized());
     mvc.perform(get("/api/study/history/attempts")).andExpect(status().isUnauthorized());
   }
 }
