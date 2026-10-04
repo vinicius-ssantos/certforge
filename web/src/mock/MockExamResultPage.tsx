@@ -32,13 +32,20 @@ export function MockExamResultPage() {
       unwrap(api.GET("/api/study/mock-exams/{sessionId}/result", { params: { path: { sessionId } } })),
   });
 
-  if (result.isPending) return <><h1>{t.mockResult.title}</h1><Loading label={t.mockResult.loading} /></>;
-  if (result.isError) return <><h1>{t.mockResult.title}</h1><ErrorState error={result.error} onRetry={() => void result.refetch()} /></>;
+  // Written once and used in each branch. This page was already correct -- an h1 that is the first
+  // child of the returned fragment in every branch is reconciled to the same DOM node, which
+  // `heading-focus.test.tsx` proves -- so this is a guard, not a fix. It is here because the way
+  // MockExamPage broke was by someone wrapping the loaded branch in a div, and the invariant is
+  // easy to lose by accident when it is only implied by three separate copies of the same element.
+  const heading = <h1>{t.mockResult.title}</h1>;
+
+  if (result.isPending) return <>{heading}<Loading label={t.mockResult.loading} /></>;
+  if (result.isError) return <>{heading}<ErrorState error={result.error} onRetry={() => void result.refetch()} /></>;
 
   const data = result.data;
   return (
     <>
-      <h1>{t.mockResult.title}</h1>
+      {heading}
       <section className="mock-score" aria-labelledby="score-heading">
         <h2 id="score-heading">{data.passed ? t.mockResult.reached : t.mockResult.notReached}</h2>
         <p className="mock-score-value">{t.mockResult.percentage(data.percentage)}</p>
