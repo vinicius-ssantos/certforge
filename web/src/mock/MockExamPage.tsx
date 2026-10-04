@@ -128,125 +128,136 @@ export function MockExamPage() {
     },
   });
 
+  // One return, so the heading is rendered once and stays the same DOM node through every state.
+  // Layout moves focus to this h1 after a navigation, and a heading that is unmounted and remade
+  // when the query settles takes that focus out of the document with it (#118). What varies is the
+  // body below, and whether the head carries the live counters and the timer.
+  const live = !exam.isPending && !exam.isError && exam.data.status === "IN_PROGRESS" ? exam.data : null;
+  const ordered = live ? [...live.questions].sort((a, b) => a.position - b.position) : [];
+  const current = ordered.find((entry) => entry.position === position) ?? ordered[0];
+  const remaining = live ? formatRemaining(live.expiresAt, now) : null;
+  const flagged = current ? flags.includes(current.position) : false;
+
+  let body;
   if (exam.isPending) {
-    return <><h1>{t.mock.title}</h1><Loading label={t.mock.loading} /></>;
-  }
-  if (exam.isError) {
-    return <><h1>{t.mock.title}</h1><ErrorState error={exam.error} onRetry={() => void exam.refetch()} /></>;
-  }
-  if (exam.data.status !== "IN_PROGRESS") {
-    return (
+    body = <Loading label={t.mock.loading} />;
+  } else if (exam.isError) {
+    body = <ErrorState error={exam.error} onRetry={() => void exam.refetch()} />;
+  } else if (!live) {
+    body = (
       <>
-        <h1>{t.mock.title}</h1>
         <p>{t.mock.closed}</p>
         <p><Link to={`/mock-exams/${sessionId}/result`}>{t.mock.viewResult}</Link></p>
       </>
     );
+  } else if (!current) {
+    body = <p>{t.mock.noQuestions}</p>;
+  } else {
+    body = (
+      <>
+        {respond.isError ? <ErrorState error={respond.error} /> : null}
+        {finish.isError ? <ErrorState error={finish.error} /> : null}
+
+        <div className="mock-layout">
+          <aside aria-label={t.mock.navigationLabel}>
+            <h2>{t.mock.questions}</h2>
+            <ol className="mock-nav">
+              {ordered.map((entry) => (
+                <li key={entry.position}>
+                  <button
+                    type="button"
+                    className={[
+                      "mock-nav-button",
+                      entry.position === current.position ? "current" : "",
+                      entry.answered ? "answered" : "",
+                      flags.includes(entry.position) ? "flagged" : "",
+                    ].filter(Boolean).join(" ")}
+                    aria-current={entry.position === current.position ? "step" : undefined}
+                    aria-label={t.mock.questionButtonLabel(
+                      entry.position + 1,
+                      entry.answered,
+                      flags.includes(entry.position),
+                    )}
+                    onClick={() => setPosition(entry.position)}
+                  >
+                    {entry.position + 1}
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <p className="mock-legend muted">{t.mock.legend}</p>
+          </aside>
+
+          <section className="mock-question" aria-labelledby="mock-question-heading">
+            <h2 id="mock-question-heading">{t.mock.questionHeading(current.position + 1, ordered.length)}</h2>
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => setFlags((items) =>
+                items.includes(current.position)
+                  ? items.filter((item) => item !== current.position)
+                  : [...items, current.position],
+              )}
+            >
+              {flagged ? t.mock.removeFlag : t.mock.addFlag}
+            </button>
+            <MockQuestion
+              key={current.position}
+              question={current.question}
+              answered={current.answered}
+              submitting={respond.isPending}
+              failure={respond.isError ? errorMessage(respond.error, t) : null}
+              onSubmit={(selected, key) => respond.mutate({ at: current.position, selected, key })}
+            />
+            <div className="mock-question-actions">
+              <button type="button" className="secondary" disabled={current.position === 0}
+                onClick={() => setPosition(Math.max(0, current.position - 1))}>{t.mock.previous}</button>
+              <button type="button" className="secondary" disabled={current.position === ordered.length - 1}
+                onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>{t.mock.next}</button>
+            </div>
+          </section>
+        </div>
+
+        <div className="session-actions">
+          <Confirm
+            title={t.mock.submitTitle}
+            explain={t.mock.submitExplain(live.questionCount - live.answeredCount)}
+            confirmLabel={t.mock.submitConfirm}
+            cancelLabel={t.mock.submitCancel}
+            busy={finish.isPending}
+            onConfirm={() => finish.mutate()}
+          >
+            {t.mock.submitTrigger}
+          </Confirm>
+        </div>
+      </>
+    );
   }
 
-  const ordered = [...exam.data.questions].sort((a, b) => a.position - b.position);
-  const current = ordered.find((entry) => entry.position === position) ?? ordered[0];
-  if (!current) return <><h1>{t.mock.title}</h1><p>{t.mock.noQuestions}</p></>;
-
-  const remaining = formatRemaining(exam.data.expiresAt, now);
-  const flagged = flags.includes(current.position);
   return (
     <>
       <div className="mock-head">
         <div>
           <h1>{t.mock.title}</h1>
-          {resumed ? (
-            <p role="status">{t.mock.resumed}</p>
+          {resumed && live ? <p role="status">{t.mock.resumed}</p> : null}
+          {live ? (
+            <p className="muted">
+              {t.mock.answeredAndTarget(
+                live.answeredCount,
+                live.questionCount,
+                live.passingPercentage,
+              )}
+            </p>
           ) : null}
-          <p className="muted">
-            {t.mock.answeredAndTarget(
-              exam.data.answeredCount,
-              exam.data.questionCount,
-              exam.data.passingPercentage,
-            )}
-          </p>
         </div>
-        <div className="mock-timer" role="timer" aria-label={t.mock.timeRemainingLabel(remaining)}>
-          <span className="muted">{t.mock.timeRemaining}</span>
-          <strong>{remaining}</strong>
-        </div>
-      </div>
-
-      {respond.isError ? <ErrorState error={respond.error} /> : null}
-      {finish.isError ? <ErrorState error={finish.error} /> : null}
-
-      <div className="mock-layout">
-        <aside aria-label={t.mock.navigationLabel}>
-          <h2>{t.mock.questions}</h2>
-          <ol className="mock-nav">
-            {ordered.map((entry) => (
-              <li key={entry.position}>
-                <button
-                  type="button"
-                  className={[
-                    "mock-nav-button",
-                    entry.position === current.position ? "current" : "",
-                    entry.answered ? "answered" : "",
-                    flags.includes(entry.position) ? "flagged" : "",
-                  ].filter(Boolean).join(" ")}
-                  aria-current={entry.position === current.position ? "step" : undefined}
-                  aria-label={t.mock.questionButtonLabel(
-                    entry.position + 1,
-                    entry.answered,
-                    flags.includes(entry.position),
-                  )}
-                  onClick={() => setPosition(entry.position)}
-                >
-                  {entry.position + 1}
-                </button>
-              </li>
-            ))}
-          </ol>
-          <p className="mock-legend muted">{t.mock.legend}</p>
-        </aside>
-
-        <section className="mock-question" aria-labelledby="mock-question-heading">
-          <h2 id="mock-question-heading">{t.mock.questionHeading(current.position + 1, ordered.length)}</h2>
-          <button
-            type="button"
-            className="secondary"
-            onClick={() => setFlags((items) =>
-              items.includes(current.position)
-                ? items.filter((item) => item !== current.position)
-                : [...items, current.position],
-            )}
-          >
-            {flagged ? t.mock.removeFlag : t.mock.addFlag}
-          </button>
-          <MockQuestion
-            key={current.position}
-            question={current.question}
-            answered={current.answered}
-            submitting={respond.isPending}
-            failure={respond.isError ? errorMessage(respond.error, t) : null}
-            onSubmit={(selected, key) => respond.mutate({ at: current.position, selected, key })}
-          />
-          <div className="mock-question-actions">
-            <button type="button" className="secondary" disabled={current.position === 0}
-              onClick={() => setPosition(Math.max(0, current.position - 1))}>{t.mock.previous}</button>
-            <button type="button" className="secondary" disabled={current.position === ordered.length - 1}
-              onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>{t.mock.next}</button>
+        {live && remaining ? (
+          <div className="mock-timer" role="timer" aria-label={t.mock.timeRemainingLabel(remaining)}>
+            <span className="muted">{t.mock.timeRemaining}</span>
+            <strong>{remaining}</strong>
           </div>
-        </section>
+        ) : null}
       </div>
-
-      <div className="session-actions">
-        <Confirm
-          title={t.mock.submitTitle}
-          explain={t.mock.submitExplain(exam.data.questionCount - exam.data.answeredCount)}
-          confirmLabel={t.mock.submitConfirm}
-          cancelLabel={t.mock.submitCancel}
-          busy={finish.isPending}
-          onConfirm={() => finish.mutate()}
-        >
-          {t.mock.submitTrigger}
-        </Confirm>
-      </div>
+      {body}
     </>
   );
 }
