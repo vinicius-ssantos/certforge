@@ -4,7 +4,7 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { Misconception } from "../api/types";
 import { formatDateTime } from "../history/format";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 
@@ -23,6 +23,7 @@ function percent(accuracy: number | null, noValue: string): string {
  */
 function Misconceptions({ rows }: { rows: Misconception[] }) {
   const t = useText();
+  const { locale } = useLocale();
   if (rows.length === 0) {
     return null;
   }
@@ -51,7 +52,7 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
               <td>{row.attempts}</td>
               <td>{row.questions}</td>
               <td>
-                <time dateTime={row.lastAt}>{formatDateTime(row.lastAt)}</time>
+                <time dateTime={row.lastAt}>{formatDateTime(row.lastAt, locale)}</time>
               </td>
             </tr>
           ))}
@@ -66,6 +67,7 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
 
 export function ProgressPage() {
   const t = useText();
+  const { locale } = useLocale();
   useDocumentTitle(t.progress.title);
   const api = useApi();
   const progress = useQuery({
@@ -123,7 +125,7 @@ export function ProgressPage() {
                 <td>{percent(topic.accuracy, t.progress.noValue)}</td>
                 <td>
                   {topic.lastActivityAt ? (
-                    <time dateTime={topic.lastActivityAt}>{formatDateTime(topic.lastActivityAt)}</time>
+                    <time dateTime={topic.lastActivityAt}>{formatDateTime(topic.lastActivityAt, locale)}</time>
                   ) : (
                     t.progress.noValue
                   )}

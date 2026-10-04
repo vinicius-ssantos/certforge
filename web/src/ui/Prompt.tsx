@@ -33,7 +33,9 @@ export function splitFences(text: string): Segment[] {
 export function Prompt({ text }: { text: string }): ReactNode {
   const t = useText();
   return (
-    <div className="prompt">
+    // lang="en": question text stays English in every locale, and a screen reader needs to be told
+    // so, or it reads English words with the phonetics of the interface language (ADR 0012).
+    <div className="prompt" lang="en">
       {splitFences(text).map((segment, index) =>
         segment.kind === "code" ? (
           // A code block can be wider than the screen. Making it focusable lets keyboard users

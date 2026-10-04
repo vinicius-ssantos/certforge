@@ -5,6 +5,8 @@ import { App } from "../App";
 import { ApiProvider } from "../api/ApiProvider";
 import { createApi } from "../api/client";
 import { AuthProvider, ME_KEY } from "../auth/AuthContext";
+import { TextProvider } from "../i18n/TextProvider";
+import type { LocaleCode } from "../i18n/locales";
 import { createQueryClient } from "../queryClient";
 import { fakeFetch, type FakeFetch, type Handler } from "./fakeServer";
 
@@ -104,7 +106,7 @@ export interface Rendered {
  */
 export function renderApp(
   routes: Record<string, Handler> = {},
-  options: { path?: string; signedIn?: boolean; as?: typeof account } = {},
+  options: { path?: string; signedIn?: boolean; as?: typeof account; locale?: LocaleCode } = {},
 ): Rendered {
   const signedIn = options.signedIn ?? true;
   const fetch = fakeFetch({
@@ -133,11 +135,15 @@ export function renderApp(
   );
 
   const rendered = render(
-    <ApiProvider api={api}>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </ApiProvider>,
+    // Pinned to English unless a test asks otherwise, so the existing suites keep asserting the
+    // literal English wording and a locale is something a test opts into.
+    <TextProvider locale={options.locale ?? "en"}>
+      <ApiProvider api={api}>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+        </QueryClientProvider>
+      </ApiProvider>
+    </TextProvider>,
   );
   return {
     fetch,

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { MockExamQuestionResult } from "../api/types";
+import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
 import { Prompt } from "../ui/Prompt";
@@ -102,12 +103,12 @@ function QuestionReview({ item }: { item: MockExamQuestionResult }) {
       <ul className="answers">
         {item.answer.options.map((option) => (
           <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-            <p><strong>{option.key}. {option.text}</strong></p>
+            <p><strong>{option.key}. <English>{option.text}</English></strong></p>
             <p className="muted">
               {selected.has(option.key) ? t.feedback.yourAnswer : ""}
               {correct.has(option.key) ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
             </p>
-            {option.explanation ? <p>{option.explanation}</p> : null}
+            {option.explanation ? <English as="p">{option.explanation}</English> : null}
           </li>
         ))}
       </ul>
@@ -119,7 +120,7 @@ function QuestionReview({ item }: { item: MockExamQuestionResult }) {
           <ul>
             {item.answer.references.map((reference) => (
               <li key={reference.url}>
-                <a href={reference.url} target="_blank" rel="noopener noreferrer">{reference.title}</a>
+                <a href={reference.url} target="_blank" rel="noopener noreferrer" lang="en">{reference.title}</a>
               </li>
             ))}
           </ul>

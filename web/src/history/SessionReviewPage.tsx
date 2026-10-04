@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
-import { useText } from "../i18n/useText";
+import { English } from "../i18n/English";
+import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime } from "./format";
@@ -11,6 +12,7 @@ import { formatDateTime } from "./format";
 /** Every answer given in one session, with what was correct and why. Reads only; nothing changes. */
 export function SessionReviewPage() {
   const t = useText();
+  const { locale } = useLocale();
   const { sessionId = "" } = useParams();
   const api = useApi();
   useDocumentTitle(t.sessionReview.title);
@@ -50,7 +52,7 @@ export function SessionReviewPage() {
                   attempt.selectedOptions.join(", "),
                   t.sessionReview.confidenceName(attempt.confidence),
                 )}
-                <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt)}</time>.
+                <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt, locale)}</time>.
               </p>
               <details>
                 <summary>{t.sessionReview.showAnswer}</summary>
@@ -59,14 +61,14 @@ export function SessionReviewPage() {
                     <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
                       <p>
                         <strong>
-                          {option.key}. {option.text}
+                          {option.key}. <English>{option.text}</English>
                         </strong>
                       </p>
                       <p className="muted">
                         {attempt.selectedOptions.includes(option.key) ? t.feedback.yourAnswer : ""}
                         {option.correct ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
                       </p>
-                      {option.explanation ? <p>{option.explanation}</p> : null}
+                      {option.explanation ? <English as="p">{option.explanation}</English> : null}
                     </li>
                   ))}
                 </ul>
@@ -76,7 +78,7 @@ export function SessionReviewPage() {
                     {attempt.question.references.map((reference) => (
                       <li key={reference.url}>
                         <a href={reference.url} target="_blank" rel="noopener noreferrer">
-                          {t.feedback.referenceLink(reference.title)}
+                          <English>{t.feedback.referenceLink(reference.title)}</English>
                         </a>
                       </li>
                     ))}

@@ -1,6 +1,7 @@
 import { useEffect, useRef, type RefObject } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { useAuth } from "../auth/AuthContext";
+import { LanguageSwitcher } from "../i18n/LanguageSwitcher";
 import { useText } from "../i18n/useText";
 import { useHasAny } from "../auth/permissions";
 
@@ -59,6 +60,7 @@ export function Layout() {
               </button>
             </nav>
           ) : null}
+          <LanguageSwitcher />
         </div>
       </header>
       <main id="main" ref={mainRef} tabIndex={-1}>

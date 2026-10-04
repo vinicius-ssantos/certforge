@@ -1,6 +1,7 @@
 # ADR 0012: Translate the interface, keep the question text in English
 
-- Status: **Accepted** on 2026-10-02, as written. Nothing is translated yet: decision 3 keeps the work out of `v0.1.0`, and #74 carries it afterwards.
+- Status: **Accepted** on 2026-10-02, as written, and **carried out** in #74 after `v0.2.0`: the strings were extracted into a typed catalog (#122) and Brazilian Portuguese was added alongside English, with the browser's preferred language as the default and a remembered switcher (#123). The Portuguese wording was read by vinicius-ssantos, a native speaker, on 2026-10-04. That is the author of the project reviewing their own project's translation rather than an independent reviewer, which is the same limitation [ADR 0011](0011-grade-content-evidence.md) records for the question pack.
+- Date: 2026-10-02
 - Date: 2026-10-02
 
 ## Context

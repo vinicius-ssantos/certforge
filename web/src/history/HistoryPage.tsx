@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime, statusLabel } from "./format";
@@ -10,6 +10,7 @@ import { useTopicNames, useTrackNames } from "./useTopicNames";
 
 export function HistoryPage() {
   const t = useText();
+  const { locale } = useLocale();
   useDocumentTitle(t.history.title);
   const api = useApi();
   const topicNames = useTopicNames();
@@ -97,7 +98,7 @@ export function HistoryPage() {
                       </Link>
                     </th>
                     <td>
-                      <time dateTime={mock.createdAt}>{formatDateTime(mock.createdAt)}</time>
+                      <time dateTime={mock.createdAt}>{formatDateTime(mock.createdAt, locale)}</time>
                     </td>
                     <td>{statusLabel(mock.status, t)}</td>
                     <td>{t.history.answeredOf(mock.answeredCount, mock.questionCount)}</td>
@@ -175,7 +176,7 @@ export function HistoryPage() {
                       </Link>
                     </th>
                     <td>
-                      <time dateTime={session.createdAt}>{formatDateTime(session.createdAt)}</time>
+                      <time dateTime={session.createdAt}>{formatDateTime(session.createdAt, locale)}</time>
                     </td>
                     <td>{statusLabel(session.status, t)}</td>
                     <td>{t.history.answeredOf(session.answeredCount, session.requestedCount)}</td>
