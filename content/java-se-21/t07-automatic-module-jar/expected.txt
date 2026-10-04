@@ -1,0 +1,7 @@
+hasModuleInfo=false
+found=true
+automatic=true
+name=com.example.widgets
+version=1.4
+packages=[com.example.widgets]
+requires=[mandated java.base]

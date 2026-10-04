@@ -1,0 +1,6 @@
+initialModule=com.example.app
+mainClass=p.Main
+modulePathWasGiven=true
+named=true
+module=com.example.app
+class=p.Main

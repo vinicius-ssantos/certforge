@@ -1,0 +1,7 @@
+toApp=true
+toOther=true
+toJavaBase=false
+lUnqualified=false
+qUnqualified=true
+readFromOther=internal
+readHere=internal

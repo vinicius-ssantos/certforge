@@ -1,0 +1,5 @@
+module=app
+declaredRequires=0
+requires=[java.base[MANDATED]]
+readsJavaBase=true
+javaBaseName=java.base

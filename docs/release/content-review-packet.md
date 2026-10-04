@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 26 of the 150 questions: `t07-automatic-module-jar`, `t07-export-does-not-make-type-public`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-import-wildcard-no-subpackages`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t07-unnamed-package-import`, `t08-reentrantlock-finally`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-lines-close`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`.
+- Nothing is verified by the build in 15 of the 150 questions: `t08-reentrantlock-finally`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-lines-close`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`.
 
 ## How to review
 
@@ -127,21 +127,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
 | 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | **not reviewed** |
-| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
-| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | no (conceptual) | **not reviewed** |
-| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | no (conceptual) | **not reviewed** |
+| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | reviewed 2026-10-02 |
+| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | yes, not shown | **not reviewed** |
+| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | yes, not shown | **not reviewed** |
 | 98 | [`t07-object-module-name`](#98-t07-object-module-name) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
-| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | **not reviewed** |
-| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | **not reviewed** |
+| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
 | 102 | [`t07-requires-transitive`](#102-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
 | 103 | [`t07-static-import-member`](#103-t07-static-import-member) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
 | 104 | [`t07-unnamed-module-isnamed`](#104-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | **not reviewed** |
-| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
 | 106 | [`t08-atomic-compare-and-set`](#106-t08-atomic-compare-and-set) | Managing concurrent code execution | single | medium | yes, shown | **not reviewed** |
 | 107 | [`t08-atomicinteger-update-and-get`](#107-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | yes, not shown | **not reviewed** |
@@ -7921,7 +7921,63 @@ Tests the migration mechanism that lets an ordinary JAR participate on the modul
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+hasModuleInfo=false
+found=true
+automatic=true
+name=com.example.widgets
+version=1.4
+packages=[com.example.widgets]
+requires=[mandated java.base]
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.module.ModuleDescriptor;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // An ordinary JAR: no module-info.class anywhere in it.
+    Path dir = Files.createTempDirectory("mods");
+    Path jar = dir.resolve("com.example.widgets-1.4.jar");
+    try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
+      out.putNextEntry(new JarEntry("com/example/widgets/Widget.class"));
+      out.write(new byte[] {1, 2, 3});
+      out.closeEntry();
+    }
+    System.out.println("hasModuleInfo=" + Files.exists(dir.resolve("module-info.class")));
+
+    // Placed where the module system looks for modules, it becomes a named module all the same.
+    ModuleFinder finder = ModuleFinder.of(dir);
+    Optional<ModuleReference> found = finder.find("com.example.widgets");
+    System.out.println("found=" + found.isPresent());
+    ModuleDescriptor descriptor = found.orElseThrow().descriptor();
+    System.out.println("automatic=" + descriptor.isAutomatic());
+    // The name comes from the file name, with a trailing version dropped and read separately.
+    System.out.println("name=" + descriptor.name());
+    System.out.println("version=" + descriptor.version().map(Object::toString).orElse("none"));
+    // An automatic module exports every package it contains and requires nothing but java.base.
+    System.out.println("packages=" + descriptor.packages());
+    System.out.println("requires=" + descriptor.requires());
+
+    Files.delete(jar);
+    Files.delete(dir);
+  }
+}
+```
 
 ### Review
 
@@ -7936,7 +7992,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c56051364a37bbc7a05"`, `"verified": null`
+To record: `"digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c56051364a37bbc7a05"`, `"verified": "sha256:5a84fc70b7f7fff49c4dcfeb32fd6b3433d2b2906de962db4eb6ff648b05285b"`
 
 **Comments:**
 
@@ -7977,7 +8033,80 @@ Separates module-level package export from Java language access modifiers on ind
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: not.def.public.cant.access
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import p.Api;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The public type of the exported package is reachable.
+    System.out.println("api=" + Api.value());
+    // The package-private one is not, and the module being exported changes nothing about it.
+    System.out.println("helper=" + p.Helper.value());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// p is exported in full. Exporting controls which packages other modules may read; it does not
+// change the access modifiers of the types inside.
+module lib {
+  exports p;
+}
+```
+
+`modules/lib/p/Api.java`:
+
+```java
+package p;
+
+/** Public, in the same exported package, and reachable from other modules. */
+public final class Api {
+
+  private Api() {}
+
+  public static String value() {
+    // Inside the package the package-private type is perfectly usable.
+    return Helper.value();
+  }
+}
+```
+
+`modules/lib/p/Helper.java`:
+
+```java
+package p;
+
+/** Package-private: no modifier. Exporting p does not widen this. */
+class Helper {
+
+  static String value() {
+    return "helper";
+  }
+}
+```
 
 ### Review
 
@@ -7992,7 +8121,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2"`, `"verified": null`
+To record: `"digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2"`, `"verified": "sha256:a6a96d4dd098bc83278a738421356322f8fa69f3043dc81ff81abe57afb3bed0"`
 
 **Comments:**
 
@@ -8036,11 +8165,123 @@ exports and opens look similar but differ in compile-time versus run-time access
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+exportedPublicCall=exportedPublic
+lExported=true
+lOpen=false
+qExported=true
+qOpen=true
+openedPrivateField=openedPrivate
+openedPrivateMethod=openedPrivateMethod
+exportedPrivateReflection=InaccessibleObjectException
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import l.Api;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Module lib = Api.class.getModule();
+    Module app = Main.class.getModule();
+
+    // exports: the public type compiled into this module and runs. That this file compiles at
+    // all is the compile-time half; the call is the run-time half.
+    System.out.println("exportedPublicCall=" + new Api().value());
+    System.out.println("lExported=" + lib.isExported("l", app));
+    System.out.println("lOpen=" + lib.isOpen("l", app));
+
+    // opens: reflection reaches a private field and a private method of the opened package. Note
+    // that isExported reports true for q as well: opening a package implies exporting it, which
+    // Module.isExported documents, so the reverse of lExported/lOpen above is not symmetric.
+    Class<?> hidden = Class.forName("q.Hidden");
+    System.out.println("qExported=" + lib.isExported("q", app));
+    System.out.println("qOpen=" + lib.isOpen("q", app));
+    Field secret = hidden.getDeclaredField("secret");
+    secret.setAccessible(true);
+    Object instance = hidden.getDeclaredConstructor().newInstance();
+    System.out.println("openedPrivateField=" + secret.get(instance));
+    Method whisper = hidden.getDeclaredMethod("whisper");
+    whisper.setAccessible(true);
+    System.out.println("openedPrivateMethod=" + whisper.invoke(instance));
+
+    // Exporting is not opening: the same reflection on the exported package is refused.
+    Field exportedPrivate = Api.class.getDeclaredField("hidden");
+    try {
+      exportedPrivate.setAccessible(true);
+      System.out.println("exportedPrivateReflection=allowed");
+    } catch (RuntimeException e) {
+      System.out.println("exportedPrivateReflection=" + e.getClass().getSimpleName());
+    }
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/l/Api.java`:
+
+```java
+package l;
+
+public final class Api {
+
+  private final String hidden = "exportedPrivate";
+
+  public String value() {
+    return "exportedPublic";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// Two directives for two different things: l is exported, so its public types are part of the
+// API at compile time and at run time. q is opened, so reflection may reach every type and
+// member in it, private ones included, but only at run time.
+module lib {
+  exports l;
+  opens q;
+}
+```
+
+`modules/lib/q/Hidden.java`:
+
+```java
+package q;
+
+public final class Hidden {
+
+  private final String secret = "openedPrivate";
+
+  private String whisper() {
+    return "openedPrivateMethod";
+  }
+}
+```
 
 ### Review
 
 **Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.
 
 A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
@@ -8054,7 +8295,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf1db359adf23f38"`, `"verified": null`
+To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf1db359adf23f38"`, `"verified": "sha256:0f4d7c947becc32f648a881a59dd48347d812d240fff919d908671308c6d0a8c"`
 
 **Comments:**
 
@@ -8095,7 +8336,52 @@ Checks the implicit readability foundation that module declarations usually do n
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+module=app
+declaredRequires=0
+requires=[java.base[MANDATED]]
+readsJavaBase=true
+javaBaseName=java.base
+```
+
+That program, across 2 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+import java.util.TreeSet;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // java.base is depended upon implicitly, which is why this module can use String and
+    // System without declaring anything. The descriptor the compiler produced says so.
+    ModuleDescriptor descriptor = Main.class.getModule().getDescriptor();
+    System.out.println("module=" + descriptor.name());
+    System.out.println("declaredRequires=0");
+
+    // Names and modifiers only, not the recorded version of java.base, which depends on the
+    // release the build compiles against rather than on anything the question claims.
+    TreeSet<String> names = new TreeSet<>();
+    descriptor.requires().forEach(r -> names.add(r.name() + r.modifiers()));
+    System.out.println("requires=" + names);
+    System.out.println("readsJavaBase=" + Main.class.getModule().canRead(Object.class.getModule()));
+    System.out.println("javaBaseName=" + Object.class.getModule().getName());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// No requires directive is written at all.
+module app {}
+```
 
 ### Review
 
@@ -8110,7 +8396,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40c9d6fd91e276cf"`, `"verified": null`
+To record: `"digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40c9d6fd91e276cf"`, `"verified": "sha256:b47db13ac12eca1af4818d70924422538ba95a7825ac3a80cdbbdc6d8e5cafb8"`
 
 **Comments:**
 
@@ -8151,7 +8437,36 @@ Tests the scope of on-demand type imports and the fact that packages are not rec
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: cant.resolve.location
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // java.util.* brings in the accessible top-level types declared directly in java.util.
+    List<String> list = new ArrayList<>();
+    Map<String, Integer> map = new HashMap<>();
+    list.add("ok");
+    map.put("ok", 1);
+    System.out.println(list + " " + map);
+
+    // It does not reach java.util.concurrent, which is a different package rather than part of
+    // java.util, so this simple name cannot be resolved.
+    ConcurrentHashMap<String, Integer> concurrent = new ConcurrentHashMap<>();
+    System.out.println(concurrent);
+  }
+}
+```
 
 ### Review
 
@@ -8166,7 +8481,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa"`, `"verified": null`
+To record: `"digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa"`, `"verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f"`
 
 **Comments:**
 
@@ -8207,7 +8522,45 @@ Checks the command-line form for launching a main class from a named module on a
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+initialModule=com.example.app
+mainClass=p.Main
+modulePathWasGiven=true
+named=true
+module=com.example.app
+class=p.Main
+```
+
+That program, across 2 files:
+
+`modules/com.example.app/module-info.java`:
+
+```java
+module com.example.app {}
+```
+
+`modules/com.example.app/p/Main.java`:
+
+```java
+package p;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // This question is proved by how the build runs it. The harness launches a modular question
+    // with exactly the form the question asks about -- java --module-path <dir> --module
+    // <module>/<main class> -- and the launcher records what it was given in these properties.
+    System.out.println("initialModule=" + System.getProperty("jdk.module.main"));
+    System.out.println("mainClass=" + System.getProperty("jdk.module.main.class"));
+    System.out.println("modulePathWasGiven=" + (System.getProperty("jdk.module.path") != null));
+    System.out.println("named=" + Main.class.getModule().isNamed());
+    System.out.println("module=" + Main.class.getModule().getName());
+    System.out.println("class=" + Main.class.getName());
+  }
+}
+```
 
 ### Review
 
@@ -8222,7 +8575,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2"`, `"verified": null`
+To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2"`, `"verified": "sha256:89b9e6b7bd210be67a88f45bad724d8c67fcd44253131820512698704d2fc2b9"`
 
 **Comments:**
 
@@ -8263,7 +8616,114 @@ Requires mapping service consumption and service implementation to the correct m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+providerResolved=true
+loaded=[LOUD from provider]
+declaredUses=[s.Greeter]
+providerProvides=[s.Greeter->[p.Loud]]
+```
+
+That program, across 6 files:
+
+`modules/api/module-info.java`:
+
+```java
+module api {
+  exports s;
+}
+```
+
+`modules/api/s/Greeter.java`:
+
+```java
+package s;
+
+/** The service type: an interface both the consumer and the provider name. */
+public interface Greeter {
+
+  String greet();
+}
+```
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.util.ServiceLoader;
+import java.util.TreeSet;
+import s.Greeter;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The provider module is not required by anything. It is in the graph because app declares
+    // uses and the resolver binds providers of that service, which is what the pair is for.
+    System.out.println("providerResolved=" + ModuleLayer.boot().findModule("provider").isPresent());
+
+    TreeSet<String> greetings = new TreeSet<>();
+    for (Greeter greeter : ServiceLoader.load(Greeter.class)) {
+      greetings.add(greeter.greet() + " from " + greeter.getClass().getModule().getName());
+    }
+    System.out.println("loaded=" + greetings);
+
+    System.out.println("declaredUses=" + Main.class.getModule().getDescriptor().uses());
+    System.out.println(
+        "providerProvides="
+            + ModuleLayer.boot()
+                .findModule("provider")
+                .orElseThrow()
+                .getDescriptor()
+                .provides()
+                .stream()
+                .map(p -> p.service() + "->" + p.providers())
+                .toList());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// A consumer declares the service type it loads. Without uses, ServiceLoader finds nothing from
+// this module, and the provider module is not even pulled into the graph.
+module app {
+  requires api;
+  uses s.Greeter;
+}
+```
+
+`modules/provider/module-info.java`:
+
+```java
+// A provider declares what it implements and with which class. The directive names the service
+// interface first and the implementation second, and the implementation must be in this module.
+module provider {
+  requires api;
+  provides s.Greeter with p.Loud;
+}
+```
+
+`modules/provider/p/Loud.java`:
+
+```java
+package p;
+
+import s.Greeter;
+
+/** Needs a public no-argument constructor for ServiceLoader to instantiate it. */
+public final class Loud implements Greeter {
+
+  public Loud() {}
+
+  @Override
+  public String greet() {
+    return "LOUD";
+  }
+}
+```
 
 ### Review
 
@@ -8278,7 +8738,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518"`, `"verified": null`
+To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518"`, `"verified": "sha256:02ba7787ad244576db685cfd89ffe6a07695123b62acb4205c55cd05d257d2ff"`
 
 **Comments:**
 
@@ -8387,7 +8847,108 @@ Requires separating reflective openness from compile-time export accessibility a
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+isOpen=true
+opensDirectives=0
+exportsDirectives=[l]
+lOpenToApp=true
+hOpenToApp=true
+ordinaryCallIntoExported=exported
+privateFieldOfUnexported=deeplyReflected
+hInExports=false
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+import java.lang.reflect.Field;
+import java.util.TreeSet;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Module lib = l.Api.class.getModule();
+    Module app = Main.class.getModule();
+    ModuleDescriptor descriptor = lib.getDescriptor();
+
+    System.out.println("isOpen=" + descriptor.isOpen());
+    // An open module declares no opens directives: being open covers every package it has.
+    System.out.println("opensDirectives=" + descriptor.opens().size());
+    TreeSet<String> exported = new TreeSet<>();
+    descriptor.exports().forEach(e -> exported.add(e.source()));
+    System.out.println("exportsDirectives=" + exported);
+
+    System.out.println("lOpenToApp=" + lib.isOpen("l", app));
+    System.out.println("hOpenToApp=" + lib.isOpen("h", app));
+    System.out.println("ordinaryCallIntoExported=" + l.Api.value());
+
+    // Deep reflection into the package that is *not* exported, which is what open grants.
+    Class<?> internal = Class.forName("h.Internal");
+    Field secret = internal.getDeclaredField("secret");
+    secret.setAccessible(true);
+    System.out.println("privateFieldOfUnexported=" + secret.get(internal.getDeclaredConstructor().newInstance()));
+
+    // The compile-time half of this -- that a non-exported package still cannot be named in
+    // source -- is proved by t07-export-does-not-make-type-public, which fails to compile for
+    // exactly that reason. A program that runs cannot also be a program that does not compile.
+    System.out.println("hInExports=" + exported.contains("h"));
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/h/Internal.java`:
+
+```java
+package h;
+
+/** In a package the module never exports, so no other module can name this type in source. */
+public final class Internal {
+
+  private final String secret = "deeplyReflected";
+
+  public Internal() {}
+}
+```
+
+`modules/lib/l/Api.java`:
+
+```java
+package l;
+
+public final class Api {
+
+  private Api() {}
+
+  public static String value() {
+    return "exported";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// An open module. Every package is open for deep reflection, including h, which is not exported.
+// exports still names exactly one package, and that is what ordinary compile-time access goes by.
+open module lib {
+  exports l;
+}
+```
 
 ### Review
 
@@ -8402,7 +8963,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5a88b0b9ff4f9b7"`, `"verified": null`
+To record: `"digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5a88b0b9ff4f9b7"`, `"verified": "sha256:37563b482716882d7df61eb7411262ab3dd09c36c4228e9d2d0df6b251aa72d7"`
 
 **Comments:**
 
@@ -8443,7 +9004,124 @@ Tests the difference between an unqualified export and an export targeted to a f
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+toApp=true
+toOther=true
+toJavaBase=false
+lUnqualified=false
+qUnqualified=true
+readFromOther=internal
+readHere=internal
+```
+
+That program, across 7 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Module lib = l.Internal.class.getModule();
+    Module app = Main.class.getModule();
+    Module other = x.Named.class.getModule();
+    Module javaBase = Object.class.getModule();
+
+    // app and other are the two modules the qualified export names, so both may read l; and
+    // both really do, which is what the compiled call below shows.
+    System.out.println("toApp=" + lib.isExported("l", app));
+    System.out.println("toOther=" + lib.isExported("l", other));
+    System.out.println("toJavaBase=" + lib.isExported("l", javaBase));
+    // Unqualified means exported to every module, which the qualified one is not.
+    System.out.println("lUnqualified=" + lib.isExported("l"));
+    System.out.println("qUnqualified=" + lib.isExported("q"));
+    System.out.println("readFromOther=" + x.Named.read());
+    System.out.println("readHere=" + l.Internal.secret());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+  requires other;
+}
+```
+
+`modules/lib/l/Internal.java`:
+
+```java
+package l;
+
+/** Public, in a package exported only to the named modules. */
+public final class Internal {
+
+  private Internal() {}
+
+  public static String secret() {
+    return "internal";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// A qualified export: the package is available to the two named modules and to nobody else.
+module lib {
+  exports l to app, other;
+  exports q;
+}
+```
+
+`modules/lib/q/Open.java`:
+
+```java
+package q;
+
+/** Public, in a package exported to everyone. */
+public final class Open {
+
+  private Open() {}
+
+  public static String value() {
+    return "open";
+  }
+}
+```
+
+`modules/other/module-info.java`:
+
+```java
+// Named in the qualified export, so it may read l.
+module other {
+  requires lib;
+  exports x;
+}
+```
+
+`modules/other/x/Named.java`:
+
+```java
+package x;
+
+import l.Internal;
+
+public final class Named {
+
+  private Named() {}
+
+  public static String read() {
+    return Internal.secret();
+  }
+}
+```
 
 ### Review
 
@@ -8458,7 +9136,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92"`, `"verified": null`
+To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92"`, `"verified": "sha256:cb2fec7270c07e63bcab6f4b4cb4c3a2f73d005558f81f8c73b4c95bebd4f00e"`
 
 **Comments:**
 
@@ -8499,7 +9177,86 @@ Requires distinguishing ordinary module readability from the special compile-tim
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+modifiers=[STATIC]
+isStatic=true
+appResolved=true
+optionalResolved=false
+classLoaded=false
+```
+
+That program, across 4 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    ModuleDescriptor descriptor = Main.class.getModule().getDescriptor();
+    ModuleDescriptor.Requires optional =
+        descriptor.requires().stream()
+            .filter(r -> r.name().equals("optional"))
+            .findFirst()
+            .orElseThrow();
+    // Compile time: the dependency is declared, and the STATIC modifier is what makes it
+    // optional later. The whole graph compiled, which is the compile-time half of the claim.
+    System.out.println("modifiers=" + optional.modifiers());
+    System.out.println(
+        "isStatic=" + optional.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+
+    // Run time: optional sits on the module path next to app and still was not resolved, because
+    // a static dependency on its own does not pull a module into the graph.
+    System.out.println("appResolved=" + ModuleLayer.boot().findModule("app").isPresent());
+    System.out.println("optionalResolved=" + ModuleLayer.boot().findModule("optional").isPresent());
+    try {
+      Class.forName("o.Flag");
+      System.out.println("classLoaded=true");
+    } catch (ClassNotFoundException e) {
+      System.out.println("classLoaded=false");
+    }
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// requires static: app compiles against optional, but at run time the module system does not
+// resolve it unless something else pulls it in.
+module app {
+  requires static optional;
+}
+```
+
+`modules/optional/module-info.java`:
+
+```java
+module optional {
+  exports o;
+}
+```
+
+`modules/optional/o/Flag.java`:
+
+```java
+package o;
+
+public final class Flag {
+
+  private Flag() {}
+
+  public static String name() {
+    return "optional";
+  }
+}
+```
 
 ### Review
 
@@ -8514,7 +9271,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b"`, `"verified": null`
+To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b"`, `"verified": "sha256:b7021ceb205085071e10e567e045853ae1c06478b100a69c657120a42b2d8629"`
 
 **Comments:**
 
@@ -8833,7 +9590,42 @@ Tests the special visibility limitation of types declared in the unnamed package
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: cant.resolve.location
+```
+
+That program, across 2 files:
+
+`Helper.java`:
+
+```java
+/** A top-level type in the unnamed package: the file declares no package. */
+public class Helper {
+
+  public static String name() {
+    return "helper";
+  }
+}
+```
+
+`Main.java`:
+
+```java
+package p;
+
+// There is no way to write the import either: `import Helper;` is not even grammatical, because
+// an import needs a qualified name and the unnamed package has no name to qualify with. So the
+// reference below is the honest test, and it fails to resolve: a type in a named package cannot
+// reach a top-level type of the unnamed package at all.
+public class Main {
+
+  public static void main(String[] args) {
+    System.out.println(Helper.name());
+  }
+}
+```
 
 ### Review
 
@@ -8848,7 +9640,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1"`, `"verified": null`
+To record: `"digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1"`, `"verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f"`
 
 **Comments:**
 

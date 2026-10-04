@@ -1,0 +1,5 @@
+modifiers=[STATIC]
+isStatic=true
+appResolved=true
+optionalResolved=false
+classLoaded=false

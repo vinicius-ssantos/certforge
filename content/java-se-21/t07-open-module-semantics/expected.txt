@@ -1,0 +1,8 @@
+isOpen=true
+opensDirectives=0
+exportsDirectives=[l]
+lOpenToApp=true
+hOpenToApp=true
+ordinaryCallIntoExported=exported
+privateFieldOfUnexported=deeplyReflected
+hInExports=false
