@@ -1,5 +1,6 @@
 import type { Revision } from "../api/types";
-import { DIFFICULTY_LABEL, TYPE_LABEL } from "./labels";
+import type { Catalog } from "../i18n/en";
+import { difficultyLabels, typeLabels } from "./labels";
 
 export interface Piece {
   kind: "same" | "added" | "removed";
@@ -75,18 +76,22 @@ export function diffRevisions(
   previous: Revision,
   next: Revision,
   topicName: (id: string) => string | undefined,
+  t: Catalog,
 ): Change[] {
+  const d = t.editorial.diff;
+  const types = typeLabels(t);
+  const difficulties = difficultyLabels(t);
   const changes: (Change | null)[] = [
-    text("Question", previous.prompt, next.prompt),
-    text("Type", name(TYPE_LABEL, previous.type), name(TYPE_LABEL, next.type)),
+    text(d.question, previous.prompt, next.prompt),
+    text(d.type, name(types, previous.type), name(types, next.type)),
     text(
-      "Topic",
-      previous.topicId ? (topicName(previous.topicId) ?? "Another topic") : "",
-      next.topicId ? (topicName(next.topicId) ?? "Another topic") : "",
+      d.topic,
+      previous.topicId ? (topicName(previous.topicId) ?? d.anotherTopic) : "",
+      next.topicId ? (topicName(next.topicId) ?? d.anotherTopic) : "",
     ),
-    text("Difficulty", name(DIFFICULTY_LABEL, previous.difficulty), name(DIFFICULTY_LABEL, next.difficulty)),
-    text("Java release", previous.javaRelease ? String(previous.javaRelease) : "", next.javaRelease ? String(next.javaRelease) : ""),
-    text("Why this difficulty", previous.difficultyRationale, next.difficultyRationale),
+    text(d.difficulty, name(difficulties, previous.difficulty), name(difficulties, next.difficulty)),
+    text(d.javaRelease, previous.javaRelease ? String(previous.javaRelease) : "", next.javaRelease ? String(next.javaRelease) : ""),
+    text(d.whyThisDifficulty, previous.difficultyRationale, next.difficultyRationale),
   ];
 
   const keys = [...new Set([...previous.options.map((o) => o.key), ...next.options.map((o) => o.key)])].sort();
@@ -94,37 +99,37 @@ export function diffRevisions(
     const before = previous.options.find((option) => option.key === key);
     const after = next.options.find((option) => option.key === key);
     if (!before) {
-      changes.push({ label: `Option ${key} added`, pieces: [{ kind: "added", text: after!.text }] });
+      changes.push({ label: d.optionAdded(key), pieces: [{ kind: "added", text: after!.text }] });
       continue;
     }
     if (!after) {
-      changes.push({ label: `Option ${key} removed`, pieces: [{ kind: "removed", text: before.text }] });
+      changes.push({ label: d.optionRemoved(key), pieces: [{ kind: "removed", text: before.text }] });
       continue;
     }
-    changes.push(text(`Option ${key}`, before.text, after.text));
+    changes.push(text(d.option(key), before.text, after.text));
     if (before.correct !== after.correct) {
       changes.push({
-        label: `Option ${key} correctness`,
+        label: d.optionCorrectness(key),
         pieces: [
-          { kind: "removed", text: before.correct ? "correct" : "incorrect" },
+          { kind: "removed", text: before.correct ? d.correct : d.incorrect },
           { kind: "same", text: " " },
-          { kind: "added", text: after.correct ? "correct" : "incorrect" },
+          { kind: "added", text: after.correct ? d.correct : d.incorrect },
         ],
       });
     }
-    changes.push(text(`Reason for ${key}`, before.explanation, after.explanation));
+    changes.push(text(d.reasonFor(key), before.explanation, after.explanation));
   }
 
-  changes.push(text("Explanation", previous.explanation, next.explanation));
+  changes.push(text(d.explanation, previous.explanation, next.explanation));
 
   const refs = (revision: Revision) => revision.references.map((reference) => `${reference.title} (${reference.url})`);
   const oldRefs = refs(previous);
   const newRefs = refs(next);
   for (const reference of oldRefs.filter((item) => !newRefs.includes(item))) {
-    changes.push({ label: "Reference removed", pieces: [{ kind: "removed", text: reference }] });
+    changes.push({ label: d.referenceRemoved, pieces: [{ kind: "removed", text: reference }] });
   }
   for (const reference of newRefs.filter((item) => !oldRefs.includes(item))) {
-    changes.push({ label: "Reference added", pieces: [{ kind: "added", text: reference }] });
+    changes.push({ label: d.referenceAdded, pieces: [{ kind: "added", text: reference }] });
   }
 
   return changes.filter((change): change is Change => change !== null);

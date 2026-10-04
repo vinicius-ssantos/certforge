@@ -4,29 +4,38 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { useHasAny } from "../auth/permissions";
 import { useTopicNames } from "../history/useTopicNames";
+import type { Catalog } from "../i18n/en";
+import { useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { StatusMark } from "./StatusParts";
 
-const FILTERS = [
-  { label: "All", status: null },
-  { label: "Drafts", status: "DRAFT" },
-  { label: "Waiting for review", status: "TECHNICAL_REVIEW" },
-  { label: "Approved", status: "APPROVED" },
-  { label: "Published", status: "PUBLISHED" },
-] as const;
+/** The statuses the queue can be narrowed to, in the order they are offered. */
+const FILTER_STATUSES = [null, "DRAFT", "TECHNICAL_REVIEW", "APPROVED", "PUBLISHED"] as const;
 
-type Status = Exclude<(typeof FILTERS)[number]["status"], null>;
+type Status = Exclude<(typeof FILTER_STATUSES)[number], null>;
+
+function filters(t: Catalog): { label: string; status: (typeof FILTER_STATUSES)[number] }[] {
+  return [
+    { label: t.editorial.queue.filterAll, status: null },
+    { label: t.editorial.queue.filterDrafts, status: "DRAFT" },
+    { label: t.editorial.queue.filterWaiting, status: "TECHNICAL_REVIEW" },
+    { label: t.editorial.queue.filterApproved, status: "APPROVED" },
+    { label: t.editorial.queue.filterPublished, status: "PUBLISHED" },
+  ];
+}
 
 export function QueuePage() {
-  useDocumentTitle("Questions");
+  const t = useText();
+  useDocumentTitle(t.editorial.queue.title);
   const api = useApi();
   const canAuthor = useHasAny("CONTENT_AUTHOR");
   const canManageCatalog = useHasAny("CATALOG_MANAGE");
   const topicNames = useTopicNames();
   const [params] = useSearchParams();
   const requested = params.get("status");
-  const status = FILTERS.find((filter) => filter.status === requested)?.status ?? null;
+  const tabs = filters(t);
+  const status = FILTER_STATUSES.find((candidate) => candidate === requested) ?? null;
 
   const questions = useQuery({
     queryKey: ["editorial", "questions", status],
@@ -42,18 +51,18 @@ export function QueuePage() {
   return (
     <>
       <div className="page-head">
-        <h1>Questions</h1>
+        <h1>{t.editorial.queue.title}</h1>
         <div className="head-actions">
-          {canManageCatalog ? <Link to="/editorial/catalog">Catalog</Link> : null}
+          {canManageCatalog ? <Link to="/editorial/catalog">{t.editorial.catalogTitle}</Link> : null}
           {canAuthor ? (
             <Link to="/editorial/new" className="button">
-              New question
+              {t.editorial.newQuestion}
             </Link>
           ) : null}
         </div>
       </div>
-      <nav className="tabs" aria-label="Filter by status">
-        {FILTERS.map((filter) => (
+      <nav className="tabs" aria-label={t.editorial.queue.filterLabel}>
+        {tabs.map((filter) => (
           <Link
             key={filter.label}
             to={filter.status ? `/editorial?status=${filter.status}` : "/editorial"}
@@ -63,30 +72,32 @@ export function QueuePage() {
           </Link>
         ))}
       </nav>
-      {questions.isPending ? <Loading label="Loading questions" /> : null}
+      {questions.isPending ? <Loading label={t.editorial.queue.loading} /> : null}
       {questions.isError ? (
         <ErrorState error={questions.error} onRetry={() => void questions.refetch()} />
       ) : null}
       {questions.data && questions.data.length === 0 ? (
-        <EmptyState title={status ? "No questions with this status" : "No questions yet"}>
+        <EmptyState
+          title={status ? t.editorial.queue.emptyWithStatus : t.editorial.queue.emptyTitle}
+        >
           <p>
-            {canAuthor
-              ? "Write the first one with New question, or import a content pack."
-              : "Questions appear here once an editor writes them."}
+            {canAuthor ? t.editorial.queue.emptyBodyAuthor : t.editorial.queue.emptyBodyReader}
           </p>
         </EmptyState>
       ) : null}
       {questions.data && questions.data.length > 0 ? (
         <table className="queue">
           <caption className="visually-hidden">
-            {FILTERS.find((filter) => filter.status === status)?.label} questions
+            {t.editorial.queue.tableCaption(
+              tabs.find((filter) => filter.status === status)?.label ?? "",
+            )}
           </caption>
           <thead>
             <tr>
-              <th scope="col">Question</th>
-              <th scope="col">Topic</th>
-              <th scope="col">Status</th>
-              <th scope="col">Revision</th>
+              <th scope="col">{t.editorial.queue.question}</th>
+              <th scope="col">{t.editorial.queue.topic}</th>
+              <th scope="col">{t.editorial.queue.status}</th>
+              <th scope="col">{t.editorial.queue.revision}</th>
             </tr>
           </thead>
           <tbody>
@@ -94,10 +105,14 @@ export function QueuePage() {
               <tr key={question.id}>
                 <td className="question-cell">
                   <Link to={`/editorial/questions/${question.id}`}>
-                    {question.prompt?.split("\n")[0] || "Untitled draft"}
+                    {question.prompt?.split("\n")[0] || t.editorial.queue.untitled}
                   </Link>
                 </td>
-                <td>{question.topicId ? (topicNames.get(question.topicId) ?? "Topic") : "No topic yet"}</td>
+                <td>
+                  {question.topicId
+                    ? (topicNames.get(question.topicId) ?? t.editorial.queue.fallbackTopic)
+                    : t.editorial.queue.noTopicYet}
+                </td>
                 <td>
                   <StatusMark status={question.latestStatus} />
                 </td>

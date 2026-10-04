@@ -1,14 +1,19 @@
 import { Prompt } from "../ui/Prompt";
 import { useMemo, useState, type FormEvent } from "react";
 import type { AttemptRequest, Confidence, Question } from "../api/types";
+import { useText } from "../i18n/useText";
+import type { Catalog } from "../i18n/en";
 import { ErrorSummary } from "../ui/Form";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
 
-const CONFIDENCE: { value: Confidence; label: string }[] = [
-  { value: "LOW", label: "Low – I am guessing" },
-  { value: "MEDIUM", label: "Medium – I am fairly sure" },
-  { value: "HIGH", label: "High – I am certain" },
-];
+/** The levels in the order they are offered, with the wording read from the active catalog. */
+function confidenceLevels(t: Catalog): { value: Confidence; label: string }[] {
+  return [
+    { value: "LOW", label: t.question.confidenceLow },
+    { value: "MEDIUM", label: t.question.confidenceMedium },
+    { value: "HIGH", label: t.question.confidenceHigh },
+  ];
+}
 
 /**
  * One question. The learner picks one answer (single choice) or any number (multiple choice), says
@@ -34,6 +39,7 @@ export function QuestionForm({
   submitting: boolean;
   onSubmit: (request: AttemptRequest, idempotencyKey: string) => void;
 }) {
+  const t = useText();
   const heading = useFocusOnMount<HTMLHeadingElement>();
   const [shownAt] = useState(() => performance.now());
   const [idempotencyKey] = useState(() => crypto.randomUUID());
@@ -60,11 +66,11 @@ export function QuestionForm({
     if (selected.length === 0) {
       found.push({
         fieldId: firstOption,
-        message: multiple ? "Choose at least one answer." : "Choose an answer.",
+        message: multiple ? t.question.chooseAtLeastOne : t.question.chooseOne,
       });
     }
     if (!confidence) {
-      found.push({ fieldId: "confidence-LOW", message: "Say how confident you are." });
+      found.push({ fieldId: "confidence-LOW", message: t.question.sayConfidence });
     }
     setProblems(found);
     if (found.length > 0 || !confidence) {
@@ -90,14 +96,14 @@ export function QuestionForm({
   return (
     <section aria-labelledby="question-heading">
       <h2 id="question-heading" ref={heading} tabIndex={-1}>
-        Question {number} of {total}
+        {t.question.heading(number, total)}
       </h2>
       <ErrorSummary problems={shown} />
       <form onSubmit={submit} noValidate>
         <Prompt text={question.prompt} />
 
         <fieldset>
-          <legend>{multiple ? "Choose all the correct answers" : "Choose one answer"}</legend>
+          <legend>{multiple ? t.question.chooseAllCorrect : t.question.chooseOneAnswer}</legend>
           {question.options.map((option) => (
             <div key={option.key} className="choice">
               <input
@@ -108,7 +114,7 @@ export function QuestionForm({
                 onChange={() => toggle(option.key)}
               />
               <label htmlFor={`option-${option.key}`}>
-                <span className="visually-hidden">Option {option.key}: </span>
+                <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
                 {option.text}
               </label>
             </div>
@@ -116,8 +122,8 @@ export function QuestionForm({
         </fieldset>
 
         <fieldset>
-          <legend>How confident are you?</legend>
-          {CONFIDENCE.map((level) => (
+          <legend>{t.question.confidenceLegend}</legend>
+          {confidenceLevels(t).map((level) => (
             <div key={level.value} className="choice">
               <input
                 id={`confidence-${level.value}`}
@@ -132,7 +138,7 @@ export function QuestionForm({
         </fieldset>
 
         <button type="submit" disabled={submitting}>
-          {submitting ? "Submitting…" : "Submit answer"}
+          {submitting ? t.question.submitting : t.question.submit}
         </button>
       </form>
     </section>

@@ -7,8 +7,9 @@ import type { EditorialQuestion, Revision } from "../api/types";
 import { useHasAny } from "../auth/permissions";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
+import { useText } from "../i18n/useText";
 import { errorMessage } from "../ui/messages";
-import { CHECKLIST } from "./labels";
+import { checklist } from "./labels";
 
 type Action = "approve" | "request-changes" | "publish" | "deprecate" | "new-revision";
 
@@ -38,6 +39,8 @@ export function ReviewPanel({
   revision: Revision;
   isLatest: boolean;
 }) {
+  const t = useText();
+  const panel = t.editorial.reviewPanel;
   const api = useApi();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -89,12 +92,12 @@ export function ReviewPanel({
         navigate(`${location.pathname}${location.search}`, { replace: true, state: { notice } });
       }
     },
-    onError: (error) => setFailure(errorMessage(error)),
+    onError: (error) => setFailure(errorMessage(error, t)),
   });
 
   function requestChanges() {
     if (!comment.trim()) {
-      setProblems([{ fieldId: "review-comment", message: "Say what needs to change before sending it back." }]);
+      setProblems([{ fieldId: "review-comment", message: panel.sayWhatToChange }]);
       return;
     }
     setProblems([]);
@@ -114,11 +117,9 @@ export function ReviewPanel({
         <form onSubmit={(event) => event.preventDefault()} noValidate>
           <ErrorSummary problems={shown} />
           <fieldset>
-            <legend>Content policy</legend>
-            <p className="hint">
-              Tick only what you checked yourself. The items you tick are recorded with your decision.
-            </p>
-            {CHECKLIST.map((item) => (
+            <legend>{panel.policyLegend}</legend>
+            <p className="hint">{panel.policyHint}</p>
+            {checklist(t).map((item) => (
               <label key={item.code} className="check">
                 <input
                   type="checkbox"
@@ -135,9 +136,9 @@ export function ReviewPanel({
             ))}
           </fieldset>
           <div className="field">
-            <label htmlFor="review-comment">Comment</label>
+            <label htmlFor="review-comment">{panel.comment}</label>
             <p id="review-comment-hint" className="hint">
-              Needed when you ask for changes. The author sees it.
+              {panel.commentHint}
             </p>
             <textarea
               id="review-comment"
@@ -149,12 +150,12 @@ export function ReviewPanel({
           </div>
           <div className="stack">
             <button type="button" className="approve" disabled={decide.isPending} onClick={() => decide.mutate("approve")}>
-              Approve
+              {panel.approve}
             </button>
             <button type="button" className="warn" disabled={decide.isPending} onClick={requestChanges}>
-              Request changes
+              {panel.requestChanges}
             </button>
-            <p className="hint">Requesting changes returns the revision to its author as a draft.</p>
+            <p className="hint">{panel.requestChangesHint}</p>
           </div>
         </form>
       ) : (
@@ -163,27 +164,24 @@ export function ReviewPanel({
 
       {can.publish ? (
         <section className="publish" aria-labelledby="publish-heading">
-          <h2 id="publish-heading">Publish</h2>
-          <p>
-            Only approved revisions can be published. A published revision cannot be edited; a correction becomes a
-            new revision.
-          </p>
+          <h2 id="publish-heading">{panel.publishHeading}</h2>
+          <p>{panel.publishNote}</p>
           {revision.status === "APPROVED" ? (
             <Confirm
-              title={`Confirm publishing revision ${revision.number}`}
-              explain={`Publish revision ${revision.number}? Learners will get this question in their sessions, and the revision it replaces is retired.`}
-              confirmLabel={`Yes, publish revision ${revision.number}`}
+              title={panel.confirmPublishTitle(revision.number)}
+              explain={panel.confirmPublishExplain(revision.number)}
+              confirmLabel={panel.confirmPublishLabel(revision.number)}
               busy={decide.isPending}
               onConfirm={() => decide.mutate("publish")}
             >
-              Publish revision {revision.number}
+              {panel.publishRevision(revision.number)}
             </Confirm>
           ) : (
             <>
               <button type="button" disabled>
-                Publish revision {revision.number}
+                {panel.publishRevision(revision.number)}
               </button>
-              <p className="hint">Approve it first.</p>
+              <p className="hint">{panel.approveFirst}</p>
             </>
           )}
         </section>
@@ -191,26 +189,26 @@ export function ReviewPanel({
 
       {can.retire ? (
         <section className="publish" aria-labelledby="retire-heading">
-          <h2 id="retire-heading">Retire</h2>
-          <p>A retired revision stays in history and in learners' past answers, and no new session will use it.</p>
+          <h2 id="retire-heading">{panel.retireHeading}</h2>
+          <p>{panel.retireNote}</p>
           <Confirm
-            title={`Confirm retiring revision ${revision.number}`}
-            explain={`Retire revision ${revision.number}? New sessions will no longer include this question unless a newer revision is published.`}
-            confirmLabel={`Yes, retire revision ${revision.number}`}
+            title={panel.confirmRetireTitle(revision.number)}
+            explain={panel.confirmRetireExplain(revision.number)}
+            confirmLabel={panel.confirmRetireLabel(revision.number)}
             busy={decide.isPending}
             onConfirm={() => decide.mutate("deprecate")}
           >
-            Retire revision {revision.number}
+            {panel.retireRevision(revision.number)}
           </Confirm>
         </section>
       ) : null}
 
       {can.startRevision ? (
         <section className="publish" aria-labelledby="revise-heading">
-          <h2 id="revise-heading">Correct this question</h2>
-          <p>Starting a revision copies this one into a new draft. The published text stays as it is until the new one is published.</p>
+          <h2 id="revise-heading">{panel.reviseHeading}</h2>
+          <p>{panel.reviseNote}</p>
           <button type="button" disabled={decide.isPending} onClick={() => decide.mutate("new-revision")}>
-            Start a new revision
+            {panel.startRevision}
           </button>
         </section>
       ) : null}

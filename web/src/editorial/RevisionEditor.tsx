@@ -5,6 +5,7 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { Revision } from "../api/types";
 import { useTopics } from "../catalog/useTopics";
+import { useText } from "../i18n/useText";
 import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
 import {
@@ -17,7 +18,7 @@ import {
   type Draft,
   type Problem,
 } from "./draft";
-import { VIOLATION } from "./labels";
+import { difficultyLabels, typeLabels, violations as violationWording } from "./labels";
 
 function Field({
   id,
@@ -54,6 +55,11 @@ function questionKey(id: string) {
  * complete means, this only words it.
  */
 export function RevisionEditor({ revision }: { revision?: Revision }) {
+  const t = useText();
+  const ed = t.editorial.editor;
+  const types = typeLabels(t);
+  const difficulties = difficultyLabels(t);
+  const wording = violationWording(t);
   const api = useApi();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -153,7 +159,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         setViolations(list.filter((item): item is string => typeof item === "string"));
         setFailure(null);
       } else {
-        setFailure(errorMessage(error));
+        setFailure(errorMessage(error, t));
       }
     },
   });
@@ -202,8 +208,8 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
     <div className="with-aside">
       <form onSubmit={submit} noValidate>
         {blocker.state === "blocked" ? (
-          <div role="group" aria-label="Unsaved changes" className="confirm">
-            <p>You have changes that are not saved. If you leave now they are lost.</p>
+          <div role="group" aria-label={ed.unsavedLabel} className="confirm">
+            <p>{ed.unsavedWarning}</p>
             <button
               ref={keepEditing}
               type="button"
@@ -212,10 +218,10 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
                 saveButton.current?.focus();
               }}
             >
-              Keep editing
+              {ed.keepEditing}
             </button>{" "}
             <button type="button" className="secondary" onClick={() => blocker.proceed()}>
-              Leave without saving
+              {ed.leaveWithoutSaving}
             </button>
           </div>
         ) : null}
@@ -228,7 +234,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         {changesRequested ? (
           <section className="changes" aria-labelledby="changes-heading">
             <h2 id="changes-heading">
-              {changesRequested.reviewerName ? `${changesRequested.reviewerName} asked for changes` : "A reviewer asked for changes"}
+              {changesRequested.reviewerName
+                ? ed.reviewerAskedForChanges(changesRequested.reviewerName)
+                : ed.someoneAskedForChanges}
             </h2>
             <p>{changesRequested.comment}</p>
           </section>
@@ -236,19 +244,19 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
 
         <div className="row">
           <fieldset className="field">
-            <legend>Type</legend>
+            <legend>{ed.typeLegend}</legend>
             <label className="check">
               <input type="radio" name="type" checked={!multiple} onChange={() => chooseType("SINGLE_CHOICE")} />
-              Single choice
+              {types.SINGLE_CHOICE}
             </label>
             <label className="check">
               <input type="radio" name="type" checked={multiple} onChange={() => chooseType("MULTIPLE_CHOICE")} />
-              Multiple choice
+              {types.MULTIPLE_CHOICE}
             </label>
           </fieldset>
-          <Field id="field-topic" label="Topic">
+          <Field id="field-topic" label={ed.topic}>
             <select id="field-topic" value={draft.topicId} onChange={(event) => change({ topicId: event.target.value })}>
-              <option value="">Choose a topic</option>
+              <option value="">{ed.chooseTopic}</option>
               {topics.map((topic) => (
                 <option key={topic.id} value={topic.id}>
                   {`${"– ".repeat(topic.depth)}${topic.name}`}
@@ -256,22 +264,22 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
               ))}
             </select>
           </Field>
-          <Field id="field-difficulty" label="Difficulty">
+          <Field id="field-difficulty" label={ed.difficulty}>
             <select
               id="field-difficulty"
               value={draft.difficulty}
               onChange={(event) => change({ difficulty: event.target.value as Draft["difficulty"] })}
             >
-              <option value="">Choose a difficulty</option>
-              <option value="EASY">Easy</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HARD">Hard</option>
+              <option value="">{ed.chooseDifficulty}</option>
+              <option value="EASY">{difficulties.EASY}</option>
+              <option value="MEDIUM">{difficulties.MEDIUM}</option>
+              <option value="HARD">{difficulties.HARD}</option>
             </select>
           </Field>
         </div>
 
         <div className="narrow-field">
-          <Field id="field-release" label="Java release">
+          <Field id="field-release" label={ed.javaRelease}>
             <input
               id="field-release"
               type="text"
@@ -282,7 +290,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           </Field>
         </div>
 
-        <Field id="field-rationale" label="Why this difficulty" hint="What makes a candidate likely to get it wrong?">
+        <Field id="field-rationale" label={ed.whyThisDifficulty} hint={ed.whyThisDifficultyHint}>
           <textarea
             id="field-rationale"
             aria-describedby="field-rationale-hint"
@@ -294,8 +302,8 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
 
         <Field
           id="field-prompt"
-          label="Question"
-          hint="Put code in a fenced block (three backticks). The learner sees it exactly as written."
+          label={ed.question}
+          hint={ed.questionHint}
         >
           <textarea
             id="field-prompt"
@@ -308,18 +316,15 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         </Field>
 
         <fieldset id="options" className="field" tabIndex={-1}>
-          <legend>Answer options</legend>
-          <p className="hint">
-            {multiple ? "Mark every correct option." : "Mark the one correct option."} Each option needs a
-            reason, shown to the learner after they answer, wrong options included.
-          </p>
+          <legend>{ed.optionsLegend}</legend>
+          <p className="hint">{ed.optionsHint(multiple)}</p>
           {draft.options.map((option, index) => (
             <div key={index} className="option">
               <div className="letter" aria-hidden="true">
                 {KEYS[index]}
               </div>
               <div>
-                <Field id={`option-text-${index}`} label={`Option ${KEYS[index]}`}>
+                <Field id={`option-text-${index}`} label={ed.optionLabel(KEYS[index]!)}>
                   <input
                     id={`option-text-${index}`}
                     type="text"
@@ -334,9 +339,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
                     checked={option.correct}
                     onChange={(event) => markCorrect(index, event.target.checked)}
                   />
-                  Option {KEYS[index]} is correct
+                  {ed.optionIsCorrect(KEYS[index]!)}
                 </label>
-                <Field id={`option-reason-${index}`} label={`Reason for ${KEYS[index]}`}>
+                <Field id={`option-reason-${index}`} label={ed.reasonFor(KEYS[index]!)}>
                   <textarea
                     id={`option-reason-${index}`}
                     rows={2}
@@ -350,7 +355,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
                     className="link-button"
                     onClick={() => change({ options: draft.options.filter((_, at) => at !== index) })}
                   >
-                    Remove option {KEYS[index]}
+                    {ed.removeOption(KEYS[index]!)}
                   </button>
                 ) : null}
               </div>
@@ -362,12 +367,12 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
               className="secondary"
               onClick={() => change({ options: [...draft.options, emptyOption()] })}
             >
-              Add another option
+              {ed.addOption}
             </button>
           ) : null}
         </fieldset>
 
-        <Field id="field-explanation" label="Explanation" hint="Shown after the learner answers.">
+        <Field id="field-explanation" label={ed.explanation} hint={ed.explanationHint}>
           <textarea
             id="field-explanation"
             className="read"
@@ -379,11 +384,11 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         </Field>
 
         <fieldset id="references" className="field" tabIndex={-1}>
-          <legend>References</legend>
-          <p className="hint">Official documentation only. Links must start with https://</p>
+          <legend>{ed.referencesLegend}</legend>
+          <p className="hint">{ed.referencesHint}</p>
           {draft.references.map((reference, index) => (
             <div key={index} className="reference">
-              <Field id={`reference-title-${index}`} label={`Title of reference ${index + 1}`}>
+              <Field id={`reference-title-${index}`} label={ed.referenceTitle(index + 1)}>
                 <input
                   id={`reference-title-${index}`}
                   type="text"
@@ -397,7 +402,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
                   }
                 />
               </Field>
-              <Field id={`reference-url-${index}`} label={`Link of reference ${index + 1}`}>
+              <Field id={`reference-url-${index}`} label={ed.referenceUrl(index + 1)}>
                 <input
                   id={`reference-url-${index}`}
                   type="text"
@@ -417,7 +422,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
                   className="link-button"
                   onClick={() => change({ references: draft.references.filter((_, at) => at !== index) })}
                 >
-                  Remove reference {index + 1}
+                  {ed.removeReference(index + 1)}
                 </button>
               ) : null}
             </div>
@@ -427,37 +432,34 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
             className="secondary"
             onClick={() => change({ references: [...draft.references, { title: "", url: "" }] })}
           >
-            Add another reference
+            {ed.addReference}
           </button>
         </fieldset>
 
         <div className="actions">
           <button ref={saveButton} type="submit" className="secondary" disabled={save.isPending}>
-            Save draft
+            {ed.saveDraft}
           </button>
           <button type="button" disabled={save.isPending} onClick={() => save.mutate(true)}>
-            Send for review
+            {ed.sendForReview}
           </button>
           <span role="status" className="muted">
-            {save.isPending ? "Saving…" : savedAt ? `Saved at ${savedAt}` : ""}
+            {save.isPending ? ed.saving : savedAt ? ed.savedAt(savedAt) : ""}
           </span>
         </div>
       </form>
 
       <aside aria-labelledby="send-checks">
-        <h2 id="send-checks">Before you can send this</h2>
+        <h2 id="send-checks">{ed.checksHeading}</h2>
         {violations === null ? (
-          <p className="hint">
-            Sending checks the whole revision. Anything missing is listed here, and each item takes you to its
-            field.
-          </p>
+          <p className="hint">{ed.checksHint}</p>
         ) : violations.length === 0 ? (
-          <p>Nothing is missing.</p>
+          <p>{ed.nothingMissing}</p>
         ) : (
           <div role="alert">
             <ul className="todo">
               {violations.map((code) => {
-                const known = VIOLATION[code];
+                const known = wording[code];
                 return (
                   <li key={code}>
                     <span aria-hidden="true">✗</span>
@@ -468,7 +470,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
             </ul>
           </div>
         )}
-        <p className="hint">A reviewer other than you has to approve it before it can be published.</p>
+        <p className="hint">{ed.needsAnotherReviewer}</p>
       </aside>
     </div>
   );

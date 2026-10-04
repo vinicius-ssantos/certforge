@@ -1,12 +1,14 @@
 import { useState, type FormEvent } from "react";
 import { Link, Navigate, useLocation } from "react-router";
+import { useText } from "../i18n/useText";
 import { ErrorSummary, TextField } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { useAuth } from "./AuthContext";
 
 export function LoginPage() {
-  useDocumentTitle("Sign in");
+  const t = useText();
+  useDocumentTitle(t.auth.signIn);
   const { state, login } = useAuth();
   const location = useLocation();
   const from = (location.state as { from?: string } | null)?.from ?? "/";
@@ -24,8 +26,8 @@ export function LoginPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     const errors: { email?: string; password?: string } = {};
-    if (!email.trim()) errors.email = "Enter your email address.";
-    if (!password) errors.password = "Enter your password.";
+    if (!email.trim()) errors.email = t.auth.enterEmail;
+    if (!password) errors.password = t.auth.enterPassword;
     setFieldErrors(errors);
     setFailure(null);
     if (Object.keys(errors).length > 0) {
@@ -35,7 +37,7 @@ export function LoginPage() {
     try {
       await login(email.trim(), password);
     } catch (error) {
-      setFailure(errorMessage(error));
+      setFailure(errorMessage(error, t));
     } finally {
       setSubmitting(false);
     }
@@ -49,12 +51,12 @@ export function LoginPage() {
 
   return (
     <div className="narrow">
-      <h1>Sign in</h1>
+      <h1>{t.auth.signIn}</h1>
       <ErrorSummary problems={problems} />
       <form onSubmit={(event) => void submit(event)} noValidate>
         <TextField
           id="login-email"
-          label="Email"
+          label={t.auth.email}
           type="email"
           autoComplete="email"
           value={email}
@@ -63,7 +65,7 @@ export function LoginPage() {
         />
         <TextField
           id="login-password"
-          label="Password"
+          label={t.auth.password}
           type="password"
           autoComplete="current-password"
           value={password}
@@ -71,11 +73,11 @@ export function LoginPage() {
           error={fieldErrors.password}
         />
         <button type="submit" disabled={submitting}>
-          {submitting ? "Signing in…" : "Sign in"}
+          {submitting ? t.auth.signingIn : t.auth.signIn}
         </button>
       </form>
       <p>
-        New here? <Link to="/register">Create an account</Link>
+        {t.auth.newHere} <Link to="/register">{t.auth.createOne}</Link>
       </p>
     </div>
   );

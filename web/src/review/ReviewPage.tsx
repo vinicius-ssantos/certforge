@@ -4,6 +4,7 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { ReviewQueueItem } from "../api/types";
 import { formatDateTime } from "../history/format";
+import { useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { reasonExplanation, reasonLabel } from "./reasons";
@@ -26,7 +27,8 @@ function summarise(prompt: string): string {
  * whole queue.
  */
 export function ReviewPage() {
-  useDocumentTitle("Review");
+  const t = useText();
+  useDocumentTitle(t.review.title);
   const api = useApi();
   const navigate = useNavigate();
   const queue = useQuery({
@@ -49,15 +51,18 @@ export function ReviewPage() {
   const data = queue.data;
   const byTopic = new Map<string, { name: string; items: ReviewQueueItem[] }>();
   for (const item of data?.items ?? []) {
-    const group = byTopic.get(item.topicId) ?? { name: item.topicName ?? "Topic", items: [] };
+    const group = byTopic.get(item.topicId) ?? {
+      name: item.topicName ?? t.review.fallbackTopic,
+      items: [],
+    };
     group.items.push(item);
     byTopic.set(item.topicId, group);
   }
 
   return (
     <>
-      <h1>Review</h1>
-      {queue.isPending ? <Loading label="Loading your review queue" /> : null}
+      <h1>{t.review.title}</h1>
+      {queue.isPending ? <Loading label={t.review.loading} /> : null}
       {queue.isError ? (
         <ErrorState error={queue.error} onRetry={() => void queue.refetch()} />
       ) : null}
@@ -66,29 +71,22 @@ export function ReviewPage() {
         <EmptyState
           title={
             data.waiting > 0
-              ? "Nothing is due yet"
+              ? t.review.nothingDueTitle
               : data.neverAttempted > 0
-                ? "Nothing to review yet"
-                : "Nothing here yet"
+                ? t.review.nothingToReviewTitle
+                : t.review.nothingHereTitle
           }
         >
-          {data.waiting > 0 ? (
-            <p>
-              You have answered {data.waiting}{" "}
-              {data.waiting === 1 ? "question" : "questions"} correctly and confidently, and they
-              are resting. Each comes back after a gap that grows every time you get it right.
-            </p>
-          ) : null}
+          {data.waiting > 0 ? <p>{t.review.resting(data.waiting)}</p> : null}
           {data.neverAttempted > 0 ? (
             <p>
-              {data.neverAttempted} {data.neverAttempted === 1 ? "question" : "questions"} in the
-              topics you have studied have never been attempted. Review is for revisiting, so start
-              from the <Link to="/">tracks page</Link>.
+              {t.review.neverAttempted(data.neverAttempted)}
+              <Link to="/">{t.review.tracksPageLink}</Link>.
             </p>
           ) : (
             <p>
-              Answer some questions and the ones worth revisiting appear here, with the reason. Start
-              from the <Link to="/">tracks page</Link>.
+              {t.review.startFromTracks}
+              <Link to="/">{t.review.tracksPageLink}</Link>.
             </p>
           )}
         </EmptyState>
@@ -97,11 +95,9 @@ export function ReviewPage() {
       {data && data.items.length > 0 ? (
         <>
           <p>
-            {data.dueNow} {data.dueNow === 1 ? "question is" : "questions are"} worth revisiting
-            {data.items.length < data.dueNow ? `, showing the first ${data.items.length}` : ""}.
-            {data.waiting > 0
-              ? ` ${data.waiting} more ${data.waiting === 1 ? "is" : "are"} resting until their next recall.`
-              : ""}
+            {t.review.dueNow(data.dueNow)}
+            {data.items.length < data.dueNow ? t.review.showingFirst(data.items.length) : ""}.
+            {data.waiting > 0 ? t.review.restingMore(data.waiting) : ""}
           </p>
           {[...byTopic].map(([topicId, group]) => (
             <section key={topicId} aria-labelledby={`topic-${topicId}`}>
@@ -116,19 +112,16 @@ export function ReviewPage() {
                   })
                 }
               >
-                Practise {group.items.length}{" "}
-                {group.items.length === 1 ? "question" : "questions"} in {group.name}
+                {t.review.practise(group.items.length, group.name)}
               </button>
               <ol className="review-queue">
                 {group.items.map((item) => (
                   <li key={item.questionId}>
-                    <strong>{reasonLabel(item.reason)}</strong>
+                    <strong>{reasonLabel(item.reason, t)}</strong>
                     <p>{summarise(item.prompt)}</p>
-                    <p className="muted">{reasonExplanation(item.reason)}</p>
+                    <p className="muted">{reasonExplanation(item.reason, t)}</p>
                     <p className="muted">
-                      Answered {item.timesAttempted}{" "}
-                      {item.timesAttempted === 1 ? "time" : "times"}, {item.timesWrong} wrong. Last
-                      answered{" "}
+                      {t.review.attemptSummary(item.timesAttempted, item.timesWrong)}
                       <time dateTime={item.lastAttemptedAt}>
                         {formatDateTime(item.lastAttemptedAt)}
                       </time>

@@ -1,12 +1,14 @@
 import type { ReactNode } from "react";
 import { ApiError } from "../api/problem";
+import { useText } from "../i18n/useText";
 import { errorMessage } from "./messages";
 
 /** Announced politely to screen readers; sighted users see a plain message. */
-export function Loading({ label = "Loading" }: { label?: string }) {
+export function Loading({ label }: { label?: string }) {
+  const t = useText();
   return (
     <p role="status" className="state">
-      {label}…
+      {label ?? t.states.loading}…
     </p>
   );
 }
@@ -26,19 +28,20 @@ export function EmptyState({ title, children }: { title: string; children?: Reac
  * what happened.
  */
 export function ErrorState({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
+  const t = useText();
   const reference = error instanceof ApiError ? error.requestId : undefined;
   return (
     <div role="alert" className="state state-error">
-      <h2>That did not work</h2>
-      <p>{errorMessage(error)}</p>
+      <h2>{t.states.errorTitle}</h2>
+      <p>{errorMessage(error, t)}</p>
       {reference ? (
         <p className="muted">
-          Reference: <code>{reference}</code>
+          {t.states.reference} <code>{reference}</code>
         </p>
       ) : null}
       {onRetry ? (
         <button type="button" onClick={onRetry}>
-          Try again
+          {t.states.tryAgain}
         </button>
       ) : null}
     </div>

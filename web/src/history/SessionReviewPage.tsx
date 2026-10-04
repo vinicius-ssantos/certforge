@@ -3,15 +3,17 @@ import { useQuery } from "@tanstack/react-query";
 import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
+import { useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime } from "./format";
 
 /** Every answer given in one session, with what was correct and why. Reads only; nothing changes. */
 export function SessionReviewPage() {
+  const t = useText();
   const { sessionId = "" } = useParams();
   const api = useApi();
-  useDocumentTitle("Session review");
+  useDocumentTitle(t.sessionReview.title);
   const attempts = useQuery({
     queryKey: ["history", "attempts", sessionId],
     queryFn: () =>
@@ -24,34 +26,34 @@ export function SessionReviewPage() {
 
   return (
     <>
-      <h1>Session review</h1>
+      <h1>{t.sessionReview.title}</h1>
       <p>
-        <Link to="/history">Back to history</Link>
+        <Link to="/history">{t.sessionReview.backToHistory}</Link>
       </p>
-      {attempts.isPending ? <Loading label="Loading your answers" /> : null}
+      {attempts.isPending ? <Loading label={t.sessionReview.loading} /> : null}
       {attempts.isError ? (
         <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} />
       ) : null}
       {attempts.data && items.length === 0 ? (
-        <EmptyState title="No answers in this session">
-          <p>Nothing was answered before the session closed.</p>
+        <EmptyState title={t.sessionReview.emptyTitle}>
+          <p>{t.sessionReview.emptyBody}</p>
         </EmptyState>
       ) : null}
       {items.length > 0 ? (
         <ol className="review">
           {items.map((attempt) => (
             <li key={attempt.id}>
-              <h2>
-                Question {attempt.position + 1}: {attempt.correct ? "correct" : "incorrect"}
-              </h2>
+              <h2>{t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}</h2>
               <Prompt text={attempt.question.prompt} />
               <p>
-                Your answer: {attempt.selectedOptions.join(", ")}. Confidence:{" "}
-                {attempt.confidence.toLowerCase()}. Answered{" "}
+                {t.sessionReview.yourAnswerLine(
+                  attempt.selectedOptions.join(", "),
+                  t.sessionReview.confidenceName(attempt.confidence),
+                )}
                 <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt)}</time>.
               </p>
               <details>
-                <summary>Show the correct answer and explanation</summary>
+                <summary>{t.sessionReview.showAnswer}</summary>
                 <ul className="answers">
                   {attempt.question.options.map((option) => (
                     <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
@@ -61,8 +63,8 @@ export function SessionReviewPage() {
                         </strong>
                       </p>
                       <p className="muted">
-                        {attempt.selectedOptions.includes(option.key) ? "Your answer. " : ""}
-                        {option.correct ? "Correct answer." : "Incorrect answer."}
+                        {attempt.selectedOptions.includes(option.key) ? t.feedback.yourAnswer : ""}
+                        {option.correct ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
                       </p>
                       {option.explanation ? <p>{option.explanation}</p> : null}
                     </li>
@@ -74,7 +76,7 @@ export function SessionReviewPage() {
                     {attempt.question.references.map((reference) => (
                       <li key={reference.url}>
                         <a href={reference.url} target="_blank" rel="noopener noreferrer">
-                          {reference.title} (opens in a new tab)
+                          {t.feedback.referenceLink(reference.title)}
                         </a>
                       </li>
                     ))}
