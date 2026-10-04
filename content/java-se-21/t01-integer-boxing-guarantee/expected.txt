@@ -1,0 +1,4 @@
+cached=true
+uncachedSameObject=false
+uncachedEquals=true
+cacheEdge=true,false

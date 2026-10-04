@@ -1,0 +1,1 @@
+COMPILE_ERROR: multicatch.types.must.be.disjoint
