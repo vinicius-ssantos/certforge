@@ -21,7 +21,10 @@ function sessionItem(id: string, overrides: Record<string, unknown> = {}) {
   };
 }
 
-const tracks = { "GET /api/catalog/tracks": { body: [javaTrack] } };
+const tracks = {
+  "GET /api/catalog/tracks": { body: [javaTrack] },
+  "GET /api/study/history/mock-exams": { body: { items: [], nextCursor: null } },
+};
 
 describe("history", () => {
   it("lists sessions with topic names, results and a link to review each", async () => {
@@ -58,6 +61,78 @@ describe("history", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
+  it("lists mock runs separately and surfaces weak topics only after close", async () => {
+    renderApp(
+      {
+        "GET /api/catalog/tracks": { body: [javaTrack] },
+        "GET /api/study/history/sessions": { body: { items: [], nextCursor: null } },
+        "GET /api/study/history/mock-exams": {
+          body: {
+            items: [
+              {
+                id: "m1",
+                trackId: javaTrack.id,
+                status: "COMPLETED",
+                questionCount: 50,
+                answeredCount: 48,
+                correctCount: 31,
+                percentage: 62,
+                passingPercentage: 68,
+                passed: false,
+                createdAt: "2026-10-03T10:00:00Z",
+                expiresAt: "2026-10-03T12:00:00Z",
+                closedAt: "2026-10-03T11:40:00Z",
+                topics: [
+                  {
+                    topicId: TOPIC_ID,
+                    total: 5,
+                    answered: 5,
+                    correct: 2,
+                    percentage: 40,
+                    needsReview: true,
+                  },
+                ],
+              },
+              {
+                id: "m2",
+                trackId: javaTrack.id,
+                status: "IN_PROGRESS",
+                questionCount: 50,
+                answeredCount: 12,
+                correctCount: null,
+                percentage: null,
+                passingPercentage: 68,
+                passed: null,
+                createdAt: "2026-10-03T12:30:00Z",
+                expiresAt: "2026-10-03T14:30:00Z",
+                closedAt: null,
+                topics: [],
+              },
+            ],
+            nextCursor: null,
+          },
+        },
+      },
+      { path: "/history" },
+    );
+
+    const table = await screen.findByRole("table", { name: "Your mock exams, newest first" });
+    const rows = within(table).getAllByRole("row");
+    expect(rows).toHaveLength(3);
+    expect(within(rows[1]!).getByRole("link", { name: /Java Certification/ })).toHaveAttribute(
+      "href",
+      "/mock-exams/m1/result",
+    );
+    expect(rows[1]).toHaveTextContent("31 of 50 (62%)");
+    expect(rows[1]).toHaveTextContent("Handling exceptions");
+    expect(within(rows[2]!).getByRole("link", { name: /Java Certification/ })).toHaveAttribute(
+      "href",
+      "/mock-exams/m2",
+    );
+    expect(rows[2]).toHaveTextContent("12 of 50");
+    expect(rows[2]).toHaveTextContent("–");
+  });
+
   it("loads further pages with the cursor when asked", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
@@ -85,7 +160,7 @@ describe("history", () => {
       { path: "/history" },
     );
 
-    expect(await screen.findByRole("heading", { name: "No practice sessions yet" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "No study history yet" })).toBeInTheDocument();
   });
 
   it("shows a failure and retries", async () => {

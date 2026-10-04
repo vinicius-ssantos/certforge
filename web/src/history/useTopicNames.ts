@@ -23,3 +23,14 @@ export function useTopicNames(): Map<string, string> {
   }
   return names;
 }
+
+
+/** Track names by id, from the same cached catalog request used for topic labels. */
+export function useTrackNames(): Map<string, string> {
+  const api = useApi();
+  const tracks = useQuery({
+    queryKey: ["tracks"],
+    queryFn: () => unwrap(api.GET("/api/catalog/tracks")),
+  });
+  return new Map((tracks.data ?? []).map((track) => [track.id, track.name]));
+}

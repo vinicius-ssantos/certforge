@@ -72,7 +72,9 @@ A mock result describes that run. It is not a readiness forecast or a probabilit
 
 ## Relationship to ordinary progress
 
-Mock responses initially remain separate from ordinary topic-practice attempts. Mixing them into the existing progress projection would silently change the meaning of `attempted`, `correct` and confidence-based review evidence.
+Mock responses remain separate from ordinary topic-practice attempts. Mixing them into the existing progress projection would silently change the meaning of `attempted`, `correct` and confidence-based review evidence.
+
+Mock history therefore has its own read model under `/api/study/history/mock-exams`. While a run is active, history exposes participation only. Once terminal, it exposes the run score and per-topic aggregates; topics below that run's configured practice target are marked `needsReview`. These markers are historical mock evidence and do not mutate ordinary progress or the adaptive-review queue.
 
 ## Learner API
 
@@ -83,11 +85,12 @@ The timed lifecycle is exposed under `/api/study/mock-exams`:
 - `POST /api/study/mock-exams/{sessionId}/questions/{position}/response` accepts one idempotent response. Its response is only a receipt: it deliberately contains no correctness, answer key, explanations or references.
 - `POST /api/study/mock-exams/{sessionId}/finish` closes a live run.
 - `GET /api/study/mock-exams/{sessionId}/result` is available only after completion or expiration. It then exposes the score, topic breakdown and full revision evidence needed for review.
+- `GET /api/study/history/mock-exams` pages the learner's mock runs separately from topic-practice history. Active rows omit correctness; terminal rows include aggregate score and weak-topic markers.
 
 Expiration is based on the persisted deadline and the server clock. Unanswered items remain unanswered evidence and count against the full question-count denominator rather than disappearing from the score. The OpenAPI contract test explicitly checks that active-run schemas do not grow answer material by accident.
 
-## Remaining delivery
+## Learner flow
 
-1. Add the web flow: timer, question navigation, flag for review, submit confirmation.
-2. Add result and history screens with topic breakdown and post-close explanations.
-3. Measure the flow and add operational tests before release.
+The certification track links to a dedicated mock runner. The runner shows the server-backed countdown, direct question navigation, answered state, browser-local review flags and an irreversible submit confirmation that calls out unanswered questions. It never renders correctness while the run is active.
+
+Terminal runs open a result screen with the practice score, elapsed time, named topic breakdown and full answer review. The History page lists mock exams separately from topic practice, resumes active runs, links terminal runs back to their result, and surfaces topics below the run's configured practice target without feeding that signal into ordinary progress.

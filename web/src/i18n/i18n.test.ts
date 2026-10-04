@@ -31,6 +31,7 @@ describe("the catalogs", () => {
       "layout.editorial", // "Editorial" is the same word in Portuguese.
       "editorial.catalogTrack.number", // "#"
       "progress.noValue", // "–", punctuation rather than a word
+      "history.noValue", // the same dash, in the mock exam table
       "editorial.diff.closeBracket", // "]"
     ]);
 

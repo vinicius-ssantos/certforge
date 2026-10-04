@@ -581,6 +581,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/history/mock-exams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["mockExams"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/history/sessions": {
         parameters: {
             query?: never;
@@ -961,6 +977,31 @@ export interface components {
             topicId: string;
             topicName: string | null;
         };
+        MockExamHistoryItem: {
+            /** Format: int32 */
+            answeredCount: number;
+            /** Format: date-time */
+            closedAt: string | null;
+            /** Format: int32 */
+            correctCount: number | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: uuid */
+            id: string;
+            passed: boolean | null;
+            /** Format: int32 */
+            passingPercentage: number;
+            /** Format: int32 */
+            percentage: number | null;
+            /** Format: int32 */
+            questionCount: number;
+            status: string;
+            topics: components["schemas"]["MockExamTopicHistoryItem"][];
+            /** Format: uuid */
+            trackId: string;
+        };
         MockExamQuestionView: {
             answered: boolean;
             /** Format: int32 */
@@ -995,6 +1036,19 @@ export interface components {
         };
         MockExamStartRequest: {
             trackSlug: string;
+        };
+        MockExamTopicHistoryItem: {
+            /** Format: int32 */
+            answered: number;
+            /** Format: int32 */
+            correct: number;
+            needsReview: boolean;
+            /** Format: int32 */
+            percentage: number;
+            /** Format: uuid */
+            topicId: string;
+            /** Format: int32 */
+            total: number;
         };
         MockExamView: {
             /** Format: int32 */
@@ -1040,6 +1094,10 @@ export interface components {
         };
         PageAuditEventView: {
             items: components["schemas"]["AuditEventView"][];
+            nextCursor: string | null;
+        };
+        PageMockExamHistoryItem: {
+            items: components["schemas"]["MockExamHistoryItem"][];
             nextCursor: string | null;
         };
         PageSessionHistoryItem: {
@@ -2230,6 +2288,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["PageAttemptHistoryItem"];
+                };
+            };
+        };
+    };
+    mockExams: {
+        parameters: {
+            query?: {
+                cursor?: string;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PageMockExamHistoryItem"];
                 };
             };
         };

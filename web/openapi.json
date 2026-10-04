@@ -600,6 +600,64 @@
         "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
         "type" : "object"
       },
+      "MockExamHistoryItem" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "correctCount" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "passed" : {
+            "type" : [ "boolean", "null" ]
+          },
+          "passingPercentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamTopicHistoryItem"
+            },
+            "type" : "array"
+          },
+          "trackId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "expiresAt", "id", "passed", "passingPercentage", "percentage", "questionCount", "status", "topics", "trackId" ],
+        "type" : "object"
+      },
       "MockExamQuestionView" : {
         "properties" : {
           "answered" : {
@@ -688,6 +746,35 @@
           }
         },
         "required" : [ "trackSlug" ],
+        "type" : "object"
+      },
+      "MockExamTopicHistoryItem" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "needsReview" : {
+            "type" : "boolean"
+          },
+          "percentage" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "total" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "answered", "correct", "needsReview", "percentage", "topicId", "total" ],
         "type" : "object"
       },
       "MockExamView" : {
@@ -817,6 +904,21 @@
           "items" : {
             "items" : {
               "$ref" : "#/components/schemas/AuditEventView"
+            },
+            "type" : "array"
+          },
+          "nextCursor" : {
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "items", "nextCursor" ],
+        "type" : "object"
+      },
+      "PageMockExamHistoryItem" : {
+        "properties" : {
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamHistoryItem"
             },
             "type" : "array"
           },
@@ -2802,6 +2904,40 @@
               "*/*" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/PageAttemptHistoryItem"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/history/mock-exams" : {
+      "get" : {
+        "operationId" : "mockExams",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "cursor",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PageMockExamHistoryItem"
                 }
               }
             },

@@ -68,12 +68,12 @@ Um resultado de simulado descreve aquela execução. Ele não é previsão de pr
 
 ## Relação com o progresso normal
 
-As respostas do simulado ficam inicialmente separadas das tentativas da prática por tópico. Misturá-las na projeção de progresso atual mudaria silenciosamente o significado de `attempted`, `correct` e da evidência baseada em confiança.
+As respostas do simulado permanecem separadas das tentativas da prática por tópico. Misturá-las na projeção de progresso atual mudaria silenciosamente o significado de `attempted`, `correct` e da evidência baseada em confiança.
 
-## Entregas restantes
+O histórico de simulados, portanto, tem um read model próprio em `/api/study/history/mock-exams`. Enquanto a execução está ativa, o histórico expõe apenas participação. Depois que ela se torna terminal, expõe a pontuação e agregados por tópico; tópicos abaixo da meta de prática daquela execução são marcados como `needsReview`. Esses marcadores são evidência histórica do simulado e não alteram o progresso normal nem a fila de revisão adaptativa.
 
-1. Persistir o agregado do simulado e a evidência imutável das respostas.
-2. Criar endpoints de iniciar/retomar/responder/finalizar/resultado com submissão idempotente.
-3. Criar o fluxo web: cronômetro, navegação, marcação para revisar e confirmação de envio.
-4. Criar telas de resultado e histórico com detalhamento por tópico e explicações após o fechamento.
-5. Medir o fluxo e acrescentar testes operacionais/de contrato antes da release.
+## Fluxo do aluno
+
+A trilha de certificação leva a um runner dedicado de simulado. Ele mostra a contagem regressiva baseada no prazo do servidor, navegação direta entre questões, estado de respondidas, marcações locais para revisão e uma confirmação irreversível de envio que destaca questões não respondidas. Enquanto a execução está ativa, ele nunca renderiza correção.
+
+Execuções terminais abrem uma tela de resultado com pontuação de prática, tempo decorrido, detalhamento por tópico e revisão completa das respostas. A página Histórico lista simulados separadamente da prática por tópico, retoma execuções ativas, liga execuções terminais ao resultado e destaca tópicos abaixo da meta de prática da execução sem alimentar esse sinal no progresso normal.
