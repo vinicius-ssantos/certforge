@@ -658,35 +658,6 @@
           "required" : [ "answeredCount", "closedAt", "correctCount", "createdAt", "expiresAt", "id", "passed", "passingPercentage", "percentage", "questionCount", "status", "topics", "trackId" ],
           "type" : "object"
         },
-        "MockExamTopicHistoryItem" : {
-          "properties" : {
-            "answered" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "correct" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "needsReview" : {
-              "type" : "boolean"
-            },
-            "percentage" : {
-              "format" : "int32",
-              "type" : "integer"
-            },
-            "topicId" : {
-              "format" : "uuid",
-              "type" : "string"
-            },
-            "total" : {
-              "format" : "int32",
-              "type" : "integer"
-            }
-          },
-          "required" : [ "answered", "correct", "needsReview", "percentage", "topicId", "total" ],
-          "type" : "object"
-        },
         "MockExamQuestionView" : {
           "properties" : {
             "answered" : {
@@ -775,6 +746,35 @@
             }
           },
           "required" : [ "trackSlug" ],
+          "type" : "object"
+        },
+        "MockExamTopicHistoryItem" : {
+          "properties" : {
+            "answered" : {
+              "format" : "int32",
+              "type" : "integer"
+            },
+            "correct" : {
+              "format" : "int32",
+              "type" : "integer"
+            },
+            "needsReview" : {
+              "type" : "boolean"
+            },
+            "percentage" : {
+              "format" : "int32",
+              "type" : "integer"
+            },
+            "topicId" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "total" : {
+              "format" : "int32",
+              "type" : "integer"
+            }
+          },
+          "required" : [ "answered", "correct", "needsReview", "percentage", "topicId", "total" ],
           "type" : "object"
         },
         "MockExamView" : {
