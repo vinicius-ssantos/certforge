@@ -1002,19 +1002,6 @@ export interface components {
             /** Format: uuid */
             trackId: string;
         };
-        MockExamTopicHistoryItem: {
-            /** Format: int32 */
-            answered: number;
-            /** Format: int32 */
-            correct: number;
-            needsReview: boolean;
-            /** Format: int32 */
-            percentage: number;
-            /** Format: uuid */
-            topicId: string;
-            /** Format: int32 */
-            total: number;
-        };
         MockExamQuestionView: {
             answered: boolean;
             /** Format: int32 */
@@ -1049,6 +1036,19 @@ export interface components {
         };
         MockExamStartRequest: {
             trackSlug: string;
+        };
+        MockExamTopicHistoryItem: {
+            /** Format: int32 */
+            answered: number;
+            /** Format: int32 */
+            correct: number;
+            needsReview: boolean;
+            /** Format: int32 */
+            percentage: number;
+            /** Format: uuid */
+            topicId: string;
+            /** Format: int32 */
+            total: number;
         };
         MockExamView: {
             /** Format: int32 */
