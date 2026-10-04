@@ -1,0 +1,1 @@
+COMPILE_ERROR: name.clash.same.erasure

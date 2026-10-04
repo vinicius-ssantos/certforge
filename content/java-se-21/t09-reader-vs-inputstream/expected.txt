@@ -1,0 +1,5 @@
+chars=2 bytes=3
+inputStreamRead=[97, 195, 169]
+readerRead=[97, 233]
+decodedMatchesSource=true
+byteCountDiffersFromCharCount=true

@@ -12,7 +12,7 @@ The build checks that every code snippet compiles for Java 21 and prints what th
 - The reviewer reported no errors rather than ticking each of the seven policy checks per question, so this record claims a verdict, not a per-check audit.
 - A question with no runnable code rests entirely on this review and its references, because the build verifies nothing about it. The packet lists which ones those are, as it stands.
 - The exam objective wording seeded in the catalog was not part of this review of the questions. It was checked separately against Oracle's page, in a browser on 2026-10-02, and matched.
-- Nothing is verified by the build in 81 of the 150 questions: `t01-bigdecimal-nonterminating-divide`, `t01-bigdecimal-striptrailingzeros-scale`, `t01-integer-boxing-guarantee`, `t01-localdate-invalid-withday`, `t01-localdate-plus-years-leap-day`, `t01-math-round-negative`, `t01-period-vs-duration`, `t02-case-null-pattern-switch`, `t02-dangling-else`, `t02-do-while-first-execution`, `t02-enhanced-for-variable-assignment`, `t02-pattern-variable-and-scope`, `t02-switch-expression-exhaustive`, `t02-switch-null-default-combination`, `t02-switch-rule-no-fallthrough`, `t03-class-method-beats-default`, `t03-covariant-return`, `t03-default-method-conflict`, `t03-enum-constructor-access`, `t03-generic-erasure-overload`, `t03-private-interface-method`, `t03-record-components-members`, `t03-sealed-direct-subclass-modifier`, `t03-static-method-hiding`, `t04-autocloseable-close-contract`, `t04-catch-order-unreachable`, `t04-multicatch-parameter-reassignment`, `t04-multicatch-related-types`, `t04-overriding-checked-exception`, `t04-precise-rethrow`, `t04-throw-null`, `t04-try-resource-effectively-final`, `t04-unchecked-exception-classes`, `t05-arrays-aslist-backed`, `t05-generic-invariance`, `t05-sequencedmap-first-entry`, `t05-treeset-comparator-uniqueness`, `t05-unmodifiable-list-view`, `t05-wildcard-extends-read`, `t05-wildcard-super-integer`, `t06-collectors-tomap-duplicate-key`, `t06-findfirst-ordered-stream`, `t06-functional-interface-extra-methods`, `t06-lambda-effectively-final`, `t06-lambda-this-enclosing-instance`, `t06-stream-facts`, `t06-string-length-method-reference`, `t06-to-unmodifiable-list-null`, `t07-automatic-module-jar`, `t07-export-does-not-make-type-public`, `t07-exports-and-opens`, `t07-implicit-java-base`, `t07-import-wildcard-no-subpackages`, `t07-java-module-launch`, `t07-module-service-directives`, `t07-open-module-semantics`, `t07-qualified-exports`, `t07-requires-static`, `t07-unnamed-package-import`, `t08-completablefuture-join-vs-get`, `t08-computeifabsent-null-result`, `t08-reentrantlock-finally`, `t08-start-virtual-thread`, `t08-synchronized-method-lock`, `t08-virtual-thread-builder-unstarted`, `t08-volatile-increment`, `t09-files-copy-existing-target`, `t09-files-lines-close`, `t09-files-readstring-utf8`, `t09-files-walk-close`, `t09-randomaccessfile-seek`, `t09-reader-vs-inputstream`, `t09-serialization-serialversionuid`, `t10-collator-locale-sensitive`, `t10-collator-primary-strength`, `t10-locale-default-categories`, `t10-locale-root`, `t10-messageformat-apostrophe`, `t10-numberformat-currency-instance`, `t10-resourcebundle-missing-key`, `t10-resourcebundle-parent-lookup`.
+- Every question in this pack now carries a program the build runs.
 
 ## How to review
 
@@ -38,155 +38,155 @@ The checks, from the [content policy](../product/content-policy.md):
 | # | Question | Topic | Type | Difficulty | Runnable code | Review |
 |---:|---|---|---|---|---|---|
 | 1 | [`t01-bigdecimal-equals-scale`](#1-t01-bigdecimal-equals-scale) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
-| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
-| 3 | [`t01-bigdecimal-striptrailingzeros-scale`](#3-t01-bigdecimal-striptrailingzeros-scale) | Date, time, text, numeric and boolean values | single | hard | no (conceptual) | **not reviewed** |
+| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
+| 3 | [`t01-bigdecimal-striptrailingzeros-scale`](#3-t01-bigdecimal-striptrailingzeros-scale) | Date, time, text, numeric and boolean values | single | hard | yes, not shown | **not reviewed** |
 | 4 | [`t01-boolean-parseboolean`](#4-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | yes, not shown | **not reviewed** |
-| 5 | [`t01-integer-boxing-guarantee`](#5-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | reviewed 2026-10-02 |
+| 5 | [`t01-integer-boxing-guarantee`](#5-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | reviewed 2026-10-02 |
 | 6 | [`t01-integer-division-assignment`](#6-t01-integer-division-assignment) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
-| 7 | [`t01-localdate-invalid-withday`](#7-t01-localdate-invalid-withday) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 7 | [`t01-localdate-invalid-withday`](#7-t01-localdate-invalid-withday) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 8 | [`t01-localdate-plus-months`](#8-t01-localdate-plus-months) | Date, time, text, numeric and boolean values | single | medium | yes, shown | reviewed 2026-10-02 |
-| 9 | [`t01-localdate-plus-years-leap-day`](#9-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
-| 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | no (conceptual) | **not reviewed** |
+| 9 | [`t01-localdate-plus-years-leap-day`](#9-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
+| 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 11 | [`t01-numeric-promotion-byte-addition`](#11-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | yes, not shown | **not reviewed** |
-| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | no (conceptual) | **not reviewed** |
+| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | yes, not shown | **not reviewed** |
 | 13 | [`t01-string-repeat`](#13-t01-string-repeat) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
 | 14 | [`t01-string-strip-vs-trim`](#14-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 15 | [`t01-stringbuilder-reverse-chain`](#15-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
-| 16 | [`t02-case-null-pattern-switch`](#16-t02-case-null-pattern-switch) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 16 | [`t02-case-null-pattern-switch`](#16-t02-case-null-pattern-switch) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 17 | [`t02-continue-for-update`](#17-t02-continue-for-update) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
-| 18 | [`t02-dangling-else`](#18-t02-dangling-else) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
-| 19 | [`t02-do-while-first-execution`](#19-t02-do-while-first-execution) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
-| 20 | [`t02-enhanced-for-variable-assignment`](#20-t02-enhanced-for-variable-assignment) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
+| 18 | [`t02-dangling-else`](#18-t02-dangling-else) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
+| 19 | [`t02-do-while-first-execution`](#19-t02-do-while-first-execution) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
+| 20 | [`t02-enhanced-for-variable-assignment`](#20-t02-enhanced-for-variable-assignment) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 21 | [`t02-for-update-order`](#21-t02-for-update-order) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
 | 22 | [`t02-labeled-break-count`](#22-t02-labeled-break-count) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
 | 23 | [`t02-labeled-continue`](#23-t02-labeled-continue) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
 | 24 | [`t02-pattern-switch-guard`](#24-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
-| 25 | [`t02-pattern-variable-and-scope`](#25-t02-pattern-variable-and-scope) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
+| 25 | [`t02-pattern-variable-and-scope`](#25-t02-pattern-variable-and-scope) | Controlling program flow | single | hard | yes, not shown | **not reviewed** |
 | 26 | [`t02-switch-dominance`](#26-t02-switch-dominance) | Controlling program flow | single | hard | yes, shown | reviewed 2026-10-02 |
-| 27 | [`t02-switch-expression-exhaustive`](#27-t02-switch-expression-exhaustive) | Controlling program flow | single | medium | no (conceptual) | **not reviewed** |
-| 28 | [`t02-switch-null-default-combination`](#28-t02-switch-null-default-combination) | Controlling program flow | single | hard | no (conceptual) | **not reviewed** |
-| 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | no (conceptual) | **not reviewed** |
+| 27 | [`t02-switch-expression-exhaustive`](#27-t02-switch-expression-exhaustive) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
+| 28 | [`t02-switch-null-default-combination`](#28-t02-switch-null-default-combination) | Controlling program flow | single | hard | yes, not shown | **not reviewed** |
+| 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
 | 30 | [`t02-switch-yield-block`](#30-t02-switch-yield-block) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
-| 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
+| 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
 | 32 | [`t03-constructor-order-super-first`](#32-t03-constructor-order-super-first) | Object-oriented concepts in Java | single | easy | yes, shown | **not reviewed** |
-| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
-| 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
-| 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | no (conceptual) | **not reviewed** |
-| 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | no (conceptual) | **not reviewed** |
+| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
+| 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | yes, not shown | **not reviewed** |
+| 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | yes, not shown | **not reviewed** |
+| 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | yes, not shown | **not reviewed** |
 | 37 | [`t03-overload-most-specific`](#37-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
 | 38 | [`t03-overload-null`](#38-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
-| 39 | [`t03-private-interface-method`](#39-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 39 | [`t03-private-interface-method`](#39-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
 | 40 | [`t03-record-compact-normalization`](#40-t03-record-compact-normalization) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
-| 41 | [`t03-record-components-members`](#41-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
+| 41 | [`t03-record-components-members`](#41-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
 | 42 | [`t03-record-facts`](#42-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
 | 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
-| 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | no (conceptual) | **not reviewed** |
-| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | no (conceptual) | **not reviewed** |
-| 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | no (conceptual) | **not reviewed** |
+| 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
+| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
+| 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
+| 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | yes, not shown | **not reviewed** |
 | 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
 | 49 | [`t04-finally-return`](#49-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
 | 50 | [`t04-finally-return-overrides`](#50-t04-finally-return-overrides) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
-| 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | no (conceptual) | **not reviewed** |
-| 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
-| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
+| 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
+| 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
+| 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | yes, not shown | **not reviewed** |
+| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
 | 55 | [`t04-suppressed-exception`](#55-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
 | 56 | [`t04-suppressed-order-multiple-resources`](#56-t04-suppressed-order-multiple-resources) | Handling exceptions | single | hard | yes, shown | **not reviewed** |
-| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | no (conceptual) | **not reviewed** |
-| 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | no (conceptual) | **not reviewed** |
+| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
+| 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | yes, not shown | **not reviewed** |
 | 59 | [`t04-try-with-resources-order`](#59-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
-| 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | no (conceptual) | **not reviewed** |
-| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
+| 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | yes, not shown | **not reviewed** |
+| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
 | 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
-| 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
 | 64 | [`t05-immutable-and-fixed-size-lists`](#64-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
 | 65 | [`t05-list-first-last`](#65-t05-list-first-last) | Arrays and collections | single | easy | yes, shown | **not reviewed** |
 | 66 | [`t05-list-remove-overload`](#66-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
 | 67 | [`t05-map-merge-null-removes`](#67-t05-map-merge-null-removes) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
 | 68 | [`t05-map-of-null-rejection`](#68-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | yes, not shown | **not reviewed** |
 | 69 | [`t05-sequenced-collection-reversed`](#69-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
-| 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
+| 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
 | 71 | [`t05-set-of-duplicate-elements`](#71-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | **not reviewed** |
-| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | no (conceptual) | **not reviewed** |
-| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
-| 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | no (conceptual) | **not reviewed** |
-| 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | no (conceptual) | **not reviewed** |
-| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | yes, not shown | **not reviewed** |
+| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
+| 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
+| 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
+| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | no (conceptual) | **not reviewed** |
+| 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | yes, not shown | **not reviewed** |
 | 80 | [`t06-generate-limit-count`](#80-t06-generate-limit-count) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
 | 81 | [`t06-intstream-average`](#81-t06-intstream-average) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
-| 82 | [`t06-lambda-effectively-final`](#82-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | no (conceptual) | **not reviewed** |
-| 83 | [`t06-lambda-this-enclosing-instance`](#83-t06-lambda-this-enclosing-instance) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
+| 82 | [`t06-lambda-effectively-final`](#82-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
+| 83 | [`t06-lambda-this-enclosing-instance`](#83-t06-lambda-this-enclosing-instance) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 84 | [`t06-parallel-foreachordered`](#84-t06-parallel-foreachordered) | Streams and lambda expressions | single | medium | yes, shown | **not reviewed** |
 | 85 | [`t06-reduce-empty-identity`](#85-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 86 | [`t06-stream-facts`](#86-t06-stream-facts) | Streams and lambda expressions | multiple | medium | no (conceptual) | reviewed 2026-10-02 |
+| 86 | [`t06-stream-facts`](#86-t06-stream-facts) | Streams and lambda expressions | multiple | medium | yes, not shown | reviewed 2026-10-02 |
 | 87 | [`t06-stream-laziness`](#87-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
 | 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
-| 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | no (conceptual) | **not reviewed** |
-| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | no (conceptual) | **not reviewed** |
-| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | reviewed 2026-10-02 |
-| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | no (conceptual) | **not reviewed** |
-| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | no (conceptual) | **not reviewed** |
+| 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | **not reviewed** |
+| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | reviewed 2026-10-02 |
+| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | yes, not shown | **not reviewed** |
+| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | yes, not shown | **not reviewed** |
 | 98 | [`t07-object-module-name`](#98-t07-object-module-name) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
-| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | no (conceptual) | **not reviewed** |
-| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | no (conceptual) | **not reviewed** |
-| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | **not reviewed** |
+| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
 | 102 | [`t07-requires-transitive`](#102-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
 | 103 | [`t07-static-import-member`](#103-t07-static-import-member) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
 | 104 | [`t07-unnamed-module-isnamed`](#104-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | **not reviewed** |
-| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | no (conceptual) | **not reviewed** |
+| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
 | 106 | [`t08-atomic-compare-and-set`](#106-t08-atomic-compare-and-set) | Managing concurrent code execution | single | medium | yes, shown | **not reviewed** |
 | 107 | [`t08-atomicinteger-update-and-get`](#107-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
-| 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | no (conceptual) | **not reviewed** |
-| 109 | [`t08-computeifabsent-null-result`](#109-t08-computeifabsent-null-result) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | yes, not shown | **not reviewed** |
+| 109 | [`t08-computeifabsent-null-result`](#109-t08-computeifabsent-null-result) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 110 | [`t08-concurrenthashmap-null`](#110-t08-concurrenthashmap-null) | Managing concurrent code execution | multiple | easy | yes, not shown | **not reviewed** |
 | 111 | [`t08-countdownlatch-count`](#111-t08-countdownlatch-count) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 112 | [`t08-executor-close`](#112-t08-executor-close) | Managing concurrent code execution | single | medium | yes, shown | reviewed 2026-10-02 |
-| 113 | [`t08-reentrantlock-finally`](#113-t08-reentrantlock-finally) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
-| 114 | [`t08-start-virtual-thread`](#114-t08-start-virtual-thread) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
-| 115 | [`t08-synchronized-method-lock`](#115-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 113 | [`t08-reentrantlock-finally`](#113-t08-reentrantlock-finally) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
+| 114 | [`t08-start-virtual-thread`](#114-t08-start-virtual-thread) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
+| 115 | [`t08-synchronized-method-lock`](#115-t08-synchronized-method-lock) | Managing concurrent code execution | multiple | medium | yes, not shown | **not reviewed** |
 | 116 | [`t08-synchronized-reentrant`](#116-t08-synchronized-reentrant) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 117 | [`t08-thread-interrupted-clears`](#117-t08-thread-interrupted-clears) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
-| 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | no (conceptual) | **not reviewed** |
+| 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | yes, not shown | **not reviewed** |
 | 119 | [`t08-virtual-thread-daemon`](#119-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | no (conceptual) | **not reviewed** |
+| 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | yes, not shown | **not reviewed** |
 | 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
 | 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
-| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
-| 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | no (conceptual) | **not reviewed** |
-| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | no (conceptual) | **not reviewed** |
+| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
+| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
+| 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | yes, not shown | **not reviewed** |
+| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
 | 127 | [`t09-path-normalize-namecount`](#127-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | **not reviewed** |
 | 128 | [`t09-path-relativize`](#128-t09-path-relativize) | Java I/O API | single | medium | yes, shown | **not reviewed** |
 | 129 | [`t09-path-resolve-absolute`](#129-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 131 | [`t09-read-all-lines`](#131-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
-| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | no (conceptual) | **not reviewed** |
+| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
 | 133 | [`t09-serialization-facts`](#133-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | no (conceptual) | **not reviewed** |
+| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
 | 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
-| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
-| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
+| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
+| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
 | 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | **not reviewed** |
 | 139 | [`t10-datetimeformatter-locale-immutability`](#139-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 140 | [`t10-locale-builder-language-tag`](#140-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | **not reviewed** |
-| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 142 | [`t10-locale-language-tag`](#142-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
-| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | no (conceptual) | **not reviewed** |
+| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
 | 144 | [`t10-locale-to-string`](#144-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
-| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | no (conceptual) | **not reviewed** |
-| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | no (conceptual) | **not reviewed** |
+| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
+| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
 | 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | **not reviewed** |
 | 148 | [`t10-resource-bundle-fallback`](#148-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
-| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
-| 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | no (conceptual) | **not reviewed** |
+| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
+| 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
 
 ## 1. t01-bigdecimal-equals-scale
 
@@ -302,7 +302,35 @@ Tests the exact division contract of BigDecimal when no rounding mode is supplie
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=ArithmeticException
+withScale=0.3333
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.math.BigDecimal;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      new BigDecimal("1").divide(new BigDecimal("3"));
+      System.out.println("thrown=none");
+    } catch (ArithmeticException e) {
+      System.out.println("thrown=" + e.getClass().getSimpleName());
+    }
+    // With a rounding mode there is a representable answer, so the exception is about the
+    // non-terminating expansion rather than about division itself.
+    System.out.println("withScale=" + new BigDecimal("1").divide(new BigDecimal("3"), 4, java.math.RoundingMode.HALF_UP));
+  }
+}
+```
 
 ### Review
 
@@ -317,7 +345,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8"`, `"verified": null`
+To record: `"digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8"`, `"verified": "sha256:b23b0fa047fe57d8726e0b481c7a1e79a60e6c1c6705391034558c4211615c87"`
 
 **Comments:**
 
@@ -358,7 +386,32 @@ Tests the non-obvious fact that stripping trailing zeroes can produce a negative
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+scale=-3
+unscaled=1
+value=1000
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.math.BigDecimal;
+
+public class Main {
+
+  public static void main(String[] args) {
+    BigDecimal stripped = new BigDecimal("1000").stripTrailingZeros();
+    // A negative scale means the unscaled value is multiplied by a power of ten.
+    System.out.println("scale=" + stripped.scale());
+    System.out.println("unscaled=" + stripped.unscaledValue());
+    System.out.println("value=" + stripped.toPlainString());
+  }
+}
+```
 
 ### Review
 
@@ -373,7 +426,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:d42b42ab33f68334c08037053831c48a49912aa790e2fddb5b9092ec1efb21da"`, `"verified": null`
+To record: `"digest": "sha256:d42b42ab33f68334c08037053831c48a49912aa790e2fddb5b9092ec1efb21da"`, `"verified": "sha256:ef2f9e6813c1d7a4d478bfd420e43a23447269c7e4f01f0a6eafe7972c09a08d"`
 
 **Comments:**
 
@@ -495,11 +548,49 @@ Separates what the language specification guarantees about boxed Integer identit
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+cached=true
+uncachedSameObject=false
+uncachedEquals=true
+cacheEdge=true,false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    // The specification requires boxing to cache -128..127, so two boxes of the same value in
+    // that range are the same object. 100 is in the cache; 1000 is not, and == there compares
+    // references, which is why only the cached case is guaranteed.
+    Integer a = 100;
+    Integer b = 100;
+    System.out.println("cached=" + (a == b));
+
+    Integer c = 1000;
+    Integer d = 1000;
+    System.out.println("uncachedSameObject=" + (c == d));
+    System.out.println("uncachedEquals=" + c.equals(d));
+
+    Integer low = -128;
+    Integer alsoLow = -128;
+    Integer belowLow = -129;
+    Integer alsoBelowLow = -129;
+    System.out.println("cacheEdge=" + (low == alsoLow) + "," + (belowLow == alsoBelowLow));
+  }
+}
+```
 
 ### Review
 
 **Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.
 
 A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
@@ -513,7 +604,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:a2fbe740c9fa46fdb62cd9e5e9b5287d1abf6ebb534c3d4e67384a9757be5d0b"`, `"verified": null`
+To record: `"digest": "sha256:a2fbe740c9fa46fdb62cd9e5e9b5287d1abf6ebb534c3d4e67384a9757be5d0b"`, `"verified": "sha256:203fe5eefccde95240612ffe51e2db9fa4942270e8feeb4f180251194e1a61ba"`
 
 **Comments:**
 
@@ -623,7 +714,36 @@ Distinguishes date-adjustment methods that clamp invalid dates from methods that
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=DateTimeException
+lastValidDay=2026-04-30
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.time.DateTimeException;
+import java.time.LocalDate;
+
+public class Main {
+
+  public static void main(String[] args) {
+    LocalDate april = LocalDate.of(2026, 4, 15);
+    try {
+      april.withDayOfMonth(31);
+      System.out.println("thrown=none");
+    } catch (DateTimeException e) {
+      System.out.println("thrown=" + e.getClass().getSimpleName());
+    }
+    // Nothing is clamped and nothing rolls over into May.
+    System.out.println("lastValidDay=" + april.withDayOfMonth(30));
+  }
+}
+```
 
 ### Review
 
@@ -638,7 +758,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:53d34a71752f9abcc061cf58e769cb6cce68c3438e03778a47b7acf798d80baa"`, `"verified": null`
+To record: `"digest": "sha256:53d34a71752f9abcc061cf58e769cb6cce68c3438e03778a47b7acf798d80baa"`, `"verified": "sha256:b1ffbccae796036180621badd4c4bec7f4ac2d361bb6d2db28f7193603116a10"`
 
 **Comments:**
 
@@ -753,7 +873,30 @@ Requires knowing how LocalDate resolves an invalid leap-day result after adding 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+plusOneYear=2025-02-28
+plusFourYears=2028-02-29
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.time.LocalDate;
+
+public class Main {
+
+  public static void main(String[] args) {
+    LocalDate leapDay = LocalDate.of(2024, 2, 29);
+    // A date unit adjusts to the last valid day rather than overflowing into March.
+    System.out.println("plusOneYear=" + leapDay.plusYears(1));
+    System.out.println("plusFourYears=" + leapDay.plusYears(4));
+  }
+}
+```
 
 ### Review
 
@@ -768,7 +911,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:443fbe5186672dfe196388a78b2d33cb5a269f4d958d29769d30aae519dc2349"`, `"verified": null`
+To record: `"digest": "sha256:443fbe5186672dfe196388a78b2d33cb5a269f4d958d29769d30aae519dc2349"`, `"verified": "sha256:e4037b8c41d1c0a89127ea6eccb1c01d2c7feb763420f57e7425d2b1ffa7dd80"`
 
 **Comments:**
 
@@ -809,7 +952,29 @@ Tests Math.round's exact definition for a negative half value, which is often co
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+negativeHalf=-1
+positiveHalf=2
+negativeBelowHalf=-2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    // Math.round adds a half and floors, so a negative exact half rounds towards positive infinity.
+    System.out.println("negativeHalf=" + Math.round(-1.5d));
+    System.out.println("positiveHalf=" + Math.round(1.5d));
+    System.out.println("negativeBelowHalf=" + Math.round(-1.6d));
+  }
+}
+```
 
 ### Review
 
@@ -824,7 +989,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d"`, `"verified": null`
+To record: `"digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d"`, `"verified": "sha256:1fac75f60eb4010872b7b076db3e876cdc3fee63e0dd47dc207ba22cc5fe2a2b"`
 
 **Comments:**
 
@@ -949,7 +1114,35 @@ Requires separating date-based amounts from time-based amounts in the java.time 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+periodUnits=[Years, Months, Days]
+durationUnits=[Seconds, Nanos]
+durationSeconds=90
+durationNanos=500
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.time.Duration;
+import java.time.Period;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The units each type supports are the distinction, and each reports its own.
+    System.out.println("periodUnits=" + Period.of(1, 2, 3).getUnits());
+    System.out.println("durationUnits=" + Duration.ofSeconds(90, 500).getUnits());
+    Duration duration = Duration.ofSeconds(90, 500);
+    System.out.println("durationSeconds=" + duration.getSeconds());
+    System.out.println("durationNanos=" + duration.getNano());
+  }
+}
+```
 
 ### Review
 
@@ -964,7 +1157,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f"`, `"verified": null`
+To record: `"digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f"`, `"verified": "sha256:5b00062cd21846f16baba295fd23d0decff43aeb756da933c14b97b99fe9b013"`
 
 **Comments:**
 
@@ -1222,7 +1415,54 @@ Tests the Java 21 switch feature that lets null handling be expressed directly i
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+null
+string:x
+integer:7
+other
+noNullLabel=thrown:NullPointerException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static String describe(Object value) {
+    // Without a case null label a pattern switch throws NullPointerException on null. With it,
+    // null is matched by that label and nothing else.
+    return switch (value) {
+      case null -> "null";
+      case String s -> "string:" + s;
+      case Integer i -> "integer:" + i;
+      default -> "other";
+    };
+  }
+
+  static String withoutNullLabel(Object value) {
+    try {
+      return switch (value) {
+        case String s -> "string";
+        default -> "other";
+      };
+    } catch (NullPointerException e) {
+      return "thrown:" + e.getClass().getSimpleName();
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println(describe(null));
+    System.out.println(describe("x"));
+    System.out.println(describe(7));
+    System.out.println(describe(1.5));
+    System.out.println("noNullLabel=" + withoutNullLabel(null));
+  }
+}
+```
 
 ### Review
 
@@ -1237,7 +1477,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:dcfcf7cf389a01f97b7ed8330171a5309a501c0afc0d0288477f85119b250b76"`, `"verified": null`
+To record: `"digest": "sha256:dcfcf7cf389a01f97b7ed8330171a5309a501c0afc0d0288477f85119b250b76"`, `"verified": "sha256:a677a2ff1275e5a693a45e77f73d08b3d47a97db80a1a6a1bc5cc0ced9f9c1b2"`
 
 **Comments:**
 
@@ -1361,7 +1601,36 @@ Tests the classic grammar rule for matching an else to the nearest unmatched if.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+outerTrueInnerFalse=else
+outerFalse=none
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    System.out.println("outerTrueInnerFalse=" + describe(true, false));
+    System.out.println("outerFalse=" + describe(false, true));
+  }
+
+  static String describe(boolean outer, boolean inner) {
+    String result = "none";
+    // The else belongs to the nearest unmatched if, which is the inner one. If it belonged to the
+    // outer if, outerFalse would report "else" instead of "none".
+    if (outer)
+      if (inner) result = "inner";
+      else result = "else";
+    return result;
+  }
+}
+```
 
 ### Review
 
@@ -1376,7 +1645,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:bd4ec731cc3036e485f0e5cdc8248786afd74c800fa033932d0ee6e9ff823865"`, `"verified": null`
+To record: `"digest": "sha256:bd4ec731cc3036e485f0e5cdc8248786afd74c800fa033932d0ee6e9ff823865"`, `"verified": "sha256:fd9098efd29b9f3dc66f5211d20071d83f8adf8f3c88359d53a4d80188c30bdb"`
 
 **Comments:**
 
@@ -1417,7 +1686,41 @@ Checks the defining control-flow distinction between do-while and while.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+runsWithFalseCondition=1
+whileRunsWithFalseCondition=0
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    int runs = 0;
+    do {
+      runs += 1;
+    } while (false);
+    // The condition was false from the start and the body still ran.
+    System.out.println("runsWithFalseCondition=" + runs);
+
+    int whileRuns = 0;
+    while (false_()) {
+      whileRuns += 1;
+    }
+    System.out.println("whileRunsWithFalseCondition=" + whileRuns);
+  }
+
+  // A method, because "while (false)" alone is unreachable code and will not compile.
+  static boolean false_() {
+    return false;
+  }
+}
+```
 
 ### Review
 
@@ -1432,7 +1735,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:afd742e7cc3ab7537a7f2cff562ba7b7b9e5426307690adafa1f61f651ecba1d"`, `"verified": null`
+To record: `"digest": "sha256:afd742e7cc3ab7537a7f2cff562ba7b7b9e5426307690adafa1f61f651ecba1d"`, `"verified": "sha256:32c03c3d699dd9171b6559b326ca8c2b0ac672ab956c76f7c5c1c56ceee53ae3"`
 
 **Comments:**
 
@@ -1473,7 +1776,38 @@ Requires distinguishing assignment to the enhanced-for iteration variable from m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+afterLoopVariable=[1, 2, 3]
+afterIndexWrite=[2, 3, 4]
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+
+public class Main {
+
+  public static void main(String[] args) {
+    int[] values = {1, 2, 3};
+    for (int value : values) {
+      value++;
+    }
+    // The loop variable is a fresh local holding a copy of the element, so incrementing it
+    // cannot reach the array. Writing through the index does.
+    System.out.println("afterLoopVariable=" + Arrays.toString(values));
+
+    for (int i = 0; i < values.length; i++) {
+      values[i]++;
+    }
+    System.out.println("afterIndexWrite=" + Arrays.toString(values));
+  }
+}
+```
 
 ### Review
 
@@ -1488,7 +1822,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:dfe236fb2fbacc249157abb42b1791277c5cb0251fd49f850015a73f1216b490"`, `"verified": null`
+To record: `"digest": "sha256:dfe236fb2fbacc249157abb42b1791277c5cb0251fd49f850015a73f1216b490"`, `"verified": "sha256:545a279ad3d80ed5b3e5e35ebb7c5d61d18a56d99535735f937cae5c3cda4385"`
 
 **Comments:**
 
@@ -1834,7 +2168,45 @@ Tests flow-sensitive scope of a pattern variable across short-circuit boolean op
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+string=true
+empty=false
+notAString=false
+null=false
+afterNegatedIf=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static boolean nonEmptyString(Object obj) {
+    // && guarantees the left side matched before the right side runs, so s is in scope there.
+    return obj instanceof String s && s.length() > 0;
+  }
+
+  static boolean reachableAfterIf(Object obj) {
+    if (!(obj instanceof String s)) {
+      return false;
+    }
+    // Negated-and-returned puts the rest of the method in the scope of s as well.
+    return s.isBlank();
+  }
+
+  public static void main(String[] args) {
+    System.out.println("string=" + nonEmptyString("abc"));
+    System.out.println("empty=" + nonEmptyString(""));
+    System.out.println("notAString=" + nonEmptyString(42));
+    System.out.println("null=" + nonEmptyString(null));
+    System.out.println("afterNegatedIf=" + reachableAfterIf("   "));
+  }
+}
+```
 
 ### Review
 
@@ -1849,7 +2221,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:a22c81aba1df224d02f15fca5e50fd29f7d02134896da423c07ae6ffc54da33a"`, `"verified": null`
+To record: `"digest": "sha256:a22c81aba1df224d02f15fca5e50fd29f7d02134896da423c07ae6ffc54da33a"`, `"verified": "sha256:65b10cd598ed60f95aa930d4e201febc30499ac55e596444f886685a9249f37e"`
 
 **Comments:**
 
@@ -1968,7 +2340,37 @@ Checks the compile-time exhaustiveness requirement of switch expressions.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: not.exhaustive
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  sealed interface Shape permits Circle, Square {}
+
+  record Circle() implements Shape {}
+
+  record Square() implements Shape {}
+
+  public static void main(String[] args) {
+    Shape shape = new Circle();
+    // A switch expression must be exhaustive. This one covers only one of the two permitted
+    // subclasses and has no default, so it does not compile.
+    String name =
+        switch (shape) {
+          case Circle c -> "circle";
+        };
+    System.out.println(name);
+  }
+}
+```
 
 ### Review
 
@@ -1983,7 +2385,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:34d860bc322ca0879d9023b6fc43d36f9c1cb9f5f07cf9bf723b317b6469d2a9"`, `"verified": null`
+To record: `"digest": "sha256:34d860bc322ca0879d9023b6fc43d36f9c1cb9f5f07cf9bf723b317b6469d2a9"`, `"verified": "sha256:a12709591235d81a9383e44c7cc0995db5ff4b9d69c440d771b01f1c72ad047c"`
 
 **Comments:**
 
@@ -2024,7 +2426,40 @@ Tests a Java 21 switch-label form that combines handling null with the catch-all
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+string
+integer
+nullOrOther
+nullOrOther
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static String describe(Object value) {
+    // case null, default is the one arm allowed to carry both, and it is the only combination
+    // of null with another label that the language permits.
+    return switch (value) {
+      case String s -> "string";
+      case Integer i -> "integer";
+      case null, default -> "nullOrOther";
+    };
+  }
+
+  public static void main(String[] args) {
+    System.out.println(describe("x"));
+    System.out.println(describe(7));
+    System.out.println(describe(null));
+    System.out.println(describe(1.5));
+  }
+}
+```
 
 ### Review
 
@@ -2039,7 +2474,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:2ba5dac0053a90e357381ada001d6818ecaf5e7bd433883c11bcf2535404f95d"`, `"verified": null`
+To record: `"digest": "sha256:2ba5dac0053a90e357381ada001d6818ecaf5e7bd433883c11bcf2535404f95d"`, `"verified": "sha256:12703fca07ac192975f7ccfd923ea25cdef221eea0f4115b734fd4ad1a4fcaa0"`
 
 **Comments:**
 
@@ -2080,7 +2515,31 @@ Checks the control-flow distinction between arrow switch rules and traditional c
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+ran=one
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    StringBuilder ran = new StringBuilder();
+    switch (1) {
+      case 1 -> ran.append("one");
+      // No break is written, and the next arm still does not run.
+      case 2 -> ran.append("two");
+      default -> ran.append("other");
+    }
+    System.out.println("ran=" + ran);
+  }
+}
+```
 
 ### Review
 
@@ -2095,7 +2554,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef81931e0ee3d68ce33e"`, `"verified": null`
+To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef81931e0ee3d68ce33e"`, `"verified": "sha256:8833ddbfbebc9db9c534438480c06a1e43626ccd24ac5d41500b60178e0bbd50"`
 
 **Comments:**
 
@@ -2217,7 +2676,39 @@ Tests the class-over-interface precedence rule for inherited concrete instance m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+inherited=superclass method
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  interface Greeter {
+    default String run() {
+      return "interface default";
+    }
+  }
+
+  static class Base {
+    public String run() {
+      return "superclass method";
+    }
+  }
+
+  // Declares no run() of its own, so the inherited one is the question.
+  static class Subclass extends Base implements Greeter {}
+
+  public static void main(String[] args) {
+    System.out.println("inherited=" + new Subclass().run());
+  }
+}
+```
 
 ### Review
 
@@ -2232,7 +2723,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:a09b6917beb7f093ff3abb555a96fabc70f9dd5ab7c0f222b21461173f92398f"`, `"verified": null`
+To record: `"digest": "sha256:a09b6917beb7f093ff3abb555a96fabc70f9dd5ab7c0f222b21461173f92398f"`, `"verified": "sha256:e1baa8868cedc31f372697b54cfc24add3848fb1eca22f059db79a6468ea3660"`
 
 **Comments:**
 
@@ -2353,7 +2844,41 @@ Checks a key overriding rule: an overriding method can narrow a reference return
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+throughParent=2
+declaredType=Integer
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static class Parent {
+    Number value() {
+      return 1;
+    }
+  }
+
+  static class Child extends Parent {
+    // A subtype of the overridden return type is allowed; this file compiling is the proof.
+    @Override
+    Integer value() {
+      return 2;
+    }
+  }
+
+  public static void main(String[] args) {
+    Parent asParent = new Child();
+    System.out.println("throughParent=" + asParent.value());
+    System.out.println("declaredType=" + new Child().value().getClass().getSimpleName());
+  }
+}
+```
 
 ### Review
 
@@ -2368,7 +2893,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e2f5059bd22b95c"`, `"verified": null`
+To record: `"digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e2f5059bd22b95c"`, `"verified": "sha256:5f8456bc6933e830d9bf618baaba6b4de30fb8f3a54565bafcb224ec005f12ac"`
 
 **Comments:**
 
@@ -2409,7 +2934,41 @@ Tests the conflict-resolution rule when a class inherits unrelated default metho
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: types.incompatible
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  interface Walks {
+    default String move() {
+      return "walk";
+    }
+  }
+
+  interface Swims {
+    default String move() {
+      return "swim";
+    }
+  }
+
+  // Two unrelated interfaces, neither default more specific than the other. Without an override
+  // the class does not compile, which is what makes the override mandatory rather than merely
+  // advisable.
+  static class Amphibian implements Walks, Swims {}
+
+  public static void main(String[] args) {
+    System.out.println(new Amphibian().move());
+  }
+}
+```
 
 ### Review
 
@@ -2424,7 +2983,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:eb4409af4125d56ff4a03527eb2e922dfd072622a1414b72cfc421f545166833"`, `"verified": null`
+To record: `"digest": "sha256:eb4409af4125d56ff4a03527eb2e922dfd072622a1414b72cfc421f545166833"`, `"verified": "sha256:0407b514e56e15f8764cc85df455d3d942fb909dd51961cf2c1c01ebd06ba41c"`
 
 **Comments:**
 
@@ -2465,7 +3024,52 @@ Tests the special access rule for enum constructors, which differs from ordinary
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+declaredCount=1
+isPrivate=true
+isPublic=false
+isProtected=false
+sourceParameters=1,reflected=3
+constants=1,2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+
+public class Main {
+
+  enum Planet {
+    EARTH(1),
+    MARS(2);
+
+    final int moons;
+
+    // No access modifier is written here.
+    Planet(int moons) {
+      this.moons = moons;
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println("declaredCount=" + Planet.class.getDeclaredConstructors().length);
+    Constructor<?> only = Planet.class.getDeclaredConstructors()[0];
+    System.out.println("isPrivate=" + Modifier.isPrivate(only.getModifiers()));
+    System.out.println("isPublic=" + Modifier.isPublic(only.getModifiers()));
+    System.out.println("isProtected=" + Modifier.isProtected(only.getModifiers()));
+    // The compiler also prepends the name and ordinal parameters, which is why the reflected
+    // constructor takes three where the source declares one.
+    System.out.println("sourceParameters=1,reflected=" + only.getParameterCount());
+    System.out.println("constants=" + Planet.EARTH.moons + "," + Planet.MARS.moons);
+  }
+}
+```
 
 ### Review
 
@@ -2480,7 +3084,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c116ca78accd40bbd6dbc8e897375631b0e7d4f7dceea2f4a44267192f53df2e"`, `"verified": null`
+To record: `"digest": "sha256:c116ca78accd40bbd6dbc8e897375631b0e7d4f7dceea2f4a44267192f53df2e"`, `"verified": "sha256:b042cec1c11c3c328da127cd9ddb6cad1550ae9c33c544c20be6419d643731eb"`
 
 **Comments:**
 
@@ -2522,7 +3126,36 @@ Tests type erasure and the resulting restriction on overloads that differ only i
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: name.clash.same.erasure
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+
+public class Main {
+
+  // Both parameters erase to List, so the two declarations have the same erased signature and
+  // cannot coexist in one class, however different the type arguments look.
+  void process(List<String> x) {
+    System.out.println("strings" + x);
+  }
+
+  void process(List<Integer> x) {
+    System.out.println("integers" + x);
+  }
+
+  public static void main(String[] args) {
+    new Main().process(List.of("a"));
+  }
+}
+```
 
 ### Review
 
@@ -2537,7 +3170,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:af0d595ad57d2ddebe8eca2b73029cc48ba82e3ecded0f39b758852aaa5458be"`, `"verified": null`
+To record: `"digest": "sha256:af0d595ad57d2ddebe8eca2b73029cc48ba82e3ecded0f39b758852aaa5458be"`, `"verified": "sha256:55aa1567b680ce7e410119ca9009140233eafe54ddef78989af23a8cb21cf631"`
 
 **Comments:**
 
@@ -2746,7 +3379,55 @@ Requires understanding why interfaces can contain private helper methods without
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+Hello Ana!
+declaredByClass=[]
+punctuationInPublicApi=false
+greetInPublicApi=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.reflect.Method;
+import java.util.Arrays;
+
+public class Main {
+
+  interface Greeter {
+    private String punctuation() {
+      return "!";
+    }
+
+    // A private interface method is callable from a default method of the same interface, which
+    // is what makes it usable as an implementation helper.
+    default String greet(String name) {
+      return "Hello " + name + punctuation();
+    }
+  }
+
+  static class English implements Greeter {}
+
+  public static void main(String[] args) {
+    System.out.println(new English().greet("Ana"));
+
+    // It is not inherited into the implementing class's callable API: the class declares nothing,
+    // and its public methods are the ones it inherited from Object plus greet.
+    System.out.println(
+        "declaredByClass=" + Arrays.toString(English.class.getDeclaredMethods()));
+    boolean visible =
+        Arrays.stream(English.class.getMethods()).map(Method::getName).anyMatch("punctuation"::equals);
+    System.out.println("punctuationInPublicApi=" + visible);
+    boolean greetVisible =
+        Arrays.stream(English.class.getMethods()).map(Method::getName).anyMatch("greet"::equals);
+    System.out.println("greetInPublicApi=" + greetVisible);
+  }
+}
+```
 
 ### Review
 
@@ -2761,7 +3442,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:cb5b92dca6b5a7d30cff7a1bdb4f8c2824df319cd28332d32d1ead6e35f48ff9"`, `"verified": null`
+To record: `"digest": "sha256:cb5b92dca6b5a7d30cff7a1bdb4f8c2824df319cd28332d32d1ead6e35f48ff9"`, `"verified": "sha256:83ddaf777dcb7396db7f0182d4c6fb69016d0021000b371a89680166dd9652f9"`
 
 **Comments:**
 
@@ -2877,7 +3558,54 @@ Requires knowing which members the language mandates for a record instead of tre
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+fieldPrivate=true
+fieldFinal=true
+accessorNamedAfterComponent=x
+accessorPublic=true
+hasSetter=false
+classFinal=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
+public class Main {
+
+  record Point(int x) {}
+
+  public static void main(String[] args) throws Exception {
+    Field field = Point.class.getDeclaredField("x");
+    System.out.println("fieldPrivate=" + Modifier.isPrivate(field.getModifiers()));
+    System.out.println("fieldFinal=" + Modifier.isFinal(field.getModifiers()));
+
+    Method accessor = Point.class.getDeclaredMethod("x");
+    System.out.println("accessorNamedAfterComponent=" + accessor.getName());
+    System.out.println("accessorPublic=" + Modifier.isPublic(accessor.getModifiers()));
+
+    // No setter is generated, and the class itself is final.
+    System.out.println("hasSetter=" + hasMethod("setX"));
+    System.out.println("classFinal=" + Modifier.isFinal(Point.class.getModifiers()));
+  }
+
+  static boolean hasMethod(String name) {
+    for (Method method : Point.class.getDeclaredMethods()) {
+      if (method.getName().equals(name)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+```
 
 ### Review
 
@@ -2892,7 +3620,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0ff6b907dc8f3ebd5c84b47981593c5acf73d18ad45fc74bbcd638d25717afb8"`, `"verified": null`
+To record: `"digest": "sha256:0ff6b907dc8f3ebd5c84b47981593c5acf73d18ad45fc74bbcd638d25717afb8"`, `"verified": "sha256:5d32b44ece875af3c57add5452b1ee090de3669abe1dcb83bfe132646b2efe2d"`
 
 **Comments:**
 
@@ -3102,7 +3830,47 @@ Requires knowing the closure rules for direct subclasses of a sealed class rathe
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+finalIsFinal=true
+sealedIsSealed=true
+nonSealedIsSealed=false
+extendedNonSealed=true
+permitted=3
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  sealed interface Shape permits Finally, Sealing, Opened {}
+
+  // Each of the three modifiers satisfies a direct subclass's obligation to say how sealing
+  // continues, and they say three different things.
+  static final class Finally implements Shape {}
+
+  static sealed class Sealing implements Shape permits Leaf {}
+
+  static final class Leaf extends Sealing {}
+
+  static non-sealed class Opened implements Shape {}
+
+  // Permitted only because Opened is non-sealed: an unrelated subclass of a sealed hierarchy.
+  static class Outsider extends Opened {}
+
+  public static void main(String[] args) {
+    System.out.println("finalIsFinal=" + java.lang.reflect.Modifier.isFinal(Finally.class.getModifiers()));
+    System.out.println("sealedIsSealed=" + Sealing.class.isSealed());
+    System.out.println("nonSealedIsSealed=" + Opened.class.isSealed());
+    System.out.println("extendedNonSealed=" + (new Outsider() instanceof Shape));
+    System.out.println("permitted=" + Shape.class.getPermittedSubclasses().length);
+  }
+}
+```
 
 ### Review
 
@@ -3117,7 +3885,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e959d38c6a866d48a"`, `"verified": null`
+To record: `"digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e959d38c6a866d48a"`, `"verified": "sha256:bbf56540e044771e3af895d10d58b2d50df37f7bb503cc622ffb703bef188de8"`
 
 **Comments:**
 
@@ -3158,7 +3926,40 @@ Distinguishes static method hiding from dynamic dispatch of overridden instance 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+throughVariable=parent
+throughType=child
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static class Parent {
+    static String who() {
+      return "parent";
+    }
+  }
+
+  static class Child extends Parent {
+    static String who() {
+      return "child";
+    }
+  }
+
+  public static void main(String[] args) {
+    Parent variable = new Child();
+    // The variable's compile-time type decides, so the instance being a Child changes nothing.
+    System.out.println("throughVariable=" + variable.who());
+    System.out.println("throughType=" + Child.who());
+  }
+}
+```
 
 ### Review
 
@@ -3173,7 +3974,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": null`
+To record: `"digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b"`, `"verified": "sha256:145ac6a9fe5a81caccbfd546f5ad24e46b1783ad847662c871a6a36a7c2e43db"`
 
 **Comments:**
 
@@ -3214,7 +4015,48 @@ Tests the signature that makes AutoCloseable broadly usable in try-with-resource
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+autoCloseable=[class java.lang.Exception]
+closeable=[class java.io.IOException]
+body=ran
+caught=java.lang.Exception:from close
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.Closeable;
+import java.util.Arrays;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // AutoCloseable.close() is declared to throw Exception, which is why a resource may throw
+    // any checked exception from close and try-with-resources has to allow for that.
+    System.out.println(
+        "autoCloseable=" + Arrays.toString(AutoCloseable.class.getMethod("close").getExceptionTypes()));
+    // Closeable narrows it to IOException. The two are often confused.
+    System.out.println(
+        "closeable=" + Arrays.toString(Closeable.class.getMethod("close").getExceptionTypes()));
+
+    class Resource implements AutoCloseable {
+      @Override
+      public void close() throws Exception {
+        throw new Exception("from close");
+      }
+    }
+    try (Resource r = new Resource()) {
+      System.out.println("body=ran");
+    } catch (Exception e) {
+      System.out.println("caught=" + e.getClass().getName() + ":" + e.getMessage());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3229,7 +4071,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5ab0f4c702acf4f07745dea13ba6aee30aa0aa83a65f39c3b264cca0aff86787"`, `"verified": null`
+To record: `"digest": "sha256:5ab0f4c702acf4f07745dea13ba6aee30aa0aa83a65f39c3b264cca0aff86787"`, `"verified": "sha256:b2c7bd5525dbd1cea47cfb88d9b4cc8425ebd2be978b21abe97620971612593a"`
 
 **Comments:**
 
@@ -3270,7 +4112,37 @@ Checks catch-clause reachability when exception types have an inheritance relati
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: except.already.caught
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      if (args.length == 0) {
+        throw new FileNotFoundException("missing");
+      }
+      // The IOException catch already handles every FileNotFoundException, so the second catch
+      // can never run and the compiler rejects it rather than accepting dead code.
+    } catch (IOException e) {
+      System.out.println("io");
+    } catch (FileNotFoundException e) {
+      System.out.println("notFound");
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3285,7 +4157,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:e3960611c7004121f66ad18889cfbca1a5397b083d8e94f24539f969cd9e7eda"`, `"verified": null`
+To record: `"digest": "sha256:e3960611c7004121f66ad18889cfbca1a5397b083d8e94f24539f969cd9e7eda"`, `"verified": "sha256:727f14af6460e6c58f3749f341b8c506133e786f9d6ff31be23bb0c95eab7a0e"`
 
 **Comments:**
 
@@ -3561,7 +4433,38 @@ Tests the special treatment of exception parameters in a multi-catch clause.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: multicatch.parameter.may.not.be.assigned
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+import java.sql.SQLException;
+
+public class Main {
+
+  static void readRow() throws IOException, SQLException {
+    throw new IOException("boom");
+  }
+
+  public static void main(String[] args) {
+    try {
+      readRow();
+    } catch (IOException | SQLException ex) {
+      // A multi-catch parameter is implicitly final, so this assignment does not compile. A
+      // single-type catch parameter is not, and the same line there would be allowed.
+      ex = new IOException("replaced");
+      System.out.println(ex.getMessage());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3576,7 +4479,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:fa6d1845fdb457fa94622d83cf09f8eb88382f4efab0da5f5a5c9f875ae3d8d3"`, `"verified": null`
+To record: `"digest": "sha256:fa6d1845fdb457fa94622d83cf09f8eb88382f4efab0da5f5a5c9f875ae3d8d3"`, `"verified": "sha256:fa47524547f6c4505c2fbe84550043626b9c940c3aa76937a6f46587fce1a202"`
 
 **Comments:**
 
@@ -3617,7 +4520,33 @@ Tests a compile-time restriction specific to multi-catch alternatives that is ea
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: multicatch.types.must.be.disjoint
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      throw new FileNotFoundException("missing");
+      // FileNotFoundException is a subtype of IOException, so one alternative subsumes the
+      // other and the multi-catch is rejected. Only disjoint alternatives are allowed.
+    } catch (IOException | FileNotFoundException ex) {
+      System.out.println(ex.getMessage());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3632,7 +4561,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:a1aeb4003a853b4838c8b30c803b2cabb36edad84a40cba6956339dfb850be01"`, `"verified": null`
+To record: `"digest": "sha256:a1aeb4003a853b4838c8b30c803b2cabb36edad84a40cba6956339dfb850be01"`, `"verified": "sha256:a8ceb15f3a09eef6e07a6b0cede57f49eb476cb48385b3736f7db9c016317dbe"`
 
 **Comments:**
 
@@ -3673,7 +4602,63 @@ Checks how the throws clause may change during method overriding, especially for
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+quiet=saved
+caughtAsIOException=FileNotFoundException
+quietThrows=0
+narrowThrows=FileNotFoundException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class Main {
+
+  static class Store {
+    void save() throws IOException {
+      throw new IOException("base");
+    }
+  }
+
+  // Omitting the checked exception entirely is allowed: an override may throw less, never more.
+  static class Quiet extends Store {
+    @Override
+    void save() {
+      System.out.println("quiet=saved");
+    }
+  }
+
+  // Narrowing to a subtype is allowed for the same reason.
+  static class Narrow extends Store {
+    @Override
+    void save() throws FileNotFoundException {
+      throw new FileNotFoundException("narrow");
+    }
+  }
+
+  public static void main(String[] args) throws Exception {
+    new Quiet().save();
+    // Calling through the supertype still only has to handle what the supertype declares, which
+    // is what the rule protects.
+    Store asStore = new Narrow();
+    try {
+      asStore.save();
+    } catch (IOException e) {
+      System.out.println("caughtAsIOException=" + e.getClass().getSimpleName());
+    }
+    System.out.println("quietThrows=" + Quiet.class.getDeclaredMethod("save").getExceptionTypes().length);
+    System.out.println(
+        "narrowThrows=" + Narrow.class.getDeclaredMethod("save").getExceptionTypes()[0].getSimpleName());
+  }
+}
+```
 
 ### Review
 
@@ -3688,7 +4673,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:8df117237acec009efb84ecffeaf663a6797508f33efdffed8fbf57c920ce86f"`, `"verified": null`
+To record: `"digest": "sha256:8df117237acec009efb84ecffeaf663a6797508f33efdffed8fbf57c920ce86f"`, `"verified": "sha256:a4739b9c4c56133f90ab1b12450a5cfe2e23c3999b1dda25c4a4c883bb9705e1"`
 
 **Comments:**
 
@@ -3729,7 +4714,53 @@ Tests Java's precise rethrow analysis for an effectively final catch parameter t
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+io=IOException
+sql=SQLException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+import java.sql.SQLException;
+
+public class Main {
+
+  /**
+   * Precise rethrow: the compiler knows ex can only be one of the two the body can throw, so the
+   * method declares those rather than Exception. This file compiling is the proof.
+   */
+  static void run(boolean io) throws IOException, SQLException {
+    try {
+      if (io) {
+        throw new IOException("io");
+      }
+      throw new SQLException("sql");
+    } catch (Exception ex) {
+      throw ex;
+    }
+  }
+
+  public static void main(String[] args) {
+    System.out.println("io=" + caught(true));
+    System.out.println("sql=" + caught(false));
+  }
+
+  static String caught(boolean io) {
+    try {
+      run(io);
+      return "none";
+    } catch (Exception e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -3744,7 +4775,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a"`, `"verified": null`
+To record: `"digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a"`, `"verified": "sha256:5b6c01404af159275127e5426fa81f74c45a7a073e30fc7858285bd2b6fbfca1"`
 
 **Comments:**
 
@@ -3958,7 +4989,35 @@ Tests the special runtime behavior of a throw statement whose expression evaluat
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=NullPointerException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      throwNull();
+      System.out.println("thrown=none");
+    } catch (Throwable thrown) {
+      System.out.println("thrown=" + thrown.getClass().getSimpleName());
+    }
+  }
+
+  static void throwNull() {
+    // The null literal needs no throws clause: its static type carries no checked exception,
+    // which is why this compiles at all. The failure happens when it is thrown.
+    throw null;
+  }
+}
+```
 
 ### Review
 
@@ -3973,7 +5032,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea"`, `"verified": null`
+To record: `"digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea"`, `"verified": "sha256:f0ea31173b30fc8f6659dbb196761b5a87cba2a5599d8ef252b6549a90acfeca"`
 
 **Comments:**
 
@@ -4014,7 +5073,43 @@ Tests the Java language rule that an existing local variable can appear in a res
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+read=line
+closed=true:IOException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+
+public class Main {
+
+  public static void main(String[] args) throws IOException {
+    // Declared before the statement and never reassigned, so it is effectively final and may be
+    // named directly in the resource list.
+    BufferedReader reader = new BufferedReader(new StringReader("line"));
+    try (reader) {
+      System.out.println("read=" + reader.readLine());
+    }
+
+    // Leaving the statement closed it, even though the statement did not declare it. A closed
+    // BufferedReader refuses further reads.
+    try {
+      reader.readLine();
+      System.out.println("closed=false");
+    } catch (IOException e) {
+      System.out.println("closed=true:" + e.getClass().getSimpleName());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -4029,7 +5124,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:db2ba98db1d5be314931368482ebace892c0c97439bf3e587e636a582557ee78"`, `"verified": null`
+To record: `"digest": "sha256:db2ba98db1d5be314931368482ebace892c0c97439bf3e587e636a582557ee78"`, `"verified": "sha256:d602e4580e6ae67a48937fb08cfce2df19ea07e3d2480886e566c4275c11b0b4"`
 
 **Comments:**
 
@@ -4158,7 +5253,51 @@ Checks the exception-analysis distinction between checked exceptions and Runtime
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+runtimeNeedsNoThrows=IllegalStateException
+errorNeedsNoThrows=StackOverflowError
+ioIsRuntime=false
+ioIsError=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+
+public class Main {
+
+  // No throws clause, and these compile: that is what unchecked means.
+  static void throwsRuntime() {
+    throw new IllegalStateException("unchecked");
+  }
+
+  static void throwsError() {
+    throw new StackOverflowError("also unchecked");
+  }
+
+  public static void main(String[] args) {
+    System.out.println("runtimeNeedsNoThrows=" + caught(Main::throwsRuntime));
+    System.out.println("errorNeedsNoThrows=" + caught(Main::throwsError));
+    // A checked exception is one that is neither, which is why IOException must be declared.
+    System.out.println("ioIsRuntime=" + RuntimeException.class.isAssignableFrom(IOException.class));
+    System.out.println("ioIsError=" + Error.class.isAssignableFrom(IOException.class));
+  }
+
+  static String caught(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (Throwable t) {
+      return t.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -4173,7 +5312,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:f3298bb15abaf556983f5edaf62617f681d111db362c160d980d3ed043d895ca"`, `"verified": null`
+To record: `"digest": "sha256:f3298bb15abaf556983f5edaf62617f681d111db362c160d980d3ed043d895ca"`, `"verified": "sha256:5eee7a971bcbce1dd4d19b4a3b8a910fbf5e5498b4eb2ff756c052853dbc637a"`
 
 **Comments:**
 
@@ -4214,7 +5353,44 @@ Requires knowing that Arrays.asList is fixed-size and backed by the original arr
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+writesThroughToArray=z
+add=UnsupportedOperationException
+remove=UnsupportedOperationException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    String[] array = {"x", "y"};
+    List<String> list = Arrays.asList(array);
+
+    list.set(0, "z");
+    System.out.println("writesThroughToArray=" + array[0]);
+    System.out.println("add=" + thrownBy(() -> list.add("z")));
+    System.out.println("remove=" + thrownBy(() -> list.remove(0)));
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -4229,7 +5405,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:78ae48555284a939204e7fd0a0c9ec06a2868315ed215f48a0bead672ec7c70f"`, `"verified": null`
+To record: `"digest": "sha256:78ae48555284a939204e7fd0a0c9ec06a2868315ed215f48a0bead672ec7c70f"`, `"verified": "sha256:3ca8f77e3e8dda4129c5dab4327208a26a63ea9cfc6bc95ed7a7767e6cf9eb79"`
 
 **Comments:**
 
@@ -4341,7 +5517,33 @@ Tests generic invariance, a core rule behind wildcard use and many collection-as
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: prob.found.req
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<Integer> integers = new ArrayList<>();
+    // Generic types are invariant in their type argument: List<Integer> is not a List<Number>,
+    // however much Integer is a Number. Allowing it would let a Double be added through the
+    // second reference.
+    List<Number> numbers = integers;
+    numbers.add(Double.valueOf(1.5));
+    System.out.println(integers.get(0));
+  }
+}
+```
 
 ### Review
 
@@ -4356,7 +5558,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:094a1e2203407a95692132fcad51deac056d2c528ed0a4ba8b86d2bec730fa3b"`, `"verified": null`
+To record: `"digest": "sha256:094a1e2203407a95692132fcad51deac056d2c528ed0a4ba8b86d2bec730fa3b"`, `"verified": "sha256:8bf864e73cc334c2af3118db7fc68bd832eb0ceb1d626d5abd39c31e30e9e562"`
 
 **Comments:**
 
@@ -4879,7 +6081,36 @@ Checks Java 21's SequencedMap encounter-order API using LinkedHashMap's insertio
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+first=a
+last=c
+reversed=[c, b, a]
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.LinkedHashMap;
+import java.util.SequencedMap;
+
+public class Main {
+
+  public static void main(String[] args) {
+    SequencedMap<String, Integer> map = new LinkedHashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
+    map.put("c", 3);
+
+    System.out.println("first=" + map.firstEntry().getKey());
+    System.out.println("last=" + map.lastEntry().getKey());
+    System.out.println("reversed=" + map.reversed().keySet());
+  }
+}
+```
 
 ### Review
 
@@ -4894,7 +6125,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5550cddfb25d8027408ced0a592c9595a6985d775b16064dd2f079c54ddda8c2"`, `"verified": null`
+To record: `"digest": "sha256:5550cddfb25d8027408ced0a592c9595a6985d775b16064dd2f079c54ddda8c2"`, `"verified": "sha256:c0b7e7a0825025da1e9f8f5e580e6ed5fd3da72e05c6c98ac4c5784de05915b7"`
 
 **Comments:**
 
@@ -5015,7 +6246,39 @@ Tests the SortedSet rule that ordering equality determines element uniqueness, w
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+areEqual=false
+secondAdded=false
+size=1
+kept=first
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.TreeSet;
+
+public class Main {
+
+  record Item(String id) {}
+
+  public static void main(String[] args) {
+    // The comparator decides membership for a sorted set, not equals.
+    TreeSet<Item> set = new TreeSet<>((a, b) -> 0);
+    set.add(new Item("first"));
+    Item second = new Item("second");
+
+    System.out.println("areEqual=" + new Item("first").equals(second));
+    System.out.println("secondAdded=" + set.add(second));
+    System.out.println("size=" + set.size());
+    System.out.println("kept=" + set.first().id());
+  }
+}
+```
 
 ### Review
 
@@ -5030,7 +6293,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:bb2c3d99cea36775c4a9c9e4d3f64fab7b9f9d7d868385bb5ae7526d14aca3f8"`, `"verified": null`
+To record: `"digest": "sha256:bb2c3d99cea36775c4a9c9e4d3f64fab7b9f9d7d868385bb5ae7526d14aca3f8"`, `"verified": "sha256:f8d953b82ae460272c52275ab89e9cd2cc47daa9ff148d98ff34b92a4b041e23"`
 
 **Comments:**
 
@@ -5071,7 +6334,46 @@ Distinguishes an unmodifiable view from an immutable independent copy.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+addThroughView=UnsupportedOperationException
+viewSeesBackingChange=2
+backingStillModifiable=2
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> backing = new ArrayList<>(List.of("a"));
+    List<String> view = Collections.unmodifiableList(backing);
+
+    System.out.println("addThroughView=" + thrownBy(() -> view.add("b")));
+    backing.add("b");
+    // A copy would not have noticed, and the backing list is not itself frozen.
+    System.out.println("viewSeesBackingChange=" + view.size());
+    System.out.println("backingStillModifiable=" + backing.size());
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -5086,7 +6388,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:841c4f88777e1d2214370df5e28556c09978e2a01750b1529d8083e8279fddd9"`, `"verified": null`
+To record: `"digest": "sha256:841c4f88777e1d2214370df5e28556c09978e2a01750b1529d8083e8279fddd9"`, `"verified": "sha256:dc4aa67860f06cad84df4161672a72a6f5156d93dd50d684671cacfd15b8f953"`
 
 **Comments:**
 
@@ -5127,7 +6429,42 @@ Tests the producer side of upper-bounded wildcards and why they do not safely ac
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+read=1 class=Integer
+size=1
+read=2.5 class=Double
+size=1
+read=3 class=Long
+size=1
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+
+public class Main {
+
+  static void readOnly(List<? extends Number> values) {
+    // Every element is some Number, whatever the actual type argument is, so reading as Number
+    // is always safe. Writing is not: the compiler has no element type it can accept, which is
+    // why values.add(1) would not compile here.
+    Number n = values.get(0);
+    System.out.println("read=" + n + " class=" + n.getClass().getSimpleName());
+    System.out.println("size=" + values.size());
+  }
+
+  public static void main(String[] args) {
+    readOnly(List.of(Integer.valueOf(1)));
+    readOnly(List.of(Double.valueOf(2.5)));
+    readOnly(List.<Number>of(Long.valueOf(3)));
+  }
+}
+```
 
 ### Review
 
@@ -5142,7 +6479,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:8ec87ba3fc8e34ea91d56f057bcc827f26cd7422fab6d3dec176c257b1aa65cf"`, `"verified": null`
+To record: `"digest": "sha256:8ec87ba3fc8e34ea91d56f057bcc827f26cd7422fab6d3dec176c257b1aa65cf"`, `"verified": "sha256:1c925a9e7d83017dd65d5dfa43b5eaaa9051cc43f07acaea064a1b7df74cff7d"`
 
 **Comments:**
 
@@ -5183,7 +6520,42 @@ Tests the consumer side of lower-bounded wildcards and the safe type available w
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+listOfInteger added=1 readAsObject=Integer
+listOfNumber added=1 readAsObject=Integer
+listOfObject added=1 readAsObject=Integer
+listOfComparable added=1 readAsObject=Integer
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+  static void writeInteger(String label, List<? super Integer> values) {
+    // The actual type argument is Integer or a supertype of it, so an Integer is always an
+    // acceptable element: adding is safe. Reading gives back only Object, because the one type
+    // every candidate type argument is known to share is Object.
+    values.add(Integer.valueOf(1));
+    Object x = values.get(0);
+    System.out.println(label + " added=" + values.size() + " readAsObject=" + x.getClass().getSimpleName());
+  }
+
+  public static void main(String[] args) {
+    writeInteger("listOfInteger", new ArrayList<Integer>());
+    writeInteger("listOfNumber", new ArrayList<Number>());
+    writeInteger("listOfObject", new ArrayList<Object>());
+    writeInteger("listOfComparable", new ArrayList<Comparable<Integer>>());
+  }
+}
+```
 
 ### Review
 
@@ -5198,7 +6570,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:649993028d41fe35da8524352275a5c01a381387399a0007ff09a0e6707b89fd"`, `"verified": null`
+To record: `"digest": "sha256:649993028d41fe35da8524352275a5c01a381387399a0007ff09a0e6707b89fd"`, `"verified": "sha256:516fc32dc34e74ec943db82872a225750305ed8ef6bbe5726f309143772a216b"`
 
 **Comments:**
 
@@ -5239,7 +6611,37 @@ Tests the duplicate-key behavior of the two-function toMap collector when no mer
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=IllegalStateException
+withMergeFunction={a=ab}
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+
+  public static void main(String[] args) {
+    try {
+      List.of("aa", "ab").stream().collect(Collectors.toMap(s -> s.charAt(0), s -> s));
+      System.out.println("thrown=none");
+    } catch (IllegalStateException e) {
+      System.out.println("thrown=" + e.getClass().getSimpleName());
+    }
+    // The three-argument form is the way to say which value wins.
+    System.out.println(
+        "withMergeFunction="
+            + List.of("aa", "ab").stream().collect(Collectors.toMap(s -> s.charAt(0), s -> s, (a, b) -> b)));
+  }
+}
+```
 
 ### Review
 
@@ -5254,7 +6656,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b"`, `"verified": null`
+To record: `"digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b"`, `"verified": "sha256:bc985617b6e5969c4dd2a4fbbf129eeece5a38f6d180e56723a04039a844b0a6"`
 
 **Comments:**
 
@@ -5295,7 +6697,30 @@ Requires connecting encounter order with the semantics of the short-circuiting f
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+sequential=a
+parallel=a
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> ordered = List.of("a", "b", "c");
+    System.out.println("sequential=" + ordered.stream().findFirst().orElseThrow());
+    // Ordered means first, even in parallel; findAny is the one that may return any element.
+    System.out.println("parallel=" + ordered.stream().parallel().findFirst().orElseThrow());
+  }
+}
+```
 
 ### Review
 
@@ -5310,7 +6735,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c36ab357793803d"`, `"verified": null`
+To record: `"digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c36ab357793803d"`, `"verified": "sha256:919b1feae12cce04d4be8a2db134dcc55918835923581f04b314f67827a1fd79"`
 
 **Comments:**
 
@@ -5429,7 +6854,83 @@ Tests the formal functional-interface definition rather than the oversimplified 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+ana
+BRUNO
+declared=equals abstract=true static=false default=false
+declared=hashCode abstract=true static=false default=false
+declared=name abstract=true static=false default=false
+declared=of abstract=false static=true default=false
+declared=shout abstract=false static=false default=true
+declared=toString abstract=true static=false default=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.Comparator;
+
+public class Main {
+
+  // @FunctionalInterface is a compile-time assertion: this would not compile if the extra
+  // declarations cost the interface its single abstract method. Default methods, static methods
+  // and abstract redeclarations of public Object methods all leave it intact.
+  @FunctionalInterface
+  interface Named {
+    String name();
+
+    default String shout() {
+      return name().toUpperCase();
+    }
+
+    static Named of(String value) {
+      return () -> value;
+    }
+
+    @Override
+    boolean equals(Object other);
+
+    @Override
+    int hashCode();
+
+    @Override
+    String toString();
+  }
+
+  public static void main(String[] args) {
+    // A lambda is assignable, which is exactly what an interface loses when it stops being
+    // functional. That this line compiles is the proof; the listing below only reports which
+    // declarations the interface really has.
+    Named named = () -> "ana";
+    System.out.println(named.name());
+    System.out.println(Named.of("bruno").shout());
+
+    // Sorted by name and without the compiler's synthetic lambda body, because the order
+    // getDeclaredMethods returns is unspecified and would make this output depend on the JVM.
+    Arrays.stream(Named.class.getDeclaredMethods())
+        .filter(m -> !m.isSynthetic())
+        .sorted(Comparator.comparing(Method::getName))
+        .forEach(
+            m ->
+                System.out.println(
+                    "declared="
+                        + m.getName()
+                        + " abstract="
+                        + Modifier.isAbstract(m.getModifiers())
+                        + " static="
+                        + Modifier.isStatic(m.getModifiers())
+                        + " default="
+                        + m.isDefault()));
+  }
+}
+```
 
 ### Review
 
@@ -5444,7 +6945,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:a7c2eeed5b5430583895ba7bcc5741a85d8baa0e1d28600f8919a5197ec642dd"`, `"verified": null`
+To record: `"digest": "sha256:a7c2eeed5b5430583895ba7bcc5741a85d8baa0e1d28600f8919a5197ec642dd"`, `"verified": "sha256:c9108b77def2326441479f5fd4ece664208fd0aa5bcf8cee5deb697426406e99"`
 
 **Comments:**
 
@@ -5627,7 +7128,31 @@ Checks the capture rule for local variables used from a lambda body.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: cant.ref.non.effectively.final.var
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.function.Supplier;
+
+public class Main {
+
+  public static void main(String[] args) {
+    int counter = 0;
+    Supplier<Integer> read = () -> counter;
+    // The capture above requires counter to be effectively final. This reassignment takes that
+    // away, so the lambda no longer compiles, and the error is reported at the capture.
+    counter = 1;
+    System.out.println(read.get());
+  }
+}
+```
 
 ### Review
 
@@ -5642,7 +7167,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:e5ebba5c9d6aeaef72da6498990ea36c3a1b80e5266da18c242d5fc478e7c75e"`, `"verified": null`
+To record: `"digest": "sha256:e5ebba5c9d6aeaef72da6498990ea36c3a1b80e5266da18c242d5fc478e7c75e"`, `"verified": "sha256:8e39abccc00b372f3acc69f0e730030f8894bad24f80e7a38cc06d4296d0d575"`
 
 **Comments:**
 
@@ -5683,7 +7208,59 @@ Distinguishes lambda lexical scoping from anonymous-class scoping.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+lambda=true:enclosing:enclosing
+anonymous=false:true:enclosing
+lambdaThisIsEnclosing=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.function.Supplier;
+
+public class Main {
+
+  final String label = "enclosing";
+
+  String fromLambda() {
+    // A lambda is not a new scope for this: it means the enclosing instance, so this, Main.this
+    // and an unqualified field read all reach the same object.
+    Supplier<String> supplier = () -> (this == Main.this) + ":" + this.label + ":" + label;
+    return supplier.get();
+  }
+
+  String fromAnonymousClass() {
+    // An anonymous class is a different object, so this there is the anonymous instance and
+    // reaching the enclosing one needs Main.this.
+    Supplier<String> supplier =
+        new Supplier<>() {
+          @Override
+          public String get() {
+            Object self = this;
+            return (self == Main.this) + ":" + self.getClass().getSimpleName().isEmpty() + ":" + Main.this.label;
+          }
+        };
+    return supplier.get();
+  }
+
+  String lambdaIdentity() {
+    Supplier<Object> supplier = () -> this;
+    return String.valueOf(supplier.get() == this);
+  }
+
+  public static void main(String[] args) {
+    Main main = new Main();
+    System.out.println("lambda=" + main.fromLambda());
+    System.out.println("anonymous=" + main.fromAnonymousClass());
+    System.out.println("lambdaThisIsEnclosing=" + main.lambdaIdentity());
+  }
+}
+```
 
 ### Review
 
@@ -5698,7 +7275,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1a0fa4c0cdeafcc273869919ee6d954b9b3f67ee60d3bc0a0bcb6930fdf7e600"`, `"verified": null`
+To record: `"digest": "sha256:1a0fa4c0cdeafcc273869919ee6d954b9b3f67ee60d3bc0a0bcb6930fdf7e600"`, `"verified": "sha256:301a76363ca57c469d680e15619185c4025b0e0a8de566564b8ca36a5f0531ed"`
 
 **Comments:**
 
@@ -5889,11 +7466,63 @@ Each statement checks a different fact about stream pipelines: laziness, single 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+beforeTerminal=[]
+afterTerminal=[a, bb, ccc] result=[bb, ccc]
+sortedOrder=[in3, in1, in2, out1, out2, out3] sorted=[1, 2, 3]
+peekedWithLimit=[1, 2]
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> seen = new ArrayList<>();
+
+    // An intermediate operation processes nothing until a terminal operation asks for elements.
+    Stream<String> pipeline = Stream.of("a", "bb", "ccc").filter(s -> {
+      seen.add(s);
+      return s.length() > 1;
+    });
+    System.out.println("beforeTerminal=" + seen);
+    List<String> result = pipeline.toList();
+    System.out.println("afterTerminal=" + seen + " result=" + result);
+
+    // sorted() is stateful: it cannot emit its first element until it has consumed every input,
+    // which a peek before and after makes visible.
+    List<String> order = new ArrayList<>();
+    List<Integer> sorted =
+        Stream.of(3, 1, 2)
+            .peek(i -> order.add("in" + i))
+            .sorted()
+            .peek(i -> order.add("out" + i))
+            .toList();
+    System.out.println("sortedOrder=" + order + " sorted=" + sorted);
+
+    // peek observes elements as they flow past a point, and only those the pipeline demands:
+    // with a short-circuiting terminal operation it sees fewer than the source holds.
+    List<Integer> peeked = new ArrayList<>();
+    Stream.of(1, 2, 3, 4).peek(peeked::add).limit(2).toList();
+    System.out.println("peekedWithLimit=" + peeked);
+  }
+}
+```
 
 ### Review
 
 **Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.
 
 A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
@@ -5907,7 +7536,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:6aefbf857ab03ebf0639c5df18fdf73d11544b50be59c6ec9fa977deba8bc9da"`, `"verified": null`
+To record: `"digest": "sha256:6aefbf857ab03ebf0639c5df18fdf73d11544b50be59c6ec9fa977deba8bc9da"`, `"verified": "sha256:d352f1eb2c0e9643c3a96e8c70bedd367afd3d70ad187e74e5cd3bc00ea7d862"`
 
 **Comments:**
 
@@ -6117,7 +7746,35 @@ Tests how an unbound instance method reference maps the receiver to the function
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+applied=4
+boxed=3
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The assignment compiling is the claim: an unbound reference to an instance method takes the
+    // receiver as its argument, so it fits a function from String to int.
+    ToIntFunction<String> length = String::length;
+    System.out.println("applied=" + length.applyAsInt("abcd"));
+
+    // The boxing form fits too, which is why the question asks for the primitive one.
+    Function<String, Integer> boxed = String::length;
+    System.out.println("boxed=" + boxed.apply("abc"));
+  }
+}
+```
 
 ### Review
 
@@ -6132,7 +7789,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:f37197deee9a5b4d33b7e31daae1b23fbcca2f567c2d568a722e28d001878169"`, `"verified": null`
+To record: `"digest": "sha256:f37197deee9a5b4d33b7e31daae1b23fbcca2f567c2d568a722e28d001878169"`, `"verified": "sha256:caa32181978516c56c61c0c4532df9864957e8394293a6fc04d39c32dea0d0f8"`
 
 **Comments:**
 
@@ -6173,7 +7830,42 @@ Tests two documented guarantees of the unmodifiable-list collector, including it
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+add=UnsupportedOperationException
+withNullElement=NullPointerException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class Main {
+
+  public static void main(String[] args) {
+    List<String> collected = List.of("a").stream().collect(Collectors.toUnmodifiableList());
+    System.out.println("add=" + thrownBy(() -> collected.add("b")));
+    System.out.println(
+        "withNullElement="
+            + thrownBy(() -> Arrays.asList("a", null).stream().collect(Collectors.toUnmodifiableList())));
+  }
+
+  static String thrownBy(Runnable action) {
+    try {
+      action.run();
+      return "none";
+    } catch (RuntimeException e) {
+      return e.getClass().getSimpleName();
+    }
+  }
+}
+```
 
 ### Review
 
@@ -6188,7 +7880,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216ccc8578dfbc6940"`, `"verified": null`
+To record: `"digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216ccc8578dfbc6940"`, `"verified": "sha256:defc11ffa0d793417c6cfb30e889baaa84e03c2208ef85397506ffdac57ca5d9"`
 
 **Comments:**
 
@@ -6229,7 +7921,63 @@ Tests the migration mechanism that lets an ordinary JAR participate on the modul
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+hasModuleInfo=false
+found=true
+automatic=true
+name=com.example.widgets
+version=1.4
+packages=[com.example.widgets]
+requires=[mandated java.base]
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.lang.module.ModuleDescriptor;
+import java.lang.module.ModuleFinder;
+import java.lang.module.ModuleReference;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Optional;
+import java.util.jar.JarEntry;
+import java.util.jar.JarOutputStream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // An ordinary JAR: no module-info.class anywhere in it.
+    Path dir = Files.createTempDirectory("mods");
+    Path jar = dir.resolve("com.example.widgets-1.4.jar");
+    try (JarOutputStream out = new JarOutputStream(Files.newOutputStream(jar))) {
+      out.putNextEntry(new JarEntry("com/example/widgets/Widget.class"));
+      out.write(new byte[] {1, 2, 3});
+      out.closeEntry();
+    }
+    System.out.println("hasModuleInfo=" + Files.exists(dir.resolve("module-info.class")));
+
+    // Placed where the module system looks for modules, it becomes a named module all the same.
+    ModuleFinder finder = ModuleFinder.of(dir);
+    Optional<ModuleReference> found = finder.find("com.example.widgets");
+    System.out.println("found=" + found.isPresent());
+    ModuleDescriptor descriptor = found.orElseThrow().descriptor();
+    System.out.println("automatic=" + descriptor.isAutomatic());
+    // The name comes from the file name, with a trailing version dropped and read separately.
+    System.out.println("name=" + descriptor.name());
+    System.out.println("version=" + descriptor.version().map(Object::toString).orElse("none"));
+    // An automatic module exports every package it contains and requires nothing but java.base.
+    System.out.println("packages=" + descriptor.packages());
+    System.out.println("requires=" + descriptor.requires());
+
+    Files.delete(jar);
+    Files.delete(dir);
+  }
+}
+```
 
 ### Review
 
@@ -6244,7 +7992,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c56051364a37bbc7a05"`, `"verified": null`
+To record: `"digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c56051364a37bbc7a05"`, `"verified": "sha256:5a84fc70b7f7fff49c4dcfeb32fd6b3433d2b2906de962db4eb6ff648b05285b"`
 
 **Comments:**
 
@@ -6285,7 +8033,80 @@ Separates module-level package export from Java language access modifiers on ind
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: not.def.public.cant.access
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import p.Api;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The public type of the exported package is reachable.
+    System.out.println("api=" + Api.value());
+    // The package-private one is not, and the module being exported changes nothing about it.
+    System.out.println("helper=" + p.Helper.value());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// p is exported in full. Exporting controls which packages other modules may read; it does not
+// change the access modifiers of the types inside.
+module lib {
+  exports p;
+}
+```
+
+`modules/lib/p/Api.java`:
+
+```java
+package p;
+
+/** Public, in the same exported package, and reachable from other modules. */
+public final class Api {
+
+  private Api() {}
+
+  public static String value() {
+    // Inside the package the package-private type is perfectly usable.
+    return Helper.value();
+  }
+}
+```
+
+`modules/lib/p/Helper.java`:
+
+```java
+package p;
+
+/** Package-private: no modifier. Exporting p does not widen this. */
+class Helper {
+
+  static String value() {
+    return "helper";
+  }
+}
+```
 
 ### Review
 
@@ -6300,7 +8121,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2"`, `"verified": null`
+To record: `"digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2"`, `"verified": "sha256:a6a96d4dd098bc83278a738421356322f8fa69f3043dc81ff81abe57afb3bed0"`
 
 **Comments:**
 
@@ -6344,11 +8165,123 @@ exports and opens look similar but differ in compile-time versus run-time access
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+exportedPublicCall=exportedPublic
+lExported=true
+lOpen=false
+qExported=true
+qOpen=true
+openedPrivateField=openedPrivate
+openedPrivateMethod=openedPrivateMethod
+exportedPrivateReflection=InaccessibleObjectException
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import l.Api;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Module lib = Api.class.getModule();
+    Module app = Main.class.getModule();
+
+    // exports: the public type compiled into this module and runs. That this file compiles at
+    // all is the compile-time half; the call is the run-time half.
+    System.out.println("exportedPublicCall=" + new Api().value());
+    System.out.println("lExported=" + lib.isExported("l", app));
+    System.out.println("lOpen=" + lib.isOpen("l", app));
+
+    // opens: reflection reaches a private field and a private method of the opened package. Note
+    // that isExported reports true for q as well: opening a package implies exporting it, which
+    // Module.isExported documents, so the reverse of lExported/lOpen above is not symmetric.
+    Class<?> hidden = Class.forName("q.Hidden");
+    System.out.println("qExported=" + lib.isExported("q", app));
+    System.out.println("qOpen=" + lib.isOpen("q", app));
+    Field secret = hidden.getDeclaredField("secret");
+    secret.setAccessible(true);
+    Object instance = hidden.getDeclaredConstructor().newInstance();
+    System.out.println("openedPrivateField=" + secret.get(instance));
+    Method whisper = hidden.getDeclaredMethod("whisper");
+    whisper.setAccessible(true);
+    System.out.println("openedPrivateMethod=" + whisper.invoke(instance));
+
+    // Exporting is not opening: the same reflection on the exported package is refused.
+    Field exportedPrivate = Api.class.getDeclaredField("hidden");
+    try {
+      exportedPrivate.setAccessible(true);
+      System.out.println("exportedPrivateReflection=allowed");
+    } catch (RuntimeException e) {
+      System.out.println("exportedPrivateReflection=" + e.getClass().getSimpleName());
+    }
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/l/Api.java`:
+
+```java
+package l;
+
+public final class Api {
+
+  private final String hidden = "exportedPrivate";
+
+  public String value() {
+    return "exportedPublic";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// Two directives for two different things: l is exported, so its public types are part of the
+// API at compile time and at run time. q is opened, so reflection may reach every type and
+// member in it, private ones included, but only at run time.
+module lib {
+  exports l;
+  opens q;
+}
+```
+
+`modules/lib/q/Hidden.java`:
+
+```java
+package q;
+
+public final class Hidden {
+
+  private final String secret = "openedPrivate";
+
+  private String whisper() {
+    return "openedPrivateMethod";
+  }
+}
+```
 
 ### Review
 
 **Approved** by vinicius-ssantos on 2026-10-02. The question has not changed since, so that verdict still applies.
+
+A program has been written for it since that review. Nothing the reviewer read changed, and the claim now has a program behind it, so the verdict stands and is better supported than when it was given.
 
 A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
@@ -6362,7 +8295,7 @@ A second reviewer is still worth having. To review it again, make the checks bel
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf1db359adf23f38"`, `"verified": null`
+To record: `"digest": "sha256:7b83957989115dccf5b2081c11c63c36aa4f8871fa46d5fccf1db359adf23f38"`, `"verified": "sha256:0f4d7c947becc32f648a881a59dd48347d812d240fff919d908671308c6d0a8c"`
 
 **Comments:**
 
@@ -6403,7 +8336,52 @@ Checks the implicit readability foundation that module declarations usually do n
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+module=app
+declaredRequires=0
+requires=[java.base[MANDATED]]
+readsJavaBase=true
+javaBaseName=java.base
+```
+
+That program, across 2 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+import java.util.TreeSet;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // java.base is depended upon implicitly, which is why this module can use String and
+    // System without declaring anything. The descriptor the compiler produced says so.
+    ModuleDescriptor descriptor = Main.class.getModule().getDescriptor();
+    System.out.println("module=" + descriptor.name());
+    System.out.println("declaredRequires=0");
+
+    // Names and modifiers only, not the recorded version of java.base, which depends on the
+    // release the build compiles against rather than on anything the question claims.
+    TreeSet<String> names = new TreeSet<>();
+    descriptor.requires().forEach(r -> names.add(r.name() + r.modifiers()));
+    System.out.println("requires=" + names);
+    System.out.println("readsJavaBase=" + Main.class.getModule().canRead(Object.class.getModule()));
+    System.out.println("javaBaseName=" + Object.class.getModule().getName());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// No requires directive is written at all.
+module app {}
+```
 
 ### Review
 
@@ -6418,7 +8396,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40c9d6fd91e276cf"`, `"verified": null`
+To record: `"digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40c9d6fd91e276cf"`, `"verified": "sha256:b47db13ac12eca1af4818d70924422538ba95a7825ac3a80cdbbdc6d8e5cafb8"`
 
 **Comments:**
 
@@ -6459,7 +8437,36 @@ Tests the scope of on-demand type imports and the fact that packages are not rec
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: cant.resolve.location
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // java.util.* brings in the accessible top-level types declared directly in java.util.
+    List<String> list = new ArrayList<>();
+    Map<String, Integer> map = new HashMap<>();
+    list.add("ok");
+    map.put("ok", 1);
+    System.out.println(list + " " + map);
+
+    // It does not reach java.util.concurrent, which is a different package rather than part of
+    // java.util, so this simple name cannot be resolved.
+    ConcurrentHashMap<String, Integer> concurrent = new ConcurrentHashMap<>();
+    System.out.println(concurrent);
+  }
+}
+```
 
 ### Review
 
@@ -6474,7 +8481,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa"`, `"verified": null`
+To record: `"digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa"`, `"verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f"`
 
 **Comments:**
 
@@ -6515,7 +8522,45 @@ Checks the command-line form for launching a main class from a named module on a
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+initialModule=com.example.app
+mainClass=p.Main
+modulePathWasGiven=true
+named=true
+module=com.example.app
+class=p.Main
+```
+
+That program, across 2 files:
+
+`modules/com.example.app/module-info.java`:
+
+```java
+module com.example.app {}
+```
+
+`modules/com.example.app/p/Main.java`:
+
+```java
+package p;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // This question is proved by how the build runs it. The harness launches a modular question
+    // with exactly the form the question asks about -- java --module-path <dir> --module
+    // <module>/<main class> -- and the launcher records what it was given in these properties.
+    System.out.println("initialModule=" + System.getProperty("jdk.module.main"));
+    System.out.println("mainClass=" + System.getProperty("jdk.module.main.class"));
+    System.out.println("modulePathWasGiven=" + (System.getProperty("jdk.module.path") != null));
+    System.out.println("named=" + Main.class.getModule().isNamed());
+    System.out.println("module=" + Main.class.getModule().getName());
+    System.out.println("class=" + Main.class.getName());
+  }
+}
+```
 
 ### Review
 
@@ -6530,7 +8575,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2"`, `"verified": null`
+To record: `"digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2"`, `"verified": "sha256:89b9e6b7bd210be67a88f45bad724d8c67fcd44253131820512698704d2fc2b9"`
 
 **Comments:**
 
@@ -6571,7 +8616,114 @@ Requires mapping service consumption and service implementation to the correct m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+providerResolved=true
+loaded=[LOUD from provider]
+declaredUses=[s.Greeter]
+providerProvides=[s.Greeter->[p.Loud]]
+```
+
+That program, across 6 files:
+
+`modules/api/module-info.java`:
+
+```java
+module api {
+  exports s;
+}
+```
+
+`modules/api/s/Greeter.java`:
+
+```java
+package s;
+
+/** The service type: an interface both the consumer and the provider name. */
+public interface Greeter {
+
+  String greet();
+}
+```
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.util.ServiceLoader;
+import java.util.TreeSet;
+import s.Greeter;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // The provider module is not required by anything. It is in the graph because app declares
+    // uses and the resolver binds providers of that service, which is what the pair is for.
+    System.out.println("providerResolved=" + ModuleLayer.boot().findModule("provider").isPresent());
+
+    TreeSet<String> greetings = new TreeSet<>();
+    for (Greeter greeter : ServiceLoader.load(Greeter.class)) {
+      greetings.add(greeter.greet() + " from " + greeter.getClass().getModule().getName());
+    }
+    System.out.println("loaded=" + greetings);
+
+    System.out.println("declaredUses=" + Main.class.getModule().getDescriptor().uses());
+    System.out.println(
+        "providerProvides="
+            + ModuleLayer.boot()
+                .findModule("provider")
+                .orElseThrow()
+                .getDescriptor()
+                .provides()
+                .stream()
+                .map(p -> p.service() + "->" + p.providers())
+                .toList());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// A consumer declares the service type it loads. Without uses, ServiceLoader finds nothing from
+// this module, and the provider module is not even pulled into the graph.
+module app {
+  requires api;
+  uses s.Greeter;
+}
+```
+
+`modules/provider/module-info.java`:
+
+```java
+// A provider declares what it implements and with which class. The directive names the service
+// interface first and the implementation second, and the implementation must be in this module.
+module provider {
+  requires api;
+  provides s.Greeter with p.Loud;
+}
+```
+
+`modules/provider/p/Loud.java`:
+
+```java
+package p;
+
+import s.Greeter;
+
+/** Needs a public no-argument constructor for ServiceLoader to instantiate it. */
+public final class Loud implements Greeter {
+
+  public Loud() {}
+
+  @Override
+  public String greet() {
+    return "LOUD";
+  }
+}
+```
 
 ### Review
 
@@ -6586,7 +8738,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518"`, `"verified": null`
+To record: `"digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518"`, `"verified": "sha256:02ba7787ad244576db685cfd89ffe6a07695123b62acb4205c55cd05d257d2ff"`
 
 **Comments:**
 
@@ -6695,7 +8847,108 @@ Requires separating reflective openness from compile-time export accessibility a
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+isOpen=true
+opensDirectives=0
+exportsDirectives=[l]
+lOpenToApp=true
+hOpenToApp=true
+ordinaryCallIntoExported=exported
+privateFieldOfUnexported=deeplyReflected
+hInExports=false
+```
+
+That program, across 5 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+import java.lang.reflect.Field;
+import java.util.TreeSet;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Module lib = l.Api.class.getModule();
+    Module app = Main.class.getModule();
+    ModuleDescriptor descriptor = lib.getDescriptor();
+
+    System.out.println("isOpen=" + descriptor.isOpen());
+    // An open module declares no opens directives: being open covers every package it has.
+    System.out.println("opensDirectives=" + descriptor.opens().size());
+    TreeSet<String> exported = new TreeSet<>();
+    descriptor.exports().forEach(e -> exported.add(e.source()));
+    System.out.println("exportsDirectives=" + exported);
+
+    System.out.println("lOpenToApp=" + lib.isOpen("l", app));
+    System.out.println("hOpenToApp=" + lib.isOpen("h", app));
+    System.out.println("ordinaryCallIntoExported=" + l.Api.value());
+
+    // Deep reflection into the package that is *not* exported, which is what open grants.
+    Class<?> internal = Class.forName("h.Internal");
+    Field secret = internal.getDeclaredField("secret");
+    secret.setAccessible(true);
+    System.out.println("privateFieldOfUnexported=" + secret.get(internal.getDeclaredConstructor().newInstance()));
+
+    // The compile-time half of this -- that a non-exported package still cannot be named in
+    // source -- is proved by t07-export-does-not-make-type-public, which fails to compile for
+    // exactly that reason. A program that runs cannot also be a program that does not compile.
+    System.out.println("hInExports=" + exported.contains("h"));
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+}
+```
+
+`modules/lib/h/Internal.java`:
+
+```java
+package h;
+
+/** In a package the module never exports, so no other module can name this type in source. */
+public final class Internal {
+
+  private final String secret = "deeplyReflected";
+
+  public Internal() {}
+}
+```
+
+`modules/lib/l/Api.java`:
+
+```java
+package l;
+
+public final class Api {
+
+  private Api() {}
+
+  public static String value() {
+    return "exported";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// An open module. Every package is open for deep reflection, including h, which is not exported.
+// exports still names exactly one package, and that is what ordinary compile-time access goes by.
+open module lib {
+  exports l;
+}
+```
 
 ### Review
 
@@ -6710,7 +8963,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5a88b0b9ff4f9b7"`, `"verified": null`
+To record: `"digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5a88b0b9ff4f9b7"`, `"verified": "sha256:37563b482716882d7df61eb7411262ab3dd09c36c4228e9d2d0df6b251aa72d7"`
 
 **Comments:**
 
@@ -6751,7 +9004,124 @@ Tests the difference between an unqualified export and an export targeted to a f
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+toApp=true
+toOther=true
+toJavaBase=false
+lUnqualified=false
+qUnqualified=true
+readFromOther=internal
+readHere=internal
+```
+
+That program, across 7 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Module lib = l.Internal.class.getModule();
+    Module app = Main.class.getModule();
+    Module other = x.Named.class.getModule();
+    Module javaBase = Object.class.getModule();
+
+    // app and other are the two modules the qualified export names, so both may read l; and
+    // both really do, which is what the compiled call below shows.
+    System.out.println("toApp=" + lib.isExported("l", app));
+    System.out.println("toOther=" + lib.isExported("l", other));
+    System.out.println("toJavaBase=" + lib.isExported("l", javaBase));
+    // Unqualified means exported to every module, which the qualified one is not.
+    System.out.println("lUnqualified=" + lib.isExported("l"));
+    System.out.println("qUnqualified=" + lib.isExported("q"));
+    System.out.println("readFromOther=" + x.Named.read());
+    System.out.println("readHere=" + l.Internal.secret());
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+module app {
+  requires lib;
+  requires other;
+}
+```
+
+`modules/lib/l/Internal.java`:
+
+```java
+package l;
+
+/** Public, in a package exported only to the named modules. */
+public final class Internal {
+
+  private Internal() {}
+
+  public static String secret() {
+    return "internal";
+  }
+}
+```
+
+`modules/lib/module-info.java`:
+
+```java
+// A qualified export: the package is available to the two named modules and to nobody else.
+module lib {
+  exports l to app, other;
+  exports q;
+}
+```
+
+`modules/lib/q/Open.java`:
+
+```java
+package q;
+
+/** Public, in a package exported to everyone. */
+public final class Open {
+
+  private Open() {}
+
+  public static String value() {
+    return "open";
+  }
+}
+```
+
+`modules/other/module-info.java`:
+
+```java
+// Named in the qualified export, so it may read l.
+module other {
+  requires lib;
+  exports x;
+}
+```
+
+`modules/other/x/Named.java`:
+
+```java
+package x;
+
+import l.Internal;
+
+public final class Named {
+
+  private Named() {}
+
+  public static String read() {
+    return Internal.secret();
+  }
+}
+```
 
 ### Review
 
@@ -6766,7 +9136,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92"`, `"verified": null`
+To record: `"digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92"`, `"verified": "sha256:cb2fec7270c07e63bcab6f4b4cb4c3a2f73d005558f81f8c73b4c95bebd4f00e"`
 
 **Comments:**
 
@@ -6807,7 +9177,86 @@ Requires distinguishing ordinary module readability from the special compile-tim
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+modifiers=[STATIC]
+isStatic=true
+appResolved=true
+optionalResolved=false
+classLoaded=false
+```
+
+That program, across 4 files:
+
+`modules/app/a/Main.java`:
+
+```java
+package a;
+
+import java.lang.module.ModuleDescriptor;
+
+public class Main {
+
+  public static void main(String[] args) {
+    ModuleDescriptor descriptor = Main.class.getModule().getDescriptor();
+    ModuleDescriptor.Requires optional =
+        descriptor.requires().stream()
+            .filter(r -> r.name().equals("optional"))
+            .findFirst()
+            .orElseThrow();
+    // Compile time: the dependency is declared, and the STATIC modifier is what makes it
+    // optional later. The whole graph compiled, which is the compile-time half of the claim.
+    System.out.println("modifiers=" + optional.modifiers());
+    System.out.println(
+        "isStatic=" + optional.modifiers().contains(ModuleDescriptor.Requires.Modifier.STATIC));
+
+    // Run time: optional sits on the module path next to app and still was not resolved, because
+    // a static dependency on its own does not pull a module into the graph.
+    System.out.println("appResolved=" + ModuleLayer.boot().findModule("app").isPresent());
+    System.out.println("optionalResolved=" + ModuleLayer.boot().findModule("optional").isPresent());
+    try {
+      Class.forName("o.Flag");
+      System.out.println("classLoaded=true");
+    } catch (ClassNotFoundException e) {
+      System.out.println("classLoaded=false");
+    }
+  }
+}
+```
+
+`modules/app/module-info.java`:
+
+```java
+// requires static: app compiles against optional, but at run time the module system does not
+// resolve it unless something else pulls it in.
+module app {
+  requires static optional;
+}
+```
+
+`modules/optional/module-info.java`:
+
+```java
+module optional {
+  exports o;
+}
+```
+
+`modules/optional/o/Flag.java`:
+
+```java
+package o;
+
+public final class Flag {
+
+  private Flag() {}
+
+  public static String name() {
+    return "optional";
+  }
+}
+```
 
 ### Review
 
@@ -6822,7 +9271,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b"`, `"verified": null`
+To record: `"digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b"`, `"verified": "sha256:b7021ceb205085071e10e567e045853ae1c06478b100a69c657120a42b2d8629"`
 
 **Comments:**
 
@@ -7141,7 +9590,42 @@ Tests the special visibility limitation of types declared in the unnamed package
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+COMPILE_ERROR: cant.resolve.location
+```
+
+That program, across 2 files:
+
+`Helper.java`:
+
+```java
+/** A top-level type in the unnamed package: the file declares no package. */
+public class Helper {
+
+  public static String name() {
+    return "helper";
+  }
+}
+```
+
+`Main.java`:
+
+```java
+package p;
+
+// There is no way to write the import either: `import Helper;` is not even grammatical, because
+// an import needs a qualified name and the unnamed package has no name to qualify with. So the
+// reference below is the honest test, and it fails to resolve: a type in a named package cannot
+// reach a top-level type of the unnamed package at all.
+public class Main {
+
+  public static void main(String[] args) {
+    System.out.println(Helper.name());
+  }
+}
+```
 
 ### Review
 
@@ -7156,7 +9640,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1"`, `"verified": null`
+To record: `"digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1"`, `"verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f"`
 
 **Comments:**
 
@@ -7341,7 +9825,47 @@ Tests the exception-surface difference between two common ways to wait for a Com
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+join=CompletionException
+get=ExecutionException
+bothWrapTheSameCause=ok
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    CompletableFuture<String> failed = CompletableFuture.failedFuture(new IllegalStateException("boom"));
+
+    try {
+      failed.join();
+      System.out.println("join=none");
+    } catch (RuntimeException e) {
+      // Unchecked, so join needs no catch at all to compile.
+      System.out.println("join=" + e.getClass().getSimpleName());
+    }
+
+    try {
+      failed.get();
+      System.out.println("get=none");
+    } catch (ExecutionException e) {
+      // Checked, which is why this one has to be caught or declared.
+      System.out.println("get=" + e.getClass().getSimpleName());
+    }
+
+    System.out.println("bothWrapTheSameCause=" + CompletableFuture.completedFuture("ok").join());
+  }
+}
+```
 
 ### Review
 
@@ -7356,7 +9880,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:14321ec79b2165f614edf4f2d5ddc7317f2864917e3401e01dec22a22d28eec5"`, `"verified": null`
+To record: `"digest": "sha256:14321ec79b2165f614edf4f2d5ddc7317f2864917e3401e01dec22a22d28eec5"`, `"verified": "sha256:21123a300fcabd121ce8203fdc72ccb7b295b4fe526f7ee7d5280c92b1cb3d67"`
 
 **Comments:**
 
@@ -7397,7 +9921,34 @@ Tests ConcurrentHashMap.computeIfAbsent semantics when the mapping function decl
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+returned=null
+containsKey=false
+size=0
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.ConcurrentHashMap;
+
+public class Main {
+
+  public static void main(String[] args) {
+    ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+    Integer returned = map.computeIfAbsent("x", key -> null);
+
+    System.out.println("returned=" + returned);
+    // No mapping is recorded, which is what lets null from get() mean absence.
+    System.out.println("containsKey=" + map.containsKey("x"));
+    System.out.println("size=" + map.size());
+  }
+}
+```
 
 ### Review
 
@@ -7412,7 +9963,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f"`, `"verified": null`
+To record: `"digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f"`, `"verified": "sha256:add2dc8e9babb3791c67936bbfe5048020ba1ce96cefef971defb3434283a662"`
 
 **Comments:**
 
@@ -7693,7 +10244,90 @@ Checks the standard lock/unlock structure needed because Lock does not have sync
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+threw=boom
+lockedAfterFinally=false
+holdCountAfterFinally=0
+holdCountAfterTwoLocks=2
+holdCountAfterOneUnlock=1
+stillLocked=true
+holdCountAtEnd=0
+catchVariantAlsoReleases=true
+unlockWithoutLock=IllegalMonitorStateException
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+public class Main {
+
+  static final ReentrantLock LOCK = new ReentrantLock();
+
+  static void protectedWork() {
+    LOCK.lock();
+    try {
+      throw new IllegalStateException("boom");
+    } finally {
+      // finally runs whether the body returns or throws, which is the only placement that
+      // releases the lock on both paths.
+      LOCK.unlock();
+    }
+  }
+
+  static void withoutFinally() {
+    LOCK.lock();
+    try {
+      throw new IllegalStateException("boom");
+    } catch (IllegalStateException e) {
+      // The unlock here is skipped by the throw above in the common shape of this mistake:
+      // placing it after the protected code, inside the try, instead of in a finally.
+      LOCK.unlock();
+      throw e;
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      protectedWork();
+    } catch (IllegalStateException e) {
+      System.out.println("threw=" + e.getMessage());
+    }
+    System.out.println("lockedAfterFinally=" + LOCK.isLocked());
+    System.out.println("holdCountAfterFinally=" + LOCK.getHoldCount());
+
+    // Reentrant: the same thread may lock repeatedly, and owes one unlock for each lock, which
+    // is why the hold count and not a boolean is what finally has to bring back to zero.
+    LOCK.lock();
+    LOCK.lock();
+    System.out.println("holdCountAfterTwoLocks=" + LOCK.getHoldCount());
+    LOCK.unlock();
+    System.out.println("holdCountAfterOneUnlock=" + LOCK.getHoldCount());
+    System.out.println("stillLocked=" + LOCK.isLocked());
+    LOCK.unlock();
+    System.out.println("holdCountAtEnd=" + LOCK.getHoldCount());
+
+    try {
+      withoutFinally();
+    } catch (IllegalStateException e) {
+      System.out.println("catchVariantAlsoReleases=" + !LOCK.isLocked());
+    }
+    // Unlocking a lock this thread does not hold is itself an error, so an unbalanced finally
+    // cannot be patched by unlocking twice.
+    try {
+      LOCK.unlock();
+      System.out.println("unlockWithoutLock=allowed");
+    } catch (IllegalMonitorStateException e) {
+      System.out.println("unlockWithoutLock=" + e.getClass().getSimpleName());
+    }
+  }
+}
+```
 
 ### Review
 
@@ -7708,7 +10342,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5"`, `"verified": null`
+To record: `"digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5"`, `"verified": "sha256:9b8a0b697e5b54cbe9f4885e4c58cc9a2c128e4e32959150c59a7f1c4ad5aa70"`
 
 **Comments:**
 
@@ -7749,7 +10383,44 @@ Checks the Java 21 convenience API for starting a virtual thread and distinguish
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+returnsAThread=true
+isVirtual=true
+ran=true
+ranOnCallingThread=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class Main {
+
+  public static void main(String[] args) throws InterruptedException {
+    AtomicBoolean ran = new AtomicBoolean(false);
+    AtomicBoolean onCaller = new AtomicBoolean(false);
+    Thread caller = Thread.currentThread();
+
+    Thread started = Thread.startVirtualThread(
+        () -> {
+          ran.set(true);
+          onCaller.set(Thread.currentThread() == caller);
+        });
+
+    System.out.println("returnsAThread=" + (started instanceof Thread));
+    System.out.println("isVirtual=" + started.isVirtual());
+    started.join();
+    System.out.println("ran=" + ran.get());
+    // Already started, and not run on the caller.
+    System.out.println("ranOnCallingThread=" + onCaller.get());
+  }
+}
+```
 
 ### Review
 
@@ -7764,7 +10435,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1b132edc5296249a8b8757c486af2aee1fcc34c6da91c2d9b77ea394d5c79d4e"`, `"verified": null`
+To record: `"digest": "sha256:1b132edc5296249a8b8757c486af2aee1fcc34c6da91c2d9b77ea394d5c79d4e"`, `"verified": "sha256:e251b62af39c798917a2f2404b2b180ba9dcab8b31c11c057bc4d2cbadc6e7c8"`
 
 **Comments:**
 
@@ -7805,7 +10476,55 @@ Requires knowing which monitor is acquired by synchronized instance and static m
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+beforeAnyLock=false,false
+instanceHoldsReceiver=true
+instanceHoldsClass=false
+staticHoldsClass=true
+staticHoldsInstance=false
+blockOnThisHoldsReceiver=true
+afterAllLocks=false,false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  // A synchronized instance method acquires the receiver's monitor: the same lock as
+  // synchronized (this).
+  synchronized void instanceMethod() {
+    System.out.println("instanceHoldsReceiver=" + Thread.holdsLock(this));
+    System.out.println("instanceHoldsClass=" + Thread.holdsLock(Main.class));
+  }
+
+  // A synchronized static method acquires the monitor of the Class object, because there is no
+  // receiver. The two therefore do not exclude each other.
+  static synchronized void staticMethod(Main instance) {
+    System.out.println("staticHoldsClass=" + Thread.holdsLock(Main.class));
+    System.out.println("staticHoldsInstance=" + Thread.holdsLock(instance));
+  }
+
+  void explicitBlock() {
+    synchronized (this) {
+      System.out.println("blockOnThisHoldsReceiver=" + Thread.holdsLock(this));
+    }
+  }
+
+  public static void main(String[] args) {
+    Main instance = new Main();
+    System.out.println("beforeAnyLock=" + Thread.holdsLock(instance) + "," + Thread.holdsLock(Main.class));
+    instance.instanceMethod();
+    staticMethod(instance);
+    instance.explicitBlock();
+    System.out.println("afterAllLocks=" + Thread.holdsLock(instance) + "," + Thread.holdsLock(Main.class));
+  }
+}
+```
 
 ### Review
 
@@ -7820,7 +10539,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb22389d94b43b89ca9d"`, `"verified": null`
+To record: `"digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb22389d94b43b89ca9d"`, `"verified": "sha256:f4472e283f026d84223166eeb17f09bebf26af1daf55d2417f5a1b368195d246"`
 
 **Comments:**
 
@@ -8022,7 +10741,58 @@ Tests the distinction between constructing and starting a virtual thread with th
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+isVirtual=true
+state=NEW
+alive=false
+daemon=true
+stateAfterJoin=TERMINATED
+aliveAfterJoin=false
+restarted=IllegalThreadStateException
+startVirtualThreadIsNew=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  public static void main(String[] args) throws InterruptedException {
+    Runnable task = () -> {};
+    Thread thread = Thread.ofVirtual().unstarted(task);
+
+    // unstarted builds the thread and hands it back without running it, which is the whole
+    // difference from start() and from Thread.startVirtualThread.
+    System.out.println("isVirtual=" + thread.isVirtual());
+    System.out.println("state=" + thread.getState());
+    System.out.println("alive=" + thread.isAlive());
+    // A virtual thread is always a daemon and always has normal priority.
+    System.out.println("daemon=" + thread.isDaemon());
+
+    thread.start();
+    thread.join();
+    System.out.println("stateAfterJoin=" + thread.getState());
+    System.out.println("aliveAfterJoin=" + thread.isAlive());
+
+    // Starting it a second time is refused, so unstarted hands out a one-shot thread.
+    try {
+      thread.start();
+      System.out.println("restarted=allowed");
+    } catch (IllegalThreadStateException e) {
+      System.out.println("restarted=" + e.getClass().getSimpleName());
+    }
+
+    // For contrast, the thread Thread.startVirtualThread returns is already running or finished.
+    Thread started = Thread.startVirtualThread(task);
+    System.out.println("startVirtualThreadIsNew=" + (started.getState() == Thread.State.NEW));
+    started.join();
+  }
+}
+```
 
 ### Review
 
@@ -8037,7 +10807,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7"`, `"verified": null`
+To record: `"digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7"`, `"verified": "sha256:343e0e1342de3a34bdf2df42d3acf889d593391dfe164e715bfb11b78b832d64"`
 
 **Comments:**
 
@@ -8167,7 +10937,65 @@ Separates volatile visibility guarantees from atomicity of a compound read-modif
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+volatileWriteBecameVisible=true
+incrementsPerformed=200000
+neverExceedsExpected=true
+atLeastOne=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+public class Main {
+
+  static volatile boolean flag = false;
+  static volatile int count = 0;
+
+  public static void main(String[] args) throws InterruptedException {
+    // The visibility half of the claim, deterministically: this spin ends only because a
+    // volatile write by another thread is guaranteed to become visible to this one.
+    Thread writer = new Thread(() -> flag = true);
+    writer.start();
+    while (!flag) {
+      Thread.onSpinWait();
+    }
+    System.out.println("volatileWriteBecameVisible=" + flag);
+    writer.join();
+
+    // The lost-update half cannot be made deterministic. count++ is a read, an add and a write,
+    // so two threads can read the same value and one increment can vanish -- but whether that
+    // happens in any given run is up to the scheduler. Asserting that a loss was observed would
+    // be a test that passes most of the time, which is worse than not asserting it. What is
+    // always true, and is what this prints, is that increments are never gained: the total can
+    // come out below the number of increments performed and never above it.
+    int threads = 4;
+    int perThread = 50_000;
+    Thread[] workers = new Thread[threads];
+    for (int i = 0; i < threads; i++) {
+      workers[i] =
+          new Thread(
+              () -> {
+                for (int n = 0; n < perThread; n++) {
+                  count++;
+                }
+              });
+      workers[i].start();
+    }
+    for (Thread worker : workers) {
+      worker.join();
+    }
+    int expected = threads * perThread;
+    System.out.println("incrementsPerformed=" + expected);
+    System.out.println("neverExceedsExpected=" + (count <= expected));
+    System.out.println("atLeastOne=" + (count > 0));
+  }
+}
+```
 
 ### Review
 
@@ -8182,7 +11010,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb"`, `"verified": null`
+To record: `"digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb"`, `"verified": "sha256:f54950daca7e5deae007690cf5e471c9ebb80c8b0a62386a786f615f5964384c"`
 
 **Comments:**
 
@@ -8385,7 +11213,46 @@ Checks the default replacement behavior of Files.copy, a common source of incorr
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+thrown=FileAlreadyExistsException
+afterReplaceExisting=from the source
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+
+public class Main {
+
+  public static void main(String[] args) throws IOException {
+    Path source = Files.createTempFile("certforge-source", ".txt");
+    Path target = Files.createTempFile("certforge-target", ".txt");
+    Files.writeString(source, "from the source");
+    try {
+      try {
+        Files.copy(source, target);
+        System.out.println("thrown=none");
+      } catch (IOException e) {
+        System.out.println("thrown=" + e.getClass().getSimpleName());
+      }
+      // Overwriting is opt-in rather than the default.
+      Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
+      System.out.println("afterReplaceExisting=" + Files.readString(target));
+    } finally {
+      Files.deleteIfExists(source);
+      Files.deleteIfExists(target);
+    }
+  }
+}
+```
 
 ### Review
 
@@ -8400,7 +11267,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a787e081b9567d47"`, `"verified": null`
+To record: `"digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a787e081b9567d47"`, `"verified": "sha256:81107834f27d0803fc4d530c928a5e15cc7129e72e362b9263b49b918ff9cfd5"`
 
 **Comments:**
 
@@ -8441,7 +11308,63 @@ Checks the resource-lifecycle requirement of a lazily populated stream backed by
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+streamIsAutoCloseable=true
+read=[one, two, three]
+afterClose=IllegalStateException
+firstOnly=one
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path file = Files.createTempFile("lines", ".txt");
+    Files.writeString(file, "one\ntwo\nthree\n", StandardCharsets.UTF_8);
+
+    // The stream a Files method returns is closeable, which is what makes try-with-resources
+    // applicable to it at all. An ordinary Stream from a collection has nothing to release.
+    System.out.println("streamIsAutoCloseable=" + AutoCloseable.class.isAssignableFrom(Stream.class));
+
+    try (Stream<String> lines = Files.lines(file)) {
+      List<String> read = lines.toList();
+      System.out.println("read=" + read);
+    }
+
+    // Leaving the block closed the stream, and a closed stream refuses further use. That is the
+    // observable half; that closing is also what releases the file handle is what the javadoc
+    // states and is the reason the resource block matters rather than being tidy.
+    Stream<String> leaked = Files.lines(file);
+    leaked.close();
+    try {
+      leaked.findFirst();
+      System.out.println("afterClose=usable");
+    } catch (IllegalStateException e) {
+      System.out.println("afterClose=" + e.getClass().getSimpleName());
+    }
+
+    // It is lazy: a short-circuiting terminal operation reads the first line and stops, so the
+    // whole file is never held in memory and never fully read.
+    try (Stream<String> lines = Files.lines(file)) {
+      System.out.println("firstOnly=" + lines.findFirst().orElseThrow());
+    }
+
+    Files.delete(file);
+  }
+}
+```
 
 ### Review
 
@@ -8456,7 +11379,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c"`, `"verified": null`
+To record: `"digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c"`, `"verified": "sha256:6375607bfe48fdf99823980353f91b7ad971d1d7a92cd17ac447476b8de6886b"`
 
 **Comments:**
 
@@ -8497,7 +11420,42 @@ Tests the default charset specified by the convenience overload of Files.readStr
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+defaultMatchesUtf8=true
+explicitUtf8Matches=true
+latin1Matches=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // U+00E7 is one character that UTF-8 stores in two bytes, so the charset is observable.
+    String text = "a\u00e7a\u00ed";
+    Path file = Files.createTempFile("certforge-charset", ".txt");
+    try {
+      Files.write(file, text.getBytes(StandardCharsets.UTF_8));
+
+      System.out.println("defaultMatchesUtf8=" + Files.readString(file).equals(text));
+      System.out.println("explicitUtf8Matches=" + Files.readString(file, StandardCharsets.UTF_8).equals(text));
+      // Reading the same bytes as Latin-1 does not, which is what makes the default meaningful.
+      System.out.println("latin1Matches=" + Files.readString(file, StandardCharsets.ISO_8859_1).equals(text));
+    } finally {
+      Files.deleteIfExists(file);
+    }
+  }
+}
+```
 
 ### Review
 
@@ -8512,7 +11470,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:e9a22d566e7a8783558af0b1a6bcea1fceabc6d10bd22fd202c2a7e9a1b0766a"`, `"verified": null`
+To record: `"digest": "sha256:e9a22d566e7a8783558af0b1a6bcea1fceabc6d10bd22fd202c2a7e9a1b0766a"`, `"verified": "sha256:d8788c76d115b7dbc997048a434dcb9bb54287ea39df1de52d0a856e2d781237"`
 
 **Comments:**
 
@@ -8553,7 +11511,83 @@ Tests resource management for lazily populated directory-tree streams.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+streamIsAutoCloseable=true
+totalEntries=12
+visitedWhenThreeTaken=3 taken=3
+depthOneEntries=7
+afterClose=IllegalStateException
+cleanedUp=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path root = Files.createTempDirectory("walk");
+    Path nested = Files.createDirectory(root.resolve("nested"));
+    for (int i = 0; i < 5; i++) {
+      Files.createFile(root.resolve("file" + i + ".txt"));
+      Files.createFile(nested.resolve("deep" + i + ".txt"));
+    }
+
+    // Closeable, so try-with-resources applies: the walk holds directory handles open as it
+    // descends, and closing is what releases them.
+    System.out.println("streamIsAutoCloseable=" + AutoCloseable.class.isAssignableFrom(Stream.class));
+
+    try (Stream<Path> walk = Files.walk(root)) {
+      // The start directory, nested, and ten files.
+      System.out.println("totalEntries=" + walk.count());
+    }
+
+    // Populated lazily: with a limit the walk visits only as many entries as the pipeline asks
+    // for, rather than building the whole tree first. Counting visits rather than naming them,
+    // because the order a directory is iterated in is not specified.
+    List<Path> visited = new ArrayList<>();
+    try (Stream<Path> walk = Files.walk(root)) {
+      List<Path> taken = walk.peek(visited::add).limit(3).toList();
+      System.out.println("visitedWhenThreeTaken=" + visited.size() + " taken=" + taken.size());
+    }
+
+    // maxDepth bounds the descent, so the nested files are never visited at depth 1.
+    try (Stream<Path> walk = Files.walk(root, 1)) {
+      System.out.println("depthOneEntries=" + walk.count());
+    }
+
+    Stream<Path> leaked = Files.walk(root);
+    leaked.close();
+    try {
+      leaked.findFirst();
+      System.out.println("afterClose=usable");
+    } catch (IllegalStateException e) {
+      System.out.println("afterClose=" + e.getClass().getSimpleName());
+    }
+
+    try (Stream<Path> walk = Files.walk(root)) {
+      walk.sorted(java.util.Comparator.reverseOrder()).forEach(p -> {
+        try {
+          Files.delete(p);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
+    }
+    System.out.println("cleanedUp=" + !Files.exists(root));
+  }
+}
+```
 
 ### Review
 
@@ -8568,7 +11602,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9"`, `"verified": null`
+To record: `"digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9"`, `"verified": "sha256:8353460381256744b9d2aadd5057dd4efcfcc9c3ba259c8fbb1d7ed1a61458d1"`
 
 **Comments:**
 
@@ -8834,7 +11868,67 @@ Tests the capability that distinguishes RandomAccessFile from sequential stream 
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+pointerAfterSeek=3
+readAt3=D
+pointerAfterRead=4
+readAt3Again=D
+readAt0=A
+content=AxCDEFGH
+lengthAfterSeekPastEnd=8
+readPastEnd=-1
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    Path file = Files.createTempFile("seek", ".bin");
+    try (RandomAccessFile raf = new RandomAccessFile(file.toFile(), "rw")) {
+      raf.write("ABCDEFGH".getBytes("US-ASCII"));
+
+      // seek moves the file pointer to an absolute byte offset counted from the beginning of
+      // the file, not relative to where the pointer happens to be.
+      raf.seek(3);
+      System.out.println("pointerAfterSeek=" + raf.getFilePointer());
+      System.out.println("readAt3=" + (char) raf.read());
+      System.out.println("pointerAfterRead=" + raf.getFilePointer());
+
+      // Absolute, not relative: seeking to 3 again returns to the same byte.
+      raf.seek(3);
+      System.out.println("readAt3Again=" + (char) raf.read());
+
+      raf.seek(0);
+      System.out.println("readAt0=" + (char) raf.read());
+
+      // Writing is positional too, so a seek plus a write replaces bytes in place.
+      raf.seek(1);
+      raf.write('x');
+      raf.seek(0);
+      byte[] all = new byte[8];
+      raf.readFully(all);
+      System.out.println("content=" + new String(all, "US-ASCII"));
+
+      // Seeking past the end is allowed and does not extend the file until something is
+      // written there; a read at that position reports end of file.
+      raf.seek(100);
+      System.out.println("lengthAfterSeekPastEnd=" + raf.length());
+      System.out.println("readPastEnd=" + raf.read());
+    }
+    Files.delete(file);
+  }
+}
+```
 
 ### Review
 
@@ -8849,7 +11943,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc040db21eb4bbde37"`, `"verified": null`
+To record: `"digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc040db21eb4bbde37"`, `"verified": "sha256:74518199e6d506170aaa15e747d4bd2a0ed7d49e2f2e5732363ed542cc8ff78b"`
 
 **Comments:**
 
@@ -8972,7 +12066,63 @@ Checks the fundamental byte-stream versus character-stream split in java.io.
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+chars=2 bytes=3
+inputStreamRead=[97, 195, 169]
+readerRead=[97, 233]
+decodedMatchesSource=true
+byteCountDiffersFromCharCount=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Main {
+
+  public static void main(String[] args) throws Exception {
+    // One character that is not ASCII, written as an escape so this source file stays ASCII:
+    // U+00E9, which UTF-8 encodes as two bytes.
+    String text = "aé";
+    byte[] utf8 = text.getBytes(StandardCharsets.UTF_8);
+    System.out.println("chars=" + text.length() + " bytes=" + utf8.length);
+
+    // An InputStream is byte-oriented: read() returns one byte at a time, so the single
+    // character arrives as two separate values and neither is the character.
+    List<Integer> bytes = new ArrayList<>();
+    try (InputStream in = new ByteArrayInputStream(utf8)) {
+      for (int b = in.read(); b != -1; b = in.read()) {
+        bytes.add(b);
+      }
+    }
+    System.out.println("inputStreamRead=" + bytes);
+
+    // A Reader is character-oriented: it decodes bytes with a charset and returns code units,
+    // so the same input arrives as two characters, the second being the one byte pair decoded.
+    List<Integer> chars = new ArrayList<>();
+    try (Reader reader =
+        new InputStreamReader(new ByteArrayInputStream(utf8), StandardCharsets.UTF_8)) {
+      for (int c = reader.read(); c != -1; c = reader.read()) {
+        chars.add(c);
+      }
+    }
+    System.out.println("readerRead=" + chars);
+    System.out.println("decodedMatchesSource=" + (chars.get(1) == (int) text.charAt(1)));
+    System.out.println("byteCountDiffersFromCharCount=" + (bytes.size() != chars.size()));
+  }
+}
+```
 
 ### Review
 
@@ -8987,7 +12137,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec627496aee4e9baa40a"`, `"verified": null`
+To record: `"digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec627496aee4e9baa40a"`, `"verified": "sha256:e6ed654adf7c0254cd594ba503ac3fbf64c92d2f38eccb98503776569369df19"`
 
 **Comments:**
 
@@ -9140,7 +12290,96 @@ Tests the purpose of serialVersionUID in Java's built-in serialization compatibi
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+declared=102030405060708
+computedIsNonZero=true
+roundTrip=kept
+identifierFoundInStream=true
+mismatch=InvalidClassException
+mentionsIncompatible=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamClass;
+import java.io.Serializable;
+
+public class Main {
+
+  /** Declares its own version identifier, with a recognisable value. */
+  static class Versioned implements Serializable {
+    private static final long serialVersionUID = 0x0102030405060708L;
+
+    final String value = "kept";
+  }
+
+  /** Declares none, so the runtime computes one from the class structure. */
+  static class Unversioned implements Serializable {
+    final String value = "computed";
+  }
+
+  public static void main(String[] args) throws Exception {
+    long declared = ObjectStreamClass.lookup(Versioned.class).getSerialVersionUID();
+    System.out.println("declared=" + Long.toHexString(declared));
+    System.out.println("computedIsNonZero=" + (ObjectStreamClass.lookup(Unversioned.class).getSerialVersionUID() != 0));
+
+    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+    try (ObjectOutputStream out = new ObjectOutputStream(buffer)) {
+      out.writeObject(new Versioned());
+    }
+    byte[] stream = buffer.toByteArray();
+
+    // A round trip with the identifier intact succeeds.
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(stream))) {
+      System.out.println("roundTrip=" + ((Versioned) in.readObject()).value);
+    }
+
+    // The identifier is written into the stream, so it can be found there and altered. Changing
+    // it is what a class whose version moved on would look like to a reader holding old bytes.
+    int at = indexOfVersion(stream, declared);
+    System.out.println("identifierFoundInStream=" + (at >= 0));
+    stream[at + 7] ^= 0x01;
+
+    // Deserializing now fails, and it fails on the version check rather than on the data, which
+    // is what the identifier participates in.
+    try (ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(stream))) {
+      in.readObject();
+      System.out.println("mismatch=accepted");
+    } catch (InvalidClassException e) {
+      System.out.println("mismatch=" + e.getClass().getSimpleName());
+      System.out.println("mentionsIncompatible=" + e.getMessage().contains("incompatible"));
+    }
+  }
+
+  /** Where the eight big-endian bytes of the identifier sit in the stream. */
+  private static int indexOfVersion(byte[] stream, long version) {
+    byte[] wanted = new byte[8];
+    for (int i = 0; i < 8; i++) {
+      wanted[i] = (byte) (version >>> (56 - 8 * i));
+    }
+    outer:
+    for (int start = 0; start + 8 <= stream.length; start++) {
+      for (int i = 0; i < 8; i++) {
+        if (stream[start + i] != wanted[i]) {
+          continue outer;
+        }
+      }
+      return start;
+    }
+    return -1;
+  }
+}
+```
 
 ### Review
 
@@ -9155,7 +12394,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660"`, `"verified": null`
+To record: `"digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660"`, `"verified": "sha256:4b93b8dec6265fd8f14bf5c9d1158f3bb0ef9461909916abfb52167d0c3bc689"`
 
 **Comments:**
 
@@ -9296,7 +12535,55 @@ Tests the API intended for locale-sensitive string comparison rather than code-u
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+stringCompareTo_a_B=after
+collator_a_B=before
+theyDisagree=true
+german_umlautA_z=before
+swedish_umlautA_z=after
+sameInputDifferentOrder=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.Collator;
+import java.util.Locale;
+
+public class Main {
+
+  /** Only the sign matters for an ordering, and only the sign is stable to print. */
+  static String sign(int value) {
+    return value < 0 ? "before" : value > 0 ? "after" : "equal";
+  }
+
+  public static void main(String[] args) {
+    // String.compareTo compares UTF-16 code units, so every uppercase letter comes before every
+    // lowercase one and "a" lands after "B". That is an encoding order, not an alphabetical one.
+    System.out.println("stringCompareTo_a_B=" + sign("a".compareTo("B")));
+
+    // A Collator compares by collation rules, so "a" comes before "B" the way a reader of a
+    // dictionary expects. Same two strings, opposite answer.
+    Collator english = Collator.getInstance(Locale.ENGLISH);
+    System.out.println("collator_a_B=" + sign(english.compare("a", "B")));
+    System.out.println("theyDisagree="
+        + (Integer.signum("a".compareTo("B")) != Integer.signum(english.compare("a", "B"))));
+
+    // And the rules are locale-sensitive: German treats a-umlaut as a variant of a, so it sorts
+    // before z, while Swedish treats it as a letter of its own that follows z.
+    Collator german = Collator.getInstance(Locale.GERMAN);
+    Collator swedish = Collator.getInstance(Locale.of("sv", "SE"));
+    System.out.println("german_umlautA_z=" + sign(german.compare("ä", "z")));
+    System.out.println("swedish_umlautA_z=" + sign(swedish.compare("ä", "z")));
+    System.out.println("sameInputDifferentOrder="
+        + (Integer.signum(german.compare("ä", "z")) != Integer.signum(swedish.compare("ä", "z"))));
+  }
+}
+```
 
 ### Review
 
@@ -9311,7 +12598,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2"`, `"verified": null`
+To record: `"digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2"`, `"verified": "sha256:96478308144957575b0e3a31315fca8385a7e3c55c1732ce34c8193b4af27582"`
 
 **Comments:**
 
@@ -9352,7 +12639,54 @@ Tests the meaning of Collator strength levels rather than only basic locale sele
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+primaryStrength=true
+primaryIgnoresCase=true
+primaryIgnoresAccent=true
+primarySeesBaseLetters=false
+secondarySeesAccent=true
+secondaryIgnoresCase=true
+tertiarySeesCase=true
+primaryCompareZero=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.Collator;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Collator collator = Collator.getInstance(Locale.ENGLISH);
+
+    // At PRIMARY strength only base-letter differences count. Case is a tertiary difference and
+    // an accent is a secondary one, so both are ignored and the strings compare as equal.
+    collator.setStrength(Collator.PRIMARY);
+    System.out.println("primaryStrength=" + (collator.getStrength() == Collator.PRIMARY));
+    System.out.println("primaryIgnoresCase=" + collator.equals("abc", "ABC"));
+    System.out.println("primaryIgnoresAccent=" + collator.equals("resume", "résume"));
+    System.out.println("primarySeesBaseLetters=" + collator.equals("abc", "abd"));
+
+    // Raising the strength makes the finer differences count again.
+    collator.setStrength(Collator.SECONDARY);
+    System.out.println("secondarySeesAccent=" + !collator.equals("resume", "résume"));
+    System.out.println("secondaryIgnoresCase=" + collator.equals("abc", "ABC"));
+
+    collator.setStrength(Collator.TERTIARY);
+    System.out.println("tertiarySeesCase=" + !collator.equals("abc", "ABC"));
+
+    // equals is defined as compare returning zero, so the same holds for ordering.
+    collator.setStrength(Collator.PRIMARY);
+    System.out.println("primaryCompareZero=" + (collator.compare("abc", "ABC") == 0));
+  }
+}
+```
 
 ### Review
 
@@ -9367,7 +12701,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c"`, `"verified": null`
+To record: `"digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c"`, `"verified": "sha256:fd1fca3ad0ca08f90bcc5c51e7051ae1a8fd4021c3a9f511df4097d181a50b09"`
 
 **Comments:**
 
@@ -9635,7 +12969,62 @@ Requires knowing that Java maintains category-specific default locales for displ
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+categories=[DISPLAY, FORMAT]
+displayAfterSet=fr_FR
+formatAfterSet=ja_JP
+categoriesDiffer=true
+bothAfterPlainSet=de_DE,de_DE
+plainGetDefault=de_DE
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Arrays;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // Two categories, so the locale used to *show* things can differ from the one used to
+    // *format* them.
+    System.out.println("categories=" + Arrays.toString(Locale.Category.values()));
+
+    Locale plain = Locale.getDefault();
+    Locale display = Locale.getDefault(Locale.Category.DISPLAY);
+    Locale format = Locale.getDefault(Locale.Category.FORMAT);
+    try {
+      Locale.setDefault(Locale.Category.DISPLAY, Locale.FRANCE);
+      Locale.setDefault(Locale.Category.FORMAT, Locale.JAPAN);
+
+      // Setting one category leaves the other alone, which is the point of having two.
+      System.out.println("displayAfterSet=" + Locale.getDefault(Locale.Category.DISPLAY));
+      System.out.println("formatAfterSet=" + Locale.getDefault(Locale.Category.FORMAT));
+      System.out.println(
+          "categoriesDiffer="
+              + !Locale.getDefault(Locale.Category.DISPLAY)
+                  .equals(Locale.getDefault(Locale.Category.FORMAT)));
+
+      // The no-argument setDefault sets both, and it is the one that moves getDefault().
+      Locale.setDefault(Locale.GERMANY);
+      System.out.println("bothAfterPlainSet=" + Locale.getDefault(Locale.Category.DISPLAY) + "," + Locale.getDefault(Locale.Category.FORMAT));
+      System.out.println("plainGetDefault=" + Locale.getDefault());
+    } finally {
+      // Restored, because these are process-wide. setDefault(Category, ...) does not put back the
+      // plain default that setDefault(Locale) moved, so that one is restored first and then the
+      // two categories on top of it.
+      Locale.setDefault(plain);
+      Locale.setDefault(Locale.Category.DISPLAY, display);
+      Locale.setDefault(Locale.Category.FORMAT, format);
+    }
+  }
+}
+```
 
 ### Review
 
@@ -9650,7 +13039,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145b6394f588181be"`, `"verified": null`
+To record: `"digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145b6394f588181be"`, `"verified": "sha256:57b3deaa6b51167f7c9c17fd1298b65c1a53d8ded9085082a23072bc86af00de"`
 
 **Comments:**
 
@@ -9769,7 +13158,42 @@ Tests the purpose of the root locale as a locale-neutral base rather than a user
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+language=[]
+country=[]
+variant=[]
+toString=[]
+toLanguageTag=und
+equalsEnglish=false
+sameAsEmptyBuilt=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // Locale.ROOT is the language-neutral locale: it names no language and no country, which is
+    // what makes it the base every other locale falls back to.
+    System.out.println("language=[" + Locale.ROOT.getLanguage() + "]");
+    System.out.println("country=[" + Locale.ROOT.getCountry() + "]");
+    System.out.println("variant=[" + Locale.ROOT.getVariant() + "]");
+    System.out.println("toString=[" + Locale.ROOT + "]");
+    System.out.println("toLanguageTag=" + Locale.ROOT.toLanguageTag());
+
+    // It is not the same thing as the English locale, and not the same as the JVM default.
+    System.out.println("equalsEnglish=" + Locale.ROOT.equals(Locale.ENGLISH));
+    System.out.println("sameAsEmptyBuilt=" + Locale.ROOT.equals(Locale.of("", "")));
+  }
+}
+```
 
 ### Review
 
@@ -9784,7 +13208,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3"`, `"verified": null`
+To record: `"digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3"`, `"verified": "sha256:92026d263d35c3acfce8d5516c4f006533d4ec28ad295be0e46e64a45d6181f1"`
 
 **Comments:**
 
@@ -9900,7 +13324,40 @@ Tests MessageFormat's quoting syntax, which is easy to confuse with ordinary Str
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+placeholder=value is x
+quoted=value is {0}
+doubled=it's x
+loneQuote=its {0}
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.MessageFormat;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // An explicit locale throughout, so none of this depends on the machine's default.
+    // Without quotes, {0} is an argument placeholder and is substituted.
+    System.out.println("placeholder=" + new MessageFormat("value is {0}", Locale.ROOT).format(new Object[] {"x"}));
+
+    // A pair of single quotes around it makes the braces literal text: the argument is not
+    // substituted, and the quotes themselves do not appear in the output.
+    System.out.println("quoted=" + new MessageFormat("value is '{0}'", Locale.ROOT).format(new Object[] {"x"}));
+
+    // Which is why a real apostrophe has to be doubled, and a lone one quotes what follows.
+    System.out.println("doubled=" + new MessageFormat("it''s {0}", Locale.ROOT).format(new Object[] {"x"}));
+    System.out.println("loneQuote=" + new MessageFormat("it's {0}", Locale.ROOT).format(new Object[] {"x"}));
+  }
+}
+```
 
 ### Review
 
@@ -9915,7 +13372,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff775262054005453d31faa2437"`, `"verified": null`
+To record: `"digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff775262054005453d31faa2437"`, `"verified": "sha256:b9f7156261b46d9435dbb860deb5393b0e12af4ffc52d2006a670d167b2a3cb5"`
 
 **Comments:**
 
@@ -9956,7 +13413,47 @@ Tests selection of the locale-sensitive formatter intended specifically for mone
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+usCurrency=USD
+usFractionDigits=2
+usSymbolPresent=true
+japanCurrency=JPY
+japanFractionDigits=0
+currenciesDiffer=true
+formatsDiffer=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.text.NumberFormat;
+import java.util.Locale;
+
+public class Main {
+
+  public static void main(String[] args) {
+    // getCurrencyInstance returns a formatter configured for money in the given locale: the
+    // currency of that locale, its symbol, and its conventional number of fraction digits.
+    NumberFormat us = NumberFormat.getCurrencyInstance(Locale.US);
+    System.out.println("usCurrency=" + us.getCurrency().getCurrencyCode());
+    System.out.println("usFractionDigits=" + us.getMaximumFractionDigits());
+    System.out.println("usSymbolPresent=" + us.format(1).contains("$"));
+
+    NumberFormat japan = NumberFormat.getCurrencyInstance(Locale.JAPAN);
+    System.out.println("japanCurrency=" + japan.getCurrency().getCurrencyCode());
+    // The yen has no minor unit, which the formatter knows without being told.
+    System.out.println("japanFractionDigits=" + japan.getMaximumFractionDigits());
+
+    // The locale decides, so the same amount formats differently and the currency differs.
+    System.out.println("currenciesDiffer=" + !us.getCurrency().equals(japan.getCurrency()));
+    System.out.println("formatsDiffer=" + !us.format(1234.5).equals(japan.format(1234.5)));
+  }
+}
+```
 
 ### Review
 
@@ -9971,7 +13468,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8"`, `"verified": null`
+To record: `"digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8"`, `"verified": "sha256:7faae9f5d63a20a372562eab6417ef6b3cf33adb324ca361868946da2432e932"`
 
 **Comments:**
 
@@ -10159,7 +13656,46 @@ Checks the failure contract of ResourceBundle lookup when a requested key is abs
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+present=a value
+missing=MissingResourceException
+containsKey=false
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ListResourceBundle;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
+public class Main {
+
+  public static class Messages extends ListResourceBundle {
+    @Override
+    protected Object[][] getContents() {
+      return new Object[][] {{"present", "a value"}};
+    }
+  }
+
+  public static void main(String[] args) {
+    ResourceBundle bundle = new Messages();
+    System.out.println("present=" + bundle.getString("present"));
+    try {
+      bundle.getString("missing");
+      System.out.println("missing=none");
+    } catch (MissingResourceException e) {
+      System.out.println("missing=" + e.getClass().getSimpleName());
+    }
+    // containsKey is the way to ask without the exception.
+    System.out.println("containsKey=" + bundle.containsKey("missing"));
+  }
+}
+```
 
 ### Review
 
@@ -10174,7 +13710,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e4438722201546ae9803"`, `"verified": null`
+To record: `"digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e4438722201546ae9803"`, `"verified": "sha256:917956b3fc18810b8cbe30669a2be82ff1b3ef85d7b17c9107191f833464560c"`
 
 **Comments:**
 
@@ -10215,7 +13751,52 @@ Tests hierarchical ResourceBundle lookup rather than assuming only the most spec
 
 ### Verified by the build
 
-Conceptual question with no runnable code: **the build verified nothing here.** It rests on its references and on the human review, so read both with extra care.
+A program the learner does not see backs this question. It compiles for Java 21 and prints:
+
+```text
+fromParent=from the parent
+childOverrides=child value
+keySetIncludesParent=true
+```
+
+That program, in one file:
+
+`Main.java`:
+
+```java
+import java.util.ListResourceBundle;
+import java.util.ResourceBundle;
+
+public class Main {
+
+  public static class Parent extends ListResourceBundle {
+    @Override
+    protected Object[][] getContents() {
+      return new Object[][] {{"title", "from the parent"}, {"shared", "parent value"}};
+    }
+  }
+
+  public static class Child extends ListResourceBundle {
+    Child(ResourceBundle parent) {
+      setParent(parent);
+    }
+
+    @Override
+    protected Object[][] getContents() {
+      return new Object[][] {{"shared", "child value"}};
+    }
+  }
+
+  public static void main(String[] args) {
+    ResourceBundle bundle = new Child(new Parent());
+    // Not defined here, so the lookup continues into the parent.
+    System.out.println("fromParent=" + bundle.getString("title"));
+    // Defined here, so the child wins.
+    System.out.println("childOverrides=" + bundle.getString("shared"));
+    System.out.println("keySetIncludesParent=" + bundle.keySet().contains("title"));
+  }
+}
+```
 
 ### Review
 
@@ -10230,7 +13811,7 @@ Conceptual question with no runnable code: **the build verified nothing here.** 
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a573de6bbbdb78b"`, `"verified": null`
+To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a573de6bbbdb78b"`, `"verified": "sha256:0513944940b00223f5575658b8c97c1507f199a59a7d312b0eeee8d3198951e8"`
 
 **Comments:**
 

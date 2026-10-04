@@ -22,6 +22,10 @@ Encadear sessões normais quebraria essa garantia: o endpoint comum de tentativa
 | Questões por tópico | 5 |
 | Acertos necessários nessa meta | 34 |
 
+> **De onde vêm os três primeiros números não foi verificado.** A quantidade de questões, o limite de tempo e a meta de aprovação descrevem a prova da Oracle, não uma escolha do CertForge, e nada neste repositório registra uma fonte para eles nem uma data em que alguém os conferiu. Eles são apresentados ao aluno como a forma da prova real, e quem treina numa rodada de 50 questões em 120 minutos calibra o ritmo por ela — então errar aqui engana ativamente, não em silêncio.
+>
+> É a mesma lacuna que o texto dos objetivos tinha antes da #68, e é rastreada do mesmo jeito. Até ser conferido com a página de prova da Oracle em um navegador, trate os três como não verificados.
+
 Os valores ficam em `MockExamBlueprintCatalog`. Uma futura versão de exame precisa aderir explicitamente; ela nunca herda duração ou distribuição de outra prova por acidente.
 
 A distribuição uniforme de cinco questões por tópico é um blueprint de prática do CertForge. Ela dá exposição significativa a cada objetivo publicado e não é apresentada como ponderação oficial da Oracle.
@@ -64,12 +68,12 @@ Um resultado de simulado descreve aquela execução. Ele não é previsão de pr
 
 ## Relação com o progresso normal
 
-As respostas do simulado ficam inicialmente separadas das tentativas da prática por tópico. Misturá-las na projeção de progresso atual mudaria silenciosamente o significado de `attempted`, `correct` e da evidência baseada em confiança.
+As respostas do simulado permanecem separadas das tentativas da prática por tópico. Misturá-las na projeção de progresso atual mudaria silenciosamente o significado de `attempted`, `correct` e da evidência baseada em confiança.
 
-## Entregas restantes
+O histórico de simulados, portanto, tem um read model próprio em `/api/study/history/mock-exams`. Enquanto a execução está ativa, o histórico expõe apenas participação. Depois que ela se torna terminal, expõe a pontuação e agregados por tópico; tópicos abaixo da meta de prática daquela execução são marcados como `needsReview`. Esses marcadores são evidência histórica do simulado e não alteram o progresso normal nem a fila de revisão adaptativa.
 
-1. Persistir o agregado do simulado e a evidência imutável das respostas.
-2. Criar endpoints de iniciar/retomar/responder/finalizar/resultado com submissão idempotente.
-3. Criar o fluxo web: cronômetro, navegação, marcação para revisar e confirmação de envio.
-4. Criar telas de resultado e histórico com detalhamento por tópico e explicações após o fechamento.
-5. Medir o fluxo e acrescentar testes operacionais/de contrato antes da release.
+## Fluxo do aluno
+
+A trilha de certificação leva a um runner dedicado de simulado. Ele mostra a contagem regressiva baseada no prazo do servidor, navegação direta entre questões, estado de respondidas, marcações locais para revisão e uma confirmação irreversível de envio que destaca questões não respondidas. Enquanto a execução está ativa, ele nunca renderiza correção.
+
+Execuções terminais abrem uma tela de resultado com pontuação de prática, tempo decorrido, detalhamento por tópico e revisão completa das respostas. A página Histórico lista simulados separadamente da prática por tópico, retoma execuções ativas, liga execuções terminais ao resultado e destaca tópicos abaixo da meta de prática da execução sem alimentar esse sinal no progresso normal.

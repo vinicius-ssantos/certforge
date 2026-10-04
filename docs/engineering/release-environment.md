@@ -21,6 +21,8 @@ DB_PASSWORD=... BOOTSTRAP_ADMIN_EMAIL=... BOOTSTRAP_ADMIN_PASSWORD=... \
 
 `DB_PASSWORD` has no default, so a missing secret stops the start instead of running with a known one. The bootstrap administrator is created only when no administrator exists; set both variables for the first start, then remove them.
 
+> **The trap in that sentence.** Pointing `BOOTSTRAP_ADMIN_EMAIL` at a different address later does nothing at all, silently: the account created on the first start is still the only administrator, and signing in as the new address gives a 401 that looks like a wrong password. Either use the original account, or start over with an empty database (`just reset`). The deploy scripts say this when the sign-in fails rather than printing a stack trace.
+
 ## What the web container guarantees
 
 - **One origin.** The browser talks to `web` for both the app and the API, so the session cookie never crosses origins.

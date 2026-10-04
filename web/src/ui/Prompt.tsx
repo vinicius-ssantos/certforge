@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useText } from "../i18n/useText";
 
 interface Segment {
   kind: "text" | "code";
@@ -30,6 +31,7 @@ export function splitFences(text: string): Segment[] {
  * Nothing else is interpreted, and the text is never inserted as HTML.
  */
 export function Prompt({ text }: { text: string }): ReactNode {
+  const t = useText();
   return (
     <div className="prompt">
       {splitFences(text).map((segment, index) =>
@@ -37,7 +39,7 @@ export function Prompt({ text }: { text: string }): ReactNode {
           // A code block can be wider than the screen. Making it focusable lets keyboard users
           // scroll it, which is why a non-interactive element takes a tab stop here.
           // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-          <pre key={index} className="code" tabIndex={0} aria-label="Code example">
+          <pre key={index} className="code" tabIndex={0} aria-label={t.prompt.codeExample}>
             <code>{segment.value}</code>
           </pre>
         ) : (

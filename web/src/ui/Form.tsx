@@ -1,4 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
+import { useText } from "../i18n/useText";
 
 /**
  * The error summary at the top of a form. It is an alert and takes focus when it appears, so a
@@ -10,6 +11,7 @@ export function ErrorSummary({
 }: {
   problems: { fieldId?: string; message: string }[];
 }) {
+  const t = useText();
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (problems.length > 0) {
@@ -21,7 +23,7 @@ export function ErrorSummary({
   }
   return (
     <div ref={ref} role="alert" tabIndex={-1} className="error-summary">
-      <h2>There is a problem</h2>
+      <h2>{t.form.problemTitle}</h2>
       <ul>
         {problems.map((problem, index) => (
           <li key={`${problem.fieldId ?? "form"}-${index}`}>
@@ -53,6 +55,7 @@ export function TextField({
   error?: string | undefined;
   hint?: ReactNode;
 }) {
+  const t = useText();
   const hintId = `${id}-hint`;
   const errorId = `${id}-error`;
   const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
@@ -66,7 +69,7 @@ export function TextField({
       ) : null}
       {error ? (
         <p id={errorId} className="field-error">
-          <span className="visually-hidden">Error: </span>
+          <span className="visually-hidden">{t.form.errorPrefix}</span>
           {error}
         </p>
       ) : null}

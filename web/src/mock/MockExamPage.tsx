@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { MockExam, Question } from "../api/types";
+import { useText } from "../i18n/useText";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
 import { Prompt } from "../ui/Prompt";
@@ -39,12 +40,13 @@ function loadFlags(sessionId: string): number[] {
 }
 
 export function MockExamPage() {
+  const t = useText();
   const { sessionId = "" } = useParams();
   const api = useApi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const resumed = (useLocation().state as { resumed?: boolean } | null)?.resumed === true;
-  useDocumentTitle("Mock exam");
+  useDocumentTitle(t.mock.title);
 
   const exam = useQuery({
     queryKey: examKey(sessionId),
@@ -127,24 +129,24 @@ export function MockExamPage() {
   });
 
   if (exam.isPending) {
-    return <><h1>Mock exam</h1><Loading label="Loading mock exam" /></>;
+    return <><h1>{t.mock.title}</h1><Loading label={t.mock.loading} /></>;
   }
   if (exam.isError) {
-    return <><h1>Mock exam</h1><ErrorState error={exam.error} onRetry={() => void exam.refetch()} /></>;
+    return <><h1>{t.mock.title}</h1><ErrorState error={exam.error} onRetry={() => void exam.refetch()} /></>;
   }
   if (exam.data.status !== "IN_PROGRESS") {
     return (
       <>
-        <h1>Mock exam</h1>
-        <p>This mock is closed. The answer key is now available in the result.</p>
-        <p><Link to={`/mock-exams/${sessionId}/result`}>View result and review</Link></p>
+        <h1>{t.mock.title}</h1>
+        <p>{t.mock.closed}</p>
+        <p><Link to={`/mock-exams/${sessionId}/result`}>{t.mock.viewResult}</Link></p>
       </>
     );
   }
 
   const ordered = [...exam.data.questions].sort((a, b) => a.position - b.position);
   const current = ordered.find((entry) => entry.position === position) ?? ordered[0];
-  if (!current) return <><h1>Mock exam</h1><p>No questions were found.</p></>;
+  if (!current) return <><h1>{t.mock.title}</h1><p>{t.mock.noQuestions}</p></>;
 
   const remaining = formatRemaining(exam.data.expiresAt, now);
   const flagged = flags.includes(current.position);
@@ -152,17 +154,20 @@ export function MockExamPage() {
     <>
       <div className="mock-head">
         <div>
-          <h1>Mock exam</h1>
+          <h1>{t.mock.title}</h1>
           {resumed ? (
-            <p role="status">You already had this mock in progress, so you are continuing it.</p>
+            <p role="status">{t.mock.resumed}</p>
           ) : null}
           <p className="muted">
-            {exam.data.answeredCount} of {exam.data.questionCount} answered · Practice target{" "}
-            {exam.data.passingPercentage}%
+            {t.mock.answeredAndTarget(
+              exam.data.answeredCount,
+              exam.data.questionCount,
+              exam.data.passingPercentage,
+            )}
           </p>
         </div>
-        <div className="mock-timer" role="timer" aria-label={`Time remaining ${remaining}`}>
-          <span className="muted">Time remaining</span>
+        <div className="mock-timer" role="timer" aria-label={t.mock.timeRemainingLabel(remaining)}>
+          <span className="muted">{t.mock.timeRemaining}</span>
           <strong>{remaining}</strong>
         </div>
       </div>
@@ -171,8 +176,8 @@ export function MockExamPage() {
       {finish.isError ? <ErrorState error={finish.error} /> : null}
 
       <div className="mock-layout">
-        <aside aria-label="Question navigation">
-          <h2>Questions</h2>
+        <aside aria-label={t.mock.navigationLabel}>
+          <h2>{t.mock.questions}</h2>
           <ol className="mock-nav">
             {ordered.map((entry) => (
               <li key={entry.position}>
@@ -185,7 +190,11 @@ export function MockExamPage() {
                     flags.includes(entry.position) ? "flagged" : "",
                   ].filter(Boolean).join(" ")}
                   aria-current={entry.position === current.position ? "step" : undefined}
-                  aria-label={`Question ${entry.position + 1}${entry.answered ? ", answered" : ""}${flags.includes(entry.position) ? ", flagged for review" : ""}`}
+                  aria-label={t.mock.questionButtonLabel(
+                    entry.position + 1,
+                    entry.answered,
+                    flags.includes(entry.position),
+                  )}
                   onClick={() => setPosition(entry.position)}
                 >
                   {entry.position + 1}
@@ -193,11 +202,11 @@ export function MockExamPage() {
               </li>
             ))}
           </ol>
-          <p className="mock-legend muted">Answered · Flagged · Current</p>
+          <p className="mock-legend muted">{t.mock.legend}</p>
         </aside>
 
         <section className="mock-question" aria-labelledby="mock-question-heading">
-          <h2 id="mock-question-heading">Question {current.position + 1} of {ordered.length}</h2>
+          <h2 id="mock-question-heading">{t.mock.questionHeading(current.position + 1, ordered.length)}</h2>
           <button
             type="button"
             className="secondary"
@@ -207,35 +216,35 @@ export function MockExamPage() {
                 : [...items, current.position],
             )}
           >
-            {flagged ? "Remove review flag" : "Flag for review"}
+            {flagged ? t.mock.removeFlag : t.mock.addFlag}
           </button>
           <MockQuestion
             key={current.position}
             question={current.question}
             answered={current.answered}
             submitting={respond.isPending}
-            failure={respond.isError ? errorMessage(respond.error) : null}
+            failure={respond.isError ? errorMessage(respond.error, t) : null}
             onSubmit={(selected, key) => respond.mutate({ at: current.position, selected, key })}
           />
           <div className="mock-question-actions">
             <button type="button" className="secondary" disabled={current.position === 0}
-              onClick={() => setPosition(Math.max(0, current.position - 1))}>Previous</button>
+              onClick={() => setPosition(Math.max(0, current.position - 1))}>{t.mock.previous}</button>
             <button type="button" className="secondary" disabled={current.position === ordered.length - 1}
-              onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>Next</button>
+              onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>{t.mock.next}</button>
           </div>
         </section>
       </div>
 
       <div className="session-actions">
         <Confirm
-          title="Submit mock exam"
-          explain={`Submit now? ${exam.data.questionCount - exam.data.answeredCount} unanswered questions will count as incorrect. You cannot change answers after submitting.`}
-          confirmLabel="Submit mock exam"
-          cancelLabel="Keep working"
+          title={t.mock.submitTitle}
+          explain={t.mock.submitExplain(exam.data.questionCount - exam.data.answeredCount)}
+          confirmLabel={t.mock.submitConfirm}
+          cancelLabel={t.mock.submitCancel}
           busy={finish.isPending}
           onConfirm={() => finish.mutate()}
         >
-          Finish and score mock
+          {t.mock.submitTrigger}
         </Confirm>
       </div>
     </>
@@ -255,6 +264,7 @@ function MockQuestion({
   failure: string | null;
   onSubmit: (selected: string[], key: string) => void;
 }) {
+  const t = useText();
   const [selected, setSelected] = useState<string[]>([]);
   const [key] = useState(() => crypto.randomUUID());
   const [problem, setProblem] = useState<string | null>(null);
@@ -275,7 +285,7 @@ function MockQuestion({
   function submit(event: FormEvent) {
     event.preventDefault();
     if (selected.length === 0) {
-      setProblem(multiple ? "Choose at least one answer." : "Choose an answer.");
+      setProblem(multiple ? t.question.chooseAtLeastOne : t.question.chooseOne);
       return;
     }
     setProblem(null);
@@ -287,11 +297,11 @@ function MockQuestion({
       <ErrorSummary problems={shownProblems} />
       <Prompt text={question.prompt} />
       {answered ? (
-        <p role="status" className="notice">Answer submitted. Feedback stays hidden until the mock is finished.</p>
+        <p role="status" className="notice">{t.mock.answerSubmitted}</p>
       ) : (
         <form onSubmit={submit} noValidate>
           <fieldset>
-            <legend>{multiple ? "Choose all that apply" : "Choose one answer"}</legend>
+            <legend>{multiple ? t.mock.chooseAllThatApply : t.mock.chooseOneAnswer}</legend>
             {question.options.map((option) => (
               <div key={option.key} className="choice">
                 <input
@@ -302,12 +312,12 @@ function MockQuestion({
                   onChange={() => toggle(option.key)}
                 />
                 <label htmlFor={`mock-${question.revisionId}-${option.key}`}>
-                  <span className="visually-hidden">Option {option.key}: </span>{option.text}
+                  <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>{option.text}
                 </label>
               </div>
             ))}
           </fieldset>
-          <button type="submit" disabled={submitting}>{submitting ? "Saving…" : "Save answer"}</button>
+          <button type="submit" disabled={submitting}>{submitting ? t.mock.saving : t.mock.saveAnswer}</button>
         </form>
       )}
     </>

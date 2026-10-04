@@ -1,0 +1,6 @@
+declared=102030405060708
+computedIsNonZero=true
+roundTrip=kept
+identifierFoundInStream=true
+mismatch=InvalidClassException
+mentionsIncompatible=true

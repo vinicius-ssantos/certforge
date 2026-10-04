@@ -1,0 +1,6 @@
+categories=[DISPLAY, FORMAT]
+displayAfterSet=fr_FR
+formatAfterSet=ja_JP
+categoriesDiffer=true
+bothAfterPlainSet=de_DE,de_DE
+plainGetDefault=de_DE

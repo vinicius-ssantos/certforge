@@ -80,7 +80,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 
 ## Project status
 
-**`v0.1.0` Study Core is released.** The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment are tested end to end in CI, the initial question pack had its [technical review](content/java-se-21/review.json), and the manual passes a machine cannot do — accessibility judgement, a walkthrough, the exam objective wording against Oracle's page — were done on 2026-10-02. The [readiness review](docs/release/v0.1.0-readiness.md) records each gate, what a person checked by hand, and what that does not amount to: one reviewer, who is also the author. The [release notes](docs/release/v0.1.0-release-notes.md) list the known limitations.
+**`v0.2.0` Adaptive Review is released**, on top of `v0.1.0` Study Core. A learner is now told what is worth revisiting and why, not only what they have done. The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment are tested end to end in CI, the initial question pack had its [technical review](content/java-se-21/review.json), and the manual passes a machine cannot do — accessibility judgement, a walkthrough, the exam objective wording against Oracle's page — were done on 2026-10-02. The [readiness review](docs/release/v0.1.0-readiness.md) records each gate, what a person checked by hand, and what that does not amount to: one reviewer, who is also the author. The [release notes](docs/release/v0.1.0-release-notes.md) list the known limitations.
 
 ### Try it
 

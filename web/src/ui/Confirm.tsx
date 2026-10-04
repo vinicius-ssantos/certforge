@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useText } from "../i18n/useText";
 
 /**
  * A two-step action for something that cannot be taken back. The first button asks; the group that
@@ -14,7 +15,7 @@ export function Confirm({
   title,
   explain,
   confirmLabel,
-  cancelLabel = "Cancel",
+  cancelLabel,
   busy = false,
   onConfirm,
 }: {
@@ -27,6 +28,7 @@ export function Confirm({
   busy?: boolean;
   onConfirm: () => void;
 }) {
+  const t = useText();
   const [asking, setAsking] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const confirm = useRef<HTMLButtonElement>(null);
@@ -55,7 +57,7 @@ export function Confirm({
         {confirmLabel}
       </button>{" "}
       <button type="button" className="secondary" onClick={() => setAsking(false)}>
-        {cancelLabel}
+        {cancelLabel ?? t.confirm.cancel}
       </button>
     </div>
   );

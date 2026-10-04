@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Revision } from "../api/types";
+import { en } from "../i18n/en";
 import { diffRevisions, wordDiff } from "./diff";
 
 describe("wordDiff", () => {
@@ -57,7 +58,7 @@ const names = (id: string) => (id === "t" ? "Exceptions" : undefined);
 
 describe("diffRevisions", () => {
   it("finds nothing between identical revisions", () => {
-    expect(diffRevisions(revision(), revision({ number: 2 }), names)).toEqual([]);
+    expect(diffRevisions(revision(), revision({ number: 2 }), names, en)).toEqual([]);
   });
 
   it("names each field that changed", () => {
@@ -76,7 +77,7 @@ describe("diffRevisions", () => {
       ],
     });
 
-    const labels = diffRevisions(revision(), next, names).map((change) => change.label);
+    const labels = diffRevisions(revision(), next, names, en).map((change) => change.label);
 
     expect(labels).toEqual([
       "Question",
@@ -93,7 +94,7 @@ describe("diffRevisions", () => {
   it("reports a removed option and a removed reference", () => {
     const next = revision({ number: 2, options: [revision().options[0]!], references: [] });
 
-    const labels = diffRevisions(revision(), next, names).map((change) => change.label);
+    const labels = diffRevisions(revision(), next, names, en).map((change) => change.label);
 
     expect(labels).toEqual(["Option B removed", "Reference removed"]);
   });

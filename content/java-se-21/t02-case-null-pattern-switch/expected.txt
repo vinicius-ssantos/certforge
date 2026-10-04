@@ -1,0 +1,5 @@
+null
+string:x
+integer:7
+other
+noNullLabel=thrown:NullPointerException

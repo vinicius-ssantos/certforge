@@ -2,13 +2,15 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
+import { useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-import { formatDateTime, STATUS_LABEL } from "./format";
+import { formatDateTime, statusLabel } from "./format";
 import { useTopicNames, useTrackNames } from "./useTopicNames";
 
 export function HistoryPage() {
-  useDocumentTitle("History");
+  const t = useText();
+  useDocumentTitle(t.history.title);
   const api = useApi();
   const topicNames = useTopicNames();
   const trackNames = useTrackNames();
@@ -40,39 +42,44 @@ export function HistoryPage() {
   const sessionItems = sessions.data?.pages.flatMap((page) => page.items) ?? [];
   const mockItems = mocks.data?.pages.flatMap((page) => page.items) ?? [];
   const empty =
-    sessions.data !== undefined
-    && mocks.data !== undefined
-    && sessionItems.length === 0
-    && mockItems.length === 0;
+    sessions.data !== undefined &&
+    mocks.data !== undefined &&
+    sessionItems.length === 0 &&
+    mockItems.length === 0;
 
   return (
     <>
-      <h1>History</h1>
+      <h1>{t.history.title}</h1>
 
       {empty ? (
-        <EmptyState title="No study history yet">
+        <EmptyState title={t.history.emptyTitle}>
           <p>
-            Start a topic practice session or a mock exam from the <Link to="/">tracks page</Link>.
+            {t.history.emptyBodyStart}
+            <Link to="/">{t.history.tracksPageLink}</Link>.
           </p>
         </EmptyState>
       ) : null}
 
       <section aria-labelledby="mock-history-heading">
-        <h2 id="mock-history-heading">Mock exams</h2>
-        {mocks.isPending ? <Loading label="Loading your mock exams" /> : null}
-        {mocks.isError ? <ErrorState error={mocks.error} onRetry={() => void mocks.refetch()} /> : null}
-        {mocks.data && mockItems.length === 0 && !empty ? <p className="muted">No mock exams yet.</p> : null}
+        <h2 id="mock-history-heading">{t.history.mockHeading}</h2>
+        {mocks.isPending ? <Loading label={t.history.mockLoading} /> : null}
+        {mocks.isError ? (
+          <ErrorState error={mocks.error} onRetry={() => void mocks.refetch()} />
+        ) : null}
+        {mocks.data && mockItems.length === 0 && !empty ? (
+          <p className="muted">{t.history.noMocks}</p>
+        ) : null}
         {mockItems.length > 0 ? (
           <table>
-            <caption className="visually-hidden">Your mock exams, newest first</caption>
+            <caption className="visually-hidden">{t.history.mockTableCaption}</caption>
             <thead>
               <tr>
-                <th scope="col">Track</th>
-                <th scope="col">Started</th>
-                <th scope="col">Status</th>
-                <th scope="col">Answered</th>
-                <th scope="col">Score</th>
-                <th scope="col">Topics to review</th>
+                <th scope="col">{t.history.track}</th>
+                <th scope="col">{t.history.started}</th>
+                <th scope="col">{t.history.status}</th>
+                <th scope="col">{t.history.answered}</th>
+                <th scope="col">{t.history.score}</th>
+                <th scope="col">{t.history.topicsToReview}</th>
               </tr>
             </thead>
             <tbody>
@@ -83,30 +90,34 @@ export function HistoryPage() {
                   <tr key={mock.id}>
                     <th scope="row">
                       <Link to={open ? `/mock-exams/${mock.id}` : `/mock-exams/${mock.id}/result`}>
-                        {trackNames.get(mock.trackId) ?? "Certification track"}
+                        {trackNames.get(mock.trackId) ?? t.history.fallbackTrack}
                         <span className="visually-hidden">
-                          {open ? " (continue mock)" : " (view mock result)"}
+                          {open ? t.history.continueMockHint : t.history.mockResultHint}
                         </span>
                       </Link>
                     </th>
                     <td>
                       <time dateTime={mock.createdAt}>{formatDateTime(mock.createdAt)}</time>
                     </td>
-                    <td>{STATUS_LABEL[mock.status] ?? mock.status}</td>
-                    <td>
-                      {mock.answeredCount} of {mock.questionCount}
-                    </td>
+                    <td>{statusLabel(mock.status, t)}</td>
+                    <td>{t.history.answeredOf(mock.answeredCount, mock.questionCount)}</td>
                     <td>
                       {mock.percentage === null || mock.correctCount === null
-                        ? "–"
-                        : `${mock.correctCount} of ${mock.questionCount} (${mock.percentage}%)`}
+                        ? t.history.noValue
+                        : t.history.mockScore(
+                            mock.correctCount,
+                            mock.questionCount,
+                            mock.percentage,
+                          )}
                     </td>
                     <td>
                       {open
-                        ? "–"
+                        ? t.history.noValue
                         : weak.length === 0
-                          ? "None"
-                          : weak.map((topic) => topicNames.get(topic.topicId) ?? "Topic").join(", ")}
+                          ? t.history.none
+                          : weak
+                              .map((topic) => topicNames.get(topic.topicId) ?? t.history.fallbackTopic)
+                              .join(", ")}
                     </td>
                   </tr>
                 );
@@ -121,7 +132,7 @@ export function HistoryPage() {
               onClick={() => void mocks.fetchNextPage()}
               disabled={mocks.isFetchingNextPage}
             >
-              {mocks.isFetchingNextPage ? "Loading…" : "Load more mock exams"}
+              {mocks.isFetchingNextPage ? t.history.loadingMore : t.history.loadMoreMocks}
             </button>
           </p>
         ) : null}
@@ -129,29 +140,29 @@ export function HistoryPage() {
       </section>
 
       <section aria-labelledby="practice-history-heading">
-        <h2 id="practice-history-heading">Topic practice</h2>
-        {sessions.isPending ? <Loading label="Loading your sessions" /> : null}
+        <h2 id="practice-history-heading">{t.history.practiceHeading}</h2>
+        {sessions.isPending ? <Loading label={t.history.loading} /> : null}
         {sessions.isError ? (
           <ErrorState error={sessions.error} onRetry={() => void sessions.refetch()} />
         ) : null}
         {sessions.data && sessionItems.length === 0 && !empty ? (
-          <p className="muted">No topic practice sessions yet.</p>
+          <p className="muted">{t.history.noPractice}</p>
         ) : null}
         {sessionItems.length > 0 ? (
           <table>
-            <caption className="visually-hidden">Your practice sessions, newest first</caption>
+            <caption className="visually-hidden">{t.history.tableCaption}</caption>
             <thead>
               <tr>
-                <th scope="col">Topic</th>
-                <th scope="col">Started</th>
-                <th scope="col">Status</th>
-                <th scope="col">Answered</th>
-                <th scope="col">Correct</th>
+                <th scope="col">{t.history.topic}</th>
+                <th scope="col">{t.history.started}</th>
+                <th scope="col">{t.history.status}</th>
+                <th scope="col">{t.history.answered}</th>
+                <th scope="col">{t.history.correct}</th>
               </tr>
             </thead>
             <tbody>
               {sessionItems.map((session) => {
-                const name = topicNames.get(session.topicId) ?? "Topic";
+                const name = topicNames.get(session.topicId) ?? t.history.fallbackTopic;
                 const open = session.status === "IN_PROGRESS";
                 return (
                   <tr key={session.id}>
@@ -159,17 +170,15 @@ export function HistoryPage() {
                       <Link to={open ? `/sessions/${session.id}` : `/history/sessions/${session.id}`}>
                         {name}
                         <span className="visually-hidden">
-                          {open ? " (continue)" : " (review answers)"}
+                          {open ? t.history.continueHint : t.history.reviewHint}
                         </span>
                       </Link>
                     </th>
                     <td>
                       <time dateTime={session.createdAt}>{formatDateTime(session.createdAt)}</time>
                     </td>
-                    <td>{STATUS_LABEL[session.status] ?? session.status}</td>
-                    <td>
-                      {session.answeredCount} of {session.requestedCount}
-                    </td>
+                    <td>{statusLabel(session.status, t)}</td>
+                    <td>{t.history.answeredOf(session.answeredCount, session.requestedCount)}</td>
                     <td>{session.correctCount}</td>
                   </tr>
                 );
@@ -184,7 +193,7 @@ export function HistoryPage() {
               onClick={() => void sessions.fetchNextPage()}
               disabled={sessions.isFetchingNextPage}
             >
-              {sessions.isFetchingNextPage ? "Loading…" : "Load more sessions"}
+              {sessions.isFetchingNextPage ? t.history.loadingMore : t.history.loadMore}
             </button>
           </p>
         ) : null}

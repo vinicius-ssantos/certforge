@@ -1,89 +1,92 @@
 import { ApiError } from "../api/problem";
+import type { Catalog } from "../i18n/en";
 
 /**
- * What a learner reads for each stable error code. The backend never sends text meant for
- * display; it sends a code, and the wording lives here so it can be reviewed and translated.
+ * What a learner reads for each stable error code. The backend never sends text meant for display;
+ * it sends a code, and the wording lives in the catalog so it can be reviewed and translated.
+ *
+ * The catalog is a required argument rather than a defaulted one on purpose: a call site that
+ * forgot to pass the active locale would silently render English, and a default parameter is
+ * exactly the kind of omission the type checker cannot see.
  */
-export function errorMessage(error: unknown): string {
+export function errorMessage(error: unknown, t: Catalog): string {
   if (!(error instanceof ApiError)) {
-    return "Something went wrong. Please try again.";
+    return t.errors.unknown;
   }
   switch (error.code) {
     case "network_error":
-      return "The server cannot be reached. Check your connection and try again.";
+      return t.errors.network;
     case "unauthenticated":
-      return "Your session has ended. Please sign in again.";
+      return t.errors.unauthenticated;
     case "invalid_credentials":
-      return "The email or password is incorrect.";
+      return t.errors.invalidCredentials;
     case "too_many_attempts":
       return error.retryAfterSeconds
-        ? `Too many attempts. Wait ${error.retryAfterSeconds} seconds and try again.`
-        : "Too many attempts. Wait a little and try again.";
+        ? t.errors.tooManyAttemptsIn(error.retryAfterSeconds)
+        : t.errors.tooManyAttempts;
     case "email_already_registered":
-      return "An account with this email already exists. Try signing in instead.";
+      return t.errors.emailAlreadyRegistered;
     case "password_too_short":
-      return "The password must have at least 12 characters.";
+      return t.errors.passwordTooShort;
     case "password_too_long":
-      return "The password is too long. Use at most 72 bytes.";
+      return t.errors.passwordTooLong;
     case "password_equals_email":
-      return "The password must not be the same as your email.";
+      return t.errors.passwordEqualsEmail;
     case "validation_failed":
-      return "Some of the information is not valid. Check the form and try again.";
+      return t.errors.validationFailed;
     case "csrf_invalid":
-      return "The page's security token expired. Try again.";
+      return t.errors.csrfInvalid;
     case "track_not_found":
-      return "This track does not exist or is not available.";
+      return t.errors.trackNotFound;
     case "topic_not_found":
-      return "This topic does not exist or is not available.";
+      return t.errors.topicNotFound;
     case "insufficient_content":
-      return "There are not enough published questions on this topic yet. Try another topic.";
+      return t.errors.insufficientContent;
     case "active_session_exists":
-      return "You already have a practice session in progress for this topic.";
+      return t.errors.activeSessionExists;
     case "session_not_found":
-      return "This practice session does not exist.";
+      return t.errors.sessionNotFound;
     case "session_expired":
-      return "This practice session expired. Answers you already gave were kept.";
+      return t.errors.sessionExpired;
     case "session_not_in_progress":
-      return "This practice session is already finished.";
+      return t.errors.sessionNotInProgress;
     case "already_answered":
-      return "You already answered this question.";
+      return t.errors.alreadyAnswered;
     case "concurrent_submission":
-      return "Your answer is still being saved. Wait a moment and try again.";
+      return t.errors.concurrentSubmission;
     case "idempotency_key_reused":
     case "idempotency_key_invalid":
     case "idempotency_key_required":
-      return "Your answer could not be saved safely. Reload the page and try again.";
+      return t.errors.idempotency;
     case "invalid_option":
     case "duplicate_option":
     case "single_choice_requires_one_option":
-      return "Choose one answer from the list.";
+      return t.errors.chooseOne;
     case "question_count_out_of_range":
-      return "That number of questions is not allowed.";
+      return t.errors.questionCountOutOfRange;
     case "question_not_found":
     case "revision_not_found":
-      return "This question or revision does not exist.";
+      return t.errors.questionNotFound;
     case "revision_incomplete":
-      return "The revision is not complete yet. The list beside the form says what is missing.";
+      return t.errors.revisionIncomplete;
     case "revision_not_editable":
     case "revision_not_draft":
-      return "Only a draft can be edited. Create a new revision to change this question.";
+      return t.errors.revisionNotEditable;
     case "not_revision_author":
-      return "Only the author of a revision can change or send it.";
+      return t.errors.notRevisionAuthor;
     case "revision_not_in_review":
-      return "This revision is not waiting for review any more.";
+      return t.errors.revisionNotInReview;
     case "revision_not_approved":
-      return "Only an approved revision can be published.";
+      return t.errors.revisionNotApproved;
     case "reviewer_must_differ_from_author":
-      return "A revision cannot be reviewed by the person who wrote it.";
+      return t.errors.reviewerMustDiffer;
     case "open_revision_exists":
-      return "This question already has a revision in progress.";
+      return t.errors.openRevisionExists;
     case "topic_not_active":
-      return "That topic is not active. Choose another one.";
+      return t.errors.topicNotActive;
     case "forbidden":
-      return "You do not have permission to do that.";
+      return t.errors.forbidden;
     default:
-      return error.status >= 500
-        ? "Something went wrong on our side. Please try again."
-        : "The request could not be completed.";
+      return error.status >= 500 ? t.errors.serverSide : t.errors.requestFailed;
   }
 }

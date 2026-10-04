@@ -1,23 +1,25 @@
 import { Link } from "react-router";
 import { useHasAny } from "../auth/permissions";
+import { useText } from "../i18n/useText";
 import { EmptyState } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { RevisionEditor } from "./RevisionEditor";
 
 export function NewQuestionPage() {
-  useDocumentTitle("New question");
+  const t = useText();
+  useDocumentTitle(t.editorial.newQuestion);
   const canAuthor = useHasAny("CONTENT_AUTHOR");
   return (
     <>
       <p>
-        <Link to="/editorial">Back to questions</Link>
+        <Link to="/editorial">{t.editorial.backToQuestions}</Link>
       </p>
-      <h1>New question</h1>
+      <h1>{t.editorial.newQuestion}</h1>
       {canAuthor ? (
         <RevisionEditor />
       ) : (
-        <EmptyState title="You cannot write questions">
-          <p>Ask an administrator for the editor role.</p>
+        <EmptyState title={t.editorial.cannotAuthor}>
+          <p>{t.editorial.cannotAuthorBody}</p>
         </EmptyState>
       )}
     </>

@@ -5,6 +5,8 @@ import { unwrap } from "../api/problem";
 import { useAccount } from "../auth/AuthContext";
 import { useHasAny } from "../auth/permissions";
 import { useTopicNames } from "../history/useTopicNames";
+import type { Catalog } from "../i18n/en";
+import { useText } from "../i18n/useText";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
@@ -14,15 +16,11 @@ import { ReviewPanel, useCanDecide } from "./ReviewPanel";
 import { RevisionView } from "./RevisionView";
 import { StatusMark, StatusRail } from "./StatusParts";
 
-const NOTICE: Record<string, string> = {
-  sent: "Sent for review. A reviewer other than you will pick it up from the queue.",
-  saved: "Draft saved.",
-  approved: "Approved. An administrator can now publish it.",
-  changes: "Sent back to the author with your comment. It is a draft again.",
-  published: "Published. Learners can now get this question in their sessions.",
-  retired: "Retired. It stays in history and no new session will use it.",
-  started: "New revision started as a draft, copied from the previous one.",
-};
+/** What each outcome says, by the key the deciding page navigates with. */
+function noticeFor(kind: string, t: Catalog): string | undefined {
+  const notices: Record<string, string> = t.editorial.questionPage.notices;
+  return notices[kind];
+}
 
 function RevisionWithDecisions({
   question,
@@ -53,10 +51,11 @@ function RevisionWithDecisions({
 }
 
 function Notice({ kind }: { kind: string }) {
+  const t = useText();
   const ref = useFocusOnMount<HTMLParagraphElement>();
   return (
     <p ref={ref} role="status" tabIndex={-1} className="notice">
-      {NOTICE[kind]}
+      {noticeFor(kind, t)}
     </p>
   );
 }
@@ -67,6 +66,8 @@ function Notice({ kind }: { kind: string }) {
  * for.
  */
 export function QuestionPage() {
+  const t = useText();
+  const page = t.editorial.questionPage;
   const { questionId = "" } = useParams();
   const [params] = useSearchParams();
   const notice = (useLocation().state as { notice?: string } | null)?.notice;
@@ -88,38 +89,40 @@ export function QuestionPage() {
   const wanted = Number(params.get("revision"));
   const revision =
     revisions.find((candidate) => candidate.number === wanted) ?? revisions[revisions.length - 1];
-  useDocumentTitle(revision ? `Revision ${revision.number}` : "Question");
+  const title = revision ? page.revisionTitle(revision.number) : page.fallbackTitle;
+  useDocumentTitle(title);
 
   // The heading is always the first element and never replaced as data arrives, so focus placed on
   // it by the route change stays put.
   return (
     <>
       <p>
-        <Link to="/editorial">Back to questions</Link>
+        <Link to="/editorial">{t.editorial.backToQuestions}</Link>
       </p>
-      <h1>{revision ? `Revision ${revision.number}` : "Question"}</h1>
-      {question.isPending ? <Loading label="Loading question" /> : null}
+      <h1>{title}</h1>
+      {question.isPending ? <Loading label={page.loading} /> : null}
       {question.isError ? (
         <ErrorState error={question.error} onRetry={() => void question.refetch()} />
       ) : null}
       {question.data && revision ? (
         <>
-          {notice && NOTICE[notice] ? <Notice key={notice} kind={notice} /> : null}
+          {notice && noticeFor(notice, t) ? <Notice key={notice} kind={notice} /> : null}
           <div className="revision-head">
             <StatusRail status={revision.status} />
             <p className="muted">
-              Current status: <StatusMark status={revision.status} />
+              {page.currentStatus}
+              <StatusMark status={revision.status} />
             </p>
           </div>
           {revisions.length > 1 ? (
-            <nav className="tabs" aria-label="Revisions">
+            <nav className="tabs" aria-label={page.revisionsLabel}>
               {revisions.map((candidate) => (
                 <Link
                   key={candidate.id}
                   to={`/editorial/questions/${question.data.id}?revision=${candidate.number}`}
                   aria-current={candidate.id === revision.id ? "page" : undefined}
                 >
-                  Revision {candidate.number}
+                  {page.revisionTab(candidate.number)}
                 </Link>
               ))}
             </nav>

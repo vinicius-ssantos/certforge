@@ -1,0 +1,5 @@
+finalIsFinal=true
+sealedIsSealed=true
+nonSealedIsSealed=false
+extendedNonSealed=true
+permitted=3

@@ -1,0 +1,8 @@
+exportedPublicCall=exportedPublic
+lExported=true
+lOpen=false
+qExported=true
+qOpen=true
+openedPrivateField=openedPrivate
+openedPrivateMethod=openedPrivateMethod
+exportedPrivateReflection=InaccessibleObjectException

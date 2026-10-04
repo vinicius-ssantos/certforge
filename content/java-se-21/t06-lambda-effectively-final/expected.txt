@@ -1,0 +1,1 @@
+COMPILE_ERROR: cant.ref.non.effectively.final.var

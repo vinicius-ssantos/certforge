@@ -1,0 +1,3 @@
+negativeHalf=-1
+positiveHalf=2
+negativeBelowHalf=-2

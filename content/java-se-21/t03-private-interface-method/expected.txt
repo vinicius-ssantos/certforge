@@ -1,0 +1,4 @@
+Hello Ana!
+declaredByClass=[]
+punctuationInPublicApi=false
+greetInPublicApi=true

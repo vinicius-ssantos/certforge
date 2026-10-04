@@ -4,11 +4,12 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { Misconception } from "../api/types";
 import { formatDateTime } from "../history/format";
+import { useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 
-function percent(accuracy: number | null): string {
-  return accuracy === null ? "–" : `${Math.round(accuracy * 100)}%`;
+function percent(accuracy: number | null, noValue: string): string {
+  return accuracy === null ? noValue : `${Math.round(accuracy * 100)}%`;
 }
 
 /**
@@ -21,33 +22,32 @@ function percent(accuracy: number | null): string {
  * is one idea stuck, and three to three questions is a weak area.
  */
 function Misconceptions({ rows }: { rows: Misconception[] }) {
+  const t = useText();
   if (rows.length === 0) {
     return null;
   }
   return (
     <section aria-labelledby="misconceptions">
-      <h2 id="misconceptions">Where you were sure and wrong</h2>
+      <h2 id="misconceptions">{t.progress.misconceptionsHeading}</h2>
       <p>
-        These are answers you got wrong while saying you were confident. That is worth more than a
-        wrong answer you knew was a guess, because nothing told you to look again. It is evidence of
-        where to look, <strong>not</strong> a prediction about an exam.
+        {t.progress.misconceptionsBodyStart}
+        <strong>{t.progress.misconceptionsBodyNot}</strong>
+        {t.progress.misconceptionsBodyEnd}
       </p>
       <table>
-        <caption className="visually-hidden">
-          Confidently wrong answers by topic, with how many questions they span
-        </caption>
+        <caption className="visually-hidden">{t.progress.misconceptionsCaption}</caption>
         <thead>
           <tr>
-            <th scope="col">Topic</th>
-            <th scope="col">Wrong while sure</th>
-            <th scope="col">Across questions</th>
-            <th scope="col">Most recent</th>
+            <th scope="col">{t.progress.topic}</th>
+            <th scope="col">{t.progress.wrongWhileSure}</th>
+            <th scope="col">{t.progress.acrossQuestions}</th>
+            <th scope="col">{t.progress.mostRecent}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
             <tr key={row.topicId}>
-              <th scope="row">{row.topicName ?? "Topic"}</th>
+              <th scope="row">{row.topicName ?? t.progress.fallbackTopic}</th>
               <td>{row.attempts}</td>
               <td>{row.questions}</td>
               <td>
@@ -58,14 +58,15 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
         </tbody>
       </table>
       <p>
-        <Link to="/review">Review these questions</Link>
+        <Link to="/review">{t.progress.reviewThese}</Link>
       </p>
     </section>
   );
 }
 
 export function ProgressPage() {
-  useDocumentTitle("Progress");
+  const t = useText();
+  useDocumentTitle(t.progress.title);
   const api = useApi();
   const progress = useQuery({
     queryKey: ["progress", "topics"],
@@ -78,30 +79,30 @@ export function ProgressPage() {
 
   return (
     <>
-      <h1>Progress</h1>
-      {progress.isPending ? <Loading label="Loading your progress" /> : null}
+      <h1>{t.progress.title}</h1>
+      {progress.isPending ? <Loading label={t.progress.loading} /> : null}
       {progress.isError ? (
         <ErrorState error={progress.error} onRetry={() => void progress.refetch()} />
       ) : null}
       {progress.data && progress.data.length === 0 ? (
-        <EmptyState title="No progress yet">
+        <EmptyState title={t.progress.emptyTitle}>
           <p>
-            Answer some questions and your progress by topic appears here. Start from the{" "}
-            <Link to="/">tracks page</Link>.
+            {t.progress.emptyBody}
+            <Link to="/">{t.progress.tracksPageLink}</Link>.
           </p>
         </EmptyState>
       ) : null}
       {progress.data && progress.data.length > 0 ? (
         <table>
-          <caption className="visually-hidden">Your progress by topic</caption>
+          <caption className="visually-hidden">{t.progress.tableCaption}</caption>
           <thead>
             <tr>
-              <th scope="col">Topic</th>
-              <th scope="col">Attempted</th>
-              <th scope="col">Correct</th>
-              <th scope="col">Incorrect</th>
-              <th scope="col">Accuracy</th>
-              <th scope="col">Last activity</th>
+              <th scope="col">{t.progress.topic}</th>
+              <th scope="col">{t.progress.attempted}</th>
+              <th scope="col">{t.progress.correct}</th>
+              <th scope="col">{t.progress.incorrect}</th>
+              <th scope="col">{t.progress.accuracy}</th>
+              <th scope="col">{t.progress.lastActivity}</th>
             </tr>
           </thead>
           <tbody>
@@ -109,20 +110,22 @@ export function ProgressPage() {
               <tr key={topic.topicId}>
                 <th scope="row">
                   {topic.trackSlug ? (
-                    <Link to={`/tracks/${topic.trackSlug}`}>{topic.topicName ?? "Topic"}</Link>
+                    <Link to={`/tracks/${topic.trackSlug}`}>
+                      {topic.topicName ?? t.progress.fallbackTopic}
+                    </Link>
                   ) : (
-                    (topic.topicName ?? "Topic")
+                    (topic.topicName ?? t.progress.fallbackTopic)
                   )}
                 </th>
                 <td>{topic.attempted}</td>
                 <td>{topic.correct}</td>
                 <td>{topic.incorrect}</td>
-                <td>{percent(topic.accuracy)}</td>
+                <td>{percent(topic.accuracy, t.progress.noValue)}</td>
                 <td>
                   {topic.lastActivityAt ? (
                     <time dateTime={topic.lastActivityAt}>{formatDateTime(topic.lastActivityAt)}</time>
                   ) : (
-                    "–"
+                    t.progress.noValue
                   )}
                 </td>
               </tr>

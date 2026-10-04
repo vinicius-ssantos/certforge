@@ -1,0 +1,6 @@
+read=1 class=Integer
+size=1
+read=2.5 class=Double
+size=1
+read=3 class=Long
+size=1

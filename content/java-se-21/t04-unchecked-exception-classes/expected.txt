@@ -1,0 +1,4 @@
+runtimeNeedsNoThrows=IllegalStateException
+errorNeedsNoThrows=StackOverflowError
+ioIsRuntime=false
+ioIsError=false

@@ -1,0 +1,3 @@
+addThroughView=UnsupportedOperationException
+viewSeesBackingChange=2
+backingStillModifiable=2

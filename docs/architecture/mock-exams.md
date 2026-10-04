@@ -20,6 +20,10 @@ Chaining ordinary practice sessions would break that invariant: the ordinary att
 | Questions per topic | 5 |
 | Correct answers needed at that threshold | 34 |
 
+> **Where the first three numbers come from has not been verified.** The question count, the time limit and the pass threshold describe Oracle's exam, not a CertForge choice, and nothing in this repository records a source for them or a date on which a person checked them. They are presented to a learner as the shape of the real exam, and a learner practising a 50-question, 120-minute run calibrates their pacing to it, so being wrong here misleads actively rather than quietly.
+>
+> This is the same gap the exam objective wording had before #68, and it is tracked the same way. Until it is checked against Oracle's exam page in a browser, treat the three as unverified.
+
 The values live in `MockExamBlueprintCatalog`. A future exam version must opt in explicitly; it never inherits another exam's timing or distribution by accident.
 
 The equal five-per-topic distribution is a CertForge practice blueprint. It deliberately gives every published objective meaningful exposure and is not presented as an Oracle-published objective weighting.
@@ -60,9 +64,9 @@ This is a server rule, not a front-end convention.
 
 ## Timing and scoring
 
-The browser displays the countdown, but the server owns the deadline. Once `expiresAt` has passed, later answers are rejected and the run expires lazily, matching ordinary study-session behavior.
+The browser will display the countdown, but the server owns the deadline. Once `expiresAt` has passed, later answers are rejected and the run expires lazily, matching ordinary study-session behavior.
 
-The final score denominator is the blueprint's full question count, not the number answered. Results expose total, answered and correct counts; percentage; whether the configured practice threshold was reached; elapsed duration; per-topic breakdown; and detailed post-close review.
+The final score denominator is the blueprint's full question count, not the number answered. Results will expose total, answered and correct counts; percentage; whether the configured practice threshold was reached; elapsed duration; per-topic breakdown; and detailed post-close review.
 
 A mock result describes that run. It is not a readiness forecast or a probability of passing the real exam.
 
@@ -87,6 +91,6 @@ Expiration is based on the persisted deadline and the server clock. Unanswered i
 
 ## Learner flow
 
-The certification track now links to a dedicated mock runner. The runner shows the server-backed countdown, direct question navigation, answered state, browser-local review flags and an irreversible submit confirmation that calls out unanswered questions. It never renders correctness while the run is active.
+The certification track links to a dedicated mock runner. The runner shows the server-backed countdown, direct question navigation, answered state, browser-local review flags and an irreversible submit confirmation that calls out unanswered questions. It never renders correctness while the run is active.
 
 Terminal runs open a result screen with the practice score, elapsed time, named topic breakdown and full answer review. The History page lists mock exams separately from topic practice, resumes active runs, links terminal runs back to their result, and surfaces topics below the run's configured practice target without feeding that signal into ordinary progress.

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { Link, Navigate } from "react-router";
+import { useText } from "../i18n/useText";
 import { ErrorSummary, TextField } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
@@ -9,7 +10,8 @@ import { useAuth } from "./AuthContext";
 const MIN_PASSWORD_LENGTH = 12;
 
 export function RegisterPage() {
-  useDocumentTitle("Create an account");
+  const t = useText();
+  useDocumentTitle(t.auth.createAnAccount);
   const { state, register } = useAuth();
 
   const [email, setEmail] = useState("");
@@ -25,9 +27,9 @@ export function RegisterPage() {
   async function submit(event: FormEvent) {
     event.preventDefault();
     const errors: { email?: string; password?: string } = {};
-    if (!email.trim()) errors.email = "Enter your email address.";
+    if (!email.trim()) errors.email = t.auth.enterEmail;
     if (password.length < MIN_PASSWORD_LENGTH) {
-      errors.password = `The password must have at least ${MIN_PASSWORD_LENGTH} characters.`;
+      errors.password = t.auth.passwordTooShort(MIN_PASSWORD_LENGTH);
     }
     setFieldErrors(errors);
     setFailure(null);
@@ -38,7 +40,7 @@ export function RegisterPage() {
     try {
       await register(email.trim(), password);
     } catch (error) {
-      setFailure(errorMessage(error));
+      setFailure(errorMessage(error, t));
     } finally {
       setSubmitting(false);
     }
@@ -52,12 +54,12 @@ export function RegisterPage() {
 
   return (
     <div className="narrow">
-      <h1>Create an account</h1>
+      <h1>{t.auth.createAnAccount}</h1>
       <ErrorSummary problems={problems} />
       <form onSubmit={(event) => void submit(event)} noValidate>
         <TextField
           id="register-email"
-          label="Email"
+          label={t.auth.email}
           type="email"
           autoComplete="email"
           value={email}
@@ -66,20 +68,20 @@ export function RegisterPage() {
         />
         <TextField
           id="register-password"
-          label="Password"
+          label={t.auth.password}
           type="password"
           autoComplete="new-password"
           value={password}
           onChange={setPassword}
           error={fieldErrors.password}
-          hint={`Use at least ${MIN_PASSWORD_LENGTH} characters. There are no other rules; a long phrase works well.`}
+          hint={t.auth.passwordHint(MIN_PASSWORD_LENGTH)}
         />
         <button type="submit" disabled={submitting}>
-          {submitting ? "Creating account…" : "Create account"}
+          {submitting ? t.auth.creatingAccount : t.auth.createAccount}
         </button>
       </form>
       <p>
-        Already have an account? <Link to="/login">Sign in</Link>
+        {t.auth.alreadyHaveAccount} <Link to="/login">{t.auth.signIn}</Link>
       </p>
     </div>
   );

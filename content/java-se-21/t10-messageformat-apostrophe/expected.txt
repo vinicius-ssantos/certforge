@@ -1,0 +1,4 @@
+placeholder=value is x
+quoted=value is {0}
+doubled=it's x
+loneQuote=its {0}

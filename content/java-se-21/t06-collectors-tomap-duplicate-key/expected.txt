@@ -1,0 +1,2 @@
+thrown=IllegalStateException
+withMergeFunction={a=ab}

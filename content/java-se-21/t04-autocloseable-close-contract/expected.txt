@@ -1,0 +1,4 @@
+autoCloseable=[class java.lang.Exception]
+closeable=[class java.io.IOException]
+body=ran
+caught=java.lang.Exception:from close

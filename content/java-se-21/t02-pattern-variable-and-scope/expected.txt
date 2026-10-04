@@ -1,0 +1,5 @@
+string=true
+empty=false
+notAString=false
+null=false
+afterNegatedIf=true

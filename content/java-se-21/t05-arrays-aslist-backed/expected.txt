@@ -1,0 +1,3 @@
+writesThroughToArray=z
+add=UnsupportedOperationException
+remove=UnsupportedOperationException

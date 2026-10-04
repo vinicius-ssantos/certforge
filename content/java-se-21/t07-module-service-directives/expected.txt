@@ -1,0 +1,4 @@
+providerResolved=true
+loaded=[LOUD from provider]
+declaredUses=[s.Greeter]
+providerProvides=[s.Greeter->[p.Loud]]

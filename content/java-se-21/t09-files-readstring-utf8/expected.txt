@@ -1,0 +1,3 @@
+defaultMatchesUtf8=true
+explicitUtf8Matches=true
+latin1Matches=false

@@ -1,0 +1,3 @@
+join=CompletionException
+get=ExecutionException
+bothWrapTheSameCause=ok

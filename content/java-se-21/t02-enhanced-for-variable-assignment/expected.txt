@@ -1,0 +1,2 @@
+afterLoopVariable=[1, 2, 3]
+afterIndexWrite=[2, 3, 4]
