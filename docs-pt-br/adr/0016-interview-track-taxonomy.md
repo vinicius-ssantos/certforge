@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0016-interview-track-taxonomy.md`](../../docs/adr/0016-interview-track-taxonomy.md). O inglês é a fonte canônica.
 
-- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. As decisões 1, 2, 6, 7 e 8 estão implementadas, e uma questão em um tópico de entrevista realmente publica. A decisão 3 (as linhas da taxonomia) e a decisão 5 (senioridade na revisão) ainda estão por vir. Cada decisão abaixo diz o que existe.
+- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. As decisões 1, 2, 3, 6, 7 e 8 estão implementadas: a taxonomia existe como trilha em DRAFT e versão de taxonomia em DRAFT, e uma questão em um tópico de entrevista realmente publica assim que as duas são ativadas. A decisão 5 (senioridade na revisão) ainda está por vir, e também tornar a taxonomia alcançável pela mesa editorial — veja as consequências. Cada decisão abaixo diz o que existe.
 - Data: 2026-10-04
 
 ## Contexto
@@ -97,6 +97,14 @@ Então: quando um objetivo de certificação e um tópico de entrevista cobrem o
 ## Consequências
 
 - **Nada nesta ADR é construível sem a decisão 1**, que é uma migração em tabelas vivas. A ordem honesta é: generalizar a versão de trilha, depois tornar as duas regras condicionais, depois inserir a taxonomia, depois escrever conteúdo. Uma trilha de entrevista inserida antes disso seria uma trilha incapaz de guardar uma questão.
+- **A mesa editorial ainda não consegue escrever contra a taxonomia, e isso não estava previsto aqui.**
+  O `useTopics` no app web lê `/api/catalog/tracks` — o endpoint do *aluno*, que serve somente
+  trilha ativa com versão ativa. Então enquanto a trilha de entrevista está em `DRAFT`, os tópicos
+  dela não aparecem na lista do editor de questões, e não há como escrever conteúdo para ela. É um
+  acoplamento latente que só nunca incomodou porque existia uma única trilha permanentemente ativa:
+  a mesa editorial não deveria ver apenas o que os alunos veem. Corrigir exige um endpoint de
+  tópicos editorial, permitido aos papéis de conteúdo e não ao `CATALOG_MANAGE`, e é o próximo
+  passo antes de qualquer conteúdo de entrevista ser escrito.
 - **A trilha de entrevista ficará visivelmente vazia por um bom tempo.** Doze tópicos sem questões revisadas é o que isso produz no começo, e a página de trilhas mostraria uma trilha que ninguém consegue praticar. Ou a trilha fica em `DRAFT` até alguns tópicos terem conteúdo, ou a interface diz claramente que um tópico não tem nenhum — a segunda é mais honesta e é o que os estados vazios já fazem em outros lugares.
 - O problema de nome da ADR 0014 piora, não melhora: uma trilha chamada "entrevista" passa a ser dona de estruturas de dados, SOLID e system design. "Java Backend — Pleno/Sênior" como *nome* da trilha, com `INTERVIEW` como tipo, é a leitura menos ruim, e o tipo é a coisa em que o código ramifica.
 - Postergar comunicação comportamental significa que a primeira trilha de entrevista não faz justamente o que o nome do épico mais sugere a quem lê. Isso deve ser dito na documentação de produto, não descoberto.

@@ -267,6 +267,91 @@ class PreparationCatalogIT {
    * a reader has to interpret.
    */
   @Test
+  void theSeededInterviewTaxonomyIsTwelveWeightedTopicsWithNoExamAndNoObjectives() {
+    String track = "a1000000-0000-4000-8000-000000000002";
+    String version = "a2000000-0000-4000-8000-000000000002";
+
+    assertThat(
+            jdbc.queryForObject(
+                "select kind || ':' || status from certforge.catalog_track where id = ?::uuid",
+                String.class,
+                track))
+        .isEqualTo("INTERVIEW:DRAFT");
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_topic where track_id = ?::uuid",
+                Integer.class,
+                track))
+        .isEqualTo(12);
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_track_version_topic"
+                    + " where track_version_id = ?::uuid",
+                Integer.class,
+                version))
+        .isEqualTo(12);
+    // No objective is cited, because there is no published objective to cite.
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_track_version_topic"
+                    + " where track_version_id = ?::uuid and objective_ref is not null",
+                Integer.class,
+                version))
+        .isZero();
+    // Every topic carries a canonical weight, in the documented 1 to 5 range.
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_track_version_topic"
+                    + " where track_version_id = ?::uuid and weight between 1 and 5",
+                Integer.class,
+                version))
+        .isEqualTo(12);
+    // And it is a taxonomy version, not an exam revision.
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_certification_exam"
+                    + " where track_version_id = ?::uuid",
+                Integer.class,
+                version))
+        .isZero();
+    // Reading order is independent of weight, and is a gapless sequence.
+    assertThat(
+            jdbc.queryForList(
+                "select position from certforge.catalog_track_version_topic"
+                    + " where track_version_id = ?::uuid order by position",
+                Integer.class,
+                version))
+        .containsExactly(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+  }
+
+  /** Both rows are DRAFT, so no learner can see the track and nothing can be published to it. */
+  @Test
+  void theSeededInterviewTrackIsNotOfferedToLearnersYet() throws Exception {
+    assertThat(catalog.activeTracks()).extracting("slug").doesNotContain("java-backend-interview");
+    assertThat(catalog.activeTrack("java-backend-interview")).isEmpty();
+    assertThat(
+            catalog.findActiveTopicContext(
+                new TopicId(UUID.fromString("a3000000-0000-4000-8000-000000000102"))))
+        .as("a draft version maps the topic, but publishing needs an active one")
+        .isEmpty();
+
+    // The kind is still answerable, which is what lets an editor write for it before it opens.
+    assertThat(
+            catalog.findTrackKindOfTopic(
+                new TopicId(UUID.fromString("a3000000-0000-4000-8000-000000000102"))))
+        .contains(TrackKind.INTERVIEW);
+
+    mvc.perform(get("/api/catalog/tracks").cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$[?(@.slug=='java-backend-interview')]", org.hamcrest.Matchers.empty()))
+        // The same filter against the track that *is* served, so the assertion above is known to
+        // be the filter finding nothing rather than the filter not working at all.
+        .andExpect(
+            jsonPath("$[?(@.slug=='java-certification')]", org.hamcrest.Matchers.hasSize(1)));
+  }
+
+  @Test
   void anInterviewTopicHasAContextWithNoJavaRelease() {
     UUID trackId = UUID.randomUUID();
     UUID versionId = UUID.randomUUID();
