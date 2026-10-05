@@ -18,32 +18,45 @@ The initial interview track should be:
 
 **Java Backend — Pleno/Sênior**
 
-Candidate topic taxonomy:
+### The taxonomy, as seeded
 
-- Java Core;
-- Collections and generics;
-- Streams and functional APIs;
-- concurrency and JVM fundamentals;
-- Spring and Spring Boot;
-- Spring Security;
-- JPA and Hibernate;
-- SQL and transactions;
-- testing;
-- SOLID and design patterns;
-- domain boundaries and DDD fundamentals;
-- microservices;
-- synchronous versus asynchronous integration;
-- messaging;
-- Kafka and RabbitMQ concepts;
-- idempotency, retries, DLQ, ordering, and consistency;
-- AWS fundamentals for backend engineers;
-- Docker and Kubernetes;
-- observability and resilience;
-- system design;
-- behavioral communication;
-- financial-system concerns such as auditability, precision, traceability, and duplicate prevention.
+Twelve topics, decided by [ADR 0016](../adr/0016-interview-track-taxonomy.md) and inserted by `V14` as a draft track and a draft taxonomy version. The twenty-three candidates this document used to list are folded in as the subject matter of these twelve, not dropped.
 
-The first content pack should emphasize Java/Spring backend rather than attempt to cover every interview domain.
+| # | Topic | Weight | What it covers |
+|---|---|---|---|
+| 1 | Java language and runtime | 5 | Java core, collections, generics, streams, functional APIs, JVM fundamentals |
+| 2 | Concurrency | 4 | threads, virtual threads, memory visibility, coordination |
+| 3 | Object-oriented design | 5 | SOLID, design patterns, object-oriented modelling |
+| 4 | Data structures and algorithms | 3 | the properties underneath the collections, and the cost of an operation |
+| 5 | Spring | 5 | Spring, Spring Boot, Spring Security |
+| 6 | Persistence | 5 | JPA, Hibernate, SQL, transactions |
+| 7 | Testing | 4 | unit, integration, test doubles, what a test is evidence of |
+| 8 | Domain boundaries | 3 | DDD fundamentals, ownership, contracts between modules |
+| 9 | Distributed systems | 4 | microservices, synchronous versus asynchronous integration, failure |
+| 10 | Messaging | 4 | Kafka and RabbitMQ concepts, idempotency, retries, DLQ, ordering, consistency |
+| 11 | Cloud and operations | 3 | AWS for backend engineers, Docker, Kubernetes, observability, resilience |
+| 12 | System design | 3 | composing the above under constraints |
+
+Weight is an editorial judgement about what a Pleno/Sênior backend screen asks, on a 1 to 5 scale, not a measurement. A job-specific blueprint may disagree with it without rewriting the taxonomy.
+
+**Two subjects in the list above are deliberately absent, and a reader should not have to discover that.** *Behavioural communication* has no authoritative reference, and the [content policy](content-policy.md) requires one; whether the policy admits a question whose evidence is editorial judgement alone has to be decided before the topic exists. *Financial-system concerns* — auditability, precision, traceability, duplicate prevention — are a lens across topics 6, 9, 10 and 12 rather than a thirteenth area, and belong in a job blueprint. So the first interview track does not yet do the thing the word "interview" most suggests.
+
+### Where data structures end and collections begin
+
+Topic 1 absorbed "Collections and generics", so the boundary that matters is between topic 1 and topic 4, and it is this: **topic 1 is the API, topic 4 is the properties underneath it.**
+
+- "Which `Map` keeps insertion order?" and "what does `Collectors.toMap` do with a duplicate key?" are **topic 1**: they are answered by knowing the Java library.
+- "Why is a lookup in a hash table not always constant time?", "when does an array beat a linked list even with worse asymptotics?", "what does a tree buy you over a hash table?" are **topic 4**: they are answered by knowing the structure, in any language.
+
+A question that can be answered by reading the Javadoc belongs in topic 1. A question that would read the same in another language belongs in topic 4. When a question genuinely needs both, it goes where the *reasoning* is, not where the type name is.
+
+### What depth a question may assume
+
+**Reasoning about behaviour and cost, never writing an algorithm from scratch.** Two reasons, and the first is structural: the platform does not execute learner code, and will not before `v0.5.0` ([ADR 0006](../adr/0006-isolate-code-execution.md)), so a question has to be answerable without running anything. The second is that an interview for a backend role asks a candidate to *choose* and *justify* a structure far more often than to implement one.
+
+So a question may assume the candidate can read code and reason about complexity, and may not require them to produce a working implementation. "Which of these is O(log n) and why" is in scope; "write a balanced insert" is not, and would not be gradeable here even if it were.
+
+The first content pack should emphasise Java/Spring backend rather than attempt to cover every interview domain.
 
 ## Preparation tracks
 
