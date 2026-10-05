@@ -247,7 +247,7 @@ class CatalogAdminService {
                             .map(
                                 m ->
                                     new AdminMappingView(
-                                        m.topicId(), m.objectiveRef(), m.position()))
+                                        m.topicId(), m.objectiveRef(), m.position(), m.weight()))
                             .toList()))
             .toList();
     List<AdminTopicView> topics =

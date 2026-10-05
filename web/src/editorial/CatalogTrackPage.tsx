@@ -28,15 +28,27 @@ function ExamVersion({ version, topics }: { version: AdminExamVersion; topics: A
       <h3 id={`version-${version.id}`}>
         {version.label} <Status status={version.status} />
       </h3>
-      <p className="muted">
-        {t.editorial.catalogTrack.examNameAndCode(version.examName, version.examCode)} ·{" "}
-        {t.editorial.catalogTrack.javaRelease(version.javaRelease)}
-      </p>
-      <p>
-        <a href={version.objectivesUrl} target="_blank" rel="noopener noreferrer">
-          {t.editorial.catalogTrack.objectives}
-        </a>
-      </p>
+      {/*
+       * An interview track's version is a taxonomy revision with no exam behind it, so there is no
+       * code, name, release or objectives page to show. Saying that is better than four blanks.
+       */}
+      {version.examCode === null || version.examName === null || version.javaRelease === null ? (
+        <p className="muted">{t.editorial.catalogTrack.noExam}</p>
+      ) : (
+        <>
+          <p className="muted">
+            {t.editorial.catalogTrack.examNameAndCode(version.examName, version.examCode)} ·{" "}
+            {t.editorial.catalogTrack.javaRelease(version.javaRelease)}
+          </p>
+          {version.objectivesUrl === null ? null : (
+            <p>
+              <a href={version.objectivesUrl} target="_blank" rel="noopener noreferrer">
+                {t.editorial.catalogTrack.objectives}
+              </a>
+            </p>
+          )}
+        </>
+      )}
       {mapped.length === 0 ? (
         <p>{t.editorial.catalogTrack.noTopicMapped}</p>
       ) : (
@@ -124,9 +136,15 @@ function TrackDetail({ track }: { track: AdminTrack }) {
           <p>
             {t.editorial.catalogTrack.publishableStart(publishable.size)}
             <strong>{active.label}</strong>
-            {t.editorial.catalogTrack.publishableRelease}
-            <strong>{t.editorial.catalogTrack.javaRelease(active.javaRelease)}</strong>
-            {t.editorial.catalogTrack.publishableEnd}
+            {active.javaRelease === null ? (
+              t.editorial.catalogTrack.publishableNoRelease
+            ) : (
+              <>
+                {t.editorial.catalogTrack.publishableRelease}
+                <strong>{t.editorial.catalogTrack.javaRelease(active.javaRelease)}</strong>
+                {t.editorial.catalogTrack.publishableEnd}
+              </>
+            )}
           </p>
         ) : (
           <p>{t.editorial.catalogTrack.noActiveVersion}</p>

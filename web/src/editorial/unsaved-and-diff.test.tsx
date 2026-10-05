@@ -2,12 +2,16 @@ import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
-import { editor, javaTrack, renderApp, reviewer } from "../test/render";
+import { editor, authorableTracks, javaTrack, renderApp, reviewer } from "../test/render";
 
 const QUESTION_ID = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const REVISION_ID = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
 const TOPIC_ID = javaTrack.topics[0]!.id;
-const tracks = { "GET /api/catalog/tracks": { body: [javaTrack] } };
+const tracks = {
+  "GET /api/catalog/tracks": { body: [javaTrack] },
+  // The question editor reads the editorial source, not the learner catalog.
+  "GET /api/editorial/catalog/topics": { body: authorableTracks },
+};
 const QUESTION_URL = `/api/admin/questions/${QUESTION_ID}`;
 
 function revision(overrides: Record<string, unknown> = {}) {

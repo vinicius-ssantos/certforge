@@ -97,7 +97,7 @@ Então: quando um objetivo de certificação e um tópico de entrevista cobrem o
 ## Consequências
 
 - **Nada nesta ADR é construível sem a decisão 1**, que é uma migração em tabelas vivas. A ordem honesta é: generalizar a versão de trilha, depois tornar as duas regras condicionais, depois inserir a taxonomia, depois escrever conteúdo. Uma trilha de entrevista inserida antes disso seria uma trilha incapaz de guardar uma questão.
-- **A mesa editorial ainda não consegue escrever contra a taxonomia, e isso não estava previsto aqui.**
+- ~~**A mesa editorial ainda não consegue escrever contra a taxonomia, e isso não estava previsto aqui.**~~ **Resolvido:** o `GET /api/editorial/catalog/topics` agora serve a taxonomia aos papéis de conteúdo, e o editor de questões lê dele em vez do catálogo do aluno. Semear também revelou uma segunda instância da mesma suposição: toda consulta de trilha fazia inner join em `catalog_certification_profile`, então uma trilha sem perfil era invisível até para o administrador responsável por ela. As duas estão corrigidas; o texto original fica abaixo porque o raciocínio é o que importa.
   O `useTopics` no app web lê `/api/catalog/tracks` — o endpoint do *aluno*, que serve somente
   trilha ativa com versão ativa. Então enquanto a trilha de entrevista está em `DRAFT`, os tópicos
   dela não aparecem na lista do editor de questões, e não há como escrever conteúdo para ela. É um

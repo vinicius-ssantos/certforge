@@ -2,6 +2,9 @@ package dev.certforge.preparationcatalog.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,6 +46,7 @@ class PreparationCatalogIT {
 
   private static final String PASSWORD = "correct horse battery";
   private static final String SESSION_COOKIE = "CERTFORGE_SESSION";
+  private static final String INTERVIEW_TRACK_ID = "a1000000-0000-4000-8000-000000000002";
   private static final String SEEDED_TOPIC_ID = "a3000000-0000-4000-8000-000000000001";
   private static final AtomicInteger IP_SEQUENCE = new AtomicInteger();
 
@@ -322,6 +326,35 @@ class PreparationCatalogIT {
                 Integer.class,
                 version))
         .containsExactly(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+  }
+
+  /**
+   * The administrator has to be able to see a track that is not a certification, or the catalog is
+   * lying to the person responsible for it. Before this, every track query inner-joined
+   * catalog_certification_profile, so a track with no profile — which an interview track has no
+   * reason to have — was silently absent from the admin catalog as well as from the learner's.
+   */
+  @Test
+  void theAdminCatalogShowsTracksThatAreNotCertifications() throws Exception {
+    mvc.perform(get("/api/admin/catalog/tracks").cookie(admin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[?(@.slug=='java-backend-interview')].kind", hasItem("INTERVIEW")))
+        .andExpect(jsonPath("$[?(@.slug=='java-backend-interview')].status", hasItem("DRAFT")))
+        // No exam identity, rather than an invented one or a crash on unboxing a null.
+        .andExpect(
+            jsonPath("$[?(@.slug=='java-backend-interview')].provider", hasItem(nullValue())))
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-backend-interview')].examVersions[0].javaRelease",
+                hasItem(nullValue())))
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-backend-interview')].examVersions[0].label",
+                hasItem("Taxonomy 2026.1")));
+
+    mvc.perform(get("/api/admin/catalog/tracks/" + INTERVIEW_TRACK_ID).cookie(admin))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.topics", hasSize(12)));
   }
 
   /** Both rows are DRAFT, so no learner can see the track and nothing can be published to it. */
