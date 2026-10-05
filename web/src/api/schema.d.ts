@@ -485,6 +485,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/editorial/catalog/topics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["topics_1"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/progress/rebuild": {
         parameters: {
             query?: never;
@@ -786,23 +802,25 @@ export interface components {
             roles: string[];
         };
         AdminExamVersionView: {
-            examCode: string;
-            examName: string;
+            examCode: string | null;
+            examName: string | null;
             /** Format: uuid */
             id: string;
             /** Format: int32 */
-            javaRelease: number;
+            javaRelease: number | null;
             label: string;
-            objectivesUrl: string;
+            objectivesUrl: string | null;
             status: string;
             topics: components["schemas"]["AdminMappingView"][];
         };
         AdminMappingView: {
-            objectiveRef: string;
+            objectiveRef: string | null;
             /** Format: int32 */
             position: number;
             /** Format: uuid */
             topicId: string;
+            /** Format: int32 */
+            weight: number | null;
         };
         AdminTopicView: {
             /** Format: uuid */
@@ -813,13 +831,13 @@ export interface components {
             slug: string;
         };
         AdminTrackView: {
-            certificationName: string;
+            certificationName: string | null;
             examVersions: components["schemas"]["AdminExamVersionView"][];
             /** Format: uuid */
             id: string;
             kind: string;
             name: string;
-            provider: string;
+            provider: string | null;
             slug: string;
             status: string;
             topics: components["schemas"]["AdminTopicView"][];
@@ -879,6 +897,24 @@ export interface components {
             occurredAt: string;
             requestId: string | null;
             subject: string;
+        };
+        AuthorableTopic: {
+            /** Format: int32 */
+            depth: number;
+            /** Format: uuid */
+            id: string;
+            name: string;
+            objectiveRef: string | null;
+            slug: string;
+        };
+        AuthorableTrack: {
+            /** Format: uuid */
+            id: string;
+            kind: string;
+            name: string;
+            slug: string;
+            status: string;
+            topics: components["schemas"]["AuthorableTopic"][];
         };
         CountsView: {
             /** Format: int32 */
@@ -2160,6 +2196,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["TrackView"];
+                };
+            };
+        };
+    };
+    topics_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AuthorableTrack"][];
                 };
             };
         };

@@ -2,6 +2,8 @@ package dev.certforge.questionbank.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -618,6 +620,43 @@ class QuestionBankIT {
         .andExpect(jsonPath("$.code").value("revision_incomplete"))
         .andExpect(
             jsonPath("$.violations", org.hamcrest.Matchers.hasItem("java_release_not_applicable")));
+  }
+
+  /**
+   * An editor needs the taxonomy they write against, and before this they were reading the learner
+   * catalog — which serves only an active track with an active version, so a draft track's topics
+   * were invisible to the only people who could give it content.
+   *
+   * <p>An editor holds CONTENT_AUTHOR and not CATALOG_MANAGE, which is why this is a separate
+   * endpoint rather than the administrative one: reading the taxonomy you write against is not
+   * administering it.
+   */
+  @Test
+  void anEditorCanReadEveryTopicAQuestionMayBeWrittenFor() throws Exception {
+    mvc.perform(get("/api/editorial/catalog/topics").cookie(editor.session()))
+        .andExpect(status().isOk())
+        // The active certification track, with its objectives, as before.
+        .andExpect(jsonPath("$[?(@.slug=='java-certification')].kind", hasItem("CERTIFICATION")))
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-certification')].topics[0].objectiveRef",
+                hasItem("Handling date, time, text, numeric and boolean values")))
+        // And the draft interview track, which the learner catalog does not serve at all.
+        .andExpect(jsonPath("$[?(@.slug=='java-backend-interview')].kind", hasItem("INTERVIEW")))
+        .andExpect(jsonPath("$[?(@.slug=='java-backend-interview')].status", hasItem("DRAFT")))
+        .andExpect(jsonPath("$[?(@.slug=='java-backend-interview')].topics", hasSize(1)))
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-backend-interview')].topics[0].name",
+                hasItem("Java language and runtime")))
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-backend-interview')].topics[11].name", hasItem("System design")))
+        // An interview topic cites no exam objective, and says so with a null rather than a blank.
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='java-backend-interview')].topics[0].objectiveRef",
+                hasItem(nullValue())));
   }
 
   /** Creates, submits and approves a revision with the given body and returns its ids. */

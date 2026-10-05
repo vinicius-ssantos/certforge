@@ -63,7 +63,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   const api = useApi();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { topics } = useTopics();
+  const { groups } = useTopics();
 
   const [draft, setDraft] = useState<Draft>(() => (revision ? draftFrom(revision) : emptyDraft()));
   // What was last saved (or loaded), to tell whether leaving would lose anything.
@@ -257,10 +257,26 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           <Field id="field-topic" label={ed.topic}>
             <select id="field-topic" value={draft.topicId} onChange={(event) => change({ topicId: event.target.value })}>
               <option value="">{ed.chooseTopic}</option>
-              {topics.map((topic) => (
-                <option key={topic.id} value={topic.id}>
-                  {`${"– ".repeat(topic.depth)}${topic.name}`}
-                </option>
+              {/*
+               * Grouped by track, because the same subject exists on a certification track and an
+               * interview track as two separate topics on purpose (ADR 0014). optgroup rather than
+               * a rendered heading: a screen reader announces the group with the option, so the
+               * choice is unambiguous without the author having to remember the order.
+               */}
+              {groups.map((group) => (
+                <optgroup
+                  key={group.trackId}
+                  label={ed.trackGroup(
+                    group.trackName,
+                    group.kind === "INTERVIEW" ? ed.kindInterview : ed.kindCertification,
+                  )}
+                >
+                  {group.topics.map((topic) => (
+                    <option key={topic.id} value={topic.id}>
+                      {`${"– ".repeat(topic.depth)}${topic.name}`}
+                    </option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </Field>

@@ -21,10 +21,12 @@ class CatalogRepository {
   private static final String SLUG = "slug";
   private static final String NAME = "name";
   private static final String TRACK_ID = "trackId";
+  // LEFT JOIN: only a certification track has a profile, and a track without one must still be
+  // readable. An inner join here is what hid the interview track from the admin catalog.
   private static final String SELECT_TRACK =
       "select t.id, t.slug, t.name, t.kind, t.status, p.provider, p.certification_name"
           + " from certforge.catalog_track t"
-          + " join certforge.catalog_certification_profile p on p.track_id = t.id";
+          + " left join certforge.catalog_certification_profile p on p.track_id = t.id";
   // LEFT JOIN: an interview version has no exam row, and must still be read rather than vanish.
   private static final String SELECT_VERSION =
       "select v.id, v.track_id, v.label, v.status,"

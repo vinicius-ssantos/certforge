@@ -53,6 +53,36 @@ export const admin = {
   ],
 };
 
+/**
+ * The same taxonomy as javaTrack, in the shape the editorial topic endpoint returns: flat, with a
+ * depth, grouped under its track. The question editor reads this rather than the learner catalog,
+ * because an editor writes for draft tracks too.
+ */
+export const authorableTracks = [
+  {
+    id: "22222222-2222-4222-8222-222222222222",
+    slug: "java-certification",
+    name: "Java Certification",
+    kind: "CERTIFICATION",
+    status: "ACTIVE",
+    topics: [
+      {
+        id: "44444444-4444-4444-8444-444444444444",
+        slug: "exceptions",
+        name: "Handling exceptions",
+        depth: 0,
+        objectiveRef: "Handling exceptions",
+      },
+      {
+        id: "55555555-5555-4555-8555-555555555555",
+        slug: "try-with-resources",
+        name: "try-with-resources",
+        depth: 1,
+        objectiveRef: "Using try-with-resources",
+      },
+    ],
+  },
+];
 export const javaTrack = {
   id: "22222222-2222-4222-8222-222222222222",
   slug: "java-certification",

@@ -32,10 +32,10 @@
       "AdminExamVersionView" : {
         "properties" : {
           "examCode" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "examName" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "id" : {
             "format" : "uuid",
@@ -43,13 +43,13 @@
           },
           "javaRelease" : {
             "format" : "int32",
-            "type" : "integer"
+            "type" : [ "integer", "null" ]
           },
           "label" : {
             "type" : "string"
           },
           "objectivesUrl" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "status" : {
             "type" : "string"
@@ -67,7 +67,7 @@
       "AdminMappingView" : {
         "properties" : {
           "objectiveRef" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "position" : {
             "format" : "int32",
@@ -76,9 +76,13 @@
           "topicId" : {
             "format" : "uuid",
             "type" : "string"
+          },
+          "weight" : {
+            "format" : "int32",
+            "type" : [ "integer", "null" ]
           }
         },
-        "required" : [ "objectiveRef", "position", "topicId" ],
+        "required" : [ "objectiveRef", "position", "topicId", "weight" ],
         "type" : "object"
       },
       "AdminTopicView" : {
@@ -104,7 +108,7 @@
       "AdminTrackView" : {
         "properties" : {
           "certificationName" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "examVersions" : {
             "items" : {
@@ -123,7 +127,7 @@
             "type" : "string"
           },
           "provider" : {
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "slug" : {
             "type" : "string"
@@ -300,6 +304,57 @@
           }
         },
         "required" : [ "action", "actorId", "id", "occurredAt", "requestId", "subject" ],
+        "type" : "object"
+      },
+      "AuthorableTopic" : {
+        "properties" : {
+          "depth" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "objectiveRef" : {
+            "type" : [ "string", "null" ]
+          },
+          "slug" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "depth", "id", "name", "objectiveRef", "slug" ],
+        "type" : "object"
+      },
+      "AuthorableTrack" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "kind" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AuthorableTopic"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "id", "kind", "name", "slug", "status", "topics" ],
         "type" : "object"
       },
       "CountsView" : {
@@ -2746,6 +2801,27 @@
           }
         },
         "tags" : [ "catalog-controller" ]
+      }
+    },
+    "/api/editorial/catalog/topics" : {
+      "get" : {
+        "operationId" : "topics_1",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/AuthorableTrack"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "editorial-catalog-controller" ]
       }
     },
     "/api/progress/rebuild" : {

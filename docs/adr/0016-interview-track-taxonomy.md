@@ -95,7 +95,7 @@ So: when a certification objective and an interview topic cover the same ground,
 ## Consequences
 
 - **Nothing in this ADR is buildable without decision 1**, which is a migration on live tables. The honest ordering is: generalise the track version, then make the two rules conditional, then insert the taxonomy, then author content. An interview track inserted before that would be a track that cannot hold a question.
-- **The editorial desk cannot author against the taxonomy yet, and that was not foreseen here.**
+- ~~**The editorial desk cannot author against the taxonomy yet, and that was not foreseen here.**~~ **Resolved:** `GET /api/editorial/catalog/topics` now serves the taxonomy to the content roles, and the question editor reads it instead of the learner catalog. Seeding also turned up a second instance of the same assumption: every track query inner-joined `catalog_certification_profile`, so a track without one was invisible even to the administrator responsible for it. Both are fixed; the original text is kept below because the reasoning is what matters.
   `useTopics` in the web app reads `/api/catalog/tracks` — the *learner* endpoint, which serves
   only an active track with an active version. So while the interview track is `DRAFT`, its topics
   do not appear in the question editor's topic list, and content cannot be written for it. That is a
