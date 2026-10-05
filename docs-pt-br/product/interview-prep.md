@@ -20,30 +20,43 @@ A trilha de entrevista inicial deve ser:
 
 **Java Backend — Pleno/Sênior**
 
-Taxonomia candidata de tópicos:
+### A taxonomia, como foi semeada
 
-- Java Core;
-- Collections e generics;
-- Streams e APIs funcionais;
-- concorrência e fundamentos da JVM;
-- Spring e Spring Boot;
-- Spring Security;
-- JPA e Hibernate;
-- SQL e transações;
-- testes;
-- SOLID e design patterns;
-- fronteiras de domínio e fundamentos de DDD;
-- microsserviços;
-- integração síncrona versus assíncrona;
-- mensageria;
-- conceitos de Kafka e RabbitMQ;
-- idempotência, retries, DLQ, ordenação e consistência;
-- fundamentos de AWS para engenheiros de backend;
-- Docker e Kubernetes;
-- observabilidade e resiliência;
-- system design;
-- comunicação comportamental;
-- preocupações de sistemas financeiros, como auditabilidade, precisão, rastreabilidade e prevenção de duplicidade.
+Doze tópicos, decididos pela [ADR 0016](../adr/0016-interview-track-taxonomy.md) e inseridos pela `V14` como trilha em rascunho e versão de taxonomia em rascunho. Os vinte e três candidatos que este documento listava estão dobrados dentro desses doze como assunto deles, não descartados.
+
+| # | Tópico | Peso | O que abrange |
+|---|---|---|---|
+| 1 | Linguagem e runtime Java | 5 | Java core, coleções, generics, streams, APIs funcionais, fundamentos de JVM |
+| 2 | Concorrência | 4 | threads, virtual threads, visibilidade de memória, coordenação |
+| 3 | Design orientado a objetos | 5 | SOLID, padrões de projeto, modelagem OO |
+| 4 | Estruturas de dados e algoritmos | 3 | as propriedades por baixo das coleções, e o custo de uma operação |
+| 5 | Spring | 5 | Spring, Spring Boot, Spring Security |
+| 6 | Persistência | 5 | JPA, Hibernate, SQL, transações |
+| 7 | Testes | 4 | unitário, integração, dublês, do que um teste é evidência |
+| 8 | Fronteiras de domínio | 3 | fundamentos de DDD, propriedade, contratos entre módulos |
+| 9 | Sistemas distribuídos | 4 | microsserviços, integração síncrona versus assíncrona, falha |
+| 10 | Mensageria | 4 | conceitos de Kafka e RabbitMQ, idempotência, retentativas, DLQ, ordenação, consistência |
+| 11 | Nuvem e operação | 3 | AWS para backend, Docker, Kubernetes, observabilidade, resiliência |
+| 12 | System design | 3 | compor o que está acima sob restrições |
+
+O peso é um julgamento editorial sobre o que uma triagem de backend Pleno/Sênior pergunta, numa escala de 1 a 5 — não é medição. Um blueprint de vaga pode discordar dele sem reescrever a taxonomia.
+
+**Dois assuntos da lista anterior estão deliberadamente ausentes, e quem lê não deveria ter que descobrir isso.** *Comunicação comportamental* não tem referência autoritativa, e a [política de conteúdo](content-policy.md) exige uma; se a política admite uma questão cuja evidência é só julgamento editorial é algo a decidir antes de o tópico existir. *Preocupações de sistemas financeiros* — auditabilidade, precisão, rastreabilidade, prevenção de duplicidade — são uma lente que atravessa os tópicos 6, 9, 10 e 12, não uma décima terceira área, e pertencem a um blueprint de vaga. Então a primeira trilha de entrevista ainda não faz aquilo que a palavra "entrevista" mais sugere.
+
+### Onde estruturas de dados terminam e coleções começam
+
+O tópico 1 absorveu "Collections e generics", então a fronteira que importa é entre o tópico 1 e o tópico 4, e é esta: **o tópico 1 é a API, o tópico 4 são as propriedades por baixo dela.**
+
+- "Qual `Map` preserva a ordem de inserção?" e "o que `Collectors.toMap` faz com chave duplicada?" são **tópico 1**: respondem-se conhecendo a biblioteca do Java.
+- "Por que uma busca em tabela hash não é sempre tempo constante?", "quando um array ganha de uma lista encadeada mesmo com assintótica pior?", "o que uma árvore te dá que uma tabela hash não dá?" são **tópico 4**: respondem-se conhecendo a estrutura, em qualquer linguagem.
+
+Questão que se responde lendo o Javadoc é tópico 1. Questão que seria a mesma em outra linguagem é tópico 4. Quando uma questão precisa genuinamente dos dois, ela vai onde está o *raciocínio*, não onde está o nome do tipo.
+
+### Que profundidade uma questão pode assumir
+
+**Raciocinar sobre comportamento e custo, nunca escrever um algoritmo do zero.** Dois motivos, e o primeiro é estrutural: a plataforma não executa código de quem estuda, e não vai antes da `v0.5.0` ([ADR 0006](../adr/0006-isolate-code-execution.md)), então a questão precisa ser respondível sem rodar nada. O segundo é que uma entrevista de backend pede muito mais para *escolher* e *justificar* uma estrutura do que para implementá-la.
+
+Então uma questão pode assumir que a pessoa lê código e raciocina sobre complexidade, e não pode exigir uma implementação funcionando. "Qual destes é O(log n) e por quê" está no escopo; "escreva uma inserção balanceada" não está, e nem seria avaliável aqui se estivesse.
 
 O primeiro pacote de conteúdo deve dar ênfase ao backend Java/Spring, em vez de tentar cobrir todos os domínios de entrevista.
 
