@@ -58,6 +58,16 @@ export function TrackPage() {
     queryKey: ["track", slug],
     queryFn: () => unwrap(api.GET("/api/catalog/tracks/{slug}", { params: { path: { slug } } })),
   });
+  const mockAvailability = useQuery({
+    queryKey: ["mock-exam-availability", slug],
+    queryFn: () =>
+      unwrap(
+        api.GET("/api/study/mock-exams/availability", {
+          params: { query: { trackSlug: slug } },
+        }),
+      ),
+    enabled: track.data?.kind === "CERTIFICATION",
+  });
   useDocumentTitle(track.data?.name ?? t.track.fallbackName);
 
   // Starting a session for a topic that already has one in progress is not a failure for the
@@ -85,6 +95,9 @@ export function TrackPage() {
       }
     },
   });
+
+  const unavailableTopics =
+    mockAvailability.data?.topics.filter((topic) => topic.missing > 0).length ?? 0;
 
   // The heading is always the first element and is never replaced as the data arrives, so focus
   // moved to it by the route change stays put instead of being lost on a re-render.
@@ -117,14 +130,41 @@ export function TrackPage() {
               <h2 id="mock-entry-heading">{t.track.mockHeading}</h2>
               <p>{t.track.mockBody}</p>
               <p className="muted">{t.track.mockCaveat}</p>
+              {mockAvailability.isPending ? (
+                <Loading label={t.track.mockAvailabilityLoading} />
+              ) : null}
+              {mockAvailability.isError ? (
+                <ErrorState error={mockAvailability.error} onRetry={() => void mockAvailability.refetch()} />
+              ) : null}
               {startMock.isError && !isActiveMock(startMock.error) ? (
                 <ErrorState error={startMock.error} />
               ) : null}
-              <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
-                {startMock.isPending
-                  ? t.track.startingMock
-                  : t.track.startMock(track.data.examVersion.examCode)}
-              </button>
+              {mockAvailability.data?.activeSessionId ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate(`/mock-exams/${mockAvailability.data.activeSessionId}`, {
+                      state: { resumed: true },
+                    })
+                  }
+                >
+                  {t.track.continueMock}
+                </button>
+              ) : mockAvailability.data?.contentReady ? (
+                <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
+                  {startMock.isPending
+                    ? t.track.startingMock
+                    : t.track.startMock(track.data.examVersion.examCode)}
+                </button>
+              ) : mockAvailability.data ? (
+                <p role="status">
+                  {t.track.mockUnavailable(
+                    mockAvailability.data.missingQuestionCount,
+                    unavailableTopics,
+                    mockAvailability.data.questionsPerTopic,
+                  )}
+                </p>
+              ) : null}
             </section>
           ) : null}
           <h2>{t.track.topics}</h2>

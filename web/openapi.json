@@ -655,6 +655,37 @@
         "required" : [ "attempts", "lastAt", "questions", "topicId", "topicName" ],
         "type" : "object"
       },
+      "MockExamAvailability" : {
+        "properties" : {
+          "activeSessionId" : {
+            "format" : "uuid",
+            "type" : [ "string", "null" ]
+          },
+          "contentReady" : {
+            "type" : "boolean"
+          },
+          "missingQuestionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "questionsPerTopic" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MockExamTopicAvailability"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "activeSessionId", "contentReady", "missingQuestionCount", "questionCount", "questionsPerTopic", "topics" ],
+        "type" : "object"
+      },
       "MockExamHistoryItem" : {
         "properties" : {
           "answeredCount" : {
@@ -801,6 +832,28 @@
           }
         },
         "required" : [ "trackSlug" ],
+        "type" : "object"
+      },
+      "MockExamTopicAvailability" : {
+        "properties" : {
+          "available" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "missing" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "required" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "available", "missing", "required", "topicId" ],
         "type" : "object"
       },
       "MockExamTopicHistoryItem" : {
@@ -3087,6 +3140,32 @@
               }
             },
             "description" : "Created"
+          }
+        },
+        "tags" : [ "mock-exam-controller" ]
+      }
+    },
+    "/api/study/mock-exams/availability" : {
+      "get" : {
+        "operationId" : "availability",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "trackSlug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MockExamAvailability"
+                }
+              }
+            },
+            "description" : "OK"
           }
         },
         "tags" : [ "mock-exam-controller" ]

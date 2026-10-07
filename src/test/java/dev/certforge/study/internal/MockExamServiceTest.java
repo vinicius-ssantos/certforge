@@ -9,6 +9,8 @@ import static org.mockito.Mockito.when;
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
 import dev.certforge.preparationcatalog.PreparationCatalog;
+import dev.certforge.preparationcatalog.PreparationTrackId;
+import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.PublishedOption;
 import dev.certforge.questionbank.PublishedQuestion;
@@ -20,6 +22,7 @@ import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.questionbank.RevisionStatus;
 import dev.certforge.study.internal.MockExamRepository.SnapshotQuestion;
 import java.time.Clock;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Arrays;
@@ -55,6 +58,30 @@ class MockExamServiceTest {
     service =
         new MockExamService(
             repository, planner, catalog, questionBank, currentActor, clock, transactionManager);
+  }
+
+  @Test
+  void availabilityReportsTheContentShortfallAndAnExistingRunSeparately() {
+    UUID sessionId = UUID.randomUUID();
+    TopicId topicId = new TopicId(UUID.randomUUID());
+    MockExamPlanner.Readiness readiness =
+        new MockExamPlanner.Readiness(
+            new PreparationTrackId(track),
+            new MockExamBlueprint("1Z0-830", 50, Duration.ofMinutes(120), 68, 5),
+            List.of(new MockExamPlanner.TopicReadiness(topicId, 5, 2)));
+    when(planner.readiness("java-se-21")).thenReturn(readiness);
+    when(repository.findActive(learner, track)).thenReturn(Optional.of(active(sessionId, 50, 68)));
+
+    MockExamViews.MockExamAvailability availability = service.availability("java-se-21");
+
+    assertThat(availability.contentReady()).isFalse();
+    assertThat(availability.activeSessionId()).isEqualTo(sessionId);
+    assertThat(availability.questionCount()).isEqualTo(50);
+    assertThat(availability.questionsPerTopic()).isEqualTo(5);
+    assertThat(availability.missingQuestionCount()).isEqualTo(3);
+    assertThat(availability.topics())
+        .containsExactly(new MockExamViews.MockExamTopicAvailability(topicId, 5, 2, 3));
+    verify(repository).expireDue(learner, now);
   }
 
   @Test

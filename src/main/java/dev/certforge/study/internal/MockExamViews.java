@@ -26,6 +26,16 @@ interface MockExamViews {
   record MockExamQuestionView(
       int position, TopicId topicId, PublishedQuestion question, boolean answered) {}
 
+  record MockExamAvailability(
+      boolean contentReady,
+      @Schema(nullable = true) UUID activeSessionId,
+      int questionCount,
+      int questionsPerTopic,
+      int missingQuestionCount,
+      List<MockExamTopicAvailability> topics) {}
+
+  record MockExamTopicAvailability(TopicId topicId, int required, int available, int missing) {}
+
   record MockExamHistoryItem(
       UUID id,
       PreparationTrackId trackId,

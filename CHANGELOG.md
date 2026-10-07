@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Fixed
+
+- A certification track no longer offers a mock-exam action that the current published content cannot satisfy. The server now exposes mock readiness from the same per-topic eligibility rule used by the planner; the learner sees how many reviewed questions are still missing and in how many topics instead of discovering the shortage through a failed start. An already-active mock remains resumable even if the currently published bank later falls below the blueprint requirement (#138).
+
 ### Added
 
 - Mock-exam history now lives in its own learner read model: active runs expose participation only, terminal runs expose score and per-topic evidence, weak topics are surfaced against that run's practice target, and none of this changes ordinary topic-practice progress or adaptive-review evidence (#97).

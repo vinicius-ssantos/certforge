@@ -150,6 +150,10 @@ export const en = {
     mockBody:
       "Run a timed full mock with a server-enforced deadline, delayed feedback and a final topic breakdown. The current CertForge blueprint controls the question count, duration and practice target.",
     mockCaveat: "The practice target is for study guidance and is not an Oracle score prediction.",
+    mockAvailabilityLoading: "Checking whether this mock can start",
+    mockUnavailable: (missing: number, topics: number, perTopic: number) =>
+      `Not available yet. ${missing} reviewed ${plural(TAG, missing, { one: "question is", other: "questions are" })} still missing across ${topics} ${plural(TAG, topics, { one: "topic", other: "topics" })}. A full mock requires ${perTopic} published questions in every topic.`,
+    continueMock: "Continue mock exam",
     startingMock: "Starting…",
     startMock: (examCode: string) => `Start ${examCode} mock`,
   },

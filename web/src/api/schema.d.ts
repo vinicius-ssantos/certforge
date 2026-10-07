@@ -645,6 +645,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/mock-exams/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["availability"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/mock-exams/{sessionId}": {
         parameters: {
             query?: never;
@@ -1013,6 +1029,18 @@ export interface components {
             topicId: string;
             topicName: string | null;
         };
+        MockExamAvailability: {
+            /** Format: uuid */
+            activeSessionId: string | null;
+            contentReady: boolean;
+            /** Format: int32 */
+            missingQuestionCount: number;
+            /** Format: int32 */
+            questionCount: number;
+            /** Format: int32 */
+            questionsPerTopic: number;
+            topics: components["schemas"]["MockExamTopicAvailability"][];
+        };
         MockExamHistoryItem: {
             /** Format: int32 */
             answeredCount: number;
@@ -1072,6 +1100,16 @@ export interface components {
         };
         MockExamStartRequest: {
             trackSlug: string;
+        };
+        MockExamTopicAvailability: {
+            /** Format: int32 */
+            available: number;
+            /** Format: int32 */
+            missing: number;
+            /** Format: int32 */
+            required: number;
+            /** Format: uuid */
+            topicId: string;
         };
         MockExamTopicHistoryItem: {
             /** Format: int32 */
@@ -2417,6 +2455,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MockExamView"];
+                };
+            };
+        };
+    };
+    availability: {
+        parameters: {
+            query: {
+                trackSlug: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MockExamAvailability"];
                 };
             };
         };
