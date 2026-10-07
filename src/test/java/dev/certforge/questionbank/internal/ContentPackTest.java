@@ -308,6 +308,22 @@ class ContentPackTest {
   // ---- pack-level checks ---------------------------------------------------------------------
 
   @Test
+  void everyQuestionCarriesMechanicalVerificationEvidence() throws IOException {
+    for (Path dir : questionDirs()) {
+      List<Path> sources =
+          Files.isDirectory(dir.resolve("modules"))
+              ? javaFilesUnder(dir.resolve("modules"))
+              : javaFilesIn(dir);
+      assertThat(sources)
+          .as("%s must carry at least one Java verification source", dir.getFileName())
+          .isNotEmpty();
+      assertThat(dir.resolve("expected.txt"))
+          .as("%s must declare the result verified by the build", dir.getFileName())
+          .exists();
+    }
+  }
+
+  @Test
   void packCoversEveryTopicWithMixedTypesAndDifficulties() throws IOException {
     Map<String, Integer> perTopic = new TreeMap<>();
     Set<Difficulty> difficulties = EnumSet.noneOf(Difficulty.class);
