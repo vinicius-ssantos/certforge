@@ -3,7 +3,7 @@
   "reviewerRole": "project owner and maintainer",
   "reviewedOn": "2026-10-02",
   "packet": "docs/release/content-review-packet.md",
-  "method": "The reviewer read the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and reported no technical errors in any of the twenty.",
+  "method": "The reviewer used the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and approved only questions personally reviewed. Reviews may be recorded in batches; a question-level reviewedOn overrides the pack-level default date.",
   "checklist": [
     "TECHNICAL_ACCURACY"
   ],
@@ -113,6 +113,84 @@
       "verdict": "APPROVED",
       "digest": "sha256:faaf1a0cb99cf50d4449d2f3dd1ff0b185c6b3661dd9700b1d678b8e6278399e",
       "verified": "sha256:674ac4b0bd40c5764a1ddf4e0119e9b4ee02f743211eefcf7b27c932a4831a4b"
+    },
+    "t01-bigdecimal-equals-scale": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9ef4fd637d6c94153ba2213f7b71028a6ee0cdb9613b5ff5af8fee0aeb9eb69a",
+      "verified": "sha256:cb8918a0b255d75b7e746fff3d0527b997e5b67e2895c87b9f4180152ea66093",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-bigdecimal-nonterminating-divide": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8",
+      "verified": "sha256:b23b0fa047fe57d8726e0b481c7a1e79a60e6c1c6705391034558c4211615c87",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-bigdecimal-striptrailingzeros-scale": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d42b42ab33f68334c08037053831c48a49912aa790e2fddb5b9092ec1efb21da",
+      "verified": "sha256:ef2f9e6813c1d7a4d478bfd420e43a23447269c7e4f01f0a6eafe7972c09a08d",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-boolean-parseboolean": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0b1e7623275f6a34616baa9b67706d684411c852f8fda72205d1a0a30cae7b2e",
+      "verified": "sha256:9de0aefc79be65d37c2dc0f1da2f500fe90d67220bca1accb137bd89a8387321",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-integer-division-assignment": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4fca205d6666e3e341d125ac4a9890bc6db852fe884413562d746155476e139f",
+      "verified": "sha256:d84bdb34d4eeef4034d77e5403f850e35bc4a51b1143e3a83510e1aaad839748",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-localdate-invalid-withday": {
+      "verdict": "APPROVED",
+      "digest": "sha256:53d34a71752f9abcc061cf58e769cb6cce68c3438e03778a47b7acf798d80baa",
+      "verified": "sha256:b1ffbccae796036180621badd4c4bec7f4ac2d361bb6d2db28f7193603116a10",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-localdate-plus-years-leap-day": {
+      "verdict": "APPROVED",
+      "digest": "sha256:443fbe5186672dfe196388a78b2d33cb5a269f4d958d29769d30aae519dc2349",
+      "verified": "sha256:e4037b8c41d1c0a89127ea6eccb1c01d2c7feb763420f57e7425d2b1ffa7dd80",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-math-round-negative": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4cd027741c337d773f7436876639d5351d5d46473767281087fa634d6166889d",
+      "verified": "sha256:1fac75f60eb4010872b7b076db3e876cdc3fee63e0dd47dc207ba22cc5fe2a2b",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-numeric-promotion-byte-addition": {
+      "verdict": "APPROVED",
+      "digest": "sha256:316807c7951d482af8c9258c8489c77a8b5155ec187a8d28e2970601f25f3ede",
+      "verified": "sha256:f9e1b01e6565a469b543626f1146b558d869260ba5536320df3040e8fca3c8e0",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-period-vs-duration": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f",
+      "verified": "sha256:5b00062cd21846f16baba295fd23d0decff43aeb756da933c14b97b99fe9b013",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-string-repeat": {
+      "verdict": "APPROVED",
+      "digest": "sha256:893373158293234ca3bf8d443a29fa1d83b63b1d4e9cdcec90b6746b02c8e1ed",
+      "verified": "sha256:36ff120f98d1ca85de299f65314b3b968d132cee69f8f8bb6a6d4e1058313355",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-string-strip-vs-trim": {
+      "verdict": "APPROVED",
+      "digest": "sha256:18beae388763468f5c0a8093db0a0a07798a3cb1b3ae7c63534d8059465f34ec",
+      "verified": "sha256:2a89805f07d11ccd0c9aa5deb96109c14d2ac21df4edfa4e6b73382aaa453758",
+      "reviewedOn": "2026-10-07"
+    },
+    "t01-stringbuilder-reverse-chain": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aea8331fa93333dfad0351da8c4cbbfd9232762f383669c610388dd3a7b807f7",
+      "verified": "sha256:2726d07fc3e65530cfda68174f66f84801a7a197596407dfc620a796ca6ef207",
+      "reviewedOn": "2026-10-07"
     }
   }
 }
