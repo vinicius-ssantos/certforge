@@ -113,6 +113,38 @@
       "verdict": "APPROVED",
       "digest": "sha256:faaf1a0cb99cf50d4449d2f3dd1ff0b185c6b3661dd9700b1d678b8e6278399e",
       "verified": "sha256:674ac4b0bd40c5764a1ddf4e0119e9b4ee02f743211eefcf7b27c932a4831a4b"
+    },
+    "t01-bigdecimal-nonterminating-divide": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fc689ebbf924f5d369c3ad37c59325b46029037e46d2cf05ddf1f167b4847ac8",
+      "verified": "sha256:b23b0fa047fe57d8726e0b481c7a1e79a60e6c1c6705391034558c4211615c87",
+      "reviewer": "vinicius-ssantos",
+      "reviewedOn": "2026-10-07",
+      "method": "The maintainer answered the question without seeing the answer key, then compared the result with the answer key, explanations and verification evidence, and explicitly confirmed the question was acceptable."
+    },
+    "t01-period-vs-duration": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7664d4024c80d840583bbce6e1c0538a346fcc1221123c3f46f1858e97452c0f",
+      "verified": "sha256:5b00062cd21846f16baba295fd23d0decff43aeb756da933c14b97b99fe9b013",
+      "reviewer": "vinicius-ssantos",
+      "reviewedOn": "2026-10-07",
+      "method": "The maintainer answered the question without seeing the answer key, then compared the result with the answer key, explanations and verification evidence, and explicitly confirmed the question was acceptable."
+    },
+    "t01-stringbuilder-reverse-chain": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aea8331fa93333dfad0351da8c4cbbfd9232762f383669c610388dd3a7b807f7",
+      "verified": "sha256:2726d07fc3e65530cfda68174f66f84801a7a197596407dfc620a796ca6ef207",
+      "reviewer": "vinicius-ssantos",
+      "reviewedOn": "2026-10-07",
+      "method": "The maintainer answered the question without seeing the answer key, then compared the result with the answer key, explanations and verification evidence, and explicitly confirmed the question was acceptable."
+    },
+    "t02-labeled-break-count": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c01c05f1a2c10ad9dd3156dbc7ca74feae974a0b396d6d727ffcc6931d37c9d4",
+      "verified": "sha256:4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+      "reviewer": "vinicius-ssantos",
+      "reviewedOn": "2026-10-07",
+      "method": "The maintainer answered the question without seeing the answer key, then compared the result with the answer key, explanations and verification evidence, and explicitly confirmed the question was acceptable."
     }
   }
 }
