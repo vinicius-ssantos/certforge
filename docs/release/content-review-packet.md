@@ -2567,7 +2567,7 @@ To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef8193
 
 ### As the learner sees it
 
-> A `case` arm of a switch expression uses a block and must produce the value of that arm. Which statement is used to provide that value from the block?
+> A `case` in a switch expression uses a block and must produce a value for the switch expression. Which statement should be used inside the block to provide that value?
 
 - **A** break value;
 - **B** return value;
@@ -2577,7 +2577,7 @@ To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef8193
 ### Answer key and reasons
 
 - **A: incorrect.** `break` does not provide a result value for a switch expression block.
-- **B: incorrect.** `return` exits the enclosing method, not just the switch expression arm.
+- **B: incorrect.** `return` exits the enclosing method, not just the block within the switch expression.
 - **C: correct.** `yield` transfers control out of the switch expression block while providing its value.
 - **D: incorrect.** `continue` applies to loops and does not produce a switch expression result.
 
@@ -2635,7 +2635,7 @@ public class Main {
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1f903957483547db1a7824aebe113ae55eabdb87db3c96384d0eb2f1992e5573"`, `"verified": "sha256:e4265b8eaa0d0e5c93ff5c0ee686a8732def082906a190c4e9a68ea776550879"`
+To record: `"digest": "sha256:0afae2a7218a5d3803639c7ee84cf3a310257d9d93ebae0f2d0af3c2ffd406ef"`, `"verified": "sha256:e4265b8eaa0d0e5c93ff5c0ee686a8732def082906a190c4e9a68ea776550879"`
 
 **Comments:**
 
