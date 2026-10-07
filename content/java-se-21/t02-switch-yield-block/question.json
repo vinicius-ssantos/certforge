@@ -4,7 +4,7 @@
   "javaRelease": 21,
   "difficulty": "MEDIUM",
   "difficultyRationale": "Requires distinguishing statement-style control transfer from producing a value from a block in a switch expression.",
-  "prompt": "A `case` arm of a switch expression uses a block and must produce the value of that arm. Which statement is used to provide that value from the block?",
+  "prompt": "A `case` in a switch expression uses a block and needs to produce a value for the switch expression. Which statement is used inside the block to provide that value?",
   "explanation": "A block in a switch expression uses `yield` to produce the value of the switch expression. `break` exits a switch statement but does not yield a value for a switch expression block.",
   "options": [
     {
