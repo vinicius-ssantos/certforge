@@ -36,7 +36,7 @@ content/
 - `topicId` uses the fixed ids of the seeded topics (`a3000000-0000-4000-8000-0000000000NN`), so the same files load in any environment. No test-only identifiers are involved.
 - If the prompt contains `{{snippet}}`, it is replaced by the contents of `Main.java`, so the code learners see is, by construction, the code the build verified. A question may also have a snippet that is only verified and not shown (for example the record facts, where the code backs statements in the options).
 - A snippet directory may contain several `.java` files that are compiled together, for example the resource bundles of `t10-resource-bundle-fallback`. `Main` is the entry point.
-- Questions without code have only `question.json`.
+- Every question in the current Java SE 21 pack carries Java verification sources plus `expected.txt`. Some programs are shown to learners; others exist only as mechanical evidence for claims in the question.
 
 ## Writing a question
 
@@ -171,7 +171,7 @@ No test can check the second one. It is a discipline, and the only thing automat
 | 9 Java I/O | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localization | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Among the initial twenty reviewed questions, three are conceptual and have no runnable code: `t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`. Across the current 150-question pack, 69 questions carry runnable verification programs and 81 are conceptual/reference-backed. The initial reviewed twenty account for 17 runnable and 3 conceptual questions; all 130 later questions still await human technical review regardless of whether a program backs them. The review packet derives the complete current list rather than repeating it here, so it cannot go stale.
+All 150 questions in the current Java SE 21 pack now carry mechanical verification sources and an `expected.txt` result checked by the build. That evidence is intentionally not treated as a substitute for semantic review: a program can demonstrate a concrete example without proving that every wording, distractor, explanation, or specification-level claim is sound. The original 20 questions retain their recorded human review; the 130 later questions still await human technical review. The generated review packet derives both review and verification state directly from the pack so these counts do not need to be maintained by hand.
 
 `t07-requires-transitive` used to be a fourth. It now carries a three-module graph under `modules/`, where `app` requires only `lib`, uses a type from `util`, and compiles because `lib` declares `requires transitive util` — remove the `transitive` and the build fails with `package u is not visible`. That is the conversion [ADR 0011](../adr/0011-grade-content-evidence.md) asks for, and it kept its recorded review, because nothing the reviewer read changed.
 
