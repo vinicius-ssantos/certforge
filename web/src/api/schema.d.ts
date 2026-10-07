@@ -985,6 +985,28 @@ export interface components {
             label: string;
             objectivesUrl: string;
         };
+        ExpectedConceptRequest: {
+            explanation?: string;
+            required?: boolean;
+            text?: string;
+        };
+        ExpectedConceptView: {
+            explanation: string | null;
+            required: boolean;
+            text: string;
+        };
+        GuidedResponseRequest: {
+            commonMistakes?: string[];
+            expectedConcepts?: components["schemas"]["ExpectedConceptRequest"][];
+            followUps?: string[];
+            referenceAnswer?: string;
+        };
+        GuidedResponseView: {
+            commonMistakes: string[];
+            expectedConcepts: components["schemas"]["ExpectedConceptView"][];
+            followUps: string[];
+            referenceAnswer: string;
+        };
         HistoricalOption: {
             correct: boolean;
             explanation: string;
@@ -1198,7 +1220,7 @@ export interface components {
             /** Format: uuid */
             topicId: string;
             /** @enum {string} */
-            type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+            type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "GUIDED_RESPONSE";
         };
         QuestionResult: {
             answer: components["schemas"]["Answer"];
@@ -1323,6 +1345,7 @@ export interface components {
             difficulty?: "EASY" | "MEDIUM" | "HARD";
             difficultyRationale?: string;
             explanation?: string;
+            guidedResponse?: components["schemas"]["GuidedResponseRequest"];
             /** Format: int32 */
             javaRelease?: number;
             options?: components["schemas"]["OptionRequest"][];
@@ -1333,7 +1356,7 @@ export interface components {
             /** Format: uuid */
             topicId?: string;
             /** @enum {string} */
-            type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
+            type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "GUIDED_RESPONSE";
         };
         RevisionView: {
             /** Format: uuid */
@@ -1348,6 +1371,7 @@ export interface components {
             /** Format: uuid */
             examVersionId: string | null;
             explanation: string | null;
+            guidedResponse: components["schemas"]["GuidedResponseView"];
             /** Format: uuid */
             id: string;
             /** Format: int32 */

@@ -593,6 +593,105 @@ class QuestionBankIT {
   }
 
   @Test
+  void guidedResponseCriteriaRoundTripAndFreezeWithTheRevision() throws Exception {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'guided-interview-"
+            + UUID.randomUUID()
+            + "', 'Java Backend', 'INTERVIEW', 'ACTIVE')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'messaging-guided', 'Messaging')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+
+    String request =
+        """
+        {
+          "type":"GUIDED_RESPONSE",
+          "topicId":"%s",
+          "seniority":"SENIOR",
+          "difficulty":"HARD",
+          "difficultyRationale":"Requires reasoning about retries and durable state",
+          "prompt":"How would you make a message consumer idempotent?",
+          "guidedResponse":{
+            "referenceAnswer":"Use a stable key and atomically persist duplicate detection with the business effect.",
+            "expectedConcepts":[
+              {"text":"stable idempotency key","required":true,"explanation":"Duplicates need the same identity."},
+              {"text":"durable duplicate detection","required":true,"explanation":"Memory alone is insufficient."}
+            ],
+            "commonMistakes":["Treating broker delivery guarantees as business idempotency."],
+            "followUps":["What changes when the side effect is in another service?"]
+          },
+          "references":[
+            {"title":"Kafka design","url":"https://kafka.apache.org/documentation/"}
+          ]
+        }
+        """
+            .formatted(topicId);
+
+    ResultActions created =
+        send(post("/api/admin/questions"), editor, request)
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.revisions[0].type").value("GUIDED_RESPONSE"))
+            .andExpect(jsonPath("$.revisions[0].options.length()").value(0))
+            .andExpect(jsonPath("$.revisions[0].explanation").value(nullValue()))
+            .andExpect(
+                jsonPath("$.revisions[0].guidedResponse.referenceAnswer")
+                    .value(
+                        "Use a stable key and atomically persist duplicate detection with the business effect."))
+            .andExpect(
+                jsonPath("$.revisions[0].guidedResponse.expectedConcepts[0].required").value(true))
+            .andExpect(
+                jsonPath("$.revisions[0].guidedResponse.commonMistakes[0]")
+                    .value("Treating broker delivery guarantees as business idempotency."))
+            .andExpect(
+                jsonPath("$.revisions[0].guidedResponse.followUps[0]")
+                    .value("What changes when the side effect is in another service?"));
+
+    String questionId = questionId(created);
+    String revisionId = firstRevisionId(created, 0);
+    send(get("/api/admin/questions/" + questionId), reviewer, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.revisions[0].guidedResponse.expectedConcepts[1].text")
+                .value("durable duplicate detection"));
+
+    submit(revisionId);
+    approve(revisionId);
+    publish(revisionId).andExpect(status().isOk());
+
+    // The model is publishable now, but learner interview sessions are #21. Existing objective
+    // Study/Review/Mock flows must not pick this revision and grade an empty option set as correct.
+    assertThat(bank.findPublished(new QuestionRevisionId(UUID.fromString(revisionId)))).isEmpty();
+    assertThat(bank.findRevision(new QuestionRevisionId(UUID.fromString(revisionId)))).isEmpty();
+    assertThat(bank.eligibleForTopic(new TopicId(topicId))).isEmpty();
+
+    assertThatThrownBy(
+            () ->
+                jdbc.update(
+                    "update certforge.qb_guided_response set reference_answer = 'rewritten'"
+                        + " where revision_id = ?",
+                    UUID.fromString(revisionId)))
+        .hasMessageContaining("immutable");
+  }
+
+  @Test
   void anInterviewQuestionWithoutASeniorityCannotBeSent() throws Exception {
     UUID trackId = UUID.randomUUID();
     UUID versionId = UUID.randomUUID();

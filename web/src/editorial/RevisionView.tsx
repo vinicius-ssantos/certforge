@@ -42,10 +42,13 @@ export function RevisionView({
   const types = typeLabels(t);
   const difficulties = difficultyLabels(t);
   const checks = checklist(t);
+  const guided = revision.type === "GUIDED_RESPONSE";
+  const criteria = guided ? revision.guidedResponse : null;
   const meta = [
     types[revision.type] ?? revision.type,
     revision.difficulty ? difficulties[revision.difficulty] : null,
     revision.javaRelease ? view.javaRelease(revision.javaRelease) : null,
+    revision.seniority ?? null,
     topicName ?? null,
   ].filter(Boolean);
 
@@ -62,50 +65,111 @@ export function RevisionView({
           <h2 id="learner-view">{view.learnerViewHeading}</h2>
           <p className="muted">{view.learnerViewNote}</p>
           <Prompt text={revision.prompt ?? ""} />
-          <ol className="learner-options">
-            {revision.options.map((option) => (
-              <li key={option.key}>
-                <strong aria-hidden="true">{option.key}</strong>
-                <span>
-                  <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
-                  <English>{option.text}</English>
-                </span>
-              </li>
-            ))}
-          </ol>
+          {!guided ? (
+            <ol className="learner-options">
+              {revision.options.map((option) => (
+                <li key={option.key}>
+                  <strong aria-hidden="true">{option.key}</strong>
+                  <span>
+                    <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
+                    <English>{option.text}</English>
+                  </span>
+                </li>
+              ))}
+            </ol>
+          ) : null}
         </section>
 
-        <section aria-labelledby="answer-key">
-          <h2 id="answer-key">{view.answerKeyHeading}</h2>
-          <ul className="key">
-            {revision.options.map((option) => (
-              <li key={option.key}>
-                <strong className={option.correct ? "yes" : "no"}>
-                  {view.optionVerdict(option.key, option.correct)}
-                </strong>
-                <English as="p">{option.explanation}</English>
-              </li>
-            ))}
-          </ul>
-          <h2>{view.explanation}</h2>
-          <Prompt text={revision.explanation ?? ""} />
-          {revision.difficultyRationale ? (
-            <>
-              <h2>{view.whyThisDifficulty}</h2>
-              <p>{revision.difficultyRationale}</p>
-            </>
-          ) : null}
-          <h2>{view.references}</h2>
-          <ul>
-            {revision.references.map((reference) => (
-              <li key={reference.url}>
-                <a href={reference.url} target="_blank" rel="noopener noreferrer">
-                  <English>{t.feedback.referenceLink(reference.title)}</English>
-                </a>
-              </li>
-            ))}
-          </ul>
-        </section>
+        {guided && criteria ? (
+          <section aria-labelledby="guided-criteria">
+            <h2 id="guided-criteria">{view.guidedCriteriaHeading}</h2>
+            <p className="muted">{view.guidedCriteriaNote}</p>
+            <h3>{view.referenceAnswer}</h3>
+            <Prompt text={criteria.referenceAnswer} />
+            <h3>{view.expectedConcepts}</h3>
+            <ul className="key">
+              {criteria.expectedConcepts.map((concept, index) => (
+                <li key={`${index}-${concept.text}`}>
+                  <strong>{concept.required ? view.requiredConcept : view.optionalConcept}</strong>
+                  <English as="p">{concept.text}</English>
+                  {concept.explanation ? <English as="p">{concept.explanation}</English> : null}
+                </li>
+              ))}
+            </ul>
+            {criteria.commonMistakes.length > 0 ? (
+              <>
+                <h3>{view.commonMistakes}</h3>
+                <ul>
+                  {criteria.commonMistakes.map((mistake, index) => (
+                    <li key={`${index}-${mistake}`}>
+                      <English>{mistake}</English>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+            {criteria.followUps.length > 0 ? (
+              <>
+                <h3>{view.followUps}</h3>
+                <ul>
+                  {criteria.followUps.map((followUp, index) => (
+                    <li key={`${index}-${followUp}`}>
+                      <English>{followUp}</English>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : null}
+            {revision.difficultyRationale ? (
+              <>
+                <h3>{view.whyThisDifficulty}</h3>
+                <p>{revision.difficultyRationale}</p>
+              </>
+            ) : null}
+            <h3>{view.references}</h3>
+            <ul>
+              {revision.references.map((reference) => (
+                <li key={reference.url}>
+                  <a href={reference.url} target="_blank" rel="noopener noreferrer">
+                    <English>{t.feedback.referenceLink(reference.title)}</English>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : (
+          <section aria-labelledby="answer-key">
+            <h2 id="answer-key">{view.answerKeyHeading}</h2>
+            <ul className="key">
+              {revision.options.map((option) => (
+                <li key={option.key}>
+                  <strong className={option.correct ? "yes" : "no"}>
+                    {view.optionVerdict(option.key, option.correct)}
+                  </strong>
+                  <English as="p">{option.explanation}</English>
+                </li>
+              ))}
+            </ul>
+            <h2>{view.explanation}</h2>
+            <Prompt text={revision.explanation ?? ""} />
+            {revision.difficultyRationale ? (
+              <>
+                <h2>{view.whyThisDifficulty}</h2>
+                <p>{revision.difficultyRationale}</p>
+              </>
+            ) : null}
+            <h2>{view.references}</h2>
+            <ul>
+              {revision.references.map((reference) => (
+                <li key={reference.url}>
+                  <a href={reference.url} target="_blank" rel="noopener noreferrer">
+                    <English>{t.feedback.referenceLink(reference.title)}</English>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {revision.reviews.length > 0 ? (
           <section aria-labelledby="notes">

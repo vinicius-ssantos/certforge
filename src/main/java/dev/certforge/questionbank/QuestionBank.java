@@ -10,9 +10,10 @@ import java.util.Set;
 public interface QuestionBank {
 
   /**
-   * Published, learner-safe questions for a topic, bound to the topic's current active exam
-   * version. Deprecated revisions and revisions of a replaced exam version are never included, and
-   * a topic that is not active has none.
+   * Published, learner-safe questions eligible for the current objective Study/Review/Mock flows,
+   * bound to the topic's current active track version. Deprecated revisions and revisions of a
+   * replaced version are never included, and a topic that is not active has none. Guided-response
+   * interview revisions remain excluded until the dedicated interview-session contract is added.
    */
   List<PublishedQuestion> eligibleForTopic(TopicId topicId);
 

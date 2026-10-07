@@ -27,9 +27,9 @@ This generalization is intentionally narrow: it avoids making certification the 
 
 `Question` is the logical identity. `QuestionRevision` is the immutable publishable artifact. Options, expected answers, explanations, references, declared compatibility, and review evidence belong to the revision.
 
-For `v0.1.0`, supported question types remain single-choice and multiple-choice with deterministic correctness.
+For `v0.1.0`, supported learner question types remain single-choice and multiple-choice with deterministic correctness.
 
-Future Interview Prep may introduce guided-response metadata such as expected concepts, reference answers, common mistakes, follow-up prompts, and seniority expectations. Those fields are not part of the first release and must not be simulated through nullable certification fields.
+The Interview Prep model now also defines `GUIDED_RESPONSE` revisions. Their reviewed criteria — expected concepts, required/optional status, reference answer, common mistakes and follow-up prompts — are revision-owned immutable content, alongside interview seniority and authoritative references. They are structurally separate from objective options and explanations and are valid only on interview tracks. Learner submission/evaluation of those responses remains a later Study capability and must not overload objective `correct` semantics.
 
 Core invariants:
 
@@ -39,7 +39,7 @@ Core invariants:
 - a question has at most one active published revision per declared track/exam context unless an explicit variant model is introduced;
 - a single-choice revision has exactly one expected option;
 - a multiple-choice revision has at least two options and at least one expected option;
-- every published revision has an explanation and authoritative reference;
+- every published objective revision has an explanation and authoritative reference; every published guided-response revision has reviewed response criteria and authoritative references;
 - deprecated revisions cannot enter new sessions.
 
 ### Study

@@ -82,6 +82,22 @@ export const authorableTracks = [
       },
     ],
   },
+  {
+    id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    slug: "java-backend-interview",
+    name: "Java Backend Interview",
+    kind: "INTERVIEW",
+    status: "ACTIVE",
+    topics: [
+      {
+        id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        slug: "messaging",
+        name: "Messaging",
+        depth: 0,
+        objectiveRef: null,
+      },
+    ],
+  },
 ];
 export const javaTrack = {
   id: "22222222-2222-4222-8222-222222222222",

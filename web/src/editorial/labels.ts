@@ -32,6 +32,7 @@ export function typeLabels(t: Catalog): Record<string, string> {
   return {
     SINGLE_CHOICE: t.editorial.type.singleChoice,
     MULTIPLE_CHOICE: t.editorial.type.multipleChoice,
+    GUIDED_RESPONSE: t.editorial.type.guidedResponse,
   };
 }
 
@@ -76,6 +77,50 @@ export function violations(t: Catalog): Record<string, { message: string; fieldI
     multiple_choice_requires_a_correct_option: {
       message: v.atLeastOneCorrect,
       fieldId: "options",
+    },
+    guided_response_requires_interview_track: {
+      message: v.guidedRequiresInterview,
+      fieldId: "field-topic",
+    },
+    guided_response_explanation_not_applicable: {
+      message: v.guidedExplanationNotApplicable,
+      fieldId: "guided-response",
+    },
+    guided_response_options_not_applicable: {
+      message: v.guidedOptionsNotApplicable,
+      fieldId: "guided-response",
+    },
+    guided_response_criteria_not_applicable: {
+      message: v.guidedCriteriaNotApplicable,
+      fieldId: "options",
+    },
+    guided_response_criteria_missing: {
+      message: v.guidedCriteriaMissing,
+      fieldId: "guided-response",
+    },
+    guided_reference_answer_missing: {
+      message: v.guidedReferenceAnswerMissing,
+      fieldId: "guided-reference-answer",
+    },
+    guided_expected_concepts_missing: {
+      message: v.guidedExpectedConceptsMissing,
+      fieldId: "guided-concepts",
+    },
+    guided_required_concept_missing: {
+      message: v.guidedRequiredConceptMissing,
+      fieldId: "guided-concepts",
+    },
+    guided_concept_text_missing: {
+      message: v.guidedConceptTextMissing,
+      fieldId: "guided-concepts",
+    },
+    guided_common_mistake_invalid: {
+      message: v.guidedCommonMistakeInvalid,
+      fieldId: "guided-common-mistakes",
+    },
+    guided_follow_up_invalid: {
+      message: v.guidedFollowUpInvalid,
+      fieldId: "guided-follow-ups",
     },
     references_missing: { message: v.referencesMissing, fieldId: "references" },
     reference_invalid: { message: v.referenceInvalid, fieldId: "references" },

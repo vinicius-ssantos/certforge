@@ -91,6 +91,7 @@ export function diffRevisions(
     ),
     text(d.difficulty, name(difficulties, previous.difficulty), name(difficulties, next.difficulty)),
     text(d.javaRelease, previous.javaRelease ? String(previous.javaRelease) : "", next.javaRelease ? String(next.javaRelease) : ""),
+    text(d.seniority, previous.seniority, next.seniority),
     text(d.whyThisDifficulty, previous.difficultyRationale, next.difficultyRationale),
   ];
 
@@ -121,6 +122,36 @@ export function diffRevisions(
   }
 
   changes.push(text(d.explanation, previous.explanation, next.explanation));
+
+  const concepts = (revision: Revision) =>
+    revision.guidedResponse?.expectedConcepts
+      .map(
+        (concept) =>
+          `${concept.required ? "[required]" : "[optional]"} ${concept.text}${concept.explanation ? ` — ${concept.explanation}` : ""}`,
+      )
+      .join("\n") ?? "";
+  changes.push(
+    text(
+      d.guidedReferenceAnswer,
+      previous.guidedResponse?.referenceAnswer,
+      next.guidedResponse?.referenceAnswer,
+    ),
+  );
+  changes.push(text(d.guidedExpectedConcepts, concepts(previous), concepts(next)));
+  changes.push(
+    text(
+      d.guidedCommonMistakes,
+      previous.guidedResponse?.commonMistakes.join("\n"),
+      next.guidedResponse?.commonMistakes.join("\n"),
+    ),
+  );
+  changes.push(
+    text(
+      d.guidedFollowUps,
+      previous.guidedResponse?.followUps.join("\n"),
+      next.guidedResponse?.followUps.join("\n"),
+    ),
+  );
 
   const refs = (revision: Revision) => revision.references.map((reference) => `${reference.title} (${reference.url})`);
   const oldRefs = refs(previous);

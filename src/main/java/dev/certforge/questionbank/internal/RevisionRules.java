@@ -59,12 +59,56 @@ final class RevisionRules {
     if (isBlank(content.difficultyRationale())) {
       found.add("difficulty_rationale_missing");
     }
-    if (isBlank(content.explanation())) {
-      found.add("explanation_missing");
+    if (content.type() == QuestionType.GUIDED_RESPONSE) {
+      if (kind != TrackKind.INTERVIEW) {
+        found.add("guided_response_requires_interview_track");
+      }
+      if (!isBlank(content.explanation())) {
+        found.add("guided_response_explanation_not_applicable");
+      }
+      if (!content.options().isEmpty()) {
+        found.add("guided_response_options_not_applicable");
+      }
+      checkGuidedResponse(content.guidedResponse(), found);
+    } else {
+      if (isBlank(content.explanation())) {
+        found.add("explanation_missing");
+      }
+      if (content.guidedResponse() != null) {
+        found.add("guided_response_criteria_not_applicable");
+      }
+      checkOptions(content, found);
     }
-    checkOptions(content, found);
     checkReferences(content, found);
     return List.copyOf(found);
+  }
+
+  private static void checkGuidedResponse(
+      RevisionContent.GuidedResponse guided, Set<String> found) {
+    if (guided == null) {
+      found.add("guided_response_criteria_missing");
+      return;
+    }
+    if (isBlank(guided.referenceAnswer())) {
+      found.add("guided_reference_answer_missing");
+    }
+    if (guided.expectedConcepts().isEmpty()) {
+      found.add("guided_expected_concepts_missing");
+    } else if (guided.expectedConcepts().stream()
+        .noneMatch(RevisionContent.ExpectedConcept::required)) {
+      found.add("guided_required_concept_missing");
+    }
+    for (RevisionContent.ExpectedConcept concept : guided.expectedConcepts()) {
+      if (isBlank(concept.text())) {
+        found.add("guided_concept_text_missing");
+      }
+    }
+    if (guided.commonMistakes().stream().anyMatch(RevisionRules::isBlank)) {
+      found.add("guided_common_mistake_invalid");
+    }
+    if (guided.followUps().stream().anyMatch(RevisionRules::isBlank)) {
+      found.add("guided_follow_up_invalid");
+    }
   }
 
   private static void checkOptions(RevisionContent content, Set<String> found) {

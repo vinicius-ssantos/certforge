@@ -98,4 +98,44 @@ describe("diffRevisions", () => {
 
     expect(labels).toEqual(["Option B removed", "Reference removed"]);
   });
+
+  it("shows changes to reviewed guided-response criteria", () => {
+    const before = revision({
+      type: "GUIDED_RESPONSE",
+      javaRelease: null,
+      seniority: "SENIOR",
+      explanation: null,
+      options: [],
+      guidedResponse: {
+        referenceAnswer: "Use an idempotency key.",
+        expectedConcepts: [
+          { text: "Stable key", required: true, explanation: "Duplicates need one identity." },
+        ],
+        commonMistakes: ["Keeping duplicate detection only in memory."],
+        followUps: ["What if the side effect is remote?"],
+      },
+    });
+    const after = revision({
+      ...before,
+      number: 2,
+      guidedResponse: {
+        referenceAnswer: "Use a stable key and durable duplicate detection.",
+        expectedConcepts: [
+          { text: "Stable key", required: true, explanation: "Duplicates need one identity." },
+          { text: "Durable state", required: true, explanation: "Survives restarts." },
+        ],
+        commonMistakes: ["Assuming broker delivery guarantees imply business idempotency."],
+        followUps: ["How do you handle a remote side effect?"],
+      },
+    });
+
+    const labels = diffRevisions(before, after, names, en).map((change) => change.label);
+
+    expect(labels).toEqual([
+      "Reference answer",
+      "Expected concepts",
+      "Common mistakes",
+      "Follow-up prompts",
+    ]);
+  });
 });

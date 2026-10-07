@@ -120,7 +120,34 @@ class QuestionAdminController {
       @Size(max = 10000) String prompt,
       @Size(max = 10000) String explanation,
       @Valid @Size(max = 8) List<OptionRequest> options,
+      @Valid GuidedResponseRequest guidedResponse,
       @Valid @Size(max = 10) List<ReferenceRequest> references) {
+
+    /** Compatibility constructor for existing objective-question imports/tests. */
+    RevisionRequest(
+        QuestionType type,
+        UUID topicId,
+        Integer javaRelease,
+        Seniority seniority,
+        Difficulty difficulty,
+        String difficultyRationale,
+        String prompt,
+        String explanation,
+        List<OptionRequest> options,
+        List<ReferenceRequest> references) {
+      this(
+          type,
+          topicId,
+          javaRelease,
+          seniority,
+          difficulty,
+          difficultyRationale,
+          prompt,
+          explanation,
+          options,
+          null,
+          references);
+    }
 
     RevisionContent toContent() {
       return new RevisionContent(
@@ -140,6 +167,20 @@ class QuestionAdminController {
                           new RevisionContent.Option(
                               o.key(), o.text(), o.correct(), o.explanation()))
                   .toList(),
+          guidedResponse == null
+              ? null
+              : new RevisionContent.GuidedResponse(
+                  guidedResponse.referenceAnswer(),
+                  guidedResponse.expectedConcepts() == null
+                      ? List.of()
+                      : guidedResponse.expectedConcepts().stream()
+                          .map(
+                              concept ->
+                                  new RevisionContent.ExpectedConcept(
+                                      concept.text(), concept.required(), concept.explanation()))
+                          .toList(),
+                  guidedResponse.commonMistakes(),
+                  guidedResponse.followUps()),
           references == null
               ? List.of()
               : references.stream()
@@ -153,6 +194,15 @@ class QuestionAdminController {
       @NotBlank @Size(max = 2000) String text,
       boolean correct,
       @Size(max = 2000) String explanation) {}
+
+  record GuidedResponseRequest(
+      @Size(max = 20000) String referenceAnswer,
+      @Valid @Size(max = 20) List<ExpectedConceptRequest> expectedConcepts,
+      @Size(max = 20) List<@Size(max = 2000) String> commonMistakes,
+      @Size(max = 20) List<@Size(max = 4000) String> followUps) {}
+
+  record ExpectedConceptRequest(
+      @Size(max = 2000) String text, boolean required, @Size(max = 2000) String explanation) {}
 
   record ReferenceRequest(
       @NotBlank @Size(max = 300) String title,
