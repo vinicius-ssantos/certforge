@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0016-interview-track-taxonomy.md`](../../docs/adr/0016-interview-track-taxonomy.md). O inglês é a fonte canônica.
 
-- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. As decisões 1, 2, 3, 6, 7 e 8 estão implementadas: a taxonomia existe como trilha em DRAFT e versão de taxonomia em DRAFT, e uma questão em um tópico de entrevista realmente publica assim que as duas são ativadas. A decisão 5 (senioridade na revisão) ainda está por vir, e também tornar a taxonomia alcançável pela mesa editorial — veja as consequências. Cada decisão abaixo diz o que existe.
+- Status: **Aceita** em 2026-10-04 por vinicius-ssantos, como escrita. As decisões 1, 2, 3, 6, 7 e 8 estão implementadas: a taxonomia existe como trilha em DRAFT e versão de taxonomia em DRAFT, e uma questão em um tópico de entrevista realmente publica assim que as duas são ativadas. Todas as oito decisões estão implementadas. O que falta é conteúdo: a trilha fica em DRAFT até existir algum, e ativá-la é um ato deliberado. Cada decisão abaixo diz o que existe.
 - Data: 2026-10-04
 
 ## Contexto

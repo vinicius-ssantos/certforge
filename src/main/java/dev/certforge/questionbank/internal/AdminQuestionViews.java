@@ -19,6 +19,8 @@ interface AdminQuestionViews {
       String type,
       @Schema(nullable = true) UUID topicId,
       @Schema(nullable = true) Integer javaRelease,
+      /** The level an interview question is asked at; absent on a certification question. */
+      @Schema(nullable = true) String seniority,
       @Schema(nullable = true) String difficulty,
       @Schema(nullable = true) String difficultyRationale,
       @Schema(nullable = true) String prompt,

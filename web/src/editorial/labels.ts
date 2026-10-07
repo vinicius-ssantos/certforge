@@ -53,6 +53,15 @@ export function violations(t: Catalog): Record<string, { message: string; fieldI
     prompt_missing: { message: v.promptMissing, fieldId: "field-prompt" },
     topic_missing: { message: v.topicMissing, fieldId: "field-topic" },
     java_release_missing: { message: v.javaReleaseMissing, fieldId: "field-release" },
+    java_release_not_applicable: {
+      message: v.javaReleaseNotApplicable,
+      fieldId: "field-release",
+    },
+    seniority_missing: { message: v.seniorityMissing, fieldId: "field-seniority" },
+    seniority_not_applicable: {
+      message: v.seniorityNotApplicable,
+      fieldId: "field-seniority",
+    },
     difficulty_missing: { message: v.difficultyMissing, fieldId: "field-difficulty" },
     difficulty_rationale_missing: { message: v.difficultyRationaleMissing, fieldId: "field-rationale" },
     explanation_missing: { message: v.explanationMissing, fieldId: "field-explanation" },

@@ -40,8 +40,18 @@ final class RevisionRules {
       if (content.javaRelease() != null) {
         found.add("java_release_not_applicable");
       }
-    } else if (content.javaRelease() == null || content.javaRelease() < 1) {
-      found.add("java_release_missing");
+      if (content.seniority() == null) {
+        found.add("seniority_missing");
+      }
+    } else {
+      if (content.javaRelease() == null || content.javaRelease() < 1) {
+        found.add("java_release_missing");
+      }
+      // The mirror of the rule above: an exam objective is true or it is not, and there is no level
+      // at which it is asked, so a seniority here would be a claim with nothing behind it.
+      if (content.seniority() != null) {
+        found.add("seniority_not_applicable");
+      }
     }
     if (content.difficulty() == null) {
       found.add("difficulty_missing");

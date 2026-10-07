@@ -3,6 +3,7 @@ package dev.certforge.questionbank.internal;
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionStatus;
+import dev.certforge.questionbank.Seniority;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -29,7 +30,8 @@ class QuestionRepository {
   private static final String STATUS = "status";
   private static final String SELECT_REVISION =
       "select id, question_id, revision_number, status, question_type, topic_id, java_release,"
-          + " difficulty, difficulty_rationale, prompt, explanation, author_id, track_version_id,"
+          + " seniority, difficulty, difficulty_rationale, prompt, explanation, author_id,"
+          + " track_version_id,"
           + " created_at, submitted_at, published_at, published_by, deprecated_at"
           + " from certforge.qb_question_revision";
 
@@ -58,9 +60,11 @@ class QuestionRepository {
   void insertRevision(UUID id, UUID questionId, int number, UUID authorId, RevisionContent c) {
     jdbc.sql(
             "insert into certforge.qb_question_revision (id, question_id, revision_number,"
-                + " question_type, topic_id, java_release, difficulty, difficulty_rationale,"
+                + " question_type, topic_id, java_release, seniority, difficulty,"
+                + " difficulty_rationale,"
                 + " prompt, explanation, author_id)"
-                + " values (:id, :questionId, :number, :type, :topic, :release, :difficulty,"
+                + " values (:id, :questionId, :number, :type, :topic, :release, :seniority,"
+                + " :difficulty,"
                 + " :rationale, :prompt, :explanation, :author)")
         .param(ID, id)
         .param(QUESTION_ID, questionId)
@@ -68,6 +72,7 @@ class QuestionRepository {
         .param("type", c.type().name())
         .param("topic", c.topicId())
         .param("release", c.javaRelease())
+        .param("seniority", c.seniority() == null ? null : c.seniority().name())
         .param("difficulty", c.difficulty() == null ? null : c.difficulty().name())
         .param("rationale", c.difficultyRationale())
         .param(PROMPT, c.prompt())
@@ -81,13 +86,14 @@ class QuestionRepository {
   void updateContent(UUID id, RevisionContent c) {
     jdbc.sql(
             "update certforge.qb_question_revision set question_type = :type, topic_id = :topic,"
-                + " java_release = :release, difficulty = :difficulty,"
+                + " java_release = :release, seniority = :seniority, difficulty = :difficulty,"
                 + " difficulty_rationale = :rationale, prompt = :prompt,"
                 + " explanation = :explanation where id = :id")
         .param(ID, id)
         .param("type", c.type().name())
         .param("topic", c.topicId())
         .param("release", c.javaRelease())
+        .param("seniority", c.seniority() == null ? null : c.seniority().name())
         .param("difficulty", c.difficulty() == null ? null : c.difficulty().name())
         .param("rationale", c.difficultyRationale())
         .param(PROMPT, c.prompt())
@@ -336,11 +342,13 @@ class QuestionRepository {
       throws SQLException {
     String difficulty = rs.getString("difficulty");
     Integer release = (Integer) rs.getObject("java_release");
+    String seniority = rs.getString("seniority");
     RevisionContent content =
         new RevisionContent(
             QuestionType.valueOf(rs.getString("question_type")),
             rs.getObject("topic_id", UUID.class),
             release,
+            seniority == null ? null : Seniority.valueOf(seniority),
             difficulty == null ? null : Difficulty.valueOf(difficulty),
             rs.getString("difficulty_rationale"),
             rs.getString("prompt"),

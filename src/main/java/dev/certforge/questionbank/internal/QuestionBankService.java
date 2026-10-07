@@ -301,6 +301,7 @@ class QuestionBankService {
         c.type().name(),
         c.topicId(),
         c.javaRelease(),
+        c.seniority() == null ? null : c.seniority().name(),
         c.difficulty() == null ? null : c.difficulty().name(),
         c.difficultyRationale(),
         c.prompt(),

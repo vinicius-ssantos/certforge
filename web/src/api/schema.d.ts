@@ -1290,6 +1290,8 @@ export interface components {
             options?: components["schemas"]["OptionRequest"][];
             prompt?: string;
             references?: components["schemas"]["ReferenceRequest"][];
+            /** @enum {string} */
+            seniority?: "PLENO" | "SENIOR";
             /** Format: uuid */
             topicId?: string;
             /** @enum {string} */
@@ -1323,6 +1325,7 @@ export interface components {
             publishedByName: string | null;
             references: components["schemas"]["ReferenceView"][];
             reviews: components["schemas"]["ReviewView"][];
+            seniority: string | null;
             status: string;
             /** Format: date-time */
             submittedAt: string | null;

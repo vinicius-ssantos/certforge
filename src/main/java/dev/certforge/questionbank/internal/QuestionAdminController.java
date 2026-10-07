@@ -3,6 +3,7 @@ package dev.certforge.questionbank.internal;
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionStatus;
+import dev.certforge.questionbank.Seniority;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionSummary;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionView;
 import jakarta.validation.Valid;
@@ -113,6 +114,7 @@ class QuestionAdminController {
       @NotNull QuestionType type,
       UUID topicId,
       @Min(1) Integer javaRelease,
+      Seniority seniority,
       Difficulty difficulty,
       @Size(max = 2000) String difficultyRationale,
       @Size(max = 10000) String prompt,
@@ -125,6 +127,7 @@ class QuestionAdminController {
           type,
           topicId,
           javaRelease,
+          seniority,
           difficulty,
           difficultyRationale,
           prompt,
