@@ -64,8 +64,12 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { groups } = useTopics();
-
   const [draft, setDraft] = useState<Draft>(() => (revision ? draftFrom(revision) : emptyDraft()));
+  // Which taxonomy the chosen topic belongs to decides which of the two fields below applies.
+  // Unknown (nothing chosen yet) is treated as certification, which is what the rules do.
+  const interview =
+    groups.find((group) => group.topics.some((topic) => topic.id === draft.topicId))?.kind ===
+    "INTERVIEW";
   // What was last saved (or loaded), to tell whether leaving would lose anything.
   const [baseline, setBaseline] = useState(() => JSON.stringify(revision ? draftFrom(revision) : emptyDraft()));
   const dirty = JSON.stringify(draft) !== baseline;
@@ -295,15 +299,32 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         </div>
 
         <div className="narrow-field">
-          <Field id="field-release" label={ed.javaRelease}>
-            <input
-              id="field-release"
-              type="text"
-              inputMode="numeric"
-              value={draft.javaRelease}
-              onChange={(event) => change({ javaRelease: event.target.value })}
-            />
-          </Field>
+          {interview ? (
+            <Field id="field-seniority" label={ed.seniority} hint={ed.seniorityHint}>
+              <select
+                id="field-seniority"
+                aria-describedby="field-seniority-hint"
+                value={draft.seniority}
+                onChange={(event) =>
+                  change({ seniority: event.target.value as Draft["seniority"] })
+                }
+              >
+                <option value="">{ed.chooseSeniority}</option>
+                <option value="PLENO">{ed.seniorityPleno}</option>
+                <option value="SENIOR">{ed.senioritySenior}</option>
+              </select>
+            </Field>
+          ) : (
+            <Field id="field-release" label={ed.javaRelease}>
+              <input
+                id="field-release"
+                type="text"
+                inputMode="numeric"
+                value={draft.javaRelease}
+                onChange={(event) => change({ javaRelease: event.target.value })}
+              />
+            </Field>
+          )}
         </div>
 
         <Field id="field-rationale" label={ed.whyThisDifficulty} hint={ed.whyThisDifficultyHint}>

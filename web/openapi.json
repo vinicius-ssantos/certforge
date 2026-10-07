@@ -1446,6 +1446,10 @@
             "minItems" : 0,
             "type" : "array"
           },
+          "seniority" : {
+            "enum" : [ "PLENO", "SENIOR" ],
+            "type" : "string"
+          },
           "topicId" : {
             "format" : "uuid",
             "type" : "string"
@@ -1532,6 +1536,9 @@
             },
             "type" : "array"
           },
+          "seniority" : {
+            "type" : [ "string", "null" ]
+          },
           "status" : {
             "type" : "string"
           },
@@ -1547,7 +1554,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "status", "submittedAt", "topicId", "type" ],
+        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
         "type" : "object"
       },
       "RolesRequest" : {

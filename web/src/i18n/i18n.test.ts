@@ -32,6 +32,8 @@ describe("the catalogs", () => {
       "editorial.catalogTrack.number", // "#"
       "progress.noValue", // "–", punctuation rather than a word
       "history.noValue", // the same dash, in the mock exam table
+      "editorial.editor.seniorityPleno", // "Pleno" is the same word in both.
+      "editorial.editor.senioritySenior", // and so is "Sênior".
       "editorial.diff.closeBracket", // "]"
     ]);
 

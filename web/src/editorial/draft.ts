@@ -16,6 +16,8 @@ export interface Draft {
   type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE";
   topicId: string;
   javaRelease: string;
+  /** Interview tracks only: the level the question is asked at. Empty on a certification track. */
+  seniority: "" | "PLENO" | "SENIOR";
   difficulty: "" | "EASY" | "MEDIUM" | "HARD";
   rationale: string;
   prompt: string;
@@ -36,6 +38,7 @@ export function emptyDraft(): Draft {
     type: "SINGLE_CHOICE",
     topicId: "",
     javaRelease: "21",
+    seniority: "",
     difficulty: "",
     rationale: "",
     prompt: "",
@@ -58,6 +61,7 @@ export function draftFrom(revision: Revision): Draft {
     type: revision.type === "MULTIPLE_CHOICE" ? "MULTIPLE_CHOICE" : "SINGLE_CHOICE",
     topicId: revision.topicId ?? "",
     javaRelease: revision.javaRelease ? String(revision.javaRelease) : "",
+    seniority: revision.seniority === "PLENO" || revision.seniority === "SENIOR" ? revision.seniority : "",
     difficulty:
       revision.difficulty === "EASY" || revision.difficulty === "MEDIUM" || revision.difficulty === "HARD"
         ? revision.difficulty
@@ -134,6 +138,7 @@ export function toRequest(draft: Draft): { request: RevisionRequest; problems: P
     ...(draft.topicId ? { topicId: draft.topicId } : {}),
     ...(draft.difficulty ? { difficulty: draft.difficulty } : {}),
     ...(javaRelease !== undefined ? { javaRelease } : {}),
+    ...(draft.seniority ? { seniority: draft.seniority } : {}),
   };
   return { request, problems };
 }

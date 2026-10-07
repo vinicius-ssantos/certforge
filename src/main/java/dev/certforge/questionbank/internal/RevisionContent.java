@@ -2,6 +2,7 @@ package dev.certforge.questionbank.internal;
 
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.QuestionType;
+import dev.certforge.questionbank.Seniority;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,8 @@ record RevisionContent(
     QuestionType type,
     UUID topicId,
     Integer javaRelease,
+    /** The level this is asked at. Interview questions only; see {@link Seniority}. */
+    Seniority seniority,
     Difficulty difficulty,
     String difficultyRationale,
     String prompt,

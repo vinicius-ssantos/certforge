@@ -87,6 +87,7 @@ class ContentPackTest {
         request.type(),
         request.topicId(),
         request.javaRelease(),
+        null,
         request.difficulty(),
         request.difficultyRationale(),
         prompt,

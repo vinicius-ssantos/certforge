@@ -559,7 +559,8 @@ class QuestionBankIT {
         versionId,
         topicId);
 
-    String noRelease =
+    // No Java release, and a seniority instead: the two fields each belong to one kind of track.
+    String interviewBody =
         body(
                 "How would you make a consumer idempotent?",
                 "SINGLE_CHOICE",
@@ -567,8 +568,8 @@ class QuestionBankIT {
                 0,
                 true,
                 false)
-            .replace(",\"javaRelease\":0", "");
-    String[] ids = publishableWith(noRelease);
+            .replace(",\"javaRelease\":0", ",\"seniority\":\"SENIOR\"");
+    String[] ids = publishableWith(interviewBody);
 
     publish(ids[1]).andExpect(status().isOk());
     assertThat(
@@ -578,6 +579,62 @@ class QuestionBankIT {
                 UUID.fromString(ids[1])))
         .as("published against the interview track's version, not an exam")
         .isEqualTo(versionId);
+    // Round-tripped rather than accepted and dropped, which is what a read-only column would do.
+    assertThat(
+            jdbc.queryForObject(
+                "select seniority from certforge.qb_question_revision where id = ?",
+                String.class,
+                UUID.fromString(ids[1])))
+        .isEqualTo("SENIOR");
+    send(get("/api/admin/questions/" + ids[0]), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].seniority").value("SENIOR"))
+        .andExpect(jsonPath("$.revisions[0].javaRelease").value(nullValue()));
+  }
+
+  @Test
+  void anInterviewQuestionWithoutASeniorityCannotBeSent() throws Exception {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, 'interview-"
+            + UUID.randomUUID()
+            + "', 'Java Backend', 'INTERVIEW', 'ACTIVE')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'messaging', 'Messaging')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+
+    ResultActions created =
+        send(
+                post("/api/admin/questions"),
+                editor,
+                body("No level stated", "SINGLE_CHOICE", topicId.toString(), 0, true, false)
+                    .replace(",\"javaRelease\":0", ""))
+            .andExpect(status().isCreated());
+
+    send(
+            post("/api/admin/question-revisions/" + firstRevisionId(created, 0) + "/submit"),
+            editor,
+            null)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("revision_incomplete"))
+        .andExpect(jsonPath("$.violations", hasItem("seniority_missing")));
   }
 
   @Test
@@ -751,6 +808,15 @@ class QuestionBankIT {
                 jdbc.update(
                     "update certforge.qb_revision_option set correct = not correct"
                         + " where revision_id = ?",
+                    revision))
+        .hasMessageContaining("immutable");
+    // Seniority is content, not lifecycle: it changes what a correct answer must contain, so a
+    // reviewer approved the question at a level and that must not move underneath them. V15 added
+    // the column to the guard from V5 for this reason.
+    assertThatThrownBy(
+            () ->
+                jdbc.update(
+                    "update certforge.qb_question_revision set seniority = 'PLENO' where id = ?",
                     revision))
         .hasMessageContaining("immutable");
     assertThatThrownBy(

@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.certforge.questionbank.Difficulty;
 import dev.certforge.questionbank.QuestionType;
+import dev.certforge.questionbank.Seniority;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ class RevisionRulesTest {
         type,
         UUID.randomUUID(),
         21,
+        null,
         Difficulty.MEDIUM,
         "Requires knowing switch patterns",
         "What is printed?",
@@ -99,6 +101,7 @@ class RevisionRulesTest {
             QuestionType.SINGLE_CHOICE,
             UUID.randomUUID(),
             21,
+            null,
             Difficulty.EASY,
             "r",
             "p",
@@ -110,6 +113,7 @@ class RevisionRulesTest {
             QuestionType.SINGLE_CHOICE,
             UUID.randomUUID(),
             21,
+            null,
             Difficulty.EASY,
             "r",
             "p",
@@ -126,7 +130,16 @@ class RevisionRulesTest {
   void reportsEveryMissingRequiredField() {
     var empty =
         new RevisionContent(
-            QuestionType.SINGLE_CHOICE, null, null, null, null, null, null, List.of(), List.of());
+            QuestionType.SINGLE_CHOICE,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(),
+            List.of());
 
     assertThat(RevisionRules.violations(empty, CERTIFICATION))
         .contains(
@@ -143,24 +156,14 @@ class RevisionRulesTest {
   // ---- the Java release, which only a certification question states (ADR 0016 decision 6) -----
 
   @Test
-  void anInterviewQuestionNeedsNoJavaRelease() {
-    RevisionContent withoutRelease =
-        new RevisionContent(
-            QuestionType.SINGLE_CHOICE,
-            UUID.randomUUID(),
-            null,
-            Difficulty.MEDIUM,
-            "Asked at this depth in most backend screens",
-            "How would you make a consumer idempotent?",
-            "Explanation",
-            List.of(option("A", true), option("B", false)),
-            List.of(REFERENCE));
+  void anInterviewQuestionNeedsNoJavaReleaseButDoesNeedASeniority() {
+    RevisionContent interview = interview(Seniority.SENIOR);
 
-    assertThat(RevisionRules.violations(withoutRelease, INTERVIEW)).isEmpty();
-    // The same content is incomplete for a certification track, which is the point of the rule
-    // being conditional rather than simply relaxed.
-    assertThat(RevisionRules.violations(withoutRelease, CERTIFICATION))
-        .containsExactly("java_release_missing");
+    assertThat(RevisionRules.violations(interview, INTERVIEW)).isEmpty();
+    // The same content for a certification track is incomplete and carries a field it may not,
+    // which is the point of the rules being conditional rather than simply relaxed.
+    assertThat(RevisionRules.violations(interview, CERTIFICATION))
+        .containsExactlyInAnyOrder("java_release_missing", "seniority_not_applicable");
   }
 
   @Test
@@ -169,7 +172,57 @@ class RevisionRulesTest {
         content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false)));
 
     assertThat(RevisionRules.violations(withRelease, INTERVIEW))
-        .containsExactly("java_release_not_applicable");
+        .containsExactlyInAnyOrder("java_release_not_applicable", "seniority_missing");
+  }
+
+  // ---- seniority, which only an interview question states (ADR 0016 decision 5) ---------------
+
+  @Test
+  void anInterviewQuestionWithoutASeniorityIsIncomplete() {
+    assertThat(RevisionRules.violations(interview(null), INTERVIEW))
+        .containsExactly("seniority_missing");
+  }
+
+  @Test
+  void eitherSeniorityIsAccepted() {
+    assertThat(RevisionRules.violations(interview(Seniority.PLENO), INTERVIEW)).isEmpty();
+    assertThat(RevisionRules.violations(interview(Seniority.SENIOR), INTERVIEW)).isEmpty();
+  }
+
+  @Test
+  void aCertificationQuestionIsRefusedASeniority() {
+    var withSeniority =
+        new RevisionContent(
+            QuestionType.SINGLE_CHOICE,
+            UUID.randomUUID(),
+            21,
+            Seniority.PLENO,
+            Difficulty.MEDIUM,
+            "Requires knowing switch patterns",
+            "What is printed?",
+            "Explanation",
+            List.of(option("A", true), option("B", false)),
+            List.of(REFERENCE));
+
+    // An exam objective is true or it is not; there is no level at which it is asked, so a
+    // seniority here would be a claim with nothing behind it.
+    assertThat(RevisionRules.violations(withSeniority, CERTIFICATION))
+        .containsExactly("seniority_not_applicable");
+  }
+
+  /** A complete interview question: no Java release, and the given seniority. */
+  private static RevisionContent interview(Seniority seniority) {
+    return new RevisionContent(
+        QuestionType.SINGLE_CHOICE,
+        UUID.randomUUID(),
+        null,
+        seniority,
+        Difficulty.MEDIUM,
+        "Asked at this depth in most backend screens",
+        "How would you make a consumer idempotent?",
+        "Explanation",
+        List.of(option("A", true), option("B", false)),
+        List.of(REFERENCE));
   }
 
   @Test
@@ -188,6 +241,7 @@ class RevisionRulesTest {
     return new RevisionContent(
         QuestionType.SINGLE_CHOICE,
         UUID.randomUUID(),
+        null,
         null,
         Difficulty.MEDIUM,
         "Requires knowing switch patterns",

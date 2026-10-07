@@ -1,6 +1,6 @@
 # ADR 0016: Shape the interview track as a versioned taxonomy, and keep it small
 
-- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decisions 1, 2, 3, 6, 7 and 8 are implemented: the taxonomy exists as a DRAFT track and a DRAFT taxonomy version, and a question on an interview topic really does publish once both are activated. Decision 5 (seniority on a revision) is still to come, and so is making the taxonomy reachable from the editorial desk — see the consequences. Each decision below says what exists.
+- Status: **Accepted** on 2026-10-04 by vinicius-ssantos, as written. Decisions 1, 2, 3, 6, 7 and 8 are implemented: the taxonomy exists as a DRAFT track and a DRAFT taxonomy version, and a question on an interview topic really does publish once both are activated. All eight decisions are implemented. What remains is content: the track is DRAFT until there is some, and activating it is a deliberate act. Each decision below says what exists.
 - Date: 2026-10-04
 
 ## Context
