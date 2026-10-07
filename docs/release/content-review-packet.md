@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**20 of 150 questions carry a current review** by vinicius-ssantos, recorded on 2026-10-02. 0 have been edited since being reviewed and need a new one; 130 have never been reviewed. Each is marked below.
+**24 of 150 questions carry a current recorded human review.** 0 have been edited since being reviewed and need a new one; 126 have never been reviewed. Per-question reviewer/date provenance is shown below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -38,7 +38,7 @@ The checks, from the [content policy](../product/content-policy.md):
 | # | Question | Topic | Type | Difficulty | Runnable code | Review |
 |---:|---|---|---|---|---|---|
 | 1 | [`t01-bigdecimal-equals-scale`](#1-t01-bigdecimal-equals-scale) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
-| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
+| 2 | [`t01-bigdecimal-nonterminating-divide`](#2-t01-bigdecimal-nonterminating-divide) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | reviewed 2026-10-07 |
 | 3 | [`t01-bigdecimal-striptrailingzeros-scale`](#3-t01-bigdecimal-striptrailingzeros-scale) | Date, time, text, numeric and boolean values | single | hard | yes, not shown | **not reviewed** |
 | 4 | [`t01-boolean-parseboolean`](#4-t01-boolean-parseboolean) | Date, time, text, numeric and boolean values | multiple | easy | yes, not shown | **not reviewed** |
 | 5 | [`t01-integer-boxing-guarantee`](#5-t01-integer-boxing-guarantee) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | reviewed 2026-10-02 |
@@ -48,17 +48,17 @@ The checks, from the [content policy](../product/content-policy.md):
 | 9 | [`t01-localdate-plus-years-leap-day`](#9-t01-localdate-plus-years-leap-day) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 10 | [`t01-math-round-negative`](#10-t01-math-round-negative) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
 | 11 | [`t01-numeric-promotion-byte-addition`](#11-t01-numeric-promotion-byte-addition) | Date, time, text, numeric and boolean values | single | easy | yes, not shown | **not reviewed** |
-| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | yes, not shown | **not reviewed** |
+| 12 | [`t01-period-vs-duration`](#12-t01-period-vs-duration) | Date, time, text, numeric and boolean values | multiple | medium | yes, not shown | reviewed 2026-10-07 |
 | 13 | [`t01-string-repeat`](#13-t01-string-repeat) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
 | 14 | [`t01-string-strip-vs-trim`](#14-t01-string-strip-vs-trim) | Date, time, text, numeric and boolean values | single | medium | yes, not shown | **not reviewed** |
-| 15 | [`t01-stringbuilder-reverse-chain`](#15-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | **not reviewed** |
+| 15 | [`t01-stringbuilder-reverse-chain`](#15-t01-stringbuilder-reverse-chain) | Date, time, text, numeric and boolean values | single | easy | yes, shown | reviewed 2026-10-07 |
 | 16 | [`t02-case-null-pattern-switch`](#16-t02-case-null-pattern-switch) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 17 | [`t02-continue-for-update`](#17-t02-continue-for-update) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 18 | [`t02-dangling-else`](#18-t02-dangling-else) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
 | 19 | [`t02-do-while-first-execution`](#19-t02-do-while-first-execution) | Controlling program flow | single | easy | yes, not shown | **not reviewed** |
 | 20 | [`t02-enhanced-for-variable-assignment`](#20-t02-enhanced-for-variable-assignment) | Controlling program flow | single | medium | yes, not shown | **not reviewed** |
 | 21 | [`t02-for-update-order`](#21-t02-for-update-order) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
-| 22 | [`t02-labeled-break-count`](#22-t02-labeled-break-count) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
+| 22 | [`t02-labeled-break-count`](#22-t02-labeled-break-count) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-07 |
 | 23 | [`t02-labeled-continue`](#23-t02-labeled-continue) | Controlling program flow | single | medium | yes, shown | **not reviewed** |
 | 24 | [`t02-pattern-switch-guard`](#24-t02-pattern-switch-guard) | Controlling program flow | single | medium | yes, shown | reviewed 2026-10-02 |
 | 25 | [`t02-pattern-variable-and-scope`](#25-t02-pattern-variable-and-scope) | Controlling program flow | single | hard | yes, not shown | **not reviewed** |
@@ -334,7 +334,7 @@ public class Main {
 
 ### Review
 
-
+**Approved** by vinicius-ssantos on 2026-10-07. The question has not changed since, so that verdict still applies.\n\nA second reviewer is still worth having. To review it again, make the checks below and record your own verdict:\n
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1146,7 +1146,7 @@ public class Main {
 
 ### Review
 
-
+**Approved** by vinicius-ssantos on 2026-10-07. The question has not changed since, so that verdict still applies.\n\nA second reviewer is still worth having. To review it again, make the checks below and record your own verdict:\n
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1363,7 +1363,7 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
-
+**Approved** by vinicius-ssantos on 2026-10-07. The question has not changed since, so that verdict still applies.\n\nA second reviewer is still worth having. To review it again, make the checks below and record your own verdict:\n
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -1959,7 +1959,7 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
-
+**Approved** by vinicius-ssantos on 2026-10-07. The question has not changed since, so that verdict still applies.\n\nA second reviewer is still worth having. To review it again, make the checks below and record your own verdict:\n
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
 - [ ] There is no hidden dependency on the environment or on unspecified behavior.
@@ -2567,7 +2567,7 @@ To record: `"digest": "sha256:b242031edf316e072ac889f837b7727dbd545e65e888ef8193
 
 ### As the learner sees it
 
-> A `case` arm of a switch expression uses a block and must produce the value of that arm. Which statement is used to provide that value from the block?
+> A `case` in a switch expression uses a block and needs to produce a value for the switch expression. Which statement is used inside the block to provide that value?
 
 - **A** break value;
 - **B** return value;
@@ -2635,7 +2635,7 @@ public class Main {
 
 **Verdict:** [ ] approve  [ ] request changes  [ ] do not publish
 
-To record: `"digest": "sha256:1f903957483547db1a7824aebe113ae55eabdb87db3c96384d0eb2f1992e5573"`, `"verified": "sha256:e4265b8eaa0d0e5c93ff5c0ee686a8732def082906a190c4e9a68ea776550879"`
+To record: `"digest": "sha256:2ffcec013155b33ba8eecfb4783228420cf3393d7f38449aa38f3456f1f02dbf"`, `"verified": "sha256:e4265b8eaa0d0e5c93ff5c0ee686a8732def082906a190c4e9a68ea776550879"`
 
 **Comments:**
 
@@ -13822,7 +13822,7 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | # | Question | Verdict | Reviewer | Date |
 |---:|---|---|---|---|
 | 1 | `t01-bigdecimal-equals-scale` |  |  |  |
-| 2 | `t01-bigdecimal-nonterminating-divide` |  |  |  |
+| 2 | `t01-bigdecimal-nonterminating-divide` | approved | vinicius-ssantos | 2026-10-07 |
 | 3 | `t01-bigdecimal-striptrailingzeros-scale` |  |  |  |
 | 4 | `t01-boolean-parseboolean` |  |  |  |
 | 5 | `t01-integer-boxing-guarantee` | approved | vinicius-ssantos | 2026-10-02 |
@@ -13832,17 +13832,17 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 9 | `t01-localdate-plus-years-leap-day` |  |  |  |
 | 10 | `t01-math-round-negative` |  |  |  |
 | 11 | `t01-numeric-promotion-byte-addition` |  |  |  |
-| 12 | `t01-period-vs-duration` |  |  |  |
+| 12 | `t01-period-vs-duration` | approved | vinicius-ssantos | 2026-10-07 |
 | 13 | `t01-string-repeat` |  |  |  |
 | 14 | `t01-string-strip-vs-trim` |  |  |  |
-| 15 | `t01-stringbuilder-reverse-chain` |  |  |  |
+| 15 | `t01-stringbuilder-reverse-chain` | approved | vinicius-ssantos | 2026-10-07 |
 | 16 | `t02-case-null-pattern-switch` |  |  |  |
 | 17 | `t02-continue-for-update` |  |  |  |
 | 18 | `t02-dangling-else` |  |  |  |
 | 19 | `t02-do-while-first-execution` |  |  |  |
 | 20 | `t02-enhanced-for-variable-assignment` |  |  |  |
 | 21 | `t02-for-update-order` |  |  |  |
-| 22 | `t02-labeled-break-count` |  |  |  |
+| 22 | `t02-labeled-break-count` | approved | vinicius-ssantos | 2026-10-07 |
 | 23 | `t02-labeled-continue` |  |  |  |
 | 24 | `t02-pattern-switch-guard` | approved | vinicius-ssantos | 2026-10-02 |
 | 25 | `t02-pattern-variable-and-scope` |  |  |  |
