@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000301",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Uma equipe compila uma aplicação em uma etapa Dockerfile e copia apenas o artefato para outra etapa, usada como imagem final. Qual recurso está sendo utilizado?",
+  "prompt": "Considere este Dockerfile simplificado:\n\n```dockerfile\nFROM maven:3.9-eclipse-temurin-21 AS build\nWORKDIR /app\nCOPY . .\nRUN mvn -B package\n\nFROM eclipse-temurin:21-jre\nCOPY --from=build /app/target/app.jar /app/app.jar\nCMD [\"java\", \"-jar\", \"/app/app.jar\"]\n```\n\nO primeiro estágio compila a aplicação; o segundo contém apenas o necessário para executá-la. Qual recurso do Docker está sendo utilizado?",
   "explanation": "Builds multi-stage permitem separar a etapa de compilação da imagem final, copiando apenas os arquivos necessários com COPY --from.",
   "options": [
     {
