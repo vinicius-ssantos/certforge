@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conceito de instância de contêiner a partir de uma imagem e diferencia ciclo de vida de contêiner e imagem.",
+  "prompt": "Uma equipe criou uma imagem Docker para uma API e executou dois contêineres a partir dela. Um dos contêineres foi removido. O que acontece com a imagem original?",
+  "explanation": "Uma imagem é um artefato imutável usado para criar contêineres. Remover um contêiner não exclui automaticamente a imagem de origem nem interrompe outras instâncias que a utilizem.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A imagem é removida automaticamente quando qualquer contêiner derivado é excluído.",
+      "correct": false,
+      "explanation": "A exclusão de uma instância de contêiner não remove automaticamente a imagem correspondente."
+    },
+    {
+      "key": "B",
+      "text": "A imagem permanece disponível e pode continuar sendo usada para criar outros contêineres.",
+      "correct": true,
+      "explanation": "A imagem e a instância de contêiner têm ciclos de vida separados."
+    },
+    {
+      "key": "C",
+      "text": "Todos os contêineres derivados da mesma imagem são encerrados.",
+      "correct": false,
+      "explanation": "Contêineres são instâncias independentes e a remoção de uma não encerra automaticamente as demais."
+    },
+    {
+      "key": "D",
+      "text": "A imagem torna-se gravável para que a remoção seja registrada nela.",
+      "correct": false,
+      "explanation": "A camada gravável pertence ao contêiner; a imagem não muda por causa da remoção de uma instância."
+    }
+  ],
+  "references": [
+    {
+      "title": "Docker Docs — What is a container?",
+      "url": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/"
+    },
+    {
+      "title": "Docker Docs — What is an image?",
+      "url": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-an-image/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
