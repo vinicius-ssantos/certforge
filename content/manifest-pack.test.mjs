@@ -3,59 +3,247 @@ import assert from "node:assert/strict";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { readManifestPack, reviewDigestV2, validateGeneralQuestion } from "./manifest-pack.mjs";
+import {
+  readManifestPack,
+  reviewDigestV2,
+  validateGeneralQuestion,
+  validateManifestQuestion,
+} from "./manifest-pack.mjs";
 
 const manifest = {
-  schemaVersion: 1, packId: "infra", trackSlug: "infra", trackKind: "GENERAL",
-  trackVersion: "2026.1", language: "pt-BR", sourcePolicy: "official-v1",
-  evidenceProfile: "reference-v1", editorialStatus: "DRAFT",
+  schemaVersion: 1,
+  packId: "infra",
+  trackSlug: "infra",
+  trackKind: "GENERAL",
+  trackVersion: "2026.1",
+  language: "pt-BR",
+  sourcePolicy: "official-v1",
+  evidenceProfile: "reference-v1",
+  editorialStatus: "DRAFT",
 };
+
+const interviewManifest = {
+  ...manifest,
+  packId: "java-backend-interview-foundation",
+  trackSlug: "java-backend-interview",
+  trackKind: "INTERVIEW",
+  trackVersion: "Taxonomy 2026.1",
+  sourcePolicy: "java-backend-authoritative-v1",
+};
+
 const sample = () => ({
   topicId: "a3000000-0000-4000-8000-000000000301",
-  type: "SINGLE_CHOICE", difficulty: "EASY", difficultyRationale: "One concept",
-  prompt: "Which network layer?", explanation: "Reference-backed explanation",
+  type: "SINGLE_CHOICE",
+  difficulty: "EASY",
+  difficultyRationale: "One concept",
+  prompt: "Which network layer?",
+  explanation: "Reference-backed explanation",
   options: ["A", "B", "C", "D"].map((key, index) => ({
-    key, text: `Choice ${key}`, correct: index === 0, explanation: `Why ${key}`,
+    key,
+    text: `Choice ${key}`,
+    correct: index === 0,
+    explanation: `Why ${key}`,
   })),
   references: [{ title: "Documentation", url: "https://example.org/docs" }],
+  evidence: { type: "reference-backed" },
+});
+
+const guided = () => ({
+  topicId: "a3000000-0000-4000-8000-000000000110",
+  type: "GUIDED_RESPONSE",
+  seniority: "SENIOR",
+  difficulty: "HARD",
+  difficultyRationale: "Requires reasoning about retries and durable state",
+  prompt: "How would you make a message consumer idempotent?",
+  guidedResponse: {
+    referenceAnswer:
+      "Use a stable idempotency key and atomically persist duplicate detection with the business effect.",
+    expectedConcepts: [
+      {
+        text: "stable idempotency key",
+        required: true,
+        explanation: "Duplicate deliveries need the same durable identity.",
+      },
+      {
+        text: "durable duplicate detection",
+        required: true,
+        explanation: "Process memory cannot survive retries or restarts.",
+      },
+    ],
+    commonMistakes: ["Treating broker delivery guarantees as business idempotency."],
+    followUps: ["What changes when the side effect is in another service?"],
+  },
+  references: [{ title: "Kafka design", url: "https://kafka.apache.org/documentation/" }],
   evidence: { type: "reference-backed" },
 });
 
 test("accepts reference-backed general-knowledge questions", () => {
   assert.equal(validateGeneralQuestion(sample(), manifest).type, "SINGLE_CHOICE");
 });
-test("rejects malformed questions and accidental Java metadata", () => {
-  assert.throws(() => validateGeneralQuestion({ ...sample(), javaRelease: 21 }, manifest), /javaRelease/);
-  assert.throws(() => validateGeneralQuestion({ ...sample(), options: sample().options.slice(0, 3) }, manifest), /4 or 5/);
-  assert.throws(() => validateGeneralQuestion({
-    ...sample(), options: sample().options.map((value) => ({ ...value, correct: false })),
-  }, manifest), /cardinality/);
-  assert.throws(() => validateGeneralQuestion({
-    ...sample(), references: [{ title: "Docs", url: "http://example.org" }],
-  }, manifest), /HTTPS/);
+
+test("rejects malformed questions and accidental legacy Java metadata", () => {
+  assert.throws(
+    () => validateManifestQuestion({ ...sample(), javaRelease: 21 }, manifest),
+    /javaRelease/,
+  );
+  assert.throws(
+    () => validateManifestQuestion({ ...sample(), options: sample().options.slice(0, 3) }, manifest),
+    /4 or 5/,
+  );
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        {
+          ...sample(),
+          options: sample().options.map((value) => ({ ...value, correct: false })),
+        },
+        manifest,
+      ),
+    /cardinality/,
+  );
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        { ...sample(), references: [{ title: "Docs", url: "http://example.org" }] },
+        manifest,
+      ),
+    /HTTPS/,
+  );
 });
+
 test("exam questions must bind to their objectives", () => {
   const certification = { ...manifest, trackKind: "CERTIFICATION" };
-  assert.throws(() => validateGeneralQuestion(sample(), certification), /objectiveKeys/);
-  assert.equal(validateGeneralQuestion({ ...sample(), objectiveKeys: ["1.1"] }, certification).objectiveKeys[0], "1.1");
+  assert.throws(() => validateManifestQuestion(sample(), certification), /objectiveKeys/);
+  assert.equal(
+    validateManifestQuestion({ ...sample(), objectiveKeys: ["1.1"] }, certification)
+      .objectiveKeys[0],
+    "1.1",
+  );
 });
-test("digest changes on semantic edits and certification context changes", () => {
-  const question = sample();
-  const digest = reviewDigestV2(manifest, question);
-  assert.equal(reviewDigestV2(manifest, { ...question }), digest);
-  assert.notEqual(reviewDigestV2(manifest, { ...question, prompt: "Changed" }), digest);
-  assert.notEqual(reviewDigestV2({ ...manifest, trackVersion: "2026.2" }, question), digest);
+
+test("interview questions require explicit seniority", () => {
+  assert.throws(
+    () => validateManifestQuestion({ ...sample(), explanation: "Still objective" }, interviewManifest),
+    /seniority/,
+  );
+  const question = { ...sample(), seniority: "PLENO" };
+  assert.equal(validateManifestQuestion(question, interviewManifest).seniority, "PLENO");
+  assert.throws(
+    () => validateManifestQuestion({ ...question, seniority: "JUNIOR" }, interviewManifest),
+    /PLENO or SENIOR/,
+  );
+  assert.throws(
+    () => validateManifestQuestion({ ...sample(), seniority: "PLENO" }, manifest),
+    /only valid for INTERVIEW/,
+  );
 });
-test("reads one manifest-backed pack and rejects an empty one", () => {
+
+test("accepts reviewed guided-response criteria only on interview packs", () => {
+  const question = guided();
+  assert.equal(validateManifestQuestion(question, interviewManifest).type, "GUIDED_RESPONSE");
+  assert.throws(() => validateManifestQuestion(question, manifest), /INTERVIEW/);
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        {
+          ...question,
+          options: [
+            { key: "A", text: "Choice", correct: true, explanation: "Not applicable" },
+          ],
+        },
+        interviewManifest,
+      ),
+    /must not define answer options/,
+  );
+  assert.throws(
+    () => validateManifestQuestion({ ...question, explanation: "Objective answer" }, interviewManifest),
+    /objective explanation/,
+  );
+});
+
+test("guided responses require a reference answer and at least one required concept", () => {
+  const question = guided();
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        {
+          ...question,
+          guidedResponse: { ...question.guidedResponse, referenceAnswer: " " },
+        },
+        interviewManifest,
+      ),
+    /referenceAnswer/,
+  );
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        {
+          ...question,
+          guidedResponse: {
+            ...question.guidedResponse,
+            expectedConcepts: question.guidedResponse.expectedConcepts.map((concept) => ({
+              ...concept,
+              required: false,
+            })),
+          },
+        },
+        interviewManifest,
+      ),
+    /required concept/,
+  );
+  assert.throws(
+    () =>
+      validateManifestQuestion(
+        {
+          ...question,
+          guidedResponse: { ...question.guidedResponse, followUps: [""] },
+        },
+        interviewManifest,
+      ),
+    /followUps/,
+  );
+});
+
+test("digest changes on semantic, policy, seniority and guided-criteria edits", () => {
+  const question = guided();
+  const digest = reviewDigestV2(interviewManifest, question);
+  assert.equal(reviewDigestV2(interviewManifest, { ...question }), digest);
+  assert.notEqual(reviewDigestV2(interviewManifest, { ...question, prompt: "Changed" }), digest);
+  assert.notEqual(
+    reviewDigestV2({ ...interviewManifest, trackVersion: "Taxonomy 2026.2" }, question),
+    digest,
+  );
+  assert.notEqual(
+    reviewDigestV2({ ...interviewManifest, sourcePolicy: "other-policy" }, question),
+    digest,
+  );
+  assert.notEqual(reviewDigestV2(interviewManifest, { ...question, seniority: "PLENO" }), digest);
+  assert.notEqual(
+    reviewDigestV2(interviewManifest, {
+      ...question,
+      guidedResponse: {
+        ...question.guidedResponse,
+        followUps: [...question.guidedResponse.followUps, "How would you test it?"],
+      },
+    }),
+    digest,
+  );
+});
+
+test("reads one manifest-backed guided-response pack and rejects an empty one", () => {
   const dir = mkdtempSync(join(tmpdir(), "certforge-pack-"));
   try {
-    writeFileSync(join(dir, "pack.json"), JSON.stringify(manifest));
+    writeFileSync(join(dir, "pack.json"), JSON.stringify(interviewManifest));
     assert.throws(() => readManifestPack(dir), /at least one question/);
-    mkdirSync(join(dir, "t01-networking"));
-    writeFileSync(join(dir, "t01-networking", "question.json"), JSON.stringify(sample()));
+    mkdirSync(join(dir, "messaging-idempotency"));
+    writeFileSync(
+      join(dir, "messaging-idempotency", "question.json"),
+      JSON.stringify(guided()),
+    );
     const pack = readManifestPack(dir);
     assert.equal(pack.questions.length, 1);
-    assert.equal(pack.manifest.trackKind, "GENERAL");
+    assert.equal(pack.manifest.trackKind, "INTERVIEW");
+    assert.equal(pack.questions[0].guidedResponse.expectedConcepts.length, 2);
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
