@@ -117,6 +117,9 @@ export const ptBR: Catalog = {
     enterEmail: "Informe seu e-mail.",
     enterPassword: "Informe sua senha.",
     passwordTooShort: (minimum: number) => `A senha precisa ter pelo menos ${minimum} caracteres.`,
+    passwordRemaining: (remaining: number) =>
+      `${plural(TAG, remaining, { one: "Falta", other: "Faltam" })} ${remaining} ${plural(TAG, remaining, { one: "caractere", other: "caracteres" })}.`,
+    passwordLongEnough: "Já tem o tamanho mínimo.",
     passwordHint: (minimum: number) =>
       `Use pelo menos ${minimum} caracteres. Não há outras regras; uma frase longa funciona bem.`,
     newHere: "É novo por aqui?",
@@ -212,6 +215,13 @@ export const ptBR: Catalog = {
     countingCorrect: "Contando suas respostas corretas",
     correctOf: (correct: number, answered: number) =>
       `${correct} de ${answered} ${plural(TAG, answered, { one: "resposta estava correta", other: "respostas estavam corretas" })}.`,
+    statAnswered: "Respondidas",
+    statCorrect: "Corretas",
+    statNotSeen: "Não vistas",
+    notSeenOf: (notSeen: number) =>
+      `${plural(TAG, notSeen, { one: "Ficou", other: "Ficaram" })} ${notSeen} ${plural(TAG, notSeen, { one: "questão sem ver", other: "questões sem ver" })}.`,
+    practiseAgain: "Praticar este tópico de novo",
+    seeReview: "Ver a revisão da sessão",
   },
 
   review: {
@@ -310,7 +320,8 @@ export const ptBR: Catalog = {
     tracksPageLink: "página de trilhas",
     mockHeading: "Simulados",
     mockLoading: "Carregando seus simulados",
-    noMocks: "Nenhum simulado ainda.",
+    noMocks:
+      "Nenhum simulado ainda. Um simulado precisa de cinco questões revisadas em cada tópico.",
     mockTableCaption: "Seus simulados, do mais recente para o mais antigo",
     track: "Trilha",
     score: "Nota",

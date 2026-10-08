@@ -45,10 +45,17 @@ export function SessionReviewPage() {
       {items.length > 0 ? (
         <ol className="review">
           {items.map((attempt) => (
-            <li key={attempt.id}>
-              <h2>{t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}</h2>
+            <li key={attempt.id} className={attempt.correct ? undefined : "panel-danger"}>
+              {/*
+               * A wrong answer wears a red rail. It is what the learner opened this page for, and
+               * in a flat list it carried the same weight as the ones they got right. The heading
+               * still says "correct" or "not quite" in words, so the rail is the second cue.
+               */}
+              <h2 className="section-label">
+                {t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}
+              </h2>
               <Prompt text={attempt.question.prompt} />
-              <p>
+              <p className="muted">
                 {t.sessionReview.yourAnswerLine(
                   attempt.selectedOptions.join(", "),
                   t.sessionReview.confidenceName(attempt.confidence),

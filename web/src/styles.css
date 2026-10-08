@@ -204,6 +204,29 @@ main {
   margin-top: var(--s2);
 }
 
+/*
+ * One segment per character the rule asks for, filling as they are typed. It restates the count
+ * in the words beside it and says nothing on its own, which is why it is `aria-hidden`: a screen
+ * reader gets the sentence, not twelve anonymous boxes. It is deliberately not a strength meter —
+ * the product has one rule about passwords and no opinion beyond it.
+ */
+.meter {
+  display: flex;
+  gap: 2px;
+  margin-top: var(--s2);
+}
+
+.meter > i {
+  height: 4px;
+  flex: 1;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.meter > i.on {
+  background: var(--ok);
+}
+
 .narrow > p:last-child {
   margin: var(--s5) 0 0;
   padding-top: var(--s4);
@@ -310,7 +333,8 @@ button:disabled {
   cursor: progress;
 }
 
-button.secondary {
+button.secondary,
+a.button.secondary {
   background: transparent;
   color: var(--action);
 }
@@ -512,6 +536,47 @@ fieldset.field > legend {
 
 .changes p {
   margin: 0;
+}
+
+/*
+ * A block of content on its own surface: the general case the cards, notices and panels around
+ * the product are variations of. A rail on the leading edge gives it a voice without a fill —
+ * brass where something is waiting, red where something cannot be undone.
+ */
+.panel {
+  display: grid;
+  gap: var(--s3);
+  justify-items: start;
+  padding: var(--s5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.panel > h2,
+.panel > h3 {
+  margin: 0;
+}
+
+.panel > p {
+  margin: 0;
+}
+
+/* Side-by-side actions. `.row` is the grid for short form fields and would stretch a button to a
+ * column; these size to their words. */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.panel-hold {
+  border-left: 3px solid var(--review);
+}
+
+.panel-danger {
+  border-left: 3px solid var(--danger);
 }
 
 .confirm {
@@ -1217,10 +1282,33 @@ pre.code {
 
 /* ---- tables ------------------------------------------------------------------------------ */
 
+/*
+ * A data table sits on a surface like every other block of content. `.table-scroll` is the
+ * wrapper `ScrollableTable` always renders, so it can own the edge and the corners the collapsed
+ * table itself cannot round; the table keeps `border-collapse` and loses its outer rules to the
+ * wrapper's border.
+ */
+.table-scroll {
+  margin: var(--s4) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--s4) 0;
+}
+
+.table-scroll > table {
+  margin: 0;
+}
+
+/* The last row's rule would sit on the wrapper's own border. */
+.table-scroll tbody tr:last-child > * {
+  border-bottom: 0;
 }
 
 th,
@@ -1294,10 +1382,20 @@ table.queue td.question-cell a {
 .review > li {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--s2) var(--s4) var(--s4);
+  padding: var(--s4);
   margin: var(--s4) 0;
   background: var(--surface);
   max-width: none;
+}
+
+.review > li > .section-label {
+  margin-bottom: var(--s3);
+}
+
+/* The prompt here is being re-read, not answered, so it does not need the practice screen's size. */
+.review > li .prompt {
+  margin-bottom: var(--s3);
+  font-size: var(--t-lg);
 }
 
 /* The questions waiting to be practised again, under the topic that owns them. Numbered, because

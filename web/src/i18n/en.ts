@@ -121,6 +121,14 @@ export const en = {
     passwordTooShort: (minimum: number) => `The password must have at least ${minimum} characters.`,
     passwordHint: (minimum: number) =>
       `Use at least ${minimum} characters. There are no other rules; a long phrase works well.`,
+    /**
+     * The same rule, counted down while the person types. It replaces the hint rather than joining
+     * it, so the field never carries two sentences about the same requirement.
+     */
+    passwordRemaining: (remaining: number) =>
+      `${remaining} more ${plural(TAG, remaining, { one: "character", other: "characters" })} to go.`,
+    /** Said once the rule is met, so the person knows they can send without counting. */
+    passwordLongEnough: "Long enough.",
     newHere: "New here?",
     createOne: "Create an account",
     alreadyHaveAccount: "Already have an account?",
@@ -211,6 +219,19 @@ export const en = {
     countingCorrect: "Counting your correct answers",
     correctOf: (correct: number, answered: number) =>
       `${correct} of ${answered} ${plural(TAG, answered, { one: "answer was", other: "answers were" })} correct.`,
+    /**
+     * The figures of a finished session, as labels over numbers. "Not seen" is stated rather than
+     * left out: ending early is a legitimate way to stop, and how much was left is part of what
+     * happened.
+     */
+    statAnswered: "Answered",
+    statCorrect: "Correct",
+    statNotSeen: "Not seen",
+    notSeenOf: (notSeen: number) =>
+      `${notSeen} ${plural(TAG, notSeen, { one: "question was", other: "questions were" })} left unseen.`,
+    /** The two ways on from a finished session, instead of dropping the learner at the menu. */
+    practiseAgain: "Practise this topic again",
+    seeReview: "See the session review",
   },
   /**
    * Counts are written as functions of the count rather than as a string plus a plural suffix, so
@@ -320,7 +341,12 @@ export const en = {
     tracksPageLink: "tracks page",
     mockHeading: "Mock exams",
     mockLoading: "Loading your mock exams",
-    noMocks: "No mock exams yet.",
+    /**
+     * An empty state that explains itself. A mock needs five reviewed questions in every
+     * topic (see issue #138), and saying so turns "nothing here" into something the reader can
+     * act on or at least understand.
+     */
+    noMocks: "No mock exams yet. A mock exam needs five reviewed questions in every topic.",
     mockTableCaption: "Your mock exams, newest first",
     track: "Track",
     score: "Score",

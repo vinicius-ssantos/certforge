@@ -63,7 +63,7 @@ export function HistoryPage() {
       ) : null}
 
       <section aria-labelledby="mock-history-heading">
-        <h2 id="mock-history-heading">{t.history.mockHeading}</h2>
+        <h2 id="mock-history-heading" className="section-label">{t.history.mockHeading}</h2>
         {mocks.isPending ? <Loading label={t.history.mockLoading} /> : null}
         {mocks.isError ? (
           <ErrorState error={mocks.error} onRetry={() => void mocks.refetch()} />
@@ -144,7 +144,7 @@ export function HistoryPage() {
       </section>
 
       <section aria-labelledby="practice-history-heading">
-        <h2 id="practice-history-heading">{t.history.practiceHeading}</h2>
+        <h2 id="practice-history-heading" className="section-label">{t.history.practiceHeading}</h2>
         {sessions.isPending ? <Loading label={t.history.loading} /> : null}
         {sessions.isError ? (
           <ErrorState error={sessions.error} onRetry={() => void sessions.refetch()} />

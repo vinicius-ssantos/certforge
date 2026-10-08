@@ -62,7 +62,9 @@ test.describe("the review loop", () => {
     await endSession(page);
 
     // ---- the queue says what happened, in words ----------------------------------------------
-    await page.getByRole("link", { name: "Review" }).click();
+    // Scoped to the main navigation: the ended-session screen now offers "See the session review"
+    // too, and an unscoped name match reaches both.
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
 
     const queued = page.getByRole("listitem").filter({ hasText: PROMPT });
