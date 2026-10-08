@@ -282,6 +282,12 @@ export const en = {
     lastActivity: "Last activity",
     /** Shown where there is no number to show, so it is punctuation rather than a word. */
     noValue: "–",
+    /**
+     * A topic with no attempts has no accuracy, and a dash says only that the cell is empty. This
+     * names the state instead, because "you have not started this" is a different thing from "we
+     * have nothing to show".
+     */
+    notStarted: "Not started",
     fallbackTopic: "Topic",
     misconceptionsHeading: "Where you were sure and wrong",
     misconceptionsBodyStart:

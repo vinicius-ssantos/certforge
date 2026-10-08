@@ -282,6 +282,7 @@ export const ptBR: Catalog = {
     accuracy: "Precisão",
     lastActivity: "Última atividade",
     noValue: "–",
+    notStarted: "Não começou",
     fallbackTopic: "Tópico",
     misconceptionsHeading: "Onde você estava confiante e errou",
     misconceptionsBodyStart:

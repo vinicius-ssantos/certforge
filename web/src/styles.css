@@ -121,7 +121,10 @@ main:focus {
   padding: var(--s3) var(--s4);
 }
 
+/* The wordmark is set in the reading face, not the interface face. The product is an editorial
+ * desk; the serif is the one place the masthead says so before you read a word of it. */
 .brand {
+  font-family: var(--font-read);
   font-weight: 700;
   font-size: var(--t-lg);
   letter-spacing: -0.01em;
@@ -156,10 +159,11 @@ nav a:hover {
 }
 
 /* The current page is named by weight and by a rule under it, so the cue survives a greyscale
- * print and does not rely on the accent being distinguishable from the ink. */
+ * print. The rule is the accent: it is the one mark in the chrome that is allowed to be blue, and
+ * it ties the header to the focus ring and the progress bar. */
 nav a[aria-current="page"] {
   font-weight: 700;
-  border-bottom-color: var(--action);
+  border-bottom-color: var(--accent);
 }
 
 /* ---- page shell -------------------------------------------------------------------------- */
@@ -214,10 +218,16 @@ main {
   align-items: flex-start;
 }
 
+/*
+ * A line of short fields. `auto-fit` rather than a fixed three columns: the classification line
+ * carries three fields or four depending on the track, and a fixed count left either a gap or a
+ * field pushed onto a line of its own.
+ */
 .row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s5);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--s4) var(--s5);
+  align-items: start;
 }
 
 /*
@@ -377,6 +387,19 @@ fieldset.field > legend {
   min-height: var(--touch);
   margin: 0;
   font-weight: 500;
+}
+
+/* A short list of choices reads across rather than down when the options are two or three words
+ * each: three stacked rows spend a third of the form's height saying what kind of question it is. */
+.inline-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s5);
+}
+
+.inline-choices > legend {
+  float: left; /* a flex container's legend is taken out of flow, so it needs its own line back */
+  width: 100%;
 }
 
 .check input {
@@ -551,12 +574,96 @@ fieldset.field > legend {
   margin-left: var(--s2);
 }
 
+/* ---- small repeated parts ---------------------------------------------------------------- */
+
+/*
+ * A named state, as a word in a ring. Used where a row would otherwise have to say its state with
+ * an empty cell or a dash: "not started" is a fact about a topic, and `0 0 — —` is not a way to
+ * say it. The ring takes the colour of the text, so one rule covers every state.
+ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  padding: 2px var(--s2);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: var(--t-xs);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pill-ok {
+  color: var(--ok);
+}
+
+.pill-hold {
+  color: var(--review);
+}
+
+.pill-new {
+  color: var(--muted);
+}
+
+/*
+ * A percentage with a short bar beside it. Comparing nine rows of percentages is work the shape
+ * does better than the digits, and the digits stay for the exact value.
+ */
+.bar-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-variant-numeric: tabular-nums;
+}
+
+.mini {
+  width: 4rem;
+  height: 5px;
+  flex: none;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/*
+ * The accent, not the green: the bar restates the accuracy, it does not judge it. Calling 72%
+ * "good" needs a threshold this product has not decided, and a green bar would be deciding it
+ * quietly. The `low` variant exists for when that line is drawn, and nothing sets it yet.
+ */
+.mini > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.mini > i.low {
+  background: var(--review);
+}
+
+/*
+ * The small uppercase label that names a group of fields or a region. It is set in the interface
+ * face on purpose: it is furniture, and should not compete with the serif used for content.
+ */
+.section-label {
+  margin: 0 0 var(--s2);
+  font: 700 var(--t-xs) / 1.4 var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
 /* ---- step rail (editorial lifecycle) ----------------------------------------------------- */
 
+/*
+ * Where this revision is in its life, as a row of pills. The numbered circles this replaces took a
+ * line of their own and read as a wizard the author could click through; a revision's stage is
+ * something that happened to it, not a step they choose, so it belongs beside the title at the
+ * size of a label.
+ */
 .rail {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s2) var(--s6);
+  gap: var(--s1);
   list-style: none;
   margin: 0 0 var(--s5);
   padding: 0;
@@ -565,65 +672,80 @@ fieldset.field > legend {
 .rail li {
   display: flex;
   align-items: center;
-  gap: var(--s2);
-  color: var(--muted);
+  gap: var(--s1);
   max-width: none;
+  padding: 2px var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--t-xs);
+  color: var(--muted);
 }
 
 .rail li > span:first-child {
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  flex: none;
-  border: 1.5px solid var(--border-strong);
-  border-radius: 50%;
-  font-size: var(--t-xs);
-  font-weight: 600;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .rail li[aria-current="step"] {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.rail li[aria-current="step"] > span:first-child {
   background: var(--action);
   border-color: var(--action);
   color: var(--action-text);
+  font-weight: 600;
 }
 
-.rail li.done > span:first-child {
-  background: var(--ok);
+/* A stage already passed. The tick is the second cue, so the state does not rest on the green. */
+.rail li.done {
+  color: var(--ok);
   border-color: var(--ok);
-  color: var(--bg);
+}
+
+.rail li.done::after {
+  content: "✓";
+  font-weight: 700;
 }
 
 /* ---- session progress -------------------------------------------------------------------- */
 
 /*
- * How far through the session the learner is. The number is stated in words beside the bar; the bar
- * is the illustration, not the information, so it is `aria-hidden` in the markup.
+ * How far through the session the learner is: a line of words over a bar. The words carry the
+ * information — where you are on the left, what you are working on and how it is going on the
+ * right — and the bar is the illustration, so the bar is `aria-hidden` in the markup.
+ *
+ * Over ten questions the sense of advancing is most of what holds a session together, and a line
+ * of grey text was not providing it.
  */
 .session-progress {
-  display: flex;
-  align-items: center;
-  gap: var(--s4);
+  display: grid;
+  gap: var(--s2);
+  max-width: var(--ask); /* aligns the bar with the question column it measures */
   margin: 0 0 var(--s5);
 }
 
-.session-progress > span {
-  flex: none;
+.session-progress-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s1) var(--s3);
+}
+
+.session-progress-head > .eyebrow {
+  margin: 0;
+}
+
+.session-progress-head > strong {
   font-size: var(--t-sm);
   font-weight: 600;
-  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 
+.session-progress-head > span {
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
 .session-progress-track {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 0.5rem;
+  height: 6px; /* a rule, not a control: thin enough to read as a measure of the page */
   border-radius: 999px;
   background: var(--border);
   overflow: hidden;
@@ -632,20 +754,53 @@ fieldset.field > legend {
 .session-progress-fill {
   display: block;
   height: 100%;
+  border-radius: 999px;
   background: var(--accent);
 }
 
 /* ---- the question ------------------------------------------------------------------------ */
 
 /*
+ * The practice column. Everything the learner reads and answers sits inside one narrow measure —
+ * prompt, options, confidence, submit — so the eye travels straight down a single column instead
+ * of crossing the full width of the shell for every option. The page shell stays wide for the
+ * screens that need it; this one does not.
+ */
+.asking {
+  max-width: var(--ask);
+}
+
+/*
+ * The answer options carry their own boxes, so the fieldset around them must not add a second one.
+ * The legend stays — it is what says "choose one" or "choose all that apply" — but as a quiet
+ * field label rather than a framed caption.
+ */
+.options {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--s5);
+}
+
+.options > legend {
+  padding: 0;
+  margin-bottom: var(--s2);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/*
  * The prompt is the largest thing on the practice screen. It is set in the reading face because it
  * is read closely, often twice, and frequently contains a sentence about code rather than code.
+ * Semibold rather than regular: at this size the serif needs the weight to hold its own against
+ * the lettered options below it.
  */
 .prompt {
   margin: 0 0 var(--s5);
   font-family: var(--font-read);
   font-size: var(--t-xl);
-  line-height: 1.45;
+  font-weight: 600;
+  line-height: 1.4;
   max-width: var(--measure);
 }
 
@@ -682,9 +837,9 @@ pre.code {
   align-items: start;
   gap: var(--s3);
   min-height: var(--touch);
-  padding: var(--s3) var(--s4);
+  padding: var(--s3);
   margin-bottom: var(--s2);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
 }
@@ -695,33 +850,82 @@ pre.code {
 
 .choice:has(input:checked) {
   border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px var(--accent);
   background: var(--accent-bg);
 }
 
+/*
+ * The lettered badge is what the learner sees; the native control is laid transparently over it,
+ * at its full size. Not clipped to a pixel: a control that has been shrunk away is unreachable by
+ * pointer, by a browser automation tool and by anything that works on hit areas rather than on
+ * the accessibility tree. This keeps one real radio or checkbox, at the size it appears to be —
+ * tab order, grouping, arrow keys and the label all behave as the browser intends.
+ */
 .choice input {
-  position: relative;
+  position: absolute;
+  /* Offsets run from the padding box, which is exactly where the badge begins. */
+  top: 0;
+  left: 0;
   z-index: 2;
-  width: 1.4rem;
-  height: 1.4rem;
-  margin: 0.15rem 0 0; /* optical: aligns the control with the first line, not the line box */
-  flex: none;
-  accent-color: var(--accent);
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
+.choice:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/*
+ * The option's letter, as a badge. It is how a learner refers to an answer out loud and how the
+ * explanation below refers back to it, so it should be visible rather than only announced. The
+ * badge fills when the option is chosen: a form change, not only a colour change.
+ *
+ * Round means pick one, square means pick several. The shape is the only place the form tells a
+ * single-choice question from a multiple-choice one at a glance, now that the native radio and
+ * checkbox are gone; the legend above still says it in words.
+ */
+.choice .key {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.choice:has(input[type="checkbox"]) .key {
+  border-radius: var(--radius);
+}
+
+.choice:has(input:checked) .key {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+/*
+ * The label is the target for everything right of the badge: it stretches to the full height and
+ * width of its column, so the padding and the empty space after a short option select it too,
+ * instead of only the few characters of text. An absolutely positioned overlay would cover the
+ * badge as well and swallow the clicks meant for the control underneath it.
+ */
 .choice label {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-height: 1.75rem; /* the badge's height, so a one-line option centres against it */
   margin: 0;
   font-weight: 400;
   font-family: var(--font-read);
   font-size: var(--t-lg);
   line-height: 1.45;
-}
-
-.choice label::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  cursor: pointer;
 }
 
 /*
@@ -733,41 +937,57 @@ pre.code {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
+  width: fit-content;
+  max-width: 100%;
   border: 0;
   padding: 0;
   margin: 0 0 var(--s5);
 }
 
+/* The legend is a quiet field label, not a heading: three words over one control. */
 .segmented > legend {
   padding: 0;
   margin-bottom: var(--s2);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
 }
 
+/*
+ * One strip, not three stacked rows. Each segment sizes to its own words — stretching them to the
+ * full column made three equal grey slabs that read as disabled rather than as a choice.
+ */
 .segmented .choice {
   position: relative;
   display: block;
-  flex: 1 1 8rem;
+  flex: 0 0 auto;
   min-width: 0;
+  min-height: 0;
   margin: 0;
   padding: 0;
   border: 0;
   background: none;
 }
 
+.segmented .choice:hover {
+  border-color: transparent;
+}
+
 .segmented .choice:has(input:checked) {
-  box-shadow: none;
   background: none;
 }
 
+.segmented .choice:has(input:focus-visible) {
+  outline: none;
+}
+
+/* A segment has no badge, so its control covers the whole segment instead. */
 .segmented .choice input {
-  position: absolute;
   inset: 0;
-  z-index: 1;
+  top: auto;
+  left: auto;
   width: 100%;
   height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
 }
 
 .segmented .choice label {
@@ -775,11 +995,11 @@ pre.code {
   align-items: center;
   justify-content: center;
   min-height: var(--touch);
-  padding: var(--s2) var(--s3);
-  border: 1px solid var(--border-strong);
-  margin-left: -1px; /* collapses the shared edge between two segments into one line */
+  padding: var(--s2) var(--s4);
+  border: 1.5px solid var(--border-strong);
+  margin-left: -1.5px; /* collapses the shared edge between two segments into one line */
   font-family: var(--font-ui);
-  font-size: var(--t-md);
+  font-size: var(--t-sm);
   text-align: center;
   cursor: pointer;
 }
@@ -819,31 +1039,76 @@ pre.code {
   margin: 0 0 var(--s5);
 }
 
+/* Laid out like the options the learner answered, so the same question reads the same way before
+ * and after: the lettered badge in its column, the option beside it. */
 .answers li {
-  border: 1px solid var(--border);
-  border-left-width: 6px;
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: start;
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--s3) var(--s4);
+  padding: var(--s3);
   margin: var(--s2) 0;
   background: var(--surface);
   max-width: none;
 }
 
-/* The fill and the rail are the third cue. The first two are in the markup: the option's letter,
- * and a sentence saying whether it was correct and whether the learner chose it. */
+.answers .key {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
+}
+
+/* The fill and the filled badge are the third cue. The first two are in the markup: the tick or
+ * the cross, and a sentence saying whether the option is correct and whether the learner chose
+ * it. Nothing here is the only thing saying so. */
 .answers .answer-correct {
   border-color: var(--ok);
   background: var(--ok-bg);
 }
 
+.answers .answer-correct .key {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: var(--bg);
+}
+
 .answers p {
-  margin: var(--s1) 0;
+  margin: 0;
   max-width: var(--measure);
 }
 
-.answers strong {
+.answer-text {
   font-family: var(--font-read);
   font-size: var(--t-lg);
+  line-height: 1.4;
+}
+
+.answers .verdict {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s1);
+  margin-top: var(--s1);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.answers .verdict-ok {
+  color: var(--ok);
+}
+
+/* Why this option is right or wrong. Quieter than the option itself: it is read after the verdict,
+ * not instead of it. */
+.answers .why {
+  margin-top: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--muted);
 }
 
 /* What the verification programme printed for this question, shown where the learner is told the
@@ -1296,14 +1561,19 @@ del {
   color: var(--muted);
 }
 
+/* Monospaced and tabular so the digits hold their columns and the clock does not twitch once a
+ * second; medium weight, because at this size the bold read as an alarm. */
 .mock-timer strong {
-  font: 700 var(--t-2xl) / 1.15 var(--font-code);
+  font: 500 var(--t-2xl) / 1.15 var(--font-code);
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
+/* 16rem holds five navigator cells at `--touch` across, so fifty questions land in ten readable
+ * rows rather than thirteen. */
 .mock-layout {
   display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
+  grid-template-columns: 16rem minmax(0, 1fr);
   gap: var(--s6);
   align-items: start;
 }
@@ -1319,8 +1589,8 @@ del {
  */
 .mock-nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--s2);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s1);
   list-style: none;
   margin: 0 0 var(--s4);
   padding: 0;
@@ -1347,6 +1617,7 @@ button.mock-nav-button {
 button.mock-nav-button.answered {
   background: var(--ok-bg);
   border-color: var(--ok);
+  color: var(--ok);
 }
 
 button.mock-nav-button.answered::before {
@@ -1359,21 +1630,34 @@ button.mock-nav-button.answered::before {
   color: var(--ok);
 }
 
-/* Flagged: a folded corner. A shape, so it reads without the colour. */
+/*
+ * Flagged: a folded corner, in brass. Brass and not red, because the learner flagged the question
+ * themselves — it is something to come back to, not something wrong. Red here would be the only
+ * alarm on a screen where nothing has gone wrong yet. The corner is a shape, so the state reads
+ * without the colour.
+ */
+button.mock-nav-button.flagged {
+  border-color: var(--review);
+  background: var(--review-bg);
+  color: var(--review);
+}
+
 button.mock-nav-button.flagged::after {
   content: "";
   position: absolute;
   top: 0;
   right: 0;
-  border-width: 0 0.7rem 0.7rem 0;
+  border-width: 0.7rem 0.7rem 0 0;
   border-style: solid;
-  border-color: transparent var(--danger) transparent transparent;
+  border-color: var(--review) transparent transparent transparent;
   border-top-right-radius: var(--radius);
 }
 
+/* Where the learner is now: filled with ink, the strongest mark on the grid. */
 button.mock-nav-button.current {
+  background: var(--action);
   border-color: var(--action);
-  box-shadow: inset 0 0 0 2px var(--action);
+  color: var(--action-text);
   font-weight: 700;
 }
 
@@ -1416,20 +1700,25 @@ button.mock-nav-button.current {
   color: var(--ok);
 }
 
+.mock-legend-marker.flagged {
+  border-color: var(--review);
+  background: var(--review-bg);
+}
+
 .mock-legend-marker.flagged::after {
   content: "";
   position: absolute;
   top: 0;
   right: 0;
-  border-width: 0 0.45rem 0.45rem 0;
+  border-width: 0.45rem 0.45rem 0 0;
   border-style: solid;
-  border-color: transparent var(--danger) transparent transparent;
+  border-color: var(--review) transparent transparent transparent;
   border-top-right-radius: var(--radius);
 }
 
 .mock-legend-marker.current {
+  background: var(--action);
   border-color: var(--action);
-  box-shadow: inset 0 0 0 1px var(--action);
 }
 
 .mock-question {

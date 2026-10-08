@@ -178,10 +178,14 @@ export function SessionPage() {
 
   return (
     <>
-      <h1 className="eyebrow">{t.session.title}</h1>
       {resumed ? <p role="status">{t.session.resumed}</p> : null}
+      {/* The page's name and how far through it the learner is share one line: both are furniture
+          for the question below, and stacking them pushed the question off the first screen. */}
       <div className="session-progress">
-        <span>{t.session.answeredCount(answered, ordered.length)}</span>
+        <div className="session-progress-head">
+          <h1 className="eyebrow">{t.session.title}</h1>
+          <strong>{t.session.answeredCount(answered, ordered.length)}</strong>
+        </div>
         <span className="session-progress-track" aria-hidden="true">
           <span
             className="session-progress-fill"

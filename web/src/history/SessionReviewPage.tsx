@@ -5,6 +5,7 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { English } from "../i18n/English";
 import { useLocale, useText } from "../i18n/useText";
+import { AnswerList } from "../ui/AnswerList";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime } from "./format";
@@ -56,22 +57,10 @@ export function SessionReviewPage() {
               </p>
               <details>
                 <summary>{t.sessionReview.showAnswer}</summary>
-                <ul className="answers">
-                  {attempt.question.options.map((option) => (
-                    <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-                      <p>
-                        <strong>
-                          {option.key}. <English>{option.text}</English>
-                        </strong>
-                      </p>
-                      <p className="muted">
-                        {attempt.selectedOptions.includes(option.key) ? t.feedback.yourAnswer : ""}
-                        {option.correct ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
-                      </p>
-                      {option.explanation ? <English as="p">{option.explanation}</English> : null}
-                    </li>
-                  ))}
-                </ul>
+                <AnswerList
+                  options={attempt.question.options}
+                  chosen={new Set(attempt.selectedOptions)}
+                />
                 <Prompt text={attempt.question.explanation} />
                 {attempt.question.references.length > 0 ? (
                   <ul>

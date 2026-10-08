@@ -123,7 +123,20 @@ export function ProgressPage() {
                 <td className="numeric">{topic.attempted}</td>
                 <td className="numeric">{topic.correct}</td>
                 <td className="numeric">{topic.incorrect}</td>
-                <td className="numeric">{percent(topic.accuracy, t.progress.noValue)}</td>
+                <td>
+                  {topic.accuracy === null ? (
+                    <span className="pill pill-new">{t.progress.notStarted}</span>
+                  ) : (
+                    <span className="bar-cell">
+                      {/* The bar restates the number it sits beside; comparing nine rows of
+                          percentages is work a shape does better than digits. */}
+                      <span className="mini" aria-hidden="true">
+                        <i style={{ width: `${Math.round(topic.accuracy * 100)}%` }} />
+                      </span>
+                      {percent(topic.accuracy, t.progress.noValue)}
+                    </span>
+                  )}
+                </td>
                 <td>
                   {topic.lastActivityAt ? (
                     <time dateTime={topic.lastActivityAt}>

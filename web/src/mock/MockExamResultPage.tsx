@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { MockExamQuestionResult } from "../api/types";
-import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
+import { AnswerList } from "../ui/AnswerList";
 import { Prompt } from "../ui/Prompt";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
@@ -94,25 +94,13 @@ export function MockExamResultPage() {
 function QuestionReview({ item }: { item: MockExamQuestionResult }) {
   const t = useText();
   const selected = new Set(item.selectedOptions);
-  const correct = new Set(item.answer.correctOptions);
   return (
     <details>
       <summary>
         {t.mockResult.questionSummary(item.position + 1, item.correct, item.answered)}
       </summary>
       <Prompt text={item.question.prompt} />
-      <ul className="answers">
-        {item.answer.options.map((option) => (
-          <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-            <p><strong>{option.key}. <English>{option.text}</English></strong></p>
-            <p className="muted">
-              {selected.has(option.key) ? t.feedback.yourAnswer : ""}
-              {correct.has(option.key) ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
-            </p>
-            {option.explanation ? <English as="p">{option.explanation}</English> : null}
-          </li>
-        ))}
-      </ul>
+      <AnswerList options={item.answer.options} chosen={selected} />
       <h3>{t.feedback.explanation}</h3>
       <Prompt text={item.answer.explanation} />
       {item.answer.references.length > 0 ? (
