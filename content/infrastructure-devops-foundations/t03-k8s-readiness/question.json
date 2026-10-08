@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Um Pod continua executando, mas uma dependência obrigatória para atender requisições ficou indisponível. A equipe quer suspender temporariamente o tráfego enviado a esse Pod sem reiniciá-lo. Qual mecanismo é mais adequado?",
+  "explanation": "Uma readiness probe indica se o contêiner está pronto para receber tráfego; falhas retiram o Pod dos endpoints de Services correspondentes sem exigir reinício automático.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Liveness probe, para reiniciar o contêiner até a dependência retornar.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "Readiness probe, para retirar o Pod dos endpoints prontos enquanto estiver indisponível.",
+      "correct": true,
+      "explanation": "Uma readiness probe indica se o contêiner está pronto para receber tráfego; falhas retiram o Pod dos endpoints de Services correspondentes sem exigir reinício automático."
+    },
+    {
+      "key": "C",
+      "text": "Job, para recriar o Deployment a cada erro.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "D",
+      "text": "DaemonSet, para fixar o Pod em todos os nós.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
