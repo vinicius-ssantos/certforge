@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000302",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Uma aplicação Kubernetes usa um Deployment com replicas: 3. Um dos Pods gerenciados falha permanentemente. Qual comportamento é esperado dos controladores, supondo recursos disponíveis?",
+  "prompt": "Considere o trecho de um Deployment Kubernetes:\n\n```yaml\nspec:\n  replicas: 3\n```\n\nSuponha que um dos Pods gerenciados seja excluído e que o cluster tenha recursos disponíveis. Qual comportamento é esperado dos controladores para recuperar a quantidade desejada de réplicas?",
   "explanation": "O Deployment gerencia ReplicaSets, que reconciliam a quantidade atual de Pods com a quantidade desejada.",
   "options": [
     {
