@@ -1,3 +1,15 @@
+> **Superado em 2026-10-08.** O plano de UI deste documento virou issues rastreadas.
+> Comece pela **epic [#184](https://github.com/vinicius-ssantos/certforge/issues/184)** e pela
+> milestone **"UI redesign — remaining screens"**, não pelas seções §3 e §9 abaixo.
+> A epic carrega o vocabulário de design, as regras inegociáveis e as armadilhas do repositório;
+> as seis filhas ([#185](https://github.com/vinicius-ssantos/certforge/issues/185)–[#190](https://github.com/vinicius-ssantos/certforge/issues/190))
+> são uma por PR. Protótipos aprovados:
+> [quatro telas](https://claude.ai/artifact/WReMi2BkRwN6yzZqjtHEeu) (implementadas) e
+> [doze telas](https://claude.ai/artifact/4iDNEmCRhLzCTnY4UG76PP) (a fazer).
+>
+> O resto deste documento continua válido como estado medido em 2026-10-07: ambiente, bloqueador
+> do simulado (#138), e os relatórios dos dois agentes.
+
 # Handoff — 2026-10-07, 19h40 (America/Sao_Paulo)
 
 Documento de passagem de bastão. Escrito para que outro assistente (ChatGPT ou qualquer um)
