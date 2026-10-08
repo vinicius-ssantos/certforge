@@ -26,9 +26,12 @@ function TopicList({
               <strong>{topic.name}</strong>
               {topic.objectiveRef ? <span className="muted">{topic.objectiveRef}</span> : null}
             </div>
+            {/* Outlined, not filled. Ten topics means ten of these, and ten filled buttons down
+                one edge read as ten primary actions competing with each other and with the mock
+                above them. The row's subject is the topic; starting it is the offer. */}
             <button
               type="button"
-              className="small"
+              className="small secondary"
               aria-label={t.track.practiceTopic(topic.name)}
               disabled={busy}
               onClick={() => onStart(topic)}
@@ -120,8 +123,10 @@ export function TrackPage() {
       {track.data ? (
         <>
           <p>{track.data.certificationName}</p>
+          {/* The version's label already carries the exam code — "Java SE 21 (1Z0-830)" — so
+              appending it again printed it twice. */}
           <p className="muted">
-            {track.data.provider} · {track.data.examVersion.label} ({track.data.examVersion.examCode}) ·{" "}
+            {track.data.provider} · {track.data.examVersion.label} ·{" "}
             {t.track.javaRelease(track.data.examVersion.javaRelease)}
           </p>
           <p>

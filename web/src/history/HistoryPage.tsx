@@ -6,7 +6,7 @@ import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-import { formatDateTime, statusLabel } from "./format";
+import { formatDateTime, statusLabel, statusTone } from "./format";
 import { useTopicNames, useTrackNames } from "./useTopicNames";
 
 export function HistoryPage() {
@@ -101,7 +101,9 @@ export function HistoryPage() {
                     <td>
                       <time dateTime={mock.createdAt}>{formatDateTime(mock.createdAt, locale)}</time>
                     </td>
-                    <td>{statusLabel(mock.status, t)}</td>
+                    <td>
+                      <span className={`pill ${statusTone(mock.status)}`}>{statusLabel(mock.status, t)}</span>
+                    </td>
                     <td>{t.history.answeredOf(mock.answeredCount, mock.questionCount)}</td>
                     <td>
                       {mock.percentage === null || mock.correctCount === null
@@ -179,7 +181,9 @@ export function HistoryPage() {
                     <td>
                       <time dateTime={session.createdAt}>{formatDateTime(session.createdAt, locale)}</time>
                     </td>
-                    <td>{statusLabel(session.status, t)}</td>
+                    <td>
+                      <span className={`pill ${statusTone(session.status)}`}>{statusLabel(session.status, t)}</span>
+                    </td>
                     <td>{t.history.answeredOf(session.answeredCount, session.requestedCount)}</td>
                     <td>{session.correctCount}</td>
                   </tr>

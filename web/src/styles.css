@@ -154,8 +154,10 @@ nav a {
   border-bottom: 2px solid transparent;
 }
 
+/* Hover underlines the words; only the current page gets a rule beneath them. Using the same
+ * bottom border for both made a hovered link indistinguishable from the page you are on. */
 nav a:hover {
-  border-bottom-color: var(--border-strong);
+  text-decoration: underline;
 }
 
 /* The current page is named by weight and by a rule under it, so the cue survives a greyscale
@@ -174,8 +176,40 @@ main {
   padding: var(--s6) var(--s4) var(--s7);
 }
 
+/*
+ * The front door: signing in and creating an account.
+ *
+ * These were the one pair of screens the redesign's four did not cover, so they kept the new
+ * palette and nothing else — a bare form adrift on the page ground while every other screen had
+ * gained a surface to sit on. They get the same card the rest of the product uses, centred and
+ * held to a form's width, so arriving at CertForge looks like the same product as using it.
+ */
 .narrow {
-  max-width: 30rem;
+  max-width: 26rem;
+  margin: var(--s6) auto 0;
+  padding: var(--s6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.narrow > h1 {
+  margin-bottom: var(--s5);
+}
+
+/* One form, one action: at this width a button sized to its two words sits oddly against fields
+ * that run the full card. */
+.narrow form button[type="submit"] {
+  width: 100%;
+  margin-top: var(--s2);
+}
+
+.narrow > p:last-child {
+  margin: var(--s5) 0 0;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+  font-size: var(--t-sm);
+  color: var(--muted);
 }
 
 .page-head {
@@ -494,15 +528,18 @@ fieldset.field > legend {
 /* ---- cards ------------------------------------------------------------------------------- */
 
 /*
- * `auto-fit` rather than `auto-fill`: with `auto-fill` a single track kept its 16rem width and left
- * the rest of the row empty, so one track in a track list sat in a narrow box beside nothing.
+ * Cards keep a card's proportions. `auto-fill` left a lone track in a narrow box beside an empty
+ * column; plain `auto-fit` went to the other extreme and stretched that one card across the full
+ * shell, four short lines adrift in a thousand pixels. Capping the track at 24rem means one card
+ * looks like a card and several still fill the row.
  */
 .cards {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 24rem));
+  justify-content: start;
   gap: var(--s4);
 }
 

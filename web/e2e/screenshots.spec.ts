@@ -59,6 +59,15 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await expect(page.getByRole("heading", { level: 2, name: "Session ended" })).toBeVisible();
   await shot(page, "07-session-ended");
 
+  /*
+   * The tracks screen again, now that there is something to say about it. `02-tracks` is the
+   * first visit, where a card carries no standing because the learner has none; this is the same
+   * screen once they do. Without it the release evidence only ever shows the empty state.
+   */
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Tracks" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeVisible();
+  await shot(page, "07b-tracks-with-standing");
+
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "History" }).click();
   await expect(page.getByRole("table")).toBeVisible();
   await shot(page, "08-history");
