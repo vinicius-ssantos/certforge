@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000302",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Três Pods de uma API podem ser substituídos durante um rollout. Qual recurso fornece um ponto de acesso de rede estável para os consumidores dentro do cluster?",
+  "prompt": "Uma API roda em três Pods no Kubernetes. Durante um rollout, os Pods antigos são substituídos e seus endereços IP podem mudar.\n\n```yaml\napiVersion: v1\nkind: Service\nmetadata:\n  name: api\nspec:\n  selector:\n    app: api\n  ports:\n    - port: 80\n      targetPort: 8080\n```\n\nQual recurso oferece aos consumidores do cluster um ponto de acesso estável aos Pods selecionados?",
   "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos.",
   "options": [
     {
