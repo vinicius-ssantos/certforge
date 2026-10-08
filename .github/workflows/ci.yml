@@ -75,6 +75,10 @@ jobs:
         run: npm run budget
 
       # The packet a reviewer works from is generated from the question pack; it must match it.
+      - name: Validate multi-track content pack manifests
+        working-directory: .
+        run: node --test content/pack-manifest.test.mjs
+
       - name: Content review packet is current
         working-directory: .
         run: |
