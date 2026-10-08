@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Três Pods de uma API podem ser substituídos durante um rollout. Qual recurso fornece um ponto de acesso de rede estável para os consumidores dentro do cluster?",
+  "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ConfigMap.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "PersistentVolumeClaim.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "C",
+      "text": "Namespace.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "D",
+      "text": "Service.",
+      "correct": true,
+      "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
