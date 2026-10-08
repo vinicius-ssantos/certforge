@@ -140,6 +140,16 @@ The platform must not convert this automatically into a fake deterministic `corr
 
 **Common weakness:** treating an ORM entity as the integration contract.
 
+### First guided-response evaluation contract
+
+The first guided-response capability deliberately stops before automated grading. The immutable question revision is the source of truth and stores the reviewed reference answer, expected concepts with required/optional status, common mistakes, follow-up prompts, seniority expectation and references.
+
+When learner interview sessions are implemented, the first evaluation flow should persist the learner's free-form response, confidence, elapsed time and the exact revision identifier. After the response is committed, the learner may compare it with the reviewed criteria and mark which expected concepts they believe they covered. That self-review is evidence, not deterministic correctness: it must not write `correct=true/false`, a hiring score or an employability probability.
+
+Reference answers and reviewed criteria stay hidden before the learner commits the response, just as objective answer keys are hidden before submission. A future AI comparison may point out likely matches or omissions, but it consumes the immutable reviewed criteria and may not replace them, invent new canonical requirements or silently change historical evidence.
+
+Follow-up prompts are also revision content. The first implementation may present reviewed follow-ups after the primary response; generating unreviewed follow-ups dynamically is outside this boundary.
+
 ## Job-specific preparation
 
 A future workflow may accept a job description and produce an explicit study blueprint, for example:

@@ -526,6 +526,104 @@
         "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl" ],
         "type" : "object"
       },
+      "ExpectedConceptRequest" : {
+        "properties" : {
+          "explanation" : {
+            "maxLength" : 2000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "required" : {
+            "type" : "boolean"
+          },
+          "text" : {
+            "maxLength" : 2000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "ExpectedConceptView" : {
+        "properties" : {
+          "explanation" : {
+            "type" : [ "string", "null" ]
+          },
+          "required" : {
+            "type" : "boolean"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "explanation", "required", "text" ],
+        "type" : "object"
+      },
+      "GuidedResponseRequest" : {
+        "properties" : {
+          "commonMistakes" : {
+            "items" : {
+              "maxLength" : 2000,
+              "minLength" : 0,
+              "type" : "string"
+            },
+            "maxItems" : 20,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "expectedConcepts" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ExpectedConceptRequest"
+            },
+            "maxItems" : 20,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "followUps" : {
+            "items" : {
+              "maxLength" : 4000,
+              "minLength" : 0,
+              "type" : "string"
+            },
+            "maxItems" : 20,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "referenceAnswer" : {
+            "maxLength" : 20000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "GuidedResponseView" : {
+        "properties" : {
+          "commonMistakes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "expectedConcepts" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ExpectedConceptView"
+            },
+            "type" : "array"
+          },
+          "followUps" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "referenceAnswer" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "commonMistakes", "expectedConcepts", "followUps", "referenceAnswer" ],
+        "type" : "object"
+      },
       "HistoricalOption" : {
         "properties" : {
           "correct" : {
@@ -1100,7 +1198,7 @@
             "type" : "string"
           },
           "type" : {
-            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
+            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE", "GUIDED_RESPONSE" ],
             "type" : "string"
           }
         },
@@ -1473,6 +1571,9 @@
             "minLength" : 0,
             "type" : "string"
           },
+          "guidedResponse" : {
+            "$ref" : "#/components/schemas/GuidedResponseRequest"
+          },
           "javaRelease" : {
             "format" : "int32",
             "minimum" : 1,
@@ -1508,7 +1609,7 @@
             "type" : "string"
           },
           "type" : {
-            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE" ],
+            "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE", "GUIDED_RESPONSE" ],
             "type" : "string"
           }
         },
@@ -1544,6 +1645,10 @@
           },
           "explanation" : {
             "type" : [ "string", "null" ]
+          },
+          "guidedResponse" : {
+            "$ref" : "#/components/schemas/GuidedResponseView",
+            "type" : "null"
           },
           "id" : {
             "format" : "uuid",
@@ -1607,7 +1712,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
+        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "guidedResponse", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
         "type" : "object"
       },
       "RolesRequest" : {

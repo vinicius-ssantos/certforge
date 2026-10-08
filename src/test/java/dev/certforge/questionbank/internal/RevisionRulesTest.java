@@ -226,6 +226,106 @@ class RevisionRulesTest {
   }
 
   @Test
+  void acceptsACompleteGuidedResponseOnlyForInterviewTracks() {
+    RevisionContent guided = guided(Seniority.SENIOR);
+
+    assertThat(RevisionRules.violations(guided, INTERVIEW)).isEmpty();
+    assertThat(RevisionRules.violations(guided, CERTIFICATION))
+        .contains(
+            "java_release_missing",
+            "seniority_not_applicable",
+            "guided_response_requires_interview_track");
+  }
+
+  @Test
+  void guidedResponseNeedsReviewedCriteriaAndAtLeastOneRequiredConcept() {
+    RevisionContent missing =
+        new RevisionContent(
+            QuestionType.GUIDED_RESPONSE,
+            UUID.randomUUID(),
+            null,
+            Seniority.PLENO,
+            Difficulty.MEDIUM,
+            "Tests reasoning rather than recall",
+            "Explain an idempotent consumer.",
+            null,
+            List.of(),
+            null,
+            List.of(REFERENCE));
+    RevisionContent noRequired =
+        new RevisionContent(
+            QuestionType.GUIDED_RESPONSE,
+            UUID.randomUUID(),
+            null,
+            Seniority.PLENO,
+            Difficulty.MEDIUM,
+            "Tests reasoning rather than recall",
+            "Explain an idempotent consumer.",
+            null,
+            List.of(),
+            new RevisionContent.GuidedResponse(
+                "Use a stable idempotency key and durable duplicate detection.",
+                List.of(new RevisionContent.ExpectedConcept("idempotency key", false, null)),
+                List.of(),
+                List.of()),
+            List.of(REFERENCE));
+
+    assertThat(RevisionRules.violations(missing, INTERVIEW))
+        .containsExactly("guided_response_criteria_missing");
+    assertThat(RevisionRules.violations(noRequired, INTERVIEW))
+        .containsExactly("guided_required_concept_missing");
+  }
+
+  @Test
+  void objectiveQuestionsCannotCarryGuidedCriteria() {
+    RevisionContent objective =
+        new RevisionContent(
+            QuestionType.SINGLE_CHOICE,
+            UUID.randomUUID(),
+            21,
+            null,
+            Difficulty.MEDIUM,
+            "Tests overload resolution",
+            "Which overload is selected?",
+            "The most specific applicable overload wins.",
+            List.of(option("A", true), option("B", false)),
+            new RevisionContent.GuidedResponse(
+                "Not applicable",
+                List.of(new RevisionContent.ExpectedConcept("not applicable", true, null)),
+                List.of(),
+                List.of()),
+            List.of(REFERENCE));
+
+    assertThat(RevisionRules.violations(objective, CERTIFICATION))
+        .containsExactly("guided_response_criteria_not_applicable");
+  }
+
+  private static RevisionContent guided(Seniority seniority) {
+    return new RevisionContent(
+        QuestionType.GUIDED_RESPONSE,
+        UUID.randomUUID(),
+        null,
+        seniority,
+        Difficulty.HARD,
+        "Requires connecting delivery semantics with durable state",
+        "How would you make a message consumer idempotent?",
+        null,
+        List.of(),
+        new RevisionContent.GuidedResponse(
+            "Use a stable message or business key and record processed work atomically with the side effect.",
+            List.of(
+                new RevisionContent.ExpectedConcept(
+                    "stable idempotency key", true, "Duplicates must map to the same identity."),
+                new RevisionContent.ExpectedConcept(
+                    "atomic durable duplicate detection",
+                    true,
+                    "Detection cannot be only in memory.")),
+            List.of("Assuming the broker can guarantee exactly-once business effects."),
+            List.of("What changes if the side effect is in another service?")),
+        List.of(REFERENCE));
+  }
+
+  @Test
   void anUnknownKindIsTreatedAsCertification() {
     var complete =
         content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false)));

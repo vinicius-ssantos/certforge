@@ -9,6 +9,8 @@ import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.questionbank.RevisionStatus;
+import dev.certforge.questionbank.internal.AdminQuestionViews.ExpectedConceptView;
+import dev.certforge.questionbank.internal.AdminQuestionViews.GuidedResponseView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.OptionView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionSummary;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionView;
@@ -309,6 +311,18 @@ class QuestionBankService {
         c.options().stream()
             .map(o -> new OptionView(o.key(), o.text(), o.correct(), o.explanation()))
             .toList(),
+        c.guidedResponse() == null
+            ? null
+            : new GuidedResponseView(
+                c.guidedResponse().referenceAnswer(),
+                c.guidedResponse().expectedConcepts().stream()
+                    .map(
+                        concept ->
+                            new ExpectedConceptView(
+                                concept.text(), concept.required(), concept.explanation()))
+                    .toList(),
+                c.guidedResponse().commonMistakes(),
+                c.guidedResponse().followUps()),
         c.references().stream().map(ref -> new ReferenceView(ref.title(), ref.url())).toList(),
         r.authorId(),
         names.get(r.authorId()),

@@ -8,6 +8,7 @@ import { editor, authorableTracks, javaTrack, renderApp, reviewer } from "../tes
 const QUESTION_ID = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const REVISION_ID = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
 const TOPIC_ID = javaTrack.topics[0]!.id;
+const INTERVIEW_TOPIC_ID = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
 const tracks = {
   "GET /api/catalog/tracks": { body: [javaTrack] },
   // The question editor reads the editorial source, not the learner catalog.
@@ -15,6 +16,14 @@ const tracks = {
 };
 
 const PROMPT = "What is printed by this program?\n\n```java\nSystem.out.println(1 + 1);\n```";
+const GUIDED_CRITERIA = {
+  referenceAnswer: "Use a stable idempotency key and durable duplicate detection.",
+  expectedConcepts: [
+    { text: "Stable idempotency key", required: true, explanation: "Duplicates must resolve to the same identity." },
+  ],
+  commonMistakes: ["Assuming broker delivery semantics make business effects idempotent."],
+  followUps: ["What changes if the side effect is in another service?"],
+};
 
 function revision(overrides: Record<string, unknown> = {}) {
   return {
@@ -43,6 +52,7 @@ function revision(overrides: Record<string, unknown> = {}) {
     publishedBy: null,
     deprecatedAt: null,
     examVersionId: null,
+    guidedResponse: null,
     ...overrides,
   };
 }
@@ -214,6 +224,74 @@ describe("writing a draft", () => {
     expect(screen.getAllByRole("checkbox", { name: /is correct/ })).toHaveLength(2);
   });
 
+  it("authors a guided response without objective answer semantics", async () => {
+    const user = userEvent.setup();
+    const guidedRevision = {
+      type: "GUIDED_RESPONSE",
+      topicId: INTERVIEW_TOPIC_ID,
+      javaRelease: null,
+      seniority: "SENIOR",
+      difficulty: "HARD",
+      difficultyRationale: "Requires reasoning across delivery and durable state.",
+      prompt: "How would you make a message consumer idempotent?",
+      explanation: null,
+      options: [],
+      guidedResponse: GUIDED_CRITERIA,
+    };
+    const guidedQuestion = question(guidedRevision);
+    const { fetch, container } = renderApp(
+      {
+        ...tracks,
+        "POST /api/admin/questions": { status: 201, body: guidedQuestion },
+        [`GET ${QUESTION_URL}`]: { body: guidedQuestion },
+      },
+      { as: editor, path: "/editorial/new" },
+    );
+
+    await user.click(await screen.findByRole("radio", { name: "Guided response" }));
+    await user.selectOptions(screen.getByLabelText("Topic"), INTERVIEW_TOPIC_ID);
+    await user.selectOptions(screen.getByLabelText("Asked at"), "SENIOR");
+    await user.selectOptions(screen.getByLabelText("Difficulty"), "HARD");
+    await user.type(screen.getByLabelText("Why this difficulty"), "Requires reasoning across delivery and durable state.");
+    await user.type(screen.getByLabelText("Question"), "How would you make a message consumer idempotent?");
+    await user.type(screen.getByLabelText("Reference answer"), GUIDED_CRITERIA.referenceAnswer);
+    await user.type(screen.getByLabelText("Expected concept 1"), GUIDED_CRITERIA.expectedConcepts[0]!.text);
+    await user.type(screen.getByLabelText("Why concept 1 matters"), GUIDED_CRITERIA.expectedConcepts[0]!.explanation);
+    await user.type(screen.getByLabelText("Common mistake 1"), GUIDED_CRITERIA.commonMistakes[0]!);
+    await user.type(screen.getByLabelText("Follow-up prompt 1"), GUIDED_CRITERIA.followUps[0]!);
+    await user.type(screen.getByLabelText("Title of reference 1"), "Kafka documentation");
+    await user.type(screen.getByLabelText("Link of reference 1"), "https://kafka.apache.org/documentation/");
+
+    expect(screen.queryByLabelText("Java release")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Option A")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("Explanation")).not.toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Save draft" }));
+
+    expect(await screen.findByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
+    const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === "/api/admin/questions");
+    expect(call?.body).toMatchObject({
+      type: "GUIDED_RESPONSE",
+      topicId: INTERVIEW_TOPIC_ID,
+      seniority: "SENIOR",
+      options: [],
+      guidedResponse: {
+        referenceAnswer: GUIDED_CRITERIA.referenceAnswer,
+        expectedConcepts: [
+          {
+            text: GUIDED_CRITERIA.expectedConcepts[0]!.text,
+            required: true,
+            explanation: GUIDED_CRITERIA.expectedConcepts[0]!.explanation,
+          },
+        ],
+        commonMistakes: GUIDED_CRITERIA.commonMistakes,
+        followUps: GUIDED_CRITERIA.followUps,
+      },
+    });
+    expect(call?.body).not.toHaveProperty("javaRelease");
+    expect(call?.body).not.toHaveProperty("explanation");
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
   it("adds and removes options and keeps their letters in order", async () => {
     const user = userEvent.setup();
     renderApp(tracks, { as: editor, path: "/editorial/new" });
@@ -350,6 +428,34 @@ describe("reading a revision", () => {
     expect(within(key).getByText("A is correct")).toBeInTheDocument();
     expect(within(key).getByText("B is incorrect")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /JLS 15.18/ })).toHaveAttribute("rel", "noopener noreferrer");
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("shows reviewed guided criteria without an objective answer key", async () => {
+    const guided = question({
+      status: "TECHNICAL_REVIEW",
+      authorId: editor.id,
+      type: "GUIDED_RESPONSE",
+      topicId: INTERVIEW_TOPIC_ID,
+      javaRelease: null,
+      seniority: "SENIOR",
+      explanation: null,
+      options: [],
+      guidedResponse: GUIDED_CRITERIA,
+      prompt: "How would you make a message consumer idempotent?",
+    });
+    const { container } = renderApp(
+      { ...tracks, [`GET ${QUESTION_URL}`]: { body: guided } },
+      { as: reviewer, path: `/editorial/questions/${QUESTION_ID}` },
+    );
+
+    const criteria = await screen.findByRole("region", { name: "Reviewed response criteria" });
+    expect(within(criteria).getByText(GUIDED_CRITERIA.referenceAnswer)).toBeInTheDocument();
+    expect(within(criteria).getByText("Stable idempotency key")).toBeInTheDocument();
+    expect(within(criteria).getByText("Required")).toBeInTheDocument();
+    expect(within(criteria).getByText(GUIDED_CRITERIA.followUps[0]!)).toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "Answer key and reasons" })).not.toBeInTheDocument();
+    expect(screen.getByText(/not a binary correctness or hiring score/i)).toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
   });
 

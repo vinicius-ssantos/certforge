@@ -24,10 +24,16 @@ class QuestionRepository {
   private static final String ID = "id";
   private static final String PROMPT = "prompt";
   private static final String EXPLANATION = "explanation";
+  private static final String POSITION = "position";
+  private static final String TEXT = "text";
   private static final String NOW = "now";
   private static final String QUESTION_ID = "questionId";
   private static final String REVISION_ID = "revisionId";
+  private static final String REVISION_IDS = "revisionIds";
+  private static final String REVISION_ID_COLUMN = "revision_id";
   private static final String STATUS = "status";
+  private static final String REVISION_CHILDREN_ORDER =
+      " where revision_id = :revisionId order by position";
   private static final String SELECT_REVISION =
       "select id, question_id, revision_number, status, question_type, topic_id, java_release,"
           + " seniority, difficulty, difficulty_rationale, prompt, explanation, author_id,"
@@ -109,6 +115,18 @@ class QuestionRepository {
     jdbc.sql("delete from certforge.qb_revision_reference where revision_id = :revisionId")
         .param(REVISION_ID, revisionId)
         .update();
+    jdbc.sql("delete from certforge.qb_guided_expected_concept where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
+    jdbc.sql("delete from certforge.qb_guided_common_mistake where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
+    jdbc.sql("delete from certforge.qb_guided_follow_up where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
+    jdbc.sql("delete from certforge.qb_guided_response where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
     int position = 0;
     for (RevisionContent.Option option : c.options()) {
       jdbc.sql(
@@ -117,12 +135,62 @@ class QuestionRepository {
                   + " values (:revisionId, :key, :position, :text, :correct, :explanation)")
           .param(REVISION_ID, revisionId)
           .param("key", option.key())
-          .param("position", position)
-          .param("text", option.text())
+          .param(POSITION, position)
+          .param(TEXT, option.text())
           .param("correct", option.correct())
           .param(EXPLANATION, option.explanation())
           .update();
       position++;
+    }
+    if (c.guidedResponse() != null) {
+      RevisionContent.GuidedResponse guided = c.guidedResponse();
+      jdbc.sql(
+              "insert into certforge.qb_guided_response (revision_id, reference_answer)"
+                  + " values (:revisionId, :answer)")
+          .param(REVISION_ID, revisionId)
+          .param("answer", guided.referenceAnswer())
+          .update();
+
+      position = 0;
+      for (RevisionContent.ExpectedConcept concept : guided.expectedConcepts()) {
+        jdbc.sql(
+                "insert into certforge.qb_guided_expected_concept"
+                    + " (revision_id, position, required, text, explanation)"
+                    + " values (:revisionId, :position, :required, :text, :explanation)")
+            .param(REVISION_ID, revisionId)
+            .param(POSITION, position)
+            .param("required", concept.required())
+            .param(TEXT, concept.text())
+            .param(EXPLANATION, concept.explanation())
+            .update();
+        position++;
+      }
+
+      position = 0;
+      for (String mistake : guided.commonMistakes()) {
+        jdbc.sql(
+                "insert into certforge.qb_guided_common_mistake"
+                    + " (revision_id, position, text)"
+                    + " values (:revisionId, :position, :text)")
+            .param(REVISION_ID, revisionId)
+            .param(POSITION, position)
+            .param(TEXT, mistake)
+            .update();
+        position++;
+      }
+
+      position = 0;
+      for (String followUp : guided.followUps()) {
+        jdbc.sql(
+                "insert into certforge.qb_guided_follow_up"
+                    + " (revision_id, position, prompt)"
+                    + " values (:revisionId, :position, :prompt)")
+            .param(REVISION_ID, revisionId)
+            .param(POSITION, position)
+            .param(PROMPT, followUp)
+            .update();
+        position++;
+      }
     }
     position = 0;
     for (RevisionContent.Reference reference : c.references()) {
@@ -130,7 +198,7 @@ class QuestionRepository {
               "insert into certforge.qb_revision_reference (revision_id, position, title, url)"
                   + " values (:revisionId, :position, :title, :url)")
           .param(REVISION_ID, revisionId)
-          .param("position", position)
+          .param(POSITION, position)
           .param("title", reference.title())
           .param("url", reference.url())
           .update();
@@ -161,6 +229,7 @@ class QuestionRepository {
       return List.of();
     }
     Map<UUID, List<RevisionContent.Option>> options = options(ids);
+    Map<UUID, RevisionContent.GuidedResponse> guided = guidedResponses(ids);
     Map<UUID, List<RevisionContent.Reference>> references = references(ids);
     return jdbc.sql(SELECT_REVISION + " where id in (:ids)")
         .param("ids", ids)
@@ -171,6 +240,7 @@ class QuestionRepository {
                   rs,
                   id,
                   options.getOrDefault(id, List.of()),
+                  guided.get(id),
                   references.getOrDefault(id, List.of()));
             })
         .list();
@@ -243,7 +313,7 @@ class QuestionRepository {
                     rs.getObject("id", UUID.class),
                     rs.getInt("revision_number"),
                     rs.getString("status"),
-                    rs.getString("prompt"),
+                    rs.getString(PROMPT),
                     rs.getObject("topic_id", UUID.class)))
         .list();
   }
@@ -331,13 +401,14 @@ class QuestionRepository {
 
   private Revision mapRevision(ResultSet rs, int rowNum) throws SQLException {
     UUID id = rs.getObject("id", UUID.class);
-    return mapRevision(rs, id, options(id), references(id));
+    return mapRevision(rs, id, options(id), guidedResponse(id), references(id));
   }
 
   private Revision mapRevision(
       ResultSet rs,
       UUID id,
       List<RevisionContent.Option> options,
+      RevisionContent.GuidedResponse guidedResponse,
       List<RevisionContent.Reference> references)
       throws SQLException {
     String difficulty = rs.getString("difficulty");
@@ -351,9 +422,10 @@ class QuestionRepository {
             seniority == null ? null : Seniority.valueOf(seniority),
             difficulty == null ? null : Difficulty.valueOf(difficulty),
             rs.getString("difficulty_rationale"),
-            rs.getString("prompt"),
+            rs.getString(PROMPT),
             rs.getString(EXPLANATION),
             options,
+            guidedResponse,
             references);
     return new Revision(
         id,
@@ -373,22 +445,55 @@ class QuestionRepository {
   private List<RevisionContent.Option> options(UUID revisionId) {
     return jdbc.sql(
             "select option_key, text, correct, explanation from certforge.qb_revision_option"
-                + " where revision_id = :revisionId order by position")
+                + REVISION_CHILDREN_ORDER)
         .param(REVISION_ID, revisionId)
         .query(
             (rs, n) ->
                 new RevisionContent.Option(
                     rs.getString("option_key"),
-                    rs.getString("text"),
+                    rs.getString(TEXT),
                     rs.getBoolean("correct"),
                     rs.getString(EXPLANATION)))
         .list();
   }
 
+  private RevisionContent.GuidedResponse guidedResponse(UUID revisionId) {
+    Optional<String> answer =
+        jdbc.sql(
+                "select reference_answer from certforge.qb_guided_response"
+                    + " where revision_id = :revisionId")
+            .param(REVISION_ID, revisionId)
+            .query(String.class)
+            .optional();
+    if (answer.isEmpty()) {
+      return null;
+    }
+    List<RevisionContent.ExpectedConcept> concepts =
+        jdbc.sql(
+                "select text, required, explanation from certforge.qb_guided_expected_concept"
+                    + REVISION_CHILDREN_ORDER)
+            .param(REVISION_ID, revisionId)
+            .query(
+                (rs, n) ->
+                    new RevisionContent.ExpectedConcept(
+                        rs.getString(TEXT), rs.getBoolean("required"), rs.getString(EXPLANATION)))
+            .list();
+    List<String> mistakes =
+        jdbc.sql("select text from certforge.qb_guided_common_mistake" + REVISION_CHILDREN_ORDER)
+            .param(REVISION_ID, revisionId)
+            .query(String.class)
+            .list();
+    List<String> followUps =
+        jdbc.sql("select prompt from certforge.qb_guided_follow_up" + REVISION_CHILDREN_ORDER)
+            .param(REVISION_ID, revisionId)
+            .query(String.class)
+            .list();
+    return new RevisionContent.GuidedResponse(answer.orElseThrow(), concepts, mistakes, followUps);
+  }
+
   private List<RevisionContent.Reference> references(UUID revisionId) {
     return jdbc.sql(
-            "select title, url from certforge.qb_revision_reference"
-                + " where revision_id = :revisionId order by position")
+            "select title, url from certforge.qb_revision_reference" + REVISION_CHILDREN_ORDER)
         .param(REVISION_ID, revisionId)
         .query((rs, n) -> new RevisionContent.Reference(rs.getString("title"), rs.getString("url")))
         .list();
@@ -400,14 +505,14 @@ class QuestionRepository {
             "select revision_id, option_key, text, correct, explanation"
                 + " from certforge.qb_revision_option where revision_id in (:revisionIds)"
                 + " order by revision_id, position")
-        .param("revisionIds", revisionIds)
+        .param(REVISION_IDS, revisionIds)
         .query(
             (rs, n) ->
                 new OptionRow(
-                    rs.getObject("revision_id", UUID.class),
+                    rs.getObject(REVISION_ID_COLUMN, UUID.class),
                     new RevisionContent.Option(
                         rs.getString("option_key"),
-                        rs.getString("text"),
+                        rs.getString(TEXT),
                         rs.getBoolean("correct"),
                         rs.getString(EXPLANATION))))
         .list()
@@ -419,16 +524,87 @@ class QuestionRepository {
     return grouped;
   }
 
+  private Map<UUID, RevisionContent.GuidedResponse> guidedResponses(List<UUID> revisionIds) {
+    Map<UUID, String> answers = new LinkedHashMap<>();
+    jdbc.sql(
+            "select revision_id, reference_answer from certforge.qb_guided_response"
+                + " where revision_id in (:revisionIds) order by revision_id")
+        .param(REVISION_IDS, revisionIds)
+        .query(
+            (rs, n) ->
+                new GuidedAnswerRow(
+                    rs.getObject(REVISION_ID_COLUMN, UUID.class), rs.getString("reference_answer")))
+        .list()
+        .forEach(row -> answers.put(row.revisionId(), row.referenceAnswer()));
+
+    Map<UUID, List<RevisionContent.ExpectedConcept>> concepts = new LinkedHashMap<>();
+    jdbc.sql(
+            "select revision_id, text, required, explanation"
+                + " from certforge.qb_guided_expected_concept"
+                + " where revision_id in (:revisionIds) order by revision_id, position")
+        .param(REVISION_IDS, revisionIds)
+        .query(
+            (rs, n) ->
+                new ConceptRow(
+                    rs.getObject(REVISION_ID_COLUMN, UUID.class),
+                    new RevisionContent.ExpectedConcept(
+                        rs.getString(TEXT), rs.getBoolean("required"), rs.getString(EXPLANATION))))
+        .list()
+        .forEach(
+            row ->
+                concepts
+                    .computeIfAbsent(row.revisionId(), ignored -> new ArrayList<>())
+                    .add(row.concept()));
+
+    Map<UUID, List<String>> mistakes = guidedStrings(revisionIds, "qb_guided_common_mistake", TEXT);
+    Map<UUID, List<String>> followUps = guidedStrings(revisionIds, "qb_guided_follow_up", PROMPT);
+
+    Map<UUID, RevisionContent.GuidedResponse> result = new LinkedHashMap<>();
+    answers.forEach(
+        (revisionId, answer) ->
+            result.put(
+                revisionId,
+                new RevisionContent.GuidedResponse(
+                    answer,
+                    concepts.getOrDefault(revisionId, List.of()),
+                    mistakes.getOrDefault(revisionId, List.of()),
+                    followUps.getOrDefault(revisionId, List.of()))));
+    return result;
+  }
+
+  private Map<UUID, List<String>> guidedStrings(
+      List<UUID> revisionIds, String table, String column) {
+    Map<UUID, List<String>> grouped = new LinkedHashMap<>();
+    jdbc.sql(
+            "select revision_id, "
+                + column
+                + " as value from certforge."
+                + table
+                + " where revision_id in (:revisionIds) order by revision_id, position")
+        .param(REVISION_IDS, revisionIds)
+        .query(
+            (rs, n) ->
+                new GuidedStringRow(
+                    rs.getObject(REVISION_ID_COLUMN, UUID.class), rs.getString("value")))
+        .list()
+        .forEach(
+            row ->
+                grouped
+                    .computeIfAbsent(row.revisionId(), ignored -> new ArrayList<>())
+                    .add(row.value()));
+    return grouped;
+  }
+
   private Map<UUID, List<RevisionContent.Reference>> references(List<UUID> revisionIds) {
     Map<UUID, List<RevisionContent.Reference>> grouped = new LinkedHashMap<>();
     jdbc.sql(
             "select revision_id, title, url from certforge.qb_revision_reference"
                 + " where revision_id in (:revisionIds) order by revision_id, position")
-        .param("revisionIds", revisionIds)
+        .param(REVISION_IDS, revisionIds)
         .query(
             (rs, n) ->
                 new ReferenceRow(
-                    rs.getObject("revision_id", UUID.class),
+                    rs.getObject(REVISION_ID_COLUMN, UUID.class),
                     new RevisionContent.Reference(rs.getString("title"), rs.getString("url"))))
         .list()
         .forEach(
@@ -440,6 +616,12 @@ class QuestionRepository {
   }
 
   private record OptionRow(UUID revisionId, RevisionContent.Option option) {}
+
+  private record GuidedAnswerRow(UUID revisionId, String referenceAnswer) {}
+
+  private record ConceptRow(UUID revisionId, RevisionContent.ExpectedConcept concept) {}
+
+  private record GuidedStringRow(UUID revisionId, String value) {}
 
   private record ReferenceRow(UUID revisionId, RevisionContent.Reference reference) {}
 

@@ -10,6 +10,7 @@ import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
 import {
   draftFrom,
+  emptyConcept,
   emptyDraft,
   emptyOption,
   KEYS,
@@ -107,6 +108,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   }, [blocker.state]);
 
   const change = (patch: Partial<Draft>) => setDraft((current) => ({ ...current, ...patch }));
+  const guided = draft.type === "GUIDED_RESPONSE";
   const multiple = draft.type === "MULTIPLE_CHOICE";
 
   const save = useMutation({
@@ -188,15 +190,40 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   }
 
   function chooseType(type: Draft["type"]) {
+    if (type === "GUIDED_RESPONSE") {
+      change({ type });
+      return;
+    }
+    const options = draft.options.length >= 2 ? draft.options : [emptyOption(), emptyOption()];
     if (type === "SINGLE_CHOICE") {
-      const first = draft.options.findIndex((option) => option.correct);
+      const first = options.findIndex((option) => option.correct);
       change({
         type,
-        options: draft.options.map((option, at) => ({ ...option, correct: at === first })),
+        options: options.map((option, at) => ({ ...option, correct: first >= 0 && at === first })),
       });
     } else {
-      change({ type });
+      change({ type, options });
     }
+  }
+
+  function setConcept(index: number, patch: Partial<Draft["guidedResponse"]["expectedConcepts"][number]>) {
+    change({
+      guidedResponse: {
+        ...draft.guidedResponse,
+        expectedConcepts: draft.guidedResponse.expectedConcepts.map((concept, at) =>
+          at === index ? { ...concept, ...patch } : concept,
+        ),
+      },
+    });
+  }
+
+  function setGuidedList(key: "commonMistakes" | "followUps", index: number, value: string) {
+    change({
+      guidedResponse: {
+        ...draft.guidedResponse,
+        [key]: draft.guidedResponse[key].map((item, at) => (at === index ? value : item)),
+      },
+    });
   }
 
   const summary = useMemo(
@@ -250,12 +277,21 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           <fieldset className="field">
             <legend>{ed.typeLegend}</legend>
             <label className="check">
-              <input type="radio" name="type" checked={!multiple} onChange={() => chooseType("SINGLE_CHOICE")} />
+              <input
+                type="radio"
+                name="type"
+                checked={draft.type === "SINGLE_CHOICE"}
+                onChange={() => chooseType("SINGLE_CHOICE")}
+              />
               {types.SINGLE_CHOICE}
             </label>
             <label className="check">
               <input type="radio" name="type" checked={multiple} onChange={() => chooseType("MULTIPLE_CHOICE")} />
               {types.MULTIPLE_CHOICE}
+            </label>
+            <label className="check">
+              <input type="radio" name="type" checked={guided} onChange={() => chooseType("GUIDED_RESPONSE")} />
+              {types.GUIDED_RESPONSE}
             </label>
           </fieldset>
           <Field id="field-topic" label={ed.topic}>
@@ -352,73 +388,256 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           />
         </Field>
 
-        <fieldset id="options" className="field" tabIndex={-1}>
-          <legend>{ed.optionsLegend}</legend>
-          <p className="hint">{ed.optionsHint(multiple)}</p>
-          {draft.options.map((option, index) => (
-            <div key={index} className="option">
-              <div className="letter" aria-hidden="true">
-                {KEYS[index]}
-              </div>
-              <div>
-                <Field id={`option-text-${index}`} label={ed.optionLabel(KEYS[index]!)}>
-                  <input
-                    id={`option-text-${index}`}
-                    type="text"
-                    value={option.text}
-                    onChange={(event) => setOption(index, { text: event.target.value })}
-                  />
-                </Field>
-                <label className="check">
-                  <input
-                    type={multiple ? "checkbox" : "radio"}
-                    name="correct"
-                    checked={option.correct}
-                    onChange={(event) => markCorrect(index, event.target.checked)}
-                  />
-                  {ed.optionIsCorrect(KEYS[index]!)}
-                </label>
-                <Field id={`option-reason-${index}`} label={ed.reasonFor(KEYS[index]!)}>
-                  <textarea
-                    id={`option-reason-${index}`}
-                    rows={2}
-                    value={option.explanation}
-                    onChange={(event) => setOption(index, { explanation: event.target.value })}
-                  />
-                </Field>
-                {draft.options.length > 2 ? (
-                  <button
-                    type="button"
-                    className="link-button"
-                    onClick={() => change({ options: draft.options.filter((_, at) => at !== index) })}
-                  >
-                    {ed.removeOption(KEYS[index]!)}
-                  </button>
-                ) : null}
-              </div>
-            </div>
-          ))}
-          {draft.options.length < MAX_OPTIONS ? (
-            <button
-              type="button"
-              className="secondary"
-              onClick={() => change({ options: [...draft.options, emptyOption()] })}
-            >
-              {ed.addOption}
-            </button>
-          ) : null}
-        </fieldset>
+        {guided ? (
+          <section id="guided-response" className="field" aria-labelledby="guided-response-heading">
+            <h2 id="guided-response-heading">{ed.guidedLegend}</h2>
+            <p className="hint">{ed.guidedHint}</p>
+            <Field id="guided-reference-answer" label={ed.referenceAnswer} hint={ed.referenceAnswerHint}>
+              <textarea
+                id="guided-reference-answer"
+                className="read"
+                aria-describedby="guided-reference-answer-hint"
+                rows={6}
+                value={draft.guidedResponse.referenceAnswer}
+                onChange={(event) =>
+                  change({
+                    guidedResponse: { ...draft.guidedResponse, referenceAnswer: event.target.value },
+                  })
+                }
+              />
+            </Field>
 
-        <Field id="field-explanation" label={ed.explanation} hint={ed.explanationHint}>
-          <textarea
-            id="field-explanation"
-            className="read"
-            aria-describedby="field-explanation-hint"
-            rows={5}
-            value={draft.explanation}
-            onChange={(event) => change({ explanation: event.target.value })}
-          />
-        </Field>
+            <div id="guided-concepts" className="field" tabIndex={-1}>
+              <h3>{ed.expectedConcepts}</h3>
+              <p className="hint">{ed.expectedConceptsHint}</p>
+              {draft.guidedResponse.expectedConcepts.map((concept, index) => (
+                <div key={index} className="option">
+                  <div className="letter" aria-hidden="true">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <Field id={`guided-concept-text-${index}`} label={ed.expectedConcept(index + 1)}>
+                      <input
+                        id={`guided-concept-text-${index}`}
+                        type="text"
+                        value={concept.text}
+                        onChange={(event) => setConcept(index, { text: event.target.value })}
+                      />
+                    </Field>
+                    <label className="check">
+                      <input
+                        type="checkbox"
+                        checked={concept.required}
+                        onChange={(event) => setConcept(index, { required: event.target.checked })}
+                      />
+                      {ed.conceptRequired}
+                    </label>
+                    <Field id={`guided-concept-explanation-${index}`} label={ed.conceptExplanation(index + 1)}>
+                      <textarea
+                        id={`guided-concept-explanation-${index}`}
+                        rows={2}
+                        value={concept.explanation}
+                        onChange={(event) => setConcept(index, { explanation: event.target.value })}
+                      />
+                    </Field>
+                    {draft.guidedResponse.expectedConcepts.length > 1 ? (
+                      <button
+                        type="button"
+                        className="link-button"
+                        onClick={() =>
+                          change({
+                            guidedResponse: {
+                              ...draft.guidedResponse,
+                              expectedConcepts: draft.guidedResponse.expectedConcepts.filter((_, at) => at !== index),
+                            },
+                          })
+                        }
+                      >
+                        {ed.removeConcept(index + 1)}
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="secondary"
+                onClick={() =>
+                  change({
+                    guidedResponse: {
+                      ...draft.guidedResponse,
+                      expectedConcepts: [...draft.guidedResponse.expectedConcepts, emptyConcept()],
+                    },
+                  })
+                }
+              >
+                {ed.addConcept}
+              </button>
+            </div>
+
+            <div id="guided-common-mistakes" className="field" tabIndex={-1}>
+              <h3>{ed.commonMistakes}</h3>
+              {draft.guidedResponse.commonMistakes.map((mistake, index) => (
+                <div key={index} className="reference">
+                  <Field id={`guided-mistake-${index}`} label={ed.commonMistake(index + 1)}>
+                    <input
+                      id={`guided-mistake-${index}`}
+                      type="text"
+                      value={mistake}
+                      onChange={(event) => setGuidedList("commonMistakes", index, event.target.value)}
+                    />
+                  </Field>
+                  {draft.guidedResponse.commonMistakes.length > 1 ? (
+                    <button
+                      type="button"
+                      className="link-button"
+                      onClick={() =>
+                        change({
+                          guidedResponse: {
+                            ...draft.guidedResponse,
+                            commonMistakes: draft.guidedResponse.commonMistakes.filter((_, at) => at !== index),
+                          },
+                        })
+                      }
+                    >
+                      {ed.removeCommonMistake(index + 1)}
+                    </button>
+                  ) : null}
+                </div>
+              ))}
+              <button
+                type="button"
+                className="secondary"
+                onClick={() =>
+                  change({
+                    guidedResponse: {
+                      ...draft.guidedResponse,
+                      commonMistakes: [...draft.guidedResponse.commonMistakes, ""],
+                    },
+                  })
+                }
+              >
+                {ed.addCommonMistake}
+              </button>
+            </div>
+
+            <div id="guided-follow-ups" className="field" tabIndex={-1}>
+              <h3>{ed.followUps}</h3>
+              {draft.guidedResponse.followUps.map((followUp, index) => (
+                <div key={index} className="reference">
+                  <Field id={`guided-follow-up-${index}`} label={ed.followUp(index + 1)}>
+                    <input
+                      id={`guided-follow-up-${index}`}
+                      type="text"
+                      value={followUp}
+                      onChange={(event) => setGuidedList("followUps", index, event.target.value)}
+                    />
+                  </Field>
+                  {draft.guidedResponse.followUps.length > 1 ? (
+                    <button
+                      type="button"
+                      className="link-button"
+                      onClick={() =>
+                        change({
+                          guidedResponse: {
+                            ...draft.guidedResponse,
+                            followUps: draft.guidedResponse.followUps.filter((_, at) => at !== index),
+                          },
+                        })
+                      }
+                    >
+                      {ed.removeFollowUp(index + 1)}
+                    </button>
+                  ) : null}
+                </div>
+              ))}
+              <button
+                type="button"
+                className="secondary"
+                onClick={() =>
+                  change({
+                    guidedResponse: {
+                      ...draft.guidedResponse,
+                      followUps: [...draft.guidedResponse.followUps, ""],
+                    },
+                  })
+                }
+              >
+                {ed.addFollowUp}
+              </button>
+            </div>
+          </section>
+        ) : (
+          <>
+            <fieldset id="options" className="field" tabIndex={-1}>
+              <legend>{ed.optionsLegend}</legend>
+              <p className="hint">{ed.optionsHint(multiple)}</p>
+              {draft.options.map((option, index) => (
+                <div key={index} className="option">
+                  <div className="letter" aria-hidden="true">
+                    {KEYS[index]}
+                  </div>
+                  <div>
+                    <Field id={`option-text-${index}`} label={ed.optionLabel(KEYS[index]!)}>
+                      <input
+                        id={`option-text-${index}`}
+                        type="text"
+                        value={option.text}
+                        onChange={(event) => setOption(index, { text: event.target.value })}
+                      />
+                    </Field>
+                    <label className="check">
+                      <input
+                        type={multiple ? "checkbox" : "radio"}
+                        name="correct"
+                        checked={option.correct}
+                        onChange={(event) => markCorrect(index, event.target.checked)}
+                      />
+                      {ed.optionIsCorrect(KEYS[index]!)}
+                    </label>
+                    <Field id={`option-reason-${index}`} label={ed.reasonFor(KEYS[index]!)}>
+                      <textarea
+                        id={`option-reason-${index}`}
+                        rows={2}
+                        value={option.explanation}
+                        onChange={(event) => setOption(index, { explanation: event.target.value })}
+                      />
+                    </Field>
+                    {draft.options.length > 2 ? (
+                      <button
+                        type="button"
+                        className="link-button"
+                        onClick={() => change({ options: draft.options.filter((_, at) => at !== index) })}
+                      >
+                        {ed.removeOption(KEYS[index]!)}
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              ))}
+              {draft.options.length < MAX_OPTIONS ? (
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => change({ options: [...draft.options, emptyOption()] })}
+                >
+                  {ed.addOption}
+                </button>
+              ) : null}
+            </fieldset>
+
+            <Field id="field-explanation" label={ed.explanation} hint={ed.explanationHint}>
+              <textarea
+                id="field-explanation"
+                className="read"
+                aria-describedby="field-explanation-hint"
+                rows={5}
+                value={draft.explanation}
+                onChange={(event) => change({ explanation: event.target.value })}
+              />
+            </Field>
+          </>
+        )}
 
         <fieldset id="references" className="field" tabIndex={-1}>
           <legend>{ed.referencesLegend}</legend>
