@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "packId": "java-backend-interview-foundation",
+  "trackSlug": "java-backend-interview",
+  "trackKind": "INTERVIEW",
+  "trackVersion": "Taxonomy 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "java-backend-authoritative-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT"
+}

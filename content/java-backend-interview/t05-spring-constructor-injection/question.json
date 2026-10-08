@@ -1,0 +1,30 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "seniority": "PLENO",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige explicar constructor injection como contrato de dependências obrigatórias e reconhecer que muitos parâmetros podem indicar problema de coesão, sem tratar a regra como dogma.",
+  "prompt": "Em um serviço Spring, por que constructor injection costuma ser uma boa escolha para dependências obrigatórias? Se o construtor passou a receber sete ou oito colaboradores, você resolveria isso trocando tudo para field injection? O que investigaria?",
+  "guidedResponse": {
+    "referenceAnswer": "Constructor injection torna as dependências obrigatórias explícitas no momento da criação e permite construir o objeto já em estado utilizável. O Spring também consegue resolver essas dependências pelo construtor, e testes unitários podem instanciar a classe diretamente sem depender de reflexão do container. Setter injection pode ser adequada para dependências genuinamente opcionais. Um construtor muito grande não é um motivo para esconder dependências com field injection; é um sinal para investigar se a classe acumulou responsabilidades, se alguns colaboradores pertencem a outra abstração/coesa ou se existe orchestration legítima que justifique a quantidade. Refatorar só para reduzir a contagem de parâmetros, agrupando dependências sem relação, também pode apenas esconder o problema.",
+    "expectedConcepts": [
+      {"text": "Constructor injection explicita e exige dependências necessárias na criação", "required": true, "explanation": "O estado válido da classe fica visível na assinatura do construtor."},
+      {"text": "Field injection não corrige excesso de responsabilidades; apenas oculta dependências", "required": true, "explanation": "A questão de design continua existindo mesmo que a assinatura pareça menor."},
+      {"text": "Muitos colaboradores são um sinal para investigar coesão e responsabilidades", "required": true, "explanation": "Pode haver um service orchestration legítimo, mas a causa deve ser examinada."},
+      {"text": "Setter injection pode servir para dependências realmente opcionais", "required": false, "explanation": "A própria documentação Spring diferencia dependências obrigatórias e opcionais."}
+    ],
+    "commonMistakes": [
+      "Afirmar que Spring proíbe setter ou field injection.",
+      "Criar um objeto Dependencies apenas para esconder oito parâmetros sem ganhar uma abstração coerente.",
+      "Confundir facilidade do container com qualidade automática do desenho."
+    ],
+    "followUps": [
+      "Quando um construtor grande é aceitável em um application service/orchestrator?",
+      "Como constructor injection ajuda testes sem transformar todo teste em teste de implementação?"
+    ]
+  },
+  "references": [
+    {"title": "Spring Framework — Dependencies and configuration in detail", "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

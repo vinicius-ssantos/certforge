@@ -1,0 +1,32 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige montar uma estratégia de testes por tipo de evidência, incluindo idempotência, transação e redelivery, sem reduzir tudo a mocks ou a um único teste E2E.",
+  "prompt": "Um consumer recebe eventos de pagamento e precisa ser idempotente: o mesmo evento pode chegar novamente, mas o efeito de negócio não pode ser duplicado. Como você desenharia a estratégia de testes para ter confiança nessa propriedade, desde testes rápidos até integração com banco?",
+  "guidedResponse": {
+    "referenceAnswer": "Eu separaria as evidências. Regras puras, como geração/validação da chave de idempotência e decisões de domínio, podem ter testes unitários rápidos e determinísticos. A propriedade crítica de não duplicar o efeito precisa de testes de integração contra o mecanismo real de persistência: aplicar o mesmo event id duas vezes, inclusive em execuções concorrentes quando relevante, e verificar tanto o estado de negócio quanto o registro durável de deduplicação. Um banco real em container é mais representativo para constraints, isolamento e transações do que substituir o repositório por mock. Para o fluxo de mensageria, testaria redelivery/retry em uma camada apropriada e validaria os efeitos observáveis, não apenas chamadas internas. Relógio, ids e backoff devem ser controláveis para evitar flakiness. Testes de contrato podem cobrir o formato do evento; E2E fica para poucos caminhos críticos, não como única evidência.",
+    "expectedConcepts": [
+      {"text": "Testes unitários cobrem regras puras; a garantia transacional/idempotente exige integração com o mecanismo real relevante", "required": true, "explanation": "Mocks não demonstram comportamento de constraint, isolamento ou commit no banco."},
+      {"text": "O mesmo identificador deve ser exercitado mais de uma vez e o efeito de negócio observado não pode duplicar", "required": true, "explanation": "A propriedade é sobre efeito, não apenas sobre uma função retornar o mesmo valor."},
+      {"text": "Testar concorrência/redelivery quando fazem parte do modo real de falha", "required": true, "explanation": "Duplicatas podem surgir por retry, crash ou processamento simultâneo."},
+      {"text": "Controlar tempo, ids e espera para evitar testes flakey", "required": false, "explanation": "Determinismo melhora confiabilidade e diagnóstico da suíte."},
+      {"text": "Contrato do evento e E2E são camadas adicionais com escopos distintos", "required": false, "explanation": "Cada nível prova uma coisa diferente e tem custo diferente."}
+    ],
+    "commonMistakes": [
+      "Mockar o repositório e concluir que a constraint/transação real está correta.",
+      "Verificar somente que um método foi chamado uma vez, em vez do efeito de negócio persistido.",
+      "Depender de sleeps longos e temporização real para testar retries."
+    ],
+    "followUps": [
+      "Como você testaria duas entregas concorrentes do mesmo evento?",
+      "Quando um banco em memória seria evidência insuficiente para esse caso?"
+    ]
+  },
+  "references": [
+    {"title": "JUnit 5 User Guide", "url": "https://junit.org/junit5/docs/current/user-guide/"},
+    {"title": "Testcontainers — Database containers", "url": "https://java.testcontainers.org/modules/databases/"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

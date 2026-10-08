@@ -1,0 +1,32 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige separar delivery do broker de idempotência do efeito de negócio e raciocinar sobre a janela entre commit externo e commit do offset.",
+  "prompt": "Um consumer Kafka grava uma alteração no PostgreSQL e cai antes de confirmar o offset. Ao reiniciar, a mesma mensagem pode ser entregue novamente. Como você evita duplicar o efeito de negócio? Dizer apenas 'Kafka é exactly-once' resolve esse caso?",
+  "guidedResponse": {
+    "referenceAnswer": "Se o efeito no banco foi commitado mas o offset não, a mensagem pode ser lida novamente; isso é a janela clássica de redelivery. O consumer precisa tratar a repetição como parte normal do fluxo. Uma abordagem é carregar no evento um identificador estável e persistir de forma durável o registro de processamento/deduplicação na mesma transação do efeito de negócio, usando constraint/registro de inbox conforme o modelo. Se o id já foi aplicado, a nova entrega não repete o efeito. O offset só deve avançar de acordo com a semântica de processamento escolhida. As garantias de exactly-once do Kafka têm escopo específico e não tornam automaticamente uma transação em um banco externo parte da mesma atomicidade. Efeitos em outro serviço exigem estratégia adicional, como API idempotente, outbox/saga ou reconciliação.",
+    "expectedConcepts": [
+      {"text": "Commit no banco antes do offset cria uma janela legítima de redelivery", "required": true, "explanation": "Após o crash, o broker não sabe que o efeito externo já aconteceu."},
+      {"text": "Usar uma identidade estável do evento e deduplicação durável", "required": true, "explanation": "A mesma entrega lógica precisa ser reconhecida depois de restart/rebalance."},
+      {"text": "Deduplicação e efeito de negócio devem ser atomicamente consistentes quando estão no mesmo banco", "required": true, "explanation": "Registrar o id separado do efeito pode criar outra janela de inconsistência."},
+      {"text": "Garantia exactly-once do Kafka não engloba automaticamente um banco externo", "required": true, "explanation": "O escopo das garantias deve ser entendido em vez de usado como slogan."},
+      {"text": "Side effects remotos podem exigir idempotência/outbox/saga/reconciliação adicional", "required": false, "explanation": "Não há uma transação local simples que cubra todos os recursos externos."}
+    ],
+    "commonMistakes": [
+      "Confiar apenas em auto-commit de offset para impedir duplicatas de negócio.",
+      "Guardar ids processados só em memória.",
+      "Afirmar que exactly-once do Kafka inclui automaticamente qualquer banco ou API externa."
+    ],
+    "followUps": [
+      "Como você faria essa deduplicação com uma unique constraint?",
+      "O que muda se o efeito for uma chamada para um gateway de pagamento externo?"
+    ]
+  },
+  "references": [
+    {"title": "KafkaConsumer 4.1 — offset and delivery semantics", "url": "https://kafka.apache.org/41/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html"},
+    {"title": "Apache Kafka — Design", "url": "https://kafka.apache.org/41/design/design/"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

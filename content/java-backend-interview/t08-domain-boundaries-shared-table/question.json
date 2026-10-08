@@ -1,0 +1,30 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige raciocinar sobre ownership de dados e acoplamento de evolução, sem transformar DDD ou banco por serviço em dogma.",
+  "prompt": "Os módulos Billing e Support compartilham a mesma entidade JPA `Customer` e escrevem diretamente na mesma tabela. No começo isso acelerou o desenvolvimento, mas agora mudanças de schema e regras de um módulo quebram o outro. Como você redesenharia essa fronteira? Compartilhar a tabela é sempre errado?",
+  "guidedResponse": {
+    "referenceAnswer": "O problema principal é que os dois contextos passaram a compartilhar não apenas dados, mas também modelo de persistência, invariantes e ciclo de mudança. Eu procuraria definir quem é dono de cada dado e quais informações o outro contexto realmente precisa. A integração pode ocorrer por um contrato explícito — por exemplo API, evento, projeção/read model ou uma interface entre módulos — em vez de ambos manipularem a mesma entidade ORM. Isso permite evolução mais independente e torna as decisões de consistência explícitas. Em um monólito pequeno e com um único modelo/coordenador, compartilhar uma base física pode ser perfeitamente aceitável; o ponto é evitar ownership ambíguo e coupling por detalhes de schema. Separar bancos por princípio, sem necessidade operacional ou de domínio, também pode adicionar custo desnecessário.",
+    "expectedConcepts": [
+      {"text": "Definir ownership dos dados e invariantes por fronteira de domínio", "required": true, "explanation": "Sem um dono claro, qualquer módulo pode alterar regras que o outro implicitamente depende."},
+      {"text": "Não usar a mesma entidade ORM como contrato de integração entre contextos", "required": true, "explanation": "Isso vaza detalhes de persistência e acopla a evolução do modelo."},
+      {"text": "Integrar por contratos explícitos e escolher conscientemente a consistência necessária", "required": true, "explanation": "APIs, eventos ou projeções tornam dependências e trade-offs observáveis."},
+      {"text": "Banco físico compartilhado não é automaticamente errado em todo sistema", "required": false, "explanation": "O risco depende de ownership, autonomia desejada e custo de operação."}
+    ],
+    "commonMistakes": [
+      "Responder apenas 'um banco por microserviço' sem discutir ownership ou consistência.",
+      "Trocar a entidade compartilhada por um DTO compartilhado global e manter o mesmo acoplamento semântico.",
+      "Adotar eventos para tudo sem considerar latência, consistência e complexidade."
+    ],
+    "followUps": [
+      "Como o contexto Support obtém dados de cliente sem assumir o schema de Billing?",
+      "Quando você manteria dois módulos no mesmo banco, mas ainda assim separaria ownership?"
+    ]
+  },
+  "references": [
+    {"title": "Microsoft Learn — Data sovereignty per microservice", "url": "https://learn.microsoft.com/en-us/dotnet/architecture/microservices/architect-microservice-container-applications/data-sovereignty-per-microservice"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}
