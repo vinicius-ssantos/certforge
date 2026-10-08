@@ -1,6 +1,7 @@
 package dev.certforge.questionbank.internal;
 
 import static dev.certforge.preparationcatalog.TrackKind.CERTIFICATION;
+import static dev.certforge.preparationcatalog.TrackKind.GENERAL;
 import static dev.certforge.preparationcatalog.TrackKind.INTERVIEW;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -154,6 +155,16 @@ class RevisionRulesTest {
   }
 
   // ---- the Java release, which only a certification question states (ADR 0016 decision 6) -----
+
+  @Test
+  void generalKnowledgeQuestionsNeedNeitherJavaReleaseNorSeniority() {
+    assertThat(RevisionRules.violations(withoutRelease(), GENERAL)).isEmpty();
+    assertThat(RevisionRules.violations(
+        content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false))),
+        GENERAL)).containsExactly("java_release_not_applicable");
+    assertThat(RevisionRules.violations(interview(Seniority.PLENO), GENERAL))
+        .containsExactly("seniority_not_applicable");
+  }
 
   @Test
   void anInterviewQuestionNeedsNoJavaReleaseButDoesNeedASeniority() {
