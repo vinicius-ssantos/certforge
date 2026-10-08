@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { stageEditorialPack, toEditorialRequest } from "./editorial-pack.mjs";
@@ -30,8 +30,27 @@ test("stages valid general questions for the legacy editorial importer without m
 });
 
 test("certification staging fails closed until objective persistence is implemented", () => {
-  // The current editorial API does not store objectiveKeys/snapshotDigests; a certification
-  // question may not be imported while losing that information.
-  const input = readManifestPack("content/infrastructure-devops-foundations");
-  assert.equal(input.manifest.trackKind, "GENERAL");
+  // A valid exam pack must not silently lose objectiveKeys and snapshot provenance.
+  const source = readManifestPack("content/infrastructure-devops-foundations");
+  const temp = mkdtempSync(join(tmpdir(), "certforge-cert-block-"));
+  try {
+    const input = join(temp, "input");
+    mkdirSync(input);
+    mkdirSync(join(input, "question-01"));
+    const manifest = {
+      ...source.manifest,
+      trackKind: "CERTIFICATION",
+      certification: {
+        provider: "Example", examCode: "EX-1", providerVersion: "2026.1",
+        snapshotDigest: "sha256:" + "a".repeat(64), verifiedOn: "2026-10-08",
+      },
+    };
+    const question = { ...source.questions[0], objectiveKeys: ["1.1"] };
+    writeFileSync(join(input, "pack.json"), JSON.stringify(manifest));
+    writeFileSync(join(input, "question-01", "question.json"), JSON.stringify(question));
+    const output = join(temp, "output");
+    assert.throws(() => stageEditorialPack(input, output), /Certification packs need verified/);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
 });
