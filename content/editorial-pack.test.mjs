@@ -8,7 +8,9 @@ import { readManifestPack } from "./manifest-pack.mjs";
 
 test("stages valid general questions for the legacy editorial importer without metadata leakage", () => {
   const pack = readManifestPack("content/infrastructure-devops-foundations");
-  const request = toEditorialRequest(pack.questions[0]);
+  const dockerQuestion = pack.questions.find((question) => question.name === "t01-image-vs-container");
+  assert.ok(dockerQuestion);
+  const request = toEditorialRequest(dockerQuestion);
   assert.equal(request.javaRelease, null);
   assert.equal(request.topicId, "a3000000-0000-4000-8000-000000000301");
   assert.equal(request.options.filter((option) => option.correct).length, 1);
