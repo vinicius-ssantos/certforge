@@ -1,10 +1,8 @@
 package dev.certforge.preparationcatalog;
 
-/**
- * Kind of preparation target. {@link #INTERVIEW} is reserved by ADR 0007: it adds no fields,
- * persistence or behavior in v0.1.0 and cannot be created or exposed to learners.
- */
+/** Kind of preparation target. GENERAL is reserved for non-exam technical learning (#165). */
 public enum TrackKind {
   CERTIFICATION,
-  INTERVIEW
+  INTERVIEW,
+  GENERAL
 }
