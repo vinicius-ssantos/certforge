@@ -44,13 +44,17 @@ class InfrastructureCatalogMigrationIT {
         trackId,
         "infra-" + trackId.toString().substring(0, 8));
 
-    assertThat(TrackKind.valueOf(
-        jdbc.queryForObject("select kind from certforge.catalog_track where id=?", String.class, trackId)))
+    assertThat(
+            TrackKind.valueOf(
+                jdbc.queryForObject(
+                    "select kind from certforge.catalog_track where id=?", String.class, trackId)))
         .isEqualTo(TrackKind.GENERAL);
-    assertThat(jdbc.queryForObject(
-        "select count(*) from certforge.catalog_certification_profile where track_id=?",
-        Integer.class,
-        trackId)).isZero();
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_certification_profile where track_id=?",
+                Integer.class,
+                trackId))
+        .isZero();
   }
 
   @Test
@@ -62,28 +66,38 @@ class InfrastructureCatalogMigrationIT {
             + " values (?, ?, 'Sample Cloud Exam', 'CERTIFICATION', 'DRAFT')",
         trackId,
         "exam-" + trackId.toString().substring(0, 8));
-    jdbc.update("insert into certforge.catalog_track_version(id,track_id,label)"
-        + " values (?, ?, '2026.1')", versionId, trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version(id,track_id,label)"
+            + " values (?, ?, '2026.1')",
+        versionId,
+        trackId);
     jdbc.update(
         "insert into certforge.catalog_certification_exam"
             + "(track_version_id,exam_code,exam_name,java_release,objectives_url)"
             + " values (?, 'X-123', 'Cloud Exam', null, 'https://example.org/objectives')",
         versionId);
 
-    assertThatThrownBy(() -> jdbc.update(
-        "insert into certforge.catalog_exam_objective_snapshot"
-            + "(track_version_id,provider_version,verified_on,source_url,source_digest)"
-            + " values (?, '2026.1', current_date, 'http://invalid.example', ?)",
-        versionId, "sha256:" + "a".repeat(64)))
+    assertThatThrownBy(
+            () ->
+                jdbc.update(
+                    "insert into certforge.catalog_exam_objective_snapshot"
+                        + "(track_version_id,provider_version,verified_on,source_url,source_digest)"
+                        + " values (?, '2026.1', current_date, 'http://invalid.example', ?)",
+                    versionId,
+                    "sha256:" + "a".repeat(64)))
         .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
 
     jdbc.update(
         "insert into certforge.catalog_exam_objective_snapshot"
             + "(track_version_id,provider_version,verified_on,source_url,source_digest)"
             + " values (?, '2026.1', current_date, 'https://example.org/objectives', ?)",
-        versionId, "sha256:" + "a".repeat(64));
-    assertThat(jdbc.queryForObject(
-        "select count(*) from certforge.catalog_exam_objective_snapshot where track_version_id=?",
-        Integer.class,versionId)).isEqualTo(1);
+        versionId,
+        "sha256:" + "a".repeat(64));
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_exam_objective_snapshot where track_version_id=?",
+                Integer.class,
+                versionId))
+        .isEqualTo(1);
   }
 }
