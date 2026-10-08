@@ -4,6 +4,8 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
+  manifestOrphansIn,
+  manifestReviewStatusOf,
   readManifestPack,
   reviewDigestV2,
   validateGeneralQuestion,
@@ -247,4 +249,50 @@ test("reads one manifest-backed guided-response pack and rejects an empty one", 
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
+});
+
+
+test("review records bind verdicts to the exact guided-response digest", () => {
+  const question = { name: "messaging-idempotency", ...guided() };
+  const digest = reviewDigestV2(interviewManifest, question);
+  const record = {
+    reviewer: "vinicius-ssantos",
+    reviewerRole: "project owner and maintainer",
+    reviewedOn: "2026-10-08",
+    method: "Question reviewed against the generated manifest review packet.",
+    questions: {
+      "messaging-idempotency": { verdict: "APPROVED", digest },
+    },
+  };
+
+  const reviewed = manifestReviewStatusOf(record, interviewManifest, question);
+  assert.equal(reviewed.state, "reviewed");
+  assert.equal(reviewed.verdict, "APPROVED");
+  assert.equal(reviewed.reviewedOn, "2026-10-08");
+
+  const changed = manifestReviewStatusOf(
+    record,
+    interviewManifest,
+    {
+      ...question,
+      guidedResponse: {
+        ...question.guidedResponse,
+        referenceAnswer: question.guidedResponse.referenceAnswer + " Changed.",
+      },
+    },
+  );
+  assert.equal(changed.state, "changed");
+  assert.notEqual(changed.recordedDigest, changed.currentDigest);
+});
+
+test("review record reports unreviewed questions and stale orphan entries", () => {
+  const question = { name: "messaging-idempotency", ...guided() };
+  assert.equal(manifestReviewStatusOf(null, interviewManifest, question).state, "unreviewed");
+  const record = {
+    questions: {
+      "messaging-idempotency": { verdict: "APPROVED", digest: reviewDigestV2(interviewManifest, question) },
+      removed: { verdict: "APPROVED", digest: "sha256:" + "a".repeat(64) },
+    },
+  };
+  assert.deepEqual(manifestOrphansIn(record, [question]), ["removed"]);
 });

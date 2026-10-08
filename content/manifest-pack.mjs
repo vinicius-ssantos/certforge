@@ -1,6 +1,6 @@
 // Manifest-backed question reader for non-legacy packs. It does not import, approve or publish.
 // Keep this separate from pack.mjs until legacy Java 21 digest regression is proven.
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { loadPackManifest } from "./pack-manifest.mjs";
@@ -205,4 +205,37 @@ export function reviewDigestV2(manifest, question) {
     question.evidence ?? null,
   ];
   return "sha256:" + createHash("sha256").update(JSON.stringify(reviewed)).digest("hex");
+}
+
+
+export function readManifestReviewRecord(directory) {
+  const path = join(directory, "review.json");
+  return existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : null;
+}
+
+export function manifestReviewStatusOf(record, manifest, question) {
+  const entry = record?.questions?.[question.name];
+  const currentDigest = reviewDigestV2(manifest, question);
+  if (!entry) {
+    return { state: "unreviewed", currentDigest };
+  }
+  const textHolds = entry.digest === currentDigest;
+  return {
+    state: textHolds ? "reviewed" : "changed",
+    verdict: entry.verdict,
+    reviewer: record.reviewer,
+    reviewerRole: record.reviewerRole,
+    reviewedOn: entry.reviewedOn ?? record.reviewedOn,
+    method: record.method,
+    recordedDigest: entry.digest,
+    currentDigest,
+    whatChanged: textHolds ? null : "semantic content or pack review context",
+  };
+}
+
+export function manifestOrphansIn(record, questions) {
+  const present = new Set(questions.map((question) => question.name));
+  return Object.keys(record?.questions ?? {})
+    .filter((name) => !present.has(name))
+    .sort();
 }
