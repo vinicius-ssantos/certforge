@@ -1981,7 +1981,7 @@ button.mock-nav-button.current {
 .tab-count {
   margin-left: var(--s2);
   font-variant-numeric: tabular-nums;
-  opacity: 0.85;
+  color: inherit;
 }
 
 .editorial-catalog .card > :last-child {

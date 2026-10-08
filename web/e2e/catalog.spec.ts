@@ -18,7 +18,7 @@ test.describe("inspecting the catalog", () => {
     await page.getByRole("link", { name: "Catalog" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Catalog" })).toBeVisible();
 
-    const row = page.getByRole("row", { name: /Java Certification/ });
+    const row = page.locator("li.card").filter({ has: page.getByRole("link", { name: "Java Certification" }) });
     await expect(row).toContainText("Active");
     await expect(row).toContainText("Oracle");
     if (!isMobile) {

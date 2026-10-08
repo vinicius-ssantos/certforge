@@ -1,8 +1,8 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
-import { createStaff, post, put, signedInApi, testQuestion, type QuestionView } from "./api";
-import { register, signIn } from "./helpers";
+import { createStaff, post, put, publishNewQuestion, signedInApi, testQuestion, type QuestionView } from "./api";
+import { expectNoA11yViolations, register, signIn } from "./helpers";
 import { TOPIC_NAME } from "./seed";
 import { expect, test } from "./test";
 
@@ -18,6 +18,58 @@ const EDITORIAL_PROMPT = "What does this code print?\n\n```java\nSystem.out.prin
 async function shot(page: Page, name: string) {
   await page.waitForLoadState("networkidle");
   await page.screenshot({ path: join(DIRECTORY, `${name}.png`), fullPage: true });
+}
+
+/**
+ * Optional evidence for #188. Never seed mock content outside a local disposable E2E backend:
+ * these answers are test fixtures, not reviewed certification questions.
+ */
+async function captureMockResult(page: Page, adminAccount: { email: string; password: string }) {
+  const apiUrl = new URL(process.env["E2E_API_URL"] ?? "http://localhost:8080");
+  if (!["localhost", "127.0.0.1"].includes(apiUrl.hostname)) {
+    throw new Error("Mock screenshot seeding requires a local disposable E2E backend.");
+  }
+
+  const publisher = await signedInApi(adminAccount);
+  try {
+    const catalogResponse = await publisher.get("/api/catalog/tracks");
+    if (!catalogResponse.ok()) throw new Error("Cannot read mock fixture topics.");
+    const catalog = (await catalogResponse.json()) as Array<{
+      slug: string;
+      topics: Array<{ id: string; name: string }>;
+    }>;
+    const track = catalog.find((candidate) => candidate.slug === "java-certification");
+    if (!track || track.topics.length !== 10) {
+      throw new Error("Mock fixture requires all ten certification topics.");
+    }
+    const existing = (await (
+      await publisher.get("/api/admin/questions?status=PUBLISHED")
+    ).json()) as Array<{ topicId: string | null }>;
+    for (const topic of track.topics) {
+      const available = existing.filter((question) => question.topicId === topic.id).length;
+      for (let index = available; index < 5; index += 1) {
+        await publishNewQuestion(
+          publisher,
+          topic.id,
+          `E2E mock fixture for ${topic.name} #${index + 1} — test data, not exam content.`,
+        );
+      }
+    }
+  } finally {
+    await publisher.dispose();
+  }
+
+  await page.goto("/tracks/java-certification");
+  const start = page.getByRole("button", { name: "Start 1Z0-830 mock" });
+  await expect(start).toBeVisible({ timeout: 15_000 });
+  await start.click();
+  await expect(page.getByRole("heading", { level: 1, name: "Mock exam" })).toBeVisible();
+  await page.getByRole("button", { name: "Finish and score mock" }).click();
+  const confirm = page.getByRole("group", { name: "Submit mock exam" });
+  await confirm.getByRole("button", { name: "Submit mock exam" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Mock exam result" })).toBeVisible();
+  await expectNoA11yViolations(page);
+  await shot(page, "10c-mock-result");
 }
 
 test("capture the demonstration screens", async ({ page, browser, request }) => {
@@ -36,6 +88,9 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(page, "02-tracks");
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
+  // The heading appears before asynchronous mock availability. Capture the actual shortfall
+  // worklist rather than an intermediate loading message; mock result fixtures are seeded later.
+  await expect(page.getByRole("table", { name: "Reviewed questions still needed, by topic" })).toBeVisible();
   await shot(page, "03-track");
   await page.getByRole("button", { name: `Practice ${TOPIC_NAME}` }).click();
   await expect(page.getByRole("heading", { level: 2, name: /^Question 1 of/ })).toBeVisible();
@@ -137,10 +192,15 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(admin, "14-publish-confirm");
   await admin.goto("/editorial/catalog");
   await expect(admin.getByRole("heading", { level: 1, name: "Catalog" })).toBeVisible();
+  await shot(admin, "15a-catalog-overview");
   await admin.getByRole("link", { name: "Java Certification" }).click();
   await expect(admin.getByRole("region", { name: "Where content can be published" })).toBeVisible();
   await shot(admin, "15-catalog-track");
   await admin.context().close();
+  // Separate opt-in: creates enough explicitly labelled E2E-only fixtures to start a mock.
+  if (process.env["MOCK_CAPTURE"] === "1") {
+    await captureMockResult(page, adminAccount);
+  }
   await author.dispose();
   await reviewerApi.dispose();
   void request;

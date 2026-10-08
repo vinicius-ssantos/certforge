@@ -5,7 +5,7 @@ Two self-contained HTML pages. Open either in a browser — no build, no server,
 | File | Screens | Status |
 |---|---|---|
 | [`prototype-01-four-screens.html`](prototype-01-four-screens.html) | Practice session, feedback, tracks and progress, mock exam, editorial desk | **Approved and implemented** |
-| [`prototype-02-remaining-screens.html`](prototype-02-remaining-screens.html) | Sign in, create account, session ended, history, session review, the learner's review queue, mock result, editorial queue, the reviewer's screen, publish confirmation, catalogue, mock unavailable | **Approved, not yet built** — see the [`UI redesign — remaining screens`](https://github.com/vinicius-ssantos/certforge/milestone/8) milestone |
+| [`prototype-02-remaining-screens.html`](prototype-02-remaining-screens.html) | Sign in, create account, session ended, history, session review, the learner's review queue, mock result, editorial queue, the reviewer's screen, publish confirmation, catalogue, mock unavailable | **Approved; implementation in [draft PR #191](https://github.com/vinicius-ssantos/certforge/pull/191), awaiting human visual acceptance** — see the [`UI redesign — remaining screens`](https://github.com/vinicius-ssantos/certforge/milestone/8) milestone |
 
 Each screen is a mock-up with a margin note saying what changes about it and why. They are
 drawings, not code: no prototype markup should be copied into `web/`, because the real screens

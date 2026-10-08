@@ -41,6 +41,9 @@ test.describe("using it with the keyboard alone", () => {
 
     await page.getByRole("link", { name: "Java Certification" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
+    // The mock readiness table loads asynchronously after the heading; let the page settle
+    // before marking tab stops, otherwise controls added mid-walk change the sequence.
+    await expect(page.getByRole("table", { name: "Reviewed questions still needed, by topic" })).toBeVisible();
     await expectKeyboardReachable(page, "a track");
 
     await page.getByRole("button", { name: `Practice ${TOPIC_NAME}` }).click();
