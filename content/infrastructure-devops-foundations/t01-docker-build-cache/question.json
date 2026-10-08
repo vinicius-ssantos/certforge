@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000301",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Em um Dockerfile, as instruções COPY dos arquivos de dependências aparecem antes de RUN para instalá-las, enquanto COPY do código-fonte aparece depois. Qual é a principal vantagem dessa ordem?",
+  "prompt": "Considere o Dockerfile abaixo para uma aplicação Java baseada em Maven:\n\n```dockerfile\nFROM maven:3.9-eclipse-temurin-21 AS build\nWORKDIR /app\nCOPY pom.xml .\nRUN mvn -B dependency:go-offline\nCOPY src ./src\nRUN mvn -B package\n```\n\nSupondo que apenas os arquivos em `src/` mudem, enquanto o `pom.xml` e a imagem-base permaneçam iguais, qual é a principal vantagem de copiar e preparar as dependências antes do código-fonte?",
   "explanation": "A organização de instruções influencia a reutilização de camadas de cache. Copiar primeiro arquivos que mudam menos permite reaproveitar a etapa de dependências em builds subsequentes.",
   "options": [
     {
