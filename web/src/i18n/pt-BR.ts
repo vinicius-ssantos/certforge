@@ -155,6 +155,9 @@ export const ptBR: Catalog = {
     mockAvailabilityLoading: "Verificando se este simulado pode começar",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Ainda não está disponível. ${plural(TAG, missing, { one: "Falta", other: "Faltam" })} ${missing} ${plural(TAG, missing, { one: "questão revisada", other: "questões revisadas" })} em ${topics} ${plural(TAG, topics, { one: "tópico", other: "tópicos" })}. Um simulado completo exige ${perTopic} questões publicadas em cada tópico.`,
+    mockMissingCaption: "Questões revisadas que ainda faltam, por tópico",
+    mockPublished: "Publicadas",
+    mockShortfall: "Faltam",
     continueMock: "Continuar simulado",
     startingMock: "Começando…",
     startMock: (examCode: string) => `Começar simulado ${examCode}`,
@@ -226,6 +229,10 @@ export const ptBR: Catalog = {
 
   review: {
     title: "Revisão",
+    unknownReason: "Revisão necessária",
+    unknownReasonExplanation: "Esta questão precisa ser revisitada.",
+    caveat:
+      "Estas são questões que valem revisitar, escolhidas pelo que você respondeu. É evidência de onde olhar, não uma previsão sobre o exame.",
     loading: "Carregando sua fila de revisão",
     nothingDueTitle: "Nada previsto ainda",
     nothingToReviewTitle: "Nada para revisar ainda",
@@ -425,6 +432,9 @@ export const ptBR: Catalog = {
     score: "Nota",
     fallbackTopic: "Tópico",
     outOf: (value: number, total: number) => `${value} / ${total}`,
+    scoreLabel: "Resultado",
+    unanswered: (count: number) =>
+      `${plural(TAG, count, { one: "Ficou", other: "Ficaram" })} ${count} ${plural(TAG, count, { one: "questão sem resposta", other: "questões sem resposta" })} e ${plural(TAG, count, { one: "conta", other: "contam" })} como erradas.`,
     questionReview: "Revisão das questões",
     questionSummary: (number: number, correct: boolean, answered: boolean) =>
       `Questão ${number}: ${correct ? "Correta" : answered ? "Incorreta" : "Não respondida"}`,
@@ -524,6 +534,9 @@ export const ptBR: Catalog = {
       emptyTitle: "Não há trilhas",
       emptyBody: "Uma trilha vem de uma migração. Um catálogo vazio significa que nenhuma foi aplicada.",
       tableCaption: "Trilhas de preparação",
+      certificationKind: "Trilha de certificação",
+      interviewKind: "Trilha de entrevistas",
+      topicCount: (count: number) => `${count} ${plural(TAG, count, { one: "tópico", other: "tópicos" })}`,
       track: "Trilha",
       status: "Situação",
       provider: "Fornecedor",
@@ -618,6 +631,7 @@ export const ptBR: Catalog = {
 
     reviewPanel: {
       policyLegend: "Política de conteúdo",
+      checklistCount: (checked: number, total: number) => `${checked} de ${total} verificados`,
       policyHint:
         "Marque só o que você mesmo verificou. Os itens que você marcar ficam registrados com sua decisão.",
       comment: "Comentário",
@@ -630,8 +644,10 @@ export const ptBR: Catalog = {
       publishNote:
         "Só versões aprovadas podem ser publicadas. Uma versão publicada não pode ser editada; uma correção vira uma nova versão.",
       confirmPublishTitle: (revision: number) => `Confirmar a publicação da versão ${revision}`,
-      confirmPublishExplain: (revision: number) =>
-        `Publicar a versão ${revision}? Quem estuda vai receber esta questão nas sessões, e a versão que ela substitui é retirada.`,
+      unknownReviewer: "Revisor não registrado",
+      unknownApprovalDate: "data da aprovação não registrada",
+      confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>
+        `Publicar a versão ${revision} no tópico ${topic}? Aprovada por ${reviewer} em ${date}. Esta questão ficará disponível para estudantes. A publicação é definitiva: não pode ser desfeita nem editada; correções exigem uma nova versão.`,
       confirmPublishLabel: (revision: number) => `Sim, publicar a versão ${revision}`,
       publishRevision: (revision: number) => `Publicar a versão ${revision}`,
       approveFirst: "Aprove antes.",

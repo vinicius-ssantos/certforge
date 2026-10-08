@@ -687,11 +687,13 @@ fieldset.field > legend {
   display: inline-flex;
   align-items: center;
   gap: var(--s1);
+  margin: 0;
   padding: 2px var(--s2);
   border: 1px solid currentColor;
   border-radius: 999px;
-  font-size: var(--t-xs);
-  font-weight: 600;
+  /* Set explicitly because a heading can wear this: on the mock result the verdict is the
+   * region's heading and the pill at the same time, so the fact is stated once. */
+  font: 600 var(--t-xs) / 1.5 var(--font-ui);
   white-space: nowrap;
 }
 
@@ -705,6 +707,10 @@ fieldset.field > legend {
 
 .pill-new {
   color: var(--muted);
+}
+
+.pill-stop {
+  color: var(--danger);
 }
 
 /*
@@ -1933,6 +1939,78 @@ button.mock-nav-button.current {
   margin: var(--s1) 0;
   font: 700 var(--t-3xl) / 1 var(--font-read);
   font-variant-numeric: tabular-nums;
+}
+
+
+/* Publication is distinct from review: a left danger rail, not a green approval button. */
+.publish-danger {
+  padding: var(--s4) var(--s5);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--danger);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+/* Milestone 8: the reviewer's decision is one contained action surface. */
+.decision-panel {
+  display: grid;
+  gap: var(--s4);
+}
+
+.decision-actions > button {
+  width: 100%;
+}
+
+.decision-panel fieldset {
+  min-width: 0;
+}
+
+.decision-panel .pill {
+  white-space: normal;
+}
+
+
+/* Editorial screens use the same cards, badges and responsive table surface as the learner. */
+.queue .status {
+  border: 1px solid currentColor;
+  border-radius: var(--radius-lg);
+  padding: 0 var(--s2);
+  font-size: var(--t-xs);
+}
+
+.tab-count {
+  margin-left: var(--s2);
+  font-variant-numeric: tabular-nums;
+  opacity: 0.85;
+}
+
+.editorial-catalog .card > :last-child {
+  margin-top: var(--s4);
+}
+
+.editorial-catalog-versions {
+  border-top: 1px solid var(--border);
+  padding-top: var(--s3);
+}
+
+.editorial-catalog-versions ul {
+  list-style: none;
+  margin: var(--s2) 0 0;
+  padding: 0;
+}
+
+.editorial-catalog-versions li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+  padding: var(--s2) 0;
+  max-width: none;
+}
+
+.editorial-catalog-versions .pill {
+  white-space: normal;
 }
 
 /* ---- motion and width -------------------------------------------------------------------- */

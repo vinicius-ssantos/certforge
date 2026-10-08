@@ -4,6 +4,7 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { Topic } from "../api/types";
 import { useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 
@@ -106,6 +107,19 @@ export function TrackPage() {
   const unavailableTopics =
     mockAvailability.data?.topics.filter((topic) => topic.missing > 0).length ?? 0;
 
+  /*
+   * The availability endpoint names topics by id; the track carries their names. Flattened
+   * because a topic may have subtopics and either level can be short.
+   */
+  const topicNames = new Map<string, string>();
+  const collectNames = (topics: Topic[]): void => {
+    for (const topic of topics) {
+      topicNames.set(topic.id, topic.name);
+      collectNames(topic.subtopics);
+    }
+  };
+  collectNames(track.data?.topics ?? []);
+
   // The heading is always the first element and is never replaced as the data arrives, so focus
   // moved to it by the route change stays put instead of being lost on a re-render.
   return (
@@ -166,13 +180,51 @@ export function TrackPage() {
                     : t.track.startMock(track.data.examVersion.examCode)}
                 </button>
               ) : mockAvailability.data ? (
-                <p role="status">
-                  {t.track.mockUnavailable(
-                    mockAvailability.data.missingQuestionCount,
-                    unavailableTopics,
-                    mockAvailability.data.questionsPerTopic,
-                  )}
-                </p>
+                <>
+                  <p role="status">
+                    {t.track.mockUnavailable(
+                      mockAvailability.data.missingQuestionCount,
+                      unavailableTopics,
+                      mockAvailability.data.questionsPerTopic,
+                    )}
+                  </p>
+                  {/*
+                   * The sentence says how much is missing in total; this says where. It is the
+                   * work list for whoever reviews content, and without it the shortfall is a
+                   * number nobody can act on. See #138.
+                   */}
+                  <ScrollableTable label={t.track.mockMissingCaption}>
+                    <caption className="visually-hidden">{t.track.mockMissingCaption}</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">{t.progress.topic}</th>
+                        <th scope="col">{t.track.mockPublished}</th>
+                        <th scope="col">{t.track.mockShortfall}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {mockAvailability.data.topics
+                        .filter((topic) => topic.missing > 0)
+                        .map((topic) => (
+                          <tr key={topic.topicId}>
+                            <th scope="row">{topicNames.get(topic.topicId) ?? t.progress.fallbackTopic}</th>
+                            <td>
+                              <span className="bar-cell">
+                                <span className="mini" aria-hidden="true">
+                                  <i
+                                    className="low"
+                                    style={{ width: `${(topic.available / topic.required) * 100}%` }}
+                                  />
+                                </span>
+                                {`${topic.available} / ${topic.required}`}
+                              </span>
+                            </td>
+                            <td className="numeric">{topic.missing}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </ScrollableTable>
+                </>
               ) : null}
             </section>
           ) : null}

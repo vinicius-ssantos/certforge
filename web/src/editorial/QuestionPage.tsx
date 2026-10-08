@@ -45,7 +45,7 @@ function RevisionWithDecisions({
       topicName={topicName}
       previous={previous}
       topicNameOf={topicNameOf}
-      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} /> } : {})}
+      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} topicName={topicName} /> } : {})}
     />
   );
 }

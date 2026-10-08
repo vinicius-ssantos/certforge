@@ -79,6 +79,15 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await expect(page.getByRole("heading", { level: 1, name: "Progress" })).toBeVisible();
   await shot(page, "10-progress");
 
+  /*
+   * The learner's review queue. It had no picture at all, although it is the screen that decides
+   * what someone practises next. The fixture answers are correct and confident, so the queue is
+   * usually its empty state here — which is itself worth showing, since it explains the rule.
+   */
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
+  await shot(page, "10b-review-queue");
+
   // ---- the editorial desk ----
   const authorAccount = await createStaff(["LEARNER", "EDITOR"]);
   const author = await signedInApi(authorAccount);

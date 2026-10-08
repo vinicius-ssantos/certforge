@@ -161,6 +161,10 @@ export const en = {
     mockAvailabilityLoading: "Checking whether this mock can start",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Not available yet. ${missing} reviewed ${plural(TAG, missing, { one: "question is", other: "questions are" })} still missing across ${topics} ${plural(TAG, topics, { one: "topic", other: "topics" })}. A full mock requires ${perTopic} published questions in every topic.`,
+    /** The work list behind the sentence above: which topics are short, and by how much. */
+    mockMissingCaption: "Reviewed questions still needed, by topic",
+    mockPublished: "Published",
+    mockShortfall: "Short by",
     continueMock: "Continue mock exam",
     startingMock: "Starting…",
     startMock: (examCode: string) => `Start ${examCode} mock`,
@@ -239,6 +243,14 @@ export const en = {
    */
   review: {
     title: "Review",
+    unknownReason: "Review needed",
+    unknownReasonExplanation: "This question is due for another look.",
+    /**
+     * Said once, under the page title. It is the same limit the progress and mock screens state:
+     * this is evidence of where to look, never a forecast.
+     */
+    caveat:
+      "These are questions worth revisiting, chosen from how you answered. It is evidence of where to look, not a prediction about the exam.",
     loading: "Loading your review queue",
     nothingDueTitle: "Nothing is due yet",
     nothingToReviewTitle: "Nothing to review yet",
@@ -453,6 +465,11 @@ export const en = {
     score: "Score",
     fallbackTopic: "Topic",
     outOf: (value: number, total: number) => `${value} / ${total}`,
+    /** The label over the figure, so the number itself can be the loudest thing. */
+    scoreLabel: "Result",
+    /** Unanswered questions count as misses; the screen should not let that be a surprise. */
+    unanswered: (count: number) =>
+      `${count} ${plural(TAG, count, { one: "question was", other: "questions were" })} left unanswered and ${plural(TAG, count, { one: "counts", other: "count" })} as incorrect.`,
     questionReview: "Question review",
     questionSummary: (number: number, correct: boolean, answered: boolean) =>
       `Question ${number}: ${correct ? "Correct" : answered ? "Incorrect" : "Unanswered"}`,
@@ -556,6 +573,9 @@ export const en = {
       emptyTitle: "There are no tracks",
       emptyBody: "A track is seeded by migration. An empty catalog means none has been applied.",
       tableCaption: "Preparation tracks",
+      certificationKind: "Certification track",
+      interviewKind: "Interview track",
+      topicCount: (count: number) => `${count} ${plural(TAG, count, { one: "topic", other: "topics" })}`,
       track: "Track",
       status: "Status",
       provider: "Provider",
@@ -648,6 +668,7 @@ export const en = {
 
     reviewPanel: {
       policyLegend: "Content policy",
+      checklistCount: (checked: number, total: number) => `${checked} of ${total} checked`,
       policyHint:
         "Tick only what you checked yourself. The items you tick are recorded with your decision.",
       comment: "Comment",
@@ -660,8 +681,10 @@ export const en = {
       publishNote:
         "Only approved revisions can be published. A published revision cannot be edited; a correction becomes a new revision.",
       confirmPublishTitle: (revision: number) => `Confirm publishing revision ${revision}`,
-      confirmPublishExplain: (revision: number) =>
-        `Publish revision ${revision}? Learners will get this question in their sessions, and the revision it replaces is retired.`,
+      unknownReviewer: "Reviewer not recorded",
+      unknownApprovalDate: "approval date not recorded",
+      confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>
+        `Publish revision ${revision} in ${topic}? Approved by ${reviewer} on ${date}. Learners can receive this question. Publishing is final: it cannot be undone or edited; corrections require a new revision.`,
       confirmPublishLabel: (revision: number) => `Yes, publish revision ${revision}`,
       publishRevision: (revision: number) => `Publish revision ${revision}`,
       approveFirst: "Approve it first.",

@@ -143,7 +143,7 @@ export function RevisionView({
             <ul className="key">
               {revision.options.map((option) => (
                 <li key={option.key}>
-                  <strong className={option.correct ? "yes" : "no"}>
+                  <strong className={`pill ${option.correct ? "pill-ok" : "pill-new"}`}>
                     {view.optionVerdict(option.key, option.correct)}
                   </strong>
                   <English as="p">{option.explanation}</English>

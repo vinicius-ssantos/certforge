@@ -32,7 +32,8 @@ Then give the app questions, in one of two ways:
 5. To leave early, use **End session without finishing** and confirm ([picture](screenshots/07-session-ended.png)).
 6. Open **History** ([picture](screenshots/08-history.png)) and then a session to review each answer with the explanation ([picture](screenshots/09-session-review.png)).
 7. Open **Progress** for attempts, correct and incorrect answers and accuracy per topic ([picture](screenshots/10-progress.png)).
-8. **Sign out**, then try to open `/history`: you are sent to sign in.
+8. Open **Review**. If the queue has due questions, each reason is named in a coloured pill, the items remain numbered and the **Practise** action names its topic. With the correct, confident demonstration fixtures, the queue may instead show its honest empty state ([picture after capture](screenshots/10b-review-queue.png)). The reasons and the caveat explain past practice, not readiness for the real exam.
+9. **Sign out**, then try to open `/history`: you are sent to sign in.
 
 Expected: every step works with the keyboard alone; error messages say what to do; nothing is shown about the answer before step 4.
 
