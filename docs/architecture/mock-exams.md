@@ -20,11 +20,11 @@ Chaining ordinary practice sessions would break that invariant: the ordinary att
 | Questions per topic | 5 |
 | Correct answers needed at that threshold | 34 |
 
-> **Where the first three numbers come from has not been verified.** The question count, the time limit and the pass threshold describe Oracle's exam, not a CertForge choice, and nothing in this repository records a source for them or a date on which a person checked them. They are presented to a learner as the shape of the real exam, and a learner practising a 50-question, 120-minute run calibrates their pacing to it, so being wrong here misleads actively rather than quietly.
+> **Format verification, 2026-10-07.** Oracle's official [Java certification overview on dev.java](https://dev.java/learn/java-cert-overview/) lists the Java SE 21 Developer Professional exam (`1Z0-830`) as **50 questions in 120 minutes with a 68% passing score**, matching this blueprint. Dev.java describes itself as the official Java platform and language website maintained by the Java Platform Group at Oracle.
 >
-> This is the same gap the exam objective wording had before #68, and it is tracked the same way. Until it is checked against Oracle's exam page in a browser, treat the three as unverified.
+> The JavaScript-rendered Oracle University storefront at `education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830` still rejects automated clients, so #113 continues to track a direct human browser comparison of that page. The values above are therefore no longer source-less, but this record does not pretend that the storefront itself was observed on 2026-10-07.
 
-The values live in `MockExamBlueprintCatalog`. A future exam version must opt in explicitly; it never inherits another exam's timing or distribution by accident.
+The values live in `MockExamBlueprintCatalog`. A future exam version must opt in explicitly; it never inherits another exam's timing or distribution by accident. Its question count, duration and passing score must be checked again against an Oracle-maintained source and recorded with a date.
 
 The equal five-per-topic distribution is a CertForge practice blueprint. It deliberately gives every published objective meaningful exposure and is not presented as an Oracle-published objective weighting.
 

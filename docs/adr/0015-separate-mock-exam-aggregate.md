@@ -22,7 +22,7 @@ An active mock stores an immutable ordered snapshot of revision ids and topic id
 
 While the mock is active, answer submission returns a receipt only. Correctness, correct options, explanations and references are available only after the aggregate reaches a terminal state.
 
-The exam-specific shape is supplied by an explicit blueprint keyed by exam code. The first accepted blueprint is `1Z0-830`: 50 questions, 120 minutes, a 68% practice threshold and five questions from each of its ten current top-level topics. The equal topic allocation is a CertForge practice choice, not a claim about Oracle's objective weighting.
+The exam-specific shape is supplied by an explicit blueprint keyed by exam code. The first accepted blueprint is `1Z0-830`: 50 questions, 120 minutes, a 68% practice threshold and five questions from each of its ten current top-level topics. The exam question count, duration and passing score were checked on 2026-10-07 against Oracle's official [Java certification overview on dev.java](https://dev.java/learn/java-cert-overview/), which lists 1Z0-830 as 50 questions in 120 minutes with a 68% passing score. Dev.java is maintained by Oracle's Java Platform Group. Oracle University's Java SE certification page is JavaScript-rendered and still rejects automated clients, so a direct human browser comparison of that storefront remains tracked by #113 rather than being implied here. The equal topic allocation is a CertForge practice choice, not a claim about Oracle's objective weighting.
 
 Mock evidence does not feed the ordinary `progress_topic` projection in the first implementation.
 
@@ -32,7 +32,7 @@ Mock evidence does not feed the ordinary `progress_topic` projection in the firs
 - Ordinary practice semantics and history remain stable.
 - Mock results can use the full question count as their denominator, so unanswered questions are represented honestly.
 - A later content replacement cannot change an existing mock because revision ids are snapshotted.
-- Each new certification exam must declare a blueprint before mock mode can start for it.
+- Each new certification exam must declare a blueprint before mock mode can start for it, and its exam-format values must be rechecked against an Oracle-maintained source rather than inherited from another exam code.
 - There is some duplicated lifecycle and persistence logic inside the study module. That cost is accepted in exchange for keeping the two evidence contracts explicit.
 - If mock evidence later contributes to adaptive review, that relationship requires its own documented rule instead of arriving as an accidental side effect.
 
