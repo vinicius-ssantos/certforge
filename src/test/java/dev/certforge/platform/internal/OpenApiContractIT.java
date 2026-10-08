@@ -98,6 +98,7 @@ class OpenApiContractIT {
           "/api/study/sessions",
           "/api/study/sessions/{sessionId}/questions/{position}/attempt",
           "/api/study/mock-exams",
+          "/api/study/mock-exams/availability",
           "/api/study/mock-exams/{sessionId}",
           "/api/study/mock-exams/{sessionId}/questions/{position}/response",
           "/api/study/mock-exams/{sessionId}/finish",

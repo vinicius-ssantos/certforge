@@ -13,8 +13,10 @@ import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.study.internal.MockExamRepository.SnapshotQuestion;
 import dev.certforge.study.internal.MockExamViews.Answer;
+import dev.certforge.study.internal.MockExamViews.MockExamAvailability;
 import dev.certforge.study.internal.MockExamViews.MockExamQuestionView;
 import dev.certforge.study.internal.MockExamViews.MockExamResult;
+import dev.certforge.study.internal.MockExamViews.MockExamTopicAvailability;
 import dev.certforge.study.internal.MockExamViews.MockExamView;
 import dev.certforge.study.internal.MockExamViews.OptionAnswer;
 import dev.certforge.study.internal.MockExamViews.QuestionResult;
@@ -81,6 +83,31 @@ class MockExamService {
     this.currentActor = currentActor;
     this.clock = clock;
     this.transaction = new TransactionTemplate(transactionManager);
+  }
+
+  MockExamAvailability availability(String trackSlug) {
+    ActorId learner = currentActor.require();
+    Instant now = now();
+    repository.expireDue(learner.value(), now);
+
+    MockExamPlanner.Readiness readiness = planner.readiness(trackSlug);
+    Optional<MockExamSession> active =
+        repository.findActive(learner.value(), readiness.trackId().value());
+    List<MockExamTopicAvailability> topics =
+        readiness.topics().stream()
+            .map(
+                topic ->
+                    new MockExamTopicAvailability(
+                        topic.topicId(), topic.required(), topic.available(), topic.missing()))
+            .toList();
+
+    return new MockExamAvailability(
+        readiness.contentReady(),
+        active.map(MockExamSession::id).orElse(null),
+        readiness.blueprint().questionCount(),
+        readiness.blueprint().questionsPerTopic(),
+        readiness.missingQuestionCount(),
+        topics);
   }
 
   MockExamView start(String trackSlug) {

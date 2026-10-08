@@ -1,6 +1,7 @@
 package dev.certforge.study.internal;
 
 import dev.certforge.study.internal.MockExamService.ResponseOutcome;
+import dev.certforge.study.internal.MockExamViews.MockExamAvailability;
 import dev.certforge.study.internal.MockExamViews.MockExamResult;
 import dev.certforge.study.internal.MockExamViews.MockExamView;
 import dev.certforge.study.internal.MockExamViews.ResponseReceipt;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,6 +39,11 @@ class MockExamController {
 
   MockExamController(MockExamService service) {
     this.service = service;
+  }
+
+  @GetMapping("/availability")
+  MockExamAvailability availability(@RequestParam String trackSlug) {
+    return service.availability(trackSlug);
   }
 
   @PostMapping

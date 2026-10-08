@@ -48,6 +48,28 @@ class MockExamPlannerTest {
   }
 
   @Test
+  void readinessReportsThePublishedContentShortfallWithoutStartingAMock() {
+    Fixture fixture = fixture(2);
+    MockExamPlanner planner =
+        new MockExamPlanner(
+            fixture.catalog, fixture.questionBank, new MockExamBlueprintCatalog(), new Random(42));
+
+    MockExamPlanner.Readiness readiness = planner.readiness("java-se-21");
+
+    assertThat(readiness.contentReady()).isFalse();
+    assertThat(readiness.missingQuestionCount()).isEqualTo(30);
+    assertThat(readiness.topics()).hasSize(10);
+    assertThat(readiness.topics())
+        .allSatisfy(
+            topic -> {
+              assertThat(topic.required()).isEqualTo(5);
+              assertThat(topic.available()).isEqualTo(2);
+              assertThat(topic.missing()).isEqualTo(3);
+              assertThat(topic.ready()).isFalse();
+            });
+  }
+
+  @Test
   void seededRandomnessMakesTheWholePlanReproducibleForTests() {
     Fixture fixture = fixture(15);
 

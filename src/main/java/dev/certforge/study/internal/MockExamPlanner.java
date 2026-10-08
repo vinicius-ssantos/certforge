@@ -37,6 +37,27 @@ class MockExamPlanner {
       MockExamBlueprint blueprint,
       List<PlannedQuestion> questions) {}
 
+  record TopicReadiness(TopicId topicId, int required, int available) {
+    int missing() {
+      return Math.max(0, required - available);
+    }
+
+    boolean ready() {
+      return missing() == 0;
+    }
+  }
+
+  record Readiness(
+      PreparationTrackId trackId, MockExamBlueprint blueprint, List<TopicReadiness> topics) {
+    boolean contentReady() {
+      return topics.stream().allMatch(TopicReadiness::ready);
+    }
+
+    int missingQuestionCount() {
+      return topics.stream().mapToInt(TopicReadiness::missing).sum();
+    }
+  }
+
   private final PreparationCatalog catalog;
   private final QuestionBank questionBank;
   private final MockExamBlueprintCatalog blueprints;
@@ -51,6 +72,39 @@ class MockExamPlanner {
     this.questionBank = questionBank;
     this.blueprints = blueprints;
     this.random = random;
+  }
+
+  Readiness readiness(String trackSlug) {
+    TrackView track =
+        catalog
+            .activeTrack(trackSlug)
+            .orElseThrow(() -> StudyException.notFound("track_not_found", "Track not found"));
+    MockExamBlueprint blueprint =
+        blueprints
+            .find(track.examVersion().examCode())
+            .orElseThrow(
+                () ->
+                    StudyException.conflict(
+                        "mock_exam_not_configured",
+                        "Mock exam is not configured for this exam version"));
+
+    List<TopicView> topics = track.topics();
+    if (topics.size() != blueprint.topicCount()) {
+      throw StudyException.conflict(
+          "mock_exam_topic_mismatch",
+          "The active exam topics do not match the configured mock-exam blueprint",
+          Map.of("expected", blueprint.topicCount(), "available", topics.size()));
+    }
+
+    List<TopicReadiness> readiness = new ArrayList<>(topics.size());
+    for (TopicView topic : topics) {
+      readiness.add(
+          new TopicReadiness(
+              topic.id(),
+              blueprint.questionsPerTopic(),
+              questionBank.eligibleForTopic(topic.id()).size()));
+    }
+    return new Readiness(track.id(), blueprint, List.copyOf(readiness));
   }
 
   Plan plan(String trackSlug) {

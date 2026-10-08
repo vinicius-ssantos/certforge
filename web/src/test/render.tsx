@@ -144,6 +144,21 @@ export function renderApp(
       ? { body: options.as ?? account }
       : { status: 401, body: { code: "unauthenticated", status: 401, title: "Unauthorized" } },
     "GET /api/auth/csrf": { body: { headerName: "X-XSRF-TOKEN", token: "test-csrf-token" } },
+    "GET /api/study/mock-exams/availability": {
+      body: {
+        activeSessionId: null,
+        contentReady: true,
+        missingQuestionCount: 0,
+        questionCount: 50,
+        questionsPerTopic: 5,
+        topics: javaTrack.topics.map((topic) => ({
+          topicId: topic.id,
+          required: 5,
+          available: 5,
+          missing: 0,
+        })),
+      },
+    },
     ...routes,
   });
   const api = createApi({ fetch });

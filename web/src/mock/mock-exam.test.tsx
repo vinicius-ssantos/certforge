@@ -104,6 +104,21 @@ describe("mock exam flow", () => {
     const { fetch } = renderApp(
       {
         "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": {
+          body: {
+            activeSessionId: null,
+            contentReady: true,
+            missingQuestionCount: 0,
+            questionCount: 50,
+            questionsPerTopic: 5,
+            topics: javaTrack.topics.map((topic) => ({
+              topicId: topic.id,
+              required: 5,
+              available: 5,
+              missing: 0,
+            })),
+          },
+        },
         "POST /api/study/mock-exams": { status: 201, body: mock() },
         [`GET /api/study/mock-exams/${MOCK_ID}`]: { body: mock() },
       },

@@ -52,6 +52,23 @@ function mockExam(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function availability(overrides: Record<string, unknown> = {}) {
+  return {
+    activeSessionId: null,
+    contentReady: true,
+    missingQuestionCount: 0,
+    questionCount: 50,
+    questionsPerTopic: 5,
+    topics: javaTrack.topics.map((topic) => ({
+      topicId: topic.id,
+      required: 5,
+      available: 5,
+      missing: 0,
+    })),
+    ...overrides,
+  };
+}
+
 function answer(correctKey: string) {
   return {
     correctOptions: [correctKey],
@@ -120,6 +137,9 @@ describe("mock exam entry", () => {
     const { fetch } = renderApp(
       {
         "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": {
+          body: availability(),
+        },
         "POST /api/study/mock-exams": { status: 201, body: mockExam() },
         [`GET /api/study/mock-exams/${SESSION_ID}`]: { body: mockExam() },
       },
@@ -130,6 +150,10 @@ describe("mock exam entry", () => {
 
     expect(await screen.findByText("Which option compiles?")).toBeInTheDocument();
     expect(screen.getByRole("heading", { level: 1, name: "Mock exam" })).toBeInTheDocument();
+    const availabilityCall = fetch.calls.find(
+      (call) => call.method === "GET" && call.path === "/api/study/mock-exams/availability",
+    );
+    expect(availabilityCall?.query.get("trackSlug")).toBe("java-certification");
     const start = fetch.calls.find(
       (call) => call.method === "POST" && call.path === "/api/study/mock-exams",
     );
@@ -142,6 +166,9 @@ describe("mock exam entry", () => {
     renderApp(
       {
         "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": {
+          body: availability(),
+        },
         "POST /api/study/mock-exams": problem(409, "active_mock_exam_exists", {
           sessionId: SESSION_ID,
         }),
@@ -151,6 +178,56 @@ describe("mock exam entry", () => {
     );
 
     await user.click(await screen.findByRole("button", { name: "Start 1Z0-830 mock" }));
+
+    expect(await screen.findByText(/already had this mock in progress/)).toBeInTheDocument();
+  });
+
+  it("explains why a mock cannot start instead of offering a failing action", async () => {
+    renderApp(
+      {
+        "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": {
+          body: availability({
+            contentReady: false,
+            missingQuestionCount: 6,
+            topics: javaTrack.topics.map((topic) => ({
+              topicId: topic.id,
+              required: 5,
+              available: 2,
+              missing: 3,
+            })),
+          }),
+        },
+      },
+      { path: "/tracks/java-certification" },
+    );
+
+    expect(
+      await screen.findByText(
+        "Not available yet. 6 reviewed questions are still missing across 2 topics. A full mock requires 5 published questions in every topic.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Start 1Z0-830 mock" })).not.toBeInTheDocument();
+  });
+
+  it("still offers an existing mock when published content is currently insufficient", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": {
+          body: availability({
+            activeSessionId: SESSION_ID,
+            contentReady: false,
+            missingQuestionCount: 6,
+          }),
+        },
+        [`GET /api/study/mock-exams/${SESSION_ID}`]: { body: mockExam() },
+      },
+      { path: "/tracks/java-certification" },
+    );
+
+    await user.click(await screen.findByRole("button", { name: "Continue mock exam" }));
 
     expect(await screen.findByText(/already had this mock in progress/)).toBeInTheDocument();
   });
