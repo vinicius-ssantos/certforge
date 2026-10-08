@@ -159,9 +159,11 @@ class RevisionRulesTest {
   @Test
   void generalKnowledgeQuestionsNeedNeitherJavaReleaseNorSeniority() {
     assertThat(RevisionRules.violations(withoutRelease(), GENERAL)).isEmpty();
-    assertThat(RevisionRules.violations(
-        content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false))),
-        GENERAL)).containsExactly("java_release_not_applicable");
+    assertThat(
+            RevisionRules.violations(
+                content(QuestionType.SINGLE_CHOICE, List.of(option("A", true), option("B", false))),
+                GENERAL))
+        .containsExactly("java_release_not_applicable");
     assertThat(RevisionRules.violations(interview(Seniority.PLENO), GENERAL))
         .containsExactly("seniority_not_applicable");
   }
