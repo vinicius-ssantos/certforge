@@ -60,3 +60,11 @@ test("reads one manifest-backed pack and rejects an empty one", () => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("the seeded infrastructure pack is a valid unpublished draft", () => {
+  const pack = readManifestPack("content/infrastructure-devops-foundations");
+  assert.equal(pack.manifest.editorialStatus, "DRAFT");
+  assert.equal(pack.manifest.trackKind, "GENERAL");
+  assert.equal(pack.questions.length, 1);
+  assert.equal(pack.questions[0].topicId, "a3000000-0000-4000-8000-000000000301");
+});
