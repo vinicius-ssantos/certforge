@@ -296,3 +296,37 @@ test("review record reports unreviewed questions and stale orphan entries", () =
   };
   assert.deepEqual(manifestOrphansIn(record, [question]), ["removed"]);
 });
+
+
+test("validates the real Java Backend interview foundation pack", () => {
+  const pack = readManifestPack("content/java-backend-interview");
+  assert.equal(pack.manifest.packId, "java-backend-interview-foundation");
+  assert.equal(pack.manifest.trackKind, "INTERVIEW");
+  assert.equal(pack.manifest.trackSlug, "java-backend-interview");
+  assert.equal(pack.questions.length, 12);
+  assert.equal(new Set(pack.questions.map((question) => question.topicId)).size, 12);
+  assert.deepEqual(
+    pack.questions.map((question) => question.name),
+    [
+      "t01-java-equals-hashcode-key",
+      "t02-concurrency-volatile-visibility",
+      "t03-oop-payment-strategy-boundary",
+      "t04-dsa-priority-queue-scheduler",
+      "t05-spring-constructor-injection",
+      "t06-persistence-n-plus-one",
+      "t07-testing-idempotency-strategy",
+      "t08-domain-boundaries-shared-table",
+      "t09-distributed-retry-storm",
+      "t10-messaging-kafka-idempotent-consumer",
+      "t11-cloud-kubernetes-probes",
+      "t12-system-design-aws-orders-idempotency",
+    ],
+  );
+  assert.ok(pack.questions.every((question) => question.type === "GUIDED_RESPONSE"));
+  assert.ok(pack.questions.every((question) => ["PLENO", "SENIOR"].includes(question.seniority)));
+  assert.ok(
+    pack.questions.every((question) =>
+      question.guidedResponse.expectedConcepts.some((concept) => concept.required),
+    ),
+  );
+});

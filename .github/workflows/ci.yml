@@ -84,6 +84,10 @@ jobs:
         run: |
           node content/build-review-packet.mjs --out "$RUNNER_TEMP/packet.md"
           diff docs/release/content-review-packet.md "$RUNNER_TEMP/packet.md"
+          node content/build-manifest-review-packet.mjs \
+            --pack content/java-backend-interview \
+            --out "$RUNNER_TEMP/interview-packet.md"
+          diff docs/release/java-backend-interview-review-packet.md "$RUNNER_TEMP/interview-packet.md"
 
       # content/private/ is where a maintainer keeps material they hold a licence to but no right to
       # redistribute. This repository is public and Apache-2.0, so a file committed there would be

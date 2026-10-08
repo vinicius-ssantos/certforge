@@ -1,0 +1,32 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige analisar retries como problema sistêmico: timeout, multiplicação entre camadas, backoff, jitter, idempotência e limites de carga.",
+  "prompt": "Uma requisição atravessa três serviços. Cada camada possui timeout de 2 segundos e faz até três tentativas imediatas contra a próxima camada. Durante uma degradação do banco, o tráfego explode e piora a indisponibilidade. O que está acontecendo e como você redesenharia timeout/retry para evitar esse retry storm?",
+  "guidedResponse": {
+    "referenceAnswer": "Retries aumentam carga justamente quando a dependência já está degradada, e retries em várias camadas se multiplicam. O primeiro passo é definir timeouts a partir do orçamento de latência e do comportamento real da dependência, evitando esperar além do valor útil ao chamador. Eu concentraria retries em uma camada apropriada em vez de repetir o mesmo comportamento em cada hop, usaria um número limitado de tentativas com exponential backoff e jitter e imporia budgets/limites de retry. Só repetiria operações seguras ou idempotentes, ou adicionaria uma chave/semântica de idempotência. Circuit breaker ou load shedding podem ajudar a parar trabalho sem chance razoável de sucesso, mas precisam de tuning para não criar outra instabilidade. Métricas de timeout, retries, saturação e taxa de sucesso devem mostrar se a política está ajudando.",
+    "expectedConcepts": [
+      {"text": "Retries em camadas diferentes podem se multiplicar e amplificar carga na dependência degradada", "required": true, "explanation": "Cada camada pode repetir chamadas que já são repetidas abaixo dela."},
+      {"text": "Timeout deve respeitar orçamento de latência e características reais da dependência", "required": true, "explanation": "Esperas arbitrárias podem consumir todo o deadline ou falhar prematuramente."},
+      {"text": "Retries devem ser limitados e espaçados com backoff e jitter", "required": true, "explanation": "Isso reduz sincronização de clientes e pressão contínua sobre a dependência."},
+      {"text": "A operação precisa ser segura para retry ou possuir idempotência explícita", "required": true, "explanation": "Repetir uma operação com efeito não idempotente pode duplicar resultados."},
+      {"text": "Circuit breaking/load shedding e retry budgets são mecanismos complementares", "required": false, "explanation": "Eles limitam trabalho quando a chance de sucesso é baixa."}
+    ],
+    "commonMistakes": [
+      "Aumentar o número de retries durante a falha sem limitar a carga.",
+      "Usar o mesmo timeout fixo em todas as camadas sem considerar o deadline fim a fim.",
+      "Adicionar circuit breaker e manter retries ilimitados, tratando-o como solução isolada."
+    ],
+    "followUps": [
+      "Em qual camada você colocaria o retry se só pudesse escolher uma?",
+      "Como você escolheria timeouts usando p95/p99 sem causar falsos timeouts em excesso?"
+    ]
+  },
+  "references": [
+    {"title": "AWS Builders' Library — Timeouts, retries, and backoff with jitter", "url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"},
+    {"title": "AWS Builders' Library — Making retries safe with idempotent APIs", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

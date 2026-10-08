@@ -1,0 +1,31 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "seniority": "PLENO",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige reconhecer quando polimorfismo/composição reduzem acoplamento sem transformar Strategy ou injeção de dependência em regras absolutas.",
+  "prompt": "Um `PaymentService` possui um `switch` crescente por tipo de pagamento e cada novo meio altera a mesma classe. Como você avaliaria uma refatoração com Strategy e injeção de dependências? Em que situação manter o `switch` ainda pode ser a escolha mais simples?",
+  "guidedResponse": {
+    "referenceAnswer": "Quando cada tipo de pagamento encapsula comportamento realmente diferente e novos tipos são adicionados com frequência, uma abstração de estratégia pode mover cada política para uma implementação própria e permitir que o serviço orquestre por contrato em vez de conhecer todos os detalhes concretos. As implementações podem ser fornecidas ao serviço por construção/configuração, reduzindo a criação direta de dependências e facilitando testes e substituição. Isso não significa que um container de DI automaticamente satisfaz DIP nem que todo `switch` é ruim. Se o conjunto de casos é pequeno, estável, local e a abstração criaria mais indireção do que valor, um `switch` explícito pode ser mais legível. A decisão deve considerar coesão, razão de mudança, extensibilidade real e custo cognitivo.",
+    "expectedConcepts": [
+      {"text": "Strategy é útil quando há comportamentos intercambiáveis com uma abstração comum", "required": true, "explanation": "O ganho vem de encapsular variações reais, não de eliminar sintaxe condicional por si só."},
+      {"text": "Composição e dependência de abstrações podem reduzir conhecimento de implementações concretas", "required": true, "explanation": "O orquestrador passa a depender do contrato necessário ao comportamento."},
+      {"text": "Injeção de dependência é um mecanismo e não prova, sozinha, que o design segue DIP", "required": true, "explanation": "Ainda é possível injetar abstrações inadequadas ou detalhes de infraestrutura no domínio."},
+      {"text": "Um switch pequeno, estável e local pode ser mais simples que uma hierarquia prematura", "required": false, "explanation": "KISS/YAGNI e custo de indireção fazem parte do trade-off."}
+    ],
+    "commonMistakes": [
+      "Dizer que qualquer switch viola OCP.",
+      "Equacionar uso do container Spring com Dependency Inversion correta.",
+      "Criar uma classe Strategy para cada caso sem uma variação de comportamento relevante."
+    ],
+    "followUps": [
+      "Como você selecionaria a estratégia sem colocar outro switch gigante em um lugar diferente?",
+      "Que sinais indicariam que a abstração Strategy ficou mais complexa do que o problema?"
+    ]
+  },
+  "references": [
+    {"title": "Spring Framework — Dependencies and configuration in detail", "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"},
+    {"title": "JLS 9 — Interfaces", "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-9.html"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

@@ -193,7 +193,6 @@ questions.forEach((question, index) => {
   const date = current.state === "reviewed" ? (current.reviewedOn || "") : "";
   add("| " + (index + 1) + " | " + question.name + " | " + verdict + " | " + reviewer + " | " + date + " |");
 });
-add();
 
 writeFileSync(out, lines.join("\n") + "\n");
 console.log(questions.length + " questions written to " + out + ": " + reviewed.length + " reviewed, " + changed.length + " changed, " + unreviewed.length + " unreviewed");
