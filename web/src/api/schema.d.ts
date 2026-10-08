@@ -1505,7 +1505,7 @@ export interface components {
             /** Format: uuid */
             id: string;
             /** @enum {string} */
-            kind: "CERTIFICATION" | "INTERVIEW";
+            kind: "CERTIFICATION" | "INTERVIEW" | "GENERAL";
             name: string;
             provider: string;
             slug: string;
