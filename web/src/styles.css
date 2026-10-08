@@ -1,3 +1,18 @@
+/* The product's surface.
+ *
+ * Everything here is spaced and sized from the tokens in tokens.css. A literal length in this file
+ * is a bug unless it is a hairline border, an optical nudge that carries a comment, or a
+ * breakpoint. That rule is the point of the redesign: the previous sheet typed its own values per
+ * rule, so no two sections shared a rhythm and the page read as several products stitched together.
+ *
+ * Two constraints hold throughout and are tested rather than asserted. Every control is at least
+ * `--touch` tall. State is never carried by colour alone: wherever a colour says something, a word,
+ * a glyph or a shape says it too, because a learner who cannot tell the green from the brass still
+ * has to know which answer was right.
+ */
+
+/* ---- document ---------------------------------------------------------------------------- */
+
 *,
 *::before,
 *::after {
@@ -8,11 +23,13 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 1rem/1.55 var(--font-ui);
+  font: var(--t-md) / 1.55 var(--font-ui);
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: var(--accent);
+  text-underline-offset: 0.15em;
 }
 
 h1,
@@ -20,16 +37,33 @@ h2,
 h3 {
   font-family: var(--font-read);
   font-weight: 600;
+  text-wrap: balance;
 }
 
 h1 {
-  font-size: 1.85rem;
-  line-height: 1.25;
+  font-size: var(--t-2xl);
+  line-height: 1.2;
+  margin: 0 0 var(--s3);
 }
 
 h2 {
-  font-size: 1.25rem;
+  font-size: var(--t-xl);
+  line-height: 1.3;
 }
+
+h3 {
+  font-size: var(--t-lg);
+}
+
+/* Running text is held to a measure wherever it appears, including inside a card or a column. */
+p,
+li,
+dd,
+figcaption {
+  max-width: var(--measure);
+}
+
+/* ---- focus ------------------------------------------------------------------------------- */
 
 :focus-visible {
   outline: 3px solid var(--focus);
@@ -38,23 +72,26 @@ h2 {
 
 /* A programmatically focused heading or region needs no ring: it is not an interactive control. */
 h1:focus,
+h2:focus,
 main:focus {
   outline: none;
 }
 
 .skip-link {
   position: absolute;
-  left: 0.5rem;
+  left: var(--s2);
   top: -4rem;
-  padding: 0.5rem 0.75rem;
+  padding: var(--s2) var(--s3);
   background: var(--action);
   color: var(--action-text);
-  border-radius: 0.25rem;
+  border-radius: var(--radius);
+  font-weight: 600;
+  text-decoration: none;
   z-index: 10;
 }
 
 .skip-link:focus {
-  top: 0.5rem;
+  top: var(--s2);
 }
 
 .visually-hidden {
@@ -66,6 +103,8 @@ main:focus {
   white-space: nowrap;
 }
 
+/* ---- header and navigation --------------------------------------------------------------- */
+
 .site-header {
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -76,47 +115,129 @@ main:focus {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem 1.5rem;
-  max-width: 60rem;
+  gap: var(--s2) var(--s5);
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 0.75rem 1rem;
+  padding: var(--s3) var(--s4);
 }
 
 .brand {
   font-weight: 700;
+  font-size: var(--t-lg);
+  letter-spacing: -0.01em;
 }
 
 /*
  * The language control sits in the header, where the form-field `select` rule below would stretch
  * it to the full width of the bar. Only the width and the horizontal padding are overridden: the
- * 2.75rem minimum height stays, because that is what keeps it a large enough touch target.
+ * `--touch` minimum height stays, because that is what keeps it a large enough touch target.
  */
 .language select {
   width: auto;
-  padding-inline: 0.5rem;
+  padding-inline: var(--s2);
 }
 
 nav {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.25rem 1.25rem;
+  gap: var(--s1) var(--s4);
   align-items: center;
 }
 
-nav a[aria-current="page"] {
-  font-weight: 700;
-  text-decoration: underline;
+nav a {
+  padding: var(--s1) 0;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
 }
 
+nav a:hover {
+  border-bottom-color: var(--border-strong);
+}
+
+/* The current page is named by weight and by a rule under it, so the cue survives a greyscale
+ * print and does not rely on the accent being distinguishable from the ink. */
+nav a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom-color: var(--action);
+}
+
+/* ---- page shell -------------------------------------------------------------------------- */
+
 main {
-  max-width: 60rem;
+  max-width: var(--shell);
   margin: 0 auto;
-  padding: 1rem;
+  padding: var(--s6) var(--s4) var(--s7);
 }
 
 .narrow {
-  max-width: 28rem;
+  max-width: 30rem;
 }
+
+.page-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--s4);
+  margin-bottom: var(--s5);
+}
+
+.page-head > :first-child {
+  margin-bottom: 0;
+}
+
+.head-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s4);
+}
+
+/*
+ * A heading that has to exist for focus and for the document outline but must not be the loudest
+ * thing on screen. On a practice session the question itself is what the eye should land on, so the
+ * page's own title becomes a kicker above it. Visual hierarchy is not heading hierarchy.
+ */
+.eyebrow {
+  font: 600 var(--t-xs) / 1.4 var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin: 0 0 var(--s2);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s3);
+  align-items: flex-start;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--s5);
+}
+
+/*
+ * A form beside the panel that says what the form still needs: two columns from the top, so the
+ * requirements stay in view while the author types instead of being something they scroll back to.
+ */
+.with-aside {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: var(--s6);
+  margin-top: var(--s5);
+  align-items: start;
+}
+
+.with-aside > aside {
+  position: sticky;
+  top: var(--s5);
+}
+
+/* ---- buttons and links ------------------------------------------------------------------- */
 
 button,
 .link-button {
@@ -124,14 +245,20 @@ button,
   cursor: pointer;
 }
 
-button:not(.link-button) {
-  min-height: 2.75rem;
-  padding: 0.5rem 1.1rem;
+button:not(.link-button),
+a.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: var(--touch);
+  padding: var(--s2) var(--s5);
   border: 2px solid var(--action);
-  border-radius: 0.25rem;
+  border-radius: var(--radius);
   background: var(--action);
   color: var(--action-text);
   font-weight: 600;
+  text-decoration: none;
 }
 
 button:disabled {
@@ -139,39 +266,125 @@ button:disabled {
   cursor: progress;
 }
 
+button.secondary {
+  background: transparent;
+  color: var(--action);
+}
+
+button.small {
+  min-height: 2rem;
+  padding: var(--s1) var(--s3);
+  font-size: var(--t-sm);
+}
+
+button.approve {
+  border-color: var(--ok);
+  background: var(--ok);
+  color: var(--bg);
+}
+
+button.warn {
+  border-color: var(--danger);
+  background: transparent;
+  color: var(--danger);
+}
+
 .link-button {
   background: none;
   border: 0;
-  padding: 0.25rem;
+  padding: var(--s1);
   color: var(--accent);
   text-decoration: underline;
 }
 
+/* ---- form fields ------------------------------------------------------------------------- */
+
 .field {
-  margin-bottom: 1rem;
+  margin-bottom: var(--s4);
 }
 
 label {
   display: block;
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--s1);
 }
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
+input[type="password"],
+select,
+textarea {
+  display: block;
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.65rem;
+  min-height: var(--touch);
+  padding: var(--s2) var(--s3);
   font: inherit;
   color: var(--text);
-  background: var(--bg);
-  border: 2px solid var(--border);
-  border-radius: 0.375rem;
+  background: var(--surface);
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius);
 }
 
+/* A field that failed validation says so in words above it; the heavier red edge is the second
+ * cue, not the only one. */
 input[aria-invalid="true"] {
   border-color: var(--danger);
+  border-width: 3px;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+textarea.read {
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+}
+
+.narrow-field {
+  max-width: 16rem;
+}
+
+fieldset {
+  margin: 0 0 var(--s5);
+  padding: var(--s3) var(--s4) var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+legend {
+  font-weight: 600;
+  padding: 0 var(--s2);
+}
+
+/* A fieldset that is only a label over its controls, with no box of its own. */
+fieldset.field {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--s5);
+}
+
+fieldset.field > legend {
+  padding: 0;
+  margin-bottom: var(--s2);
+}
+
+.check {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: var(--touch);
+  margin: 0;
+  font-weight: 500;
+}
+
+.check input {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin: 0;
+  flex: none;
+  accent-color: var(--accent);
 }
 
 .hint,
@@ -180,309 +393,193 @@ input[aria-invalid="true"] {
 }
 
 .hint {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--s1);
+  font-size: var(--t-sm);
 }
 
 .field-error {
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--s1);
   color: var(--danger);
   font-weight: 600;
 }
 
+/* ---- messages ---------------------------------------------------------------------------- */
+
 .error-summary,
 .state-error {
-  border: 3px solid var(--danger);
+  border: 2px solid var(--danger);
+  border-left-width: 6px;
   background: var(--danger-bg);
-  padding: 0.75rem 1rem;
-  border-radius: 0.375rem;
-  margin: 1rem 0;
+  padding: var(--s3) var(--s4);
+  border-radius: var(--radius);
+  margin: var(--s4) 0;
 }
 
 .error-summary h2,
 .state-error h2 {
   margin-top: 0;
-  font-size: 1.1rem;
+  font-size: var(--t-lg);
+}
+
+.error-summary p,
+.state-error p {
+  margin-bottom: 0;
 }
 
 .state {
-  padding: 0.5rem 0;
+  padding: var(--s2) 0;
+  color: var(--muted);
 }
 
+.notice {
+  padding: var(--s3) var(--s4);
+  border: 2px solid var(--ok);
+  border-left-width: 6px;
+  background: var(--ok-bg);
+  border-radius: var(--radius);
+}
+
+.changes {
+  padding: var(--s3) var(--s4);
+  margin-bottom: var(--s5);
+  border: 2px solid var(--danger);
+  border-left-width: 6px;
+  background: var(--danger-bg);
+  border-radius: var(--radius);
+}
+
+.changes h2 {
+  margin: 0 0 var(--s1);
+  font-size: var(--t-lg);
+}
+
+.changes p {
+  margin: 0;
+}
+
+.confirm {
+  padding: var(--s3) var(--s4);
+  border: 2px solid var(--action);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.confirm p {
+  margin-top: 0;
+}
+
+/* ---- cards ------------------------------------------------------------------------------- */
+
+/*
+ * `auto-fit` rather than `auto-fill`: with `auto-fill` a single track kept its 16rem width and left
+ * the rest of the row empty, so one track in a track list sat in a narrow box beside nothing.
+ */
 .cards {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: var(--s4);
 }
 
 .card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  padding: var(--s4) var(--s5) var(--s5);
   background: var(--surface);
+  max-width: none;
 }
 
 .card h2 {
-  margin: 0 0 0.25rem;
+  margin: 0;
+  font-size: var(--t-lg);
+}
+
+.card p {
+  margin: 0;
+}
+
+.card > :last-child {
+  margin-top: auto;
 }
 
 .topics {
-  padding-left: 1.25rem;
+  padding-left: var(--s6);
+  margin: 0;
 }
 
 .topics li {
-  margin: 0.4rem 0;
+  margin: 0;
+  max-width: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  button,
-  a {
-    transition: background-color 0.15s ease, color 0.15s ease;
-  }
-}
-
-@media (max-width: 30rem) {
-  main {
-    padding: 0.75rem;
-  }
-}
-
-fieldset {
-  margin: 0 0 1.25rem;
-  padding: 0.5rem 0.75rem 0.75rem;
-  border: 1px solid var(--border);
-  border-radius: 0.375rem;
-}
-
-legend {
-  font-weight: 600;
-  padding: 0 0.25rem;
-}
-
-.choice {
+.topic-row {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  min-height: 2.75rem;
-  padding: 0.35rem 0;
+  justify-content: space-between;
+  gap: var(--s4);
+  padding: var(--s3) 0;
+  border-top: 1px solid var(--border);
 }
 
-.choice input {
-  width: 1.4rem;
-  height: 1.4rem;
-  margin: 0.2rem 0 0;
+.topic-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s1);
+  min-width: 0;
+}
+
+.topic-copy strong {
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+  line-height: 1.35;
+}
+
+.topic-copy .muted {
+  font-size: var(--t-sm);
+}
+
+.topic-row > button {
   flex: none;
 }
 
-.choice label {
-  margin: 0;
-  font-weight: 400;
+.topics .topics {
+  margin-left: var(--s2);
 }
 
-.prompt {
-  margin: 0 0 1rem;
-  font-family: var(--font-read);
-  font-size: 1.1rem;
-  line-height: 1.6;
-  max-width: 44rem;
-}
-
-.prompt p {
-  margin: 0 0 0.75rem;
-  white-space: pre-wrap;
-}
-
-pre.code {
-  margin: 0 0 1rem;
-  padding: 0.9rem 1rem;
-  overflow: auto;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: 0.25rem;
-  font: 0.875rem/1.55 var(--font-code);
-  white-space: pre;
-}
-
-.answers {
-  list-style: none;
-  padding: 0;
-}
-
-.answers li {
-  border: 1px solid var(--border);
-  border-left-width: 6px;
-  border-radius: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  margin: 0.5rem 0;
-}
-
-.answers .answer-correct {
-  border-color: var(--ok);
-  background: var(--ok-bg);
-}
-
-.answers p {
-  margin: 0.25rem 0;
-}
-
-button.small {
-  min-height: 2rem;
-  padding: 0.15rem 0.7rem;
-  font-size: 0.9rem;
-}
-
-button.secondary {
-  background: transparent;
-  color: var(--action);
-}
-
-.session-actions {
-  margin-top: 2rem;
-  border-top: 1px solid var(--border);
-  padding-top: 0.75rem;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-}
-
-th,
-td {
-  text-align: left;
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-  vertical-align: top;
-}
-
-thead th {
-  border-bottom: 2px solid var(--border);
-}
-
-tbody th {
-  font-weight: 600;
-}
-
-@media (max-width: 40rem) {
-  table {
-    display: block;
-    overflow-x: auto;
-  }
-}
-
-.review {
-  padding-left: 0;
-  list-style: none;
-}
-
-.review > li {
-  border: 1px solid var(--border);
-  border-radius: 0.5rem;
-  padding: 0.25rem 1rem 0.75rem;
-  margin: 1rem 0;
-}
-
-summary {
-  cursor: pointer;
-  font-weight: 600;
-  min-height: 2.75rem;
-}
-
-/* Editorial desk */
-.page-head {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-a.button {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.75rem;
-  padding: 0.5rem 1.1rem;
-  border: 2px solid var(--action);
-  border-radius: 0.25rem;
-  background: var(--action);
-  color: var(--action-text);
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-  margin: 1.25rem 0 0.5rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.tabs a {
-  padding: 0.7rem 1rem;
-  margin-bottom: -1px;
-  border-bottom: 3px solid transparent;
-  color: var(--text);
-  text-decoration: none;
-}
-
-.tabs a[aria-current="page"] {
-  border-bottom-color: var(--action);
-  font-weight: 600;
-}
-
-table.queue td.question-cell a {
-  font-family: var(--font-read);
-  font-size: 1.05rem;
-  color: var(--text);
-}
-
-.status {
-  display: inline-flex;
-  gap: 0.5rem;
-  align-items: baseline;
-  font-weight: 500;
-}
-
-.status-review {
-  color: var(--review);
-}
-
-.status-ok {
-  color: var(--ok);
-}
-
-.status-draft {
-  color: var(--muted);
-}
+/* ---- step rail (editorial lifecycle) ----------------------------------------------------- */
 
 .rail {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.75rem;
+  gap: var(--s2) var(--s6);
   list-style: none;
-  margin: 0.75rem 0;
+  margin: 0 0 var(--s5);
   padding: 0;
 }
 
 .rail li {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--s2);
   color: var(--muted);
+  max-width: none;
 }
 
 .rail li > span:first-child {
   display: grid;
   place-items: center;
-  width: 1.6rem;
-  height: 1.6rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
   border: 1.5px solid var(--border-strong);
   border-radius: 50%;
-  font-size: 0.8rem;
+  font-size: var(--t-xs);
+  font-weight: 600;
 }
 
 .rail li[aria-current="step"] {
@@ -502,52 +599,475 @@ table.queue td.question-cell a {
   color: var(--bg);
 }
 
-.revision-head p {
-  margin: 0 0 0.5rem;
+/* ---- session progress -------------------------------------------------------------------- */
+
+/*
+ * How far through the session the learner is. The number is stated in words beside the bar; the bar
+ * is the illustration, not the information, so it is `aria-hidden` in the markup.
+ */
+.session-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+  margin: 0 0 var(--s5);
 }
 
-.notice {
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--ok);
-  background: var(--ok-bg);
-  border-radius: 0.25rem;
+.session-progress > span {
+  flex: none;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
-.with-aside {
+.session-progress-track {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.session-progress-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* ---- the question ------------------------------------------------------------------------ */
+
+/*
+ * The prompt is the largest thing on the practice screen. It is set in the reading face because it
+ * is read closely, often twice, and frequently contains a sentence about code rather than code.
+ */
+.prompt {
+  margin: 0 0 var(--s5);
+  font-family: var(--font-read);
+  font-size: var(--t-xl);
+  line-height: 1.45;
+  max-width: var(--measure);
+}
+
+.prompt p {
+  margin: 0 0 var(--s3);
+  white-space: pre-wrap;
+  font-size: inherit;
+  max-width: none;
+}
+
+pre.code {
+  margin: 0 0 var(--s4);
+  padding: var(--s4);
+  overflow-x: auto;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+  font: var(--t-sm) / 1.6 var(--font-code);
+  white-space: pre;
+  tab-size: 4;
+}
+
+/*
+ * An answer is a full-width target. The overlay on the label covers the whole row, so the padding
+ * and the empty space to the right of a short option select it too; before this only the few
+ * characters of the option's text did, which is a hard tap on a phone and a precise one on a
+ * trackpad. The input keeps its own focus ring because the overlay is transparent.
+ */
+.choice {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 21rem;
-  gap: 3rem;
-  margin-top: 1.5rem;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
+  gap: var(--s3);
+  min-height: var(--touch);
+  padding: var(--s3) var(--s4);
+  margin-bottom: var(--s2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
 }
 
-.with-aside > aside {
-  position: sticky;
-  top: 1.5rem;
+.choice:hover {
+  border-color: var(--border-strong);
 }
 
-@media (max-width: 62rem) {
-  .with-aside {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.5rem;
-  }
+.choice:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--accent-bg);
+}
 
-  .with-aside > aside {
-    position: static;
-    order: -1;
-  }
+.choice input {
+  position: relative;
+  z-index: 2;
+  width: 1.4rem;
+  height: 1.4rem;
+  margin: 0.15rem 0 0; /* optical: aligns the control with the first line, not the line box */
+  flex: none;
+  accent-color: var(--accent);
+}
+
+.choice label {
+  margin: 0;
+  font-weight: 400;
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+  line-height: 1.45;
+}
+
+.choice label::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/*
+ * How sure the learner is, as one control rather than three stacked rows. The radios stay real
+ * radios — arrow keys move between them and the group is one tab stop — and are hidden only
+ * visually, with the checked state carried by the label's fill and weight.
+ */
+.segmented {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--s5);
+}
+
+.segmented > legend {
+  padding: 0;
+  margin-bottom: var(--s2);
+}
+
+.segmented .choice {
+  position: relative;
+  display: block;
+  flex: 1 1 8rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.segmented .choice:has(input:checked) {
+  box-shadow: none;
+  background: none;
+}
+
+.segmented .choice input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.segmented .choice label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--touch);
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border-strong);
+  margin-left: -1px; /* collapses the shared edge between two segments into one line */
+  font-family: var(--font-ui);
+  font-size: var(--t-md);
+  text-align: center;
+  cursor: pointer;
+}
+
+.segmented .choice:first-of-type label {
+  border-radius: var(--radius) 0 0 var(--radius);
+  margin-left: 0;
+}
+
+.segmented .choice:last-of-type label {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.segmented .choice label::before {
+  content: none;
+}
+
+.segmented .choice input:checked + label {
+  background: var(--action);
+  border-color: var(--action);
+  color: var(--action-text);
+  font-weight: 600;
+  position: relative; /* lifts the selected segment's edges above its neighbours' */
+}
+
+.segmented .choice input:focus-visible + label {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  position: relative;
+}
+
+/* ---- the answer -------------------------------------------------------------------------- */
+
+.answers {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 var(--s5);
+}
+
+.answers li {
+  border: 1px solid var(--border);
+  border-left-width: 6px;
+  border-radius: var(--radius);
+  padding: var(--s3) var(--s4);
+  margin: var(--s2) 0;
+  background: var(--surface);
+  max-width: none;
+}
+
+/* The fill and the rail are the third cue. The first two are in the markup: the option's letter,
+ * and a sentence saying whether it was correct and whether the learner chose it. */
+.answers .answer-correct {
+  border-color: var(--ok);
+  background: var(--ok-bg);
+}
+
+.answers p {
+  margin: var(--s1) 0;
+  max-width: var(--measure);
+}
+
+.answers strong {
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+}
+
+/* What the verification programme printed for this question, shown where the learner is told the
+ * answer. The claim and its evidence belong on the same screen. */
+.verified {
+  margin: 0 0 var(--s5);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.verified > h3 {
+  margin: 0 0 var(--s2);
+  font: 600 var(--t-xs) / 1.4 var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.verified pre {
+  margin: 0;
+  padding: var(--s3);
+  overflow-x: auto;
+  background: var(--bg);
+  border-radius: var(--radius);
+  font: var(--t-sm) / 1.6 var(--font-code);
+}
+
+.session-actions {
+  margin-top: var(--s6);
+  border-top: 1px solid var(--border);
+  padding-top: var(--s4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s4);
+  align-items: center;
+}
+
+/* ---- tables ------------------------------------------------------------------------------ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--s4) 0;
+}
+
+th,
+td {
+  text-align: left;
+  padding: var(--s3);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+thead th {
+  border-bottom: 2px solid var(--border-strong);
+  font-size: var(--t-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+tbody tr:last-child th,
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Counts and scores line up in their columns. */
+td:has(time),
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+table.queue td.question-cell a {
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+  color: var(--text);
+}
+
+.status {
+  display: inline-flex;
+  gap: var(--s2);
+  align-items: baseline;
+  font-weight: 600;
+  font-size: var(--t-sm);
+  white-space: nowrap;
+}
+
+/* Each status also carries a glyph, from `statusOf` in the markup, so the colour is never the only
+ * thing that distinguishes "approved" from "changes requested". */
+.status-review {
+  color: var(--review);
+}
+
+.status-ok {
+  color: var(--ok);
+}
+
+.status-draft {
+  color: var(--muted);
+}
+
+/* ---- review ------------------------------------------------------------------------------ */
+
+.review {
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+}
+
+.review > li {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--s2) var(--s4) var(--s4);
+  margin: var(--s4) 0;
+  background: var(--surface);
+  max-width: none;
+}
+
+/* The questions waiting to be practised again, under the topic that owns them. Numbered, because
+ * the list is a queue the learner works through rather than a set. */
+.review-queue {
+  list-style: none;
+  margin: var(--s4) 0 0;
+  padding: 0;
+  counter-reset: queue;
+}
+
+.review-queue > li {
+  counter-increment: queue;
+  position: relative;
+  padding: var(--s3) 0 var(--s3) var(--s6);
+  border-top: 1px solid var(--border);
+  max-width: none;
+}
+
+.review-queue > li::before {
+  content: counter(queue);
+  position: absolute;
+  left: 0;
+  top: var(--s3);
+  width: var(--s5);
+  text-align: right;
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.review-queue strong {
+  display: block;
+  font-size: var(--t-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--review);
+}
+
+.review-queue p {
+  margin: var(--s1) 0 0;
+}
+
+.review-queue p:nth-of-type(1) {
+  font-family: var(--font-read);
+  font-size: var(--t-lg);
+}
+
+summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: var(--touch);
+  display: flex;
+  align-items: center;
+}
+
+/* ---- the editorial desk ------------------------------------------------------------------ */
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1);
+  margin: var(--s5) 0 var(--s4);
+  border-bottom: 1px solid var(--border);
+}
+
+.tabs a {
+  padding: var(--s3) var(--s4);
+  margin-bottom: -1px;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.tabs a:hover {
+  color: var(--text);
+}
+
+.tabs a[aria-current="page"] {
+  border-bottom-color: var(--action);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.revision-head p {
+  margin: 0 0 var(--s2);
 }
 
 .stage {
-  padding: 1.5rem 1.75rem;
+  padding: var(--s5) var(--s6);
   background: var(--surface);
   border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 .stage h2 {
   margin-top: 0;
 }
 
+/* What the learner will see, shown to the author as the learner will read it. */
 .learner-options {
   list-style: none;
   margin: 0;
@@ -556,232 +1076,134 @@ table.queue td.question-cell a {
 
 .learner-options li {
   display: flex;
-  gap: 0.9rem;
-  padding: 0.7rem 0;
+  gap: var(--s4);
+  padding: var(--s3) 0;
   border-top: 1px solid var(--border);
   font-family: var(--font-read);
-  font-size: 1.05rem;
+  font-size: var(--t-lg);
+  max-width: none;
 }
 
 .learner-options strong {
-  width: 1.2rem;
+  width: 1.25rem;
   flex: none;
 }
 
 ul.key,
 ul.notes {
   list-style: none;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--s4);
   padding: 0;
 }
 
 ul.key li,
 ul.notes li {
-  padding: 0.75rem 0;
+  padding: var(--s3) 0;
   border-top: 1px solid var(--border);
+  max-width: none;
 }
 
 ul.key p,
 ul.notes p {
-  margin: 0.25rem 0 0;
+  margin: var(--s1) 0 0;
 }
 
+/* The word is in the markup; these only colour it. */
 ul.key .yes {
   color: var(--ok);
+  font-weight: 600;
 }
 
 ul.key .no {
   color: var(--danger);
-}
-
-.row {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.5rem;
-}
-
-@media (max-width: 48rem) {
-  .row {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.narrow-field {
-  max-width: 15rem;
-}
-
-fieldset.field {
-  border: 0;
-  padding: 0;
-  margin: 0 0 1.5rem;
-}
-
-fieldset.field > legend {
-  padding: 0;
-  margin-bottom: 0.4rem;
-}
-
-select,
-textarea {
-  display: block;
-  width: 100%;
-  min-height: 2.75rem;
-  padding: 0.5rem 0.65rem;
-  font: inherit;
-  color: var(--text);
-  background: var(--surface);
-  border: 2px solid var(--border-strong);
-  border-radius: 0.25rem;
-}
-
-textarea {
-  resize: vertical;
-}
-
-textarea.read {
-  font-family: var(--font-read);
-  font-size: 1.05rem;
-  line-height: 1.55;
-}
-
-.check {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  min-height: 2.75rem;
-  margin: 0;
-  font-weight: 500;
-}
-
-.check input {
-  width: 1.3rem;
-  height: 1.3rem;
-  margin: 0;
+  font-weight: 600;
 }
 
 .option {
   display: grid;
   grid-template-columns: 2.25rem minmax(0, 1fr);
-  gap: 1rem;
-  padding: 1rem 0;
+  gap: var(--s4);
+  padding: var(--s4) 0;
   border-top: 1px solid var(--border);
 }
 
 .letter {
-  padding-top: 2.1rem;
-  font: 600 1.35rem/1 var(--font-read);
+  padding-top: 2.1rem; /* optical: drops the letter onto the baseline of its field's first label */
+  font: 600 var(--t-xl) / 1 var(--font-read);
 }
 
 .reference {
-  padding: 0.75rem 0;
+  padding: var(--s3) 0;
   border-top: 1px solid var(--border);
-}
-
-.changes {
-  padding: 0.75rem 1rem;
-  margin-bottom: 1.5rem;
-  border: 2px solid var(--danger);
-  background: var(--danger-bg);
-  border-radius: 0.25rem;
-}
-
-.changes h2 {
-  margin: 0 0 0.25rem;
-  font-size: 1.05rem;
-}
-
-.changes p {
-  margin: 0;
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
-  padding-top: 1.5rem;
+  gap: var(--s4);
+  padding-top: var(--s5);
   border-top: 1px solid var(--border);
 }
 
+/* What this revision still needs before it can be sent. */
 ul.todo {
   list-style: none;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--s4);
   padding: 0;
 }
 
 ul.todo li {
   display: flex;
-  gap: 0.6rem;
-  padding: 0.6rem 0;
+  gap: var(--s3);
+  padding: var(--s3) 0;
   border-top: 1px solid var(--border);
+  max-width: none;
 }
 
 ul.todo li > span:first-child {
-  width: 1.2rem;
+  width: 1.25rem;
   flex: none;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--danger);
 }
 
 .decision fieldset {
   border: 0;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--s4);
   padding: 0;
 }
 
 .decision legend {
-  font: 600 1.1rem/1.3 var(--font-read);
+  font: 600 var(--t-lg) / 1.3 var(--font-read);
   padding: 0;
+  margin-bottom: var(--s2);
 }
 
 .decision .check {
   align-items: flex-start;
-  padding: 0.35rem 0;
+  padding: var(--s1) 0;
 }
 
 .decision .check input {
-  margin-top: 0.2rem;
+  margin-top: 0.2rem; /* optical: aligns the box with the first line of a wrapping label */
   flex: none;
 }
 
-.stack {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-button.approve {
-  border-color: var(--ok);
-  background: var(--ok);
-  color: var(--bg);
-}
-
-button.warn {
-  border-color: var(--danger);
-  background: transparent;
-  color: var(--danger);
-}
-
+/* Publishing is the one irreversible step on the desk, so it is set apart from the decisions. */
 .publish {
-  margin-top: 1.75rem;
-  padding-top: 1.1rem;
+  margin-top: var(--s6);
+  padding-top: var(--s4);
   border-top: 2px solid var(--action);
 }
 
-.confirm {
-  padding: 0.75rem 1rem;
-  border: 2px solid var(--action);
-  border-radius: 0.25rem;
-}
-
-.confirm p {
-  margin-top: 0;
-}
+/* ---- the diff ---------------------------------------------------------------------------- */
 
 .diff {
-  margin: 0 0 2rem;
-  padding: 1rem 1.25rem;
+  margin: 0 0 var(--s6);
+  padding: var(--s4) var(--s5);
   border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
@@ -794,19 +1216,25 @@ button.warn {
 }
 
 .diff dl > div {
-  padding: 0.6rem 0;
+  padding: var(--s3) 0;
   border-top: 1px solid var(--border);
 }
 
 .diff dt {
   font-weight: 600;
+  font-size: var(--t-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
 }
 
 .diff dd {
-  margin: 0.25rem 0 0;
+  margin: var(--s1) 0 0;
   white-space: pre-wrap;
 }
 
+/* Added and removed text keeps its underline and strike-through: the fill alone would say nothing
+ * in a greyscale print or to a reader who cannot separate the two hues. */
 ins {
   text-decoration: underline;
   background: var(--ok-bg);
@@ -819,20 +1247,14 @@ del {
   color: inherit;
 }
 
-.head-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
-}
+/* ---- timed mock exams -------------------------------------------------------------------- */
 
-
-/* Timed mock exams */
 .mock-entry {
-  margin: 1.5rem 0 2rem;
-  padding: 1rem 1.25rem;
-  border: 2px solid var(--border);
-  border-radius: 0.5rem;
+  margin: var(--s5) 0 var(--s6);
+  padding: var(--s4) var(--s5) var(--s5);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--action);
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
@@ -844,19 +1266,20 @@ del {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
+  gap: var(--s5);
+  margin-bottom: var(--s5);
 }
 
 .mock-head h1 {
-  margin-bottom: 0.25rem;
+  margin-bottom: var(--s1);
 }
 
 .mock-timer {
+  flex: none;
   min-width: 9rem;
-  padding: 0.65rem 0.85rem;
+  padding: var(--s3) var(--s4);
   border: 2px solid var(--border-strong);
-  border-radius: 0.375rem;
+  border-radius: var(--radius);
   background: var(--surface);
   text-align: right;
 }
@@ -866,106 +1289,239 @@ del {
   display: block;
 }
 
+.mock-timer span {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
 .mock-timer strong {
-  font: 700 1.35rem/1.25 var(--font-code);
+  font: 700 var(--t-2xl) / 1.15 var(--font-code);
+  font-variant-numeric: tabular-nums;
 }
 
 .mock-layout {
   display: grid;
-  grid-template-columns: 13rem minmax(0, 1fr);
-  gap: 2rem;
+  grid-template-columns: 14rem minmax(0, 1fr);
+  gap: var(--s6);
   align-items: start;
 }
 
 .mock-layout > aside {
   position: sticky;
-  top: 1rem;
+  top: var(--s4);
 }
 
+/*
+ * The navigator is a grid of squares rather than circles: a square takes the full `--touch` target
+ * without growing the aside, and leaves a corner free for the flag.
+ */
 .mock-nav {
   display: grid;
-  grid-template-columns: repeat(5, 2.4rem);
-  gap: 0.45rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--s2);
   list-style: none;
-  margin: 0;
+  margin: 0 0 var(--s4);
   padding: 0;
+}
+
+.mock-nav li {
+  max-width: none;
 }
 
 button.mock-nav-button {
-  min-height: 2.4rem;
-  width: 2.4rem;
+  position: relative;
+  width: 100%;
+  min-height: var(--touch);
+  aspect-ratio: 1;
   padding: 0;
-  border-radius: 50%;
-  background: transparent;
+  border-radius: var(--radius);
+  background: var(--surface);
   color: var(--text);
   border-color: var(--border-strong);
+  font-variant-numeric: tabular-nums;
 }
 
+/* Answered: a fill and a tick. Each nav button also names its own state in its `aria-label`. */
 button.mock-nav-button.answered {
   background: var(--ok-bg);
   border-color: var(--ok);
 }
 
+button.mock-nav-button.answered::before {
+  content: "✓";
+  position: absolute;
+  bottom: 0.1rem;
+  right: 0.2rem;
+  font-size: var(--t-xs);
+  line-height: 1;
+  color: var(--ok);
+}
+
+/* Flagged: a folded corner. A shape, so it reads without the colour. */
 button.mock-nav-button.flagged::after {
-  content: "•";
-  color: var(--danger);
-  margin-left: 0.1rem;
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 0.7rem 0.7rem 0;
+  border-style: solid;
+  border-color: transparent var(--danger) transparent transparent;
+  border-top-right-radius: var(--radius);
 }
 
 button.mock-nav-button.current {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
+  border-color: var(--action);
+  box-shadow: inset 0 0 0 2px var(--action);
+  font-weight: 700;
 }
 
 .mock-legend {
-  font-size: 0.9rem;
+  display: grid;
+  gap: var(--s2);
+  margin: 0;
+}
+
+.mock-legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
+.mock-legend-marker {
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.mock-legend-marker.answered {
+  background: var(--ok-bg);
+  border-color: var(--ok);
+}
+
+.mock-legend-marker.answered::before {
+  content: "✓";
+  position: absolute;
+  right: 0.05rem;
+  bottom: -0.02rem;
+  font-size: var(--t-xs);
+  line-height: 1;
+  color: var(--ok);
+}
+
+.mock-legend-marker.flagged::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-width: 0 0.45rem 0.45rem 0;
+  border-style: solid;
+  border-color: transparent var(--danger) transparent transparent;
+  border-top-right-radius: var(--radius);
+}
+
+.mock-legend-marker.current {
+  border-color: var(--action);
+  box-shadow: inset 0 0 0 1px var(--action);
 }
 
 .mock-question {
   min-width: 0;
-  padding: 1.25rem;
+  padding: var(--s5) var(--s6);
   border: 1px solid var(--border);
-  border-radius: 0.5rem;
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
 .mock-question h2 {
   margin-top: 0;
+  font-size: var(--t-xs);
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 .mock-question-actions {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  gap: var(--s4);
+  margin-top: var(--s5);
+  padding-top: var(--s4);
   border-top: 1px solid var(--border);
 }
 
 .mock-score {
-  margin: 1rem 0 2rem;
-  padding: 1rem 1.25rem;
-  border: 2px solid var(--border);
-  border-radius: 0.5rem;
+  margin: var(--s4) 0 var(--s6);
+  padding: var(--s5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
   background: var(--surface);
 }
 
 .mock-score h2 {
   margin-top: 0;
+  font-size: var(--t-xs);
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
 }
 
 .mock-score-value {
-  margin: 0.25rem 0;
-  font: 700 2.4rem/1 var(--font-read);
+  margin: var(--s1) 0;
+  font: 700 var(--t-3xl) / 1 var(--font-read);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- motion and width -------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  button,
+  a,
+  .choice {
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease,
+      color 0.15s ease;
+  }
+}
+
+/* The desk's two columns become one when the aside can no longer hold its 22rem without squeezing
+ * the form. The checklist then follows the form in document order: on a narrow screen a tall list
+ * of requirements above the fields is a wall between the author and the work. */
+@media (max-width: 64rem) {
+  .with-aside {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s5);
+  }
+
+  .with-aside > aside {
+    position: static;
+    padding-top: var(--s4);
+    border-top: 1px solid var(--border);
+  }
 }
 
 @media (max-width: 48rem) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .mock-head {
     flex-direction: column;
   }
 
   .mock-timer {
     text-align: left;
+    width: 100%;
   }
 
   .mock-layout {
@@ -977,6 +1533,55 @@ button.mock-nav-button.current {
   }
 
   .mock-nav {
-    grid-template-columns: repeat(auto-fill, 2.4rem);
+    grid-template-columns: repeat(auto-fit, minmax(var(--touch), 1fr));
+  }
+
+  .mock-question,
+  .stage {
+    padding: var(--s4);
+  }
+}
+
+@media (max-width: 40rem) {
+  .table-scroll {
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+  }
+
+  .table-scroll > table {
+    min-width: 40rem;
+  }
+
+  .topic-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .topic-row > button {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 30rem) {
+  main {
+    padding: var(--s5) var(--s4) var(--s6);
+  }
+
+  .segmented .choice {
+    flex-basis: 100%;
+  }
+
+  .segmented .choice label {
+    margin: -1px 0 0;
+    border-radius: 0;
+  }
+
+  .segmented .choice:first-of-type label {
+    border-radius: var(--radius) var(--radius) 0 0;
+    margin-top: 0;
+  }
+
+  .segmented .choice:last-of-type label {
+    border-radius: 0 0 var(--radius) var(--radius);
   }
 }

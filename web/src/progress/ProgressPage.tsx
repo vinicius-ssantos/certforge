@@ -5,6 +5,7 @@ import { unwrap } from "../api/problem";
 import type { Misconception } from "../api/types";
 import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 
@@ -35,7 +36,7 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
         <strong>{t.progress.misconceptionsBodyNot}</strong>
         {t.progress.misconceptionsBodyEnd}
       </p>
-      <table>
+      <ScrollableTable label={t.progress.misconceptionsCaption}>
         <caption className="visually-hidden">{t.progress.misconceptionsCaption}</caption>
         <thead>
           <tr>
@@ -49,15 +50,15 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
           {rows.map((row) => (
             <tr key={row.topicId}>
               <th scope="row">{row.topicName ?? t.progress.fallbackTopic}</th>
-              <td>{row.attempts}</td>
-              <td>{row.questions}</td>
+              <td className="numeric">{row.attempts}</td>
+              <td className="numeric">{row.questions}</td>
               <td>
                 <time dateTime={row.lastAt}>{formatDateTime(row.lastAt, locale)}</time>
               </td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </ScrollableTable>
       <p>
         <Link to="/review">{t.progress.reviewThese}</Link>
       </p>
@@ -95,7 +96,7 @@ export function ProgressPage() {
         </EmptyState>
       ) : null}
       {progress.data && progress.data.length > 0 ? (
-        <table>
+        <ScrollableTable label={t.progress.tableCaption}>
           <caption className="visually-hidden">{t.progress.tableCaption}</caption>
           <thead>
             <tr>
@@ -119,13 +120,15 @@ export function ProgressPage() {
                     (topic.topicName ?? t.progress.fallbackTopic)
                   )}
                 </th>
-                <td>{topic.attempted}</td>
-                <td>{topic.correct}</td>
-                <td>{topic.incorrect}</td>
-                <td>{percent(topic.accuracy, t.progress.noValue)}</td>
+                <td className="numeric">{topic.attempted}</td>
+                <td className="numeric">{topic.correct}</td>
+                <td className="numeric">{topic.incorrect}</td>
+                <td className="numeric">{percent(topic.accuracy, t.progress.noValue)}</td>
                 <td>
                   {topic.lastActivityAt ? (
-                    <time dateTime={topic.lastActivityAt}>{formatDateTime(topic.lastActivityAt, locale)}</time>
+                    <time dateTime={topic.lastActivityAt}>
+                      {formatDateTime(topic.lastActivityAt, locale)}
+                    </time>
                   ) : (
                     t.progress.noValue
                   )}
@@ -133,7 +136,7 @@ export function ProgressPage() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </ScrollableTable>
       ) : null}
       {misconceptions.data ? <Misconceptions rows={misconceptions.data} /> : null}
     </>

@@ -178,9 +178,17 @@ export function SessionPage() {
 
   return (
     <>
-      <h1>{t.session.title}</h1>
+      <h1 className="eyebrow">{t.session.title}</h1>
       {resumed ? <p role="status">{t.session.resumed}</p> : null}
-      <p className="muted">{t.session.answeredCount(answered, ordered.length)}</p>
+      <div className="session-progress">
+        <span>{t.session.answeredCount(answered, ordered.length)}</span>
+        <span className="session-progress-track" aria-hidden="true">
+          <span
+            className="session-progress-fill"
+            style={{ width: `${ordered.length === 0 ? 0 : (answered / ordered.length) * 100}%` }}
+          />
+        </span>
+      </div>
       {finish.isError ? <ErrorState error={finish.error} /> : null}
       {body}
       <div className="session-actions">

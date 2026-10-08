@@ -6,6 +6,7 @@ import { useHasAny } from "../auth/permissions";
 import { useTopicNames } from "../history/useTopicNames";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { StatusMark } from "./StatusParts";
@@ -36,6 +37,9 @@ export function QueuePage() {
   const requested = params.get("status");
   const tabs = filters(t);
   const status = FILTER_STATUSES.find((candidate) => candidate === requested) ?? null;
+  const tableCaption = t.editorial.queue.tableCaption(
+    tabs.find((filter) => filter.status === status)?.label ?? "",
+  );
 
   const questions = useQuery({
     queryKey: ["editorial", "questions", status],
@@ -86,12 +90,8 @@ export function QueuePage() {
         </EmptyState>
       ) : null}
       {questions.data && questions.data.length > 0 ? (
-        <table className="queue">
-          <caption className="visually-hidden">
-            {t.editorial.queue.tableCaption(
-              tabs.find((filter) => filter.status === status)?.label ?? "",
-            )}
-          </caption>
+        <ScrollableTable className="queue" label={tableCaption}>
+          <caption className="visually-hidden">{tableCaption}</caption>
           <thead>
             <tr>
               <th scope="col">{t.editorial.queue.question}</th>
@@ -120,7 +120,7 @@ export function QueuePage() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </ScrollableTable>
       ) : null}
     </>
   );

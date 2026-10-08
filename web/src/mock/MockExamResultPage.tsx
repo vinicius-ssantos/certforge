@@ -7,6 +7,7 @@ import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
 import { Prompt } from "../ui/Prompt";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { useTopicNames } from "../history/useTopicNames";
@@ -56,7 +57,7 @@ export function MockExamResultPage() {
       </section>
 
       <h2>{t.mockResult.breakdown}</h2>
-      <table>
+      <ScrollableTable label={t.mockResult.breakdown}>
         <thead>
           <tr>
             <th>{t.mockResult.topic}</th>
@@ -75,7 +76,7 @@ export function MockExamResultPage() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </ScrollableTable>
 
       <h2>{t.mockResult.questionReview}</h2>
       <ol className="review">
