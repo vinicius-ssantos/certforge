@@ -21,17 +21,21 @@ function TopicList({
     <ol className="topics">
       {topics.map((topic) => (
         <li key={topic.id}>
-          <strong>{topic.name}</strong>
-          <span className="muted"> {topic.objectiveRef}</span>{" "}
-          <button
-            type="button"
-            className="small"
-            aria-label={t.track.practiceTopic(topic.name)}
-            disabled={busy}
-            onClick={() => onStart(topic)}
-          >
-            {t.track.practice}
-          </button>
+          <div className="topic-row">
+            <div className="topic-copy">
+              <strong>{topic.name}</strong>
+              {topic.objectiveRef ? <span className="muted">{topic.objectiveRef}</span> : null}
+            </div>
+            <button
+              type="button"
+              className="small"
+              aria-label={t.track.practiceTopic(topic.name)}
+              disabled={busy}
+              onClick={() => onStart(topic)}
+            >
+              {t.track.practice}
+            </button>
+          </div>
           {topic.subtopics.length > 0 ? (
             <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} />
           ) : null}

@@ -96,7 +96,7 @@ export function QuestionForm({
 
   return (
     <section aria-labelledby="question-heading">
-      <h2 id="question-heading" ref={heading} tabIndex={-1}>
+      <h2 id="question-heading" ref={heading} tabIndex={-1} className="eyebrow">
         {t.question.heading(number, total)}
       </h2>
       <ErrorSummary problems={shown} />
@@ -122,7 +122,7 @@ export function QuestionForm({
           ))}
         </fieldset>
 
-        <fieldset>
+        <fieldset className="segmented">
           <legend>{t.question.confidenceLegend}</legend>
           {confidenceLevels(t).map((level) => (
             <div key={level.value} className="choice">

@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { useLocale, useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime, statusLabel } from "./format";
@@ -71,7 +72,7 @@ export function HistoryPage() {
           <p className="muted">{t.history.noMocks}</p>
         ) : null}
         {mockItems.length > 0 ? (
-          <table>
+          <ScrollableTable label={t.history.mockTableCaption}>
             <caption className="visually-hidden">{t.history.mockTableCaption}</caption>
             <thead>
               <tr>
@@ -124,7 +125,7 @@ export function HistoryPage() {
                 );
               })}
             </tbody>
-          </table>
+          </ScrollableTable>
         ) : null}
         {mocks.hasNextPage ? (
           <p>
@@ -150,7 +151,7 @@ export function HistoryPage() {
           <p className="muted">{t.history.noPractice}</p>
         ) : null}
         {sessionItems.length > 0 ? (
-          <table>
+          <ScrollableTable label={t.history.tableCaption}>
             <caption className="visually-hidden">{t.history.tableCaption}</caption>
             <thead>
               <tr>
@@ -185,7 +186,7 @@ export function HistoryPage() {
                 );
               })}
             </tbody>
-          </table>
+          </ScrollableTable>
         ) : null}
         {sessions.hasNextPage ? (
           <p>

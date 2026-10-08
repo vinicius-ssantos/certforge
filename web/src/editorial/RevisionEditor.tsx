@@ -237,7 +237,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
 
   return (
     <div className="with-aside">
-      <form onSubmit={submit} noValidate>
+      <form className="stage" onSubmit={submit} noValidate>
         {blocker.state === "blocked" ? (
           <div role="group" aria-label={ed.unsavedLabel} className="confirm">
             <p>{ed.unsavedWarning}</p>
@@ -705,7 +705,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
         </div>
       </form>
 
-      <aside aria-labelledby="send-checks">
+      <aside className="stage" aria-labelledby="send-checks">
         <h2 id="send-checks">{ed.checksHeading}</h2>
         {violations === null ? (
           <p className="hint">{ed.checksHint}</p>

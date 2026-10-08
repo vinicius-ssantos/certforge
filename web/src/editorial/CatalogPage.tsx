@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { catalogStatusOf } from "./catalogLabels";
@@ -33,7 +34,7 @@ export function CatalogPage() {
         </EmptyState>
       ) : null}
       {tracks.data && tracks.data.length > 0 ? (
-        <table>
+        <ScrollableTable label={t.editorial.catalogPage.tableCaption}>
           <caption className="visually-hidden">{t.editorial.catalogPage.tableCaption}</caption>
           <thead>
             <tr>
@@ -66,7 +67,7 @@ export function CatalogPage() {
               );
             })}
           </tbody>
-        </table>
+        </ScrollableTable>
       ) : null}
     </>
   );

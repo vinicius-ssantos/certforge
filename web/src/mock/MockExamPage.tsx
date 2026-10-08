@@ -186,7 +186,20 @@ export function MockExamPage() {
                 </li>
               ))}
             </ol>
-            <p className="mock-legend muted">{t.mock.legend}</p>
+            <div className="mock-legend" aria-label={t.mock.legend}>
+              <span className="mock-legend-item">
+                <span className="mock-legend-marker answered" aria-hidden="true" />
+                {t.mock.legendAnswered}
+              </span>
+              <span className="mock-legend-item">
+                <span className="mock-legend-marker flagged" aria-hidden="true" />
+                {t.mock.legendFlagged}
+              </span>
+              <span className="mock-legend-item">
+                <span className="mock-legend-marker current" aria-hidden="true" />
+                {t.mock.legendCurrent}
+              </span>
+            </div>
           </aside>
 
           <section className="mock-question" aria-labelledby="mock-question-heading">

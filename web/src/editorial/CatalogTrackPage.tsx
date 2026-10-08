@@ -4,6 +4,7 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { AdminExamVersion, AdminTopic, AdminTrack } from "../api/types";
 import { useText } from "../i18n/useText";
+import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { catalogStatusOf } from "./catalogLabels";
@@ -52,7 +53,7 @@ function ExamVersion({ version, topics }: { version: AdminExamVersion; topics: A
       {mapped.length === 0 ? (
         <p>{t.editorial.catalogTrack.noTopicMapped}</p>
       ) : (
-        <table>
+        <ScrollableTable label={t.editorial.catalogTrack.mappedCaption(version.label)}>
           <caption className="visually-hidden">
             {t.editorial.catalogTrack.mappedCaption(version.label)}
           </caption>
@@ -74,7 +75,7 @@ function ExamVersion({ version, topics }: { version: AdminExamVersion; topics: A
               </tr>
             ))}
           </tbody>
-        </table>
+        </ScrollableTable>
       )}
     </section>
   );

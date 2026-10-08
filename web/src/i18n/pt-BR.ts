@@ -363,7 +363,10 @@ export const ptBR: Catalog = {
     questions: "Questões",
     questionButtonLabel: (number: number, answered: boolean, flagged: boolean) =>
       `Questão ${number}${answered ? ", respondida" : ""}${flagged ? ", marcada para revisar" : ""}`,
-    legend: "Respondida · Marcada · Atual",
+    legend: "Legenda da navegação pelas questões",
+    legendAnswered: "Respondida",
+    legendFlagged: "Marcada",
+    legendCurrent: "Atual",
     questionHeading: (number: number, total: number) => `Questão ${number} de ${total}`,
     removeFlag: "Desmarcar para revisar",
     addFlag: "Marcar para revisar",

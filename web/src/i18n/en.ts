@@ -365,7 +365,10 @@ export const en = {
     questions: "Questions",
     questionButtonLabel: (number: number, answered: boolean, flagged: boolean) =>
       `Question ${number}${answered ? ", answered" : ""}${flagged ? ", flagged for review" : ""}`,
-    legend: "Answered · Flagged · Current",
+    legend: "Question navigation legend",
+    legendAnswered: "Answered",
+    legendFlagged: "Flagged",
+    legendCurrent: "Current",
     questionHeading: (number: number, total: number) => `Question ${number} of ${total}`,
     removeFlag: "Remove review flag",
     addFlag: "Flag for review",
