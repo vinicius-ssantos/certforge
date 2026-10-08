@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "packId": "infrastructure-devops-foundations",
+  "trackSlug": "infrastructure-devops-foundations",
+  "trackKind": "GENERAL",
+  "trackVersion": "Taxonomy 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT"
+}
