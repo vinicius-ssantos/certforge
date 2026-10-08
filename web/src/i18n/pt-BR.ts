@@ -283,6 +283,11 @@ export const ptBR: Catalog = {
     lastActivity: "Última atividade",
     noValue: "–",
     notStarted: "Não começou",
+    situation: "Situação",
+    solid: "Firme",
+    needsReview: "Revisar",
+    targetNote: (percent: number) =>
+      `“Firme” significa ${percent}% ou mais, a nota de corte do simulado. Descreve sua prática até aqui, não uma previsão sobre o exame.`,
     fallbackTopic: "Tópico",
     misconceptionsHeading: "Onde você estava confiante e errou",
     misconceptionsBodyStart:

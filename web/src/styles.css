@@ -641,6 +641,36 @@ fieldset.field > legend {
 }
 
 /*
+ * A few figures side by side: the number large and tabular, its name small above it. On a track
+ * card it says where the learner is, not only what the track is.
+ */
+.stat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin: var(--s1) 0 0;
+}
+
+.stat > div {
+  display: grid;
+}
+
+.stat dt {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.stat dd {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
  * The small uppercase label that names a group of fields or a region. It is set in the interface
  * face on purpose: it is furniture, and should not compete with the serif used for content.
  */

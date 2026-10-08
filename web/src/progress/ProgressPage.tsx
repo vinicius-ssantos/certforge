@@ -8,6 +8,7 @@ import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
+import { PRACTICE_TARGET_PERCENT, meetsTarget } from "./target";
 
 function percent(accuracy: number | null, noValue: string): string {
   return accuracy === null ? noValue : `${Math.round(accuracy * 100)}%`;
@@ -105,6 +106,7 @@ export function ProgressPage() {
               <th scope="col">{t.progress.correct}</th>
               <th scope="col">{t.progress.incorrect}</th>
               <th scope="col">{t.progress.accuracy}</th>
+              <th scope="col">{t.progress.situation}</th>
               <th scope="col">{t.progress.lastActivity}</th>
             </tr>
           </thead>
@@ -131,10 +133,22 @@ export function ProgressPage() {
                       {/* The bar restates the number it sits beside; comparing nine rows of
                           percentages is work a shape does better than digits. */}
                       <span className="mini" aria-hidden="true">
-                        <i style={{ width: `${Math.round(topic.accuracy * 100)}%` }} />
+                        <i
+                          className={meetsTarget(topic.accuracy) ? undefined : "low"}
+                          style={{ width: `${Math.round(topic.accuracy * 100)}%` }}
+                        />
                       </span>
                       {percent(topic.accuracy, t.progress.noValue)}
                     </span>
+                  )}
+                </td>
+                <td>
+                  {topic.accuracy === null ? (
+                    t.progress.noValue
+                  ) : meetsTarget(topic.accuracy) ? (
+                    <span className="pill pill-ok">{t.progress.solid}</span>
+                  ) : (
+                    <span className="pill pill-hold">{t.progress.needsReview}</span>
                   )}
                 </td>
                 <td>
@@ -150,6 +164,9 @@ export function ProgressPage() {
             ))}
           </tbody>
         </ScrollableTable>
+      ) : null}
+      {progress.data && progress.data.length > 0 ? (
+        <p className="hint">{t.progress.targetNote(PRACTICE_TARGET_PERCENT)}</p>
       ) : null}
       {misconceptions.data ? <Misconceptions rows={misconceptions.data} /> : null}
     </>

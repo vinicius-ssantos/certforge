@@ -288,6 +288,18 @@ export const en = {
      * have nothing to show".
      */
     notStarted: "Not started",
+    /** The column that names where a topic stands, rather than leaving the reader to infer it. */
+    situation: "Situation",
+    /** At or above the practice target. */
+    solid: "Solid",
+    /** Below the practice target. The word is an instruction, not a verdict on the learner. */
+    needsReview: "Review",
+    /**
+     * The threshold, said out loud under the table that applies it. A learner should be able to
+     * see the line they are being measured against, and see where it came from.
+     */
+    targetNote: (percent: number) =>
+      `“Solid” means ${percent}% or better, the mock exam's pass mark. It describes your practice so far, not a prediction about the exam.`,
     fallbackTopic: "Topic",
     misconceptionsHeading: "Where you were sure and wrong",
     misconceptionsBodyStart:
