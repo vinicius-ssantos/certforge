@@ -135,7 +135,7 @@ export function reviewStatusOf(record, question) {
     whatChanged: textHolds ? (verificationHolds ? null : "the verified output") : "the text",
     verdict: entry.verdict,
     reviewer: record.reviewer,
-    reviewedOn: record.reviewedOn,
+    reviewedOn: entry.reviewedOn ?? record.reviewedOn,
     recordedDigest: entry.digest,
     currentDigest: current,
     recordedVerified: recorded,

@@ -72,7 +72,7 @@ if (held.length > 0) {
   for (const { question, status } of held) {
     const why =
       status.state === "changed"
-        ? `edited after ${record.reviewer} reviewed it on ${record.reviewedOn}`
+        ? `edited after ${status.reviewer} reviewed it on ${status.reviewedOn}`
         : status.state === "unreviewed"
           ? "no recorded review"
           : `recorded verdict is ${status.verdict}`;
@@ -84,7 +84,7 @@ if (approved.length === 0) {
   refuse("Nothing in this pack is both reviewed and approved. Nothing to publish.");
 }
 
-console.log(`${approved.length} question(s) carry a current approval by ${record.reviewer} (${record.reviewedOn}).`);
+console.log(`${approved.length} question(s) carry a current recorded approval.`);
 if (dryRun) {
   for (const { question } of approved) {
     console.log(`would publish ${question.name}`);
@@ -150,7 +150,7 @@ for (const { question, status } of approved) {
   const revisionId = JSON.parse(await body(created)).revisions[0].id;
 
   const comment =
-    `Approved by ${record.reviewer} on ${record.reviewedOn}, recorded in ${pack}/review.json ` +
+    `Approved by ${status.reviewer} on ${status.reviewedOn}, recorded in ${pack}/review.json ` +
     `against ${status.recordedDigest}. ${record.method}`;
   const steps = [
     [admin, "submit", undefined],
@@ -175,7 +175,7 @@ console.log(`\npublished=${published} skipped=${skipped} held=${held.length} tot
 // The provenance of record is the accounts, and it is stored on each revision; this summary names
 // the recorded reviewer, which is a handle, and prints no address. Output like this ends up pasted
 // into issues and CI logs, and an email address in one outlives the run.
-console.log(`Carrying the verdict ${record.reviewer} recorded on ${record.reviewedOn}.`);
+console.log("Carrying the per-question reviewer and review date recorded in review.json.");
 console.log("The author, reviewer and publisher of record are the accounts used; the editorial desk shows them per revision.");
 if (held.length > 0) {
   console.log(`\n${held.length} question(s) were held back; see above.`);

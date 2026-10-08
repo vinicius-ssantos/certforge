@@ -46,6 +46,10 @@ const withState = (state) => questions.filter((question) => status.get(question.
 const reviewed = withState("reviewed");
 const changed = withState("changed");
 const unreviewed = withState("unreviewed");
+const reviewDates = [...new Set(reviewed.map((question) => status.get(question.name).reviewedOn))]
+  .filter(Boolean)
+  .sort();
+const reviewDateText = reviewDates.length > 0 ? reviewDates.join(", ") : "date not recorded";
 
 const lines = [];
 const add = (text = "") => lines.push(text);
@@ -58,11 +62,11 @@ add();
 // The state of the review, as the record and the questions themselves say it is — never as prose
 // someone remembered to update.
 if (reviewed.length === questions.length) {
-  add(`**All ${questions.length} questions were reviewed by ${record.reviewer} (${record.reviewerRole}) on ${record.reviewedOn}, and none has been edited since.** ${record.method}`);
+  add(`**All ${questions.length} questions carry a current review by ${record.reviewer} (${record.reviewerRole}); review date(s): ${reviewDateText}. None has been edited since.** ${record.method}`);
 } else if (reviewed.length === 0) {
   add(`**None of these ${questions.length} questions has been reviewed by a person.** They are AI-assisted drafts.`);
 } else {
-  add(`**${reviewed.length} of ${questions.length} questions carry a current review** by ${record.reviewer}, recorded on ${record.reviewedOn}. ${changed.length} ${changed.length === 1 ? "has" : "have"} been edited since being reviewed and ${changed.length === 1 ? "needs" : "need"} a new one; ${unreviewed.length} ${unreviewed.length === 1 ? "has" : "have"} never been reviewed. Each is marked below.`);
+  add(`**${reviewed.length} of ${questions.length} questions carry a current review** by ${record.reviewer}; review date(s): ${reviewDateText}. ${changed.length} ${changed.length === 1 ? "has" : "have"} been edited since being reviewed and ${changed.length === 1 ? "needs" : "need"} a new one; ${unreviewed.length} ${unreviewed.length === 1 ? "has" : "have"} never been reviewed. Each is marked below.`);
 }
 add();
 add("The build checks that every code snippet compiles for Java 21 and prints what the question says (the \"Verified by the build\" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.");
