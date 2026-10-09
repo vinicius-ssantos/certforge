@@ -1453,12 +1453,10 @@ table.queue td.question-cell a {
   font-variant-numeric: tabular-nums;
 }
 
-.review-queue strong {
-  display: block;
-  font-size: var(--t-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  /* The reason's own pill-stop/pill-hold class chooses its semantic colour. */
+/* The reason wears a pill and brings its own shape and colour; nothing here may override it.
+ * The block-label styling this replaces was stretching the pill across the whole column. */
+.review-queue .pill {
+  margin-bottom: var(--s1);
 }
 
 .review-queue p {

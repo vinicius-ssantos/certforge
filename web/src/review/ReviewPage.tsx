@@ -114,6 +114,7 @@ export function ReviewPage() {
                 <button
                   type="button"
                   className="small"
+                  aria-label={t.review.practise(group.items.length, group.name)}
                   disabled={practise.isPending}
                 onClick={() =>
                   practise.mutate({
@@ -122,7 +123,7 @@ export function ReviewPage() {
                   })
                 }
               >
-                  {t.review.practise(group.items.length, group.name)}
+                  {t.review.practiseShort(group.items.length)}
                 </button>
               </div>
               <ol className="review-queue">

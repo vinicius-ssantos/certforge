@@ -254,6 +254,8 @@ export const ptBR: Catalog = {
       ` ${plural(TAG, waiting, { one: "Outra", other: "Outras" })} ${waiting} ${plural(TAG, waiting, { one: "está descansando", other: "estão descansando" })} até a próxima recordação.`,
     practise: (count: number, topic: string) =>
       `Praticar ${count} ${plural(TAG, count, { one: "questão", other: "questões" })} em ${topic}`,
+    practiseShort: (count: number) =>
+      `Praticar ${count} ${plural(TAG, count, { one: "questão", other: "questões" })}`,
     attemptSummary: (attempts: number, wrong: number) =>
       `Respondida ${attempts} ${plural(TAG, attempts, { one: "vez", other: "vezes" })}, ${wrong} ${plural(TAG, wrong, { one: "errada", other: "erradas" })}. Respondida pela última vez em `,
     fallbackTopic: "Tópico",

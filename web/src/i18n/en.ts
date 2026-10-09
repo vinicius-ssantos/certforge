@@ -270,6 +270,9 @@ export const en = {
       ` ${waiting} more ${plural(TAG, waiting, { one: "is", other: "are" })} resting until their next recall.`,
     practise: (count: number, topic: string) =>
       `Practise ${count} ${plural(TAG, count, { one: "question", other: "questions" })} in ${topic}`,
+    /** What the button shows. Its full name, with the topic, stays in `practise` above. */
+    practiseShort: (count: number) =>
+      `Practise ${count} ${plural(TAG, count, { one: "question", other: "questions" })}`,
     attemptSummary: (attempts: number, wrong: number) =>
       `Answered ${attempts} ${plural(TAG, attempts, { one: "time", other: "times" })}, ${wrong} wrong. Last answered `,
     fallbackTopic: "Topic",
