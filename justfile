@@ -200,6 +200,12 @@ scan-secrets:
 review-packet:
     node content/build-review-packet.mjs
 
+# The shortest set of reviews that would make a mock exam startable, and which questions to read
+# first. It selects; it reviews nothing.
+[group('content')]
+mock-shortlist:
+    node content/build-mock-shortlist.mjs
+
 # Import the real question pack as drafts awaiting review. It publishes nothing.
 [group('content')]
 import-content email password:
