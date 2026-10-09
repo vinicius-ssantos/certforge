@@ -108,9 +108,15 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(page, "02-tracks");
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
-  // The heading appears before asynchronous mock availability. Capture the actual shortfall
-  // worklist rather than an intermediate loading message; mock result fixtures are seeded later.
-  await expect(page.getByRole("table", { name: "Reviewed questions still needed, by topic" })).toBeVisible();
+  /*
+   * The heading appears before mock availability resolves, so wait — but wait for the loading
+   * line to clear, not for the shortfall table. The table only exists while the mock *cannot*
+   * start. Waiting for it meant this capture worked only as long as #138 was unfixed, and
+   * `MOCK_CAPTURE=1` seeds enough questions to make the mock startable, so a second run with
+   * that flag already failed here. The picture is of whichever state the stack is really in,
+   * which is what a picture should be.
+   */
+  await expect(page.getByText("Checking whether this mock can start")).toHaveCount(0);
   await shot(page, "03-track");
   await page.getByRole("button", { name: `Practice ${TOPIC_NAME}` }).click();
   await expect(page.getByRole("heading", { level: 2, name: /^Question 1 of/ })).toBeVisible();
@@ -246,6 +252,14 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByText("Verificando se este simulado")).toHaveCount(0);
   await shot(page, "pt-04-track");
+
+  /*
+   * Back to English before anything else uses this page. The choice is remembered in the
+   * browser, so leaving it in Portuguese left the mock capture below looking for a button
+   * labelled "Start 1Z0-830 mock" on a page offering "Começar simulado 1Z0-830".
+   */
+  await page.getByRole("combobox", { name: "Idioma" }).selectOption("en");
+  await expect(page.getByRole("navigation", { name: "Main" })).toBeVisible();
 
   /*
    * The dark scheme, which nothing had photographed.
