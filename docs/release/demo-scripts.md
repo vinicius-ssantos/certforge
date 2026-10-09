@@ -25,14 +25,14 @@ Then give the app questions, in one of two ways:
 
 ## Script A: the learner
 
-1. Open `http://localhost:8081`. You are sent to **Sign in** ([picture](screenshots/01-sign-in.png)). Choose **Create an account**, enter an email and a password of at least 12 characters, and submit. You land on the tracks ([picture](screenshots/02-tracks.png)).
+1. Open `http://localhost:8081`. You are sent to **Sign in** ([picture](screenshots/01-sign-in.png)). Choose **Create an account** ([desktop](screenshots/01b-create-account.png); [mobile](screenshots/01c-create-account-mobile.png)). The remaining-character counter and twelve-segment meter update while typing; enter an email and a password of at least 12 characters, then submit. You land on the tracks ([picture](screenshots/02-tracks.png)).
 2. Open **Java Certification**. It lists its topics in order with the official objectives link ([picture](screenshots/03-track.png)).
 3. Press **Practice** on a topic. A session starts and focus moves to the question ([picture](screenshots/04-question.png); [on a phone](screenshots/05-question-mobile.png)). Nothing on the screen says which option is correct.
 4. Pick an answer, say how confident you are, and submit. You now see whether it was correct, the reason for each option, the explanation and the references ([picture](screenshots/06-feedback.png)). Use **Next question** to continue; the last one offers **Finish session**.
 5. To leave early, use **End session without finishing** and confirm ([picture](screenshots/07-session-ended.png)).
 6. Open **History** ([picture](screenshots/08-history.png)) and then a session to review each answer with the explanation ([picture](screenshots/09-session-review.png)).
 7. Open **Progress** for attempts, correct and incorrect answers and accuracy per topic ([picture](screenshots/10-progress.png)).
-8. Open **Review**. If the queue has due questions, each reason is named in a coloured pill, the items remain numbered and the **Practise** action names its topic. With the correct, confident demonstration fixtures, the queue may instead show its honest empty state ([picture after capture](screenshots/10b-review-queue.png)). The reasons and the caveat explain past practice, not readiness for the real exam.
+8. Open **Review**. If the queue has due questions, each reason is named in a coloured pill, the items remain numbered and the **Practise** action names its topic. The demonstration intentionally includes a wrong answer with high confidence, so the [captured queue](screenshots/10b-review-queue.png) illustrates the reason pill, numbered item, topic-level practice action and timestamp. The reasons and the caveat explain past practice, not readiness for the real exam.
 9. **Sign out**, then try to open `/history`: you are sent to sign in.
 
 Expected: every step works with the keyboard alone; error messages say what to do; nothing is shown about the answer before step 4.

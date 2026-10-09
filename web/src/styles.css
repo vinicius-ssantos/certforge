@@ -214,6 +214,7 @@ main {
   display: flex;
   gap: 2px;
   margin-top: var(--s2);
+  margin-bottom: var(--s2);
 }
 
 .meter > i {
@@ -1394,6 +1395,10 @@ table.queue td.question-cell a {
   max-width: none;
 }
 
+.review > li.panel-danger {
+  border-left: 3px solid var(--danger);
+}
+
 .review > li > .section-label {
   margin-bottom: var(--s3);
 }
@@ -1439,7 +1444,7 @@ table.queue td.question-cell a {
   font-size: var(--t-sm);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--review);
+  /* The reason's own pill-stop/pill-hold class chooses its semantic colour. */
 }
 
 .review-queue p {

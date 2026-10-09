@@ -5,7 +5,9 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { AttemptRequest, AttemptResult, Question, Session } from "../api/types";
 import type { Catalog } from "../i18n/en";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
+import { formatDateTime } from "../history/format";
+import { useTopicNames } from "../history/useTopicNames";
 import { Confirm } from "../ui/Confirm";
 import { ErrorState, Loading } from "../ui/States";
 import { errorMessage } from "../ui/messages";
@@ -244,6 +246,8 @@ function endedWording(t: Catalog): Record<string, { title: string; text: string 
 
 function SessionEnded({ session }: { session: Session }) {
   const t = useText();
+  const { locale } = useLocale();
+  const topicNames = useTopicNames();
   const api = useApi();
   const navigate = useNavigate();
   const heading = useFocusOnMount<HTMLHeadingElement>();
@@ -321,6 +325,12 @@ function SessionEnded({ session }: { session: Session }) {
           ) : null}
           <p className="visually-hidden">
             {t.session.notSeenOf(session.questions.length - answered)}
+          </p>
+          <p className="muted">
+            {t.session.endedMeta(
+              topicNames.get(session.topicId) ?? t.history.fallbackTopic,
+              session.closedAt ? formatDateTime(session.closedAt, locale) : null,
+            )}
           </p>
           {attempts.isPending ? <Loading label={t.session.countingCorrect} /> : null}
           {attempts.isError ? <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} /> : null}

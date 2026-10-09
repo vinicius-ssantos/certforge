@@ -231,6 +231,8 @@ export const en = {
     statAnswered: "Answered",
     statCorrect: "Correct",
     statNotSeen: "Not seen",
+    endedMeta: (topic: string, closedAt: string | null) =>
+      `Topic: ${topic}${closedAt ? ` · Ended ${closedAt}` : ""}`,
     notSeenOf: (notSeen: number) =>
       `${notSeen} ${plural(TAG, notSeen, { one: "question was", other: "questions were" })} left unseen.`,
     /** The two ways on from a finished session, instead of dropping the learner at the menu. */
@@ -395,8 +397,8 @@ export const en = {
     emptyBody: "Nothing was answered before the session closed.",
     questionHeading: (number: number, correct: boolean) =>
       `Question ${number}: ${correct ? "correct" : "incorrect"}`,
-    yourAnswerLine: (options: string, confidence: string) =>
-      `Your answer: ${options}. Confidence: ${confidence}. Answered `,
+    yourAnswerLine: (options: string, confidence: string, elapsedSeconds: number) =>
+      `Your answer: ${options}. Confidence: ${confidence}. ${elapsedSeconds} ${plural(TAG, elapsedSeconds, { one: "second", other: "seconds" })} to answer. Answered `,
     /**
      * The confidence the learner reported, named for reading inside a sentence. An unrecognised
      * value falls back to the code in lower case, which is what this showed before the wording

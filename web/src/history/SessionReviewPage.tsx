@@ -59,6 +59,7 @@ export function SessionReviewPage() {
                 {t.sessionReview.yourAnswerLine(
                   attempt.selectedOptions.join(", "),
                   t.sessionReview.confidenceName(attempt.confidence),
+                  Math.ceil(attempt.elapsedMillis / 1000),
                 )}
                 <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt, locale)}</time>.
               </p>

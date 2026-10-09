@@ -82,6 +82,13 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await signedOut.goto("/login");
   await expect(signedOut.getByRole("heading", { level: 1, name: "Sign in" })).toBeVisible();
   await shot(signedOut, "01-sign-in");
+  await signedOut.goto("/register");
+  await expect(signedOut.getByRole("heading", { level: 1, name: "Create an account" })).toBeVisible();
+  await signedOut.getByLabel("Password").fill("eightchars");
+  await expect(signedOut.getByText("2 more characters to go.")).toBeVisible();
+  await shot(signedOut, "01b-create-account");
+  await signedOut.setViewportSize({ width: 390, height: 844 });
+  await shot(signedOut, "01c-create-account-mobile");
   await signedOut.context().close();
 
   await register(page);
@@ -100,11 +107,10 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(page, "05-question-mobile");
   await page.setViewportSize({ width: 1280, height: 720 });
 
-  await page.locator("#option-A").check();
-  if ((await page.locator("#option-B").getAttribute("type")) === "checkbox") {
-    await page.locator("#option-B").check();
-  }
-  await page.getByLabel(/Medium/).check();
+  // A deliberately incorrect, high-confidence answer leaves visible evidence for the red
+  // rail on session review and the learner\'s "wrong while sure" review queue.
+  await page.locator("#option-C").check();
+  await page.getByLabel(/High/).check();
   await page.getByRole("button", { name: "Submit answer" }).click();
   await expect(page.getByRole("heading", { level: 2, name: /^(Correct|Not quite)$/ })).toBeVisible();
   await shot(page, "06-feedback");
@@ -112,6 +118,8 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await page.getByRole("button", { name: "End session without finishing" }).click();
   await page.getByRole("button", { name: "Yes, end the session" }).click();
   await expect(page.getByRole("heading", { level: 2, name: "Session ended" })).toBeVisible();
+  await expect(page.locator("dl.stat dt").filter({ hasText: "Correct" })).toBeVisible();
+  await expect(page.getByText(new RegExp(`Topic: ${TOPIC_NAME}`))).toBeVisible();
   await shot(page, "07-session-ended");
 
   /*
@@ -136,11 +144,12 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
 
   /*
    * The learner's review queue. It had no picture at all, although it is the screen that decides
-   * what someone practises next. The fixture answers are correct and confident, so the queue is
-   * usually its empty state here — which is itself worth showing, since it explains the rule.
+   * what someone practises next. The deliberately wrong, confident fixture makes the reason pill and practice
+   * action visible, and we wait for them instead of capturing a loading state.
    */
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
+  await expect(page.getByText("Wrong, and you were sure")).toBeVisible();
   await shot(page, "10b-review-queue");
 
   // ---- the editorial desk ----

@@ -221,6 +221,8 @@ export const ptBR: Catalog = {
     statAnswered: "Respondidas",
     statCorrect: "Corretas",
     statNotSeen: "Não vistas",
+    endedMeta: (topic: string, closedAt: string | null) =>
+      `Tópico: ${topic}${closedAt ? ` · Encerrada em ${closedAt}` : ""}`,
     notSeenOf: (notSeen: number) =>
       `${plural(TAG, notSeen, { one: "Ficou", other: "Ficaram" })} ${notSeen} ${plural(TAG, notSeen, { one: "questão sem ver", other: "questões sem ver" })}.`,
     practiseAgain: "Praticar este tópico de novo",
@@ -365,8 +367,8 @@ export const ptBR: Catalog = {
     emptyBody: "Nada foi respondido antes de a sessão fechar.",
     questionHeading: (number: number, correct: boolean) =>
       `Questão ${number}: ${correct ? "correta" : "incorreta"}`,
-    yourAnswerLine: (options: string, confidence: string) =>
-      `Sua resposta: ${options}. Confiança: ${confidence}. Respondida em `,
+    yourAnswerLine: (options: string, confidence: string, elapsedSeconds: number) =>
+      `Sua resposta: ${options}. Confiança: ${confidence}. ${elapsedSeconds} ${plural(TAG, elapsedSeconds, { one: "segundo", other: "segundos" })} para responder. Respondida em `,
     confidenceName: (confidence: string) =>
       ({ LOW: "baixa", MEDIUM: "média", HIGH: "alta" })[confidence] ?? confidence.toLowerCase(),
     showAnswer: "Mostrar a alternativa correta e a explicação",
