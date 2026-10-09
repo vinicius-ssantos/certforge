@@ -798,6 +798,13 @@ fieldset.field > legend {
   color: var(--muted);
 }
 
+/* A label that opens a section needs air above it when something precedes it, or it reads as a
+ * caption belonging to the block it is actually separating itself from. `:where` keeps this at
+ * zero specificity, so any rule that wants a different gap still wins. */
+:where(* + .section-label) {
+  margin-top: var(--s5);
+}
+
 /* ---- step rail (editorial lifecycle) ----------------------------------------------------- */
 
 /*

@@ -82,7 +82,9 @@ export function RevisionView({
 
         {guided && criteria ? (
           <section aria-labelledby="guided-criteria">
-            <h2 id="guided-criteria">{view.guidedCriteriaHeading}</h2>
+            <h2 id="guided-criteria" className="section-label">
+              {view.guidedCriteriaHeading}
+            </h2>
             <p className="muted">{view.guidedCriteriaNote}</p>
             <h3>{view.referenceAnswer}</h3>
             <Prompt text={criteria.referenceAnswer} />
@@ -139,26 +141,36 @@ export function RevisionView({
           </section>
         ) : (
           <section aria-labelledby="answer-key">
-            <h2 id="answer-key">{view.answerKeyHeading}</h2>
-            <ul className="key">
+            <h2 id="answer-key" className="section-label">
+              {view.answerKeyHeading}
+            </h2>
+            <ul className="answers">
               {revision.options.map((option) => (
-                <li key={option.key}>
-                  <strong className={`pill ${option.correct ? "pill-ok" : "pill-new"}`}>
-                    {view.optionVerdict(option.key, option.correct)}
-                  </strong>
-                  <English as="p">{option.explanation}</English>
+                <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
+                  <span className="key" aria-hidden="true">
+                    {option.key}
+                  </span>
+                  <div>
+                    <p className={option.correct ? "verdict verdict-ok" : "verdict"}>
+                      <span aria-hidden="true">{option.correct ? "✓" : "✗"}</span>{" "}
+                      {view.optionVerdict(option.key, option.correct)}
+                    </p>
+                    <English as="p" className="why">
+                      {option.explanation}
+                    </English>
+                  </div>
                 </li>
               ))}
             </ul>
-            <h2>{view.explanation}</h2>
+            <h2 className="section-label">{view.explanation}</h2>
             <Prompt text={revision.explanation ?? ""} />
             {revision.difficultyRationale ? (
               <>
-                <h2>{view.whyThisDifficulty}</h2>
+                <h2 className="section-label">{view.whyThisDifficulty}</h2>
                 <p>{revision.difficultyRationale}</p>
               </>
             ) : null}
-            <h2>{view.references}</h2>
+            <h2 className="section-label">{view.references}</h2>
             <ul>
               {revision.references.map((reference) => (
                 <li key={reference.url}>
@@ -173,7 +185,9 @@ export function RevisionView({
 
         {revision.reviews.length > 0 ? (
           <section aria-labelledby="notes">
-            <h2 id="notes">{view.notesHeading}</h2>
+            <h2 id="notes" className="section-label">
+              {view.notesHeading}
+            </h2>
             <ul className="notes">
               {revision.reviews.map((review) => (
                 <li key={`${review.reviewerId}-${review.decidedAt}`}>
