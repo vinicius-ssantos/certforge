@@ -57,10 +57,8 @@ export function RegisterPage() {
    * words carry the meaning.
    */
   const remaining = MIN_PASSWORD_LENGTH - password.length;
-  const passwordHint =
-    password.length === 0 ? (
-      t.auth.passwordHint(MIN_PASSWORD_LENGTH)
-    ) : (
+  const countdown =
+    password.length === 0 ? null : (
       <>
         {remaining > 0 ? t.auth.passwordRemaining(remaining) : t.auth.passwordLongEnough}
         <span className="meter" aria-hidden="true">
@@ -99,7 +97,8 @@ export function RegisterPage() {
           value={password}
           onChange={setPassword}
           error={fieldErrors.password}
-          hint={passwordHint}
+          hint={t.auth.passwordHint(MIN_PASSWORD_LENGTH)}
+          below={countdown}
         />
         <button type="submit" disabled={submitting}>
           {submitting ? t.auth.creatingAccount : t.auth.createAccount}

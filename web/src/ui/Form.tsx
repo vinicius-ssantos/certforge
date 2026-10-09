@@ -45,6 +45,7 @@ export function TextField({
   onChange,
   error,
   hint,
+  below,
 }: {
   id: string;
   label: string;
@@ -54,11 +55,21 @@ export function TextField({
   onChange: (value: string) => void;
   error?: string | undefined;
   hint?: ReactNode;
+  /**
+   * Content shown under the control rather than over it, for anything that describes what
+   * has been typed. A hint belongs above, where it is read before the field is filled; a
+   * readout of the field's own contents belongs below it, where the eye already is.
+   * Described to assistive technology the same way the hint is.
+   */
+  below?: ReactNode;
 }) {
   const t = useText();
   const hintId = `${id}-hint`;
+  const belowId = `${id}-below`;
   const errorId = `${id}-error`;
-  const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(" ");
+  const describedBy = [hint ? hintId : null, below ? belowId : null, error ? errorId : null]
+    .filter(Boolean)
+    .join(" ");
   return (
     <div className="field">
       <label htmlFor={id}>{label}</label>
@@ -82,6 +93,11 @@ export function TextField({
         aria-describedby={describedBy || undefined}
         onChange={(event) => onChange(event.target.value)}
       />
+      {below ? (
+        <div id={belowId} className="field-below">
+          {below}
+        </div>
+      ) : null}
     </div>
   );
 }

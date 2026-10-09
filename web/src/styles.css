@@ -479,6 +479,13 @@ fieldset.field > legend {
   font-size: var(--t-sm);
 }
 
+/* A readout of what was typed, under the control it reports on. */
+.field-below {
+  margin-top: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
 .field-error {
   margin: 0 0 var(--s1);
   color: var(--danger);
@@ -1931,13 +1938,14 @@ button.mock-nav-button.current {
   background: var(--surface);
 }
 
+/*
+ * The heading of this region is the verdict, and it wears a pill. It used to be a quiet uppercase
+ * label, and that styling survived the change — which left "practice target not reached" shouting
+ * in six-point capitals inside its own badge. The label above the figure is a paragraph now, so
+ * this rule only has to keep the heading from adding a margin the panel does not want.
+ */
 .mock-score h2 {
   margin-top: 0;
-  font-size: var(--t-xs);
-  font-family: var(--font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
 }
 
 .mock-score-value {
