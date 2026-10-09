@@ -304,6 +304,39 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(dark, "dark-03-history");
   await dark.context().close();
 
+  /*
+   * What the product looks like when something goes wrong (#195).
+   *
+   * Thirty pictures and not one of a failure: every screen that had been photographed was a
+   * screen that worked. An error screen is where someone is most likely to be lost, and it was
+   * the part of the product nobody had looked at.
+   *
+   * Each of these is produced by the real failure path, not by a screen built to look like one.
+   */
+  const failing = await (await browser.newContext({ viewport: { width: 1280, height: 720 } })).newPage();
+
+  // A password the server refuses: a real 401, and the summary that takes focus and links to the
+  // field it is about.
+  await failing.goto("/login");
+  await failing.getByLabel("Email").fill(learner.email);
+  await failing.getByLabel("Password").fill("not the right password");
+  await failing.getByRole("button", { name: "Sign in" }).click();
+  await expect(failing.getByRole("alert")).toBeVisible();
+  await shot(failing, "16-sign-in-refused");
+
+  /*
+   * The backend unreachable. Aborting the request is what the browser sees when the server is
+   * down, and it exercises the same `ErrorState` every page renders through — with its retry, and
+   * without a request id, because a request that never arrived has none to quote.
+   */
+  await signIn(failing, learner);
+  await failing.route("**/api/catalog/tracks", (route) => route.abort());
+  await failing.goto("/");
+  await expect(failing.getByRole("alert")).toBeVisible();
+  await shot(failing, "17-server-unreachable");
+  await failing.unroute("**/api/catalog/tracks");
+  await failing.context().close();
+
   // Separate opt-in: creates enough explicitly labelled E2E-only fixtures to start a mock.
   if (process.env["MOCK_CAPTURE"] === "1") {
     await captureMockResult(page, adminAccount);
