@@ -13,6 +13,17 @@
       "sourceGitBlobSha": "cef05054520d3a1d4ee3786be57fa2232a237375",
       "scope": "User expressly approved the wording and B answer of the example-based Docker cache question; no automatic publication or other question approval.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t01-docker-multistage": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-08",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t01-docker-multistage/question.json",
+      "sourceGitBlobSha": "a79e84d7f67531adfe1913834b254a9c5475edac",
+      "scope": "User expressly approved wording, example and C answer for Docker multi-stage question; no other question approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
