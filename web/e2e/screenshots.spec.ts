@@ -15,9 +15,22 @@ const DIRECTORY = join(import.meta.dirname, "..", "..", "docs", "release", "scre
 const EDITORIAL_TOPIC = "a3000000-0000-4000-8000-000000000009"; // Java I/O API
 const EDITORIAL_PROMPT = "What does this code print?\n\n```java\nSystem.out.println(1 + 1);\n```";
 
+/*
+ * `animations: "disabled"` finishes any running CSS transition before the shutter opens.
+ *
+ * Without it the navigation bar was caught mid-crossfade on every picture taken after a route
+ * change: the rule under the page you just left had not finished fading out while the rule under
+ * the page you are on had not finished fading in, so two items appeared to be the current page.
+ * That read as a real defect in the pictures and was only ever an artefact of photographing a
+ * 150ms transition.
+ */
 async function shot(page: Page, name: string) {
   await page.waitForLoadState("networkidle");
-  await page.screenshot({ path: join(DIRECTORY, `${name}.png`), fullPage: true });
+  await page.screenshot({
+    path: join(DIRECTORY, `${name}.png`),
+    fullPage: true,
+    animations: "disabled",
+  });
 }
 
 /**
@@ -206,6 +219,34 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await expect(admin.getByRole("region", { name: "Where content can be published" })).toBeVisible();
   await shot(admin, "15-catalog-track");
   await admin.context().close();
+  /*
+   * The same product in the other language it ships in.
+   *
+   * Every picture above is in English, although ADR 0012 makes Portuguese a first-class interface
+   * language and the person who accepts these screens reads Portuguese. The unit tests prove both
+   * catalogues hold every key and that no string is accidentally shared; they cannot show that a
+   * sentence fits its button or that a label still reads as a label once it is half again as long.
+   *
+   * A focused set, not a second copy of all twenty-one: the screens whose text carries the most
+   * weight, which is where a translation shows its seams.
+   */
+  await page.getByRole("combobox", { name: "Language" }).selectOption("pt-BR");
+  await expect(page.getByRole("heading", { level: 1, name: "Revisão" })).toBeVisible();
+  await shot(page, "pt-01-review-queue");
+
+  await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Progresso" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Progresso" })).toBeVisible();
+  await shot(page, "pt-02-progress");
+
+  await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Histórico" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Histórico" })).toBeVisible();
+  await shot(page, "pt-03-history");
+
+  await page.getByRole("navigation", { name: "Principal" }).getByRole("link", { name: "Trilhas" }).click();
+  await page.getByRole("link", { name: "Java Certification" }).click();
+  await expect(page.getByText("Verificando se este simulado")).toHaveCount(0);
+  await shot(page, "pt-04-track");
+
   // Separate opt-in: creates enough explicitly labelled E2E-only fixtures to start a mock.
   if (process.env["MOCK_CAPTURE"] === "1") {
     await captureMockResult(page, adminAccount);
