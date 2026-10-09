@@ -358,11 +358,29 @@ button.warn {
   color: var(--danger);
 }
 
+/*
+ * A tertiary action: ending a session, signing out, removing an option from a draft.
+ *
+ * It used to be blue and underlined, which is the affordance of a link — and a link means
+ * "this takes you somewhere". None of these do; they act. Several sat beside real links, so the
+ * one signal the interface has for navigation was being spent on things that are not navigation.
+ *
+ * Quiet text with the underline held back until hover or focus, which is the ordinary treatment
+ * for an action you should be able to find but should not be invited into. It stays a real
+ * `button`, so it keeps the role, the keyboard behaviour and the focus ring; what changes is
+ * that it stops claiming to be a link.
+ */
 .link-button {
   background: none;
   border: 0;
   padding: var(--s1);
-  color: var(--accent);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--text);
   text-decoration: underline;
 }
 
