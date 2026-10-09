@@ -104,7 +104,7 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await shot(signedOut, "01c-create-account-mobile");
   await signedOut.context().close();
 
-  await register(page);
+  const learner = await register(page);
   await shot(page, "02-tracks");
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
@@ -246,6 +246,31 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByText("Verificando se este simulado")).toHaveCount(0);
   await shot(page, "pt-04-track");
+
+  /*
+   * The dark scheme, which nothing had photographed.
+   *
+   * Every colour is a token with a dark value, and axe measures contrast in both schemes on every
+   * screen — so the arithmetic is known to hold. What arithmetic cannot say is whether it reads
+   * comfortably: whether a surface still separates from the page behind it, whether the brass and
+   * the green still mean different things, whether anything has gone muddy or glaring. The
+   * readiness review asks a person for exactly that judgement, and asking them to switch their
+   * operating system first is a good way not to get it.
+   */
+  const dark = await (
+    await browser.newContext({ viewport: { width: 1280, height: 720 }, colorScheme: "dark" })
+  ).newPage();
+  await signIn(dark, learner);
+  await dark.getByRole("link", { name: "Java Certification" }).click();
+  await expect(dark.getByText("Checking whether this mock can start")).toHaveCount(0);
+  await shot(dark, "dark-01-track");
+  await dark.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Progress" }).click();
+  await expect(dark.getByRole("heading", { level: 1, name: "Progress" })).toBeVisible();
+  await shot(dark, "dark-02-progress");
+  await dark.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "History" }).click();
+  await expect(dark.getByRole("heading", { level: 1, name: "History" })).toBeVisible();
+  await shot(dark, "dark-03-history");
+  await dark.context().close();
 
   // Separate opt-in: creates enough explicitly labelled E2E-only fixtures to start a mock.
   if (process.env["MOCK_CAPTURE"] === "1") {
