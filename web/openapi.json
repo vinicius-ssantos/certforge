@@ -1990,7 +1990,7 @@
             "type" : "string"
           },
           "kind" : {
-            "enum" : [ "CERTIFICATION", "INTERVIEW" ],
+            "enum" : [ "CERTIFICATION", "INTERVIEW", "GENERAL" ],
             "type" : "string"
           },
           "name" : {

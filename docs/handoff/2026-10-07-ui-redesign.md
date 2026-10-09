@@ -4,8 +4,8 @@
 > A epic carrega o vocabulário de design, as regras inegociáveis e as armadilhas do repositório;
 > as seis filhas ([#185](https://github.com/vinicius-ssantos/certforge/issues/185)–[#190](https://github.com/vinicius-ssantos/certforge/issues/190))
 > são uma por PR. Protótipos aprovados:
-> [quatro telas](https://claude.ai/artifact/WReMi2BkRwN6yzZqjtHEeu) (implementadas) e
-> [doze telas](https://claude.ai/artifact/4iDNEmCRhLzCTnY4UG76PP) (a fazer).
+> [quatro telas](../design/prototype-01-four-screens.html) (implementadas) e
+> [doze telas](../design/prototype-02-remaining-screens.html).
 >
 > O resto deste documento continua válido como estado medido em 2026-10-07: ambiente, bloqueador
 > do simulado (#138), e os relatórios dos dois agentes.
