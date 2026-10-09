@@ -1413,8 +1413,14 @@ table.queue td.question-cell a {
   border-left: 3px solid var(--danger);
 }
 
-.review > li > .section-label {
+.review > li > .page-head {
+  align-items: baseline;
   margin-bottom: var(--s3);
+}
+
+.attempt-meta {
+  margin: 0;
+  font-size: var(--t-sm);
 }
 
 /* The prompt here is being re-read, not answered, so it does not need the practice screen's size. */
@@ -1463,9 +1469,24 @@ table.queue td.question-cell a {
   margin: var(--s1) 0 0;
 }
 
-.review-queue p:nth-of-type(1) {
+/* The question is what the learner scans for, so it leads and it is set to be read. */
+.queued-prompt {
+  margin-top: 0;
   font-family: var(--font-read);
   font-size: var(--t-lg);
+  line-height: 1.4;
+}
+
+/*
+ * Reason and evidence on one line: the pill sits in the sentence rather than above it.
+ *
+ * Deliberately not a flex container. Flex made every run of text its own item, so the full stop
+ * after the date became a box of its own and drifted a gap away from it. The pill is already
+ * `inline-flex` and flows in the sentence by itself.
+ */
+.queued-meta {
+  font-size: var(--t-sm);
+  line-height: 1.8; /* room for the pill's border without crowding the line above */
 }
 
 summary {
@@ -1537,9 +1558,16 @@ summary {
   max-width: none;
 }
 
+/* The same badge the learner sees, because this is a preview of exactly that. */
 .learner-options strong {
-  width: 1.25rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
   flex: none;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
 }
 
 ul.key,
@@ -1709,6 +1737,15 @@ del {
   border-left: 4px solid var(--action);
   border-radius: var(--radius-lg);
   background: var(--surface);
+}
+
+/*
+ * Waiting on content. Brass rather than ink, and certainly rather than red: the ink rail says
+ * "there is something to do here", and there is not — the mock is finished and unreachable until
+ * someone reviews more questions. Nothing has gone wrong; something is absent.
+ */
+.mock-entry-waiting {
+  border-left-color: var(--review);
 }
 
 .mock-entry h2 {

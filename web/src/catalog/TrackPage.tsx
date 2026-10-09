@@ -149,7 +149,14 @@ export function TrackPage() {
             </a>
           </p>
           {track.data.kind === "CERTIFICATION" ? (
-            <section className="mock-entry" aria-labelledby="mock-entry-heading">
+            <section
+              className={
+                mockAvailability.data && !mockAvailability.data.contentReady
+                  ? "mock-entry mock-entry-waiting"
+                  : "mock-entry"
+              }
+              aria-labelledby="mock-entry-heading"
+            >
               <h2 id="mock-entry-heading">{t.track.mockHeading}</h2>
               <p>{t.track.mockBody}</p>
               <p className="muted">{t.track.mockCaveat}</p>

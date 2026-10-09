@@ -47,22 +47,29 @@ export function SessionReviewPage() {
           {items.map((attempt) => (
             <li key={attempt.id} className={attempt.correct ? undefined : "panel-danger"}>
               {/*
-               * A wrong answer wears a red rail. It is what the learner opened this page for, and
-               * in a flat list it carried the same weight as the ones they got right. The heading
-               * still says "correct" or "not quite" in words, so the rail is the second cue.
+               * The verdict is the heading and wears the pill, so it is announced and shown once,
+               * and a wrong answer also gets a red rail on the card — it is what the learner
+               * opened this page for, and a flat list gave it the same weight as the ones they
+               * got right. Confidence and time sit on the verdict's line, because "wrong, sure,
+               * twenty seconds" is one finding that used to take three glances to assemble.
                */}
-              <h2 className="section-label">
-                {t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}
-              </h2>
+              <div className="page-head">
+                <h2 className={`pill ${attempt.correct ? "pill-ok" : "pill-stop"}`}>
+                  {t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}
+                </h2>
+                <p className="muted attempt-meta">
+                  {t.sessionReview.yourAnswerLine(
+                    attempt.selectedOptions.join(", "),
+                    t.sessionReview.confidenceName(attempt.confidence),
+                    Math.ceil(attempt.elapsedMillis / 1000),
+                  )}
+                  <time dateTime={attempt.submittedAt}>
+                    {formatDateTime(attempt.submittedAt, locale)}
+                  </time>
+                  .
+                </p>
+              </div>
               <Prompt text={attempt.question.prompt} />
-              <p className="muted">
-                {t.sessionReview.yourAnswerLine(
-                  attempt.selectedOptions.join(", "),
-                  t.sessionReview.confidenceName(attempt.confidence),
-                  Math.ceil(attempt.elapsedMillis / 1000),
-                )}
-                <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt, locale)}</time>.
-              </p>
               <details>
                 <summary>{t.sessionReview.showAnswer}</summary>
                 <AnswerList

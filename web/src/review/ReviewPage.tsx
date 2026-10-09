@@ -129,18 +129,25 @@ export function ReviewPage() {
               <ol className="review-queue">
                 {group.items.map((item) => (
                   <li key={item.questionId}>
-                    <strong className={`pill ${reasonTone(item.reason)}`}>
-                      {reasonLabel(item.reason, t)}
-                    </strong>
-                    <p>{summarise(item.prompt)}</p>
-                    <p className="muted">{reasonExplanation(item.reason, t)}</p>
-                    <p className="muted">
+                    {/*
+                     * The question first, then why it is here. Leading with the reason put a
+                     * label above every entry and made the list read as a column of labels; what
+                     * the learner scans for is the question they recognise. The reason joins the
+                     * evidence on one line beneath it, where the pill is what tells "wrong while
+                     * sure" from "right while guessing" at a glance.
+                     */}
+                    <p className="queued-prompt">{summarise(item.prompt)}</p>
+                    <p className="muted queued-meta">
+                      <strong className={`pill ${reasonTone(item.reason)}`}>
+                        {reasonLabel(item.reason, t)}
+                      </strong>{" "}
                       {t.review.attemptSummary(item.timesAttempted, item.timesWrong)}
                       <time dateTime={item.lastAttemptedAt}>
                         {formatDateTime(item.lastAttemptedAt, locale)}
                       </time>
                       .
                     </p>
+                    <p className="muted">{reasonExplanation(item.reason, t)}</p>
                   </li>
                 ))}
               </ol>
