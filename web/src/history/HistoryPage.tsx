@@ -62,7 +62,9 @@ export function HistoryPage() {
         </EmptyState>
       ) : null}
 
-      <section aria-labelledby="mock-history-heading">
+      {/* Both sections stand down when there is nothing at all: the empty state above has
+          already said it, and two labels over emptiness say it twice and answer nothing. */}
+      <section aria-labelledby="mock-history-heading" hidden={empty}>
         <h2 id="mock-history-heading" className="section-label">{t.history.mockHeading}</h2>
         {mocks.isPending ? <Loading label={t.history.mockLoading} /> : null}
         {mocks.isError ? (
@@ -143,7 +145,7 @@ export function HistoryPage() {
         {mocks.isFetchNextPageError ? <ErrorState error={mocks.error} /> : null}
       </section>
 
-      <section aria-labelledby="practice-history-heading">
+      <section aria-labelledby="practice-history-heading" hidden={empty}>
         <h2 id="practice-history-heading" className="section-label">{t.history.practiceHeading}</h2>
         {sessions.isPending ? <Loading label={t.history.loading} /> : null}
         {sessions.isError ? (

@@ -59,7 +59,11 @@ export function QueuePage() {
       <div className="page-head">
         <h1>{t.editorial.queue.title}</h1>
         <div className="head-actions">
-          {canManageCatalog ? <Link to="/editorial/catalog">{t.editorial.catalogTitle}</Link> : null}
+          {canManageCatalog ? (
+            <Link to="/editorial/catalog" className="button secondary">
+              {t.editorial.catalogTitle}
+            </Link>
+          ) : null}
           {canAuthor ? (
             <Link to="/editorial/new" className="button">
               {t.editorial.newQuestion}

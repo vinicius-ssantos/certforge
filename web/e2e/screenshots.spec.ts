@@ -106,6 +106,24 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
 
   const learner = await register(page);
   await shot(page, "02-tracks");
+
+  /*
+   * What a new account actually sees first.
+   *
+   * Every other picture is of a screen with data in it, because the fixtures always put some
+   * there. The empty states were the one part of the product nothing had photographed, and they
+   * are what somebody meets before anything else — which is how three defects reached the owner
+   * instead of the evidence: two section labels standing over nothing, and a caveat describing a
+   * list that was not there.
+   */
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "History" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "History" })).toBeVisible();
+  await shot(page, "02b-history-empty");
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
+  await shot(page, "02c-review-empty");
+  await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Tracks" }).click();
+
   await page.getByRole("link", { name: "Java Certification" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
   /*

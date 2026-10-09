@@ -569,9 +569,20 @@ fieldset.field > legend {
   margin-bottom: 0;
 }
 
+/*
+ * An empty state. The body is quiet because it is explanatory, but the heading is the one thing
+ * on the screen the reader is looking for — "nothing here yet" is the answer to their question,
+ * not a footnote. Muting it put a large serif in cool grey, which reads as a link that has lost
+ * its underline.
+ */
 .state {
   padding: var(--s2) 0;
   color: var(--muted);
+}
+
+.state > h2 {
+  margin-top: 0;
+  color: var(--text);
 }
 
 .notice {
