@@ -9,7 +9,16 @@ RUN --mount=type=cache,target=/root/.m2 mvn --batch-mode --no-transfer-progress 
 
 FROM eclipse-temurin:25-jre
 # Pick up the operating system security fixes published since the base image was built.
-RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*     && useradd --system --uid 10001 --no-create-home certforge
+#
+# Then delete pebble. It is Canonical's service manager, shipped in the base image, 9.9 MB of Go
+# that this container never runs: the entrypoint below is the JVM. It belongs to no apt package —
+# `dpkg -S /usr/bin/pebble` finds nothing — so the upgrade above can never patch it, and its
+# vendored Go standard library is what the release scan reports (two HIGH denial-of-service
+# advisories against Go 1.26.7 as of 2026-10-09). Removing it is not a suppression: the code is
+# gone, so there is nothing left to be vulnerable and nothing left to scan.
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/* \
+    && rm -f /usr/bin/pebble \
+    && useradd --system --uid 10001 --no-create-home certforge
 COPY --from=build /certforge.jar /app/certforge.jar
 USER 10001
 EXPOSE 8080
