@@ -4,6 +4,9 @@ import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 import { problem } from "../test/fakeServer";
 import { renderApp } from "../test/render";
+import { reasonExplanation, reasonLabel, reasonTone } from "./reasons";
+import { en } from "../i18n/en";
+import { ptBR } from "../i18n/pt-BR";
 
 const TOPIC = "a3000000-0000-4000-8000-000000000001";
 const OTHER_TOPIC = "a3000000-0000-4000-8000-000000000002";
@@ -29,6 +32,26 @@ function queue(overrides: Record<string, unknown> = {}) {
 }
 
 const at = { path: "/review" };
+
+describe("review reason presentation", () => {
+  it("keeps every current reason named and distinguishes its tone", () => {
+    expect(reasonTone("WRONG_WHILE_CONFIDENT")).toBe("pill-stop");
+    expect(reasonTone("WRONG")).toBe("pill-stop");
+    expect(reasonTone("RIGHT_BUT_UNSURE")).toBe("pill-hold");
+    expect(reasonTone("DUE_FOR_RECALL")).toBe("pill-hold");
+    expect(reasonLabel("WRONG_WHILE_CONFIDENT", en)).toBeTruthy();
+    expect(reasonLabel("WRONG_WHILE_CONFIDENT", ptBR)).toBeTruthy();
+  });
+
+  it("shows readable neutral fallback in both languages for future API reasons", () => {
+    const unknown = "FUTURE_REASON" as Parameters<typeof reasonTone>[0];
+    expect(reasonTone(unknown)).toBe("pill-new");
+    expect(reasonLabel(unknown, en)).toBe(en.review.unknownReason);
+    expect(reasonLabel(unknown, ptBR)).toBe(ptBR.review.unknownReason);
+    expect(reasonExplanation(unknown, en)).toBe(en.review.unknownReasonExplanation);
+    expect(reasonExplanation(unknown, ptBR)).toBe(ptBR.review.unknownReasonExplanation);
+  });
+});
 
 describe("the review queue", () => {
   it("says why each question is there, in words rather than a code", async () => {

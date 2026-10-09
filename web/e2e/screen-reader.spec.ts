@@ -95,13 +95,11 @@ test.describe("what a screen reader is given", () => {
         - paragraph: /Which statement about this program is true\\?/
         - list:
           - listitem:
-            - paragraph:
-              - strong: A. The expected option
+            - paragraph: "Option A: The expected option"
             - paragraph: Your answer. Correct answer.
             - paragraph: Expected by the test.
           - listitem:
-            - paragraph:
-              - strong: B. A wrong option
+            - paragraph: "Option B: A wrong option"
             - paragraph: Incorrect answer.
             - paragraph: Wrong on purpose.
         - heading "Explanation" [level=3]

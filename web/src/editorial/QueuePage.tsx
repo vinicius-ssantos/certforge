@@ -41,16 +41,18 @@ export function QueuePage() {
     tabs.find((filter) => filter.status === status)?.label ?? "",
   );
 
+  // The endpoint already returns the whole editorial queue. One unfiltered response gives
+  // accurate counts for all tabs, without a separate network request for each status.
   const questions = useQuery({
-    queryKey: ["editorial", "questions", status],
+    queryKey: ["editorial", "questions"],
     staleTime: 0, // statuses change under other people's hands; see QuestionPage
-    queryFn: () =>
-      unwrap(
-        api.GET("/api/admin/questions", {
-          params: { query: status ? { status: status as Status } : {} },
-        }),
-      ),
+    queryFn: () => unwrap(api.GET("/api/admin/questions")),
   });
+  const visible = questions.data?.filter((question) => status === null || question.latestStatus === status);
+  const count = (candidate: Status | null) =>
+    candidate === null
+      ? questions.data?.length ?? 0
+      : questions.data?.filter((question) => question.latestStatus === candidate).length ?? 0;
 
   return (
     <>
@@ -72,7 +74,8 @@ export function QueuePage() {
             to={filter.status ? `/editorial?status=${filter.status}` : "/editorial"}
             aria-current={filter.status === status ? "page" : undefined}
           >
-            {filter.label}
+            {filter.label}{" "}
+            {questions.data ? <span className="tab-count">{count(filter.status)}</span> : null}
           </Link>
         ))}
       </nav>
@@ -80,7 +83,7 @@ export function QueuePage() {
       {questions.isError ? (
         <ErrorState error={questions.error} onRetry={() => void questions.refetch()} />
       ) : null}
-      {questions.data && questions.data.length === 0 ? (
+      {visible && visible.length === 0 ? (
         <EmptyState
           title={status ? t.editorial.queue.emptyWithStatus : t.editorial.queue.emptyTitle}
         >
@@ -89,7 +92,7 @@ export function QueuePage() {
           </p>
         </EmptyState>
       ) : null}
-      {questions.data && questions.data.length > 0 ? (
+      {visible && visible.length > 0 ? (
         <ScrollableTable className="queue" label={tableCaption}>
           <caption className="visually-hidden">{tableCaption}</caption>
           <thead>
@@ -101,7 +104,7 @@ export function QueuePage() {
             </tr>
           </thead>
           <tbody>
-            {questions.data.map((question) => (
+            {visible.map((question) => (
               <tr key={question.id}>
                 <td className="question-cell">
                   <Link to={`/editorial/questions/${question.id}`}>

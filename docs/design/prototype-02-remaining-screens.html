@@ -1,0 +1,652 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>CertForge — Telas Restantes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Mesma linguagem do primeiro protótipo: as telas abaixo são as que ficaram de fora dele. */
+  :root {
+    --ink: #121a21; --ink-soft: #4a5a66; --paper: #eef1ef; --card: #ffffff;
+    --line: #d2dad7; --line-firm: #93a19c;
+    --mark: #1d4ed8; --mark-soft: #e8edfb;
+    --pass: #156b52; --pass-soft: #dcefe7;
+    --hold: #7a5c12; --hold-soft: #f6eed8;
+    --stop: #a81f1a; --stop-soft: #fae6e4;
+    --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --read: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+    --s1: 0.25rem; --s2: 0.5rem; --s3: 0.75rem; --s4: 1rem;
+    --s5: 1.5rem; --s6: 2rem; --s7: 3rem; --s8: 4rem;
+    --r: 0.375rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e8efec; --ink-soft: #9fb0ab; --paper: #0e1418; --card: #161f25;
+      --line: #28343b; --line-firm: #64767e;
+      --mark: #8fb0f5; --mark-soft: #16233c;
+      --pass: #6fd0ab; --pass-soft: #102c25;
+      --hold: #dcb95f; --hold-soft: #2c2412;
+      --stop: #ff9c93; --stop-soft: #351714;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e8efec; --ink-soft: #9fb0ab; --paper: #0e1418; --card: #161f25;
+    --line: #28343b; --line-firm: #64767e;
+    --mark: #8fb0f5; --mark-soft: #16233c;
+    --pass: #6fd0ab; --pass-soft: #102c25;
+    --hold: #dcb95f; --hold-soft: #2c2412;
+    --stop: #ff9c93; --stop-soft: #351714;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--ui); font-size: 15px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 78rem; margin: 0 auto; padding-inline: 16px; padding-block: var(--s7) var(--s8); }
+  h1, h2, h3 { font-family: var(--read); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  .masthead { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s5); }
+  .masthead h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 700; letter-spacing: -0.015em; }
+  .masthead p { color: var(--ink-soft); max-width: 52ch; margin-top: var(--s2); }
+  .toggle { font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; background: var(--card); color: var(--ink); border: 1.5px solid var(--line-firm); border-radius: var(--r); padding: var(--s2) var(--s3); white-space: nowrap; }
+  .toggle:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+  .lead { border-left: 3px solid var(--mark); padding: var(--s3) var(--s4); background: var(--card); border-radius: 0 var(--r) var(--r) 0; display: grid; gap: var(--s2); }
+  .lead a { color: var(--mark); }
+
+  .plate { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; gap: var(--s6); align-items: start; margin-top: var(--s7); }
+  @media (max-width: 62rem) { .plate { grid-template-columns: minmax(0, 1fr); } }
+  .note { font-size: 0.85rem; color: var(--ink-soft); display: grid; gap: var(--s3); position: sticky; top: var(--s4); }
+  @media (max-width: 62rem) { .note { position: static; } }
+  .note h3 { font-family: var(--ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink); }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note ul { margin: 0; padding-left: 1.1em; display: grid; gap: var(--s2); }
+  .screen { background: var(--paper); border: 1px solid var(--line); border-radius: 0.5rem; overflow: hidden; }
+  .screen-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: var(--s2); }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--line); background: var(--card); }
+  .brand { font-family: var(--read); font-weight: 700; letter-spacing: -0.01em; }
+  .nav { display: flex; gap: var(--s4); font-size: 0.85rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .nav .on { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--mark); }
+  .body { padding: var(--s5) var(--s4); display: grid; gap: var(--s4); }
+  .body > h2 { font-size: 1.35rem; }
+  .body > h3 { font-size: 1.05rem; }
+
+  .btn { font: inherit; font-size: 0.9rem; font-weight: 600; padding: var(--s3) var(--s5); border-radius: var(--r); border: 1.5px solid var(--ink); background: var(--ink); color: var(--card); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn.sm { font-size: 0.8rem; padding: var(--s1) var(--s3); }
+  .btn.go { border-color: var(--pass); background: var(--pass); color: var(--card); }
+  .btn.no { border-color: var(--stop); background: transparent; color: var(--stop); }
+  .btn.wide { width: 100%; }
+  .row { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+  .spread { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+  .quiet { color: var(--ink-soft); font-size: 0.85rem; }
+  .pill { font-size: 0.72rem; font-weight: 600; padding: 2px var(--s2); border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; display: inline-block; }
+  .pill.new { color: var(--ink-soft); } .pill.ok { color: var(--pass); } .pill.hold { color: var(--hold); } .pill.stop { color: var(--stop); }
+  .sect { border-top: 1px solid var(--line); padding-top: var(--s3); display: grid; gap: var(--s3); }
+  .sect > h4 { margin: 0; font-family: var(--ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); }
+
+  /* cartão de autenticação */
+  .auth { max-width: 23rem; margin: var(--s5) auto; background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem; padding: var(--s5); display: grid; gap: var(--s3); }
+  .auth h2 { font-size: 1.4rem; }
+  .auth .f { display: grid; gap: var(--s1); }
+  .auth em { font-style: normal; font-size: 0.78rem; font-weight: 600; }
+  .auth .box { border: 1.5px solid var(--line-firm); border-radius: var(--r); padding: var(--s2) var(--s3); min-height: 2.1rem; background: var(--card); }
+  .auth .foot { border-top: 1px solid var(--line); padding-top: var(--s3); font-size: 0.82rem; color: var(--ink-soft); }
+  .auth .foot a { color: var(--mark); }
+  .meter { display: flex; gap: 3px; margin-top: var(--s1); }
+  .meter i { height: 4px; flex: 1; border-radius: 99px; background: var(--line); }
+  .meter i.on { background: var(--pass); }
+
+  /* tabelas */
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; background: var(--card); }
+  .tablecard { border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
+  th, td { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--line); }
+  tbody tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
+  thead th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); font-weight: 600; background: var(--paper); }
+  td.n { font-variant-numeric: tabular-nums; }
+  .mini { width: 3.5rem; height: 5px; background: var(--line); border-radius: 99px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: var(--s2); }
+  .mini i { display: block; height: 100%; background: var(--mark); }
+  .mini i.low { background: var(--hold); }
+
+  /* cartões */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 22rem)); justify-content: start; gap: var(--s3); }
+  .tcard { border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4); display: grid; gap: var(--s3); background: var(--card); }
+  .tcard h3 { font-size: 1.1rem; }
+  .stat { display: flex; gap: var(--s5); flex-wrap: wrap; }
+  .stat div { display: grid; }
+  .stat b { font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); }
+
+  /* listas de linhas */
+  .rows { display: grid; }
+  .rrow { display: flex; justify-content: space-between; gap: var(--s4); align-items: center; padding: var(--s3) 0; border-top: 1px solid var(--line); }
+  .rrow .t { font-family: var(--read); font-size: 1rem; }
+  .rrow .s { font-size: 0.8rem; color: var(--ink-soft); }
+
+  /* opções respondidas */
+  .opt { display: grid; grid-template-columns: 1.7rem minmax(0, 1fr); gap: var(--s3); align-items: start; padding: var(--s3); border: 1.5px solid var(--line); border-radius: var(--r); background: var(--card); }
+  .opt .key { width: 1.7rem; height: 1.7rem; display: grid; place-items: center; border-radius: 99px; border: 1.5px solid var(--line-firm); font-size: 0.78rem; font-weight: 700; }
+  .opt.right { border-color: var(--pass); background: var(--pass-soft); }
+  .opt.right .key { background: var(--pass); border-color: var(--pass); color: var(--card); }
+  .verdict { font-size: 0.78rem; font-weight: 600; margin-top: var(--s1); color: var(--ink-soft); }
+  .verdict.ok { color: var(--pass); }
+  .why { font-size: 0.82rem; color: var(--ink-soft); margin-top: var(--s1); }
+  .code { font-family: var(--mono); font-size: 0.8rem; background: var(--paper); border: 1px solid var(--line); border-left: 3px solid var(--line-firm); border-radius: var(--r); padding: var(--s3); overflow-x: auto; white-space: pre; }
+
+  .panel { border: 1px solid var(--line); border-radius: var(--r); background: var(--card); padding: var(--s4); display: grid; gap: var(--s3); }
+  .panel.warn { border-left: 3px solid var(--hold); }
+  .panel.danger { border-left: 3px solid var(--stop); }
+  .big { font-family: var(--read); font-size: 2.1rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+  .desk { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; }
+  @media (max-width: 48rem) { .desk { grid-template-columns: minmax(0, 1fr); } }
+  .steps { display: flex; gap: var(--s1); font-size: 0.72rem; flex-wrap: wrap; }
+  .steps b { font-weight: 600; padding: 2px var(--s2); border-radius: 99px; background: var(--ink); color: var(--card); }
+  .steps i { font-style: normal; padding: 2px var(--s2); border-radius: 99px; color: var(--ink-soft); border: 1px solid var(--line); }
+  .steps u { text-decoration: none; padding: 2px var(--s2); border-radius: 99px; color: var(--pass); border: 1px solid var(--pass); }
+  .check { display: flex; gap: var(--s2); align-items: flex-start; font-size: 0.85rem; }
+  .check span.b { width: 1rem; height: 1rem; border: 1.5px solid var(--line-firm); border-radius: 3px; flex: none; margin-top: 2px; display: grid; place-items: center; font-size: 0.7rem; }
+  .check span.b.on { background: var(--mark); border-color: var(--mark); color: var(--card); }
+  .tabs { display: flex; gap: var(--s3); border-bottom: 1px solid var(--line); font-size: 0.85rem; flex-wrap: wrap; }
+  .tabs span { padding: var(--s2) 0; color: var(--ink-soft); }
+  .tabs span.on { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--ink); }
+
+  .keep { margin-top: var(--s8); border-top: 2px solid var(--ink); padding-top: var(--s4); display: grid; gap: var(--s3); }
+  .keep h2 { font-size: 1.3rem; }
+  .keep ul { margin: 0; padding-left: 1.1em; display: grid; gap: var(--s2); color: var(--ink-soft); max-width: 70ch; }
+  .keep b { color: var(--ink); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>CertForge — telas restantes</h1>
+      <p>O primeiro protótipo cobriu quatro telas e elas já estão no código. Estas são as outras: tudo o que você vê ao usar o produto e que até agora só herdou a paleta nova. Mesma linguagem, mesmas regras.</p>
+    </div>
+    <button class="toggle" id="theme" type="button">Alternar tema</button>
+  </div>
+
+  <div class="lead">
+    <p><b>Já aprovadas e implementadas</b>, no protótipo anterior: sessão de prática, feedback, trilhas, simulado e mesa editorial — <a href="prototype-01-four-screens.html">prototype-01-four-screens.html</a>.</p>
+    <p class="quiet">Abaixo, as doze que faltam. Diga quais aprova, quais quer diferente, e quais não vale mexer — aí eu implemento de uma vez, em vez de você descobrir pelas capturas.</p>
+  </div>
+
+  <!-- 1 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">1 · Entrar</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><span class="quiet">Português</span></div>
+        <div class="body">
+          <div class="auth">
+            <h2>Entrar</h2>
+            <div class="f"><em>E-mail</em><div class="box"></div></div>
+            <div class="f"><em>Senha</em><div class="box"></div></div>
+            <button class="btn wide" type="button">Entrar</button>
+            <p class="foot">Novo por aqui? <a href="#x">Criar uma conta</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Hoje o formulário <b>flutua direto no fundo cinza</b>, enquanto todas as outras telas ganharam superfície branca. É a porta de entrada e é a única que não parece o produto.</li>
+        <li>Vira um <b>cartão centrado</b> com a largura de um formulário, não 480px encostados à esquerda num vazio de mil pixels.</li>
+        <li>O botão <b>ocupa a largura</b>: uma tela, uma ação.</li>
+        <li>"Criar uma conta" ganha uma <b>linha de separação</b> — é uma saída diferente, não mais um campo.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 2 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">2 · Criar conta</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><span class="quiet">Português</span></div>
+        <div class="body">
+          <div class="auth">
+            <h2>Criar uma conta</h2>
+            <div class="f"><em>E-mail</em><div class="box"></div></div>
+            <div class="f">
+              <em>Senha</em>
+              <div class="box"></div>
+              <div class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div>
+              <span class="quiet" style="font-size:0.78rem">Mínimo de 12 caracteres. Faltam 2.</span>
+            </div>
+            <button class="btn wide" type="button">Criar conta</button>
+            <p class="foot">Já tem conta? <a href="#x">Entrar</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Mesmo cartão.</li>
+        <li><b>A regra dos 12 caracteres aparece enquanto você digita</b>, com quanto falta. Hoje ela só existe como erro depois de enviar — o formulário sabe a regra e não conta.</li>
+        <li>A barra é ilustração do contador, não um medidor de "força": não vamos opinar sobre a senha de ninguém, só dizer se cumpre a regra.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 3 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">3 · Sessão encerrada</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span class="on">Trilhas</span><span>Revisão</span><span>Progresso</span><span>Histórico</span></nav></div>
+        <div class="body">
+          <div class="panel">
+            <h2 style="font-size:1.3rem">Sessão encerrada</h2>
+            <div class="stat">
+              <div><b>4</b><span>respondidas</span></div>
+              <div><b>3</b><span>corretas</span></div>
+              <div><b>6</b><span>não vistas</span></div>
+            </div>
+            <p class="quiet">Tratamento de exceções · encerrada às 18:22</p>
+            <div class="row">
+              <button class="btn" type="button">Praticar este tópico de novo</button>
+              <button class="btn ghost" type="button">Ver a revisão da sessão</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Hoje é um título e um parágrafo. Vira um <b>fecho com os números da sessão</b> — é o momento em que a pessoa quer saber como foi.</li>
+        <li><b>Duas saídas nomeadas</b> em vez de voltar ao menu: praticar de novo, ou ver o que errou.</li>
+        <li>"Não vistas" é dito, não omitido: encerrar cedo é legítimo e o número é parte do que aconteceu.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 4 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">4 · Histórico</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span>Revisão</span><span>Progresso</span><span class="on">Histórico</span></nav></div>
+        <div class="body">
+          <h2>Histórico</h2>
+          <div class="sect">
+            <h4>Simulados</h4>
+            <p class="quiet">Nenhum simulado ainda. Um simulado precisa de 5 questões revisadas por tópico.</p>
+          </div>
+          <div class="sect">
+            <h4>Prática por tópico</h4>
+            <div class="tablecard">
+              <table>
+                <thead><tr><th>Tópico</th><th>Início</th><th>Situação</th><th class="n">Respondidas</th><th class="n">Corretas</th></tr></thead>
+                <tbody>
+                  <tr><td><b>Tratamento de exceções</b></td><td>8 out, 18:22</td><td><span class="pill new">Encerrada cedo</span></td><td class="n">1 de 10</td><td class="n">1</td></tr>
+                  <tr><td><b>Coleções e arrays</b></td><td>7 out, 09:14</td><td><span class="pill ok">Concluída</span></td><td class="n">10 de 10</td><td class="n">8</td></tr>
+                  <tr><td><b>Streams</b></td><td>6 out, 21:02</td><td><span class="pill hold">Em andamento</span></td><td class="n">3 de 10</td><td class="n">2</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>As tabelas ganham <b>superfície</b>: hoje flutuam no cinza enquanto todo o resto está em branco.</li>
+        <li>Situação vira <b>pílula nomeada</b> — em andamento (latão), concluída (verde), encerrada cedo (neutra). A palavra continua lá; a cor só acompanha.</li>
+        <li>"Nenhum simulado ainda" <b>diz por quê</b>, em vez de deixar o vazio sem explicação.</li>
+        <li>Os títulos de seção viram rótulos em versalete, não dois H2 do mesmo peso do título da página.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 5 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">5 · Revisão da sessão</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span>Revisão</span><span>Progresso</span><span class="on">Histórico</span></nav></div>
+        <div class="body">
+          <h2>Revisão da sessão</h2>
+          <p class="quiet">Tratamento de exceções · 8 out · 4 respondidas, 3 corretas</p>
+          <div class="panel">
+            <div class="spread">
+              <span class="pill ok">1 · Correta</span>
+              <span class="quiet">Confiança: média · 48s</span>
+            </div>
+            <p style="font-family:var(--read);font-size:1.05rem">O que acontece quando <code style="font-family:var(--mono);font-size:0.85em">new BigDecimal("1").divide(...)</code> é avaliado sem modo de arredondamento?</p>
+            <p class="quiet">▸ Mostrar a resposta correta e a explicação</p>
+          </div>
+          <div class="panel" style="border-left:3px solid var(--stop)">
+            <div class="spread">
+              <span class="pill stop">2 · Incorreta</span>
+              <span class="quiet">Confiança: alta · 21s</span>
+            </div>
+            <p style="font-family:var(--read);font-size:1.05rem">Qual destas afirmações sobre <code style="font-family:var(--mono);font-size:0.85em">try-with-resources</code> é verdadeira?</p>
+            <p class="quiet">▸ Mostrar a resposta correta e a explicação</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Cada tentativa vira um <b>cartão</b> com o veredito no topo, em vez de uma lista corrida onde certas e erradas têm o mesmo peso.</li>
+        <li><b>A errada ganha um trilho vermelho na borda.</b> É o que a pessoa veio procurar.</li>
+        <li>Confiança e tempo sobem para a linha do veredito: "errei com confiança alta em 21 segundos" é a informação, e hoje ela está espalhada.</li>
+        <li>A resposta continua escondida atrás de um botão — rever é um ato, não um despejo.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 6 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">6 · Fila de revisão do aluno</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span class="on">Revisão</span><span>Progresso</span><span>Histórico</span></nav></div>
+        <div class="body">
+          <h2>Revisão</h2>
+          <p class="quiet">Questões que valem revisitar, pelo que você respondeu. Não é uma previsão sobre o exame.</p>
+          <div class="panel warn">
+            <div class="spread">
+              <h3 style="font-size:1.05rem">Tratamento de exceções</h3>
+              <button class="btn sm" type="button">Praticar estas 3</button>
+            </div>
+            <div class="rows">
+              <div class="rrow">
+                <div>
+                  <p class="t">O que acontece quando a divisão não tem quociente exato?</p>
+                  <p class="s"><span class="pill stop">Errou com confiança</span> · 2 tentativas, 2 erradas · há 3 dias</p>
+                </div>
+              </div>
+              <div class="rrow">
+                <div>
+                  <p class="t">Qual recurso é fechado primeiro em try-with-resources?</p>
+                  <p class="s"><span class="pill hold">Acertou chutando</span> · 1 tentativa · há 5 dias</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li><b>O motivo vira pílula</b>, não um rótulo em versalete solto acima do enunciado. "Errou com confiança" e "acertou chutando" são coisas diferentes e precisam se distinguir de relance.</li>
+        <li>O botão "praticar estas" <b>sobe para a linha do tópico</b>, onde a decisão é tomada.</li>
+        <li>A ressalva de que isto não prevê o exame fica no topo, uma vez, em vez de repetida por item.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 7 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">7 · Resultado do simulado</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span class="on">Trilhas</span><span>Revisão</span><span>Progresso</span><span>Histórico</span></nav></div>
+        <div class="body">
+          <div class="panel">
+            <div class="spread">
+              <div>
+                <p class="quiet" style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em">Resultado</p>
+                <p class="big">74%</p>
+                <p class="quiet">37 de 50 corretas · 44 respondidas · 1h52 de 2h00</p>
+              </div>
+              <span class="pill ok" style="font-size:0.85rem;padding:var(--s2) var(--s3)">Acima da meta de 68%</span>
+            </div>
+            <p class="quiet">A meta é orientação de estudo. Não é uma previsão de nota da Oracle.</p>
+          </div>
+          <div class="sect">
+            <h4>Por tópico</h4>
+            <div class="tablecard">
+              <table>
+                <thead><tr><th>Tópico</th><th>Acerto</th><th class="n">Corretas</th><th>Situação</th></tr></thead>
+                <tbody>
+                  <tr><td>Tratamento de exceções</td><td><span class="mini"><i class="low" style="width:40%"></i></span>40%</td><td class="n">2 de 5</td><td><span class="pill hold">Revisar</span></td></tr>
+                  <tr><td>Coleções e arrays</td><td><span class="mini"><i style="width:100%"></i></span>100%</td><td class="n">5 de 5</td><td><span class="pill ok">Firme</span></td></tr>
+                  <tr><td>Módulos</td><td><span class="mini"><i class="low" style="width:60%"></i></span>60%</td><td class="n">3 de 5</td><td><span class="pill hold">Revisar</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p class="quiet">6 questões ficaram sem resposta e contam como erradas.</p>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>A nota vira <b>um número grande com o contexto ao lado</b>, não quatro frases empilhadas.</li>
+        <li>O veredito contra a meta é <b>uma pílula</b>, e a meta é dita no mesmo lugar.</li>
+        <li>A tabela por tópico usa a <b>mesma barra e as mesmas pílulas do Progresso</b> — é a mesma pergunta, deve ter a mesma forma.</li>
+        <li>As não respondidas são ditas no fim, porque mudam a leitura da nota.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 8 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">8 · Fila editorial</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span>Revisão</span><span>Progresso</span><span>Histórico</span><span class="on">Editorial</span></nav></div>
+        <div class="body">
+          <div class="spread">
+            <h2>Questões</h2>
+            <button class="btn" type="button">Nova questão</button>
+          </div>
+          <div class="tabs"><span class="on">Todas 142</span><span>Rascunho 118</span><span>Em revisão 3</span><span>Aprovadas 1</span><span>Publicadas 20</span></div>
+          <div class="tablecard">
+            <table>
+              <thead><tr><th>Questão</th><th>Tópico</th><th>Situação</th><th>Atualizada</th></tr></thead>
+              <tbody>
+                <tr><td style="font-family:var(--read);font-size:0.95rem">O que este código imprime?</td><td class="quiet">Java I/O API</td><td><span class="pill hold">◐ Em revisão</span></td><td class="quiet">8 out</td></tr>
+                <tr><td style="font-family:var(--read);font-size:0.95rem">Qual afirmação sobre módulos é verdadeira?</td><td class="quiet">Módulos</td><td><span class="pill new">○ Rascunho</span></td><td class="quiet">7 out</td></tr>
+                <tr><td style="font-family:var(--read);font-size:0.95rem">Quantas vezes o laço executa?</td><td class="quiet">Controle de fluxo</td><td><span class="pill ok">✓ Publicada</span></td><td class="quiet">5 out</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>As abas <b>mostram a contagem</b>. Hoje você clica para descobrir quantas há em cada estado, e essa é a pergunta que a tela existe para responder.</li>
+        <li>Situação vira pílula com o glifo que já existe, numa coluna estreita — hoje é texto no meio da linha.</li>
+        <li>A tabela ganha superfície e a coluna da questão fica em serifada: é o conteúdo, o resto é metadado.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 9 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">9 · Revisor: aprovar ou pedir mudanças</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span>Progresso</span><span class="on">Editorial</span></nav></div>
+        <div class="body">
+          <div>
+            <h2 style="font-size:1.2rem">Revisão 1</h2>
+            <p class="steps" style="margin-top:var(--s2)"><u>1 Rascunho ✓</u><b>2 Em revisão</b><i>3 Aprovada</i><i>4 Publicada</i></p>
+          </div>
+          <div class="desk">
+            <div style="display:grid;gap:var(--s4);min-width:0">
+              <p class="quiet">Escolha única · Fácil · Java 21 · Java I/O API · por staff@example.com</p>
+              <div class="panel">
+                <h4 style="margin:0;font-family:var(--ui);font-size:0.72rem;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;color:var(--ink-soft)">Como o aluno verá</h4>
+                <p style="font-family:var(--read);font-size:1.15rem;font-weight:600">O que este código imprime?</p>
+                <div class="code">System.out.println(1 + 1);</div>
+                <div class="opt"><span class="key">A</span><span>A opção esperada</span></div>
+                <div class="opt"><span class="key">B</span><span>Uma opção errada</span></div>
+              </div>
+              <div class="sect">
+                <h4>Gabarito e motivos</h4>
+                <div class="opt right"><span class="key">A</span><span>A opção esperada<span class="why">Esperado pelo teste.</span></span></div>
+                <div class="opt"><span class="key">B</span><span>Uma opção errada<span class="why">Errada de propósito.</span></span></div>
+              </div>
+            </div>
+            <aside class="panel warn" style="position:sticky;top:var(--s3)">
+              <h4 style="margin:0;font-family:var(--ui);font-size:0.8rem;font-weight:700">Política de conteúdo</h4>
+              <p class="quiet" style="font-size:0.78rem">Marque só o que você mesmo conferiu.</p>
+              <div class="check"><span class="b on">✓</span><span>A resposta correta está tecnicamente certa para o Java informado</span></div>
+              <div class="check"><span class="b on">✓</span><span>O código compila e imprime o que a questão diz</span></div>
+              <div class="check"><span class="b"></span><span>Nada na redação é ambíguo</span></div>
+              <div class="check"><span class="b"></span><span>Todo motivo está correto, inclusive os das erradas</span></div>
+              <div class="check"><span class="b"></span><span>As referências são documentação oficial</span></div>
+              <p class="quiet" style="font-size:0.78rem;border-top:1px solid var(--line);padding-top:var(--s2)">2 de 5 conferidos</p>
+              <button class="btn go wide" type="button">Aprovar</button>
+              <button class="btn no wide" type="button">Pedir mudanças</button>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>A coluna da direita vira <b>um painel</b>, como o "Antes de enviar" do autor. Hoje a lista de conferência e os botões flutuam soltos no cinza.</li>
+        <li><b>"2 de 5 conferidos"</b>: a lista já registra o que você marcou junto com a decisão, mas não conta.</li>
+        <li>Os dois botões ocupam a largura e ficam na mesma caixa do que os justifica, em vez de depois de um vão.</li>
+        <li>O gabarito reusa <b>o mesmo crachá e o mesmo verde da tela de feedback</b> — autor e aluno veem a mesma forma.</li>
+        <li>Rascunho ganha ✓ por já ter sido passado.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 10 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">10 · Confirmar publicação</p>
+      <div class="screen">
+        <div class="body">
+          <div class="panel danger">
+            <h3 style="font-size:1.1rem">Publicar esta questão?</h3>
+            <p>Depois de publicada ela pode aparecer para quem estuda, e a revisão não pode ser desfeita — só substituída por uma nova.</p>
+            <div class="sect" style="border-top-color:var(--line)">
+              <h4>O que vai ao ar</h4>
+              <p class="quiet">Revisão 1 · Java I/O API · aprovada por revisor@example.com em 8 out</p>
+            </div>
+            <div class="row">
+              <button class="btn" type="button">Sim, publicar</button>
+              <button class="btn ghost" type="button">Cancelar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>A confirmação <b>diz o que é irreversível</b> e mostra o que exatamente vai ao ar — hoje é uma pergunta e dois botões.</li>
+        <li>Trilho vermelho na borda: é a única ação do produto que alcança quem estuda.</li>
+        <li>"Sim, publicar" continua sendo o botão de tinta, não verde: verde aqui sugeriria aprovação, e aprovar já aconteceu.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 11 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">11 · Catálogo (administração)</p>
+      <div class="screen">
+        <div class="bar"><span class="brand">CertForge</span><nav class="nav"><span>Trilhas</span><span class="on">Editorial</span></nav></div>
+        <div class="body">
+          <div class="tabs"><span>Questões</span><span class="on">Catálogo</span></div>
+          <div class="cards">
+            <div class="tcard">
+              <div class="spread"><h3>Java Certification</h3><span class="pill ok">Ativa</span></div>
+              <p class="quiet">Certificação · Oracle · 1Z0-830 · 10 tópicos</p>
+              <p class="quiet">Versão: Java SE 21 · publicada</p>
+            </div>
+            <div class="tcard">
+              <div class="spread"><h3>Java Backend — Pleno/Sênior</h3><span class="pill new">Rascunho</span></div>
+              <p class="quiet">Entrevista · 12 tópicos · alvo: Sênior</p>
+              <p class="quiet">Versão: Taxonomia 2026.1 · rascunho</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>O catálogo vira <b>cartões</b> em vez de tabela: são duas trilhas com naturezas diferentes, e a diferença entre certificação e entrevista é o que importa ver.</li>
+        <li>Situação da trilha e da versão ficam <b>explícitas</b> — hoje é preciso entrar para saber que a trilha de entrevista é rascunho.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 12 -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">12 · Simulado indisponível</p>
+      <div class="screen">
+        <div class="body">
+          <div class="panel warn">
+            <h3 style="font-size:1.1rem">Simulado completo</h3>
+            <p class="quiet">Prova cronometrada de 50 questões, 2 horas, com prazo no servidor e feedback no fim.</p>
+            <div class="sect" style="border-top-color:var(--line)">
+              <h4>Ainda não disponível</h4>
+              <p>Faltam <b>29 questões revisadas</b> em 7 tópicos. Um simulado exige 5 publicadas em cada tópico.</p>
+              <div class="tablecard" style="margin-top:var(--s2)">
+                <table>
+                  <thead><tr><th>Tópico</th><th class="n">Publicadas</th><th>Falta</th></tr></thead>
+                  <tbody>
+                    <tr><td>Tratamento de exceções</td><td class="n">2 de 5</td><td><span class="mini"><i class="low" style="width:40%"></i></span></td></tr>
+                    <tr><td>Módulos</td><td class="n">2 de 5</td><td><span class="mini"><i class="low" style="width:40%"></i></span></td></tr>
+                    <tr><td>Coleções e arrays</td><td class="n">5 de 5</td><td><span class="mini"><i style="width:100%"></i></span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Hoje a tela diz o total que falta numa frase. Vira <b>uma tabela do que falta por tópico</b>, porque é a lista de trabalho de quem revisa.</li>
+        <li>Isto é a issue <b>#138</b> com cara de produto: o simulado está pronto e inalcançável, e a tela deve dizer exatamente o que destrava.</li>
+        <li>Latão, não vermelho: nada quebrou — falta conteúdo.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="keep">
+    <h2>O que não muda</h2>
+    <ul>
+      <li><b>As quatro telas já aprovadas.</b> Nada aqui mexe nelas.</li>
+      <li><b>Estado nunca só por cor.</b> Toda pílula tem palavra, e os glifos ✓ ◐ ○ continuam onde já estavam.</li>
+      <li><b>Nenhuma alegação nova sobre o exame.</b> A meta de 68% continua sendo dita como orientação de estudo e nota de corte do simulado, nunca como previsão.</li>
+      <li><b>Nada vai para a main sem você ver.</b> Depois de aprovado eu implemento, recapturo as quinze imagens e abro o PR para sua validação.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme");
+    btn.addEventListener("click", function () {
+      var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var now = root.getAttribute("data-theme") || (dark ? "dark" : "light");
+      root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+    });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,11 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useLocation, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { AttemptRequest, AttemptResult, Question, Session } from "../api/types";
 import type { Catalog } from "../i18n/en";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
+import { formatDateTime } from "../history/format";
+import { useTopicNames } from "../history/useTopicNames";
 import { Confirm } from "../ui/Confirm";
 import { ErrorState, Loading } from "../ui/States";
 import { errorMessage } from "../ui/messages";
@@ -16,6 +18,11 @@ import { QuestionForm } from "./QuestionForm";
 
 /** Failures that mean the session changed under the learner: the page reloads its state. */
 const SESSION_CHANGED = new Set(["session_expired", "session_not_in_progress", "already_answered"]);
+
+/** Starting a second session conflicts with the one already open, which names it in its details. */
+function isActiveSession(error: unknown): error is ApiError {
+  return error instanceof ApiError && error.code === "active_session_exists";
+}
 
 interface Feedback {
   position: number;
@@ -178,10 +185,14 @@ export function SessionPage() {
 
   return (
     <>
-      <h1 className="eyebrow">{t.session.title}</h1>
       {resumed ? <p role="status">{t.session.resumed}</p> : null}
+      {/* The page's name and how far through it the learner is share one line: both are furniture
+          for the question below, and stacking them pushed the question off the first screen. */}
       <div className="session-progress">
-        <span>{t.session.answeredCount(answered, ordered.length)}</span>
+        <div className="session-progress-head">
+          <h1 className="eyebrow">{t.session.title}</h1>
+          <strong>{t.session.answeredCount(answered, ordered.length)}</strong>
+        </div>
         <span className="session-progress-track" aria-hidden="true">
           <span
             className="session-progress-fill"
@@ -235,7 +246,10 @@ function endedWording(t: Catalog): Record<string, { title: string; text: string 
 
 function SessionEnded({ session }: { session: Session }) {
   const t = useText();
+  const { locale } = useLocale();
+  const topicNames = useTopicNames();
   const api = useApi();
+  const navigate = useNavigate();
   const heading = useFocusOnMount<HTMLHeadingElement>();
   const wording = endedWording(t);
   const ended = wording[session.status] ?? wording.COMPLETED!;
@@ -251,28 +265,87 @@ function SessionEnded({ session }: { session: Session }) {
       ),
   });
 
+  const again = useMutation({
+    mutationFn: () =>
+      unwrap(api.POST("/api/study/sessions", { body: { topicId: session.topicId } })),
+    onSuccess: (next) => navigate(`/sessions/${next.id}`),
+    onError: (error) => {
+      // Someone opened another session in the meantime; join that one rather than fail.
+      const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
+      if (typeof existing === "string") {
+        navigate(`/sessions/${existing}`, { state: { resumed: true } });
+      }
+    },
+  });
+
   return (
     <>
-      <h1>{t.session.title}</h1>
-      <section aria-labelledby="ended-heading">
-        <h2 id="ended-heading" ref={heading} tabIndex={-1}>
-          {ended.title}
-        </h2>
-        <p>{ended.text}</p>
-        <p>{t.session.answeredOf(answered, session.questions.length)}</p>
-        {attempts.isPending ? <Loading label={t.session.countingCorrect} /> : null}
-        {attempts.isError ? <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} /> : null}
-        {attempts.data ? (
-          <p>
-            {t.session.correctOf(
-              attempts.data.items.filter((attempt) => attempt.correct).length,
-              answered,
+      <h1 className="eyebrow">{t.session.title}</h1>
+      <section aria-labelledby="ended-heading" className="asking">
+        <div className="panel">
+          <h2 id="ended-heading" ref={heading} tabIndex={-1}>
+            {ended.title}
+          </h2>
+          <p>{ended.text}</p>
+          {/*
+           * The figures, not the sentences. This is the moment the learner wants to know how it
+           * went, and three numbers answer that faster than three clauses. The sentences stay
+           * available to assistive technology through the same catalogue strings as before.
+           */}
+          {/*
+           * Figures for the eye, sentences for everyone else, each said once. Three labelled
+           * numbers are read faster than three clauses, but "Correct 1" loses the denominator
+           * that "1 of 2 answers were correct" carries — so the list is the illustration and the
+           * sentences below are the information.
+           */}
+          <dl className="stat" aria-hidden="true">
+            <div>
+              <dt>{t.session.statAnswered}</dt>
+              <dd>{answered}</dd>
+            </div>
+            {attempts.data ? (
+              <div>
+                <dt>{t.session.statCorrect}</dt>
+                <dd>{attempts.data.items.filter((attempt) => attempt.correct).length}</dd>
+              </div>
+            ) : null}
+            <div>
+              <dt>{t.session.statNotSeen}</dt>
+              <dd>{session.questions.length - answered}</dd>
+            </div>
+          </dl>
+          <p className="visually-hidden">{t.session.answeredOf(answered, session.questions.length)}</p>
+          {attempts.data ? (
+            <p className="visually-hidden">
+              {t.session.correctOf(
+                attempts.data.items.filter((attempt) => attempt.correct).length,
+                answered,
+              )}
+            </p>
+          ) : null}
+          <p className="visually-hidden">
+            {t.session.notSeenOf(session.questions.length - answered)}
+          </p>
+          <p className="muted">
+            {t.session.endedMeta(
+              topicNames.get(session.topicId) ?? t.history.fallbackTopic,
+              session.closedAt ? formatDateTime(session.closedAt, locale) : null,
             )}
           </p>
-        ) : null}
-        <p>
-          <Link to="/">{t.session.backToAll}</Link>
-        </p>
+          {attempts.isPending ? <Loading label={t.session.countingCorrect} /> : null}
+          {attempts.isError ? <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} /> : null}
+          <div className="button-row">
+            <button type="button" disabled={again.isPending} onClick={() => again.mutate()}>
+              {t.session.practiseAgain}
+            </button>
+            <Link className="button secondary" to={`/history/sessions/${session.id}`}>
+              {t.session.seeReview}
+            </Link>
+          </div>
+          <p className="back">
+            <Link to="/">{t.session.backToAll}</Link>
+          </p>
+        </div>
       </section>
     </>
   );

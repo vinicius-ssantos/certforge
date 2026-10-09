@@ -95,7 +95,7 @@ export function QuestionForm({
   );
 
   return (
-    <section aria-labelledby="question-heading">
+    <section aria-labelledby="question-heading" className="asking">
       <h2 id="question-heading" ref={heading} tabIndex={-1} className="eyebrow">
         {t.question.heading(number, total)}
       </h2>
@@ -103,7 +103,7 @@ export function QuestionForm({
       <form onSubmit={submit} noValidate>
         <Prompt text={question.prompt} />
 
-        <fieldset>
+        <fieldset className="options">
           <legend>{multiple ? t.question.chooseAllCorrect : t.question.chooseOneAnswer}</legend>
           {question.options.map((option) => (
             <div key={option.key} className="choice">
@@ -114,6 +114,11 @@ export function QuestionForm({
                 checked={selected.includes(option.key)}
                 onChange={() => toggle(option.key)}
               />
+              {/* The letter is announced by the label's prefix below, so the badge is decoration
+                  to a screen reader and a landmark to everyone else. */}
+              <span className="key" aria-hidden="true">
+                {option.key}
+              </span>
               <label htmlFor={`option-${option.key}`}>
                 <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
                 <English>{option.text}</English>

@@ -69,15 +69,44 @@ describe("the catalog", () => {
   it("lists tracks with their status and counts, and says it is read-only", async () => {
     const { container } = renderApp({ [`GET ${URL}`]: { body: [track()] } }, { as: admin, path: "/editorial/catalog" });
 
-    const row = await screen.findByRole("row", { name: /Java Certification/ });
+    const row = (await screen.findByRole("link", { name: "Java Certification" })).closest<HTMLElement>("li.card");
+    expect(row).not.toBeNull();
     expect(row).toHaveTextContent("Active");
     expect(row).toHaveTextContent("Oracle");
-    expect(row).toHaveTextContent("1 (1 active)");
-    expect(within(row).getByRole("link", { name: "Java Certification" })).toHaveAttribute(
+    expect(row).toHaveTextContent("Java SE 21 (1Z0-830)");
+    expect(row).toHaveTextContent("Certification track");
+    expect(row).toHaveTextContent("2 topics");
+    expect(within(row!).getByRole("link", { name: "Java Certification" })).toHaveAttribute(
       "href",
       `/editorial/catalog/${TRACK_ID}`,
     );
     expect(screen.getByText(/read-only view/)).toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("shows distinct track kinds and draft version status without opening a track", async () => {
+    const interview = track({
+      id: "a1000000-0000-4000-8000-000000000002",
+      name: "Java Backend Interview",
+      kind: "INTERVIEW",
+      status: "DRAFT",
+      provider: "CertForge",
+      examVersions: [examVersion({
+        id: "a2000000-0000-4000-8000-000000000002",
+        label: "Interview taxonomy v1",
+        status: "DRAFT",
+      })],
+    });
+    const { container } = renderApp(
+      { [`GET ${URL}`]: { body: [track(), interview] } },
+      { as: admin, path: "/editorial/catalog" },
+    );
+
+    const card = (await screen.findByRole("link", { name: "Java Backend Interview" }))
+      .closest<HTMLElement>("li.card");
+    expect(card).toHaveTextContent("Interview track");
+    expect(card).toHaveTextContent("Interview taxonomy v1");
+    expect(within(card!).getAllByText("Draft")).toHaveLength(2);
     expect(await axe(container)).toHaveNoViolations();
   });
 
@@ -97,7 +126,7 @@ describe("the catalog", () => {
 
     await user.click(within(await screen.findByRole("alert")).getByRole("button", { name: "Try again" }));
 
-    expect(await screen.findByRole("table")).toBeInTheDocument();
+    expect(await screen.findByRole("list", { name: "Preparation tracks" })).toBeInTheDocument();
   });
 });
 

@@ -3,9 +3,10 @@ import { Link, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { MockExamQuestionResult } from "../api/types";
-import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
+import { meetsTarget } from "../progress/target";
+import { AnswerList } from "../ui/AnswerList";
 import { Prompt } from "../ui/Prompt";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
@@ -48,11 +49,23 @@ export function MockExamResultPage() {
     <>
       {heading}
       <section className="mock-score" aria-labelledby="score-heading">
-        <h2 id="score-heading">{data.passed ? t.mockResult.reached : t.mockResult.notReached}</h2>
-        <p className="mock-score-value">{t.mockResult.percentage(data.percentage)}</p>
-        <p>{t.mockResult.correctOf(data.correct, data.total, data.answered)}</p>
-        <p>{t.mockResult.target(data.passingPercentage, data.passingCorrectCount)}</p>
-        <p>{t.mockResult.elapsed(formatElapsed(data.elapsedSeconds, t))}</p>
+        <div className="page-head">
+          <div>
+            <p className="section-label">{t.mockResult.scoreLabel}</p>
+            <p className="mock-score-value">{t.mockResult.percentage(data.percentage)}</p>
+            <p className="muted">{t.mockResult.correctOf(data.correct, data.total, data.answered)}</p>
+            <p className="muted">{t.mockResult.elapsed(formatElapsed(data.elapsedSeconds, t))}</p>
+          </div>
+          {/*
+           * The verdict is the heading, not a label beside one: it is what a screen reader should
+           * announce for this region, and it is the sentence the learner came for. It wears the
+           * pill rather than being repeated by one, so the fact is stated once.
+           */}
+          <h2 id="score-heading" className={`pill ${data.passed ? "pill-ok" : "pill-hold"}`}>
+            {data.passed ? t.mockResult.reached : t.mockResult.notReached}
+          </h2>
+        </div>
+        <p className="muted">{t.mockResult.target(data.passingPercentage, data.passingCorrectCount)}</p>
         <p className="muted">{t.mockResult.caveat}</p>
       </section>
 
@@ -64,6 +77,7 @@ export function MockExamResultPage() {
             <th>{t.mockResult.correct}</th>
             <th>{t.mockResult.answered}</th>
             <th>{t.mockResult.score}</th>
+            <th>{t.progress.situation}</th>
           </tr>
         </thead>
         <tbody>
@@ -72,7 +86,24 @@ export function MockExamResultPage() {
               <th scope="row">{topicNames.get(topic.topicId) ?? t.mockResult.fallbackTopic}</th>
               <td>{t.mockResult.outOf(topic.correct, topic.total)}</td>
               <td>{t.mockResult.outOf(topic.answered, topic.total)}</td>
-              <td>{t.mockResult.percentage(topic.percentage)}</td>
+              <td>
+                <span className="bar-cell">
+                  <span className="mini" aria-hidden="true">
+                    <i
+                      className={meetsTarget(topic.percentage / 100) ? undefined : "low"}
+                      style={{ width: `${topic.percentage}%` }}
+                    />
+                  </span>
+                  {t.mockResult.percentage(topic.percentage)}
+                </span>
+              </td>
+              <td>
+                {meetsTarget(topic.percentage / 100) ? (
+                  <span className="pill pill-ok">{t.progress.solid}</span>
+                ) : (
+                  <span className="pill pill-hold">{t.progress.needsReview}</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>
@@ -86,7 +117,10 @@ export function MockExamResultPage() {
           </li>
         ))}
       </ol>
-      <p><Link to="/">{t.mockResult.backToTracks}</Link></p>
+      {data.total > data.answered ? (
+        <p className="hint">{t.mockResult.unanswered(data.total - data.answered)}</p>
+      ) : null}
+      <p className="back"><Link to="/">{t.mockResult.backToTracks}</Link></p>
     </>
   );
 }
@@ -94,25 +128,13 @@ export function MockExamResultPage() {
 function QuestionReview({ item }: { item: MockExamQuestionResult }) {
   const t = useText();
   const selected = new Set(item.selectedOptions);
-  const correct = new Set(item.answer.correctOptions);
   return (
     <details>
       <summary>
         {t.mockResult.questionSummary(item.position + 1, item.correct, item.answered)}
       </summary>
       <Prompt text={item.question.prompt} />
-      <ul className="answers">
-        {item.answer.options.map((option) => (
-          <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-            <p><strong>{option.key}. <English>{option.text}</English></strong></p>
-            <p className="muted">
-              {selected.has(option.key) ? t.feedback.yourAnswer : ""}
-              {correct.has(option.key) ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
-            </p>
-            {option.explanation ? <English as="p">{option.explanation}</English> : null}
-          </li>
-        ))}
-      </ul>
+      <AnswerList options={item.answer.options} chosen={selected} />
       <h3>{t.feedback.explanation}</h3>
       <Prompt text={item.answer.explanation} />
       {item.answer.references.length > 0 ? (

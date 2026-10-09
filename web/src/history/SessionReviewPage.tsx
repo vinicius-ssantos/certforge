@@ -5,6 +5,7 @@ import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { English } from "../i18n/English";
 import { useLocale, useText } from "../i18n/useText";
+import { AnswerList } from "../ui/AnswerList";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime } from "./format";
@@ -29,7 +30,7 @@ export function SessionReviewPage() {
   return (
     <>
       <h1>{t.sessionReview.title}</h1>
-      <p>
+      <p className="back">
         <Link to="/history">{t.sessionReview.backToHistory}</Link>
       </p>
       {attempts.isPending ? <Loading label={t.sessionReview.loading} /> : null}
@@ -44,34 +45,37 @@ export function SessionReviewPage() {
       {items.length > 0 ? (
         <ol className="review">
           {items.map((attempt) => (
-            <li key={attempt.id}>
-              <h2>{t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}</h2>
+            <li key={attempt.id} className={attempt.correct ? undefined : "panel-danger"}>
+              {/*
+               * The verdict is the heading and wears the pill, so it is announced and shown once,
+               * and a wrong answer also gets a red rail on the card — it is what the learner
+               * opened this page for, and a flat list gave it the same weight as the ones they
+               * got right. Confidence and time sit on the verdict's line, because "wrong, sure,
+               * twenty seconds" is one finding that used to take three glances to assemble.
+               */}
+              <div className="page-head">
+                <h2 className={`pill ${attempt.correct ? "pill-ok" : "pill-stop"}`}>
+                  {t.sessionReview.questionHeading(attempt.position + 1, attempt.correct)}
+                </h2>
+                <p className="muted attempt-meta">
+                  {t.sessionReview.yourAnswerLine(
+                    attempt.selectedOptions.join(", "),
+                    t.sessionReview.confidenceName(attempt.confidence),
+                    Math.ceil(attempt.elapsedMillis / 1000),
+                  )}
+                  <time dateTime={attempt.submittedAt}>
+                    {formatDateTime(attempt.submittedAt, locale)}
+                  </time>
+                  .
+                </p>
+              </div>
               <Prompt text={attempt.question.prompt} />
-              <p>
-                {t.sessionReview.yourAnswerLine(
-                  attempt.selectedOptions.join(", "),
-                  t.sessionReview.confidenceName(attempt.confidence),
-                )}
-                <time dateTime={attempt.submittedAt}>{formatDateTime(attempt.submittedAt, locale)}</time>.
-              </p>
               <details>
                 <summary>{t.sessionReview.showAnswer}</summary>
-                <ul className="answers">
-                  {attempt.question.options.map((option) => (
-                    <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-                      <p>
-                        <strong>
-                          {option.key}. <English>{option.text}</English>
-                        </strong>
-                      </p>
-                      <p className="muted">
-                        {attempt.selectedOptions.includes(option.key) ? t.feedback.yourAnswer : ""}
-                        {option.correct ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
-                      </p>
-                      {option.explanation ? <English as="p">{option.explanation}</English> : null}
-                    </li>
-                  ))}
-                </ul>
+                <AnswerList
+                  options={attempt.question.options}
+                  chosen={new Set(attempt.selectedOptions)}
+                />
                 <Prompt text={attempt.question.explanation} />
                 {attempt.question.references.length > 0 ? (
                   <ul>

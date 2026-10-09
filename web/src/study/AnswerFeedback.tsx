@@ -2,6 +2,7 @@ import { Prompt } from "../ui/Prompt";
 import type { AttemptResult, Question } from "../api/types";
 import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
+import { AnswerList } from "../ui/AnswerList";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
 
 /**
@@ -19,32 +20,16 @@ export function AnswerFeedback({
 }) {
   const t = useText();
   const heading = useFocusOnMount<HTMLHeadingElement>();
-  const correctKeys = new Set(result.answer.correctOptions);
   const chosen = new Set(result.selectedOptions);
 
   return (
-    <section aria-labelledby="result-heading">
+    <section aria-labelledby="result-heading" className="asking">
       <h2 id="result-heading" ref={heading} tabIndex={-1}>
         {result.correct ? t.feedback.correct : t.feedback.notQuite}
       </h2>
       <Prompt text={question.prompt} />
 
-      <ul className="answers">
-        {result.answer.options.map((option) => (
-          <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
-            <p>
-              <strong>
-                {option.key}. <English>{option.text}</English>
-              </strong>
-            </p>
-            <p className="muted">
-              {chosen.has(option.key) ? t.feedback.yourAnswer : ""}
-              {correctKeys.has(option.key) ? t.feedback.correctAnswer : t.feedback.incorrectAnswer}
-            </p>
-            {option.explanation ? <English as="p">{option.explanation}</English> : null}
-          </li>
-        ))}
-      </ul>
+      <AnswerList options={result.answer.options} chosen={chosen} chosenFirst />
 
       <h3>{t.feedback.explanation}</h3>
       <Prompt text={result.answer.explanation} />

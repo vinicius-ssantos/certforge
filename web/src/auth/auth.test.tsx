@@ -110,6 +110,25 @@ describe("creating an account", () => {
     expect(fetch.calls.some((call) => call.path === "/api/auth/register")).toBe(false);
   });
 
+  it("counts the password down to the rule while it is typed", async () => {
+    const user = userEvent.setup();
+    renderApp({}, { signedIn: false, path: "/register" });
+
+    // Before anything is typed the field states the rule rather than a countdown.
+    const password = await screen.findByLabelText("Password");
+    expect(password).toHaveAccessibleDescription(/at least 12 characters/);
+
+    await user.type(password, "ten chars!");
+    expect(password).toHaveAccessibleDescription(/2 more characters to go/);
+
+    // Singular, because "1 more characters" is the kind of thing that makes a product feel unread.
+    await user.type(password, "x");
+    expect(password).toHaveAccessibleDescription(/1 more character to go/);
+
+    await user.type(password, "x");
+    expect(password).toHaveAccessibleDescription(/Long enough/);
+  });
+
   it("registers, signs in and shows the tracks", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(

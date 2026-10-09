@@ -109,7 +109,7 @@ describe("the queue", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("filters by status through the server", async () => {
+  it("filters locally and shows counts using only the unfiltered request", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
       {
@@ -121,11 +121,13 @@ describe("the queue", () => {
       { as: editor, path: "/editorial" },
     );
 
-    await user.click(await screen.findByRole("link", { name: "Drafts" }));
+    await user.click(await screen.findByRole("link", { name: /^Drafts\b/ }));
 
     await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(2));
-    expect(screen.getByRole("link", { name: "Drafts" })).toHaveAttribute("aria-current", "page");
-    expect(fetch.calls.some((call) => call.path === "/api/admin/questions" && call.query.get("status") === "DRAFT")).toBe(true);
+    expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveTextContent("1");
+    expect(fetch.calls.filter((call) => call.path === "/api/admin/questions")).toHaveLength(1);
+    expect(fetch.calls.every((call) => call.query.get("status") === null)).toBe(true);
   });
 
   it("invites the first question, and only editors can write it", async () => {

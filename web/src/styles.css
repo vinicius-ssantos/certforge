@@ -32,6 +32,46 @@ a {
   text-underline-offset: 0.15em;
 }
 
+/*
+ * A link that is a whole heading, a whole table cell, or a line of its own is not a link inside a
+ * sentence. The blue and the underline exist so a reader can pick a link out of surrounding
+ * prose; where there is no surrounding prose they buy nothing, and painting every record blue
+ * turns a page of content into a page of links. The prototype draws these as content — a track
+ * card's title is a heading, a topic in a table is just the topic — and it is right to.
+ *
+ * They keep the underline for hover and focus, they are still `a` elements with the link role,
+ * and the whole cell or heading is the target, so there is nothing subtle to hit.
+ *
+ * Links inside a sentence keep the full treatment, and so do links that leave the product: those
+ * are the ones a reader has to be able to find mid-paragraph, and the ones where being wrong
+ * about what is clickable actually costs something.
+ */
+:is(h1, h2, h3) > a,
+td > a:only-child,
+th > a:only-child,
+.back > a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+:is(h1, h2, h3) > a:hover,
+:is(h1, h2, h3) > a:focus-visible,
+td > a:only-child:hover,
+td > a:only-child:focus-visible,
+th > a:only-child:hover,
+th > a:only-child:focus-visible,
+.back > a:hover,
+.back > a:focus-visible {
+  text-decoration: underline;
+}
+
+/* A line that only goes back where you came from. */
+.back {
+  margin: 0 0 var(--s4);
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
 h1,
 h2,
 h3 {
@@ -121,7 +161,10 @@ main:focus {
   padding: var(--s3) var(--s4);
 }
 
+/* The wordmark is set in the reading face, not the interface face. The product is an editorial
+ * desk; the serif is the one place the masthead says so before you read a word of it. */
 .brand {
+  font-family: var(--font-read);
   font-weight: 700;
   font-size: var(--t-lg);
   letter-spacing: -0.01em;
@@ -151,15 +194,18 @@ nav a {
   border-bottom: 2px solid transparent;
 }
 
+/* Hover underlines the words; only the current page gets a rule beneath them. Using the same
+ * bottom border for both made a hovered link indistinguishable from the page you are on. */
 nav a:hover {
-  border-bottom-color: var(--border-strong);
+  text-decoration: underline;
 }
 
 /* The current page is named by weight and by a rule under it, so the cue survives a greyscale
- * print and does not rely on the accent being distinguishable from the ink. */
+ * print. The rule is the accent: it is the one mark in the chrome that is allowed to be blue, and
+ * it ties the header to the focus ring and the progress bar. */
 nav a[aria-current="page"] {
   font-weight: 700;
-  border-bottom-color: var(--action);
+  border-bottom-color: var(--accent);
 }
 
 /* ---- page shell -------------------------------------------------------------------------- */
@@ -170,8 +216,64 @@ main {
   padding: var(--s6) var(--s4) var(--s7);
 }
 
+/*
+ * The front door: signing in and creating an account.
+ *
+ * These were the one pair of screens the redesign's four did not cover, so they kept the new
+ * palette and nothing else — a bare form adrift on the page ground while every other screen had
+ * gained a surface to sit on. They get the same card the rest of the product uses, centred and
+ * held to a form's width, so arriving at CertForge looks like the same product as using it.
+ */
 .narrow {
-  max-width: 30rem;
+  max-width: 26rem;
+  margin: var(--s6) auto 0;
+  padding: var(--s6);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.narrow > h1 {
+  margin-bottom: var(--s5);
+}
+
+/* One form, one action: at this width a button sized to its two words sits oddly against fields
+ * that run the full card. */
+.narrow form button[type="submit"] {
+  width: 100%;
+  margin-top: var(--s2);
+}
+
+/*
+ * One segment per character the rule asks for, filling as they are typed. It restates the count
+ * in the words beside it and says nothing on its own, which is why it is `aria-hidden`: a screen
+ * reader gets the sentence, not twelve anonymous boxes. It is deliberately not a strength meter —
+ * the product has one rule about passwords and no opinion beyond it.
+ */
+.meter {
+  display: flex;
+  gap: 2px;
+  margin-top: var(--s2);
+  margin-bottom: var(--s2);
+}
+
+.meter > i {
+  height: 4px;
+  flex: 1;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.meter > i.on {
+  background: var(--ok);
+}
+
+.narrow > p:last-child {
+  margin: var(--s5) 0 0;
+  padding-top: var(--s4);
+  border-top: 1px solid var(--border);
+  font-size: var(--t-sm);
+  color: var(--muted);
 }
 
 .page-head {
@@ -214,10 +316,16 @@ main {
   align-items: flex-start;
 }
 
+/*
+ * A line of short fields. `auto-fit` rather than a fixed three columns: the classification line
+ * carries three fields or four depending on the track, and a fixed count left either a gap or a
+ * field pushed onto a line of its own.
+ */
 .row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s5);
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--s4) var(--s5);
+  align-items: start;
 }
 
 /*
@@ -266,7 +374,8 @@ button:disabled {
   cursor: progress;
 }
 
-button.secondary {
+button.secondary,
+a.button.secondary {
   background: transparent;
   color: var(--action);
 }
@@ -289,11 +398,29 @@ button.warn {
   color: var(--danger);
 }
 
+/*
+ * A tertiary action: ending a session, signing out, removing an option from a draft.
+ *
+ * It used to be blue and underlined, which is the affordance of a link — and a link means
+ * "this takes you somewhere". None of these do; they act. Several sat beside real links, so the
+ * one signal the interface has for navigation was being spent on things that are not navigation.
+ *
+ * Quiet text with the underline held back until hover or focus, which is the ordinary treatment
+ * for an action you should be able to find but should not be invited into. It stays a real
+ * `button`, so it keeps the role, the keyboard behaviour and the focus ring; what changes is
+ * that it stops claiming to be a link.
+ */
 .link-button {
   background: none;
   border: 0;
   padding: var(--s1);
-  color: var(--accent);
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--text);
   text-decoration: underline;
 }
 
@@ -342,10 +469,6 @@ textarea.read {
   font-size: var(--t-lg);
 }
 
-.narrow-field {
-  max-width: 16rem;
-}
-
 fieldset {
   margin: 0 0 var(--s5);
   padding: var(--s3) var(--s4) var(--s4);
@@ -379,6 +502,19 @@ fieldset.field > legend {
   font-weight: 500;
 }
 
+/* A short list of choices reads across rather than down when the options are two or three words
+ * each: three stacked rows spend a third of the form's height saying what kind of question it is. */
+.inline-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--s5);
+}
+
+.inline-choices > legend {
+  float: left; /* a flex container's legend is taken out of flow, so it needs its own line back */
+  width: 100%;
+}
+
 .check input {
   width: 1.3rem;
   height: 1.3rem;
@@ -395,6 +531,13 @@ fieldset.field > legend {
 .hint {
   margin: 0 0 var(--s1);
   font-size: var(--t-sm);
+}
+
+/* A readout of what was typed, under the control it reports on. */
+.field-below {
+  margin-top: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--muted);
 }
 
 .field-error {
@@ -457,6 +600,47 @@ fieldset.field > legend {
   margin: 0;
 }
 
+/*
+ * A block of content on its own surface: the general case the cards, notices and panels around
+ * the product are variations of. A rail on the leading edge gives it a voice without a fill —
+ * brass where something is waiting, red where something cannot be undone.
+ */
+.panel {
+  display: grid;
+  gap: var(--s3);
+  justify-items: start;
+  padding: var(--s5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.panel > h2,
+.panel > h3 {
+  margin: 0;
+}
+
+.panel > p {
+  margin: 0;
+}
+
+/* Side-by-side actions. `.row` is the grid for short form fields and would stretch a button to a
+ * column; these size to their words. */
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s3);
+}
+
+.panel-hold {
+  border-left: 3px solid var(--review);
+}
+
+.panel-danger {
+  border-left: 3px solid var(--danger);
+}
+
 .confirm {
   padding: var(--s3) var(--s4);
   border: 2px solid var(--action);
@@ -471,15 +655,18 @@ fieldset.field > legend {
 /* ---- cards ------------------------------------------------------------------------------- */
 
 /*
- * `auto-fit` rather than `auto-fill`: with `auto-fill` a single track kept its 16rem width and left
- * the rest of the row empty, so one track in a track list sat in a narrow box beside nothing.
+ * Cards keep a card's proportions. `auto-fill` left a lone track in a narrow box beside an empty
+ * column; plain `auto-fit` went to the other extreme and stretched that one card across the full
+ * shell, four short lines adrift in a thousand pixels. Capping the track at 24rem means one card
+ * looks like a card and several still fill the row.
  */
 .cards {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 24rem));
+  justify-content: start;
   gap: var(--s4);
 }
 
@@ -551,12 +738,139 @@ fieldset.field > legend {
   margin-left: var(--s2);
 }
 
+/* ---- small repeated parts ---------------------------------------------------------------- */
+
+/*
+ * A named state, as a word in a ring. Used where a row would otherwise have to say its state with
+ * an empty cell or a dash: "not started" is a fact about a topic, and `0 0 — —` is not a way to
+ * say it. The ring takes the colour of the text, so one rule covers every state.
+ */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s1);
+  margin: 0;
+  padding: 2px var(--s2);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  /* Set explicitly because a heading can wear this: on the mock result the verdict is the
+   * region's heading and the pill at the same time, so the fact is stated once. */
+  font: 600 var(--t-xs) / 1.5 var(--font-ui);
+  white-space: nowrap;
+}
+
+.pill-ok {
+  color: var(--ok);
+}
+
+.pill-hold {
+  color: var(--review);
+}
+
+.pill-new {
+  color: var(--muted);
+}
+
+.pill-stop {
+  color: var(--danger);
+}
+
+/*
+ * A percentage with a short bar beside it. Comparing nine rows of percentages is work the shape
+ * does better than the digits, and the digits stay for the exact value.
+ */
+.bar-cell {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  font-variant-numeric: tabular-nums;
+}
+
+.mini {
+  width: 4rem;
+  height: 5px;
+  flex: none;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+/*
+ * The accent, not the green: the bar restates the accuracy, it does not judge it. Calling 72%
+ * "good" needs a threshold this product has not decided, and a green bar would be deciding it
+ * quietly. The `low` variant exists for when that line is drawn, and nothing sets it yet.
+ */
+.mini > i {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+.mini > i.low {
+  background: var(--review);
+}
+
+/*
+ * A few figures side by side: the number large and tabular, its name small above it. On a track
+ * card it says where the learner is, not only what the track is.
+ */
+.stat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2) var(--s5);
+  margin: var(--s1) 0 0;
+}
+
+.stat > div {
+  display: grid;
+}
+
+.stat dt {
+  font-size: var(--t-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.stat dd {
+  margin: 0;
+  font-size: var(--t-xl);
+  font-weight: 600;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * The small uppercase label that names a group of fields or a region. It is set in the interface
+ * face on purpose: it is furniture, and should not compete with the serif used for content.
+ */
+.section-label {
+  margin: 0 0 var(--s2);
+  font: 700 var(--t-xs) / 1.4 var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+/* A label that opens a section needs air above it when something precedes it, or it reads as a
+ * caption belonging to the block it is actually separating itself from. `:where` keeps this at
+ * zero specificity, so any rule that wants a different gap still wins. */
+:where(* + .section-label) {
+  margin-top: var(--s5);
+}
+
 /* ---- step rail (editorial lifecycle) ----------------------------------------------------- */
 
+/*
+ * Where this revision is in its life, as a row of pills. The numbered circles this replaces took a
+ * line of their own and read as a wizard the author could click through; a revision's stage is
+ * something that happened to it, not a step they choose, so it belongs beside the title at the
+ * size of a label.
+ */
 .rail {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--s2) var(--s6);
+  gap: var(--s1);
   list-style: none;
   margin: 0 0 var(--s5);
   padding: 0;
@@ -565,65 +879,80 @@ fieldset.field > legend {
 .rail li {
   display: flex;
   align-items: center;
-  gap: var(--s2);
-  color: var(--muted);
+  gap: var(--s1);
   max-width: none;
+  padding: 2px var(--s2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: var(--t-xs);
+  color: var(--muted);
 }
 
 .rail li > span:first-child {
-  display: grid;
-  place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  flex: none;
-  border: 1.5px solid var(--border-strong);
-  border-radius: 50%;
-  font-size: var(--t-xs);
-  font-weight: 600;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .rail li[aria-current="step"] {
-  color: var(--text);
-  font-weight: 600;
-}
-
-.rail li[aria-current="step"] > span:first-child {
   background: var(--action);
   border-color: var(--action);
   color: var(--action-text);
+  font-weight: 600;
 }
 
-.rail li.done > span:first-child {
-  background: var(--ok);
+/* A stage already passed. The tick is the second cue, so the state does not rest on the green. */
+.rail li.done {
+  color: var(--ok);
   border-color: var(--ok);
-  color: var(--bg);
+}
+
+.rail li.done::after {
+  content: "✓";
+  font-weight: 700;
 }
 
 /* ---- session progress -------------------------------------------------------------------- */
 
 /*
- * How far through the session the learner is. The number is stated in words beside the bar; the bar
- * is the illustration, not the information, so it is `aria-hidden` in the markup.
+ * How far through the session the learner is: a line of words over a bar. The words carry the
+ * information — where you are on the left, what you are working on and how it is going on the
+ * right — and the bar is the illustration, so the bar is `aria-hidden` in the markup.
+ *
+ * Over ten questions the sense of advancing is most of what holds a session together, and a line
+ * of grey text was not providing it.
  */
 .session-progress {
-  display: flex;
-  align-items: center;
-  gap: var(--s4);
+  display: grid;
+  gap: var(--s2);
+  max-width: var(--ask); /* aligns the bar with the question column it measures */
   margin: 0 0 var(--s5);
 }
 
-.session-progress > span {
-  flex: none;
+.session-progress-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--s1) var(--s3);
+}
+
+.session-progress-head > .eyebrow {
+  margin: 0;
+}
+
+.session-progress-head > strong {
   font-size: var(--t-sm);
   font-weight: 600;
-  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 
+.session-progress-head > span {
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
 .session-progress-track {
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 0.5rem;
+  height: 6px; /* a rule, not a control: thin enough to read as a measure of the page */
   border-radius: 999px;
   background: var(--border);
   overflow: hidden;
@@ -632,20 +961,53 @@ fieldset.field > legend {
 .session-progress-fill {
   display: block;
   height: 100%;
+  border-radius: 999px;
   background: var(--accent);
 }
 
 /* ---- the question ------------------------------------------------------------------------ */
 
 /*
+ * The practice column. Everything the learner reads and answers sits inside one narrow measure —
+ * prompt, options, confidence, submit — so the eye travels straight down a single column instead
+ * of crossing the full width of the shell for every option. The page shell stays wide for the
+ * screens that need it; this one does not.
+ */
+.asking {
+  max-width: var(--ask);
+}
+
+/*
+ * The answer options carry their own boxes, so the fieldset around them must not add a second one.
+ * The legend stays — it is what says "choose one" or "choose all that apply" — but as a quiet
+ * field label rather than a framed caption.
+ */
+.options {
+  border: 0;
+  padding: 0;
+  margin: 0 0 var(--s5);
+}
+
+.options > legend {
+  padding: 0;
+  margin-bottom: var(--s2);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/*
  * The prompt is the largest thing on the practice screen. It is set in the reading face because it
  * is read closely, often twice, and frequently contains a sentence about code rather than code.
+ * Semibold rather than regular: at this size the serif needs the weight to hold its own against
+ * the lettered options below it.
  */
 .prompt {
   margin: 0 0 var(--s5);
   font-family: var(--font-read);
   font-size: var(--t-xl);
-  line-height: 1.45;
+  font-weight: 600;
+  line-height: 1.4;
   max-width: var(--measure);
 }
 
@@ -682,9 +1044,9 @@ pre.code {
   align-items: start;
   gap: var(--s3);
   min-height: var(--touch);
-  padding: var(--s3) var(--s4);
+  padding: var(--s3);
   margin-bottom: var(--s2);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
 }
@@ -695,33 +1057,82 @@ pre.code {
 
 .choice:has(input:checked) {
   border-color: var(--accent);
-  box-shadow: inset 0 0 0 1px var(--accent);
   background: var(--accent-bg);
 }
 
+/*
+ * The lettered badge is what the learner sees; the native control is laid transparently over it,
+ * at its full size. Not clipped to a pixel: a control that has been shrunk away is unreachable by
+ * pointer, by a browser automation tool and by anything that works on hit areas rather than on
+ * the accessibility tree. This keeps one real radio or checkbox, at the size it appears to be —
+ * tab order, grouping, arrow keys and the label all behave as the browser intends.
+ */
 .choice input {
-  position: relative;
+  position: absolute;
+  /* Offsets run from the padding box, which is exactly where the badge begins. */
+  top: 0;
+  left: 0;
   z-index: 2;
-  width: 1.4rem;
-  height: 1.4rem;
-  margin: 0.15rem 0 0; /* optical: aligns the control with the first line, not the line box */
-  flex: none;
-  accent-color: var(--accent);
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
 }
 
+.choice:has(input:focus-visible) {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/*
+ * The option's letter, as a badge. It is how a learner refers to an answer out loud and how the
+ * explanation below refers back to it, so it should be visible rather than only announced. The
+ * badge fills when the option is chosen: a form change, not only a colour change.
+ *
+ * Round means pick one, square means pick several. The shape is the only place the form tells a
+ * single-choice question from a multiple-choice one at a glance, now that the native radio and
+ * checkbox are gone; the legend above still says it in words.
+ */
+.choice .key {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex: none;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
+  font-variant-numeric: tabular-nums;
+}
+
+.choice:has(input[type="checkbox"]) .key {
+  border-radius: var(--radius);
+}
+
+.choice:has(input:checked) .key {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface);
+}
+
+/*
+ * The label is the target for everything right of the badge: it stretches to the full height and
+ * width of its column, so the padding and the empty space after a short option select it too,
+ * instead of only the few characters of text. An absolutely positioned overlay would cover the
+ * badge as well and swallow the clicks meant for the control underneath it.
+ */
 .choice label {
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+  min-height: 1.75rem; /* the badge's height, so a one-line option centres against it */
   margin: 0;
   font-weight: 400;
   font-family: var(--font-read);
   font-size: var(--t-lg);
   line-height: 1.45;
-}
-
-.choice label::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
+  cursor: pointer;
 }
 
 /*
@@ -733,41 +1144,57 @@ pre.code {
   display: flex;
   flex-wrap: wrap;
   gap: 0;
+  width: fit-content;
+  max-width: 100%;
   border: 0;
   padding: 0;
   margin: 0 0 var(--s5);
 }
 
+/* The legend is a quiet field label, not a heading: three words over one control. */
 .segmented > legend {
   padding: 0;
   margin-bottom: var(--s2);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  color: var(--muted);
 }
 
+/*
+ * One strip, not three stacked rows. Each segment sizes to its own words — stretching them to the
+ * full column made three equal grey slabs that read as disabled rather than as a choice.
+ */
 .segmented .choice {
   position: relative;
   display: block;
-  flex: 1 1 8rem;
+  flex: 0 0 auto;
   min-width: 0;
+  min-height: 0;
   margin: 0;
   padding: 0;
   border: 0;
   background: none;
 }
 
+.segmented .choice:hover {
+  border-color: transparent;
+}
+
 .segmented .choice:has(input:checked) {
-  box-shadow: none;
   background: none;
 }
 
+.segmented .choice:has(input:focus-visible) {
+  outline: none;
+}
+
+/* A segment has no badge, so its control covers the whole segment instead. */
 .segmented .choice input {
-  position: absolute;
   inset: 0;
-  z-index: 1;
+  top: auto;
+  left: auto;
   width: 100%;
   height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
 }
 
 .segmented .choice label {
@@ -775,11 +1202,11 @@ pre.code {
   align-items: center;
   justify-content: center;
   min-height: var(--touch);
-  padding: var(--s2) var(--s3);
-  border: 1px solid var(--border-strong);
-  margin-left: -1px; /* collapses the shared edge between two segments into one line */
+  padding: var(--s2) var(--s4);
+  border: 1.5px solid var(--border-strong);
+  margin-left: -1.5px; /* collapses the shared edge between two segments into one line */
   font-family: var(--font-ui);
-  font-size: var(--t-md);
+  font-size: var(--t-sm);
   text-align: center;
   cursor: pointer;
 }
@@ -819,58 +1246,76 @@ pre.code {
   margin: 0 0 var(--s5);
 }
 
+/* Laid out like the options the learner answered, so the same question reads the same way before
+ * and after: the lettered badge in its column, the option beside it. */
 .answers li {
-  border: 1px solid var(--border);
-  border-left-width: 6px;
+  display: grid;
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: var(--s3);
+  align-items: start;
+  border: 1.5px solid var(--border);
   border-radius: var(--radius);
-  padding: var(--s3) var(--s4);
+  padding: var(--s3);
   margin: var(--s2) 0;
   background: var(--surface);
   max-width: none;
 }
 
-/* The fill and the rail are the third cue. The first two are in the markup: the option's letter,
- * and a sentence saying whether it was correct and whether the learner chose it. */
+.answers .key {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
+}
+
+/* The fill and the filled badge are the third cue. The first two are in the markup: the tick or
+ * the cross, and a sentence saying whether the option is correct and whether the learner chose
+ * it. Nothing here is the only thing saying so. */
 .answers .answer-correct {
   border-color: var(--ok);
   background: var(--ok-bg);
 }
 
+.answers .answer-correct .key {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: var(--bg);
+}
+
 .answers p {
-  margin: var(--s1) 0;
+  margin: 0;
   max-width: var(--measure);
 }
 
-.answers strong {
+.answer-text {
   font-family: var(--font-read);
   font-size: var(--t-lg);
+  line-height: 1.4;
 }
 
-/* What the verification programme printed for this question, shown where the learner is told the
- * answer. The claim and its evidence belong on the same screen. */
-.verified {
-  margin: 0 0 var(--s5);
-  padding: var(--s3) var(--s4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
-.verified > h3 {
-  margin: 0 0 var(--s2);
-  font: 600 var(--t-xs) / 1.4 var(--font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.answers .verdict {
+  display: flex;
+  align-items: baseline;
+  gap: var(--s1);
+  margin-top: var(--s1);
+  font-size: var(--t-sm);
+  font-weight: 600;
   color: var(--muted);
 }
 
-.verified pre {
-  margin: 0;
-  padding: var(--s3);
-  overflow-x: auto;
-  background: var(--bg);
-  border-radius: var(--radius);
-  font: var(--t-sm) / 1.6 var(--font-code);
+.answers .verdict-ok {
+  color: var(--ok);
+}
+
+/* Why this option is right or wrong. Quieter than the option itself: it is read after the verdict,
+ * not instead of it. */
+.answers .why {
+  margin-top: var(--s2);
+  font-size: var(--t-sm);
+  color: var(--muted);
 }
 
 .session-actions {
@@ -885,10 +1330,33 @@ pre.code {
 
 /* ---- tables ------------------------------------------------------------------------------ */
 
+/*
+ * A data table sits on a surface like every other block of content. `.table-scroll` is the
+ * wrapper `ScrollableTable` always renders, so it can own the edge and the corners the collapsed
+ * table itself cannot round; the table keeps `border-collapse` and loses its outer rules to the
+ * wrapper's border.
+ */
+.table-scroll {
+  margin: var(--s4) 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: var(--surface);
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
   margin: var(--s4) 0;
+}
+
+.table-scroll > table {
+  margin: 0;
+}
+
+/* The last row's rule would sit on the wrapper's own border. */
+.table-scroll tbody tr:last-child > * {
+  border-bottom: 0;
 }
 
 th,
@@ -962,10 +1430,30 @@ table.queue td.question-cell a {
 .review > li {
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--s2) var(--s4) var(--s4);
+  padding: var(--s4);
   margin: var(--s4) 0;
   background: var(--surface);
   max-width: none;
+}
+
+.review > li.panel-danger {
+  border-left: 3px solid var(--danger);
+}
+
+.review > li > .page-head {
+  align-items: baseline;
+  margin-bottom: var(--s3);
+}
+
+.attempt-meta {
+  margin: 0;
+  font-size: var(--t-sm);
+}
+
+/* The prompt here is being re-read, not answered, so it does not need the practice screen's size. */
+.review > li .prompt {
+  margin-bottom: var(--s3);
+  font-size: var(--t-lg);
 }
 
 /* The questions waiting to be practised again, under the topic that owns them. Numbered, because
@@ -998,21 +1486,34 @@ table.queue td.question-cell a {
   font-variant-numeric: tabular-nums;
 }
 
-.review-queue strong {
-  display: block;
-  font-size: var(--t-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--review);
+/* The reason wears a pill and brings its own shape and colour; nothing here may override it.
+ * The block-label styling this replaces was stretching the pill across the whole column. */
+.review-queue .pill {
+  margin-bottom: var(--s1);
 }
 
 .review-queue p {
   margin: var(--s1) 0 0;
 }
 
-.review-queue p:nth-of-type(1) {
+/* The question is what the learner scans for, so it leads and it is set to be read. */
+.queued-prompt {
+  margin-top: 0;
   font-family: var(--font-read);
   font-size: var(--t-lg);
+  line-height: 1.4;
+}
+
+/*
+ * Reason and evidence on one line: the pill sits in the sentence rather than above it.
+ *
+ * Deliberately not a flex container. Flex made every run of text its own item, so the full stop
+ * after the date became a box of its own and drifted a gap away from it. The pill is already
+ * `inline-flex` and flows in the sentence by itself.
+ */
+.queued-meta {
+  font-size: var(--t-sm);
+  line-height: 1.8; /* room for the pill's border without crowding the line above */
 }
 
 summary {
@@ -1084,9 +1585,16 @@ summary {
   max-width: none;
 }
 
+/* The same badge the learner sees, because this is a preview of exactly that. */
 .learner-options strong {
-  width: 1.25rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
   flex: none;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 999px;
+  font: 700 var(--t-xs) / 1 var(--font-ui);
 }
 
 ul.key,
@@ -1258,6 +1766,15 @@ del {
   background: var(--surface);
 }
 
+/*
+ * Waiting on content. Brass rather than ink, and certainly rather than red: the ink rail says
+ * "there is something to do here", and there is not — the mock is finished and unreachable until
+ * someone reviews more questions. Nothing has gone wrong; something is absent.
+ */
+.mock-entry-waiting {
+  border-left-color: var(--review);
+}
+
 .mock-entry h2 {
   margin-top: 0;
 }
@@ -1296,14 +1813,19 @@ del {
   color: var(--muted);
 }
 
+/* Monospaced and tabular so the digits hold their columns and the clock does not twitch once a
+ * second; medium weight, because at this size the bold read as an alarm. */
 .mock-timer strong {
-  font: 700 var(--t-2xl) / 1.15 var(--font-code);
+  font: 500 var(--t-2xl) / 1.15 var(--font-code);
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
+/* 16rem holds five navigator cells at `--touch` across, so fifty questions land in ten readable
+ * rows rather than thirteen. */
 .mock-layout {
   display: grid;
-  grid-template-columns: 14rem minmax(0, 1fr);
+  grid-template-columns: 16rem minmax(0, 1fr);
   gap: var(--s6);
   align-items: start;
 }
@@ -1319,8 +1841,8 @@ del {
  */
 .mock-nav {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--s2);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--s1);
   list-style: none;
   margin: 0 0 var(--s4);
   padding: 0;
@@ -1347,6 +1869,7 @@ button.mock-nav-button {
 button.mock-nav-button.answered {
   background: var(--ok-bg);
   border-color: var(--ok);
+  color: var(--ok);
 }
 
 button.mock-nav-button.answered::before {
@@ -1359,21 +1882,34 @@ button.mock-nav-button.answered::before {
   color: var(--ok);
 }
 
-/* Flagged: a folded corner. A shape, so it reads without the colour. */
+/*
+ * Flagged: a folded corner, in brass. Brass and not red, because the learner flagged the question
+ * themselves — it is something to come back to, not something wrong. Red here would be the only
+ * alarm on a screen where nothing has gone wrong yet. The corner is a shape, so the state reads
+ * without the colour.
+ */
+button.mock-nav-button.flagged {
+  border-color: var(--review);
+  background: var(--review-bg);
+  color: var(--review);
+}
+
 button.mock-nav-button.flagged::after {
   content: "";
   position: absolute;
   top: 0;
   right: 0;
-  border-width: 0 0.7rem 0.7rem 0;
+  border-width: 0.7rem 0.7rem 0 0;
   border-style: solid;
-  border-color: transparent var(--danger) transparent transparent;
+  border-color: var(--review) transparent transparent transparent;
   border-top-right-radius: var(--radius);
 }
 
+/* Where the learner is now: filled with ink, the strongest mark on the grid. */
 button.mock-nav-button.current {
+  background: var(--action);
   border-color: var(--action);
-  box-shadow: inset 0 0 0 2px var(--action);
+  color: var(--action-text);
   font-weight: 700;
 }
 
@@ -1416,20 +1952,25 @@ button.mock-nav-button.current {
   color: var(--ok);
 }
 
+.mock-legend-marker.flagged {
+  border-color: var(--review);
+  background: var(--review-bg);
+}
+
 .mock-legend-marker.flagged::after {
   content: "";
   position: absolute;
   top: 0;
   right: 0;
-  border-width: 0 0.45rem 0.45rem 0;
+  border-width: 0.45rem 0.45rem 0 0;
   border-style: solid;
-  border-color: transparent var(--danger) transparent transparent;
+  border-color: var(--review) transparent transparent transparent;
   border-top-right-radius: var(--radius);
 }
 
 .mock-legend-marker.current {
+  background: var(--action);
   border-color: var(--action);
-  box-shadow: inset 0 0 0 1px var(--action);
 }
 
 .mock-question {
@@ -1466,19 +2007,92 @@ button.mock-nav-button.current {
   background: var(--surface);
 }
 
+/*
+ * The heading of this region is the verdict, and it wears a pill. It used to be a quiet uppercase
+ * label, and that styling survived the change — which left "practice target not reached" shouting
+ * in six-point capitals inside its own badge. The label above the figure is a paragraph now, so
+ * this rule only has to keep the heading from adding a margin the panel does not want.
+ */
 .mock-score h2 {
   margin-top: 0;
-  font-size: var(--t-xs);
-  font-family: var(--font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
 }
 
 .mock-score-value {
   margin: var(--s1) 0;
   font: 700 var(--t-3xl) / 1 var(--font-read);
   font-variant-numeric: tabular-nums;
+}
+
+
+/* Publication is distinct from review: a left danger rail, not a green approval button. */
+.publish-danger {
+  padding: var(--s4) var(--s5);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--danger);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+/* Milestone 8: the reviewer's decision is one contained action surface. */
+.decision-panel {
+  display: grid;
+  gap: var(--s4);
+}
+
+.decision-actions > button {
+  width: 100%;
+}
+
+.decision-panel fieldset {
+  min-width: 0;
+}
+
+.decision-panel .pill {
+  white-space: normal;
+}
+
+
+/* Editorial screens use the same cards, badges and responsive table surface as the learner. */
+.queue .status {
+  border: 1px solid currentColor;
+  border-radius: var(--radius-lg);
+  padding: 0 var(--s2);
+  font-size: var(--t-xs);
+}
+
+.tab-count {
+  margin-left: var(--s2);
+  font-variant-numeric: tabular-nums;
+  color: inherit;
+}
+
+.editorial-catalog .card > :last-child {
+  margin-top: var(--s4);
+}
+
+.editorial-catalog-versions {
+  border-top: 1px solid var(--border);
+  padding-top: var(--s3);
+}
+
+.editorial-catalog-versions ul {
+  list-style: none;
+  margin: var(--s2) 0 0;
+  padding: 0;
+}
+
+.editorial-catalog-versions li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--s2);
+  padding: var(--s2) 0;
+  max-width: none;
+}
+
+.editorial-catalog-versions .pill {
+  white-space: normal;
 }
 
 /* ---- motion and width -------------------------------------------------------------------- */

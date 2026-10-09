@@ -6,7 +6,7 @@ import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-import { formatDateTime, statusLabel } from "./format";
+import { formatDateTime, statusLabel, statusTone } from "./format";
 import { useTopicNames, useTrackNames } from "./useTopicNames";
 
 export function HistoryPage() {
@@ -63,7 +63,7 @@ export function HistoryPage() {
       ) : null}
 
       <section aria-labelledby="mock-history-heading">
-        <h2 id="mock-history-heading">{t.history.mockHeading}</h2>
+        <h2 id="mock-history-heading" className="section-label">{t.history.mockHeading}</h2>
         {mocks.isPending ? <Loading label={t.history.mockLoading} /> : null}
         {mocks.isError ? (
           <ErrorState error={mocks.error} onRetry={() => void mocks.refetch()} />
@@ -101,7 +101,9 @@ export function HistoryPage() {
                     <td>
                       <time dateTime={mock.createdAt}>{formatDateTime(mock.createdAt, locale)}</time>
                     </td>
-                    <td>{statusLabel(mock.status, t)}</td>
+                    <td>
+                      <span className={`pill ${statusTone(mock.status)}`}>{statusLabel(mock.status, t)}</span>
+                    </td>
                     <td>{t.history.answeredOf(mock.answeredCount, mock.questionCount)}</td>
                     <td>
                       {mock.percentage === null || mock.correctCount === null
@@ -142,7 +144,7 @@ export function HistoryPage() {
       </section>
 
       <section aria-labelledby="practice-history-heading">
-        <h2 id="practice-history-heading">{t.history.practiceHeading}</h2>
+        <h2 id="practice-history-heading" className="section-label">{t.history.practiceHeading}</h2>
         {sessions.isPending ? <Loading label={t.history.loading} /> : null}
         {sessions.isError ? (
           <ErrorState error={sessions.error} onRetry={() => void sessions.refetch()} />
@@ -179,7 +181,9 @@ export function HistoryPage() {
                     <td>
                       <time dateTime={session.createdAt}>{formatDateTime(session.createdAt, locale)}</time>
                     </td>
-                    <td>{statusLabel(session.status, t)}</td>
+                    <td>
+                      <span className={`pill ${statusTone(session.status)}`}>{statusLabel(session.status, t)}</span>
+                    </td>
                     <td>{t.history.answeredOf(session.answeredCount, session.requestedCount)}</td>
                     <td>{session.correctCount}</td>
                   </tr>

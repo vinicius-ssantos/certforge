@@ -27,7 +27,7 @@ async function writeQuestion(page: Page, label: string) {
 
 async function openQuestion(page: Page, filter: string, label: string) {
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Editorial" }).click();
-  await page.getByRole("link", { name: filter }).click();
+  await page.getByRole("link", { name: new RegExp(`^${filter}\\b`) }).click();
   await page.getByRole("link", { name: label }).first().click();
 }
 
@@ -72,7 +72,7 @@ test.describe("the editorial desk", () => {
     await expectReflows(page);
 
     await page.getByRole("link", { name: "Back to questions" }).click();
-    await page.getByRole("link", { name: "Waiting for review" }).click();
+    await page.getByRole("link", { name: /^Waiting for review\b/ }).click();
     await expect(page.getByRole("row", { name: new RegExp(label) })).toContainText("In review");
   });
 

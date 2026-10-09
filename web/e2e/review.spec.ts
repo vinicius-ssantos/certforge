@@ -16,6 +16,17 @@ const IN_TOPIC = 10;
 const CORRECT = "#option-A";
 const WRONG = "#option-B";
 
+async function dangerColor(page: Page): Promise<string> {
+  return page.evaluate(() => {
+    const sample = document.createElement("span");
+    sample.style.color = "var(--danger)";
+    document.body.appendChild(sample);
+    const expected = getComputedStyle(sample).color;
+    sample.remove();
+    return expected;
+  });
+}
+
 test.beforeAll(async () => {
   const admin = await adminApi();
   try {
@@ -60,14 +71,25 @@ test.describe("the review loop", () => {
     await startPractice(page);
     await answer(page, WRONG, /High/);
     await endSession(page);
+    await expect(page.getByText(/Topic: Managing concurrent code execution/)).toBeVisible();
+
+    // A wrong answer needs a visible red rail, not just a class hidden by the card border.
+    await page.getByRole("link", { name: "See the session review" }).click();
+    const wrongAttempt = page.locator(".review > li.panel-danger");
+    await expect(wrongAttempt).toHaveCount(1);
+    await expect(wrongAttempt).toContainText(/\d+ seconds? to answer/);
+    await expect(wrongAttempt).toHaveCSS("border-left-color", await dangerColor(page));
 
     // ---- the queue says what happened, in words ----------------------------------------------
-    await page.getByRole("link", { name: "Review" }).click();
+    // Scoped to the main navigation: the ended-session screen now offers "See the session review"
+    // too, and an unscoped name match reaches both.
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
     await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
 
     const queued = page.getByRole("listitem").filter({ hasText: PROMPT });
     await expect(queued).toHaveCount(1);
     await expect(queued).toContainText("Wrong, and you were sure");
+    await expect(queued.locator(".pill-stop")).toHaveCSS("color", await dangerColor(page));
     // The stable code is for the API, never for the learner.
     await expect(page.getByText("WRONG_WHILE_CONFIDENT")).toHaveCount(0);
     await expectNoA11yViolations(page);

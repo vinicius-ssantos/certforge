@@ -7,7 +7,7 @@ import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-import { reasonExplanation, reasonLabel } from "./reasons";
+import { reasonExplanation, reasonLabel, reasonTone } from "./reasons";
 
 function isActiveSession(error: unknown): error is ApiError {
   return error instanceof ApiError && error.code === "active_session_exists";
@@ -63,6 +63,7 @@ export function ReviewPage() {
   return (
     <>
       <h1>{t.review.title}</h1>
+      <p className="hint">{t.review.caveat}</p>
       {queue.isPending ? <Loading label={t.review.loading} /> : null}
       {queue.isError ? (
         <ErrorState error={queue.error} onRetry={() => void queue.refetch()} />
@@ -101,11 +102,20 @@ export function ReviewPage() {
             {data.waiting > 0 ? t.review.restingMore(data.waiting) : ""}
           </p>
           {[...byTopic].map(([topicId, group]) => (
-            <section key={topicId} aria-labelledby={`topic-${topicId}`}>
-              <h2 id={`topic-${topicId}`}>{group.name}</h2>
-              <button
-                type="button"
-                disabled={practise.isPending}
+            <section
+              key={topicId}
+              aria-labelledby={`topic-${topicId}`}
+              className="panel panel-hold"
+            >
+              {/* The topic and the offer to practise it share a line: that is where the
+                  decision is made, and the button sat above the list it applies to. */}
+              <div className="page-head">
+                <h2 id={`topic-${topicId}`}>{group.name}</h2>
+                <button
+                  type="button"
+                  className="small"
+                  aria-label={t.review.practise(group.items.length, group.name)}
+                  disabled={practise.isPending}
                 onClick={() =>
                   practise.mutate({
                     topicId,
@@ -113,21 +123,31 @@ export function ReviewPage() {
                   })
                 }
               >
-                {t.review.practise(group.items.length, group.name)}
-              </button>
+                  {t.review.practiseShort(group.items.length)}
+                </button>
+              </div>
               <ol className="review-queue">
                 {group.items.map((item) => (
                   <li key={item.questionId}>
-                    <strong>{reasonLabel(item.reason, t)}</strong>
-                    <p>{summarise(item.prompt)}</p>
-                    <p className="muted">{reasonExplanation(item.reason, t)}</p>
-                    <p className="muted">
+                    {/*
+                     * The question first, then why it is here. Leading with the reason put a
+                     * label above every entry and made the list read as a column of labels; what
+                     * the learner scans for is the question they recognise. The reason joins the
+                     * evidence on one line beneath it, where the pill is what tells "wrong while
+                     * sure" from "right while guessing" at a glance.
+                     */}
+                    <p className="queued-prompt">{summarise(item.prompt)}</p>
+                    <p className="muted queued-meta">
+                      <strong className={`pill ${reasonTone(item.reason)}`}>
+                        {reasonLabel(item.reason, t)}
+                      </strong>{" "}
                       {t.review.attemptSummary(item.timesAttempted, item.timesWrong)}
                       <time dateTime={item.lastAttemptedAt}>
                         {formatDateTime(item.lastAttemptedAt, locale)}
                       </time>
                       .
                     </p>
+                    <p className="muted">{reasonExplanation(item.reason, t)}</p>
                   </li>
                 ))}
               </ol>

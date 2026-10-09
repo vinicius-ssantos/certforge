@@ -45,7 +45,7 @@ function RevisionWithDecisions({
       topicName={topicName}
       previous={previous}
       topicNameOf={topicNameOf}
-      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} /> } : {})}
+      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} topicName={topicName} /> } : {})}
     />
   );
 }
@@ -96,7 +96,7 @@ export function QuestionPage() {
   // it by the route change stays put.
   return (
     <>
-      <p>
+      <p className="back">
         <Link to="/editorial">{t.editorial.backToQuestions}</Link>
       </p>
       <h1>{title}</h1>

@@ -18,9 +18,23 @@ function wording(t: Catalog): Record<ReviewReason, { label: string; explanation:
 }
 
 export function reasonLabel(reason: ReviewReason, t: Catalog): string {
-  return wording(t)[reason].label;
+  return wording(t)[reason]?.label ?? t.review.unknownReason;
 }
 
 export function reasonExplanation(reason: ReviewReason, t: Catalog): string {
-  return wording(t)[reason].explanation;
+  return wording(t)[reason]?.explanation ?? t.review.unknownReasonExplanation;
+}
+
+/**
+ * The pill tone for a reason. The label carries the meaning; this only colours it.
+ *
+ * Red where the evidence is that something is believed and wrong — the one case nothing warned
+ * the learner about. Brass where the answer happened to land but the learner said they were
+ * guessing, or where time alone has made it worth asking again. An unknown code gets the neutral
+ * tone rather than nothing, so a reason added to the API later still renders as a reason.
+ */
+export function reasonTone(reason: ReviewReason): string {
+  if (reason === "WRONG_WHILE_CONFIDENT" || reason === "WRONG") return "pill-stop";
+  if (reason === "RIGHT_BUT_UNSURE" || reason === "DUE_FOR_RECALL") return "pill-hold";
+  return "pill-new";
 }

@@ -7,7 +7,8 @@ import type { EditorialQuestion, Revision } from "../api/types";
 import { useHasAny } from "../auth/permissions";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
-import { useText } from "../i18n/useText";
+import { formatDateTime } from "../history/format";
+import { useLocale, useText } from "../i18n/useText";
 import { errorMessage } from "../ui/messages";
 import { checklist } from "./labels";
 
@@ -34,12 +35,15 @@ export function ReviewPanel({
   question,
   revision,
   isLatest,
+  topicName,
 }: {
   question: EditorialQuestion;
   revision: Revision;
   isLatest: boolean;
+  topicName?: string;
 }) {
   const t = useText();
+  const { locale } = useLocale();
   const panel = t.editorial.reviewPanel;
   const api = useApi();
   const queryClient = useQueryClient();
@@ -104,6 +108,13 @@ export function ReviewPanel({
     decide.mutate("request-changes");
   }
 
+  const approval = [...revision.reviews].reverse().find((review) => review.decision === "APPROVED");
+  const approvedBy = approval?.reviewerName ?? panel.unknownReviewer;
+  const approvedAt = approval?.decidedAt
+    ? formatDateTime(approval.decidedAt, locale)
+    : panel.unknownApprovalDate;
+  const topic = topicName ?? t.editorial.queue.fallbackTopic;
+
   // Stable between renders: the summary takes focus when this array changes.
   const shown = useMemo(() => (failure ? [...problems, { message: failure }] : problems), [problems, failure]);
 
@@ -114,11 +125,12 @@ export function ReviewPanel({
   return (
     <div className="decision">
       {can.review ? (
-        <form onSubmit={(event) => event.preventDefault()} noValidate>
+        <form className="panel decision-panel" onSubmit={(event) => event.preventDefault()} noValidate>
           <ErrorSummary problems={shown} />
           <fieldset>
             <legend>{panel.policyLegend}</legend>
             <p className="hint">{panel.policyHint}</p>
+            <p role="status" className="hint">{panel.checklistCount(ticked.length, checklist(t).length)}</p>
             {checklist(t).map((item) => (
               <label key={item.code} className="check">
                 <input
@@ -148,7 +160,7 @@ export function ReviewPanel({
               onChange={(event) => setComment(event.target.value)}
             />
           </div>
-          <div className="stack">
+          <div className="stack decision-actions">
             <button type="button" className="approve" disabled={decide.isPending} onClick={() => decide.mutate("approve")}>
               {panel.approve}
             </button>
@@ -163,13 +175,13 @@ export function ReviewPanel({
       )}
 
       {can.publish ? (
-        <section className="publish" aria-labelledby="publish-heading">
+        <section className="publish publish-danger" aria-labelledby="publish-heading">
           <h2 id="publish-heading">{panel.publishHeading}</h2>
           <p>{panel.publishNote}</p>
           {revision.status === "APPROVED" ? (
             <Confirm
               title={panel.confirmPublishTitle(revision.number)}
-              explain={panel.confirmPublishExplain(revision.number)}
+              explain={panel.confirmPublishExplain(revision.number, topic, approvedBy, approvedAt)}
               confirmLabel={panel.confirmPublishLabel(revision.number)}
               busy={decide.isPending}
               onConfirm={() => decide.mutate("publish")}

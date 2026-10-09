@@ -46,6 +46,29 @@ export function RegisterPage() {
     }
   }
 
+  /*
+   * The rule, counted down as it is met. It rides in the field's hint, which is wired to the input
+   * through `aria-describedby`: a screen reader reads it with the field rather than interrupting
+   * on every keystroke, which a live region here would do. The error on submit stays the
+   * authoritative announcement.
+   *
+   * The bar is an illustration of the count, not a strength rating — we do not grade anyone's
+   * password, we report the one rule we have — so it is hidden from assistive technology and the
+   * words carry the meaning.
+   */
+  const remaining = MIN_PASSWORD_LENGTH - password.length;
+  const countdown =
+    password.length === 0 ? null : (
+      <>
+        {remaining > 0 ? t.auth.passwordRemaining(remaining) : t.auth.passwordLongEnough}
+        <span className="meter" aria-hidden="true">
+          {Array.from({ length: MIN_PASSWORD_LENGTH }, (_, index) => (
+            <i key={index} className={index < password.length ? "on" : undefined} />
+          ))}
+        </span>
+      </>
+    );
+
   const problems = [
     ...(fieldErrors.email ? [{ fieldId: "register-email", message: fieldErrors.email }] : []),
     ...(fieldErrors.password ? [{ fieldId: "register-password", message: fieldErrors.password }] : []),
@@ -75,6 +98,7 @@ export function RegisterPage() {
           onChange={setPassword}
           error={fieldErrors.password}
           hint={t.auth.passwordHint(MIN_PASSWORD_LENGTH)}
+          below={countdown}
         />
         <button type="submit" disabled={submitting}>
           {submitting ? t.auth.creatingAccount : t.auth.createAccount}

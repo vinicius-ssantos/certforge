@@ -64,6 +64,7 @@ describe("reviewing", () => {
 
     expect(await screen.findByRole("group", { name: "Content policy" })).toBeInTheDocument();
     expect(screen.getAllByRole("checkbox")).toHaveLength(5);
+    expect(screen.getByText("0 of 5 checked")).toBeInTheDocument();
     expect(screen.getByText(/recorded with your decision/)).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Publish" })).not.toBeInTheDocument();
@@ -108,6 +109,7 @@ describe("reviewing", () => {
     );
 
     await user.click(await screen.findByRole("checkbox", { name: /technically right/ }));
+    expect(screen.getByText("1 of 5 checked")).toBeInTheDocument();
     await user.click(screen.getByRole("checkbox", { name: /compiles and prints/ }));
     await user.click(screen.getByRole("checkbox", { name: /compiles and prints/ }));
     await user.click(screen.getByRole("checkbox", { name: /official documentation/ }));
@@ -213,7 +215,7 @@ describe("publishing", () => {
 
     expect(fetch.calls.some((call) => call.path.endsWith("/publish"))).toBe(false);
     const confirm = screen.getByRole("group", { name: "Confirm publishing revision 1" });
-    expect(confirm).toHaveTextContent("Learners will get this question");
+    expect(confirm).toHaveTextContent("Publishing is final");
     const yes = within(confirm).getByRole("button", { name: "Yes, publish revision 1" });
     expect(yes).toHaveFocus();
     await user.click(yes);
@@ -221,6 +223,34 @@ describe("publishing", () => {
     const publishedNotice = await screen.findByText(/^Published\./);
     await waitFor(() => expect(publishedNotice).toHaveFocus());
     expect(screen.getByText("Current status:")).toHaveTextContent("Published");
+  });
+
+  it("names the topic, approving reviewer and date before publication", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: { body: view(revision({
+          status: "APPROVED",
+          reviews: [{
+            reviewerId: reviewer.id,
+            reviewerName: "reviewer@example.com",
+            decision: "APPROVED",
+            comment: null,
+            checklist: [],
+            decidedAt: "2026-09-30T12:00:00Z",
+          }],
+        })) },
+      },
+      { as: admin, ...OPEN },
+    );
+
+    await user.click(await screen.findByRole("button", { name: "Publish revision 1" }));
+    const confirm = screen.getByRole("group", { name: "Confirm publishing revision 1" });
+    expect(confirm).toHaveTextContent("Handling exceptions");
+    expect(confirm).toHaveTextContent("reviewer@example.com");
+    expect(confirm).toHaveTextContent("2026");
+    expect(confirm).toHaveTextContent("Publishing is final");
   });
 
   it("lets the person back out of publishing with focus returned", async () => {

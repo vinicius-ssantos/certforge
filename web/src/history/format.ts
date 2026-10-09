@@ -32,3 +32,14 @@ export function statusLabel(status: string, t: Catalog): string {
   };
   return labels[status] ?? status;
 }
+
+/**
+ * The pill tone for a session's status. The word comes from `statusLabel`; this only colours it,
+ * so the state never rests on the colour. Brass for a run still open, green for one carried to the
+ * end, and muted for the two ways a run stops without being finished.
+ */
+export function statusTone(status: string): string {
+  if (status === "IN_PROGRESS") return "pill-hold";
+  if (status === "COMPLETED") return "pill-ok";
+  return "pill-new";
+}

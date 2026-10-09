@@ -273,27 +273,31 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           </section>
         ) : null}
 
+        {/* The kind of question is a list of three choices, not a short field, so it keeps its own
+            line. Sharing one with the selects made the selects sit against a column three times
+            their height, with the field after them stranded below the gap. */}
+        <fieldset className="field inline-choices">
+          <legend>{ed.typeLegend}</legend>
+          <label className="check">
+            <input
+              type="radio"
+              name="type"
+              checked={draft.type === "SINGLE_CHOICE"}
+              onChange={() => chooseType("SINGLE_CHOICE")}
+            />
+            {types.SINGLE_CHOICE}
+          </label>
+          <label className="check">
+            <input type="radio" name="type" checked={multiple} onChange={() => chooseType("MULTIPLE_CHOICE")} />
+            {types.MULTIPLE_CHOICE}
+          </label>
+          <label className="check">
+            <input type="radio" name="type" checked={guided} onChange={() => chooseType("GUIDED_RESPONSE")} />
+            {types.GUIDED_RESPONSE}
+          </label>
+        </fieldset>
+
         <div className="row">
-          <fieldset className="field">
-            <legend>{ed.typeLegend}</legend>
-            <label className="check">
-              <input
-                type="radio"
-                name="type"
-                checked={draft.type === "SINGLE_CHOICE"}
-                onChange={() => chooseType("SINGLE_CHOICE")}
-              />
-              {types.SINGLE_CHOICE}
-            </label>
-            <label className="check">
-              <input type="radio" name="type" checked={multiple} onChange={() => chooseType("MULTIPLE_CHOICE")} />
-              {types.MULTIPLE_CHOICE}
-            </label>
-            <label className="check">
-              <input type="radio" name="type" checked={guided} onChange={() => chooseType("GUIDED_RESPONSE")} />
-              {types.GUIDED_RESPONSE}
-            </label>
-          </fieldset>
           <Field id="field-topic" label={ed.topic}>
             <select id="field-topic" value={draft.topicId} onChange={(event) => change({ topicId: event.target.value })}>
               <option value="">{ed.chooseTopic}</option>
@@ -332,9 +336,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
               <option value="HARD">{difficulties.HARD}</option>
             </select>
           </Field>
-        </div>
-
-        <div className="narrow-field">
+          {/* The release is two characters and the seniority is one word. They belong on the
+              classification line with the topic and the difficulty, not each on a line of their
+              own with a full-width control. */}
           {interview ? (
             <Field id="field-seniority" label={ed.seniority} hint={ed.seniorityHint}>
               <select

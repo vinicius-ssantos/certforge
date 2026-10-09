@@ -121,6 +121,14 @@ export const en = {
     passwordTooShort: (minimum: number) => `The password must have at least ${minimum} characters.`,
     passwordHint: (minimum: number) =>
       `Use at least ${minimum} characters. There are no other rules; a long phrase works well.`,
+    /**
+     * The same rule, counted down while the person types. It replaces the hint rather than joining
+     * it, so the field never carries two sentences about the same requirement.
+     */
+    passwordRemaining: (remaining: number) =>
+      `${remaining} more ${plural(TAG, remaining, { one: "character", other: "characters" })} to go.`,
+    /** Said once the rule is met, so the person knows they can send without counting. */
+    passwordLongEnough: "Long enough.",
     newHere: "New here?",
     createOne: "Create an account",
     alreadyHaveAccount: "Already have an account?",
@@ -153,6 +161,10 @@ export const en = {
     mockAvailabilityLoading: "Checking whether this mock can start",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Not available yet. ${missing} reviewed ${plural(TAG, missing, { one: "question is", other: "questions are" })} still missing across ${topics} ${plural(TAG, topics, { one: "topic", other: "topics" })}. A full mock requires ${perTopic} published questions in every topic.`,
+    /** The work list behind the sentence above: which topics are short, and by how much. */
+    mockMissingCaption: "Reviewed questions still needed, by topic",
+    mockPublished: "Published",
+    mockShortfall: "Short by",
     continueMock: "Continue mock exam",
     startingMock: "Starting…",
     startMock: (examCode: string) => `Start ${examCode} mock`,
@@ -211,6 +223,21 @@ export const en = {
     countingCorrect: "Counting your correct answers",
     correctOf: (correct: number, answered: number) =>
       `${correct} of ${answered} ${plural(TAG, answered, { one: "answer was", other: "answers were" })} correct.`,
+    /**
+     * The figures of a finished session, as labels over numbers. "Not seen" is stated rather than
+     * left out: ending early is a legitimate way to stop, and how much was left is part of what
+     * happened.
+     */
+    statAnswered: "Answered",
+    statCorrect: "Correct",
+    statNotSeen: "Not seen",
+    endedMeta: (topic: string, closedAt: string | null) =>
+      `Topic: ${topic}${closedAt ? ` · Ended ${closedAt}` : ""}`,
+    notSeenOf: (notSeen: number) =>
+      `${notSeen} ${plural(TAG, notSeen, { one: "question was", other: "questions were" })} left unseen.`,
+    /** The two ways on from a finished session, instead of dropping the learner at the menu. */
+    practiseAgain: "Practise this topic again",
+    seeReview: "See the session review",
   },
   /**
    * Counts are written as functions of the count rather than as a string plus a plural suffix, so
@@ -218,6 +245,14 @@ export const en = {
    */
   review: {
     title: "Review",
+    unknownReason: "Review needed",
+    unknownReasonExplanation: "This question is due for another look.",
+    /**
+     * Said once, under the page title. It is the same limit the progress and mock screens state:
+     * this is evidence of where to look, never a forecast.
+     */
+    caveat:
+      "These are questions worth revisiting, chosen from how you answered. It is evidence of where to look, not a prediction about the exam.",
     loading: "Loading your review queue",
     nothingDueTitle: "Nothing is due yet",
     nothingToReviewTitle: "Nothing to review yet",
@@ -235,6 +270,9 @@ export const en = {
       ` ${waiting} more ${plural(TAG, waiting, { one: "is", other: "are" })} resting until their next recall.`,
     practise: (count: number, topic: string) =>
       `Practise ${count} ${plural(TAG, count, { one: "question", other: "questions" })} in ${topic}`,
+    /** What the button shows. Its full name, with the topic, stays in `practise` above. */
+    practiseShort: (count: number) =>
+      `Practise ${count} ${plural(TAG, count, { one: "question", other: "questions" })}`,
     attemptSummary: (attempts: number, wrong: number) =>
       `Answered ${attempts} ${plural(TAG, attempts, { one: "time", other: "times" })}, ${wrong} wrong. Last answered `,
     fallbackTopic: "Topic",
@@ -282,6 +320,24 @@ export const en = {
     lastActivity: "Last activity",
     /** Shown where there is no number to show, so it is punctuation rather than a word. */
     noValue: "–",
+    /**
+     * A topic with no attempts has no accuracy, and a dash says only that the cell is empty. This
+     * names the state instead, because "you have not started this" is a different thing from "we
+     * have nothing to show".
+     */
+    notStarted: "Not started",
+    /** The column that names where a topic stands, rather than leaving the reader to infer it. */
+    situation: "Situation",
+    /** At or above the practice target. */
+    solid: "Solid",
+    /** Below the practice target. The word is an instruction, not a verdict on the learner. */
+    needsReview: "Review",
+    /**
+     * The threshold, said out loud under the table that applies it. A learner should be able to
+     * see the line they are being measured against, and see where it came from.
+     */
+    targetNote: (percent: number) =>
+      `“Solid” means ${percent}% or better, the mock exam's pass mark. It describes your practice so far, not a prediction about the exam.`,
     fallbackTopic: "Topic",
     misconceptionsHeading: "Where you were sure and wrong",
     misconceptionsBodyStart:
@@ -302,7 +358,12 @@ export const en = {
     tracksPageLink: "tracks page",
     mockHeading: "Mock exams",
     mockLoading: "Loading your mock exams",
-    noMocks: "No mock exams yet.",
+    /**
+     * An empty state that explains itself. A mock needs five reviewed questions in every
+     * topic (see issue #138), and saying so turns "nothing here" into something the reader can
+     * act on or at least understand.
+     */
+    noMocks: "No mock exams yet. A mock exam needs five reviewed questions in every topic.",
     mockTableCaption: "Your mock exams, newest first",
     track: "Track",
     score: "Score",
@@ -339,8 +400,8 @@ export const en = {
     emptyBody: "Nothing was answered before the session closed.",
     questionHeading: (number: number, correct: boolean) =>
       `Question ${number}: ${correct ? "correct" : "incorrect"}`,
-    yourAnswerLine: (options: string, confidence: string) =>
-      `Your answer: ${options}. Confidence: ${confidence}. Answered `,
+    yourAnswerLine: (options: string, confidence: string, elapsedSeconds: number) =>
+      `Your answer: ${options}. Confidence: ${confidence}. ${elapsedSeconds} ${plural(TAG, elapsedSeconds, { one: "second", other: "seconds" })} to answer. Answered `,
     /**
      * The confidence the learner reported, named for reading inside a sentence. An unrecognised
      * value falls back to the code in lower case, which is what this showed before the wording
@@ -409,6 +470,11 @@ export const en = {
     score: "Score",
     fallbackTopic: "Topic",
     outOf: (value: number, total: number) => `${value} / ${total}`,
+    /** The label over the figure, so the number itself can be the loudest thing. */
+    scoreLabel: "Result",
+    /** Unanswered questions count as misses; the screen should not let that be a surprise. */
+    unanswered: (count: number) =>
+      `${count} ${plural(TAG, count, { one: "question was", other: "questions were" })} left unanswered and ${plural(TAG, count, { one: "counts", other: "count" })} as incorrect.`,
     questionReview: "Question review",
     questionSummary: (number: number, correct: boolean, answered: boolean) =>
       `Question ${number}: ${correct ? "Correct" : answered ? "Incorrect" : "Unanswered"}`,
@@ -512,6 +578,9 @@ export const en = {
       emptyTitle: "There are no tracks",
       emptyBody: "A track is seeded by migration. An empty catalog means none has been applied.",
       tableCaption: "Preparation tracks",
+      certificationKind: "Certification track",
+      interviewKind: "Interview track",
+      topicCount: (count: number) => `${count} ${plural(TAG, count, { one: "topic", other: "topics" })}`,
       track: "Track",
       status: "Status",
       provider: "Provider",
@@ -604,6 +673,7 @@ export const en = {
 
     reviewPanel: {
       policyLegend: "Content policy",
+      checklistCount: (checked: number, total: number) => `${checked} of ${total} checked`,
       policyHint:
         "Tick only what you checked yourself. The items you tick are recorded with your decision.",
       comment: "Comment",
@@ -616,8 +686,10 @@ export const en = {
       publishNote:
         "Only approved revisions can be published. A published revision cannot be edited; a correction becomes a new revision.",
       confirmPublishTitle: (revision: number) => `Confirm publishing revision ${revision}`,
-      confirmPublishExplain: (revision: number) =>
-        `Publish revision ${revision}? Learners will get this question in their sessions, and the revision it replaces is retired.`,
+      unknownReviewer: "Reviewer not recorded",
+      unknownApprovalDate: "approval date not recorded",
+      confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>
+        `Publish revision ${revision} in ${topic}? Approved by ${reviewer} on ${date}. Learners can receive this question. Publishing is final: it cannot be undone or edited; corrections require a new revision.`,
       confirmPublishLabel: (revision: number) => `Yes, publish revision ${revision}`,
       publishRevision: (revision: number) => `Publish revision ${revision}`,
       approveFirst: "Approve it first.",

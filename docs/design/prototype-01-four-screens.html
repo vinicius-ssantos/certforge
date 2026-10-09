@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<title>CertForge Redesign</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: a stack of full-bleed plates, each one screen of the product at its real proportions,
+     with a narrow margin note pinned beside it on wide viewports and stacked above on phones. */
+  :root {
+    --ink: #121a21;
+    --ink-soft: #4a5a66;
+    --paper: #eef1ef;
+    --card: #ffffff;
+    --line: #d2dad7;
+    --line-firm: #93a19c;
+    --mark: #1d4ed8;
+    --mark-soft: #e8edfb;
+    --pass: #156b52;
+    --pass-soft: #dcefe7;
+    --hold: #7a5c12;
+    --hold-soft: #f6eed8;
+    --stop: #a81f1a;
+    --stop-soft: #fae6e4;
+
+    --ui: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --read: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+
+    --s1: 0.25rem; --s2: 0.5rem; --s3: 0.75rem; --s4: 1rem;
+    --s5: 1.5rem; --s6: 2rem; --s7: 3rem; --s8: 4rem;
+    --r: 0.375rem;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e8efec; --ink-soft: #9fb0ab; --paper: #0e1418; --card: #161f25;
+      --line: #28343b; --line-firm: #64767e;
+      --mark: #8fb0f5; --mark-soft: #16233c;
+      --pass: #6fd0ab; --pass-soft: #102c25;
+      --hold: #dcb95f; --hold-soft: #2c2412;
+      --stop: #ff9c93; --stop-soft: #351714;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e8efec; --ink-soft: #9fb0ab; --paper: #0e1418; --card: #161f25;
+    --line: #28343b; --line-firm: #64767e;
+    --mark: #8fb0f5; --mark-soft: #16233c;
+    --pass: #6fd0ab; --pass-soft: #102c25;
+    --hold: #dcb95f; --hold-soft: #2c2412;
+    --stop: #ff9c93; --stop-soft: #351714;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--ui); font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 78rem; margin: 0 auto; padding-inline: 16px; padding-block: var(--s7) var(--s8); }
+  h1, h2, h3 { font-family: var(--read); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+
+  /* ---- page head ---- */
+  .masthead { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--s4); flex-wrap: wrap; margin-bottom: var(--s6); }
+  .masthead h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); font-weight: 700; letter-spacing: -0.015em; }
+  .masthead p { color: var(--ink-soft); max-width: 46ch; margin-top: var(--s2); }
+  .toggle {
+    font: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer;
+    background: var(--card); color: var(--ink); border: 1.5px solid var(--line-firm);
+    border-radius: var(--r); padding: var(--s2) var(--s3); white-space: nowrap;
+  }
+  .toggle:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+
+  /* ---- plates ---- */
+  .plate { display: grid; grid-template-columns: minmax(0, 1fr) 17rem; gap: var(--s6); align-items: start; margin-top: var(--s7); }
+  @media (max-width: 62rem) { .plate { grid-template-columns: minmax(0, 1fr); } }
+  .note { font-size: 0.85rem; color: var(--ink-soft); display: grid; gap: var(--s3); position: sticky; top: var(--s4); }
+  @media (max-width: 62rem) { .note { position: static; } }
+  .note h3 { font-family: var(--ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink); }
+  .note b { color: var(--ink); font-weight: 600; }
+  .note ul { margin: 0; padding-left: 1.1em; display: grid; gap: var(--s2); }
+
+  .screen { background: var(--card); border: 1px solid var(--line); border-radius: 0.5rem; overflow: hidden; }
+  .screen-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: var(--s2); }
+
+  /* ---- product chrome inside the mockups ---- */
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--s4); padding: var(--s3) var(--s4); border-bottom: 1px solid var(--line); background: var(--card); }
+  .brand { font-family: var(--read); font-weight: 700; letter-spacing: -0.01em; }
+  .nav { display: flex; gap: var(--s4); font-size: 0.85rem; color: var(--ink-soft); flex-wrap: wrap; }
+  .nav .on { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--mark); }
+  .body { padding: var(--s5) var(--s4); display: grid; gap: var(--s4); }
+
+  /* progress rail */
+  .rail { display: grid; gap: var(--s2); }
+  .rail-top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--s3); font-size: 0.82rem; color: var(--ink-soft); }
+  .rail-top b { color: var(--ink); font-size: 0.95rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .track { height: 6px; background: var(--line); border-radius: 99px; overflow: hidden; }
+  .fill { height: 100%; background: var(--mark); border-radius: 99px; }
+
+  .ask { font-family: var(--read); font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.4; font-weight: 600; }
+  .code { font-family: var(--mono); font-size: 0.82rem; background: var(--paper); border: 1px solid var(--line); border-left: 3px solid var(--line-firm); border-radius: var(--r); padding: var(--s3); overflow-x: auto; white-space: pre; }
+
+  .opts { display: grid; gap: var(--s2); }
+  .opt { display: grid; grid-template-columns: 1.7rem minmax(0, 1fr); gap: var(--s3); align-items: start; padding: var(--s3); border: 1.5px solid var(--line); border-radius: var(--r); background: var(--card); }
+  .opt .key { width: 1.7rem; height: 1.7rem; display: grid; place-items: center; border-radius: 99px; border: 1.5px solid var(--line-firm); font-size: 0.78rem; font-weight: 700; }
+  .opt.pick { border-color: var(--mark); background: var(--mark-soft); }
+  .opt.pick .key { background: var(--mark); border-color: var(--mark); color: var(--card); }
+  .opt.right { border-color: var(--pass); background: var(--pass-soft); }
+  .opt.right .key { background: var(--pass); border-color: var(--pass); color: var(--card); }
+  .verdict { font-size: 0.78rem; font-weight: 600; display: flex; align-items: center; gap: var(--s1); margin-top: var(--s1); }
+  .verdict.ok { color: var(--pass); }
+  .verdict.no { color: var(--ink-soft); }
+  .why { font-size: 0.86rem; color: var(--ink-soft); margin-top: var(--s1); }
+
+  .seg { display: flex; border: 1.5px solid var(--line-firm); border-radius: var(--r); overflow: hidden; width: fit-content; max-width: 100%; flex-wrap: wrap; }
+  .seg span { font-size: 0.82rem; padding: var(--s2) var(--s3); border-right: 1.5px solid var(--line-firm); white-space: nowrap; }
+  .seg span:last-child { border-right: 0; }
+  .seg .on { background: var(--ink); color: var(--card); font-weight: 600; }
+  .field-label { font-size: 0.78rem; font-weight: 600; color: var(--ink-soft); }
+
+  .btn { font: inherit; font-size: 0.9rem; font-weight: 600; padding: var(--s3) var(--s5); border-radius: var(--r); border: 1.5px solid var(--ink); background: var(--ink); color: var(--card); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .row { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+  .spread { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+  .quiet { color: var(--ink-soft); font-size: 0.85rem; }
+
+  /* cards + table */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--s3); }
+  .tcard { border: 1px solid var(--line); border-radius: var(--r); padding: var(--s4); display: grid; gap: var(--s3); background: var(--card); }
+  .tcard h3 { font-size: 1.1rem; }
+  .meta { font-size: 0.8rem; color: var(--ink-soft); }
+  .stat { display: flex; gap: var(--s5); flex-wrap: wrap; }
+  .stat div { display: grid; }
+  .stat b { font-size: 1.25rem; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+  th, td { text-align: left; padding: var(--s2) var(--s3); border-bottom: 1px solid var(--line); }
+  th { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.07em; color: var(--ink-soft); font-weight: 600; }
+  td.n { font-variant-numeric: tabular-nums; text-align: right; }
+  .bar-cell { display: flex; align-items: center; gap: var(--s2); }
+  .mini { width: 4rem; height: 5px; background: var(--line); border-radius: 99px; overflow: hidden; flex: none; }
+  .mini i { display: block; height: 100%; background: var(--pass); }
+  .mini i.low { background: var(--hold); }
+  .pill { font-size: 0.72rem; font-weight: 600; padding: 2px var(--s2); border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+  .pill.new { color: var(--ink-soft); }
+  .scroll { overflow-x: auto; }
+
+  /* mock exam */
+  .mock-head { display: flex; justify-content: space-between; gap: var(--s4); align-items: flex-start; flex-wrap: wrap; }
+  .clock { font-family: var(--mono); font-size: 1.5rem; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .clock-wrap { text-align: right; }
+  .clock-wrap span { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); display: block; }
+  .grid-nav { display: grid; grid-template-columns: repeat(auto-fill, minmax(2.1rem, 1fr)); gap: var(--s1); }
+  .cell { aspect-ratio: 1; display: grid; place-items: center; font-size: 0.78rem; font-weight: 600; border: 1.5px solid var(--line); border-radius: var(--r); font-variant-numeric: tabular-nums; position: relative; }
+  .cell.done { background: var(--pass-soft); border-color: var(--pass); color: var(--pass); }
+  .cell.flag { border-color: var(--hold); color: var(--hold); background: var(--hold-soft); }
+  .cell.flag::after { content: ""; position: absolute; top: 2px; right: 2px; width: 0; height: 0; border-top: 6px solid var(--hold); border-left: 6px solid transparent; }
+  .cell.now { background: var(--ink); color: var(--card); border-color: var(--ink); }
+  .legend { display: flex; gap: var(--s4); flex-wrap: wrap; font-size: 0.78rem; color: var(--ink-soft); }
+  .legend i { display: inline-block; width: 0.8rem; height: 0.8rem; border-radius: 3px; border: 1.5px solid var(--line); vertical-align: -2px; margin-right: 4px; }
+
+  /* editorial */
+  .desk { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--s5); align-items: start; }
+  @media (max-width: 48rem) { .desk { grid-template-columns: minmax(0, 1fr); } }
+  .sect { border-top: 1px solid var(--line); padding-top: var(--s3); display: grid; gap: var(--s3); }
+  .sect > h4 { margin: 0; font-family: var(--ui); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); }
+  .inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: var(--s3); }
+  .inp { display: grid; gap: var(--s1); min-width: 0; }
+  .inp em { font-style: normal; font-size: 0.75rem; font-weight: 600; color: var(--ink-soft); }
+  .inp div { border: 1.5px solid var(--line-firm); border-radius: var(--r); padding: var(--s2) var(--s3); font-size: 0.85rem; background: var(--card); min-height: 2rem; }
+  .inp div.area { min-height: 3.4rem; }
+  .todo { border: 1px solid var(--line); border-left: 3px solid var(--stop); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); background: var(--card); position: sticky; top: var(--s3); }
+  .todo h4 { margin: 0; font-family: var(--ui); font-size: 0.8rem; font-weight: 700; }
+  .todo ul { margin: 0; padding-left: 1.1em; font-size: 0.82rem; display: grid; gap: var(--s2); color: var(--stop); }
+  .todo ul span { color: var(--ink-soft); }
+  .steps { display: flex; gap: var(--s1); font-size: 0.72rem; flex-wrap: wrap; }
+  .steps b { font-weight: 600; padding: 2px var(--s2); border-radius: 99px; background: var(--ink); color: var(--card); }
+  .steps i { font-style: normal; padding: 2px var(--s2); border-radius: 99px; color: var(--ink-soft); border: 1px solid var(--line); }
+
+  .keep { margin-top: var(--s8); border-top: 2px solid var(--ink); padding-top: var(--s4); display: grid; gap: var(--s3); }
+  .keep h2 { font-size: 1.3rem; }
+  .keep ul { margin: 0; padding-left: 1.1em; display: grid; gap: var(--s2); color: var(--ink-soft); max-width: 70ch; }
+  .keep b { color: var(--ink); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <div>
+      <h1>CertForge Redesign</h1>
+      <p>Four screens, reworked. The palette and scales are new; the typeface pairing and the rule that state never rides on colour alone are kept, because those were already right.</p>
+    </div>
+    <button class="toggle" id="theme" type="button">Alternar tema</button>
+  </div>
+
+  <!-- 1 ---------------------------------------------------------------- -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">1 · Sessão de prática</p>
+      <div class="screen">
+        <div class="bar">
+          <span class="brand">CertForge</span>
+          <nav class="nav"><span class="on">Trilhas</span><span>Revisão</span><span>Progresso</span><span>Histórico</span></nav>
+        </div>
+        <div class="body">
+          <div class="rail">
+            <div class="rail-top">
+              <b>Questão 4 de 10</b>
+              <span>Tratamento de exceções · 3 corretas</span>
+            </div>
+            <div class="track"><div class="fill" style="width:35%"></div></div>
+          </div>
+
+          <p class="ask">O que acontece quando <code style="font-family:var(--mono);font-size:0.9em">new BigDecimal("1").divide(new BigDecimal("3"))</code> é avaliado sem modo de arredondamento?</p>
+
+          <div class="opts">
+            <div class="opt"><span class="key">A</span><span>Retorna 0.3333333333 usando uma precisão padrão.</span></div>
+            <div class="opt pick"><span class="key">B</span><span>Lança <code style="font-family:var(--mono);font-size:0.9em">ArithmeticException</code>.</span></div>
+            <div class="opt"><span class="key">C</span><span>Retorna 0, porque os dois operandos vieram de strings inteiras.</span></div>
+            <div class="opt"><span class="key">D</span><span>Retorna <code style="font-family:var(--mono);font-size:0.9em">Double.NaN</code>.</span></div>
+          </div>
+
+          <div>
+            <p class="field-label" style="margin-bottom:var(--s2)">Qual sua confiança?</p>
+            <div class="seg"><span>Baixa</span><span class="on">Média</span><span>Alta</span></div>
+          </div>
+
+          <div class="spread">
+            <button class="btn" type="button">Enviar resposta</button>
+            <span class="quiet">Encerrar sem terminar</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>O <b>título repetido sai</b>. "Sessão de prática" era o maior elemento da tela e dizia o mesmo em toda questão.</li>
+        <li>O <b>enunciado vira o maior elemento</b>, em serifada, com medida de leitura curta.</li>
+        <li><b>Barra de progresso</b> no lugar de uma linha cinza. Em 10 questões, a sensação de avanço é o que sustenta a sessão.</li>
+        <li>Alternativas viram <b>alvos de clique inteiros</b> com a letra visível — hoje são radios soltos num fieldset.</li>
+        <li>Confiança vira <b>controle segmentado</b>: três opções mutuamente exclusivas ocupando uma linha, não três.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 2 ---------------------------------------------------------------- -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">2 · Feedback</p>
+      <div class="screen">
+        <div class="body">
+          <div class="spread">
+            <h2 style="font-size:1.3rem">Correto</h2>
+            <span class="quiet">Questão 4 de 10</span>
+          </div>
+          <div class="opts">
+            <div class="opt right">
+              <span class="key">B</span>
+              <span>
+                Lança <code style="font-family:var(--mono);font-size:0.9em">ArithmeticException</code>.
+                <span class="verdict ok">✓ Sua resposta · Alternativa correta</span>
+                <span class="why">A expansão decimal de 1/3 não termina. Essa sobrecarga exige um quociente exato e lança quando não há um.</span>
+              </span>
+            </div>
+            <div class="opt">
+              <span class="key">A</span>
+              <span>
+                Retorna 0.3333333333 usando uma precisão padrão.
+                <span class="verdict no">✗ Alternativa incorreta</span>
+                <span class="why">Essa sobrecarga não escolhe uma precisão em silêncio.</span>
+              </span>
+            </div>
+          </div>
+          <div class="code">thrown=ArithmeticException
+withScale=0.3333</div>
+          <p class="quiet">Saída do programa de verificação que o build roda para esta questão.</p>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>A tela de feedback <b>já funcionava</b> — cor, palavra e marcador juntos. Mantida.</li>
+        <li><b>A sua alternativa sobe para o topo.</b> Hoje a lista fica na ordem A–D e você procura a sua.</li>
+        <li>Novo: <b>a saída do programa</b> que prova a resposta. As 150 questões têm uma; hoje quem estuda nunca vê.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 3 ---------------------------------------------------------------- -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">3 · Trilhas e progresso</p>
+      <div class="screen">
+        <div class="body">
+          <div class="cards">
+            <div class="tcard">
+              <h3>Java Certification</h3>
+              <p class="meta">Oracle · Java SE 21 (1Z0-830) · 10 tópicos</p>
+              <div class="track"><div class="fill" style="width:12%"></div></div>
+              <div class="stat">
+                <div><b>18</b><span>respondidas</span></div>
+                <div><b>150</b><span>no pack</span></div>
+                <div><b>72%</b><span>precisão</span></div>
+              </div>
+              <div class="row"><button class="btn" type="button">Continuar</button><button class="btn ghost" type="button">Simulado</button></div>
+            </div>
+            <div class="tcard">
+              <h3>Java Backend — Pleno/Sênior</h3>
+              <p class="meta">Entrevista · 12 tópicos</p>
+              <p class="quiet">Ainda sem questões revisadas. A trilha aparece quando houver conteúdo.</p>
+              <div class="row"><span class="pill new">Em preparação</span></div>
+            </div>
+          </div>
+
+          <div class="sect" style="margin-top:var(--s3)">
+            <h4>Por tópico · ordenado pelo que precisa de atenção</h4>
+            <div class="scroll">
+              <table>
+                <thead><tr><th>Tópico</th><th>Precisão</th><th class="n">Tentadas</th><th class="n">Erradas</th><th>Situação</th></tr></thead>
+                <tbody>
+                  <tr><td>Tratamento de exceções</td><td><span class="bar-cell"><span class="mini"><i class="low" style="width:40%"></i></span>40%</span></td><td class="n">10</td><td class="n">6</td><td><span class="pill" style="color:var(--hold)">Revisar</span></td></tr>
+                  <tr><td>Coleções e arrays</td><td><span class="bar-cell"><span class="mini"><i style="width:88%"></i></span>88%</span></td><td class="n">8</td><td class="n">1</td><td><span class="pill" style="color:var(--pass)">Firme</span></td></tr>
+                  <tr><td>Concorrência</td><td><span class="quiet">—</span></td><td class="n">0</td><td class="n">0</td><td><span class="pill new">Não começou</span></td></tr>
+                  <tr><td>Módulos</td><td><span class="quiet">—</span></td><td class="n">0</td><td class="n">0</td><td><span class="pill new">Não começou</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>O <b>card solitário</b> some: a grade usa <code style="font-family:var(--mono);font-size:0.85em">auto-fill</code>, que cria colunas vazias. Com <code style="font-family:var(--mono);font-size:0.85em">auto-fit</code> o card ocupa a largura. Correção de uma palavra.</li>
+        <li>O card passa a <b>mostrar onde você está</b>, não só o que a trilha é.</li>
+        <li>A tabela de progresso <b>ordena pelo que precisa de atenção</b> em vez da ordem do catálogo, e "não começou" vira um estado nomeado em vez de <code style="font-family:var(--mono);font-size:0.85em">0 0 0 – –</code>.</li>
+        <li>Precisão ganha uma <b>barra curta</b> ao lado do número: comparar nove linhas de porcentagem é trabalho que a forma faz melhor.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 4 ---------------------------------------------------------------- -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">4 · Simulado</p>
+      <div class="screen">
+        <div class="body">
+          <div class="mock-head">
+            <div class="rail" style="flex:1;min-width:14rem">
+              <div class="rail-top"><b>Questão 12 de 50</b><span>Meta de prática 68%</span></div>
+              <div class="track"><div class="fill" style="width:24%"></div></div>
+              <p class="quiet">11 respondidas · 2 marcadas para revisar</p>
+            </div>
+            <div class="clock-wrap">
+              <span>Tempo restante</span>
+              <span class="clock">01:48:22</span>
+            </div>
+          </div>
+
+          <div class="sect">
+            <h4>Navegação</h4>
+            <div class="grid-nav">
+              <span class="cell done">1</span><span class="cell done">2</span><span class="cell done">3</span>
+              <span class="cell done flag">4</span><span class="cell done">5</span><span class="cell done">6</span>
+              <span class="cell done">7</span><span class="cell done flag">8</span><span class="cell done">9</span>
+              <span class="cell done">10</span><span class="cell done">11</span><span class="cell now">12</span>
+              <span class="cell">13</span><span class="cell">14</span><span class="cell">15</span>
+              <span class="cell">16</span><span class="cell">17</span><span class="cell">18</span>
+            </div>
+            <p class="legend">
+              <span><i style="background:var(--pass-soft);border-color:var(--pass)"></i>Respondida</span>
+              <span><i style="background:var(--hold-soft);border-color:var(--hold)"></i>Marcada ◤</span>
+              <span><i style="background:var(--ink);border-color:var(--ink)"></i>Atual</span>
+              <span><i></i>Em branco</span>
+            </p>
+          </div>
+
+          <div class="spread">
+            <button class="btn ghost" type="button">Marcar para revisar</button>
+            <button class="btn" type="button">Entregar e corrigir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>O <b>cronômetro é monoespaçado e tabular</b>, então os dígitos não dançam a cada segundo.</li>
+        <li>A navegação vira <b>grade quadrada</b>, não uma lista. Em 50 questões, uma grade é escaneável e uma lista não.</li>
+        <li>Marcada ganha <b>um canto dobrado além da cor</b> — a regra de estado nunca só por cor vale aqui também.</li>
+        <li>O estado das 50 fica <b>visível de uma vez</b>: quantas faltam e quais você deixou para trás.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <!-- 5 ---------------------------------------------------------------- -->
+  <section class="plate">
+    <div>
+      <p class="screen-label">5 · Mesa editorial</p>
+      <div class="screen">
+        <div class="body">
+          <div class="spread">
+            <div>
+              <h2 style="font-size:1.2rem">Versão 1</h2>
+              <p class="steps" style="margin-top:var(--s2)"><b>1 Rascunho</b><i>2 Em revisão</i><i>3 Aprovada</i><i>4 Publicada</i></p>
+            </div>
+            <button class="btn ghost" type="button">Voltar</button>
+          </div>
+
+          <div class="desk">
+            <div style="display:grid;gap:var(--s4);min-width:0">
+              <div class="sect">
+                <h4>Classificação</h4>
+                <div class="inputs">
+                  <label class="inp"><em>Tipo</em><div>Escolha única</div></label>
+                  <label class="inp"><em>Tópico</em><div>Java I/O API</div></label>
+                  <label class="inp"><em>Dificuldade</em><div>Fácil</div></label>
+                  <label class="inp"><em>Versão do Java</em><div>21</div></label>
+                </div>
+              </div>
+              <div class="sect">
+                <h4>Enunciado</h4>
+                <label class="inp"><div class="area">O que este código imprime?</div></label>
+              </div>
+              <div class="sect">
+                <h4>Alternativas</h4>
+                <div class="opts">
+                  <div class="opt right"><span class="key">A</span><span>A opção esperada<span class="why">Motivo: esperado pelo teste.</span></span></div>
+                  <div class="opt"><span class="key">B</span><span>Uma opção errada<span class="verdict no" style="color:var(--stop)">✗ Falta o motivo</span></span></div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="todo">
+              <h4>Antes de enviar</h4>
+              <ul>
+                <li>Escreva a explicação.</li>
+                <li>Toda alternativa precisa de um motivo, inclusive as erradas.</li>
+              </ul>
+              <p class="quiet" style="font-size:0.78rem">Um revisor diferente de você precisa aprovar antes de publicar.</p>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>O que muda</h3>
+      <ul>
+        <li>Hoje a tela tem <b>2389px de altura</b> numa coluna de 600px, com o painel "Antes de enviar" flutuando na metade e um vazio enorme acima dele.</li>
+        <li>O painel vira <b>coluna fixa no topo</b>: o que falta fica visível enquanto você escreve, não depois de rolar.</li>
+        <li>Campos ganham <b>seções nomeadas</b> e os curtos dividem uma linha — "Versão do Java" tem dois caracteres e ocupava a largura toda.</li>
+        <li>Cada pendência <b>aponta para a alternativa</b> que a causou, em vez de só listar o código do problema.</li>
+      </ul>
+    </aside>
+  </section>
+
+  <section class="keep">
+    <h2>O que não muda</h2>
+    <ul>
+      <li><b>O par tipográfico.</b> IBM Plex Sans para interface e Source Serif 4 para texto de questão é uma escolha específica e certa — serifada para ler, sans para operar. Mantida; só a escala muda.</li>
+      <li><b>Estado nunca só por cor.</b> Cada estado tem palavra ou símbolo além da cor, em toda tela nova acima.</li>
+      <li><b>Contraste nos dois esquemas.</b> A paleta nova mantém texto e links em pelo menos 4.5:1 e o anel de foco em 3:1, claro e escuro. Os testes rodam axe nos dois — se eu errar, eles reprovam.</li>
+      <li><b>O custo que você aceitou:</b> a evidência de acessibilidade da v0.1.0 precisa ser refeita, e cada tela precisa da sua validação antes de ir para a main. Nada disso vai para produção sem você olhar.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var btn = document.getElementById("theme");
+    btn.addEventListener("click", function () {
+      var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      var now = root.getAttribute("data-theme") || (dark ? "dark" : "light");
+      root.setAttribute("data-theme", now === "dark" ? "light" : "dark");
+    });
+  })();
+</script>
+
+</body>
+</html>

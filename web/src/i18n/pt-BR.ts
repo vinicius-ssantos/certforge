@@ -117,6 +117,9 @@ export const ptBR: Catalog = {
     enterEmail: "Informe seu e-mail.",
     enterPassword: "Informe sua senha.",
     passwordTooShort: (minimum: number) => `A senha precisa ter pelo menos ${minimum} caracteres.`,
+    passwordRemaining: (remaining: number) =>
+      `${plural(TAG, remaining, { one: "Falta", other: "Faltam" })} ${remaining} ${plural(TAG, remaining, { one: "caractere", other: "caracteres" })}.`,
+    passwordLongEnough: "Já tem o tamanho mínimo.",
     passwordHint: (minimum: number) =>
       `Use pelo menos ${minimum} caracteres. Não há outras regras; uma frase longa funciona bem.`,
     newHere: "É novo por aqui?",
@@ -152,6 +155,9 @@ export const ptBR: Catalog = {
     mockAvailabilityLoading: "Verificando se este simulado pode começar",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Ainda não está disponível. ${plural(TAG, missing, { one: "Falta", other: "Faltam" })} ${missing} ${plural(TAG, missing, { one: "questão revisada", other: "questões revisadas" })} em ${topics} ${plural(TAG, topics, { one: "tópico", other: "tópicos" })}. Um simulado completo exige ${perTopic} questões publicadas em cada tópico.`,
+    mockMissingCaption: "Questões revisadas que ainda faltam, por tópico",
+    mockPublished: "Publicadas",
+    mockShortfall: "Faltam",
     continueMock: "Continuar simulado",
     startingMock: "Começando…",
     startMock: (examCode: string) => `Começar simulado ${examCode}`,
@@ -212,10 +218,23 @@ export const ptBR: Catalog = {
     countingCorrect: "Contando suas respostas corretas",
     correctOf: (correct: number, answered: number) =>
       `${correct} de ${answered} ${plural(TAG, answered, { one: "resposta estava correta", other: "respostas estavam corretas" })}.`,
+    statAnswered: "Respondidas",
+    statCorrect: "Corretas",
+    statNotSeen: "Não vistas",
+    endedMeta: (topic: string, closedAt: string | null) =>
+      `Tópico: ${topic}${closedAt ? ` · Encerrada em ${closedAt}` : ""}`,
+    notSeenOf: (notSeen: number) =>
+      `${plural(TAG, notSeen, { one: "Ficou", other: "Ficaram" })} ${notSeen} ${plural(TAG, notSeen, { one: "questão sem ver", other: "questões sem ver" })}.`,
+    practiseAgain: "Praticar este tópico de novo",
+    seeReview: "Ver a revisão da sessão",
   },
 
   review: {
     title: "Revisão",
+    unknownReason: "Revisão necessária",
+    unknownReasonExplanation: "Esta questão precisa ser revisitada.",
+    caveat:
+      "Estas são questões que valem revisitar, escolhidas pelo que você respondeu. É evidência de onde olhar, não uma previsão sobre o exame.",
     loading: "Carregando sua fila de revisão",
     nothingDueTitle: "Nada previsto ainda",
     nothingToReviewTitle: "Nada para revisar ainda",
@@ -235,6 +254,8 @@ export const ptBR: Catalog = {
       ` ${plural(TAG, waiting, { one: "Outra", other: "Outras" })} ${waiting} ${plural(TAG, waiting, { one: "está descansando", other: "estão descansando" })} até a próxima recordação.`,
     practise: (count: number, topic: string) =>
       `Praticar ${count} ${plural(TAG, count, { one: "questão", other: "questões" })} em ${topic}`,
+    practiseShort: (count: number) =>
+      `Praticar ${count} ${plural(TAG, count, { one: "questão", other: "questões" })}`,
     attemptSummary: (attempts: number, wrong: number) =>
       `Respondida ${attempts} ${plural(TAG, attempts, { one: "vez", other: "vezes" })}, ${wrong} ${plural(TAG, wrong, { one: "errada", other: "erradas" })}. Respondida pela última vez em `,
     fallbackTopic: "Tópico",
@@ -282,6 +303,12 @@ export const ptBR: Catalog = {
     accuracy: "Precisão",
     lastActivity: "Última atividade",
     noValue: "–",
+    notStarted: "Não começou",
+    situation: "Situação",
+    solid: "Firme",
+    needsReview: "Revisar",
+    targetNote: (percent: number) =>
+      `“Firme” significa ${percent}% ou mais, a nota de corte do simulado. Descreve sua prática até aqui, não uma previsão sobre o exame.`,
     fallbackTopic: "Tópico",
     misconceptionsHeading: "Onde você estava confiante e errou",
     misconceptionsBodyStart:
@@ -304,7 +331,8 @@ export const ptBR: Catalog = {
     tracksPageLink: "página de trilhas",
     mockHeading: "Simulados",
     mockLoading: "Carregando seus simulados",
-    noMocks: "Nenhum simulado ainda.",
+    noMocks:
+      "Nenhum simulado ainda. Um simulado precisa de cinco questões revisadas em cada tópico.",
     mockTableCaption: "Seus simulados, do mais recente para o mais antigo",
     track: "Trilha",
     score: "Nota",
@@ -341,8 +369,8 @@ export const ptBR: Catalog = {
     emptyBody: "Nada foi respondido antes de a sessão fechar.",
     questionHeading: (number: number, correct: boolean) =>
       `Questão ${number}: ${correct ? "correta" : "incorreta"}`,
-    yourAnswerLine: (options: string, confidence: string) =>
-      `Sua resposta: ${options}. Confiança: ${confidence}. Respondida em `,
+    yourAnswerLine: (options: string, confidence: string, elapsedSeconds: number) =>
+      `Sua resposta: ${options}. Confiança: ${confidence}. ${elapsedSeconds} ${plural(TAG, elapsedSeconds, { one: "segundo", other: "segundos" })} para responder. Respondida em `,
     confidenceName: (confidence: string) =>
       ({ LOW: "baixa", MEDIUM: "média", HIGH: "alta" })[confidence] ?? confidence.toLowerCase(),
     showAnswer: "Mostrar a alternativa correta e a explicação",
@@ -408,6 +436,9 @@ export const ptBR: Catalog = {
     score: "Nota",
     fallbackTopic: "Tópico",
     outOf: (value: number, total: number) => `${value} / ${total}`,
+    scoreLabel: "Resultado",
+    unanswered: (count: number) =>
+      `${plural(TAG, count, { one: "Ficou", other: "Ficaram" })} ${count} ${plural(TAG, count, { one: "questão sem resposta", other: "questões sem resposta" })} e ${plural(TAG, count, { one: "conta", other: "contam" })} como erradas.`,
     questionReview: "Revisão das questões",
     questionSummary: (number: number, correct: boolean, answered: boolean) =>
       `Questão ${number}: ${correct ? "Correta" : answered ? "Incorreta" : "Não respondida"}`,
@@ -507,6 +538,9 @@ export const ptBR: Catalog = {
       emptyTitle: "Não há trilhas",
       emptyBody: "Uma trilha vem de uma migração. Um catálogo vazio significa que nenhuma foi aplicada.",
       tableCaption: "Trilhas de preparação",
+      certificationKind: "Trilha de certificação",
+      interviewKind: "Trilha de entrevistas",
+      topicCount: (count: number) => `${count} ${plural(TAG, count, { one: "tópico", other: "tópicos" })}`,
       track: "Trilha",
       status: "Situação",
       provider: "Fornecedor",
@@ -601,6 +635,7 @@ export const ptBR: Catalog = {
 
     reviewPanel: {
       policyLegend: "Política de conteúdo",
+      checklistCount: (checked: number, total: number) => `${checked} de ${total} verificados`,
       policyHint:
         "Marque só o que você mesmo verificou. Os itens que você marcar ficam registrados com sua decisão.",
       comment: "Comentário",
@@ -613,8 +648,10 @@ export const ptBR: Catalog = {
       publishNote:
         "Só versões aprovadas podem ser publicadas. Uma versão publicada não pode ser editada; uma correção vira uma nova versão.",
       confirmPublishTitle: (revision: number) => `Confirmar a publicação da versão ${revision}`,
-      confirmPublishExplain: (revision: number) =>
-        `Publicar a versão ${revision}? Quem estuda vai receber esta questão nas sessões, e a versão que ela substitui é retirada.`,
+      unknownReviewer: "Revisor não registrado",
+      unknownApprovalDate: "data da aprovação não registrada",
+      confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>
+        `Publicar a versão ${revision} no tópico ${topic}? Aprovada por ${reviewer} em ${date}. Esta questão ficará disponível para estudantes. A publicação é definitiva: não pode ser desfeita nem editada; correções exigem uma nova versão.`,
       confirmPublishLabel: (revision: number) => `Sim, publicar a versão ${revision}`,
       publishRevision: (revision: number) => `Publicar a versão ${revision}`,
       approveFirst: "Aprove antes.",
