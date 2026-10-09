@@ -7,3 +7,8 @@ useDefault = true
 description = "The documentation names the Idempotency-Key request header, which the generic API-key rule mistakes for a credential. It is a client-chosen retry token, not a secret."
 regexes = ['''Idempotency-Key:?\s''']
 paths = ['''docs(-pt-br)?/architecture/answer-submission\.md''']
+
+[[allowlists]]
+description = "In the content triage every 'key' is an answer key, and the thing quoted after it is what a question's verification programme printed — 'the key: `quietThrows=0`'. The generic API-key rule reads 'key:' followed by a name=value as a credential. It is a line of program output, and the only reason it is in the repository is so a reviewer can check the answer against it."
+regexes = ['''key: `[^`]+`''']
+paths = ['''docs/release/review-triage\.md''']
