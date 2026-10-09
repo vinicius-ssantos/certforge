@@ -469,10 +469,6 @@ textarea.read {
   font-size: var(--t-lg);
 }
 
-.narrow-field {
-  max-width: 16rem;
-}
-
 fieldset {
   margin: 0 0 var(--s5);
   padding: var(--s3) var(--s4) var(--s4);
@@ -1320,33 +1316,6 @@ pre.code {
   margin-top: var(--s2);
   font-size: var(--t-sm);
   color: var(--muted);
-}
-
-/* What the verification programme printed for this question, shown where the learner is told the
- * answer. The claim and its evidence belong on the same screen. */
-.verified {
-  margin: 0 0 var(--s5);
-  padding: var(--s3) var(--s4);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-}
-
-.verified > h3 {
-  margin: 0 0 var(--s2);
-  font: 600 var(--t-xs) / 1.4 var(--font-ui);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--muted);
-}
-
-.verified pre {
-  margin: 0;
-  padding: var(--s3);
-  overflow-x: auto;
-  background: var(--bg);
-  border-radius: var(--radius);
-  font: var(--t-sm) / 1.6 var(--font-code);
 }
 
 .session-actions {
