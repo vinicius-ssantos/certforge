@@ -63,7 +63,9 @@ export function ReviewPage() {
   return (
     <>
       <h1>{t.review.title}</h1>
-      <p className="hint">{t.review.caveat}</p>
+      {/* The caveat is about the list below it. With nothing to qualify it describes a queue the
+          learner does not have, immediately above a panel saying so. */}
+      {data && data.items.length > 0 ? <p className="hint">{t.review.caveat}</p> : null}
       {queue.isPending ? <Loading label={t.review.loading} /> : null}
       {queue.isError ? (
         <ErrorState error={queue.error} onRetry={() => void queue.refetch()} />
