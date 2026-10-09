@@ -342,7 +342,7 @@ function SessionEnded({ session }: { session: Session }) {
               {t.session.seeReview}
             </Link>
           </div>
-          <p>
+          <p className="back">
             <Link to="/">{t.session.backToAll}</Link>
           </p>
         </div>

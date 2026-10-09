@@ -129,7 +129,7 @@ export function TrackPage() {
       {track.isError ? (
         <>
           <ErrorState error={track.error} onRetry={() => void track.refetch()} />
-          <p>
+          <p className="back">
             <Link to="/">{t.track.backToAll}</Link>
           </p>
         </>
@@ -242,7 +242,7 @@ export function TrackPage() {
             onStart={(topic) => start.mutate(topic)}
             busy={start.isPending}
           />
-          <p>
+          <p className="back">
             <Link to="/">{t.track.allTracks}</Link>
           </p>
         </>

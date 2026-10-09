@@ -20,7 +20,7 @@ export function CatalogPage() {
 
   return (
     <>
-      <p><Link to="/editorial">{t.editorial.backToQuestions}</Link></p>
+      <p className="back"><Link to="/editorial">{t.editorial.backToQuestions}</Link></p>
       <h1>{t.editorial.catalogTitle}</h1>
       <p className="muted">{t.editorial.catalogPage.note}</p>
       {tracks.isPending ? <Loading label={t.editorial.catalogPage.loading} /> : null}

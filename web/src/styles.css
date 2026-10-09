@@ -32,6 +32,46 @@ a {
   text-underline-offset: 0.15em;
 }
 
+/*
+ * A link that is a whole heading, a whole table cell, or a line of its own is not a link inside a
+ * sentence. The blue and the underline exist so a reader can pick a link out of surrounding
+ * prose; where there is no surrounding prose they buy nothing, and painting every record blue
+ * turns a page of content into a page of links. The prototype draws these as content — a track
+ * card's title is a heading, a topic in a table is just the topic — and it is right to.
+ *
+ * They keep the underline for hover and focus, they are still `a` elements with the link role,
+ * and the whole cell or heading is the target, so there is nothing subtle to hit.
+ *
+ * Links inside a sentence keep the full treatment, and so do links that leave the product: those
+ * are the ones a reader has to be able to find mid-paragraph, and the ones where being wrong
+ * about what is clickable actually costs something.
+ */
+:is(h1, h2, h3) > a,
+td > a:only-child,
+th > a:only-child,
+.back > a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+:is(h1, h2, h3) > a:hover,
+:is(h1, h2, h3) > a:focus-visible,
+td > a:only-child:hover,
+td > a:only-child:focus-visible,
+th > a:only-child:hover,
+th > a:only-child:focus-visible,
+.back > a:hover,
+.back > a:focus-visible {
+  text-decoration: underline;
+}
+
+/* A line that only goes back where you came from. */
+.back {
+  margin: 0 0 var(--s4);
+  font-size: var(--t-sm);
+  color: var(--muted);
+}
+
 h1,
 h2,
 h3 {

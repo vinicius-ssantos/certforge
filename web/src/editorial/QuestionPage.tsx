@@ -96,7 +96,7 @@ export function QuestionPage() {
   // it by the route change stays put.
   return (
     <>
-      <p>
+      <p className="back">
         <Link to="/editorial">{t.editorial.backToQuestions}</Link>
       </p>
       <h1>{title}</h1>

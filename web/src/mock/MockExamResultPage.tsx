@@ -120,7 +120,7 @@ export function MockExamResultPage() {
       {data.total > data.answered ? (
         <p className="hint">{t.mockResult.unanswered(data.total - data.answered)}</p>
       ) : null}
-      <p><Link to="/">{t.mockResult.backToTracks}</Link></p>
+      <p className="back"><Link to="/">{t.mockResult.backToTracks}</Link></p>
     </>
   );
 }

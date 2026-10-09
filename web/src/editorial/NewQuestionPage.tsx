@@ -11,7 +11,7 @@ export function NewQuestionPage() {
   const canAuthor = useHasAny("CONTENT_AUTHOR");
   return (
     <>
-      <p>
+      <p className="back">
         <Link to="/editorial">{t.editorial.backToQuestions}</Link>
       </p>
       <h1>{t.editorial.newQuestion}</h1>

@@ -30,7 +30,7 @@ export function SessionReviewPage() {
   return (
     <>
       <h1>{t.sessionReview.title}</h1>
-      <p>
+      <p className="back">
         <Link to="/history">{t.sessionReview.backToHistory}</Link>
       </p>
       {attempts.isPending ? <Loading label={t.sessionReview.loading} /> : null}
