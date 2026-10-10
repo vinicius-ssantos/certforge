@@ -10,14 +10,14 @@ export function gitBlobSha(buffer) {
 }
 
 export function inspectPackReviews(packDir) {
-  const { questions } = readManifestPack(packDir);
+  const { manifest, questions } = readManifestPack(packDir);
   const record = JSON.parse(readFileSync(join(packDir, "review.json"), "utf8"));
   const byName = new Map(questions.map((q) => [q.name, q]));
   const results = [];
   for (const [name, entry] of Object.entries(record.questions ?? {})) {
     const question = byName.get(name);
     if (!question) throw new Error(`Orphaned review: ${name}`);
-    const sourceFile = posix.join(packDir.replaceAll("\\", "/"), name, "question.json");
+    const sourceFile = posix.join("content", manifest.packId, name, "question.json");
     const bytes = readFileSync(join(packDir, name, "question.json"));
     const actual = gitBlobSha(bytes);
     const key = question.options.filter((option) => option.correct).map((option) => option.key);
