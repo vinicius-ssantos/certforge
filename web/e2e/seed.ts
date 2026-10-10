@@ -1,5 +1,5 @@
 import { request } from "@playwright/test";
-import { ADMIN_EMAIL, ADMIN_PASSWORD, API_URL, post } from "./api";
+import { ADMIN_EMAIL, ADMIN_PASSWORD, API_URL, listQuestions, post } from "./api";
 
 /**
  * Publishes a small set of clearly labelled fixture questions so a learner session can run.
@@ -59,9 +59,7 @@ export default async function seed() {
   try {
     await post(api, "/api/auth/login", { email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
 
-    const published = (await (await api.get("/api/admin/questions?status=PUBLISHED")).json()) as {
-      prompt: string | null;
-    }[];
+    const published = await listQuestions(api, "status=PUBLISHED");
     const have = published.filter((question) => question.prompt?.startsWith(MARKER)).length;
     for (let number = have + 1; number <= FIXTURE_COUNT; number += 1) {
       const created = (await (await post(api, "/api/admin/questions", fixture(number))).json()) as {

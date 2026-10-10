@@ -67,6 +67,21 @@ interface AdminQuestionViews {
       List<String> checklist,
       Instant decidedAt) {}
 
+  /**
+   * One page of the editorial queue, with the counts the tabs show.
+   *
+   * <p>The counts are of everything that matches the search, not of the page, because a tab saying
+   * "3" should mean three questions exist in that state rather than three were returned. Counting
+   * is the server's job for the same reason paging is: the browser should not have to hold the
+   * whole corpus to answer either question.
+   */
+  record QuestionPage(
+      StatusCounts counts, List<QuestionSummary> items, int page, int size, long total) {}
+
+  /** How many questions sit in each state, for the search in force. */
+  record StatusCounts(
+      int all, int draft, int technicalReview, int approved, int published, int deprecated) {}
+
   record QuestionSummary(
       UUID id,
       UUID latestRevisionId,

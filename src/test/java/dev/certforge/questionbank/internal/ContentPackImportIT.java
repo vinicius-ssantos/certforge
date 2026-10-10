@@ -14,6 +14,7 @@ import dev.certforge.questionbank.QuestionBank;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -163,13 +164,24 @@ class ContentPackImportIT {
 
     // Exercise the pack through review and publication with test accounts.
     Cookie reviewerSession = login(reviewer, "10.4.0.4");
-    String listing =
-        mvc.perform(get("/api/admin/questions?status=TECHNICAL_REVIEW").cookie(reviewerSession))
-            .andExpect(status().isOk())
-            .andReturn()
-            .getResponse()
-            .getContentAsString();
-    List<String> revisionIds = JsonPath.read(listing, "$[*].latestRevisionId");
+    // The queue is paged, so reading one page and calling it the pack would review a fraction of
+    // it and report success. This walks every page until one comes back empty.
+    List<String> revisionIds = new ArrayList<>();
+    for (int page = 0; ; page++) {
+      String listing =
+          mvc.perform(
+                  get("/api/admin/questions?status=TECHNICAL_REVIEW&size=100&page=" + page)
+                      .cookie(reviewerSession))
+              .andExpect(status().isOk())
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+      List<String> ids = JsonPath.read(listing, "$.items[*].latestRevisionId");
+      if (ids.isEmpty()) {
+        break;
+      }
+      revisionIds.addAll(ids);
+    }
     assertThat(revisionIds).hasSize(PACK_SIZE);
     for (String revisionId : revisionIds) {
       mvc.perform(

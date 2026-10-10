@@ -144,6 +144,7 @@ export interface Rendered {
   fetch: FakeFetch;
   container: HTMLElement;
   rendered: ReturnType<typeof render>;
+  router: ReturnType<typeof createMemoryRouter>;
 }
 
 /**
@@ -210,5 +211,8 @@ export function renderApp(
     fetch,
     container: rendered.container,
     rendered,
+    // The memory router never touches window.location, so a test that cares whether state landed
+    // in the address — a search that should be linkable and survive a reload — asks the router.
+    router,
   };
 }
