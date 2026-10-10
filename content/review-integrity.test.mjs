@@ -20,11 +20,6 @@ test("editing a reviewed prompt revokes its recorded sign-off", () => {
     const data = JSON.parse(readFileSync(path, "utf8"));
     data.prompt += " Changed after review.";
     writeFileSync(path, JSON.stringify(data));
-    const record = JSON.parse(readFileSync(join(target, "review.json"), "utf8"));
-    for (const [name, entry] of Object.entries(record.questions)) {
-      entry.sourceFile = `pack/${name}/question.json`;
-    }
-    writeFileSync(join(target, "review.json"), JSON.stringify(record));
     const state = inspectPackReviews(target);
     assert.equal(state.accepted, 6);
     assert.equal(state.results.find((r) => r.name === "t01-docker-build-cache").valid, false);
