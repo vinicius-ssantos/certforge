@@ -20,7 +20,7 @@ test("stages valid general questions for the legacy editorial importer without m
   try {
     const destination = join(temp, "stage");
     const result = stageEditorialPack("content/infrastructure-devops-foundations", destination);
-    assert.equal(result.count, 7);
+    assert.equal(result.count, 25);
     const output = JSON.parse(readFileSync(join(destination, "t01-image-vs-container", "question.json"), "utf8"));
     assert.deepEqual(output, request);
     assert.throws(() => stageEditorialPack("content/infrastructure-devops-foundations", destination));
