@@ -34,6 +34,29 @@ test("rejects malformed questions and accidental Java metadata", () => {
     ...sample(), references: [{ title: "Docs", url: "http://example.org" }],
   }, manifest), /HTTPS/);
 });
+test("infrastructure evidence only accepts official Docker and Kubernetes hosts", () => {
+  const official = { ...manifest, sourcePolicy: "infrastructure-official-v1" };
+  const withRef = (url) => ({
+    ...sample(), references: [{ title: "Reference", url }],
+  });
+  assert.equal(
+    validateGeneralQuestion(withRef("https://docs.docker.com/build/"), official).type,
+    "SINGLE_CHOICE",
+  );
+  assert.equal(
+    validateGeneralQuestion(withRef("https://kubernetes.io/docs/"), official).type,
+    "SINGLE_CHOICE",
+  );
+  for (const url of [
+    "https://docker.com.evil.example/docs",
+    "https://example.com/docs",
+    "https://docs.docker.com.evil.example/docs",
+    "https://user@kubernetes.io/docs",
+  ]) {
+    assert.throws(() => validateGeneralQuestion(withRef(url), official), /official source policy/);
+  }
+});
+
 test("exam questions must bind to their objectives", () => {
   const certification = { ...manifest, trackKind: "CERTIFICATION" };
   assert.throws(() => validateGeneralQuestion(sample(), certification), /objectiveKeys/);
