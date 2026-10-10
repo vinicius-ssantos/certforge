@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,7 @@ class QuestionRepository {
   private static final String REVISION_IDS = "revisionIds";
   private static final String REVISION_ID_COLUMN = "revision_id";
   private static final String STATUS = "status";
+  private static final String SEARCH = "search";
   private static final String REVISION_CHILDREN_ORDER =
       " where revision_id = :revisionId order by position";
   private static final String SELECT_REVISION =
@@ -324,19 +326,84 @@ class QuestionRepository {
   }
 
   /** One row per question describing its most recent revision, optionally filtered by status. */
-  List<AdminQuestionViews.QuestionSummary> summaries(RevisionStatus statusFilter) {
-    var statement =
-        jdbc.sql(
-            "select r.question_id, r.id, r.revision_number, r.status, r.prompt, r.topic_id"
-                + " from certforge.qb_question_revision r"
-                + " where r.revision_number = (select max(x.revision_number)"
-                + " from certforge.qb_question_revision x where x.question_id = r.question_id)"
-                + (statusFilter == null ? "" : " and r.status = :status")
-                + " order by r.created_at desc");
+  /**
+   * The latest revision of every question, which is what the editorial queue lists.
+   *
+   * <p>`search` matches the prompt, case-insensitively, because that is what an editor remembers
+   * about a question. It is applied in SQL rather than in the browser so the response is a page
+   * rather than the whole bank.
+   */
+  private static final String LATEST_REVISION =
+      " from certforge.qb_question_revision r"
+          + " where r.revision_number = (select max(x.revision_number)"
+          + " from certforge.qb_question_revision x where x.question_id = r.question_id)";
+
+  /**
+   * The search as an {@code ilike} pattern, with the wildcards an editor typed treated as
+   * characters. Without this a prompt search for {@code %} matches everything and one for {@code _}
+   * matches any character, which is not what someone typing into a search box means.
+   */
+  private static String pattern(String search) {
+    return "%" + search.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%";
+  }
+
+  private static String filters(RevisionStatus statusFilter, String search) {
+    return (statusFilter == null ? "" : " and r.status = :status")
+        + (search == null ? "" : " and r.prompt ilike :search escape '\\'");
+  }
+
+  AdminQuestionViews.StatusCounts statusCounts(String search) {
+    return jdbc.sql(
+            "select r.status, count(*) as tally"
+                + LATEST_REVISION
+                + filters(null, search)
+                + " group by r.status")
+        .params(search == null ? Map.of() : Map.of(SEARCH, pattern(search)))
+        .query(
+            rs -> {
+              var tally = new EnumMap<RevisionStatus, Integer>(RevisionStatus.class);
+              while (rs.next()) {
+                tally.put(RevisionStatus.valueOf(rs.getString(STATUS)), rs.getInt("tally"));
+              }
+              int all = tally.values().stream().mapToInt(Integer::intValue).sum();
+              return new AdminQuestionViews.StatusCounts(
+                  all,
+                  tally.getOrDefault(RevisionStatus.DRAFT, 0),
+                  tally.getOrDefault(RevisionStatus.TECHNICAL_REVIEW, 0),
+                  tally.getOrDefault(RevisionStatus.APPROVED, 0),
+                  tally.getOrDefault(RevisionStatus.PUBLISHED, 0),
+                  tally.getOrDefault(RevisionStatus.DEPRECATED, 0));
+            });
+  }
+
+  long countSummaries(RevisionStatus statusFilter, String search) {
+    var statement = jdbc.sql("select count(*)" + LATEST_REVISION + filters(statusFilter, search));
     if (statusFilter != null) {
       statement = statement.param(STATUS, statusFilter.name());
     }
+    if (search != null) {
+      statement = statement.param(SEARCH, pattern(search));
+    }
+    return statement.query(Long.class).single();
+  }
+
+  List<AdminQuestionViews.QuestionSummary> summaries(
+      RevisionStatus statusFilter, String search, int page, int size) {
+    var statement =
+        jdbc.sql(
+            "select r.question_id, r.id, r.revision_number, r.status, r.prompt, r.topic_id"
+                + LATEST_REVISION
+                + filters(statusFilter, search)
+                + " order by r.created_at desc limit :size offset :offset");
+    if (statusFilter != null) {
+      statement = statement.param(STATUS, statusFilter.name());
+    }
+    if (search != null) {
+      statement = statement.param(SEARCH, pattern(search));
+    }
     return statement
+        .param("size", size)
+        .param("offset", (long) page * size)
         .query(
             (rs, n) ->
                 new AdminQuestionViews.QuestionSummary(

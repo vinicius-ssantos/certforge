@@ -67,7 +67,16 @@ const admin = new Session(url);
 await signInAdmin(admin, adminEmail, adminPassword);
 
 // How many demo questions are already published, so running this again tops up instead of piling up.
-const published = await json(await admin.call("GET", "/api/admin/questions?status=PUBLISHED"));
+// The queue pages; the demo seed only ever has a handful, but reading one page and assuming it
+// is everything is the bug that makes a re-run pile up instead of topping up.
+const published = [];
+for (let page = 0; ; page += 1) {
+  const { items } = await json(
+    await admin.call("GET", `/api/admin/questions?status=PUBLISHED&size=100&page=${page}`),
+  );
+  if (items.length === 0) break;
+  published.push(...items);
+}
 const already = published.filter((q) => q.prompt?.startsWith(MARKER)).length;
 if (already >= count) {
   console.log(`${already} demo questions are already published; nothing to do.`);

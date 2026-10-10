@@ -2117,6 +2117,40 @@ button.mock-nav-button.current {
   font-variant-numeric: tabular-nums;
   color: inherit;
 }
+/* The search sits between the status tabs and the table. The field shares a line with its
+ * actions and wraps to its own on a phone; the global input rule is width:100%, which inside a
+ * flex row would push the buttons off the end, so it grows from a basis here instead. */
+.queue-search {
+  margin-top: var(--s4);
+}
+
+.queue-search input[type="text"] {
+  width: auto;
+  flex: 1 1 18rem;
+  min-width: 0;
+}
+
+/* Back and forward with the span of rows between them, so the numbers answer "where am I" and
+ * not only "is there more". */
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-top: var(--s4);
+}
+
+.pager > p {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+/* While the next page is in flight the previous one stays on screen rather than unmounting. It
+ * is dimmed so it does not read as the answer to the search just typed; prefers-reduced-motion
+ * is irrelevant here because nothing moves. */
+.queue.stale {
+  opacity: 0.55;
+}
 
 .editorial-catalog .card > :last-child {
   margin-top: var(--s4);

@@ -63,6 +63,25 @@ function question(rev: Record<string, unknown> = {}) {
 
 const QUESTION_URL = `/api/admin/questions/${QUESTION_ID}`;
 
+/** The queue's response shape: a page of items plus the counts its tabs show. */
+function queuePage(items: unknown[], counts: Partial<Record<string, number>> = {}) {
+  return {
+    counts: {
+      all: items.length,
+      draft: 0,
+      technicalReview: 0,
+      approved: 0,
+      published: 0,
+      deprecated: 0,
+      ...counts,
+    },
+    items,
+    page: 0,
+    size: 25,
+    total: items.length,
+  };
+}
+
 describe("access", () => {
   it("shows the editorial link only to people who work on content", async () => {
     renderApp(tracks);
@@ -77,7 +96,7 @@ describe("access", () => {
   });
 
   it("offers the desk to an editor", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: editor, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: editor, path: "/editorial" });
 
     expect(await screen.findByRole("link", { name: "Editorial" })).toHaveAttribute("href", "/editorial");
   });
@@ -91,7 +110,7 @@ describe("the queue", () => {
 
   it("lists questions with their status in words and links to each", async () => {
     const { container } = renderApp(
-      { ...tracks, "GET /api/admin/questions": { body: summaries } },
+      { ...tracks, "GET /api/admin/questions": { body: queuePage(summaries) } },
       { as: editor, path: "/editorial" },
     );
 
@@ -109,13 +128,16 @@ describe("the queue", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("filters locally and shows counts using only the unfiltered request", async () => {
+  it("asks the server to narrow, and shows counts of everything rather than of the page", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
       {
         ...tracks,
         "GET /api/admin/questions": (request) => ({
-          body: request.query.get("status") === "DRAFT" ? [summaries[1]] : summaries,
+          body:
+            request.query.get("status") === "DRAFT"
+              ? queuePage([summaries[1]], { all: summaries.length, draft: 1 })
+              : queuePage(summaries, { all: summaries.length, draft: 1 }),
         }),
       },
       { as: editor, path: "/editorial" },
@@ -125,20 +147,64 @@ describe("the queue", () => {
 
     await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(2));
     expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveAttribute("aria-current", "page");
+    // The count is of every draft, not of the rows returned: a tab saying "1" must mean one
+    // exists, which is the whole reason the counts travel with the page.
     expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveTextContent("1");
-    expect(fetch.calls.filter((call) => call.path === "/api/admin/questions")).toHaveLength(1);
-    expect(fetch.calls.every((call) => call.query.get("status") === null)).toBe(true);
+    // The narrowing is the server's job now, so the filtered request carries the status.
+    const asked = fetch.calls.filter((call) => call.path === "/api/admin/questions");
+    expect(asked.some((call) => call.query.get("status") === "DRAFT")).toBe(true);
+  });
+
+  it("searches the prompts on the server and keeps the query in the address", async () => {
+    const user = userEvent.setup();
+    const { fetch, router } = renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) => ({
+          body: request.query.get("q")
+            ? queuePage([summaries[0]], { all: 1 })
+            : queuePage(summaries, { all: summaries.length }),
+        }),
+      },
+      { as: editor, path: "/editorial" },
+    );
+
+    await user.type(await screen.findByLabelText("Search the prompts"), "boxing");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+
+    await waitFor(() =>
+      expect(
+        fetch.calls.some(
+          (call) => call.path === "/api/admin/questions" && call.query.get("q") === "boxing",
+        ),
+      ).toBe(true),
+    );
+    expect(router.state.location.search).toContain("q=boxing");
+  });
+
+  it("says a search found nothing rather than that the bank is empty", async () => {
+    renderApp(
+      { ...tracks, "GET /api/admin/questions": { body: queuePage([], { all: 0 }) } },
+      { as: editor, path: "/editorial?q=boxing" },
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: /No question.s prompt contains "boxing"/ }),
+    ).toBeInTheDocument();
+    // Telling an editor to write the first question would be the wrong next step: the bank is
+    // not empty, the search is too narrow.
+    expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
   });
 
   it("invites the first question, and only editors can write it", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: editor, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: editor, path: "/editorial" });
 
     expect(await screen.findByRole("heading", { name: "No questions yet" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "New question" })).toHaveAttribute("href", "/editorial/new");
   });
 
   it("hides New question from a reviewer", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: reviewer, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: reviewer, path: "/editorial" });
 
     await screen.findByRole("heading", { name: "No questions yet" });
     expect(screen.queryByRole("link", { name: "New question" })).not.toBeInTheDocument();

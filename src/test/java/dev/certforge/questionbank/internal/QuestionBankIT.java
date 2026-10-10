@@ -1016,4 +1016,69 @@ class QuestionBankIT {
     assertThat(bank.findSnapshotQuestion(new QuestionRevisionId(UUID.fromString(draft[1]))))
         .isEmpty();
   }
+
+  @Test
+  void theQueueIsPagedAndSearchedOnTheServerWithCountsOfEverythingThatMatches() throws Exception {
+    // This class shares one database across its tests, so the assertions are scoped to a word
+    // only these four prompts carry. That is also the behaviour under test: the narrowing and the
+    // counting both happen in SQL, so a scoped search is a scoped count.
+    String marker = "zygomorphic";
+    createComplete("First draft about " + marker);
+    createComplete("Second draft about " + marker);
+    createComplete("Third draft about " + marker);
+    String[] published = publishNew("Published about " + marker);
+
+    send(get("/api/admin/questions?q=" + marker), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(4)))
+        .andExpect(jsonPath("$.total").value(4))
+        .andExpect(jsonPath("$.counts.all").value(4))
+        .andExpect(jsonPath("$.counts.draft").value(3))
+        .andExpect(jsonPath("$.counts.published").value(1));
+
+    // A page is a page: the items are capped while the totals still describe every match, so a
+    // tab reading "3" means three exist rather than three came back.
+    send(get("/api/admin/questions?q=" + marker + "&size=2"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(2)))
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(2))
+        .andExpect(jsonPath("$.total").value(4))
+        .andExpect(jsonPath("$.counts.all").value(4));
+
+    // The second page carries the rest, and nothing from the first.
+    MvcResult first =
+        send(get("/api/admin/questions?q=" + marker + "&size=2"), editor, null).andReturn();
+    MvcResult second =
+        send(get("/api/admin/questions?q=" + marker + "&size=2&page=1"), editor, null).andReturn();
+    List<String> firstIds =
+        JsonPath.read(first.getResponse().getContentAsString(), "$.items[*].id");
+    List<String> secondIds =
+        JsonPath.read(second.getResponse().getContentAsString(), "$.items[*].id");
+    assertThat(secondIds).hasSize(2).doesNotContainAnyElementsOf(firstIds);
+
+    // The search is case-insensitive, and composes with the status filter. The counts stay with
+    // the search rather than the filter, which is what lets the tabs say how many each state has.
+    send(get("/api/admin/questions?q=" + marker.toUpperCase() + "&status=PUBLISHED"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(1)))
+        .andExpect(jsonPath("$.items[0].id").value(published[0]))
+        .andExpect(jsonPath("$.total").value(1))
+        .andExpect(jsonPath("$.counts.all").value(4));
+
+    send(get("/api/admin/questions?q=" + marker + "-and-nothing-else"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(0)))
+        .andExpect(jsonPath("$.total").value(0))
+        .andExpect(jsonPath("$.counts.all").value(0));
+
+    // A wildcard an editor typed is a character, not a pattern: unescaped, each of these would
+    // match every question in the bank instead of none of them.
+    send(get("/api/admin/questions?q=" + marker + "%25"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.total").value(0));
+    send(get("/api/admin/questions?q=" + marker + "_"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.total").value(0));
+  }
 }
