@@ -68,6 +68,17 @@
       "sourceGitBlobSha": "56095ac7d86ce2a4c74f2c385b42f9b0ab694a16",
       "scope": "User expressly approved revised ConfigMap/Secret wording/example and C answer; no publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t02-k8s-service-discovery": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t02-k8s-service-discovery/question.json",
+      "sourceGitBlobSha": "9f391b667d003c5c694f9e30586788059c0e895d",
+      "scope": "User expressly approved revised wording, example and answer D of Kubernetes Service question in conversation; no API editorial approval, merge or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
