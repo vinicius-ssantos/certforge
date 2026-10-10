@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { stageEditorialPack, toEditorialRequest } from "./editorial-pack.mjs";
@@ -50,6 +50,23 @@ test("certification staging fails closed until objective persistence is implemen
     writeFileSync(join(input, "question-01", "question.json"), JSON.stringify(question));
     const output = join(temp, "output");
     assert.throws(() => stageEditorialPack(input, output), /Certification packs need verified/);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
+});
+
+test("staging fails closed when a previously approved question changes", () => {
+  const temp = mkdtempSync(join(tmpdir(), "certforge-stale-review-"));
+  try {
+    const source = join(temp, "input");
+    cpSync("content/infrastructure-devops-foundations", source, { recursive: true });
+    const path = join(source, "t01-docker-build-cache", "question.json");
+    const question = JSON.parse(readFileSync(path, "utf8"));
+    question.prompt += " Alterado após o aceite.";
+    writeFileSync(path, JSON.stringify(question));
+    const destination = join(temp, "staged");
+    assert.throws(() => stageEditorialPack(source, destination), /Stale editorial acceptance/);
+    assert.equal(existsSync(destination), false);
   } finally {
     rmSync(temp, { recursive: true, force: true });
   }
