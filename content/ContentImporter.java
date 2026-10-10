@@ -102,18 +102,73 @@ public class ContentImporter {
     System.out.println("created=" + created + " skipped=" + skipped + " total=" + dirs.size());
   }
 
-  /** The request body for one question, with the verified snippet placed into the prompt. */
+  /**
+   * The request body for one question: the verified snippet placed into the prompt, and the
+   * evidence behind the answer attached.
+   */
   static String render(Path dir) throws IOException {
     String json = Files.readString(dir.resolve("question.json"), StandardCharsets.UTF_8);
-    if (!json.contains(SNIPPET)) {
+    if (json.contains(SNIPPET)) {
+      Path main = dir.resolve("Main.java");
+      if (!Files.exists(main)) {
+        fail(dir + " uses " + SNIPPET + " but has no Main.java");
+      }
+      String code = Files.readString(main, StandardCharsets.UTF_8).strip();
+      json = json.replace(SNIPPET, escape(code));
+    }
+    return withVerification(json, dir);
+  }
+
+  /**
+   * Attaches the programme the build compiles and what it printed.
+   *
+   * <p>Every source under the question's directory, not only the file the learner reads: seven
+   * questions in the Java pack are a module graph, and for those the entry point alone would say
+   * the least. Sorted by path, which is the order the pack's own tooling uses, so the two agree.
+   *
+   * <p>A question with neither sources nor a recorded output gets nothing, because a question
+   * without a programme has no evidence — which is different from evidence that is empty.
+   */
+  static String withVerification(String json, Path dir) throws IOException {
+    List<Path> sources;
+    try (Stream<Path> walk = Files.walk(dir)) {
+      sources =
+          walk.filter(path -> path.getFileName().toString().endsWith(".java"))
+              .sorted()
+              .toList();
+    }
+    Path expectedFile = dir.resolve("expected.txt");
+    String output =
+        Files.exists(expectedFile)
+            ? Files.readString(expectedFile, StandardCharsets.UTF_8).stripTrailing()
+            : null;
+    if (sources.isEmpty() && output == null) {
       return json;
     }
-    Path main = dir.resolve("Main.java");
-    if (!Files.exists(main)) {
-      fail(dir + " uses " + SNIPPET + " but has no Main.java");
+
+    StringBuilder files = new StringBuilder();
+    for (Path source : sources) {
+      if (!files.isEmpty()) {
+        files.append(',');
+      }
+      String path = dir.relativize(source).toString().replace('\\', '/');
+      String body = Files.readString(source, StandardCharsets.UTF_8).stripTrailing();
+      files.append("{\"path\":\"").append(escape(path)).append("\",\"body\":\"")
+          .append(escape(body)).append("\"}");
     }
-    String code = Files.readString(main, StandardCharsets.UTF_8).strip();
-    return json.replace(SNIPPET, escape(code));
+
+    StringBuilder verification = new StringBuilder(",\"verification\":{\"files\":[");
+    verification.append(files).append(']');
+    if (output != null) {
+      verification.append(",\"output\":\"").append(escape(output)).append('"');
+    }
+    verification.append('}');
+
+    int close = json.lastIndexOf('}');
+    if (close < 0) {
+      fail(dir + " has a question.json that is not a JSON object");
+    }
+    return json.substring(0, close) + verification + json.substring(close);
   }
 
   private void signIn(String email, String password) throws Exception {

@@ -478,7 +478,23 @@ class MockExamService {
         evidence.references().stream()
             .map(reference -> new Reference(reference.title(), reference.url()))
             .toList();
-    return new Answer(correctOptions, evidence.explanation(), options, references);
+    return new Answer(
+        correctOptions, evidence.explanation(), options, references, verificationOf(evidence));
+  }
+
+  /**
+   * The evidence behind the answer, mapped for the view. Reached only from here, which is a path
+   * that has already established the learner may see answer material.
+   */
+  private static MockExamViews.Verification verificationOf(RevisionEvidence evidence) {
+    if (evidence.verification() == null) {
+      return null;
+    }
+    return new MockExamViews.Verification(
+        evidence.verification().files().stream()
+            .map(file -> new MockExamViews.SourceFile(file.path(), file.body()))
+            .toList(),
+        evidence.verification().output());
   }
 
   private static void requireKey(String key) {

@@ -20,11 +20,24 @@ interface AttemptViews {
       Instant submittedAt,
       Answer answer) {}
 
+  /**
+   * What the learner is shown once an answer has been accepted.
+   *
+   * <p>Everything in here is answer material. It is built only on the paths that have already
+   * established the learner may see it, and the verification evidence is no different: the output
+   * of a question's programme frequently is the answer.
+   */
   record Answer(
       List<String> correctOptions,
       String explanation,
       List<OptionAnswer> options,
-      List<Reference> references) {}
+      List<Reference> references,
+      Verification verification) {}
+
+  /** The programme the build ran for this question and what it printed. Null when there is none. */
+  record Verification(List<SourceFile> files, String output) {}
+
+  record SourceFile(String path, String body) {}
 
   record OptionAnswer(String key, String text, boolean correct, String explanation) {}
 

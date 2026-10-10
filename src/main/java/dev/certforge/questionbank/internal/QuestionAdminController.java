@@ -121,7 +121,8 @@ class QuestionAdminController {
       @Size(max = 10000) String explanation,
       @Valid @Size(max = 8) List<OptionRequest> options,
       @Valid GuidedResponseRequest guidedResponse,
-      @Valid @Size(max = 10) List<ReferenceRequest> references) {
+      @Valid @Size(max = 10) List<ReferenceRequest> references,
+      @Valid VerificationRequest verification) {
 
     /** Compatibility constructor for existing objective-question imports/tests. */
     RevisionRequest(
@@ -146,7 +147,8 @@ class QuestionAdminController {
           explanation,
           options,
           null,
-          references);
+          references,
+          null);
     }
 
     RevisionContent toContent() {
@@ -185,9 +187,28 @@ class QuestionAdminController {
               ? List.of()
               : references.stream()
                   .map(r -> new RevisionContent.Reference(r.title(), r.url()))
-                  .toList());
+                  .toList(),
+          verification == null
+              ? null
+              : new RevisionContent.Verification(
+                  verification.files() == null
+                      ? List.of()
+                      : verification.files().stream()
+                          .map(f -> new RevisionContent.SourceFile(f.path(), f.body()))
+                          .toList(),
+                  verification.output()));
     }
   }
+
+  /**
+   * The programme the build compiles for this question and what it printed. Carried by the importer
+   * from the content pack; it is recorded as evidence and never executed.
+   */
+  record VerificationRequest(
+      @Valid @Size(max = 25) List<SourceFileRequest> files, @Size(max = 20000) String output) {}
+
+  record SourceFileRequest(
+      @NotBlank @Size(max = 200) String path, @NotBlank @Size(max = 50000) String body) {}
 
   record OptionRequest(
       @NotBlank @Pattern(regexp = "^[A-H]$") String key,

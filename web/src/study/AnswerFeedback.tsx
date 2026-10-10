@@ -3,6 +3,7 @@ import type { AttemptResult, Question } from "../api/types";
 import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
 import { AnswerList } from "../ui/AnswerList";
+import { VerificationEvidence } from "../ui/VerificationEvidence";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
 
 /**
@@ -30,6 +31,8 @@ export function AnswerFeedback({
       <Prompt text={question.prompt} />
 
       <AnswerList options={result.answer.options} chosen={chosen} chosenFirst />
+
+      <VerificationEvidence verification={result.answer.verification} />
 
       <h3>{t.feedback.explanation}</h3>
       <Prompt text={result.answer.explanation} />

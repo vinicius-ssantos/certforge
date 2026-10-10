@@ -186,6 +186,10 @@ export const ptBR: Catalog = {
     correctAnswer: "Alternativa correta.",
     incorrectAnswer: "Alternativa incorreta.",
     explanation: "Explicação",
+    verifiedHeading: "O que o build executou, e o que imprimiu",
+    verifiedNote:
+      "Este programa é compilado e executado quando o pacote de questões é construído, e a saída fica registrada. Nada é executado aqui.",
+    verifiedOutput: "Saída",
     readMore: "Saiba mais",
     referenceLink: (title: string) => `${title} (abre em uma nova aba)`,
   },
