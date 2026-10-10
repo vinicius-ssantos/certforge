@@ -2,8 +2,8 @@
   "type": "SINGLE_CHOICE",
   "topicId": "a3000000-0000-4000-8000-000000000302",
   "difficulty": "MEDIUM",
-  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Uma API roda em três Pods no Kubernetes. Durante um rollout, os Pods antigos são substituídos e seus endereços IP podem mudar.\n\nOs Pods compartilham o rótulo `app: api`, como neste trecho:\n\n```yaml\nmetadata:\n  labels:\n    app: api\n```\n\nQual recurso oferece aos consumidores do cluster um ponto de acesso estável aos Pods selecionados por esse rótulo?",
+  "difficultyRationale": "Exige distinguir identificação de Pods por rótulos da abstração de rede que oferece descoberta de serviço e distribuição de tráfego durante rollouts.",
+  "prompt": "Uma API está implantada em três Pods no Kubernetes. Durante um rollout, os Pods antigos são substituídos, e os novos podem receber endereços IP diferentes.\n\nTodos os Pods da API compartilham este rótulo:\n\n```yaml\nmetadata:\n  labels:\n    app: api\n```\n\nUm outro componente do cluster precisa acessar a API continuamente, sem conhecer o IP individual de cada Pod nem atualizar sua configuração a cada substituição.\n\n**Qual recurso do Kubernetes deve ser criado para oferecer um endereço de acesso estável e encaminhar o tráfego aos Pods selecionados por esse rótulo?**",
   "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos.",
   "options": [
     {
