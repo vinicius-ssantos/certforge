@@ -1,9 +1,10 @@
 // Convert validated non-Java question packs into the existing editorial API payload format.
 // Objective mapping and evidence are kept in source files; the current API does not persist
 // them. This adapter must not pretend they have been stored or independently verified.
-import { mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readManifestPack } from "./manifest-pack.mjs";
+import { assertPackReviewsCurrent } from "./review-integrity.mjs";
 
 export function toEditorialRequest(question) {
   return {
@@ -30,6 +31,9 @@ export function toEditorialRequest(question) {
  */
 export function stageEditorialPack(sourceDir, destinationDir) {
   const { manifest, questions } = readManifestPack(sourceDir);
+  if (existsSync(join(sourceDir, "review.json"))) {
+    assertPackReviewsCurrent(sourceDir);
+  }
   if (manifest.trackKind === "CERTIFICATION") {
     throw new Error("Certification packs need verified objective-to-API persistence before import");
   }
