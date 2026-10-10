@@ -79,6 +79,39 @@
       "sourceGitBlobSha": "9f391b667d003c5c694f9e30586788059c0e895d",
       "scope": "User expressly approved revised wording, example and answer D of Kubernetes Service question in conversation; no API editorial approval, merge or publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-build-context": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-build-context/question.json",
+      "sourceGitBlobSha": "78701c4765b76a1a2d8b30d91daed6500e6d6f03",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-entrypoint-cmd": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-entrypoint-cmd/question.json",
+      "sourceGitBlobSha": "6b88f580b0af81a79000026d1143746a6c8b0aeb",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-volumes": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-volumes/question.json",
+      "sourceGitBlobSha": "6e8499fe6aa7609851218939680b55dc5f4b40a4",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
