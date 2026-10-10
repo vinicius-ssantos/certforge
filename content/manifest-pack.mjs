@@ -73,8 +73,10 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
   }
   if (question.evidence !== undefined) {
     const evidence = question.evidence;
-    if (!evidence || typeof evidence !== "object" || !nonempty(evidence.type)) {
-      fail(name, "invalid evidence descriptor");
+    const evidenceTypes = new Set(["reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check", "runnable-isolated-test"]);
+    if (!evidence || Array.isArray(evidence) || typeof evidence !== "object"
+        || !evidenceTypes.has(evidence.type)) {
+      fail(name, "unsupported evidence descriptor");
     }
   }
   return question;
