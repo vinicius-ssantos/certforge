@@ -8,7 +8,7 @@ import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity
 const pack = "content/infrastructure-devops-foundations";
 test("all seven human sign-offs match exact current question blobs and answer keys", () => {
   const state = assertPackReviewsCurrent(pack);
-  assert.equal(state.total, 7);
+  assert.equal(state.total, 25);
   assert.equal(state.accepted, 7);
 });
 test("editing a reviewed prompt revokes its recorded sign-off", () => {
