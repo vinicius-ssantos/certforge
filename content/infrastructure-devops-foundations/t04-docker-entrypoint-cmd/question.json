@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma imagem tem o seguinte Dockerfile:\n\n```dockerfile\nENTRYPOINT [\"java\", \"-jar\", \"/app/app.jar\"]\nCMD [\"--server.port=8080\"]\n```\n\nQual é o efeito de executar `docker run minha-api --server.port=9090`?",
+  "explanation": "ENTRYPOINT permanece e os argumentos informados substituem CMD.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O ENTRYPOINT é substituído e apenas a opção `--server.port=9090` é executada.",
+      "correct": false,
+      "explanation": "Argumentos após a imagem substituem CMD, não ENTRYPOINT no formato exec."
+    },
+    {
+      "key": "B",
+      "text": "Os parâmetros de CMD e da linha de comando são sempre concatenados.",
+      "correct": false,
+      "explanation": "Os argumentos informados no docker run substituem os parâmetros de CMD."
+    },
+    {
+      "key": "C",
+      "text": "O Java é executado com `-jar /app/app.jar --server.port=9090`.",
+      "correct": true,
+      "explanation": "ENTRYPOINT permanece e os argumentos informados substituem CMD."
+    },
+    {
+      "key": "D",
+      "text": "O Docker necessariamente ignora a opção porque há CMD no Dockerfile.",
+      "correct": false,
+      "explanation": "CMD fornece argumentos padrão que podem ser substituídos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/reference/dockerfile/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

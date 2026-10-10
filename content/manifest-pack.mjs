@@ -48,6 +48,21 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
         || !nonempty(ref?.url) || !/^https:\/\//.test(ref.url))) {
     fail(name, "references must have titles and HTTPS URLs");
   }
+  if (manifest.sourcePolicy === "infrastructure-official-v1") {
+    const officialHosts = new Set(["docs.docker.com", "kubernetes.io"]);
+    for (const reference of question.references) {
+      let parsed;
+      try {
+        parsed = new URL(reference.url);
+      } catch {
+        fail(name, "invalid reference URL");
+      }
+      if (parsed.protocol !== "https:" || !officialHosts.has(parsed.hostname)
+          || parsed.username || parsed.password || parsed.port) {
+        fail(name, "reference is outside the infrastructure official source policy");
+      }
+    }
+  }
   if (manifest.trackKind === "CERTIFICATION") {
     if (!Array.isArray(question.objectiveKeys) || question.objectiveKeys.length === 0
         || question.objectiveKeys.some((key) => !nonempty(key))) {
@@ -58,8 +73,10 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
   }
   if (question.evidence !== undefined) {
     const evidence = question.evidence;
-    if (!evidence || typeof evidence !== "object" || !nonempty(evidence.type)) {
-      fail(name, "invalid evidence descriptor");
+    const evidenceTypes = new Set(["reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check", "runnable-isolated-test"]);
+    if (!evidence || Array.isArray(evidence) || typeof evidence !== "object"
+        || !evidenceTypes.has(evidence.type)) {
+      fail(name, "unsupported evidence descriptor");
     }
   }
   return question;

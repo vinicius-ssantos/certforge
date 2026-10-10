@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um Dockerfile contém `EXPOSE 8080`, mas uma API iniciada com `docker run minha-api` não pode ser acessada em `localhost:8080` no host. Qual alteração publica a porta do contêiner no host?",
+  "explanation": "-p configura o mapeamento da porta do host para a porta do contêiner.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Executar `docker run -p 8080:8080 minha-api`.",
+      "correct": true,
+      "explanation": "-p configura o mapeamento da porta do host para a porta do contêiner."
+    },
+    {
+      "key": "B",
+      "text": "Remover EXPOSE e adicionar um comentário.",
+      "correct": false,
+      "explanation": "Comentários não configuram rede nem publicam portas."
+    },
+    {
+      "key": "C",
+      "text": "Usar somente `docker run --name api minha-api`.",
+      "correct": false,
+      "explanation": "O nome do contêiner não publica portas."
+    },
+    {
+      "key": "D",
+      "text": "Criar uma variável de ambiente `PORT=8080` sem outras mudanças.",
+      "correct": false,
+      "explanation": "Uma variável não publica automaticamente uma porta no host."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/get-started/docker-concepts/running-containers/publishing-ports/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

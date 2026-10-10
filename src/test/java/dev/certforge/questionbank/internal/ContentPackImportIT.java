@@ -13,6 +13,7 @@ import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
 import jakarta.servlet.http.Cookie;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
@@ -112,6 +113,10 @@ class ContentPackImportIT {
 
   /** Runs the standalone importer exactly as a maintainer would and returns its output. */
   private String runImporter(String email) throws Exception {
+    return runImporter(email, Path.of("content", "java-se-21"));
+  }
+
+  private String runImporter(String email, Path pack) throws Exception {
     Path java = Path.of(System.getProperty("java.home"), "bin", "java");
     Process process =
         new ProcessBuilder(
@@ -122,7 +127,9 @@ class ContentPackImportIT {
                 "--email",
                 email,
                 "--password",
-                PASSWORD)
+                PASSWORD,
+                "--pack",
+                pack.toString())
             .redirectErrorStream(true)
             .start();
     String output = new String(process.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
@@ -198,6 +205,63 @@ class ContentPackImportIT {
             .doesNotContainIgnoringCase("explanation")
             .doesNotContainIgnoringCase("correct\"")
             .doesNotContainIgnoringCase("references");
+      }
+    }
+  }
+
+  @Test
+  void importsTheNonJavaPackTwiceAsUnpublishedDrafts() throws Exception {
+    Path temporary = Files.createTempDirectory("certforge-devops-staging-");
+    try {
+      Path staged = temporary.resolve("prepared");
+      Process stage =
+          new ProcessBuilder(
+                  "node",
+                  "--input-type=module",
+                  "-e",
+                  "import {stageEditorialPack} from './content/editorial-pack.mjs'; "
+                      + "stageEditorialPack('content/infrastructure-devops-foundations', process.argv[1]);",
+                  staged.toString())
+              .redirectErrorStream(true)
+              .start();
+      String stageOutput =
+          new String(stage.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+      assertThat(stage.waitFor(30, TimeUnit.SECONDS)).isTrue();
+      assertThat(stage.exitValue()).as("staging output: %s", stageOutput).isZero();
+
+      Cookie admin = login("import-admin@example.com", "10.8.0.1");
+      String editor = account("EDITOR", admin, "10.8.0.2");
+
+      String first = runImporter(editor, staged);
+      assertThat(first).contains("created=25 skipped=0 total=25");
+      String second = runImporter(editor, staged);
+      assertThat(second).contains("created=0 skipped=25 total=25");
+
+      Integer revisions =
+          jdbc.queryForObject(
+              "select count(*) from certforge.qb_question_revision r "
+                  + "join certforge.qb_question q on q.id = r.question_id "
+                  + "where r.topic_id in (?, ?, ?) and r.status = 'TECHNICAL_REVIEW'",
+              Integer.class,
+              UUID.fromString("a3000000-0000-4000-8000-000000000301"),
+              UUID.fromString("a3000000-0000-4000-8000-000000000302"),
+              UUID.fromString("a3000000-0000-4000-8000-000000000303"));
+      assertThat(revisions).isEqualTo(25);
+      assertThat(
+              jdbc.queryForObject(
+                  "select count(*) from certforge.qb_question_revision r "
+                      + "join certforge.qb_question q on q.id = r.question_id "
+                      + "where r.topic_id in (?, ?, ?) and r.status = 'PUBLISHED'",
+                  Integer.class,
+                  UUID.fromString("a3000000-0000-4000-8000-000000000301"),
+                  UUID.fromString("a3000000-0000-4000-8000-000000000302"),
+                  UUID.fromString("a3000000-0000-4000-8000-000000000303")))
+          .isZero();
+    } finally {
+      try (var files = Files.walk(temporary)) {
+        for (Path path : files.sorted(java.util.Comparator.reverseOrder()).toList()) {
+          Files.deleteIfExists(path);
+        }
       }
     }
   }

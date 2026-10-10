@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Considere o Dockerfile abaixo para uma aplicação Java baseada em Maven:\n\n```dockerfile\nFROM maven:3.9-eclipse-temurin-21 AS build\nWORKDIR /app\nCOPY pom.xml .\nRUN mvn -B dependency:go-offline\nCOPY src ./src\nRUN mvn -B package\n```\n\nSupondo que apenas os arquivos em `src/` mudem, enquanto o `pom.xml` e a imagem-base permaneçam iguais, qual é a principal vantagem de copiar e preparar as dependências antes do código-fonte?",
+  "explanation": "A organização de instruções influencia a reutilização de camadas de cache. Copiar primeiro arquivos que mudam menos permite reaproveitar a etapa de dependências em builds subsequentes.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Docker sempre fará download de todas as dependências em cada build.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "Mudanças apenas no código-fonte podem reutilizar o cache das camadas de instalação de dependências.",
+      "correct": true,
+      "explanation": "A organização de instruções influencia a reutilização de camadas de cache. Copiar primeiro arquivos que mudam menos permite reaproveitar a etapa de dependências em builds subsequentes."
+    },
+    {
+      "key": "C",
+      "text": "A ordem elimina a necessidade de definir um contexto de build.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "D",
+      "text": "A imagem resultante torna-se automaticamente sem permissões de root.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/build/cache/optimize/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

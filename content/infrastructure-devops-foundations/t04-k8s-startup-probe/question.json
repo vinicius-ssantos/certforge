@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma API Java demora vários minutos para iniciar em máquinas lentas. Sua liveness probe começa cedo demais e reinicia o processo repetidamente antes de ele ficar pronto. Qual mecanismo evita que a liveness probe entre em ação até que a inicialização seja concluída?",
+  "explanation": "Enquanto a startup probe ainda não passou, liveness e readiness não são executadas.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ConfigMap, para armazenar o tempo médio de boot.",
+      "correct": false,
+      "explanation": "ConfigMap não controla a execução das verificações de saúde."
+    },
+    {
+      "key": "B",
+      "text": "Service, para distribuir o tráfego entre mais Pods.",
+      "correct": false,
+      "explanation": "Service não impede reinícios decorrentes de falhas de liveness."
+    },
+    {
+      "key": "C",
+      "text": "Startup probe, configurada para tolerar o tempo necessário de inicialização.",
+      "correct": true,
+      "explanation": "Enquanto a startup probe ainda não passou, liveness e readiness não são executadas."
+    },
+    {
+      "key": "D",
+      "text": "DaemonSet, para executar uma réplica por nó.",
+      "correct": false,
+      "explanation": "DaemonSet controla distribuição de Pods, não o período de inicialização das probes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

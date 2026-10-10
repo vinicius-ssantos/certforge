@@ -1,0 +1,286 @@
+{
+  "reviewer": "vinicius-ssantos",
+  "reviewerRole": "project owner / human editorial acceptance in conversation",
+  "method": "Question-by-question joint review in ChatGPT. This file records only explicit user acceptance of question wording and answer key; it is not a CONTENT_REVIEW decision in the editorial API and does not publish content.",
+  "questions": {
+    "t01-docker-build-cache": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-08",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t01-docker-build-cache/question.json",
+      "sourceGitBlobSha": "cef05054520d3a1d4ee3786be57fa2232a237375",
+      "scope": "User expressly approved the wording and B answer of the example-based Docker cache question; no automatic publication or other question approval.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t01-docker-multistage": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-08",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t01-docker-multistage/question.json",
+      "sourceGitBlobSha": "a79e84d7f67531adfe1913834b254a9c5475edac",
+      "scope": "User expressly approved wording, example and C answer for Docker multi-stage question; no other question approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t01-image-vs-container": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-08",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t01-image-vs-container/question.json",
+      "sourceGitBlobSha": "75f7e5f0b7f4240e6cffad4f636bb7b3c6ffdba2",
+      "scope": "User expressly approved wording and B answer for Docker images and containers question; no other question approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t02-k8s-deployment-replicas": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t02-k8s-deployment-replicas/question.json",
+      "sourceGitBlobSha": "940a0a6948a63595c12745c9496117002b377c99",
+      "scope": "User expressly approved the wording, example and A answer for Kubernetes Deployment and ReplicaSet question; no other approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t03-k8s-readiness": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t03-k8s-readiness/question.json",
+      "sourceGitBlobSha": "2845a277f844122be169efccd18afc77c7264b7c",
+      "scope": "User expressly approved revised readiness probe wording/example and B answer; no publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t03-k8s-configmap-secret": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t03-k8s-configmap-secret/question.json",
+      "sourceGitBlobSha": "56095ac7d86ce2a4c74f2c385b42f9b0ab694a16",
+      "scope": "User expressly approved revised ConfigMap/Secret wording/example and C answer; no publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t02-k8s-service-discovery": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t02-k8s-service-discovery/question.json",
+      "sourceGitBlobSha": "9f391b667d003c5c694f9e30586788059c0e895d",
+      "scope": "User expressly approved revised wording, example and answer D of Kubernetes Service question in conversation; no API editorial approval, merge or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-build-context": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-build-context/question.json",
+      "sourceGitBlobSha": "78701c4765b76a1a2d8b30d91daed6500e6d6f03",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-entrypoint-cmd": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-entrypoint-cmd/question.json",
+      "sourceGitBlobSha": "6b88f580b0af81a79000026d1143746a6c8b0aeb",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-docker-volumes": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-docker-volumes/question.json",
+      "sourceGitBlobSha": "6e8499fe6aa7609851218939680b55dc5f4b40a4",
+      "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-docker-publish-port": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-docker-publish-port/question.json",
+      "sourceGitBlobSha": "b63e5693614035112fcf4ebf26f1cf1cdbfb9cee",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-compose-service-dns": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-compose-service-dns/question.json",
+      "sourceGitBlobSha": "e934b2abb0f0ec00fd5c355d32d9029e53ada5a3",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-dockerignore": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-dockerignore/question.json",
+      "sourceGitBlobSha": "cd82e1cacadc459c13aa73eb9983b16f9f267efb",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-docker-image-digest": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-docker-image-digest/question.json",
+      "sourceGitBlobSha": "573b382a0260e4adebcfac36cbd661390f036814",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; not an API editorial approval or publication authorization.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-k8s-service-selector": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-k8s-service-selector/question.json",
+      "sourceGitBlobSha": "655cf5886f777231cf3f21097651570f9ce45aba",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; not an API editorial approval or publication authorization.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-k8s-startup-probe": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-k8s-startup-probe/question.json",
+      "sourceGitBlobSha": "e3ff4aed8ba14d9c825c4f1a24ea629943df10a4",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; not an API editorial approval or publication authorization.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-k8s-namespace-dns": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-k8s-namespace-dns/question.json",
+      "sourceGitBlobSha": "eb44e72ccb9313684c5978ada3db702ba9269f0d",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-rbac": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-rbac/question.json",
+      "sourceGitBlobSha": "8573d04e0c939b023f997c67582730bee5489b5e",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-requests-limits": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-requests-limits/question.json",
+      "sourceGitBlobSha": "c00499f6f6cc077ac60b9b764714cc974f72f7c8",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-oomkilled": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-oomkilled/question.json",
+      "sourceGitBlobSha": "e53dab82f392772d85601b5371bfa9fd0a7f1ad5",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-rollout": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-rollout/question.json",
+      "sourceGitBlobSha": "254a0026aa018d07c0ee98cab505553b4a35cca7",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-job": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-job/question.json",
+      "sourceGitBlobSha": "6ce4de2788903828447ab289f9500f1e637be109",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-configmap-updates": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-configmap-updates/question.json",
+      "sourceGitBlobSha": "08ad97c77b4aca5a3562f1272f470967b4b711da",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-pdb": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-pdb/question.json",
+      "sourceGitBlobSha": "f2d0fa6d52bb1eb6a8c497525e41369e41960b45",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-network-policy": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-network-policy/question.json",
+      "sourceGitBlobSha": "bcb1426f21ff7b5ef9da41e0e08741b8094aca63",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    }
+  },
+  "caveats": [
+    "Any change to the reviewed question file changes its Git blob SHA and requires renewed human acceptance.",
+    "This record is human sign-off evidence, not an API editorial approval, not independent second-reviewer validation, and not a publication instruction."
+  ]
+}

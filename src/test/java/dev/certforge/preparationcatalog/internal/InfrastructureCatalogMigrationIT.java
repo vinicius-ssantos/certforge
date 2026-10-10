@@ -58,6 +58,33 @@ class InfrastructureCatalogMigrationIT {
   }
 
   @Test
+  void infrastructureFoundationsRemainDraftAndInvisibleToLearners() {
+    String track = "a1000000-0000-4000-8000-000000000003";
+    String version = "a2000000-0000-4000-8000-000000000003";
+
+    assertThat(
+            jdbc.queryForObject(
+                "select kind || ':' || status from certforge.catalog_track where id=?::uuid",
+                String.class,
+                track))
+        .isEqualTo("GENERAL:DRAFT");
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_track_version_topic"
+                    + " where track_version_id=?::uuid",
+                Integer.class,
+                version))
+        .isEqualTo(10);
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_certification_exam"
+                    + " where track_version_id=?::uuid",
+                Integer.class,
+                version))
+        .isZero();
+  }
+
+  @Test
   void examSnapshotsRequireExplicitValidProvenance() {
     var versionId = UUID.randomUUID();
     var trackId = UUID.randomUUID();

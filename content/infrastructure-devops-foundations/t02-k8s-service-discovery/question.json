@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir identificação de Pods por rótulos da abstração de rede que oferece descoberta de serviço e distribuição de tráfego durante rollouts.",
+  "prompt": "Uma API está implantada em três Pods no Kubernetes. Durante um rollout, os Pods antigos são substituídos, e os novos podem receber endereços IP diferentes.\n\nTodos os Pods da API compartilham este rótulo:\n\n```yaml\nmetadata:\n  labels:\n    app: api\n```\n\nUm outro componente do cluster precisa acessar a API continuamente, sem conhecer o IP individual de cada Pod nem atualizar sua configuração a cada substituição.\n\n**Qual recurso do Kubernetes deve ser criado para oferecer um endereço de acesso estável e encaminhar o tráfego aos Pods selecionados por esse rótulo?**",
+  "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ConfigMap.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "PersistentVolumeClaim.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "C",
+      "text": "Namespace.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "D",
+      "text": "Service.",
+      "correct": true,
+      "explanation": "Um Service expõe uma abstração estável sobre um conjunto de Pods, permitindo descoberta e acesso mesmo quando os Pods são substituídos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
