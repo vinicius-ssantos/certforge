@@ -57,6 +57,18 @@ test("infrastructure evidence only accepts official Docker and Kubernetes hosts"
   }
 });
 
+test("evidence descriptors are explicit and unknown types fail closed", () => {
+  for (const type of [
+    "reference-backed", "shell-static-check", "yaml-static-check",
+    "manifest-schema-check", "runnable-isolated-test",
+  ]) {
+    assert.equal(validateGeneralQuestion({ ...sample(), evidence: { type } }, manifest).evidence.type, type);
+  }
+  for (const evidence of [{ type: "unverified" }, { type: "code-executed" }, { type: "" }, []]) {
+    assert.throws(() => validateGeneralQuestion({ ...sample(), evidence }, manifest), /evidence descriptor/);
+  }
+});
+
 test("exam questions must bind to their objectives", () => {
   const certification = { ...manifest, trackKind: "CERTIFICATION" };
   assert.throws(() => validateGeneralQuestion(sample(), certification), /objectiveKeys/);
