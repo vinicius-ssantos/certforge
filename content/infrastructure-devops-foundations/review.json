@@ -178,6 +178,39 @@
       "sourceGitBlobSha": "e3ff4aed8ba14d9c825c4f1a24ea629943df10a4",
       "scope": "Owner explicitly approved current wording and answer key in joint editorial review; not an API editorial approval or publication authorization.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t04-k8s-namespace-dns": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t04-k8s-namespace-dns/question.json",
+      "sourceGitBlobSha": "eb44e72ccb9313684c5978ada3db702ba9269f0d",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-rbac": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-rbac/question.json",
+      "sourceGitBlobSha": "8573d04e0c939b023f997c67582730bee5489b5e",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-requests-limits": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-requests-limits/question.json",
+      "sourceGitBlobSha": "c00499f6f6cc077ac60b9b764714cc974f72f7c8",
+      "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
