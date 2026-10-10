@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000303",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
-  "prompt": "Qual afirmação descreve corretamente ConfigMaps e Secrets no Kubernetes?",
+  "prompt": "Uma API no Kubernetes usa a configuração `LOG_LEVEL=INFO` e uma senha de acesso ao banco de dados. A equipe precisa escolher recursos adequados para fornecer esses valores aos Pods.\n\nConsidere o seguinte cenário:\n\n```text\nConfiguração não confidencial: LOG_LEVEL=INFO\nDado sensível: DB_PASSWORD=...\n```\n\nQual afirmação descreve corretamente o uso de ConfigMaps e Secrets e os cuidados necessários para proteger dados sensíveis?",
   "explanation": "Secrets destinam-se a informações sensíveis, mas seu uso exige controles adicionais; em particular, a documentação alerta que Secrets não são automaticamente criptografados em repouso por padrão.",
   "options": [
     {
