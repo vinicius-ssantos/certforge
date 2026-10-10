@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um Pod declara:\n\n```yaml\nresources:\n  requests:\n    cpu: \"250m\"\n    memory: \"256Mi\"\n  limits:\n    cpu: \"1\"\n    memory: \"512Mi\"\n```\n\nQual afirmação está correta?",
+  "explanation": "Requests orientam agendamento e limits definem limites de uso, com comportamentos específicos para CPU e memória.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O scheduler considera requests ao posicionar o Pod; limites restringem uso de recursos em execução.",
+      "correct": true,
+      "explanation": "Requests orientam agendamento e limits definem limites de uso, com comportamentos específicos para CPU e memória."
+    },
+    {
+      "key": "B",
+      "text": "O scheduler só considera limits e ignora requests.",
+      "correct": false,
+      "explanation": "O agendamento usa os recursos solicitados."
+    },
+    {
+      "key": "C",
+      "text": "O Pod necessariamente usará 1 CPU e 512Mi de memória o tempo todo.",
+      "correct": false,
+      "explanation": "Limits são tetos, não alocação permanente nem consumo obrigatório."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes reinicia qualquer contêiner que ultrapasse 250m de CPU.",
+      "correct": false,
+      "explanation": "250m é request de CPU, não limite que imponha reinício."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

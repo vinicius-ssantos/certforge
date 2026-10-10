@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Em um projeto, o comando `docker build -f docker/Dockerfile .` executa com o contexto de build no diretório raiz do projeto. O Dockerfile contém `COPY ../segredos.txt /app/segredos.txt`. O arquivo está fora do contexto enviado ao builder. O que ocorre?",
+  "explanation": "O contexto limita quais arquivos locais podem ser referenciados por COPY.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Docker lê livremente qualquer arquivo do sistema de arquivos do host.",
+      "correct": false,
+      "explanation": "COPY só pode acessar arquivos disponíveis no contexto de build."
+    },
+    {
+      "key": "B",
+      "text": "O `COPY` não pode acessar o arquivo fora do contexto de build e a operação falha.",
+      "correct": true,
+      "explanation": "O contexto limita quais arquivos locais podem ser referenciados por COPY."
+    },
+    {
+      "key": "C",
+      "text": "O arquivo é copiado após o contêiner iniciar.",
+      "correct": false,
+      "explanation": "COPY é instrução de build, não ação em runtime."
+    },
+    {
+      "key": "D",
+      "text": "O Docker cria automaticamente um volume contendo o arquivo.",
+      "correct": false,
+      "explanation": "COPY não provisiona volumes nem monta caminhos externos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/build/concepts/context/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

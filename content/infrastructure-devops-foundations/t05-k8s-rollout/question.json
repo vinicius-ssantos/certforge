@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um Deployment com 3 réplicas aplica a estratégia:\n\n```yaml\nstrategy:\n  type: RollingUpdate\n  rollingUpdate:\n    maxUnavailable: 0\n    maxSurge: 1\n```\n\nSupondo recursos disponíveis e Pods ficando Ready, qual comportamento a configuração permite durante o rollout?",
+  "explanation": "maxSurge=1 permite uma réplica extra; maxUnavailable=0 busca manter as três disponíveis.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Eliminar as três réplicas antigas de uma vez antes de criar novas.",
+      "correct": false,
+      "explanation": "maxUnavailable=0 não permite reduzir a disponibilidade desejada durante o rollout."
+    },
+    {
+      "key": "B",
+      "text": "Criar até uma réplica adicional acima das três desejadas, sem indisponibilizar voluntariamente réplicas prontas.",
+      "correct": true,
+      "explanation": "maxSurge=1 permite uma réplica extra; maxUnavailable=0 busca manter as três disponíveis."
+    },
+    {
+      "key": "C",
+      "text": "Impedir qualquer criação de Pod enquanto houver réplicas antigas.",
+      "correct": false,
+      "explanation": "maxSurge=1 permite capacidade extra durante a atualização."
+    },
+    {
+      "key": "D",
+      "text": "Converter o Deployment em StatefulSet para preservar a ordem.",
+      "correct": false,
+      "explanation": "RollingUpdate não altera o tipo do recurso."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

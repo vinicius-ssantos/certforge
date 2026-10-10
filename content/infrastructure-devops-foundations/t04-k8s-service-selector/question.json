@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um Service não encaminha tráfego para a API, embora seus três Pods estejam Running e Ready. Compare os trechos:\n\n```yaml\n# Pod\nmetadata:\n  labels:\n    app: api\n# Service\nspec:\n  selector:\n    app: api-v2\n```\n\nQual é a primeira causa a investigar?",
+  "explanation": "O selector usa app=api-v2 e os Pods têm app=api; eles não entram nos endpoints do Service.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O selector do Service não corresponde ao rótulo dos Pods.",
+      "correct": true,
+      "explanation": "O selector usa app=api-v2 e os Pods têm app=api; eles não entram nos endpoints do Service."
+    },
+    {
+      "key": "B",
+      "text": "O Service precisa obrigatoriamente ser do tipo LoadBalancer.",
+      "correct": false,
+      "explanation": "ClusterIP pode encaminhar tráfego interno normalmente."
+    },
+    {
+      "key": "C",
+      "text": "Todo Pod Running precisa usar hostNetwork.",
+      "correct": false,
+      "explanation": "hostNetwork não é requisito para Service."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes não aceita seletores por rótulo.",
+      "correct": false,
+      "explanation": "Services usam selectors por labels para associar Pods."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
