@@ -2145,6 +2145,12 @@ button.mock-nav-button.current {
   margin: 0;
   font-variant-numeric: tabular-nums;
 }
+/* While the next page is in flight the previous one stays on screen rather than unmounting. It
+ * is dimmed so it does not read as the answer to the search just typed; prefers-reduced-motion
+ * is irrelevant here because nothing moves. */
+.queue.stale {
+  opacity: 0.55;
+}
 
 .editorial-catalog .card > :last-child {
   margin-top: var(--s4);

@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Link, useSearchParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
@@ -51,6 +51,13 @@ export function QueuePage() {
   const questions = useQuery({
     queryKey: ["editorial", "questions", status, search, page],
     staleTime: 0, // statuses change under other people's hands; see QuestionPage
+    /*
+     * Each page and each search is its own query, so without this the table and the tab counts
+     * unmount on every pager click and every search, and the screen flashes to "Loading
+     * questions" with nothing under it. Keeping the previous page on screen while the next one
+     * arrives is the difference between paging through a list and watching it rebuild.
+     */
+    placeholderData: keepPreviousData,
     queryFn: () =>
       unwrap(
         api.GET("/api/admin/questions", {
@@ -176,7 +183,10 @@ export function QueuePage() {
         </EmptyState>
       ) : null}
       {visible && visible.length > 0 ? (
-        <ScrollableTable className="queue" label={tableCaption}>
+        <ScrollableTable
+          className={questions.isPlaceholderData ? "queue stale" : "queue"}
+          label={tableCaption}
+        >
           <caption className="visually-hidden">{tableCaption}</caption>
           <thead>
             <tr>
