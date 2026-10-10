@@ -241,7 +241,7 @@ class ContentPackImportIT {
           jdbc.queryForObject(
               "select count(*) from certforge.qb_question_revision r "
                   + "join certforge.qb_question q on q.id = r.question_id "
-                  + "where q.topic_id in (?, ?, ?) and r.status = 'TECHNICAL_REVIEW'",
+                  + "where r.topic_id in (?, ?, ?) and r.status = 'TECHNICAL_REVIEW'",
               Integer.class,
               UUID.fromString("a3000000-0000-4000-8000-000000000301"),
               UUID.fromString("a3000000-0000-4000-8000-000000000302"),
@@ -251,7 +251,7 @@ class ContentPackImportIT {
               jdbc.queryForObject(
                   "select count(*) from certforge.qb_question_revision r "
                       + "join certforge.qb_question q on q.id = r.question_id "
-                      + "where q.topic_id in (?, ?, ?) and r.status = 'PUBLISHED'",
+                      + "where r.topic_id in (?, ?, ?) and r.status = 'PUBLISHED'",
                   Integer.class,
                   UUID.fromString("a3000000-0000-4000-8000-000000000301"),
                   UUID.fromString("a3000000-0000-4000-8000-000000000302"),
