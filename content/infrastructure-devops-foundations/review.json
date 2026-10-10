@@ -35,6 +35,17 @@
       "sourceGitBlobSha": "75f7e5f0b7f4240e6cffad4f636bb7b3c6ffdba2",
       "scope": "User expressly approved wording and B answer for Docker images and containers question; no other question approval or publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t02-k8s-deployment-replicas": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t02-k8s-deployment-replicas/question.json",
+      "sourceGitBlobSha": "940a0a6948a63595c12745c9496117002b377c99",
+      "scope": "User expressly approved the wording, example and A answer for Kubernetes Deployment and ReplicaSet question; no other approval or publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
