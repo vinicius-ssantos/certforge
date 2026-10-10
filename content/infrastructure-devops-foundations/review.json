@@ -46,6 +46,28 @@
       "sourceGitBlobSha": "940a0a6948a63595c12745c9496117002b377c99",
       "scope": "User expressly approved the wording, example and A answer for Kubernetes Deployment and ReplicaSet question; no other approval or publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t03-k8s-readiness": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t03-k8s-readiness/question.json",
+      "sourceGitBlobSha": "2845a277f844122be169efccd18afc77c7264b7c",
+      "scope": "User expressly approved revised readiness probe wording/example and B answer; no publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t03-k8s-configmap-secret": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t03-k8s-configmap-secret/question.json",
+      "sourceGitBlobSha": "56095ac7d86ce2a4c74f2c385b42f9b0ab694a16",
+      "scope": "User expressly approved revised ConfigMap/Secret wording/example and C answer; no publication.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
