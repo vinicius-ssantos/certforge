@@ -211,6 +211,72 @@
       "sourceGitBlobSha": "c00499f6f6cc077ac60b9b764714cc974f72f7c8",
       "scope": "Owner explicitly approved current wording and answer key in joint editorial review; no API approval or publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-oomkilled": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-oomkilled/question.json",
+      "sourceGitBlobSha": "e53dab82f392772d85601b5371bfa9fd0a7f1ad5",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-k8s-rollout": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-k8s-rollout/question.json",
+      "sourceGitBlobSha": "254a0026aa018d07c0ee98cab505553b4a35cca7",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-job": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-job/question.json",
+      "sourceGitBlobSha": "6ce4de2788903828447ab289f9500f1e637be109",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-configmap-updates": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-configmap-updates/question.json",
+      "sourceGitBlobSha": "08ad97c77b4aca5a3562f1272f470967b4b711da",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-pdb": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-pdb/question.json",
+      "sourceGitBlobSha": "f2d0fa6d52bb1eb6a8c497525e41369e41960b45",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t06-k8s-network-policy": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t06-k8s-network-policy/question.json",
+      "sourceGitBlobSha": "bcb1426f21ff7b5ef9da41e0e08741b8094aca63",
+      "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
