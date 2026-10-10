@@ -863,6 +863,7 @@ export interface components {
             explanation: string;
             options: components["schemas"]["OptionAnswer"][];
             references: components["schemas"]["Reference"][];
+            verification: components["schemas"]["Verification"];
         };
         AttemptHistoryItem: {
             confidence: string;
@@ -1357,6 +1358,7 @@ export interface components {
             topicId?: string;
             /** @enum {string} */
             type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "GUIDED_RESPONSE";
+            verification?: components["schemas"]["VerificationRequest"];
         };
         RevisionView: {
             /** Format: uuid */
@@ -1457,6 +1459,14 @@ export interface components {
         SetMappingsRequest: {
             topics: components["schemas"]["MappingEntry"][];
         };
+        SourceFile: {
+            body: string;
+            path: string;
+        };
+        SourceFileRequest: {
+            body: string;
+            path: string;
+        };
         StartRequest: {
             /** Format: int32 */
             questionCount?: number;
@@ -1510,6 +1520,14 @@ export interface components {
             provider: string;
             slug: string;
             topics: components["schemas"]["TopicView"][];
+        };
+        Verification: {
+            files: components["schemas"]["SourceFile"][];
+            output: string;
+        };
+        VerificationRequest: {
+            files?: components["schemas"]["SourceFileRequest"][];
+            output?: string;
         };
     };
     responses: never;

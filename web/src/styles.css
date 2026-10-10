@@ -1329,6 +1329,47 @@ pre.code {
   color: var(--muted);
 }
 
+/*
+ * The evidence behind an answer: the programme the build ran and what it printed. A surface of
+ * its own, because it is a different kind of thing from the explanation above it — that is
+ * someone's reasoning, this is a recording.
+ */
+.verified {
+  margin: 0 0 var(--s5);
+  padding: var(--s4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.verified > h3 {
+  margin: 0 0 var(--s1);
+  font: 700 var(--t-xs) / 1.4 var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.verified > .hint {
+  margin-bottom: var(--s4);
+}
+
+/* The file's name, and the label over the output. Both name what the block beneath them is. */
+.verified-path {
+  margin: 0 0 var(--s1);
+  font-size: var(--t-xs);
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.verified pre.code {
+  margin-bottom: var(--s4);
+}
+
+.verified > :last-child {
+  margin-bottom: 0;
+}
+
 .session-actions {
   margin-top: var(--s6);
   border-top: 1px solid var(--border);

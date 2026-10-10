@@ -167,9 +167,12 @@
               "$ref" : "#/components/schemas/Reference"
             },
             "type" : "array"
+          },
+          "verification" : {
+            "$ref" : "#/components/schemas/Verification"
           }
         },
-        "required" : [ "correctOptions", "explanation", "options", "references" ],
+        "required" : [ "correctOptions", "explanation", "options", "references", "verification" ],
         "type" : "object"
       },
       "AttemptHistoryItem" : {
@@ -1611,6 +1614,9 @@
           "type" : {
             "enum" : [ "SINGLE_CHOICE", "MULTIPLE_CHOICE", "GUIDED_RESPONSE" ],
             "type" : "string"
+          },
+          "verification" : {
+            "$ref" : "#/components/schemas/VerificationRequest"
           }
         },
         "required" : [ "type" ],
@@ -1870,6 +1876,34 @@
         "required" : [ "topics" ],
         "type" : "object"
       },
+      "SourceFile" : {
+        "properties" : {
+          "body" : {
+            "type" : "string"
+          },
+          "path" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "body", "path" ],
+        "type" : "object"
+      },
+      "SourceFileRequest" : {
+        "properties" : {
+          "body" : {
+            "maxLength" : 50000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "path" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "body", "path" ],
+        "type" : "object"
+      },
       "StartRequest" : {
         "properties" : {
           "questionCount" : {
@@ -2010,6 +2044,39 @@
           }
         },
         "required" : [ "certificationName", "examVersion", "id", "kind", "name", "provider", "slug", "topics" ],
+        "type" : "object"
+      },
+      "Verification" : {
+        "properties" : {
+          "files" : {
+            "items" : {
+              "$ref" : "#/components/schemas/SourceFile"
+            },
+            "type" : "array"
+          },
+          "output" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "files", "output" ],
+        "type" : "object"
+      },
+      "VerificationRequest" : {
+        "properties" : {
+          "files" : {
+            "items" : {
+              "$ref" : "#/components/schemas/SourceFileRequest"
+            },
+            "maxItems" : 25,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "output" : {
+            "maxLength" : 20000,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
         "type" : "object"
       }
     },

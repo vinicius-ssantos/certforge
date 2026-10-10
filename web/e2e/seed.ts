@@ -33,6 +33,24 @@ function fixture(number: number) {
       { key: "D", text: "Another wrong option", correct: false, explanation: "Fixture option D." },
     ],
     references: [{ title: "Java SE 21 documentation", url: "https://docs.oracle.com/en/java/javase/21/" }],
+    // The evidence behind the answer, so the privacy checks have something real to catch leaking
+    // and the feedback screen has something real to show. The output is a phrase that appears
+    // nowhere else, which is what makes a leak identifiable.
+    verification: {
+      files: [
+        {
+          path: "Main.java",
+          body: [
+            "class Main {",
+            "  public static void main(String[] args) {",
+            '    System.out.println("fixtureVerifiedOutput=A");',
+            "  }",
+            "}",
+          ].join("\n"),
+        },
+      ],
+      output: "fixtureVerifiedOutput=A",
+    },
   };
 }
 

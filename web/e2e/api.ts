@@ -81,6 +81,7 @@ interface QuestionContent {
   explanation: string;
   options: { key: string; text: string; correct: boolean; explanation: string }[];
   references: { title: string; url: string }[];
+  verification?: { files: { path: string; body: string }[]; output: string };
 }
 
 /** A complete single-choice question, clearly labelled as test data. */
@@ -98,6 +99,23 @@ export function testQuestion(topicId: string, prompt: string): QuestionContent {
       { key: "B", text: "A wrong option", correct: false, explanation: "Wrong on purpose." },
     ],
     references: [{ title: "Java SE 21 documentation", url: "https://docs.oracle.com/en/java/javase/21/" }],
+    // Evidence, so the privacy checks have something real to catch leaking. Its output is a
+    // phrase that appears nowhere else, which is what makes a leak identifiable.
+    verification: {
+      files: [
+        {
+          path: "Main.java",
+          body: [
+            "class Main {",
+            "  public static void main(String[] args) {",
+            '    System.out.println("fixtureVerifiedOutput=A");',
+            "  }",
+            "}",
+          ].join("\n"),
+        },
+      ],
+      output: "fixtureVerifiedOutput=A",
+    },
   };
 }
 

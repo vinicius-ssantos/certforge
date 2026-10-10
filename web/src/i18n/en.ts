@@ -192,6 +192,15 @@ export const en = {
     correctAnswer: "Correct answer.",
     incorrectAnswer: "Incorrect answer.",
     explanation: "Explanation",
+    /**
+     * The evidence behind the answer. Headed as what it is — a recording the build made — rather
+     * than as something happening now, because a learner shown code and output could reasonably
+     * assume the one produced the other on this screen.
+     */
+    verifiedHeading: "What the build ran, and what it printed",
+    verifiedNote:
+      "This programme is compiled and run when the question pack is built, and its output is recorded. Nothing runs here.",
+    verifiedOutput: "Output",
     readMore: "Read more",
     referenceLink: (title: string) => `${title} (opens in a new tab)`,
   },

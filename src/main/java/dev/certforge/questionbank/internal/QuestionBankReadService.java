@@ -133,6 +133,13 @@ class QuestionBankReadService implements QuestionBank {
             .toList(),
         content.references().stream()
             .map(r -> new RevisionEvidence.Reference(r.title(), r.url()))
-            .toList());
+            .toList(),
+        content.verification() == null
+            ? null
+            : new RevisionEvidence.Verification(
+                content.verification().files().stream()
+                    .map(f -> new RevisionEvidence.SourceFile(f.path(), f.body()))
+                    .toList(),
+                content.verification().output()));
   }
 }

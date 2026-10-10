@@ -13,8 +13,23 @@ import { TOPIC_NAME } from "./seed";
  * same phrases must then appear after an accepted answer, which keeps these checks from passing
  * only because nothing was looked at.
  */
-const ANSWER_PHRASES = ["Expected by the test.", "Fixture option", "the expected options are marked correct"];
-const ANSWER_KEYS = ["correct", "correctOptions", "explanation", "references", "answer", "difficultyRationale"];
+const ANSWER_PHRASES = [
+  "Expected by the test.",
+  "Fixture option",
+  "the expected options are marked correct",
+  // The verification programme's recorded output. For many questions in the real pack the output
+  // simply is the answer, so it leaks exactly as badly as the key does.
+  "fixtureVerifiedOutput",
+];
+const ANSWER_KEYS = [
+  "correct",
+  "correctOptions",
+  "explanation",
+  "references",
+  "answer",
+  "difficultyRationale",
+  "verification",
+];
 
 interface Seen {
   url: string;
@@ -111,8 +126,15 @@ test("nothing reveals an answer before it is accepted, and everything does after
   await page.getByLabel(/Medium/).check();
   await page.getByRole("button", { name: "Submit answer" }).click();
   await expect(page.getByRole("heading", { level: 2, name: /^(Correct|Not quite)$/ })).toBeVisible();
-  const after = seen.filter((entry) => entry.url.includes("/attempt") && entry.text.includes("Expected by the test."));
-  expect(after.length).toBeGreaterThan(0);
+  // Every phrase, not one of them: a phrase that never arrives at all would make its absence
+  // before the answer prove nothing, and that is exactly how the verification evidence slipped
+  // through as a vacuous check when it was first added here.
+  for (const phrase of ANSWER_PHRASES) {
+    const after = seen.filter(
+      (entry) => entry.url.includes("/attempt") && entry.text.includes(phrase),
+    );
+    expect(after.length, `"${phrase}" must arrive once the answer is accepted`).toBeGreaterThan(0);
+  }
 });
 
 test("the built app carries no secrets, no source maps and no token storage", async ({ page, request }) => {

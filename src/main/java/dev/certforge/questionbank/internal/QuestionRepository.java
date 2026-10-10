@@ -36,7 +36,8 @@ class QuestionRepository {
       " where revision_id = :revisionId order by position";
   private static final String SELECT_REVISION =
       "select id, question_id, revision_number, status, question_type, topic_id, java_release,"
-          + " seniority, difficulty, difficulty_rationale, prompt, explanation, author_id,"
+          + " seniority, difficulty, difficulty_rationale, prompt, explanation,"
+          + " verification_output, author_id,"
           + " track_version_id,"
           + " created_at, submitted_at, published_at, published_by, deprecated_at"
           + " from certforge.qb_question_revision";
@@ -68,10 +69,10 @@ class QuestionRepository {
             "insert into certforge.qb_question_revision (id, question_id, revision_number,"
                 + " question_type, topic_id, java_release, seniority, difficulty,"
                 + " difficulty_rationale,"
-                + " prompt, explanation, author_id)"
+                + " prompt, explanation, verification_output, author_id)"
                 + " values (:id, :questionId, :number, :type, :topic, :release, :seniority,"
                 + " :difficulty,"
-                + " :rationale, :prompt, :explanation, :author)")
+                + " :rationale, :prompt, :explanation, :verificationOutput, :author)")
         .param(ID, id)
         .param(QUESTION_ID, questionId)
         .param("number", number)
@@ -83,6 +84,7 @@ class QuestionRepository {
         .param("rationale", c.difficultyRationale())
         .param(PROMPT, c.prompt())
         .param(EXPLANATION, c.explanation())
+        .param("verificationOutput", c.verification() == null ? null : c.verification().output())
         .param("author", authorId)
         .update();
     replaceChildren(id, c);
@@ -94,7 +96,8 @@ class QuestionRepository {
             "update certforge.qb_question_revision set question_type = :type, topic_id = :topic,"
                 + " java_release = :release, seniority = :seniority, difficulty = :difficulty,"
                 + " difficulty_rationale = :rationale, prompt = :prompt,"
-                + " explanation = :explanation where id = :id")
+                + " explanation = :explanation, verification_output = :verificationOutput"
+                + " where id = :id")
         .param(ID, id)
         .param("type", c.type().name())
         .param("topic", c.topicId())
@@ -104,8 +107,32 @@ class QuestionRepository {
         .param("rationale", c.difficultyRationale())
         .param(PROMPT, c.prompt())
         .param(EXPLANATION, c.explanation())
+        .param("verificationOutput", c.verification() == null ? null : c.verification().output())
         .update();
     replaceChildren(id, c);
+  }
+
+  /**
+   * The sources the build compiles for this question, in the order the pack lists them so the entry
+   * point stays first. Recorded as evidence; nothing here is ever executed.
+   */
+  private void writeVerificationFiles(UUID revisionId, RevisionContent c) {
+    if (c.verification() == null) {
+      return;
+    }
+    int filePosition = 0;
+    for (RevisionContent.SourceFile source : c.verification().files()) {
+      jdbc.sql(
+              "insert into certforge.qb_revision_verification_file"
+                  + " (revision_id, position, path, body)"
+                  + " values (:revisionId, :position, :path, :body)")
+          .param(REVISION_ID, revisionId)
+          .param(POSITION, filePosition)
+          .param("path", source.path())
+          .param("body", source.body())
+          .update();
+      filePosition++;
+    }
   }
 
   private void replaceChildren(UUID revisionId, RevisionContent c) {
@@ -127,6 +154,10 @@ class QuestionRepository {
     jdbc.sql("delete from certforge.qb_guided_response where revision_id = :revisionId")
         .param(REVISION_ID, revisionId)
         .update();
+    jdbc.sql("delete from certforge.qb_revision_verification_file where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
+    writeVerificationFiles(revisionId, c);
     int position = 0;
     for (RevisionContent.Option option : c.options()) {
       jdbc.sql(
@@ -404,6 +435,21 @@ class QuestionRepository {
     return mapRevision(rs, id, options(id), guidedResponse(id), references(id));
   }
 
+  /**
+   * The sources the build compiled for this revision, in the order the pack listed them. Read with
+   * the revision because a learner who has answered is shown them beside the output, and a reviewer
+   * weighs them before approving.
+   */
+  private List<RevisionContent.SourceFile> verificationFiles(UUID revisionId) {
+    return jdbc.sql(
+            "select path, body from certforge.qb_revision_verification_file"
+                + " where revision_id = :revisionId order by position")
+        .param(REVISION_ID, revisionId)
+        .query(
+            (rs, n) -> new RevisionContent.SourceFile(rs.getString("path"), rs.getString("body")))
+        .list();
+  }
+
   private Revision mapRevision(
       ResultSet rs,
       UUID id,
@@ -414,6 +460,14 @@ class QuestionRepository {
     String difficulty = rs.getString("difficulty");
     Integer release = (Integer) rs.getObject("java_release");
     String seniority = rs.getString("seniority");
+    String verificationOutput = rs.getString("verification_output");
+    List<RevisionContent.SourceFile> verificationFiles = verificationFiles(id);
+    // Absent rather than empty when there is nothing: a question with no programme has no
+    // evidence, which is different from evidence that is blank.
+    RevisionContent.Verification verification =
+        verificationOutput == null && verificationFiles.isEmpty()
+            ? null
+            : new RevisionContent.Verification(verificationFiles, verificationOutput);
     RevisionContent content =
         new RevisionContent(
             QuestionType.valueOf(rs.getString("question_type")),
@@ -426,7 +480,8 @@ class QuestionRepository {
             rs.getString(EXPLANATION),
             options,
             guidedResponse,
-            references);
+            references,
+            verification);
     return new Revision(
         id,
         rs.getObject("question_id", UUID.class),
