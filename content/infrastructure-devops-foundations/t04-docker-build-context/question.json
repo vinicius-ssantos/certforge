@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000301",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
-  "prompt": "Em um projeto, o comando `docker build -f docker/Dockerfile .` executa com o contexto de build no diretório raiz do projeto. O Dockerfile contém `COPY ../segredos.txt /app/segredos.txt`. O arquivo está fora do contexto enviado ao builder. O que ocorre?",
+  "prompt": "Um projeto executa `docker build -f docker/Dockerfile .`, usando a raiz do projeto como contexto. O Dockerfile contém `COPY ../segredos.txt /app/segredos.txt`. O único arquivo `segredos.txt` está no diretório pai, fora do contexto, e não existe um arquivo com esse nome dentro do contexto. O que ocorre com essa instrução?",
   "explanation": "O contexto limita quais arquivos locais podem ser referenciados por COPY.",
   "options": [
     {
@@ -14,7 +14,7 @@
     },
     {
       "key": "B",
-      "text": "O `COPY` não pode acessar o arquivo fora do contexto de build e a operação falha.",
+      "text": "O build não consegue copiar o arquivo externo ao contexto e a instrução falha.",
       "correct": true,
       "explanation": "O contexto limita quais arquivos locais podem ser referenciados por COPY."
     },
