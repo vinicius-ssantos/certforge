@@ -112,6 +112,39 @@
       "sourceGitBlobSha": "6e8499fe6aa7609851218939680b55dc5f4b40a4",
       "scope": "User expressly approved current wording and answer key in joint editorial review; no API editorial approval or publication.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-docker-publish-port": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-docker-publish-port/question.json",
+      "sourceGitBlobSha": "b63e5693614035112fcf4ebf26f1cf1cdbfb9cee",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-compose-service-dns": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-compose-service-dns/question.json",
+      "sourceGitBlobSha": "e934b2abb0f0ec00fd5c355d32d9029e53ada5a3",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t05-dockerignore": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-10",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t05-dockerignore/question.json",
+      "sourceGitBlobSha": "cd82e1cacadc459c13aa73eb9983b16f9f267efb",
+      "scope": "Owner explicitly approved the current question wording and answer key in joint editorial review; does not confer API editorial approval or permission to publish.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
