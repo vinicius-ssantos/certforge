@@ -1,6 +1,6 @@
 # Multi-track content pack contract — implementation design (#166)
 
-Status: PROPOSED. This is a design contract, **not yet implemented**. Legacy `content/java-se-21` continues unchanged.
+Status: **PARTIALLY IMPLEMENTED**. The manifest parser, isolated manifest-backed reader and `reviewDigestV2` are implemented; importer/review-packet dispatch and evidence adapters remain open under #166. Legacy `content/java-se-21` continues unchanged.
 
 ## Problem
 
@@ -28,7 +28,18 @@ Certification packs instead use `trackKind: "CERTIFICATION"` and a `certificatio
 
 ## Question schema
 
-Reuse existing question `prompt`, `options`, `type`, `difficulty`, `difficultyRationale`, `explanation`, `references`, `topicId`; add `objectiveKeys` (certification only) and `evidence` metadata. For non-Java tracks `javaRelease` must not be required or silently defaulted. Exactly one correct option for single-choice; multi-choice needs explicit cardinality; each distractor receives an explanation.
+Reuse existing question `prompt`, `type`, `difficulty`, `difficultyRationale`, `references` and `topicId`; add `objectiveKeys` (certification only) and `evidence` metadata. Manifest-backed packs do not reuse the legacy Java SE 21 `javaRelease` field.
+
+Objective questions retain `options` and `explanation`. Exactly one option is correct for single-choice; multi-choice needs explicit cardinality; each distractor receives an explanation.
+
+`INTERVIEW` questions additionally require `seniority: PLENO | SENIOR`. They may use `GUIDED_RESPONSE`, which deliberately has no objective `options` or `explanation`. Instead it carries a reviewed `guidedResponse` object with:
+
+- `referenceAnswer`;
+- `expectedConcepts[]` with explicit `required` flags and optional per-concept explanations;
+- `commonMistakes[]`;
+- `followUps[]`.
+
+A guided response is valid only on an `INTERVIEW` pack and must contain at least one required expected concept. Its criteria are review evidence, never a binary correctness key.
 
 ## Evidence adapters
 
@@ -45,7 +56,7 @@ Every adapter returns an evidence result with tool/version, fixture digest, stat
 
 1. `readPack` resolves the manifest; **no manifest** selects the current Java 21 legacy loader verbatim.
 2. Existing Java 21 semantic `reviewDigest` and `verifiedDigest` must produce exactly the same values; include golden tests against current `review.json`.
-3. New packs use a versioned `reviewDigestV2` including track/version, objective keys and evidence contract, without changing the existing algorithm.
+3. New packs use a versioned `reviewDigestV2` including track/version, language, source policy, evidence profile, objective keys where applicable, interview seniority and all reviewed guided-response criteria, without changing the legacy Java algorithm.
 4. Import uses stable IDs; dry-run validates catalog version and references; repeated import is idempotent.
 5. Import creates only DRAFT or TECHNICAL_REVIEW revisions. Publication requires a human reviewer distinct from author and explicit publisher authorization.
 6. Recheck digest on every edit, and refuse publication when source policy, exam snapshot or verified output changes.

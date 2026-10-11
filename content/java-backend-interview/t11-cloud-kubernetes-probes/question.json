@@ -1,0 +1,32 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "seniority": "PLENO",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir startup, readiness e liveness pela consequência operacional e perceber que uma dependência externa no liveness pode amplificar uma falha.",
+  "prompt": "Uma aplicação Java no Kubernetes usa o mesmo endpoint de health para startup, readiness e liveness. Esse endpoint consulta o banco. Quando o banco fica lento por alguns minutos, os pods começam a reiniciar e a recuperação piora. Como você redesenharia as probes e qual é a responsabilidade de cada uma?",
+  "guidedResponse": {
+    "referenceAnswer": "As probes respondem perguntas diferentes. Startup probe protege aplicações que precisam de tempo para iniciar; enquanto ela não passa, liveness e readiness não precisam provocar decisões prematuras. Readiness decide se o pod deve receber tráfego: quando ele não consegue atender requisições de forma útil, pode ficar temporariamente fora dos endpoints sem ser reiniciado. Liveness deve indicar que o processo entrou em um estado do qual não consegue se recuperar sozinho; falhar nela provoca restart. Colocar uma dependência externa como o banco no liveness pode reiniciar pods saudáveis durante uma indisponibilidade compartilhada e transformar uma falha de dependência em restart storm. Eu manteria liveness focada no estado interno recuperável do processo, usaria readiness para capacidade de servir quando a dependência for realmente obrigatória e configuraria thresholds/timeouts de acordo com o comportamento real da aplicação.",
+    "expectedConcepts": [
+      {"text": "Startup probe protege a janela de inicialização antes das demais decisões", "required": true, "explanation": "É útil para aplicações lentas para iniciar sem inflar artificialmente o liveness."},
+      {"text": "Readiness controla participação no tráfego e não reinicia o container", "required": true, "explanation": "Falha de readiness remove o pod dos endpoints enquanto ele não está pronto para servir."},
+      {"text": "Liveness sinaliza necessidade de restart por falha interna não recuperável", "required": true, "explanation": "Seu efeito operacional é reiniciar o container."},
+      {"text": "Dependência externa no liveness pode causar cascata/restart storm", "required": true, "explanation": "Uma falha comum do banco pode provocar restart de processos que estavam saudáveis."},
+      {"text": "Thresholds e timeouts precisam refletir startup e recuperação reais", "required": false, "explanation": "Probes agressivas demais podem virar a própria fonte da indisponibilidade."}
+    ],
+    "commonMistakes": [
+      "Dizer que readiness e liveness fazem a mesma coisa.",
+      "Colocar todas as dependências externas no liveness por padrão.",
+      "Aumentar indefinidamente os thresholds sem corrigir a semântica da probe."
+    ],
+    "followUps": [
+      "Quando a indisponibilidade do banco deveria afetar readiness?",
+      "Como você investigaria um CrashLoopBackOff causado por probes?"
+    ]
+  },
+  "references": [
+    {"title": "Kubernetes — Liveness, Readiness, and Startup Probes", "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"},
+    {"title": "Kubernetes — Configure Liveness, Readiness and Startup Probes", "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

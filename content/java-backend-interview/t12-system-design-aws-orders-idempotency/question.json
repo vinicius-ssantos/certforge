@@ -1,0 +1,38 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige compor idempotência, transação local, mensageria at-least-once, observabilidade, segurança e trade-offs de consistência em uma arquitetura coerente.",
+  "prompt": "Projete o fluxo de criação e pagamento de pedidos de um backend Java na AWS. O cliente pode repetir a mesma requisição por timeout, o pedido precisa ser persistido antes do processamento assíncrono, workers podem receber mensagens duplicadas e toda mudança financeira precisa ser auditável e rastreável. Como você desenharia o fluxo e quais garantias você não prometeria?",
+  "guidedResponse": {
+    "referenceAnswer": "Eu começaria definindo uma chave de idempotência/identidade do comando na borda e uma constraint ou registro durável que impeça criar dois pedidos para a mesma operação lógica. A criação do pedido e a intenção de publicar o evento precisam ficar consistentes; uma forma comum é uma transação local no banco que grava o estado e um outbox, seguida por publicação assíncrona. SQS Standard oferece alta disponibilidade e pelo menos uma entrega, portanto consumidores precisam continuar idempotentes e usar uma identidade estável ao aplicar efeitos. Para pagamentos, cada transição relevante deve manter trilha de auditoria/correlation id sem registrar segredos, e chamadas externas precisam de idempotência/reconciliação próprias. Observabilidade deve ligar request, pedido, mensagem e worker por ids, com métricas de backlog, falha, retry e DLQ. IAM segue least privilege. Eu não prometeria exatamente uma execução fim a fim entre HTTP, RDS, SQS e um provedor externo; a arquitetura busca efeitos de negócio idempotentes, recuperação e consistência explícita, não uma transação ACID global.",
+    "expectedConcepts": [
+      {"text": "Idempotency key/identidade estável na entrada com garantia durável de unicidade", "required": true, "explanation": "Retries do cliente não podem criar dois efeitos lógicos."},
+      {"text": "Persistência do pedido e intenção de publicação precisam evitar a dual-write inconsistente", "required": true, "explanation": "Outbox ou mecanismo equivalente conecta a transação local à entrega assíncrona recuperável."},
+      {"text": "Consumidores de SQS Standard devem tolerar redelivery e manter efeitos idempotentes", "required": true, "explanation": "A fila pode entregar mais de uma cópia de uma mensagem."},
+      {"text": "Auditoria e trace/correlation ids devem conectar as mudanças sem expor segredos", "required": true, "explanation": "Rastreabilidade é requisito de domínio e operacional, não apenas logging genérico."},
+      {"text": "IAM deve aplicar least privilege por componente", "required": true, "explanation": "Cada serviço/worker recebe somente ações e recursos necessários."},
+      {"text": "Não existe promessa automática de exactly-once/ACID global entre banco, fila e sistema externo", "required": true, "explanation": "A solução precisa declarar as fronteiras de consistência e mecanismos de recuperação."},
+      {"text": "Métricas, DLQ, alarms e reconciliação sustentam operação e recuperação", "required": false, "explanation": "Falhas assíncronas precisam ser observáveis e tratáveis depois do request original."}
+    ],
+    "commonMistakes": [
+      "Confiar que SQS Standard nunca entregará duplicatas.",
+      "Fazer write no banco e publish na fila sem estratégia para falha entre as duas operações.",
+      "Chamar a arquitetura de exactly-once fim a fim sem delimitar a garantia.",
+      "Usar uma role ampla compartilhada por todos os componentes."
+    ],
+    "followUps": [
+      "Como você implementaria o outbox e garantiria que registros antigos fossem republicados?",
+      "Onde você armazenaria a trilha de auditoria e quais dados evitaria registrar?",
+      "O que mudaria se a ordem estrita de eventos por pedido fosse obrigatória?"
+    ]
+  },
+  "references": [
+    {"title": "Amazon SQS — Standard queues", "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html"},
+    {"title": "AWS Builders' Library — Making retries safe with idempotent APIs", "url": "https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-APIs/"},
+    {"title": "AWS IAM — Security best practices", "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"},
+    {"title": "AWS Well-Architected — Reliability design principles", "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/design-principles.html"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

@@ -1,0 +1,30 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "seniority": "PLENO",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige diagnosticar N+1 a partir do padrão de acesso e escolher uma estratégia de fetch adequada ao caso de uso sem recorrer a EAGER global como correção automática.",
+  "prompt": "Um endpoint carrega 100 pedidos e depois acessa o cliente e os itens de cada pedido durante a montagem do DTO. Em produção aparecem centenas de consultas SQL para uma única requisição. Como você investigaria esse N+1 e quais opções de correção consideraria sem simplesmente marcar todas as associações como EAGER?",
+  "guidedResponse": {
+    "referenceAnswer": "Primeiro eu confirmaria o padrão com logs/estatísticas SQL ou profiling: uma consulta para a lista seguida por consultas repetidas ao acessar associações é o sinal típico. A correção deve partir dos dados que aquele caso de uso realmente precisa. Dependendo do formato, pode ser um fetch join, entity graph, projeção/DTO query ou batching, sempre verificando cardinalidade, duplicação de linhas, paginação e volume carregado. Tornar tudo EAGER globalmente costuma trocar N+1 por over-fetching e pode criar consultas grandes ou imprevisíveis em outros casos. Também separaria a fronteira transacional do problema: LazyInitializationException e N+1 são problemas diferentes. Depois da mudança, mediria novamente número de queries e volume/result set.",
+    "expectedConcepts": [
+      {"text": "Confirmar N+1 observando uma consulta principal seguida por consultas repetitivas de associações", "required": true, "explanation": "Diagnóstico deve ser baseado no SQL/telemetria e no padrão de acesso."},
+      {"text": "Escolher o plano de fetch por caso de uso", "required": true, "explanation": "Fetch join, entity graph, projeção ou batching são ferramentas com trade-offs diferentes."},
+      {"text": "EAGER global não é uma correção universal e pode causar over-fetching", "required": true, "explanation": "A estratégia deve evitar tanto consultas repetidas quanto carregamento desnecessário."},
+      {"text": "Revalidar quantidade de queries, cardinalidade e volume depois da mudança", "required": false, "explanation": "Uma alteração de fetch pode introduzir duplicação, paginação problemática ou outra regressão."}
+    ],
+    "commonMistakes": [
+      "Resolver automaticamente marcando todas as relações como EAGER.",
+      "Confundir N+1 com LazyInitializationException.",
+      "Adicionar cache antes de entender por que as consultas estão sendo geradas."
+    ],
+    "followUps": [
+      "Que cuidado você teria com fetch join de coleção e paginação?",
+      "Quando uma projeção específica para leitura seria melhor que carregar o aggregate inteiro?"
+    ]
+  },
+  "references": [
+    {"title": "Hibernate ORM — Introduction (fetching and N+1)", "url": "https://docs.hibernate.org/stable/orm/introduction/html_single/"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

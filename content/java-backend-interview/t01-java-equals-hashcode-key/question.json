@@ -1,0 +1,31 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "seniority": "PLENO",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige relacionar o contrato de igualdade do Java ao comportamento de uma coleção hash e perceber o risco de estado mutável, não apenas recitar equals/hashCode.",
+  "prompt": "Você criou um value object `Money` e pretende usá-lo como chave de um `HashMap`. A classe sobrescreve `equals()`, mas não `hashCode()`. O que pode dar errado? Como você projetaria esse tipo para que ele seja uma chave segura e previsível?",
+  "guidedResponse": {
+    "referenceAnswer": "Se dois objetos são iguais segundo `equals()`, o contrato de `hashCode()` exige que produzam o mesmo hash. Sobrescrever apenas `equals()` pode fazer duas instâncias semanticamente iguais serem tratadas de modo inconsistente por uma coleção hash. `equals()` e `hashCode()` devem derivar do mesmo estado lógico. Além disso, os campos que participam dessa identidade devem permanecer estáveis enquanto o objeto estiver armazenado como chave; mudar esse estado depois de `put()` pode tornar a entrada difícil de localizar. Para um value object como `Money`, imutabilidade costuma ser uma escolha natural. Colisões de hash continuam possíveis: hash igual não implica igualdade.",
+    "expectedConcepts": [
+      {"text": "Objetos iguais por equals devem produzir o mesmo hashCode", "required": true, "explanation": "É a condição do contrato de Object relevante para coleções baseadas em hash."},
+      {"text": "equals() e hashCode() devem usar o mesmo estado lógico", "required": true, "explanation": "Critérios incompatíveis quebram a consistência entre igualdade e hashing."},
+      {"text": "O estado que participa da identidade deve permanecer estável enquanto o objeto é chave", "required": true, "explanation": "Mudar campos usados no hash depois da inserção pode impedir a localização normal da chave."},
+      {"text": "Colisão de hash não significa igualdade", "required": false, "explanation": "Chaves diferentes podem compartilhar um hash e ainda precisam ser diferenciadas."}
+    ],
+    "commonMistakes": [
+      "Dizer que HashMap compara somente o número de hash.",
+      "Afirmar que objetos diferentes precisam obrigatoriamente ter hashes diferentes.",
+      "Ignorar mutabilidade de campos usados por equals()/hashCode() depois do put()."
+    ],
+    "followUps": [
+      "O que muda se Money for implementado como record?",
+      "Por que usar apenas um identificador técnico em equals/hashCode pode ou não fazer sentido para uma entidade JPA?"
+    ]
+  },
+  "references": [
+    {"title": "Object.equals/hashCode — Java SE 25", "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html"},
+    {"title": "HashMap — Java SE 25", "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/HashMap.html"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

@@ -1,0 +1,30 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "seniority": "PLENO",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige escolher a estrutura pela operação dominante e conhecer as propriedades de custo e ordenação de uma fila de prioridade.",
+  "prompt": "Você precisa implementar um scheduler em memória que recebe tarefas com prioridades diferentes e deve retirar repetidamente a tarefa de maior prioridade. Por que uma fila de prioridade é uma candidata melhor do que manter uma lista totalmente ordenada a cada inserção? Quais limitações de `PriorityQueue` em Java você explicaria antes de adotá-la?",
+  "guidedResponse": {
+    "referenceAnswer": "Uma fila de prioridade mantém o elemento de maior prioridade lógica na cabeça segundo seu comparador sem manter uma ordenação total observável de todos os elementos. Em Java, `PriorityQueue` oferece `offer` e `poll` em O(log n) e `peek` em O(1), o que combina bem com inserir e retirar repetidamente o próximo trabalho. Ordenar uma lista inteira após cada inserção tende a fazer trabalho desnecessário quando só o próximo elemento importa. A implementação Java não é thread-safe, não aceita `null`, e percorrer seu iterator não garante ordem de prioridade. Remover ou localizar um elemento arbitrário é O(n). O comparador também precisa definir a prioridade e o desempate de forma coerente com o domínio.",
+    "expectedConcepts": [
+      {"text": "A estrutura deve ser escolhida pelas operações dominantes, não apenas pelo nome da coleção", "required": true, "explanation": "Aqui predominam inserção e extração do próximo elemento."},
+      {"text": "PriorityQueue oferece offer/poll O(log n) e peek O(1)", "required": true, "explanation": "Essas garantias documentadas justificam a escolha para o padrão descrito."},
+      {"text": "O iterator de PriorityQueue não percorre necessariamente em ordem de prioridade", "required": true, "explanation": "A heap mantém apenas as propriedades necessárias para a cabeça, não uma lista totalmente ordenada."},
+      {"text": "Remoção/consulta arbitrária pode custar O(n)", "required": false, "explanation": "Isso pode mudar a escolha se cancelamentos por id forem frequentes."}
+    ],
+    "commonMistakes": [
+      "Afirmar que todos os elementos de PriorityQueue ficam iteráveis em ordem.",
+      "Dizer que toda operação da fila de prioridade é O(log n).",
+      "Ignorar que a implementação Java não é thread-safe."
+    ],
+    "followUps": [
+      "O que mudaria se o scheduler precisasse cancelar tarefas por id com muita frequência?",
+      "Como você trataria prioridades iguais e starvation?"
+    ]
+  },
+  "references": [
+    {"title": "PriorityQueue — Java SE 25", "url": "https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/PriorityQueue.html"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}

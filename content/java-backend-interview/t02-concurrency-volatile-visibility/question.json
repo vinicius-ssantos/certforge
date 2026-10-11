@@ -1,0 +1,30 @@
+{
+  "type": "GUIDED_RESPONSE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "seniority": "SENIOR",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige distinguir visibilidade e ordenação do Java Memory Model de atomicidade e explicar happens-before, uma fonte comum de respostas superficiais sobre volatile.",
+  "prompt": "Dois threads compartilham `int value` e `volatile boolean ready`. O thread A executa `value = 42; ready = true;`. O thread B espera até observar `ready == true` e então lê `value`. Que garantia `volatile` fornece nesse caso? E por que transformar um `int counter` em `volatile` não torna `counter++` thread-safe?",
+  "guidedResponse": {
+    "referenceAnswer": "Uma escrita em uma variável `volatile` happens-before uma leitura posterior dessa mesma variável que observa a escrita. Assim, quando B observa `ready == true`, as ações anteriores em A, incluindo `value = 42`, tornam-se visíveis a B pela relação happens-before. A garantia principal aqui é de visibilidade e ordenação do padrão de publicação. Já `counter++` é uma operação composta de leitura, cálculo e escrita. Tornar o campo volatile não transforma essa sequência inteira em uma atualização atômica; dois threads podem ler o mesmo valor e perder uma atualização. Para incremento concorrente é necessário um mecanismo com a atomicidade apropriada, como sincronização ou uma classe atômica, conforme o caso.",
+    "expectedConcepts": [
+      {"text": "A escrita volatile e a leitura correspondente estabelecem uma relação happens-before", "required": true, "explanation": "Essa relação é a base formal da publicação de value através de ready."},
+      {"text": "As escritas anteriores a ready=true ficam visíveis ao consumidor que observa ready=true", "required": true, "explanation": "A transitividade do happens-before conecta a escrita comum em value à leitura posterior."},
+      {"text": "volatile não torna uma operação read-modify-write composta automaticamente atômica", "required": true, "explanation": "counter++ envolve múltiplas ações e pode sofrer lost update."},
+      {"text": "A alternativa depende do padrão de acesso, por exemplo synchronized ou tipos atômicos", "required": false, "explanation": "A escolha de coordenação deve seguir a semântica necessária."}
+    ],
+    "commonMistakes": [
+      "Dizer que volatile torna qualquer operação sobre a variável atômica.",
+      "Explicar somente como 'vai para a memória principal' sem falar de happens-before.",
+      "Concluir que value também precisa obrigatoriamente ser volatile nesse padrão específico de publicação."
+    ],
+    "followUps": [
+      "Como você implementaria um contador concorrente com alto volume de atualizações?",
+      "Quando synchronized é preferível a uma classe atômica?"
+    ]
+  },
+  "references": [
+    {"title": "JLS 17.4.5 — Happens-before Order", "url": "https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html#jls-17.4.5"}
+  ],
+  "evidence": {"type": "reference-backed"}
+}
