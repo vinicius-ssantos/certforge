@@ -8,6 +8,15 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Fixed
 
+- Two screens no longer hide a failed request. On the progress page a failed
+  `GET /api/review/misconceptions` looked exactly like having no misconceptions: the section
+  renders nothing when there is nothing to show, and it rendered nothing when it could not find
+  out either, so a learner with real confidently-wrong answers read a clean page as nothing to
+  worry about and the link to practise those questions was simply absent. At the end of a session,
+  "Practise this topic again" knew how to follow one conflict — someone else opened a session for
+  the topic, so join that one — and dropped every other failure, re-enabling the button and saying
+  nothing, including for a topic that has since lost its published questions. Both now say what
+  happened and keep the way out of the screen.
 - Paging the editorial queue could skip a question and serve another twice. The page query ordered
   by `created_at` alone, and a pack import inserts its revisions in one go, so rows sharing a
   timestamp had no defined order and Postgres was free to arrange them differently for the offset
