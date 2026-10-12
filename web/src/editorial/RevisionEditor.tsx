@@ -5,7 +5,8 @@ import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { Revision } from "../api/types";
 import { useTopics } from "../catalog/useTopics";
-import { useText } from "../i18n/useText";
+import { formatTime } from "../history/format";
+import { useLocale, useText } from "../i18n/useText";
 import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
 import {
@@ -57,6 +58,7 @@ function questionKey(id: string) {
  */
 export function RevisionEditor({ revision }: { revision?: Revision }) {
   const t = useText();
+  const { locale } = useLocale();
   const ed = t.editorial.editor;
   const types = typeLabels(t);
   const difficulties = difficultyLabels(t);
@@ -81,6 +83,11 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   const [problems, setProblems] = useState<Problem[]>([]);
   const [failure, setFailure] = useState<string | null>(null);
   const [violations, setViolations] = useState<string[] | null>(null);
+  /*
+   * The instant, not its rendering. Formatting at save time pinned the string to the browser's
+   * locale and to whatever language was chosen then, so a Portuguese editor on an English browser
+   * read "Salvo às 02:41 PM" and switching language afterwards left the old format standing.
+   */
   const [savedAt, setSavedAt] = useState<string | null>(null);
 
   // Leaving the page, by a link, the back button or closing the tab, must not silently lose work.
@@ -132,7 +139,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
       setBaseline(JSON.stringify(draft));
       queryClient.setQueryData(questionKey(saved.id), saved);
       void queryClient.invalidateQueries({ queryKey: ["editorial", "questions"] });
-      setSavedAt(new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
+      setSavedAt(new Date().toISOString());
       if (!send) {
         return { view: saved, sent: false };
       }
@@ -704,7 +711,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
             {ed.sendForReview}
           </button>
           <span role="status" className="muted">
-            {save.isPending ? ed.saving : savedAt ? ed.savedAt(savedAt) : ""}
+            {save.isPending ? ed.saving : savedAt ? ed.savedAt(formatTime(savedAt, locale)) : ""}
           </span>
         </div>
       </form>

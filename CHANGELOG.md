@@ -8,6 +8,12 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Fixed
 
+- The question editor's "Saved at" time follows the chosen language. It was the one date in the
+  app that did not: it went through `toLocaleTimeString` with no locale, which means the
+  browser's, so an editor working in Portuguese on an English browser read "Salvo às 02:41 PM" —
+  a twelve-hour clock inside a Portuguese sentence. It was also formatted once at save time and
+  kept as text, so switching language afterwards left the old format standing. The instant is
+  stored now and rendered with the chosen locale, which is what ADR 0012 asks of dates.
 - Two screens no longer hide a failed request. On the progress page a failed
   `GET /api/review/misconceptions` looked exactly like having no misconceptions: the section
   renders nothing when there is nothing to show, and it rendered nothing when it could not find
