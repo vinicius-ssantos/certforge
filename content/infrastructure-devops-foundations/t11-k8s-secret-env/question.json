@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Um Pod consome uma senha de um Secret por variável de ambiente. Depois que o Secret muda, o processo já em execução continua usando a senha anterior. Qual explicação é correta?",
+  "explanation": "Variáveis de ambiente recebidas de Secret não são atualizadas automaticamente em contêineres já iniciados.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Secrets são acessíveis apenas por Services tipo LoadBalancer.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "A atualização do Secret altera imediatamente variáveis dentro do processo.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "A API Kubernetes ignora todas as mudanças em Secret.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Variáveis de ambiente recebidas de Secret não são atualizadas automaticamente em contêineres já iniciados.",
+      "correct": true,
+      "explanation": "Variáveis de ambiente recebidas de Secret não são atualizadas automaticamente em contêineres já iniciados."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
