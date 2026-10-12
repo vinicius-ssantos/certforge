@@ -36,6 +36,14 @@ export const en = {
     history: "History",
     editorial: "Editorial",
     signOut: "Sign out",
+    signingOut: "Signing out…",
+    /*
+     * It says they are still signed in, because that is the fact and the reason it matters: on
+     * a shared machine someone who believes they signed out walks away from an open account.
+     * Clearing the session locally instead would show the sign-in page while the cookie stayed
+     * valid, which is the same lie told more convincingly.
+     */
+    signOutFailed: "Signing out did not work, and you are still signed in. Try again — and if it keeps failing, close this browser.",
   },
 
   states: {
@@ -78,6 +86,13 @@ export const en = {
     csrfInvalid: "The page's security token expired. Try again.",
     trackNotFound: "This track does not exist or is not available.",
     topicNotFound: "This topic does not exist or is not available.",
+    /*
+     * It names the mock rather than the question, because the question is not the problem and
+     * there is nothing wrong with it: the learner is being examined on it right now, and saying
+     * so is also the only honest explanation for why practice refused.
+     */
+    questionUnderExamination:
+      "This question is in a mock exam you have open. Finish or leave the mock, and you can practise it again.",
     insufficientContent:
       "There are not enough published questions on this topic yet. Try another topic.",
     activeSessionExists: "You already have a practice session in progress for this topic.",
@@ -637,8 +652,15 @@ export const en = {
       objectiveWording: "Objective wording for this exam",
       topicOutsideTrack: "Topic outside this track",
       publishingHeading: "Where content can be published",
-      notActive: (status: string) =>
-        `This track is ${status}, so no learner is given its questions.`,
+      /*
+       * One sentence per status rather than a status label dropped into a sentence. That
+       * composes in English and not in Portuguese, where "está rascunho" needs "em rascunho"
+       * while "está inativa" does not -- a grammar the label cannot carry.
+       */
+      notActiveDraft: "This track is still a draft, so no learner is given its questions.",
+      notActiveInactive: "This track is inactive, so no learner is given its questions.",
+      notActiveOther: (status: string) =>
+        `This track is "${status}", so no learner is given its questions.`,
       publishableStart: (topics: number) => `Questions can be published on the ${topics} topics mapped to `,
       publishableRelease: ", and they must be written for ",
       publishableEnd: ". A revision for another release is refused when it is published.",

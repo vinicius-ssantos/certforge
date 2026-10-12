@@ -334,6 +334,9 @@ function SessionEnded({ session }: { session: Session }) {
           </p>
           {attempts.isPending ? <Loading label={t.session.countingCorrect} /> : null}
           {attempts.isError ? <ErrorState error={attempts.error} onRetry={() => void attempts.refetch()} /> : null}
+          {/* Everything except the conflict it follows: without this, a 500 or a topic that has
+              since lost its published questions re-enabled the button and said nothing. */}
+          {again.isError && !isActiveSession(again.error) ? <ErrorState error={again.error} /> : null}
           <div className="button-row">
             <button type="button" disabled={again.isPending} onClick={() => again.mutate()}>
               {t.session.practiseAgain}

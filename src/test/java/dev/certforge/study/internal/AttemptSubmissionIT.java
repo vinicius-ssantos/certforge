@@ -13,6 +13,7 @@ import com.jayway.jsonpath.JsonPath;
 import dev.certforge.support.EditorialFixtures;
 import dev.certforge.support.EditorialFixtures.Account;
 import dev.certforge.support.EditorialFixtures.Published;
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -42,6 +43,8 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
@@ -102,6 +105,7 @@ class AttemptSubmissionIT {
   @Autowired MockMvc mvc;
   @Autowired JdbcTemplate jdbc;
   @Autowired MutableClock clock;
+  @Autowired PlatformTransactionManager transactionManager;
 
   private static EditorialFixtures fixtures;
   private static Published multiple;
@@ -183,6 +187,38 @@ class AttemptSubmissionIT {
       request.header("Idempotency-Key", key);
     }
     return mvc.perform(request);
+  }
+
+  /**
+   * Puts a revision under examination for this learner: an in-progress mock holding exactly that
+   * question. Both rows go in one transaction, because the snapshot trigger admits a question only
+   * while the session it belongs to is still being inserted. The deadline comes from the server's
+   * clock and not the database's, since this class moves its clock.
+   */
+  private void putUnderExamination(Account as, String topic, String revisionId) {
+    UUID mock = UUID.randomUUID();
+    new TransactionTemplate(transactionManager)
+        .executeWithoutResult(
+            status -> {
+              jdbc.update(
+                  "insert into certforge.mock_exam_session (id, learner_id, track_id,"
+                      + " exam_version_id, status, question_count, time_limit_seconds,"
+                      + " passing_percentage, questions_per_topic, created_at, expires_at,"
+                      + " closed_at)"
+                      + " values (?, ?, ?, ?, 'IN_PROGRESS', 1, 7200, 68, 1, ?, ?, null)",
+                  mock,
+                  as.id(),
+                  UUID.randomUUID(),
+                  UUID.randomUUID(),
+                  Timestamp.from(clock.instant()),
+                  Timestamp.from(clock.instant().plusSeconds(7200)));
+              jdbc.update(
+                  "insert into certforge.mock_exam_question (session_id, position, topic_id,"
+                      + " revision_id) values (?, 0, ?, ?)",
+                  mock,
+                  UUID.fromString(topic),
+                  UUID.fromString(revisionId));
+            });
   }
 
   private static String key() {
@@ -684,6 +720,28 @@ class AttemptSubmissionIT {
 
     assertThat(statuses).containsExactly(201, 409, 409, 409, 409);
     assertThat(attemptCount(session.id())).isEqualTo(1);
+  }
+
+  /**
+   * The backstop. Starting a session already refuses the questions of an open mock, but a session
+   * started BEFORE the mock keeps its own snapshot, and that cannot be taken back. Accepting the
+   * attempt would return the key, the explanations and the verification output for a question the
+   * learner is being examined on at that moment.
+   */
+  @Test
+  void refusesToRevealAnAnswerForAQuestionTheLearnerIsBeingExaminedOn() throws Exception {
+    Started session = startSession(learner, TOPIC, 2);
+    int position = singlePosition(session);
+    String under = session.revisions().get(position);
+    // The mock arrives after the session, which is the whole point: the snapshot predates it.
+    putUnderExamination(learner, TOPIC, under);
+
+    submit(learner, session, position, key(), answer("HIGH", 1000, "A"))
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("question_under_examination"))
+        // Nothing of the answer comes back with the refusal.
+        .andExpect(jsonPath("$.answer").doesNotExist())
+        .andExpect(jsonPath("$.correct").doesNotExist());
   }
 
   @Test

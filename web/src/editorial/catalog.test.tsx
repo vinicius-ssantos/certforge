@@ -151,6 +151,26 @@ describe("a track in the catalog", () => {
     expect(within(where).queryByText(/^Handling exceptions/)).not.toBeInTheDocument();
   });
 
+  /*
+   * The sentence used to be built by dropping the status label into it, which composes in
+   * English and not in Portuguese: "Esta trilha está rascunho" needs "em rascunho", while
+   * "está inativa" does not. One sentence per status instead, checked in both languages
+   * because the defect only existed in one of them.
+   */
+  it.each([
+    ["en", "DRAFT", "This track is still a draft"],
+    ["en", "INACTIVE", "This track is inactive"],
+    ["pt-BR", "DRAFT", "Esta trilha ainda é um rascunho"],
+    ["pt-BR", "INACTIVE", "Esta trilha está inativa"],
+  ] as const)("says in %s why a %s track publishes nothing", async (locale, status, sentence) => {
+    renderApp(
+      { [`GET ${URL}/${TRACK_ID}`]: { body: track({ status }) } },
+      { ...open, locale },
+    );
+
+    expect(await screen.findByText(new RegExp(sentence))).toBeInTheDocument();
+  });
+
   it("says plainly when no exam version is active", async () => {
     renderApp(
       { [`GET ${URL}/${TRACK_ID}`]: { body: track({ examVersions: [examVersion({ status: "DRAFT" })] }) } },

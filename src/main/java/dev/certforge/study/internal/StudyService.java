@@ -42,6 +42,7 @@ class StudyService {
 
   private final StudyRepository repository;
   private final AttemptRepository attempts;
+  private final MockExamRepository mocks;
   private final PreparationCatalog catalog;
   private final QuestionBank questionBank;
   private final QuestionSelector selector;
@@ -55,6 +56,7 @@ class StudyService {
   StudyService(
       StudyRepository repository,
       AttemptRepository attempts,
+      MockExamRepository mocks,
       PreparationCatalog catalog,
       QuestionBank questionBank,
       QuestionSelector selector,
@@ -66,6 +68,7 @@ class StudyService {
       ObservationRegistry observations) {
     this.repository = repository;
     this.attempts = attempts;
+    this.mocks = mocks;
     this.catalog = catalog;
     this.questionBank = questionBank;
     this.selector = selector;
@@ -144,7 +147,19 @@ class StudyService {
       throw activeSessionExists(existing.get());
     }
 
-    List<PublishedQuestion> eligible = questionBank.eligibleForTopic(new TopicId(topicId));
+    /*
+     * A mock exam the learner has open is served from this same pool, and practice hands over the
+     * answer -- the key, the explanations and the verification output -- the moment an answer is
+     * submitted. Leaving those revisions here let a learner answer the exam by practising its
+     * own questions in parallel, deterministically, because the mock's payload names its own
+     * revision ids. They come out of the pool while the exam is open; asking for one by name
+     * then gets the refusal any unpublished revision gets.
+     */
+    List<UUID> underExam = mocks.revisionsUnderExam(learner.value(), now);
+    List<PublishedQuestion> eligible =
+        questionBank.eligibleForTopic(new TopicId(topicId)).stream()
+            .filter(question -> !underExam.contains(question.revisionId().value()))
+            .toList();
     if (chosen.isEmpty() && eligible.size() < count) {
       throw StudyException.conflict(
           "insufficient_content",

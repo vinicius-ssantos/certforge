@@ -6,8 +6,74 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Security
+
+- **A mock exam could be answered by practising its own questions.** Practice and the mock draw
+  from the same pool of published questions, and practice is designed to hand over the answer —
+  the key, the explanations, the references and the verification output — the moment an answer is
+  submitted. Nothing in the practice flow knew a mock existed. Because an open mock's payload
+  names its own revision ids, and `POST /api/study/sessions` accepts `revisionIds`, a learner
+  could point practice at the exam they were sitting and read every answer while the clock ran —
+  deterministically, five questions per topic per session, with the practice slot being per topic
+  so all ten topics could run at once. ADR 0015 closed the case of the attempt API being reused
+  *for* the mock; it never addressed that API staying open *beside* it.
+  
+  The revisions of an open mock now leave the practice pool for as long as it is open. Asking for
+  one by name gets the refusal any unpublished revision gets, so there is no new wording and no
+  new failure for a learner to learn; a topic whose only publishable questions are all under
+  examination reports the shortage it already reports.
+  
+  A session started *before* the mock keeps its own snapshot, and that cannot be taken back, so
+  the pool alone is not enough. Submitting an answer for a question the learner is being examined
+  on is refused as well, and that is where the refusal belongs: accepting the attempt is what
+  hands over the key, the explanations and the verification output. It says which mock is in the
+  way rather than blaming the question, because nothing is wrong with the question — the learner
+  is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- Signing out says when it failed. The click dropped the rejection, so a failed
+  `POST /api/auth/logout` left the session in place and the screen unchanged — on a shared machine,
+  someone could walk away from an account they believed they had closed. It now says the sign-out
+  did not work and that they are still signed in, and suggests closing the browser if it keeps
+  failing. Clearing the session locally instead would be worse: the cookie survives, so the
+  sign-in page would appear and the next reload would sign them straight back in. The button is
+  also busy while the request is in flight, because two clicks sent two requests.
+
+- A draft track no longer reads "Esta trilha está rascunho" in Portuguese. The sentence was built
+  by dropping the status label into it, which composes in English and not in Portuguese, where
+  "está inativa" works and "está rascunho" needs "em rascunho" — a grammar a label cannot carry.
+  Each status has its own sentence now, in both languages.
+- The history page says a failed "Load more" once instead of twice. A next page that fails puts the
+  whole query in error while keeping the data it already has, so both the load failure and the
+  next-page failure rendered — two alerts for one event, and the first offered a retry that
+  refetched every page rather than the one that failed. The rows already read stay, the button that
+  asks again stays, and there is one message.
+- Sending a new question for review no longer risks creating it twice. It is two requests — create,
+  then submit — and when the second failed the first had already happened, while the editor still
+  believed it had nothing to update, because the revision it is editing arrives as a prop and the
+  new-question page never gets one. Pressing the button again posted a second draft, with nothing
+  on screen to suggest it had. The editor now remembers what it created and updates that instead.
+
+- The question editor says when the topic catalogue could not be loaded. A failed
+  `GET /api/editorial/catalog/topics` left the Topic select holding only its placeholder, which is
+  indistinguishable from a catalogue with no topics in it — and the author who could not choose one
+  was then told by the save that the topic was missing. The failure is shown where the choice is,
+  with a retry.
+- The question editor's "Saved at" time follows the chosen language. It was the one date in the
+  app that did not: it went through `toLocaleTimeString` with no locale, which means the
+  browser's, so an editor working in Portuguese on an English browser read "Salvo às 02:41 PM" —
+  a twelve-hour clock inside a Portuguese sentence. It was also formatted once at save time and
+  kept as text, so switching language afterwards left the old format standing. The instant is
+  stored now and rendered with the chosen locale, which is what ADR 0012 asks of dates.
+- Two screens no longer hide a failed request. On the progress page a failed
+  `GET /api/review/misconceptions` looked exactly like having no misconceptions: the section
+  renders nothing when there is nothing to show, and it rendered nothing when it could not find
+  out either, so a learner with real confidently-wrong answers read a clean page as nothing to
+  worry about and the link to practise those questions was simply absent. At the end of a session,
+  "Practise this topic again" knew how to follow one conflict — someone else opened a session for
+  the topic, so join that one — and dropped every other failure, re-enabling the button and saying
+  nothing, including for a topic that has since lost its published questions. Both now say what
+  happened and keep the way out of the screen.
 - A certification track no longer offers a mock-exam action that the current published content cannot satisfy. The server now exposes mock readiness from the same per-topic eligibility rule used by the planner; the learner sees how many reviewed questions are still missing and in how many topics instead of discovering the shortage through a failed start. An already-active mock remains resumable even if the currently published bank later falls below the blueprint requirement (#138).
 
 ### Added

@@ -202,4 +202,25 @@ describe("session handling", () => {
     const logout = fetch.calls.find((call) => call.path === "/api/auth/logout");
     expect(logout?.headers.get("X-XSRF-TOKEN")).toBe("test-csrf-token");
   });
+
+  /*
+   * The worst version of this is the quiet one. A dropped rejection left the session in place
+   * and the screen unchanged, so on a shared machine someone could walk away from an account
+   * they believed they had closed. Clearing the session locally instead would be worse: the
+   * cookie survives, so the sign-in page would appear and a reload would sign them back in.
+   */
+  it("says a failed sign-out left the account open", async () => {
+    const user = userEvent.setup();
+    renderApp({
+      "GET /api/catalog/tracks": { body: [javaTrack] },
+      "POST /api/auth/logout": problem(503, "service_unavailable"),
+    });
+
+    await user.click(await screen.findByRole("button", { name: "Sign out" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("still signed in");
+    // And it does not pretend otherwise: the tracks are still there, not the sign-in page.
+    expect(screen.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
+  });
 });
