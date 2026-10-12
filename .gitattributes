@@ -1,0 +1,2 @@
+# Editorial source approvals are bound to exact Git blob bytes. Preserve LF on Windows too.
+content/infrastructure-devops-foundations/**/question.json text eol=lf

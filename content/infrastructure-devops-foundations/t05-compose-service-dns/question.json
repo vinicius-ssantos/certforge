@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "No Compose, os serviços `api` e `db` participam da mesma rede padrão do projeto:\n\n```yaml\nservices:\n  api:\n    image: exemplo/api\n  db:\n    image: postgres:18\n```\n\nQual endereço a API pode usar para se conectar ao PostgreSQL pela porta padrão dentro da rede?",
+  "explanation": "Serviços na mesma rede podem se resolver pelo nome de serviço.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`localhost:5432`, porque ambos são serviços no mesmo arquivo Compose.",
+      "correct": false,
+      "explanation": "localhost aponta para o próprio contêiner da API."
+    },
+    {
+      "key": "B",
+      "text": "`host.docker.internal:5432` obrigatoriamente em qualquer sistema.",
+      "correct": false,
+      "explanation": "Esse nome trata de acesso ao host e não substitui a descoberta pelo nome do serviço."
+    },
+    {
+      "key": "C",
+      "text": "O IP fixo do primeiro contêiner criado, pois não muda em recriações.",
+      "correct": false,
+      "explanation": "IPs de contêineres podem mudar quando eles são recriados."
+    },
+    {
+      "key": "D",
+      "text": "`db:5432`, usando a resolução de nomes de serviço da rede Compose.",
+      "correct": true,
+      "explanation": "Serviços na mesma rede podem se resolver pelo nome de serviço."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/compose/how-tos/networking/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

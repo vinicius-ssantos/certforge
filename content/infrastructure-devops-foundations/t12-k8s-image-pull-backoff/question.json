@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Um Pod exibe `ImagePullBackOff` após tentar baixar uma imagem privada. Os eventos apontam erro de autenticação no registry. Qual ação é mais diretamente pertinente?",
+  "explanation": "Configurar um Secret de credenciais de registry e referenciá-lo por `imagePullSecrets` no Pod/ServiceAccount.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Configurar um Secret de credenciais de registry e referenciá-lo por `imagePullSecrets` no Pod/ServiceAccount.",
+      "correct": true,
+      "explanation": "Configurar um Secret de credenciais de registry e referenciá-lo por `imagePullSecrets` no Pod/ServiceAccount."
+    },
+    {
+      "key": "B",
+      "text": "Aumentar `maxSurge` do Deployment.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Criar um PodDisruptionBudget.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Trocar somente a readiness probe.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

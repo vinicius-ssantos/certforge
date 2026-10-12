@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Considere o trecho de um Deployment Kubernetes:\n\n```yaml\nspec:\n  replicas: 3\n```\n\nSuponha que um dos Pods gerenciados seja excluído e que o cluster tenha recursos disponíveis. Qual comportamento é esperado dos controladores para recuperar a quantidade desejada de réplicas?",
+  "explanation": "O Deployment gerencia ReplicaSets, que reconciliam a quantidade atual de Pods com a quantidade desejada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O ReplicaSet associado tenta criar outro Pod para retornar à quantidade desejada.",
+      "correct": true,
+      "explanation": "O Deployment gerencia ReplicaSets, que reconciliam a quantidade atual de Pods com a quantidade desejada."
+    },
+    {
+      "key": "B",
+      "text": "O Deployment converte automaticamente o Pod em um Job.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "C",
+      "text": "O Service aumenta o número de portas para compensar a falha.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "D",
+      "text": "O nó deixa de participar do cluster definitivamente.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

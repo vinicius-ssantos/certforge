@@ -13,3 +13,32 @@ Authorial question packs and the tool that imports them.
 The build checks that every code snippet compiles for Java 21 and prints what the question says, and that the option carrying that output is the one marked correct. It cannot judge wording, ambiguity or the quality of the explanations. The importer only creates drafts and submits them for review; it never approves or publishes, so a review recorded here still has to be entered in the editorial desk by a reviewer account before anything can go out.
 
 How to write, verify, import, review and publish questions: [docs/engineering/content-authoring.md](../docs/engineering/content-authoring.md) (Portuguese: [docs-pt-br/engineering/content-authoring.md](../docs-pt-br/engineering/content-authoring.md)).
+
+
+## Infrastructure and DevOps drafts (issues #165–#167)
+
+`infrastructure-devops-foundations/` is a **DRAFT** general-knowledge pack with its first
+authorial Docker question. A draft catalog track and ten topic IDs are seeded by V18;
+the pack is not learner-facing and its question has **no recorded human review**.
+
+For this new format, stage a validated set of editorial API requests without publishing:
+
+```sh
+node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs
+node content/stage-editorial-pack.mjs content/infrastructure-devops-foundations /tmp/certforge-infra-stage
+java content/ContentImporter.java --pack /tmp/certforge-infra-stage --dry-run
+# Optional with an authorized author account against an initialized CertForge instance:
+# java content/ContentImporter.java --pack /tmp/certforge-infra-stage --email ...
+```
+
+Choose a **new** staging directory; the staging command will not overwrite an existing
+one. It only writes local request JSON. The existing Java importer optionally sends
+those requests and submits each revision for technical review; it never approves or
+publishes. The server must have applied migrations through V18 first.
+
+Caveats: this is a narrow, temporary compatibility adapter. The editorial API does
+not yet persist `objectiveKeys`, snapshot digests or evidence adapter results; these
+fields remain in the source pack. **Certification packs are rejected by the staging
+adapter** until their objective evidence can be persisted. Generic source policies
+and deterministic evidence runners are not implemented yet. The Java SE 21 pack,
+digests and its established import path are unchanged.

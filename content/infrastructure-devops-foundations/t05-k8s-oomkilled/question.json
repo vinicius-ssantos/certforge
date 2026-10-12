@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma API Java executa num Pod com `limits.memory: 256Mi`. Sob carga, o contêiner termina com razão `OOMKilled`. Qual interpretação é mais adequada?",
+  "explanation": "OOMKilled está ligado à memória e exige investigação do consumo e dos limites.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Service não conseguiu encontrar os Pods por selector.",
+      "correct": false,
+      "explanation": "Falha de selector não explica o encerramento com OOMKilled."
+    },
+    {
+      "key": "B",
+      "text": "O scheduler necessariamente recusou o Pod antes de executá-lo.",
+      "correct": false,
+      "explanation": "OOMKilled indica encerramento após execução por pressão/limite de memória."
+    },
+    {
+      "key": "C",
+      "text": "O processo ultrapassou o limite de memória aplicável; é preciso revisar consumo, heap e limite.",
+      "correct": true,
+      "explanation": "OOMKilled está ligado à memória e exige investigação do consumo e dos limites."
+    },
+    {
+      "key": "D",
+      "text": "O problema é sempre causado por falta de CPU request.",
+      "correct": false,
+      "explanation": "CPU request insuficiente não é uma explicação direta para OOMKilled."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

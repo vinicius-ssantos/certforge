@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Um nó tem taint `dedicated=analytics:NoSchedule`. Um Pod de processamento precisa ser elegível para esse nó, sem remover o taint. Qual configuração é necessária?",
+  "explanation": "Adicionar uma toleration correspondente a `dedicated=analytics` com efeito `NoSchedule`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar apenas o label `dedicated=analytics` ao Pod.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Adicionar uma toleration correspondente a `dedicated=analytics` com efeito `NoSchedule`.",
+      "correct": true,
+      "explanation": "Adicionar uma toleration correspondente a `dedicated=analytics` com efeito `NoSchedule`."
+    },
+    {
+      "key": "C",
+      "text": "Criar um Service para o Pod.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Configurar somente a readiness probe.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

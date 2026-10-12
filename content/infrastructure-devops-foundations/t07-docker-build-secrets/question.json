@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige interpretar cenários de contêineres e diferenciar mecanismos operacionais, de segurança e de build.",
+  "prompt": "Uma pipeline faz `docker build --build-arg TOKEN=segredo .` e o Dockerfile usa `ARG TOKEN` para acessar um repositório privado. A equipe quer evitar expor credenciais no histórico ou nos metadados da imagem. Qual alternativa é mais apropriada?",
+  "explanation": "Usar BuildKit `RUN --mount=type=secret,id=repo_token` e passar o segredo por `--secret`, sem copiá-lo para uma layer.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar `ENV TOKEN=$TOKEN` ao Dockerfile para persistir a credencial.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Usar BuildKit `RUN --mount=type=secret,id=repo_token` e passar o segredo por `--secret`, sem copiá-lo para uma layer.",
+      "correct": true,
+      "explanation": "Usar BuildKit `RUN --mount=type=secret,id=repo_token` e passar o segredo por `--secret`, sem copiá-lo para uma layer."
+    },
+    {
+      "key": "C",
+      "text": "Trocar `ARG TOKEN` por `LABEL TOKEN=$TOKEN`.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Inserir o token em um arquivo versionado e apagá-lo no fim do Dockerfile.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Docker",
+      "url": "https://docs.docker.com/build/building/secrets/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

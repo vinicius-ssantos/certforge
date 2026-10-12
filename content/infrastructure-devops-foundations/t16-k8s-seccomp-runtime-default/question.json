@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Uma equipe quer aplicar ao contêiner o perfil seccomp padrão fornecido pelo runtime, em vez de executar sem filtro seccomp. Qual configuração de securityContext é apropriada?",
+  "explanation": "`seccompProfile.type: RuntimeDefault`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`privileged: true`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "`allowPrivilegeEscalation: true` como única configuração.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "`hostPID: true`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "`seccompProfile.type: RuntimeDefault`.",
+      "correct": true,
+      "explanation": "`seccompProfile.type: RuntimeDefault`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/tutorials/security/seccomp/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -7,7 +7,9 @@ COPY src ./src
 RUN --mount=type=cache,target=/root/.m2 mvn --batch-mode --no-transfer-progress -DskipTests package \
     && cp target/certforge-*.jar /certforge.jar
 
-FROM eclipse-temurin:25-jre
+# Pin the Ubuntu 24.04 LTS variant rather than tracking the default Ubuntu release.
+# The default 26.04 runtime carries a vulnerable /usr/bin/pebble binary.
+FROM eclipse-temurin:25-jre-noble
 # Pick up the operating system security fixes published since the base image was built.
 #
 # Then delete pebble. It is Canonical's service manager, shipped in the base image, 9.9 MB of Go

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige interpretar cenários de contêineres e diferenciar mecanismos operacionais, de segurança e de build.",
+  "prompt": "Um Dockerfile multi-stage compila uma aplicação Java em um estágio com Maven e executa no estágio final uma imagem JRE menor. Qual prática reduz dependências de build na imagem distribuída?",
+  "explanation": "Copiar somente o JAR produzido do estágio de build para o estágio final.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Executar Maven no estágio final e copiar o repositório inteiro.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Copiar somente o JAR produzido do estágio de build para o estágio final.",
+      "correct": true,
+      "explanation": "Copiar somente o JAR produzido do estágio de build para o estágio final."
+    },
+    {
+      "key": "C",
+      "text": "Usar a mesma imagem Maven para compilar e executar, mantendo caches e ferramentas.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Adicionar `docker build --no-cache` a todas as implantações.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Docker",
+      "url": "https://docs.docker.com/build/building/multi-stage/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

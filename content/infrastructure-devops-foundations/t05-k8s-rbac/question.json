@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um serviço interno deve listar Pods somente no namespace `financeiro`, sem permissão para modificar Deployments nem acessar outros namespaces. Qual combinação é apropriada para conceder essa autorização?",
+  "explanation": "Role e RoleBinding permitem aplicar permissões restritas a um namespace.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ClusterRoleBinding para cluster-admin.",
+      "correct": false,
+      "explanation": "cluster-admin concede privilégios muito além dos necessários."
+    },
+    {
+      "key": "B",
+      "text": "Role com permissão `get/list` em Pods e RoleBinding no namespace `financeiro`.",
+      "correct": true,
+      "explanation": "Role e RoleBinding permitem aplicar permissões restritas a um namespace."
+    },
+    {
+      "key": "C",
+      "text": "ConfigMap com a lista dos Pods autorizados.",
+      "correct": false,
+      "explanation": "ConfigMap não concede permissões de API."
+    },
+    {
+      "key": "D",
+      "text": "NetworkPolicy com a regra `list pods`.",
+      "correct": false,
+      "explanation": "NetworkPolicy regula tráfego de rede, não autorização na API Kubernetes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/rbac/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
