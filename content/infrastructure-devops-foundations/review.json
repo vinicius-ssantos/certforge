@@ -420,6 +420,94 @@
       "sourceGitBlobSha": "4ebff719cc6fa0f70125d75589a22fb2241b68a5",
       "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t11-k8s-taints-tolerations": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t11-k8s-taints-tolerations/question.json",
+      "sourceGitBlobSha": "7b05f11bc11b1a1d19a4d6e4028cc9b6a4470a11",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t11-k8s-readiness-503": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t11-k8s-readiness-503/question.json",
+      "sourceGitBlobSha": "dcfca4fa9a438ad09490be002efa03301afb318a",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t11-k8s-gateway-api": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t11-k8s-gateway-api/question.json",
+      "sourceGitBlobSha": "e97d8afe10e84930116162e5d0f316bbe1282cb7",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t11-k8s-secret-env": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t11-k8s-secret-env/question.json",
+      "sourceGitBlobSha": "171ce3cca5f449dff90310ba154f667ca1bbf89d",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t12-k8s-init-container": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t12-k8s-init-container/question.json",
+      "sourceGitBlobSha": "b0f7e0dd472ee28443d9ed882ebb66869cbcefee",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t12-k8s-topology-spread": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t12-k8s-topology-spread/question.json",
+      "sourceGitBlobSha": "694bb5258f5f15c005e78fb64579e5ebc97cc5cb",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t12-k8s-image-pull-backoff": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t12-k8s-image-pull-backoff/question.json",
+      "sourceGitBlobSha": "f3b325b17cdad2622e73ad8928817d70bd0a2bee",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t12-k8s-termination-grace": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t12-k8s-termination-grace/question.json",
+      "sourceGitBlobSha": "fa4289fa76c13158b71a10db8233d6ff0b8cc41a",
+      "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
