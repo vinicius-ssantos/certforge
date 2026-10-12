@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Um Deployment usa `image: api:latest` e `imagePullPolicy: IfNotPresent`. Uma nova imagem é enviada ao registry com a mesma tag. Qual comportamento pode ocorrer quando um Pod é criado em nó que já possui imagem correspondente em cache?",
+  "explanation": "O nó pode reutilizar a imagem em cache, sem necessariamente buscar a nova versão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kubelet deve sempre baixar a versão nova da tag.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "O Service decide qual digest deve ser utilizado.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "O nó pode reutilizar a imagem em cache, sem necessariamente buscar a nova versão.",
+      "correct": true,
+      "explanation": "O nó pode reutilizar a imagem em cache, sem necessariamente buscar a nova versão."
+    },
+    {
+      "key": "D",
+      "text": "Um PodDisruptionBudget invalida todas as imagens armazenadas.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/containers/images/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
