@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Uma aplicação precisa executar periodicamente um processamento de conciliação às 02:00 conforme um agendamento cron, em vez de manter Pods contínuos. Qual recurso Kubernetes é indicado?",
+  "explanation": "CronJob.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ReplicaSet.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Service.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "ConfigMap.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "CronJob.",
+      "correct": true,
+      "explanation": "CronJob."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
