@@ -617,6 +617,10 @@ export const en = {
       emptyWithStatus: "No questions with this status",
       emptyWithSearch: (query: string) => `No question's prompt contains "${query}"`,
       emptyBodySearch: "Try fewer words, or clear the search to see the whole queue.",
+      emptyPastEnd: "There is no page that far into the queue",
+      emptyBodyPastEnd:
+        "The queue is shorter than the page this address asks for, which happens to a link kept after the queue changed.",
+      backToFirstPage: "Go to the first page",
       emptyTitle: "No questions yet",
       emptyBodyAuthor: "Write the first one with New question, or import a content pack.",
       emptyBodyReader: "Questions appear here once an editor writes them.",

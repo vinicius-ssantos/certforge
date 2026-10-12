@@ -63,8 +63,15 @@ function question(rev: Record<string, unknown> = {}) {
 
 const QUESTION_URL = `/api/admin/questions/${QUESTION_ID}`;
 
-/** The queue's response shape: a page of items plus the counts its tabs show. */
-function queuePage(items: unknown[], counts: Partial<Record<string, number>> = {}) {
+/**
+ * The queue's response shape: a page of items plus the counts its tabs show. `paging` overrides
+ * the page, size and total, so a test can produce a queue of more pages than it has fixtures.
+ */
+function queuePage(
+  items: unknown[],
+  counts: Partial<Record<string, number>> = {},
+  paging: Partial<{ page: number; size: number; total: number }> = {},
+) {
   return {
     counts: {
       all: items.length,
@@ -79,6 +86,7 @@ function queuePage(items: unknown[], counts: Partial<Record<string, number>> = {
     page: 0,
     size: 25,
     total: items.length,
+    ...paging,
   };
 }
 
@@ -194,6 +202,92 @@ describe("the queue", () => {
     // Telling an editor to write the first question would be the wrong next step: the bank is
     // not empty, the search is too narrow.
     expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
+  });
+
+  it("says a page is past the end rather than that the bank is empty", async () => {
+    const user = userEvent.setup();
+    const { container } = renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) =>
+          request.query.get("page") === "9"
+            ? { body: queuePage([], { all: 4 }, { page: 9, size: 2, total: 4 }) }
+            : { body: queuePage(summaries, { all: 4 }, { size: 2, total: 4 }) },
+      },
+      { as: editor, path: "/editorial?page=9" },
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "There is no page that far into the queue" }),
+    ).toBeInTheDocument();
+    // Four questions exist, so inviting the editor to write the first one would be a lie, and a
+    // pager here would have to number rows that are not there.
+    expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Pages of the question queue" })).not.toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+
+    await user.click(screen.getByRole("button", { name: "Go to the first page" }));
+
+    expect(await screen.findByText("1–2 of 4")).toBeInTheDocument();
+  });
+
+  it("keeps the rows and the counts on screen while the next page is in flight", async () => {
+    const user = userEvent.setup();
+    const later = [
+      { id: "q3", latestRevisionId: "r3", latestRevisionNumber: 1, latestStatus: "APPROVED", prompt: "Which collection keeps insertion order?", topicId: TOPIC_ID },
+      { id: "q4", latestRevisionId: "r4", latestRevisionNumber: 1, latestStatus: "PUBLISHED", prompt: "What does this stream print?", topicId: TOPIC_ID },
+    ];
+    // The second page is held open, so the assertions below run while it is genuinely in flight.
+    let arrive = () => {};
+    let asked = () => {};
+    const held = new Promise<void>((resolve) => {
+      arrive = resolve;
+    });
+    const requested = new Promise<void>((resolve) => {
+      asked = resolve;
+    });
+
+    renderApp(
+      {
+        ...tracks,
+        // Two pages of two, so the pager appears without needing fifty fixtures.
+        "GET /api/admin/questions": async (request) => {
+          if (request.query.get("page") !== "1") {
+            return { body: queuePage(summaries, { all: 4 }, { size: 2, total: 4 }) };
+          }
+          asked();
+          await held;
+          return { body: queuePage(later, { all: 4 }, { page: 1, size: 2, total: 4 }) };
+        },
+      },
+      { as: editor, path: "/editorial" },
+    );
+
+    await screen.findByText("1–2 of 4");
+    const table = await screen.findByRole("table");
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    await requested;
+
+    /*
+     * Each page is its own query, so before this was fixed the table and the tab counts unmounted
+     * right here: the screen went to "Loading questions" with nothing under it and then rebuilt.
+     * The previous page stays, dimmed, until the next one arrives.
+     */
+    await waitFor(() => expect(table).toHaveClass("stale"));
+    expect(within(table).getAllByRole("row")).toHaveLength(3);
+    expect(screen.getByRole("link", { name: /^All\b/ })).toHaveTextContent("4");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    // And the range still describes the rows standing there, not the ones being fetched.
+    expect(screen.getByText("1–2 of 4")).toBeInTheDocument();
+
+    arrive();
+    await screen.findByText("3–4 of 4");
+    // The same table element throughout: a remount would have replaced the node.
+    expect(screen.getByRole("table")).toBe(table);
+    expect(table).not.toHaveClass("stale");
+    expect(
+      screen.getByRole("link", { name: "Which collection keeps insertion order?" }),
+    ).toBeInTheDocument();
   });
 
   it("invites the first question, and only editors can write it", async () => {

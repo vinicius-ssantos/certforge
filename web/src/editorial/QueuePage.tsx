@@ -101,6 +101,21 @@ export function QueuePage() {
   const total = questions.data?.total ?? 0;
   const size = questions.data?.size ?? 25;
   const lastPage = Math.max(0, Math.ceil(total / size) - 1);
+  /*
+   * The range describes the rows on screen, which while a page is in flight are still the
+   * previous ones. The address has already moved to the page being fetched, so reading the range
+   * from it would label the dimmed rows with the numbers of rows that have not arrived — "3–4 of
+   * 4" over rows one and two. The buttons do read the address, because pressing Next twice in
+   * quick succession should ask for the page after the one in flight, not for it again.
+   */
+  const shown = questions.data?.page ?? page;
+  /*
+   * A page past the end of the queue is not an empty queue, and telling an editor to write the
+   * first question over a bank of a hundred and sixty would be a lie. It happens to a link kept
+   * after the queue changed. Previous is no help — the page before is just as empty — so the way
+   * back offered is the first page, keeping whatever filter and search are in the address.
+   */
+  const pastEnd = visible?.length === 0 && total > 0;
 
   return (
     <>
@@ -166,20 +181,29 @@ export function QueuePage() {
            would be a lie, and telling an editor to write the first one is the wrong next step. */
         <EmptyState
           title={
-            search
-              ? t.editorial.queue.emptyWithSearch(search)
-              : status
-                ? t.editorial.queue.emptyWithStatus
-                : t.editorial.queue.emptyTitle
+            pastEnd
+              ? t.editorial.queue.emptyPastEnd
+              : search
+                ? t.editorial.queue.emptyWithSearch(search)
+                : status
+                  ? t.editorial.queue.emptyWithStatus
+                  : t.editorial.queue.emptyTitle
           }
         >
           <p>
-            {search
-              ? t.editorial.queue.emptyBodySearch
-              : canAuthor
-                ? t.editorial.queue.emptyBodyAuthor
-                : t.editorial.queue.emptyBodyReader}
+            {pastEnd
+              ? t.editorial.queue.emptyBodyPastEnd
+              : search
+                ? t.editorial.queue.emptyBodySearch
+                : canAuthor
+                  ? t.editorial.queue.emptyBodyAuthor
+                  : t.editorial.queue.emptyBodyReader}
           </p>
+          {pastEnd ? (
+            <button type="button" className="link-button" onClick={() => go({ page: 0 })}>
+              {t.editorial.queue.backToFirstPage}
+            </button>
+          ) : null}
         </EmptyState>
       ) : null}
       {visible && visible.length > 0 ? (
@@ -218,8 +242,10 @@ export function QueuePage() {
           </tbody>
         </ScrollableTable>
       ) : null}
-      {/* Only shown when there is more than one page: a pager over a single page is furniture. */}
-      {total > size ? (
+      {/* Only shown when there is more than one page: a pager over a single page is furniture.
+          Past the end it would have to count rows that are not there — "2476–2500 of 160" — so
+          the empty state carries the way back instead. */}
+      {total > size && !pastEnd ? (
         <nav className="pager" aria-label={t.editorial.queue.pagerLabel}>
           <button
             type="button"
@@ -230,7 +256,11 @@ export function QueuePage() {
             {t.editorial.queue.previousPage}
           </button>
           <p className="muted">
-            {t.editorial.queue.showing(page * size + 1, Math.min((page + 1) * size, total), total)}
+            {t.editorial.queue.showing(
+              shown * size + 1,
+              Math.min((shown + 1) * size, total),
+              total,
+            )}
           </p>
           <button
             type="button"

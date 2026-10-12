@@ -573,6 +573,10 @@ export const ptBR: Catalog = {
       emptyWithStatus: "Nenhuma questão com esta situação",
       emptyWithSearch: (query: string) => `Nenhum enunciado contém "${query}"`,
       emptyBodySearch: "Tente menos palavras, ou limpe a busca para ver a fila inteira.",
+      emptyPastEnd: "Não existe página tão adiante na fila",
+      emptyBodyPastEnd:
+        "A fila é mais curta que a página pedida por este endereço, o que acontece com um link guardado depois que a fila mudou.",
+      backToFirstPage: "Ir para a primeira página",
       emptyTitle: "Nenhuma questão ainda",
       emptyBodyAuthor: "Escreva a primeira em Nova questão, ou importe um pacote de conteúdo.",
       emptyBodyReader: "As questões aparecem aqui quando um editor as escreve.",
