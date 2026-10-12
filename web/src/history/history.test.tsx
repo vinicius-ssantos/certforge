@@ -133,6 +133,34 @@ describe("history", () => {
     expect(rows[2]).toHaveTextContent("–");
   });
 
+  /*
+   * A page that fails after the first one succeeded is a different state from a history that
+   * failed to load: the rows already read must stay, and the failure must be said once rather
+   * than twice -- the section renders a load-more failure separately from a load failure, and
+   * whether both can be true at the same time is a property of the query, not of this page.
+   */
+  it("keeps the first page and says the next one failed, once", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        ...tracks,
+        "GET /api/study/history/sessions": (request) =>
+          request.query.get("cursor") === "next-page"
+            ? problem(500, "internal_error")
+            : { body: { items: [sessionItem("s1")], nextCursor: "next-page" } },
+      },
+      { path: "/history" },
+    );
+
+    await user.click(await screen.findByRole("button", { name: "Load more sessions" }));
+
+    const alerts = await screen.findAllByRole("alert");
+    expect(alerts).toHaveLength(1);
+    // The row that did arrive is still there, and so is the way to ask again.
+    expect(screen.getAllByRole("row")).toHaveLength(2);
+    expect(screen.getByRole("button", { name: "Load more sessions" })).toBeInTheDocument();
+  });
+
   it("loads further pages with the cursor when asked", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(

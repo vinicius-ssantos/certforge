@@ -67,7 +67,10 @@ export function HistoryPage() {
       <section aria-labelledby="mock-history-heading" hidden={empty}>
         <h2 id="mock-history-heading" className="section-label">{t.history.mockHeading}</h2>
         {mocks.isPending ? <Loading label={t.history.mockLoading} /> : null}
-        {mocks.isError ? (
+        {/* A failed next page puts the whole query in error while keeping its data, so without
+            this the page said so twice: once here, with a retry that refetches every page, and
+            once below, next to the button that asks for the one that failed. */}
+        {mocks.isError && !mocks.isFetchNextPageError ? (
           <ErrorState error={mocks.error} onRetry={() => void mocks.refetch()} />
         ) : null}
         {mocks.data && mockItems.length === 0 && !empty ? (
@@ -148,7 +151,10 @@ export function HistoryPage() {
       <section aria-labelledby="practice-history-heading" hidden={empty}>
         <h2 id="practice-history-heading" className="section-label">{t.history.practiceHeading}</h2>
         {sessions.isPending ? <Loading label={t.history.loading} /> : null}
-        {sessions.isError ? (
+        {/* A failed next page puts the whole query in error while keeping its data, so without
+            this the page said so twice: once here, with a retry that refetches every page, and
+            once below, next to the button that asks for the one that failed. */}
+        {sessions.isError && !sessions.isFetchNextPageError ? (
           <ErrorState error={sessions.error} onRetry={() => void sessions.refetch()} />
         ) : null}
         {sessions.data && sessionItems.length === 0 && !empty ? (
