@@ -233,9 +233,9 @@ class ContentPackImportIT {
       String editor = account("EDITOR", admin, "10.8.0.2");
 
       String first = runImporter(editor, staged);
-      assertThat(first).contains("created=38 skipped=0 total=38");
+      assertThat(first).contains("created=46 skipped=0 total=46");
       String second = runImporter(editor, staged);
-      assertThat(second).contains("created=0 skipped=38 total=38");
+      assertThat(second).contains("created=0 skipped=46 total=46");
 
       Integer revisions =
           jdbc.queryForObject(
@@ -246,7 +246,7 @@ class ContentPackImportIT {
               UUID.fromString("a3000000-0000-4000-8000-000000000301"),
               UUID.fromString("a3000000-0000-4000-8000-000000000302"),
               UUID.fromString("a3000000-0000-4000-8000-000000000303"));
-      assertThat(revisions).isEqualTo(38);
+      assertThat(revisions).isEqualTo(46);
       assertThat(
               jdbc.queryForObject(
                   "select count(*) from certforge.qb_question_revision r "
