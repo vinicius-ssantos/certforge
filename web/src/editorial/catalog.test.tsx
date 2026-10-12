@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 import { problem } from "../test/fakeServer";
-import { admin, editor, renderApp } from "../test/render";
+import { admin, editor, emptyQuestionPage, renderApp } from "../test/render";
 
 const TRACK_ID = "a1000000-0000-4000-8000-000000000001";
 const TOPIC_A = "a3000000-0000-4000-8000-000000000001";
@@ -44,7 +44,7 @@ function track(overrides: Record<string, unknown> = {}) {
 
 describe("who may inspect the catalog", () => {
   it("is offered to an administrator from the editorial desk", async () => {
-    renderApp({ "GET /api/admin/questions": { body: [] } }, { as: admin, path: "/editorial" });
+    renderApp({ "GET /api/admin/questions": { body: emptyQuestionPage } }, { as: admin, path: "/editorial" });
 
     expect(await screen.findByRole("link", { name: "Catalog" })).toHaveAttribute(
       "href",
@@ -53,7 +53,7 @@ describe("who may inspect the catalog", () => {
   });
 
   it("is not offered to an editor, and is refused if they go there", async () => {
-    renderApp({ "GET /api/admin/questions": { body: [] } }, { as: editor, path: "/editorial" });
+    renderApp({ "GET /api/admin/questions": { body: emptyQuestionPage } }, { as: editor, path: "/editorial" });
     await screen.findByRole("heading", { level: 1, name: "Questions" });
     expect(screen.queryByRole("link", { name: "Catalog" })).not.toBeInTheDocument();
 

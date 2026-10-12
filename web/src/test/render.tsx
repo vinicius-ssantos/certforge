@@ -99,6 +99,18 @@ export const authorableTracks = [
     ],
   },
 ];
+/**
+ * An empty editorial queue in the shape the server actually returns. A flat `[]` is what the
+ * endpoint returned before it was paged, and a test that still mocks one passes against a
+ * response shape that no longer exists.
+ */
+export const emptyQuestionPage = {
+  counts: { all: 0, draft: 0, technicalReview: 0, approved: 0, published: 0, deprecated: 0 },
+  items: [],
+  page: 0,
+  size: 25,
+  total: 0,
+};
 export const javaTrack = {
   id: "22222222-2222-4222-8222-222222222222",
   slug: "java-certification",

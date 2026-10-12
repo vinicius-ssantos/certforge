@@ -22,8 +22,6 @@ const TAG = "en";
 export const en = {
   language: {
     label: "Language",
-    /** Each language is named in itself, which is what a reader scanning the list looks for. */
-    change: "Change language",
   },
 
   layout: {
@@ -595,7 +593,6 @@ export const en = {
       provider: "Provider",
       examVersions: "Exam versions",
       topics: "Topics",
-      versionCount: (total: number, active: number) => `${total} (${active} active)`,
     },
 
     queue: {

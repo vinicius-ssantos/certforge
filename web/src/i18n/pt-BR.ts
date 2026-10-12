@@ -25,7 +25,6 @@ const TAG = "pt-BR";
 export const ptBR: Catalog = {
   language: {
     label: "Idioma",
-    change: "Mudar o idioma",
   },
 
   layout: {
@@ -550,8 +549,6 @@ export const ptBR: Catalog = {
       provider: "Fornecedor",
       examVersions: "Versões do exame",
       topics: "Tópicos",
-      versionCount: (total: number, active: number) =>
-        `${total} (${active} ${plural(TAG, active, { one: "ativa", other: "ativas" })})`,
     },
 
     queue: {
