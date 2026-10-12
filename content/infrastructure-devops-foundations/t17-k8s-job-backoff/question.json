@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Um Job Kubernetes cria Pods que falham repetidamente. A equipe quer controlar quantas tentativas de falha o controlador admite antes de considerar o Job malsucedido. Qual configuração investigar?",
+  "explanation": "`backoffLimit` na especificação do Job.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`minReadySeconds` no Service.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "`maxSurge` em ConfigMap.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "`nodePort` do Job.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "`backoffLimit` na especificação do Job.",
+      "correct": true,
+      "explanation": "`backoffLimit` na especificação do Job."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/job/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
