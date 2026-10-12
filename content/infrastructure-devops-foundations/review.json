@@ -277,6 +277,61 @@
       "sourceGitBlobSha": "bcb1426f21ff7b5ef9da41e0e08741b8094aca63",
       "scope": "Owner expressly approved wording and answer key in joint editorial review. This record does not approve through editorial API, merge or publish.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t07-docker-build-secrets": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t07-docker-build-secrets/question.json",
+      "sourceGitBlobSha": "b5cd57d009424ae67fb9320631463c89d6cd5bd2",
+      "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t07-docker-bind-mount": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t07-docker-bind-mount/question.json",
+      "sourceGitBlobSha": "6551283f8f2ec27d5b876c3d461ca9ffe5d4c159",
+      "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t07-docker-rootless": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t07-docker-rootless/question.json",
+      "sourceGitBlobSha": "1283bb666c8d3e44a5d5a9c2ca1fcc07b122e4d2",
+      "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t08-docker-namespaces-cgroups": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t08-docker-namespaces-cgroups/question.json",
+      "sourceGitBlobSha": "bfc1175af130f6ce0dc977993a3809c412bba060",
+      "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t08-docker-multistage-runtime": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t08-docker-multistage-runtime/question.json",
+      "sourceGitBlobSha": "8a5842214866198ca40ab4ddb4b493a3632d943c",
+      "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
