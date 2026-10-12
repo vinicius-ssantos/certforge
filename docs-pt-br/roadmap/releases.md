@@ -6,6 +6,36 @@
 
 Cada release deve criar um resultado demonstrável para o usuário. Marcos exclusivamente de infraestrutura são fatias internas de implementação, não releases de produto. As releases posteriores permanecem como hipóteses até que a anterior seja usada e revisada.
 
+### O que o tracker tem, e o que segue indeciso
+
+Esta seção existe porque o roadmap e o tracker de issues diziam coisas diferentes sobre o que o
+projeto está construindo, e nenhum dos dois podia ser lido como o plano (#200). Ela registra o que
+é verdade; não decide o que está aberto.
+
+De `v0.4.0` a `v0.7.0` não há uma única issue, e isso é esta política funcionando como escrita:
+são hipóteses, e abrir issues contra elas agora seria planejar escopo que a própria política diz
+para não planejar ainda.
+
+Duas direções têm issues sem ter número de release:
+
+| Direção | Marco | Issues | Neste documento |
+|---|---|---|---|
+| Interview Prep | `Interview Prep — foundation` | 18 | sim, como direção paralela não agendada |
+| Infraestrutura, DevOps e Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 14 | **não** |
+
+**Três perguntas estão abertas e são do dono do projeto, registradas na #200.** Até que sejam
+respondidas, nenhuma das duas direções tem lugar na sequência acima, e esta tabela é a descrição
+honesta disso:
+
+1. A direção de infraestrutura pertence a este documento — como release numerada, como segunda
+   direção paralela, ou adiada? Quatorze issues é mais que qualquer release numerada exceto a
+   `v0.1.0`.
+2. A condição de agendamento do Interview Prep, abaixo, foi atendida? Dezoito issues é muito
+   planejamento para uma direção que este documento diz não estar agendada.
+3. A #166 — generalizar os pacotes de conteúdo, as checagens de evidência e a validação editorial
+   além do Java — deve ser separada da #164? É maquinário que este projeto já tem, e é a base sobre
+   a qual as outras treze se apoiam; essas treze são conteúdo para exames que ninguém aqui prestou.
+
 ## `v0.1.0` — Study Core
 
 **Resultado:** Um aluno consegue estudar, por tópico, questões revisadas de certificação Java e inspecionar as evidências de progresso.
@@ -67,6 +97,14 @@ Capacidades candidatas:
 O Interview Prep deve reutilizar as primitivas de estudo já comprovadas onde for apropriado, mas não deve forçar respostas subjetivas de entrevista a entrar na correção binária no estilo das certificações.
 
 Veja a [direção do Interview Prep](../product/interview-prep.md).
+
+## Segunda direção, ainda sem lugar — Infraestrutura, DevOps e Cloud Native
+
+A #164 e suas treze filhas — trilhas de certificação Kubernetes, AWS e Terraform, Linux e redes,
+CI/CD, laboratórios práticos, governança de fontes e ética de conteúdo de exame — existem como um
+marco populado e não têm lugar na sequência acima. **Isso é uma pergunta aberta, não uma decisão**
+registrada aqui: veja a #200 e a tabela na seção de política. Este título existe para que ler este
+documento não deixe mais o leitor acreditando que a direção não existe.
 
 ## Gates de release
 
