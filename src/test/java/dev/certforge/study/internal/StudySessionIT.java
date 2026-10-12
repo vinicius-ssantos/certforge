@@ -12,6 +12,7 @@ import com.jayway.jsonpath.JsonPath;
 import dev.certforge.support.EditorialFixtures;
 import dev.certforge.support.EditorialFixtures.Account;
 import dev.certforge.support.EditorialFixtures.Published;
+import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -43,6 +44,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
@@ -116,6 +119,7 @@ class StudySessionIT {
   @Autowired MockMvc mvc;
   @Autowired JdbcTemplate jdbc;
   @Autowired MutableClock clock;
+  @Autowired PlatformTransactionManager transactionManager;
 
   private static EditorialFixtures fixtures;
   private static Published changing1;
@@ -230,6 +234,66 @@ class StudySessionIT {
     startChosen(learner, CHANGING_TOPIC, changing1.revisionId(), elsewhere)
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.code").value("question_not_available"));
+  }
+
+  /**
+   * Practice and the mock exam draw from the same published pool, and practice hands over the
+   * answer -- the key, the explanations and the verification output -- as soon as one is submitted.
+   * The mock's own payload names its revision ids, so a learner could point practice at the exam
+   * they are sitting and read every answer, deterministically, while the clock ran.
+   *
+   * <p>It publishes into the topic no other test counts and shadows only the revision it created,
+   * so the open mock it inserts cannot change what another test sees.
+   */
+  @Test
+  void refusesToPractiseAQuestionTheLearnerCurrentlyHasUnderExamination() throws Exception {
+    String under = fixtures.publish(SEPARATE_TOPIC, "Under examination right now").revisionId();
+    UUID mock = UUID.randomUUID();
+    /*
+     * One transaction for both rows: the snapshot trigger admits a question only while the
+     * session row it belongs to is still being inserted (`xmin = pg_current_xact_id()`), which
+     * is how the snapshot is immutable from the moment the exam exists.
+     */
+    new TransactionTemplate(transactionManager)
+        .executeWithoutResult(
+            status -> {
+              jdbc.update(
+                  "insert into certforge.mock_exam_session (id, learner_id, track_id,"
+                      + " exam_version_id, status, question_count, time_limit_seconds,"
+                      + " passing_percentage, questions_per_topic, created_at, expires_at,"
+                      + " closed_at)"
+                      + " values (?, ?, ?, ?, 'IN_PROGRESS', 1, 7200, 68, 1, ?, ?, null)",
+                  mock,
+                  learner.id(),
+                  UUID.randomUUID(),
+                  UUID.randomUUID(),
+                  // The server's clock, not the database's: this class moves its clock, and a
+                  // deadline measured against `now()` can already be in the past when the
+                  // service asks whether the exam is still open.
+                  Timestamp.from(clock.instant()),
+                  Timestamp.from(clock.instant().plusSeconds(7200)));
+              jdbc.update(
+                  "insert into certforge.mock_exam_question (session_id, position, topic_id,"
+                      + " revision_id) values (?, 0, ?, ?)",
+                  mock,
+                  UUID.fromString(SEPARATE_TOPIC),
+                  UUID.fromString(under));
+            });
+
+    startChosen(learner, SEPARATE_TOPIC, under)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("question_not_available"));
+
+    // And it is the open exam doing it, not the question: closing the mock gives it back.
+    jdbc.update(
+        "update certforge.mock_exam_session set status = 'EXPIRED', closed_at = now()"
+            + " where id = ?",
+        mock);
+    MvcResult allowed =
+        startChosen(learner, SEPARATE_TOPIC, under).andExpect(status().isCreated()).andReturn();
+    transition(
+            learner, JsonPath.read(allowed.getResponse().getContentAsString(), "$.id"), "abandon")
+        .andExpect(status().isOk());
   }
 
   @Test

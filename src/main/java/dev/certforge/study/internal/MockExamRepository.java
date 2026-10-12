@@ -160,6 +160,25 @@ class MockExamRepository {
         .list();
   }
 
+  // Every revision a learner currently has under examination. Practice reads this to keep the
+  // questions of an open mock out of its own pool: the two flows draw from the same published
+  // pool, and practice reveals the answer as soon as one is submitted, so without this a mock
+  // can be answered by practising its own questions in parallel.
+  //
+  // A mock past its deadline is not under examination, so the deadline is applied here rather
+  // than writing the expiry first: reading must not depend on a write having happened.
+  List<UUID> revisionsUnderExam(UUID learnerId, Instant now) {
+    return jdbc.sql(
+            "select q.revision_id from certforge.mock_exam_question q"
+                + " join certforge.mock_exam_session s on s.id = q.session_id"
+                + " where s.learner_id = :learner and s.status = 'IN_PROGRESS'"
+                + " and s.expires_at > :now")
+        .param(LEARNER, learnerId)
+        .param("now", utc(now))
+        .query(UUID.class)
+        .list();
+  }
+
   Optional<SnapshotQuestion> snapshotAt(UUID sessionId, int position) {
     return jdbc.sql(
             "select position, topic_id, revision_id from certforge.mock_exam_question"

@@ -6,6 +6,25 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Security
+
+- **A mock exam could be answered by practising its own questions.** Practice and the mock draw
+  from the same pool of published questions, and practice is designed to hand over the answer —
+  the key, the explanations, the references and the verification output — the moment an answer is
+  submitted. Nothing in the practice flow knew a mock existed. Because an open mock's payload
+  names its own revision ids, and `POST /api/study/sessions` accepts `revisionIds`, a learner
+  could point practice at the exam they were sitting and read every answer while the clock ran —
+  deterministically, five questions per topic per session, with the practice slot being per topic
+  so all ten topics could run at once. ADR 0015 closed the case of the attempt API being reused
+  *for* the mock; it never addressed that API staying open *beside* it.
+  
+  The revisions of an open mock now leave the practice pool for as long as it is open. Asking for
+  one by name gets the refusal any unpublished revision gets, so there is no new wording and no
+  new failure for a learner to learn; a topic whose only publishable questions are all under
+  examination reports the shortage it already reports. **This closes the start of a session, which
+  is every path to the deterministic attack. It does not cover a practice session that was already
+  open before the mock began** — that needs a check where the answer is revealed rather than where
+  the session is built, which means a refusal a learner reads, which is a wording decision.
 ### Fixed
 
 - The question editor's "Saved at" time follows the chosen language. It was the one date in the
