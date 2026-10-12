@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar cenários de contêineres e diferenciar mecanismos operacionais, de segurança e de build.",
+  "prompt": "Uma equipe quer editar arquivos do projeto no host e vê-los imediatamente dentro de um contêiner de desenvolvimento, sem reconstruir a imagem. Qual montagem atende diretamente a esse cenário?",
+  "explanation": "Bind mount de um diretório do host para o caminho de trabalho do contêiner.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Bind mount de um diretório do host para o caminho de trabalho do contêiner.",
+      "correct": true,
+      "explanation": "Bind mount de um diretório do host para o caminho de trabalho do contêiner."
+    },
+    {
+      "key": "B",
+      "text": "Copiar arquivos via `COPY` e manter o contêiner sem montagens.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "Criar somente uma variável de ambiente com o caminho do projeto.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Publicar uma porta com `-p`.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Docker",
+      "url": "https://docs.docker.com/engine/storage/bind-mounts/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
