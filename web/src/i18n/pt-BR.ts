@@ -38,6 +38,8 @@ export const ptBR: Catalog = {
     history: "Histórico",
     editorial: "Editorial",
     signOut: "Sair",
+    signingOut: "Saindo…",
+    signOutFailed: "Não foi possível sair, e você continua conectado. Tente de novo — e, se continuar falhando, feche este navegador.",
   },
 
   states: {
@@ -76,6 +78,8 @@ export const ptBR: Catalog = {
     csrfInvalid: "O token de segurança da página expirou. Tente de novo.",
     trackNotFound: "Esta trilha não existe ou não está disponível.",
     topicNotFound: "Este tópico não existe ou não está disponível.",
+    questionUnderExamination:
+      "Esta questão está em um simulado que você tem aberto. Termine ou saia do simulado e você poderá praticá-la de novo.",
     insufficientContent:
       "Ainda não há questões publicadas suficientes neste tópico. Escolha outro tópico.",
     activeSessionExists: "Você já tem uma sessão de prática em andamento neste tópico.",
@@ -593,8 +597,12 @@ export const ptBR: Catalog = {
       objectiveWording: "Texto do objetivo para este exame",
       topicOutsideTrack: "Tópico fora desta trilha",
       publishingHeading: "Onde o conteúdo pode ser publicado",
-      notActive: (status: string) =>
-        `Esta trilha está ${status}, então nenhuma questão dela é oferecida a quem estuda.`,
+      notActiveDraft:
+        "Esta trilha ainda é um rascunho, então nenhuma questão dela é oferecida a quem estuda.",
+      notActiveInactive:
+        "Esta trilha está inativa, então nenhuma questão dela é oferecida a quem estuda.",
+      notActiveOther: (status: string) =>
+        `Esta trilha está em "${status}", então nenhuma questão dela é oferecida a quem estuda.`,
       publishableStart: (topics: number) =>
         `Questões podem ser publicadas nos ${topics} tópicos mapeados para `,
       publishableRelease: ", e precisam ser escritas para o ",

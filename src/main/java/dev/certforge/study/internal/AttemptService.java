@@ -59,6 +59,7 @@ class AttemptService {
   record Outcome(AttemptResult result, boolean replayed) {}
 
   private final AttemptRepository attempts;
+  private final MockExamRepository mocks;
   private final StudyService sessions;
   private final QuestionBank questionBank;
   private final CurrentActor currentActor;
@@ -70,6 +71,7 @@ class AttemptService {
 
   AttemptService(
       AttemptRepository attempts,
+      MockExamRepository mocks,
       StudyService sessions,
       QuestionBank questionBank,
       CurrentActor currentActor,
@@ -79,6 +81,7 @@ class AttemptService {
       MeterRegistry metrics,
       ObservationRegistry observations) {
     this.attempts = attempts;
+    this.mocks = mocks;
     this.sessions = sessions;
     this.questionBank = questionBank;
     this.currentActor = currentActor;
@@ -129,6 +132,17 @@ class AttemptService {
       throw alreadyAnswered();
     }
 
+    /*
+     * Starting a session already refuses the questions of an open mock, but a session started
+     * BEFORE the mock holds its own snapshot and that snapshot cannot be taken back. This is the
+     * backstop, and it belongs here rather than at the start because here is where the answer is
+     * actually handed over: accepting the attempt means returning the key, the explanations and
+     * the verification output for a question the learner is being examined on.
+     */
+    if (mocks.revisionsUnderExam(learner.value(), clock.instant()).contains(revisionId)) {
+      throw StudyException.conflict(
+          "question_under_examination", "This question is part of a mock exam that is still open");
+    }
     RevisionEvidence evidence = evidence(revisionId);
     validate(evidence, selected);
     Attempt attempt =

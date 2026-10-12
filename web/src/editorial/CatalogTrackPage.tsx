@@ -7,7 +7,7 @@ import { useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-import { catalogStatusOf } from "./catalogLabels";
+import { catalogNotActiveSentence, catalogStatusOf } from "./catalogLabels";
 
 function Status({ status }: { status: string }) {
   const t = useText();
@@ -128,9 +128,7 @@ function TrackDetail({ track }: { track: AdminTrack }) {
         <h2 id="publishing">{t.editorial.catalogTrack.publishingHeading}</h2>
         {track.status !== "ACTIVE" ? (
           <p>
-            {t.editorial.catalogTrack.notActive(
-              catalogStatusOf(track.status, t).label.toLowerCase(),
-            )}
+            {catalogNotActiveSentence(track.status, t)}
           </p>
         ) : null}
         {active ? (
