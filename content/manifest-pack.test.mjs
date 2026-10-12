@@ -100,6 +100,6 @@ test("the seeded infrastructure pack is a valid unpublished draft", () => {
   const pack = readManifestPack("content/infrastructure-devops-foundations");
   assert.equal(pack.manifest.editorialStatus, "DRAFT");
   assert.equal(pack.manifest.trackKind, "GENERAL");
-  assert.equal(pack.questions.length, 62);
+  assert.equal(pack.questions.length, 70);
   assert.equal(pack.questions.find((q) => q.name === "t01-image-vs-container").topicId, "a3000000-0000-4000-8000-000000000301");
 });
