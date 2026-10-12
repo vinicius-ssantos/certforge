@@ -22,6 +22,21 @@ export function formatDateTime(iso: string, locale: string): string {
   return formatterFor(locale).format(new Date(iso));
 }
 
+/**
+ * The clock alone, for a moment inside today -- "saved at 14:41". Same rule as the dates above:
+ * the chosen language decides whether that reads 14:41 or 2:41 PM, not the browser's locale.
+ */
+const timeFormatters = new Map<string, Intl.DateTimeFormat>();
+
+export function formatTime(iso: string, locale: string): string {
+  let found = timeFormatters.get(locale);
+  if (!found) {
+    found = new Intl.DateTimeFormat(locale, { hour: "2-digit", minute: "2-digit" });
+    timeFormatters.set(locale, found);
+  }
+  return found.format(new Date(iso));
+}
+
 /** How each session status is named. Unknown statuses are shown as the code, as before. */
 export function statusLabel(status: string, t: Catalog): string {
   const labels: Record<string, string> = {
