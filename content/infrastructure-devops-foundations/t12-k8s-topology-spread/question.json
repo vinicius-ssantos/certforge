@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Uma API com seis réplicas precisa distribuir Pods entre zonas para evitar concentração em uma única zona. Qual configuração do Pod controla a distribuição por domínio topológico como `topology.kubernetes.io/zone`?",
+  "explanation": "`topologySpreadConstraints` com `topologyKey` adequado e critérios de distribuição.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Usar exclusivamente um Service ExternalName.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Definir `imagePullPolicy: Always`.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Usar `topologySpreadConstraints` com `topologyKey` adequado e critérios de distribuição.",
+      "correct": true,
+      "explanation": "`topologySpreadConstraints` com `topologyKey` adequado e critérios de distribuição."
+    },
+    {
+      "key": "D",
+      "text": "Aumentar `terminationGracePeriodSeconds`.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

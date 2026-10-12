@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Um CronJob executa uma tarefa demorada e a equipe quer evitar o início de uma segunda execução enquanto a anterior ainda está em andamento. Qual configuração do CronJob é apropriada?",
+  "explanation": "`concurrencyPolicy: Forbid`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`restartPolicy: Always` no CronJob.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "`maxSurge: 0`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "`concurrencyPolicy: Forbid`.",
+      "correct": true,
+      "explanation": "`concurrencyPolicy: Forbid`."
+    },
+    {
+      "key": "D",
+      "text": "`type: LoadBalancer`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

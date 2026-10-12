@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Um HorizontalPodAutoscaler utiliza utilização média de CPU para escalar um Deployment. Os Pods não possuem `resources.requests.cpu`. Qual é um efeito importante dessa configuração?",
+  "explanation": "A utilização de CPU como percentual do request fica indefinida para esses Pods, prejudicando o cálculo da métrica de escala.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O HPA sempre escala até maxReplicas em cada avaliação.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "O HPA converte automaticamente limits em requests.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "A utilização de CPU como percentual do request fica indefinida para esses Pods, prejudicando o cálculo da métrica de escala.",
+      "correct": true,
+      "explanation": "A utilização de CPU como percentual do request fica indefinida para esses Pods, prejudicando o cálculo da métrica de escala."
+    },
+    {
+      "key": "D",
+      "text": "O HPA reinicia os nós para medir CPU.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

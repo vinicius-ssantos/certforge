@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um pipeline precisa reproduzir exatamente a imagem de contêiner usada em produção, mesmo que a tag `stable` seja atualizada depois. Qual referência fornece um identificador de conteúdo imutável?",
+  "explanation": "Referenciar por digest fixa o conteúdo identificado pelo hash.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`minha-api:stable`, pois uma tag nunca aponta para outra imagem.",
+      "correct": false,
+      "explanation": "Tags são ponteiros mutáveis e podem ser atualizadas."
+    },
+    {
+      "key": "B",
+      "text": "`minha-api@sha256:<digest-da-imagem>`, usando o digest real obtido do registro.",
+      "correct": true,
+      "explanation": "Referenciar por digest fixa o conteúdo identificado pelo hash."
+    },
+    {
+      "key": "C",
+      "text": "`minha-api:latest`, pois significa a última imagem validada.",
+      "correct": false,
+      "explanation": "latest também é uma tag mutável."
+    },
+    {
+      "key": "D",
+      "text": "O nome do contêiner em execução, pois identifica o artefato no registro.",
+      "correct": false,
+      "explanation": "O nome de contêiner não fixa a versão de uma imagem no registro."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/dhi/core-concepts/digests/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

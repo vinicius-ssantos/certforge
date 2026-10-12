@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Considere este Dockerfile simplificado:\n\n```dockerfile\nFROM maven:3.9-eclipse-temurin-21 AS build\nWORKDIR /app\nCOPY . .\nRUN mvn -B package\n\nFROM eclipse-temurin:21-jre\nCOPY --from=build /app/target/app.jar /app/app.jar\nCMD [\"java\", \"-jar\", \"/app/app.jar\"]\n```\n\nO primeiro estágio compila a aplicação; o segundo contém apenas o necessário para executá-la. Qual recurso do Docker está sendo utilizado?",
+  "explanation": "Builds multi-stage permitem separar a etapa de compilação da imagem final, copiando apenas os arquivos necessários com COPY --from.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Bind mount permanente.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "Rede overlay.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "C",
+      "text": "Build multi-stage.",
+      "correct": true,
+      "explanation": "Builds multi-stage permitem separar a etapa de compilação da imagem final, copiando apenas os arquivos necessários com COPY --from."
+    },
+    {
+      "key": "D",
+      "text": "Volume anônimo.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/build/building/multi-stage/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

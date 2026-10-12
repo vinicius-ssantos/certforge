@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar cenários de contêineres e diferenciar mecanismos operacionais, de segurança e de build.",
+  "prompt": "Uma equipe precisa reduzir a exposição de privilégios do daemon e de contêineres Docker em uma estação Linux compatível. Qual recurso executa daemon e contêineres sem privilégios de root no host?",
+  "explanation": "Rootless mode com namespaces de usuário e configuração apropriada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar `EXPOSE 80` ao Dockerfile.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Usar `--privileged` em todos os contêineres.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "Ativar rootless mode com namespaces de usuário e configuração apropriada.",
+      "correct": true,
+      "explanation": "Rootless mode com namespaces de usuário e configuração apropriada."
+    },
+    {
+      "key": "D",
+      "text": "Usar a tag `latest` em todas as imagens.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Docker",
+      "url": "https://docs.docker.com/engine/security/rootless/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um contêiner PostgreSQL foi removido e recriado; a equipe quer preservar os arquivos de dados entre recriações. Qual estratégia atende ao requisito sem depender da camada gravável do contêiner?",
+  "explanation": "Volumes têm ciclo de vida independente do contêiner e persistem após a remoção dele.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Gravar os dados somente em `/tmp` dentro do contêiner.",
+      "correct": false,
+      "explanation": "A camada gravável do contêiner é removida junto com ele."
+    },
+    {
+      "key": "B",
+      "text": "Montar um volume Docker no diretório de dados do PostgreSQL.",
+      "correct": true,
+      "explanation": "Volumes têm ciclo de vida independente do contêiner e persistem após a remoção dele."
+    },
+    {
+      "key": "C",
+      "text": "Usar `docker commit` a cada escrita em disco.",
+      "correct": false,
+      "explanation": "Commit de imagem não é uma solução de persistência operacional de banco de dados."
+    },
+    {
+      "key": "D",
+      "text": "Adicionar `EXPOSE 5432` ao Dockerfile.",
+      "correct": false,
+      "explanation": "EXPOSE documenta portas, não cria armazenamento persistente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/engine/storage/volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

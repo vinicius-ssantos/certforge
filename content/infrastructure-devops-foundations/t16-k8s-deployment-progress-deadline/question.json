@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Um Deployment não consegue concluir um rollout porque os novos Pods nunca ficam disponíveis. Qual campo define o prazo após o qual o controlador informa ausência de progresso no status do Deployment?",
+  "explanation": "`progressDeadlineSeconds`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`terminationGracePeriodSeconds`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "`progressDeadlineSeconds`.",
+      "correct": true,
+      "explanation": "`progressDeadlineSeconds`."
+    },
+    {
+      "key": "C",
+      "text": "`ttlSecondsAfterFinished`.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "`activeDeadlineSeconds` em um Service.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

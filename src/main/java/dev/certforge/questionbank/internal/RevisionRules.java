@@ -34,7 +34,14 @@ final class RevisionRules {
     if (content.topicId() == null) {
       found.add("topic_missing");
     }
-    if (kind == TrackKind.INTERVIEW) {
+    if (kind == TrackKind.GENERAL) {
+      if (content.javaRelease() != null) {
+        found.add("java_release_not_applicable");
+      }
+      if (content.seniority() != null) {
+        found.add("seniority_not_applicable");
+      }
+    } else if (kind == TrackKind.INTERVIEW) {
       // Giving an interview question a Java release to satisfy a validator would be a lie in a
       // field the certification path trusts, so it is refused rather than ignored.
       if (content.javaRelease() != null) {

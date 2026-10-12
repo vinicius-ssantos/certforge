@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Uma API com quatro réplicas não deve colocar duas réplicas no mesmo nó, desde que exista capacidade nos nós elegíveis. Qual configuração do Pod expressa essa restrição rígida?",
+  "explanation": "Pod anti-affinity obrigatória em `kubernetes.io/hostname` para Pods com os mesmos rótulos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma readiness probe apontando para os outros Pods.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Pod anti-affinity obrigatória em `kubernetes.io/hostname` para Pods com os mesmos rótulos.",
+      "correct": true,
+      "explanation": "Pod anti-affinity obrigatória em `kubernetes.io/hostname` para Pods com os mesmos rótulos."
+    },
+    {
+      "key": "C",
+      "text": "Um Service NodePort para cada réplica.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Ajustar `imagePullPolicy` para Always.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
