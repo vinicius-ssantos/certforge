@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar cenários de contêineres e diferenciar mecanismos operacionais, de segurança e de build.",
+  "prompt": "Duas APIs Java compartilham o mesmo host Linux em contêineres diferentes. A equipe quer isolar a visão de processos/rede e restringir consumo de CPU/memória. Qual associação está correta?",
+  "explanation": "Namespaces fornecem isolamento de recursos visíveis e cgroups ajudam a controlar/contabilizar consumo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Cgroups criam o DNS do Compose e namespaces assinam imagens.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Namespaces são usados somente para compactação de camadas.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "Namespaces limitam CPU e cgroups definem a instrução `CMD`.",
+      "correct": false,
+      "explanation": "A alternativa não atende ao mecanismo ou à finalidade técnica exigida pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Namespaces fornecem isolamento de recursos visíveis e cgroups ajudam a controlar/contabilizar consumo.",
+      "correct": true,
+      "explanation": "Namespaces fornecem isolamento de recursos visíveis e cgroups ajudam a controlar/contabilizar consumo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Docker",
+      "url": "https://docs.docker.com/engine/security/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

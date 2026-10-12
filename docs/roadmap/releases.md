@@ -4,6 +4,34 @@
 
 Each release must create a demonstrable user outcome. Infrastructure-only milestones are internal implementation slices, not product releases. Later releases remain hypotheses until the preceding release is used and reviewed.
 
+### What the tracker holds, and what is still undecided
+
+This section exists because the roadmap and the issue tracker said different things about what
+the project is building, and neither could be read as the plan (#200). It records what is true;
+it does not decide what is open.
+
+`v0.4.0` through `v0.7.0` carry no issues at all, which is this policy working as written: they
+are hypotheses, and filing issues against them now would be planning scope the policy says not to
+plan yet.
+
+Two directions carry issues without carrying a release number:
+
+| Direction | Milestone | Issues | In this document |
+|---|---|---|---|
+| Interview Prep | `Interview Prep — foundation` | 18 | yes, as an unscheduled parallel direction |
+| Infrastructure, DevOps and Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 14 | **no** |
+
+**Three questions are open and are the owner's, tracked in #200.** Until they are answered, neither
+direction has a place in the sequence above, and this table is the honest description of that:
+
+1. Does the infrastructure direction belong here — a numbered release, a second parallel direction,
+   or deferred? Fourteen issues is more than any numbered release except `v0.1.0`.
+2. Is Interview Prep's scheduling condition below met? Eighteen issues is a lot of planning for a
+   direction this document says is not scheduled.
+3. Should #166 — generalising content packs, evidence checks and editorial validation beyond Java —
+   be separated from #164? It is machinery this project already has, and the foundation the other
+   thirteen stand on; those thirteen are content for exams nobody here has sat.
+
 ## `v0.1.0` — Study Core
 
 **Outcome:** A learner can study reviewed Java certification questions by topic and inspect evidence of progress.
@@ -65,6 +93,14 @@ Candidate capabilities:
 Interview Prep must reuse proven study primitives where appropriate, but it must not force subjective interview responses into certification-style binary correctness.
 
 See [Interview Prep direction](../product/interview-prep.md).
+
+## Second direction, not yet placed — Infrastructure, DevOps and Cloud Native
+
+#164 and its thirteen children — Kubernetes, AWS and Terraform certification paths, Linux and
+networking, CI/CD, hands-on labs, source governance and exam-content ethics — exist as a populated
+milestone and have no place in the sequence above. **That is an open question, not a decision**
+recorded here: see #200 and the table in the policy section. This heading exists so that reading
+this document no longer leaves a reader believing the direction does not exist.
 
 ## Release gates
 

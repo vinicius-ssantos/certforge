@@ -13,3 +13,14 @@ export function catalogStatusOf(
   };
   return known[status] ?? { label: status, symbol: "○", tone: "draft" };
 }
+
+/**
+ * Why a non-active track publishes nothing. One sentence per status: interpolating the status
+ * label into a sentence reads correctly in English and not in Portuguese, where the verb and
+ * preposition change with the word.
+ */
+export function catalogNotActiveSentence(status: string, t: Catalog): string {
+  if (status === "DRAFT") return t.editorial.catalogTrack.notActiveDraft;
+  if (status === "INACTIVE") return t.editorial.catalogTrack.notActiveInactive;
+  return t.editorial.catalogTrack.notActiveOther(status);
+}

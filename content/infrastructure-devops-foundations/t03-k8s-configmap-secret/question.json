@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige compreender o comportamento técnico e aplicá-lo a um cenário de implantação.",
+  "prompt": "Uma API no Kubernetes usa a configuração `LOG_LEVEL=INFO` e uma senha de acesso ao banco de dados. A equipe precisa escolher recursos adequados para fornecer esses valores aos Pods.\n\nConsidere o seguinte cenário:\n\n```text\nConfiguração não confidencial: LOG_LEVEL=INFO\nDado sensível: DB_PASSWORD=...\n```\n\nQual afirmação descreve corretamente o uso de ConfigMaps e Secrets e os cuidados necessários para proteger dados sensíveis?",
+  "explanation": "Secrets destinam-se a informações sensíveis, mas seu uso exige controles adicionais; em particular, a documentação alerta que Secrets não são automaticamente criptografados em repouso por padrão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ConfigMaps são criptografados automaticamente; Secrets nunca são persistidos.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "B",
+      "text": "Secrets devem ser usados para armazenar imagens de contêiner.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    },
+    {
+      "key": "C",
+      "text": "Secrets são destinados a dados sensíveis, mas ainda exigem controles como RBAC e proteção de dados em repouso.",
+      "correct": true,
+      "explanation": "Secrets destinam-se a informações sensíveis, mas seu uso exige controles adicionais; em particular, a documentação alerta que Secrets não são automaticamente criptografados em repouso por padrão."
+    },
+    {
+      "key": "D",
+      "text": "ConfigMaps e Secrets substituem NetworkPolicies para proteger tráfego.",
+      "correct": false,
+      "explanation": "Esta opção descreve outro recurso ou um comportamento que não é garantido no cenário; consulte a referência técnica e compare com a função solicitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Uma equipe tenta criar mais um Pod em um namespace, mas o servidor retorna erro mencionando `exceeded quota` para requests de CPU. Qual recurso e ação devem ser investigados?",
+  "explanation": "ResourceQuota do namespace e consumo/requests existentes antes de ajustar o orçamento ou o workload.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ResourceQuota do namespace e consumo/requests existentes antes de ajustar o orçamento ou o workload.",
+      "correct": true,
+      "explanation": "ResourceQuota do namespace e consumo/requests existentes antes de ajustar o orçamento ou o workload."
+    },
+    {
+      "key": "B",
+      "text": "Alterar apenas a liveness probe.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Criar um HTTPRoute adicional.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Adicionar anotação arbitrária ao Pod.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/policy/resource-quotas/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

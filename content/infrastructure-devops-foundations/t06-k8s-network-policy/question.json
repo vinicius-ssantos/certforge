@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma equipe deseja bloquear, por padrão, tráfego de entrada para Pods de um namespace, permitindo posteriormente exceções explícitas. O plugin de rede do cluster oferece suporte a NetworkPolicy. Qual configuração produz essa base de negação de ingress para Pods selecionados?",
+  "explanation": "Sem regras permitidas, os Pods selecionados ficam isolados para ingress (ressalvadas semânticas do mecanismo e políticas combinadas).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um ConfigMap sem dados.",
+      "correct": false,
+      "explanation": "ConfigMaps não controlam filtragem de rede."
+    },
+    {
+      "key": "B",
+      "text": "Uma NetworkPolicy que seleciona os Pods, contém `policyTypes: [Ingress]` e não define regras de ingresso.",
+      "correct": true,
+      "explanation": "Sem regras permitidas, os Pods selecionados ficam isolados para ingress (ressalvadas semânticas do mecanismo e políticas combinadas)."
+    },
+    {
+      "key": "C",
+      "text": "Um Service ClusterIP apontando para os mesmos Pods.",
+      "correct": false,
+      "explanation": "ClusterIP não define, por si só, regras de negação de tráfego."
+    },
+    {
+      "key": "D",
+      "text": "Uma liveness probe HTTP que responde 403.",
+      "correct": false,
+      "explanation": "Liveness não é controle de autorização de rede entre workloads."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

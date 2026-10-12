@@ -21,12 +21,28 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   The revisions of an open mock now leave the practice pool for as long as it is open. Asking for
   one by name gets the refusal any unpublished revision gets, so there is no new wording and no
   new failure for a learner to learn; a topic whose only publishable questions are all under
-  examination reports the shortage it already reports. **This closes the start of a session, which
-  is every path to the deterministic attack. It does not cover a practice session that was already
-  open before the mock began** — that needs a check where the answer is revealed rather than where
-  the session is built, which means a refusal a learner reads, which is a wording decision.
+  examination reports the shortage it already reports.
+  
+  A session started *before* the mock keeps its own snapshot, and that cannot be taken back, so
+  the pool alone is not enough. Submitting an answer for a question the learner is being examined
+  on is refused as well, and that is where the refusal belongs: accepting the attempt is what
+  hands over the key, the explanations and the verification output. It says which mock is in the
+  way rather than blaming the question, because nothing is wrong with the question — the learner
+  is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- Signing out says when it failed. The click dropped the rejection, so a failed
+  `POST /api/auth/logout` left the session in place and the screen unchanged — on a shared machine,
+  someone could walk away from an account they believed they had closed. It now says the sign-out
+  did not work and that they are still signed in, and suggests closing the browser if it keeps
+  failing. Clearing the session locally instead would be worse: the cookie survives, so the
+  sign-in page would appear and the next reload would sign them straight back in. The button is
+  also busy while the request is in flight, because two clicks sent two requests.
+
+- A draft track no longer reads "Esta trilha está rascunho" in Portuguese. The sentence was built
+  by dropping the status label into it, which composes in English and not in Portuguese, where
+  "está inativa" works and "está rascunho" needs "em rascunho" — a grammar a label cannot carry.
+  Each status has its own sentence now, in both languages.
 - The history page says a failed "Load more" once instead of twice. A next page that fails puts the
   whole query in error while keeping the data it already has, so both the load failure and the
   next-page failure rendered — two alerts for one event, and the first offered a retry that

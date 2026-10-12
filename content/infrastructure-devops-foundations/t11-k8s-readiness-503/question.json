@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Uma API responde `503` no Service durante a inicialização porque seus Pods estão Running, mas ainda não estão aptos a receber requisições. Qual mecanismo permite retirá-los dos endpoints prontos até ficarem aptos?",
+  "explanation": "Readiness probe para anunciar quando cada Pod está pronto para receber tráfego.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Liveness probe que sempre reinicia o Pod.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Um novo Namespace com o mesmo nome do Service.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Readiness probe para anunciar quando cada Pod está pronto para receber tráfego.",
+      "correct": true,
+      "explanation": "Readiness probe para anunciar quando cada Pod está pronto para receber tráfego."
+    },
+    {
+      "key": "D",
+      "text": "Uma ConfigMap vazia.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -40,6 +40,8 @@ export function errorMessage(error: unknown, t: Catalog): string {
       return t.errors.trackNotFound;
     case "topic_not_found":
       return t.errors.topicNotFound;
+    case "question_under_examination":
+      return t.errors.questionUnderExamination;
     case "insufficient_content":
       return t.errors.insufficientContent;
     case "active_session_exists":

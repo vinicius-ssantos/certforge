@@ -161,6 +161,17 @@ main:focus {
   padding: var(--s3) var(--s4);
 }
 
+/* A failure of something in the header itself -- today only a sign-out that did not work. It sits
+ * under the bar rather than inside it so it is not read as part of the navigation, and it keeps
+ * the bar's own gutters so the sentence lines up with the wordmark above it. */
+.header-alert {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 0 var(--s4) var(--s3);
+  color: var(--danger);
+  font-size: var(--t-sm);
+}
+
 /* The wordmark is set in the reading face, not the interface face. The product is an editorial
  * desk; the serif is the one place the masthead says so before you read a word of it. */
 .brand {

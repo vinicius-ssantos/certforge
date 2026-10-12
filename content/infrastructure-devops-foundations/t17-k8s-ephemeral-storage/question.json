@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Um Pod usa muito espaço em arquivos temporários e logs gravados na camada gravável do contêiner. Eventos indicam eviction por pressão em armazenamento efêmero. Qual recurso deve ser revisado?",
+  "explanation": "Requests/limits de `ephemeral-storage` e consumo de armazenamento temporário do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Apenas a porta definida em `containerPort`.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "O número de Services do namespace.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "Requests/limits de `ephemeral-storage` e consumo de armazenamento temporário do Pod.",
+      "correct": true,
+      "explanation": "Requests/limits de `ephemeral-storage` e consumo de armazenamento temporário do Pod."
+    },
+    {
+      "key": "D",
+      "text": "Somente o valor de `replicas`.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

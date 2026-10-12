@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "A equipe criou um objeto Ingress com regras HTTP para rotear tráfego externo a um Service, mas nenhum controlador de Ingress está instalado no cluster. O que explica a ausência de roteamento?",
+  "explanation": "Criar apenas o recurso Ingress não implanta um controlador; é necessário um Ingress controller compatível.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Todo Ingress cria automaticamente um balanceador funcional sem componentes adicionais.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "O objeto Ingress só funciona com Services ExternalName.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "É obrigatório transformar o Deployment em StatefulSet.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Criar apenas o recurso Ingress não implanta um controlador; é necessário um Ingress controller compatível.",
+      "correct": true,
+      "explanation": "Criar apenas o recurso Ingress não implanta um controlador; é necessário um Ingress controller compatível."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

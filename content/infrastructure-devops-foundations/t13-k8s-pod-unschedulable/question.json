@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Um Pod permanece Pending; eventos mostram `0/3 nodes are available: Insufficient memory`. O contêiner solicita `requests.memory: 4Gi`, mas nenhum nó tem capacidade alocável suficiente. Qual resposta trata diretamente a causa?",
+  "explanation": "Ajustar requests com base no consumo real ou disponibilizar nós com capacidade alocável suficiente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Aumentar timeout da readiness probe.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Ajustar requests com base no consumo real ou disponibilizar nós com capacidade alocável suficiente.",
+      "correct": true,
+      "explanation": "Ajustar requests com base no consumo real ou disponibilizar nós com capacidade alocável suficiente."
+    },
+    {
+      "key": "C",
+      "text": "Criar um Service de tipo LoadBalancer.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Trocar o hostname do Ingress.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
