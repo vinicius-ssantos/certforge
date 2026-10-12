@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Um PersistentVolume tem `persistentVolumeReclaimPolicy: Retain`. O PVC associado é excluído. Qual é o comportamento esperado do volume subjacente?",
+  "explanation": "O PV e seus dados não são excluídos automaticamente pela política Retain, exigindo recuperação/gestão manual.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O PV e seus dados não são excluídos automaticamente pela política Retain, exigindo recuperação/gestão manual.",
+      "correct": true,
+      "explanation": "O PV e seus dados não são excluídos automaticamente pela política Retain, exigindo recuperação/gestão manual."
+    },
+    {
+      "key": "B",
+      "text": "O volume é sempre apagado pelo provisionador.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "O PV é transformado em Service.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Todos os Pods ligados ao namespace recebem o volume.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
