@@ -426,6 +426,61 @@ describe("writing a draft", () => {
     expect(call?.headers.get("X-XSRF-TOKEN")).toBe("test-csrf-token");
   });
 
+  /*
+   * Sending a new question for review is two requests: create, then submit. When the second one
+   * failed the first had already happened, and `revision` is a prop -- undefined for the life of
+   * the new-question page -- so the editor still believed it had nothing to update. Pressing the
+   * button again created a second draft, and the editor had no way to tell from the screen.
+   */
+  it("does not create a second draft when the send fails after the create", async () => {
+    const user = userEvent.setup();
+    const created = question({ options: [], references: [] });
+    const { fetch } = renderApp(
+      {
+        ...tracks,
+        "POST /api/admin/questions": { status: 201, body: created },
+        [`POST /api/admin/question-revisions/${REVISION_ID}/submit`]: problem(500, "internal_error"),
+        [`PUT /api/admin/question-revisions/${REVISION_ID}`]: { body: created },
+        [`GET ${QUESTION_URL}`]: { body: created },
+      },
+      { as: editor, path: "/editorial/new" },
+    );
+    await fillBasics(user);
+
+    await user.click(screen.getByRole("button", { name: "Send for review" }));
+    await screen.findByRole("alert");
+    await user.click(screen.getByRole("button", { name: "Send for review" }));
+
+    const creates = () =>
+      fetch.calls.filter((call) => call.method === "POST" && call.path === "/api/admin/questions");
+    await waitFor(() =>
+      expect(
+        fetch.calls.filter(
+          (call) =>
+            call.method === "PUT" && call.path === `/api/admin/question-revisions/${REVISION_ID}`,
+        ),
+      ).toHaveLength(1),
+    );
+    // The retry updated the revision it had already created rather than creating another.
+    expect(creates()).toHaveLength(1);
+  });
+
+  /*
+   * A failed topic catalogue looked like a catalogue with no topics in it: the select held only
+   * its placeholder, nothing said why, and the author who could not choose one was then told by
+   * the save that the topic was missing.
+   */
+  it("says the topics could not be loaded instead of offering none", async () => {
+    renderApp(
+      { "GET /api/editorial/catalog/topics": problem(503, "service_unavailable") },
+      { as: editor, path: "/editorial/new" },
+    );
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Topic")).toBeInTheDocument();
+  });
+
   it("points at a half-filled option instead of sending it", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(tracks, { as: editor, path: "/editorial/new" });

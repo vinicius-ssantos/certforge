@@ -27,6 +27,17 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   the session is built, which means a refusal a learner reads, which is a wording decision.
 ### Fixed
 
+- Sending a new question for review no longer risks creating it twice. It is two requests — create,
+  then submit — and when the second failed the first had already happened, while the editor still
+  believed it had nothing to update, because the revision it is editing arrives as a prop and the
+  new-question page never gets one. Pressing the button again posted a second draft, with nothing
+  on screen to suggest it had. The editor now remembers what it created and updates that instead.
+
+- The question editor says when the topic catalogue could not be loaded. A failed
+  `GET /api/editorial/catalog/topics` left the Topic select holding only its placeholder, which is
+  indistinguishable from a catalogue with no topics in it — and the author who could not choose one
+  was then told by the save that the topic was missing. The failure is shown where the choice is,
+  with a retry.
 - The question editor's "Saved at" time follows the chosen language. It was the one date in the
   app that did not: it went through `toLocaleTimeString` with no locale, which means the
   browser's, so an editor working in Portuguese on an English browser read "Salvo às 02:41 PM" —
