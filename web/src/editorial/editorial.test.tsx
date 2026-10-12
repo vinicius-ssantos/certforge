@@ -204,6 +204,56 @@ describe("the queue", () => {
     expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
   });
 
+  it("does not claim a search found nothing while that search is in flight", async () => {
+    const user = userEvent.setup();
+    // The second search is held open, so the assertions below run while it is genuinely in flight.
+    let arrive = () => {};
+    let asked = () => {};
+    const held = new Promise<void>((resolve) => {
+      arrive = resolve;
+    });
+    const requested = new Promise<void>((resolve) => {
+      asked = resolve;
+    });
+
+    renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": async (request) => {
+          if (request.query.get("q") !== "switch") {
+            return { body: queuePage([], { all: 0 }) };
+          }
+          asked();
+          await held;
+          return { body: queuePage(summaries.slice(0, 1), { all: 1 }) };
+        },
+      },
+      { as: editor, path: "/editorial?q=zzz" },
+    );
+
+    await screen.findByRole("heading", { name: /contains "zzz"/ });
+    const field = screen.getByLabelText("Search the prompts");
+    await user.clear(field);
+    await user.type(field, "switch");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+    await requested;
+
+    /*
+     * There are no rows to keep on screen here, so keeping the previous answer keeps only its
+     * conclusion — and that conclusion is about a different search. Saying nothing contains
+     * "switch" before the answer for "switch" has arrived is a guess the screen is about to lose,
+     * and repeating the verdict on "zzz" under a field that now reads "switch" is no better.
+     */
+    expect(screen.queryByRole("heading", { name: /contains "switch"/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /contains "zzz"/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading questions");
+
+    arrive();
+    expect(
+      await screen.findByRole("link", { name: "What is printed by this program?" }),
+    ).toBeInTheDocument();
+  });
+
   it("says a page is past the end rather than that the bank is empty", async () => {
     const user = userEvent.setup();
     const { container } = renderApp(

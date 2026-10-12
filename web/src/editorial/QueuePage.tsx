@@ -116,6 +116,14 @@ export function QueuePage() {
    * back offered is the first page, keeping whatever filter and search are in the address.
    */
   const pastEnd = visible?.length === 0 && total > 0;
+  /*
+   * Keeping the previous answer on screen while the next one loads only helps when there are rows
+   * to keep. With none, all that survives is the previous answer's verdict — "no prompt contains
+   * zzz" — and it is a verdict on a different query than the one the field and the address now
+   * name. So an empty placeholder waits instead of asserting something the arriving answer is
+   * about to contradict.
+   */
+  const awaiting = questions.isPending || (questions.isPlaceholderData && visible?.length === 0);
 
   return (
     <>
@@ -146,7 +154,7 @@ export function QueuePage() {
           </Link>
         ))}
       </nav>
-      {questions.isPending ? <Loading label={t.editorial.queue.loading} /> : null}
+      {awaiting ? <Loading label={t.editorial.queue.loading} /> : null}
       {/* Finding one question among a hundred and thirty is the thing this screen was worst
           at, and no amount of tab filtering fixes it. The query lives in the URL so a search can
           be linked to and survives a reload. */}
@@ -176,7 +184,7 @@ export function QueuePage() {
       {questions.isError ? (
         <ErrorState error={questions.error} onRetry={() => void questions.refetch()} />
       ) : null}
-      {visible && visible.length === 0 ? (
+      {visible && visible.length === 0 && !awaiting ? (
         /* An empty result after a search is not an empty bank: saying "no questions yet" there
            would be a lie, and telling an editor to write the first one is the wrong next step. */
         <EmptyState
