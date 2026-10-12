@@ -6,10 +6,10 @@ import { join } from "node:path";
 import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity.mjs";
 
 const pack = "content/infrastructure-devops-foundations";
-test("twenty-five human sign-offs remain valid and five drafts stay pending", () => {
+test("all seventy explicit human sign-offs match the current question blobs", () => {
   const state = assertPackReviewsCurrent(pack);
   assert.equal(state.total, 70);
-  assert.equal(state.accepted, 25);
+  assert.equal(state.accepted, 70);
 });
 test("editing a reviewed prompt revokes its recorded sign-off", () => {
   const dir = mkdtempSync(join(tmpdir(), "certforge-review-check-"));
@@ -21,7 +21,7 @@ test("editing a reviewed prompt revokes its recorded sign-off", () => {
     data.prompt += " Changed after review.";
     writeFileSync(path, JSON.stringify(data));
     const state = inspectPackReviews(target);
-    assert.equal(state.accepted, 24);
+    assert.equal(state.accepted, 69);
     assert.equal(state.results.find((r) => r.name === "t01-docker-build-cache").valid, false);
   } finally {
     rmSync(dir, { recursive: true, force: true });
