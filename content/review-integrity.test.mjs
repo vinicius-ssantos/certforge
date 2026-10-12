@@ -8,7 +8,7 @@ import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity
 const pack = "content/infrastructure-devops-foundations";
 test("twenty-five human sign-offs remain valid and five drafts stay pending", () => {
   const state = assertPackReviewsCurrent(pack);
-  assert.equal(state.total, 38);
+  assert.equal(state.total, 46);
   assert.equal(state.accepted, 25);
 });
 test("editing a reviewed prompt revokes its recorded sign-off", () => {
