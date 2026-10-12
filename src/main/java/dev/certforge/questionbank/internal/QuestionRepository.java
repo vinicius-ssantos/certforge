@@ -394,7 +394,12 @@ class QuestionRepository {
             "select r.question_id, r.id, r.revision_number, r.status, r.prompt, r.topic_id"
                 + LATEST_REVISION
                 + filters(statusFilter, search)
-                + " order by r.created_at desc limit :size offset :offset");
+                // The tie-break is what makes paging stable. Two latest revisions can share a
+                // created_at -- a pack import inserts in one go -- and without a unique column
+                // Postgres may order the tied rows differently for the offset of page one than
+                // for page two, so a walker of the bank skips one question and sees another
+                // twice. Silently: an importer then re-creates what it believes is missing.
+                + " order by r.created_at desc, r.id desc limit :size offset :offset");
     if (statusFilter != null) {
       statement = statement.param(STATUS, statusFilter.name());
     }
