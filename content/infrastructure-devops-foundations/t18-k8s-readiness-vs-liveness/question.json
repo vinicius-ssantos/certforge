@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Uma API Java continua executando, mas uma dependência externa está temporariamente indisponível. A aplicação deve parar de receber novas requisições sem necessariamente reiniciar o processo. Qual verificação reflete melhor essa intenção?",
+  "explanation": "Readiness probe, que pode marcar o Pod NotReady sem reiniciá-lo por esse motivo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Liveness probe falhando para reiniciar imediatamente.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "Readiness probe, que pode marcar o Pod NotReady sem reiniciá-lo por esse motivo.",
+      "correct": true,
+      "explanation": "Readiness probe, que pode marcar o Pod NotReady sem reiniciá-lo por esse motivo."
+    },
+    {
+      "key": "C",
+      "text": "CronJob executando a cada segundo.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "ServiceAccount com permissões administrativas.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
