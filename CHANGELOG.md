@@ -27,6 +27,11 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   the session is built, which means a refusal a learner reads, which is a wording decision.
 ### Fixed
 
+- The history page says a failed "Load more" once instead of twice. A next page that fails puts the
+  whole query in error while keeping the data it already has, so both the load failure and the
+  next-page failure rendered — two alerts for one event, and the first offered a retry that
+  refetched every page rather than the one that failed. The rows already read stay, the button that
+  asks again stays, and there is one message.
 - Sending a new question for review no longer risks creating it twice. It is two requests — create,
   then submit — and when the second failed the first had already happened, while the editor still
   believed it had nothing to update, because the revision it is editing arrives as a prop and the
