@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Durante um rollout, uma API Java precisa terminar requisições em andamento após receber sinal de encerramento. Qual campo controla o período de tolerância antes do encerramento forçado do Pod?",
+  "explanation": "`terminationGracePeriodSeconds`, em conjunto com tratamento correto de SIGTERM pela aplicação.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`minReadySeconds` determina quanto tempo o processo tem para concluir requisições.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "`maxUnavailable` define o tempo limite do SIGTERM.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "`restartPolicy` garante espera indefinida.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "`terminationGracePeriodSeconds`, em conjunto com tratamento correto de SIGTERM pela aplicação.",
+      "correct": true,
+      "explanation": "`terminationGracePeriodSeconds`, em conjunto com tratamento correto de SIGTERM pela aplicação."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
