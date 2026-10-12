@@ -9,6 +9,7 @@ import { formatTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
+import { ErrorState } from "../ui/States";
 import {
   draftFrom,
   emptyConcept,
@@ -66,7 +67,8 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   const api = useApi();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { groups } = useTopics();
+  const topics = useTopics();
+  const groups = topics.groups;
   const [draft, setDraft] = useState<Draft>(() => (revision ? draftFrom(revision) : emptyDraft()));
   // Which taxonomy the chosen topic belongs to decides which of the two fields below applies.
   // Unknown (nothing chosen yet) is treated as certification, which is what the rules do.
@@ -106,6 +108,14 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
   }, [dirty]);
+  /*
+   * The revision this editor created, once it has created one. `revision` is a prop, so on the
+   * new-question page it stays undefined for the life of the component -- and a save that creates
+   * the question and then fails to submit it left the editor still believing it had nothing to
+   * update, so pressing the button again posted a second draft. A ref rather than state: nothing
+   * on screen depends on it, only the next request does.
+   */
+  const createdRef = useRef<string | null>(null);
   const keepEditing = useRef<HTMLButtonElement>(null);
   const saveButton = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -126,14 +136,16 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
       if (found.length > 0) {
         return null;
       }
-      const saved = revision
+      const editing = revision?.id ?? createdRef.current;
+      const saved = editing
         ? await unwrap(
             api.PUT("/api/admin/question-revisions/{revisionId}", {
-              params: { path: { revisionId: revision.id } },
+              params: { path: { revisionId: editing } },
               body: request,
             }),
           )
         : await unwrap(api.POST("/api/admin/questions", { body: request }));
+      createdRef.current = editing ?? saved.revisions[0]?.id ?? null;
       // What is on screen is now saved, so moving on from here loses nothing.
       dirtyRef.current = false;
       setBaseline(JSON.stringify(draft));
@@ -143,7 +155,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
       if (!send) {
         return { view: saved, sent: false };
       }
-      const revisionId = revision?.id ?? saved.revisions[0]?.id;
+      const revisionId = createdRef.current;
       if (!revisionId) {
         return { view: saved, sent: false };
       }
@@ -304,6 +316,9 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           </label>
         </fieldset>
 
+        {/* The topics could not be loaded, so the choice below is empty for a reason the author
+            would otherwise have to guess at. */}
+        {topics.error ? <ErrorState error={topics.error} onRetry={topics.refetch} /> : null}
         <div className="row">
           <Field id="field-topic" label={ed.topic}>
             <select id="field-topic" value={draft.topicId} onChange={(event) => change({ topicId: event.target.value })}>

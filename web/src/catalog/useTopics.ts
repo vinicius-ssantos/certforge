@@ -28,7 +28,12 @@ export interface TopicGroup {
  * interview track as two separate topics on purpose (ADR 0014), and an author choosing between
  * them needs to see which is which.
  */
-export function useTopics(): { groups: TopicGroup[]; isPending: boolean } {
+export function useTopics(): {
+  groups: TopicGroup[];
+  isPending: boolean;
+  error: unknown;
+  refetch: () => void;
+} {
   const api = useApi();
   const tracks = useQuery({
     queryKey: ["editorial", "topics"],
@@ -46,5 +51,15 @@ export function useTopics(): { groups: TopicGroup[]; isPending: boolean } {
     })),
   }));
 
-  return { groups, isPending: tracks.isPending };
+  /*
+   * The error is part of the result, not swallowed. Without it the only sign that this failed
+   * was an empty list of topics, which looks exactly like a catalogue with nothing in it -- and
+   * an author who cannot choose a topic is then told by the save that the topic is missing.
+   */
+  return {
+    groups,
+    isPending: tracks.isPending,
+    error: tracks.isError ? tracks.error : null,
+    refetch: () => void tracks.refetch(),
+  };
 }
