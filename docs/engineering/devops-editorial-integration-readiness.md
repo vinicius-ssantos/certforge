@@ -13,14 +13,14 @@
 | Step | Branch | PR | Base | Draft scope |
 | --- | --- | --- | --- | --- |
 | 1 | `feat/infra-draft-editorial-pipeline` | #181 | `main` | First 25 source questions; original import/review gates |
-| 2 | `feat/devops-docker-expansion-15` | not confirmed open | #181 head branch | Docker Q26–Q30 |
+| 2 | `feat/devops-docker-expansion-15` | #208 (Draft) | #181 head branch | Docker Q26–Q30 |
 | 3 | `feat/k8s-operations-expansion-23` | #202 | Docker expansion branch | K8s Q31–Q38 |
 | 4 | `feat/k8s-advanced-expansion-31` | #203 | #202 head branch | K8s Q39–Q46 |
 | 5 | `feat/k8s-troubleshooting-expansion-39` | #204 | #203 head branch | K8s Q47–Q54 |
 | 6 | `feat/k8s-production-expansion-47` | #205 | #204 head branch | K8s Q55–Q62 |
 | 7 | `feat/k8s-reliability-expansion-55` | #206 | #205 head branch | K8s Q63–Q70, plus technical CI corrections |
 
-The PRs must not be merged out of order; a successful check on #206 does not retroactively turn the historical checks of #202–#205 green. A reviewer should confirm and, where needed, reconcile the missing Docker-expansion PR before any merge authorization.
+The PRs must not be merged out of order; a successful check on #206 does not retroactively turn the historical checks of #202–#205 green. Docker expansion PR #208 has been created as Draft and must be independently checked before merge authorization.
 
 ## Changes and corrections on the tip branch
 
@@ -32,7 +32,7 @@ The PRs must not be merged out of order; a successful check on #206 does not ret
 ## Pre-integration gates (do not bypass)
 
 1. Obtain explicit authorization before **any** merge, publication or API approval.
-2. Confirm that the Docker expansion is represented by an appropriately based, reviewable PR.
+2. Confirm that Docker expansion PR #208 remains correctly based and reviewable.
 3. Confirm all 70 `question.json` blobs still match `review.json` and no answer key changed. Never transfer approval to edited content automatically.
 4. Reconcile `main` drift, especially schema migrations and version numbers, without manufacturing an empty migration merely to satisfy tests.
 5. Run Java, web, content-integrity, Playwright, CodeQL, Gitleaks and release/Trivy checks on the exact integration candidate commit.
