@@ -45,11 +45,15 @@ class MigrationUpgradeIT {
 
   @Test
   void everyVersionAppliesOnTopOfThePreviousOneAndALaterRunHasNothingLeftToDo() {
-    int latest = flyway("latest").info().all().length;
-    assertThat(latest).as("the application ships migrations").isGreaterThanOrEqualTo(11);
+    var migrations = flyway("latest").info().all();
+    assertThat(migrations.length).as("the application ships migrations").isGreaterThanOrEqualTo(11);
 
-    for (int version = 1; version <= latest; version++) {
-      var result = flyway(String.valueOf(version)).migrate();
+    // Released migrations may have intentionally reserved version numbers (for example,
+    // V18 lives on main while this stacked content branch has V19). Only migrate to
+    // versions that are actually packaged; do not assume a contiguous 1..N sequence.
+    for (var migration : migrations) {
+      String version = migration.getVersion().toString();
+      var result = flyway(version).migrate();
       assertThat(result.success).as("migrating to version " + version).isTrue();
       assertThat(result.migrationsExecuted).as("version " + version + " ran once").isEqualTo(1);
     }

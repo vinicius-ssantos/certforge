@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Uma aplicação crítica deve receber prioridade de agendamento superior à de workloads de teste, respeitando as políticas do cluster. Qual recurso e referência no Pod expressam isso?",
+  "explanation": "Uma PriorityClass e o campo `priorityClassName` no Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Criar um Service com nome `critical`.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "Criar uma PriorityClass e referenciá-la por `priorityClassName`.",
+      "correct": true,
+      "explanation": "Uma PriorityClass e o campo `priorityClassName` no Pod."
+    },
+    {
+      "key": "C",
+      "text": "Adicionar um ConfigMap contendo a palavra priority.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "Alterar a URL da readiness probe.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

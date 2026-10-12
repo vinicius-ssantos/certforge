@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Um workload precisa obrigatoriamente executar apenas em nós com o label `disk=ssd`. Qual mecanismo expressa essa restrição como requisito de agendamento?",
+  "explanation": "Node affinity `requiredDuringSchedulingIgnoredDuringExecution` com expressão para `disk=ssd`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um Service selector `disk=ssd`.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Uma annotation no ConfigMap.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Node affinity `requiredDuringSchedulingIgnoredDuringExecution` com expressão para `disk=ssd`.",
+      "correct": true,
+      "explanation": "Node affinity `requiredDuringSchedulingIgnoredDuringExecution` com expressão para `disk=ssd`."
+    },
+    {
+      "key": "D",
+      "text": "Uma liveness probe com path `/ssd`.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

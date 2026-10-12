@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Uma aplicação sofre picos rápidos de CPU e o HPA reduz réplicas agressivamente logo depois dos picos. Qual ajuste do HPA ajuda a suavizar reduções de réplicas?",
+  "explanation": "Definir uma janela de estabilização de scaleDown em `behavior.scaleDown.stabilizationWindowSeconds`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Configurar readiness probe para sempre retornar 200.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "Adicionar uma NetworkPolicy sem regras.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "Alterar a StorageClass do Pod.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "Definir uma janela de estabilização de scaleDown em `behavior.scaleDown.stabilizationWindowSeconds`.",
+      "correct": true,
+      "explanation": "Definir uma janela de estabilização de scaleDown em `behavior.scaleDown.stabilizationWindowSeconds`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

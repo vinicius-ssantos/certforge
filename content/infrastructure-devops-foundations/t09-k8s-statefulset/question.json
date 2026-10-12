@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Um banco distribuído precisa de identidades de Pod estáveis e armazenamento persistente individual por réplica ao longo de recriações. Qual controlador foi projetado para esse cenário?",
+  "explanation": "StatefulSet com volumeClaimTemplates.",
+  "options": [
+    {
+      "key": "A",
+      "text": "StatefulSet com volumeClaimTemplates.",
+      "correct": true,
+      "explanation": "StatefulSet com volumeClaimTemplates."
+    },
+    {
+      "key": "B",
+      "text": "Deployment com volume emptyDir compartilhado.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "DaemonSet sem volumes.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Service ClusterIP como controlador dos Pods.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

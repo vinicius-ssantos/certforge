@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Um PDB declara `minAvailable: 2`, mas seu selector não corresponde a nenhuma das três réplicas da aplicação. Qual é o risco principal ao contar com esse PDB durante uma manutenção?",
+  "explanation": "Ele não protegerá aqueles Pods porque não estão selecionados pelo PDB.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Ele não protegerá aqueles Pods porque não estão selecionados pelo PDB.",
+      "correct": true,
+      "explanation": "Ele não protegerá aqueles Pods porque não estão selecionados pelo PDB."
+    },
+    {
+      "key": "B",
+      "text": "O PDB muda automaticamente os labels dos Pods.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "O scheduler converte o PDB em StatefulSet.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "O Service se torna do tipo ExternalName.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/disruptions/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

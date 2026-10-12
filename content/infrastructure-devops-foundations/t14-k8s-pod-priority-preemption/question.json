@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Pods de alta prioridade estão Pending por falta de recursos em nós, e há Pods de prioridade mais baixa elegíveis à preempção. Qual mecanismo do scheduler pode liberar espaço para o Pod prioritário, sujeito às regras de elegibilidade?",
+  "explanation": "Preempção de Pods de menor prioridade, condicionada ao agendamento possível e às regras de preempção.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um Service muda automaticamente a prioridade do workload.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "O ConfigMap força todos os nós a aceitarem o Pod.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "A readiness probe remove todos os PodDisruptionBudgets.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Preempção de Pods de menor prioridade, condicionada ao agendamento possível e às regras de preempção.",
+      "correct": true,
+      "explanation": "Preempção de Pods de menor prioridade, condicionada ao agendamento possível e às regras de preempção."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

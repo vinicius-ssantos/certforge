@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Um Pod permanece Pending porque seu PersistentVolumeClaim não foi vinculado. `kubectl describe pvc` mostra que não há volume compatível e a StorageClass indicada não possui provisionador funcional. Qual ação deve ser investigada primeiro?",
+  "explanation": "Corrigir o provisionamento da StorageClass ou disponibilizar um PV compatível com o PVC.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Aumentar `replicas` do Deployment.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Corrigir o provisionamento da StorageClass ou disponibilizar um PV compatível com o PVC.",
+      "correct": true,
+      "explanation": "Corrigir o provisionamento da StorageClass ou disponibilizar um PV compatível com o PVC."
+    },
+    {
+      "key": "C",
+      "text": "Criar um Service do tipo LoadBalancer.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Remover todas as readiness probes.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

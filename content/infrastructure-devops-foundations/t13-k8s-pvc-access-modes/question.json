@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Dois Pods em nós diferentes precisam montar o mesmo volume simultaneamente com leitura e escrita. Um PVC declara `ReadWriteOnce`. Qual consideração é correta?",
+  "explanation": "ReadWriteOnce não oferece garantia de montagem leitura/escrita simultânea por múltiplos nós; deve-se avaliar suporte a ReadWriteMany no driver e storage.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ReadWriteOnce garante acesso simultâneo em todos os nós.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Toda StorageClass aceita ReadWriteMany sem depender do driver.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "ReadWriteOnce não oferece garantia de montagem leitura/escrita simultânea por múltiplos nós; deve-se avaliar suporte a ReadWriteMany no driver e storage.",
+      "correct": true,
+      "explanation": "ReadWriteOnce não oferece garantia de montagem leitura/escrita simultânea por múltiplos nós; deve-se avaliar suporte a ReadWriteMany no driver e storage."
+    },
+    {
+      "key": "D",
+      "text": "Alterar o Service resolve o modo de acesso do volume.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

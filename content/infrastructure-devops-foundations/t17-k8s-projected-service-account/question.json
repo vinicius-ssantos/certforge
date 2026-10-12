@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Uma aplicação no Pod usa um token de ServiceAccount projetado, com expiração e rotação gerenciada pelo kubelet, para chamar a API Kubernetes. Qual mecanismo viabiliza esse tipo de credencial montada no Pod?",
+  "explanation": "Projected volume com `serviceAccountToken` e audiência adequada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Projected volume com `serviceAccountToken` e audiência adequada.",
+      "correct": true,
+      "explanation": "Projected volume com `serviceAccountToken` e audiência adequada."
+    },
+    {
+      "key": "B",
+      "text": "Volume `emptyDir` com credencial estática embutida na imagem.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "Service LoadBalancer exposto publicamente.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "NetworkPolicy que armazena o token.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/storage/projected-volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

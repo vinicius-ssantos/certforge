@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requer diagnosticar comportamento de confiabilidade e isolamento em cenários de operações Kubernetes.",
+  "prompt": "Um Service tem selector correto, mas a equipe quer investigar quais backends e condições de prontidão são anunciados pela descoberta moderna de endpoints do cluster. Qual recurso deve examinar?",
+  "explanation": "EndpointSlice associado ao Service, verificando endereços e condições de endpoints.",
+  "options": [
+    {
+      "key": "A",
+      "text": "PersistentVolumeClaim associado ao Deployment.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "B",
+      "text": "CronJob com nomes dos Pods.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "C",
+      "text": "ResourceQuota do namespace.",
+      "correct": false,
+      "explanation": "Esta alternativa não representa o mecanismo associado à situação descrita."
+    },
+    {
+      "key": "D",
+      "text": "EndpointSlice associado ao Service, verificando endereços e condições de endpoints.",
+      "correct": true,
+      "explanation": "EndpointSlice associado ao Service, verificando endereços e condições de endpoints."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/endpoint-slices/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

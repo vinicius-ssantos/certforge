@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000302",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um Pod no namespace `api` precisa acessar um Service chamado `db` que pertence ao namespace `data`. O DNS do cluster usa o domínio padrão `cluster.local`. Qual nome DNS totalmente qualificado identifica esse Service?",
+  "explanation": "O nome completo segue service.namespace.svc.cluster.local.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`localhost`, porque namespaces compartilham rede de loopback.",
+      "correct": false,
+      "explanation": "Cada Pod tem seu próprio contexto de rede; localhost não aponta para outro Service."
+    },
+    {
+      "key": "B",
+      "text": "`db`, que sempre procura Services em todos os namespaces.",
+      "correct": false,
+      "explanation": "Um nome curto é resolvido principalmente no namespace de busca do Pod."
+    },
+    {
+      "key": "C",
+      "text": "`data.db.svc.cluster.local`, invertendo namespace e Service.",
+      "correct": false,
+      "explanation": "A ordem padrão é service.namespace.svc.cluster.local."
+    },
+    {
+      "key": "D",
+      "text": "`db.data.svc.cluster.local`.",
+      "correct": true,
+      "explanation": "O nome completo segue service.namespace.svc.cluster.local."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Ao criar um Pod sem requests e limits explícitos em um namespace, o cluster aplica valores padrão a cada contêiner. Qual recurso de política pode fornecer esses defaults?",
+  "explanation": "LimitRange configurado no namespace para limites e requests padrão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ResourceQuota sempre preenche automaticamente os valores individuais.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "B",
+      "text": "PodDisruptionBudget configura requests padrão.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "LimitRange configurado no namespace para limites e requests padrão.",
+      "correct": true,
+      "explanation": "LimitRange configurado no namespace para limites e requests padrão."
+    },
+    {
+      "key": "D",
+      "text": "Ingress controller preenche os limits.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/policy/limit-range/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

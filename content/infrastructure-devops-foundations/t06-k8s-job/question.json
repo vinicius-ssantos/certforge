@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma equipe precisa executar uma migração pontual que deve terminar após completar com sucesso, em vez de manter um processo servindo tráfego indefinidamente. Qual recurso Kubernetes é o mais apropriado?",
+  "explanation": "Job representa trabalho até a conclusão configurada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Service, que cria Pods até a tarefa terminar.",
+      "correct": false,
+      "explanation": "Service oferece descoberta de rede, não gerencia execução pontual."
+    },
+    {
+      "key": "B",
+      "text": "DaemonSet, para executar o comando indefinidamente em cada nó.",
+      "correct": false,
+      "explanation": "DaemonSet mantém Pods por nó e não modela um trabalho de conclusão."
+    },
+    {
+      "key": "C",
+      "text": "Deployment, porque sempre finaliza após uma execução bem-sucedida.",
+      "correct": false,
+      "explanation": "Deployments mantêm réplicas de longa duração."
+    },
+    {
+      "key": "D",
+      "text": "Job, que gerencia Pods destinados a completar uma tarefa finita.",
+      "correct": true,
+      "explanation": "Job representa trabalho até a conclusão configurada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/job/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

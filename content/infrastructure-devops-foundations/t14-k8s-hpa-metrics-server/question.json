@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Um HPA baseado em CPU informa que não consegue obter métricas de recursos e não escala como esperado. Qual dependência deve ser verificada primeiro para essa modalidade de métrica?",
+  "explanation": "A disponibilidade da API `metrics.k8s.io` e do componente que fornece métricas de recursos, como Metrics Server.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A existência de um Service tipo NodePort para cada Pod.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "A disponibilidade da API `metrics.k8s.io` e do componente que fornece métricas de recursos, como Metrics Server.",
+      "correct": true,
+      "explanation": "A disponibilidade da API `metrics.k8s.io` e do componente que fornece métricas de recursos, como Metrics Server."
+    },
+    {
+      "key": "C",
+      "text": "Se a imagem define uma instrução EXPOSE.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "A quantidade de objetos ConfigMap no cluster.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

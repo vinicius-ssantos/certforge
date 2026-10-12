@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Uma readiness probe HTTP recebe repetidamente status 500 do endpoint configurado. Qual é o efeito esperado sobre a participação do Pod nos endpoints prontos do Service?",
+  "explanation": "A falha da readiness faz o Pod ser marcado NotReady e excluído dos endpoints prontos enquanto persistir.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A falha da readiness faz o Pod ser marcado NotReady e excluído dos endpoints prontos enquanto persistir.",
+      "correct": true,
+      "explanation": "A falha da readiness faz o Pod ser marcado NotReady e excluído dos endpoints prontos enquanto persistir."
+    },
+    {
+      "key": "B",
+      "text": "A readiness reinicia obrigatoriamente o processo a cada resposta 500.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "O Pod fica automaticamente com mais requests de CPU.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes desativa todas as NetworkPolicies.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/liveness-readiness-startup-probes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
