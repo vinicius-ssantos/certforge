@@ -63,6 +63,33 @@ function question(rev: Record<string, unknown> = {}) {
 
 const QUESTION_URL = `/api/admin/questions/${QUESTION_ID}`;
 
+/**
+ * The queue's response shape: a page of items plus the counts its tabs show. `paging` overrides
+ * the page, size and total, so a test can produce a queue of more pages than it has fixtures.
+ */
+function queuePage(
+  items: unknown[],
+  counts: Partial<Record<string, number>> = {},
+  paging: Partial<{ page: number; size: number; total: number }> = {},
+) {
+  return {
+    counts: {
+      all: items.length,
+      draft: 0,
+      technicalReview: 0,
+      approved: 0,
+      published: 0,
+      deprecated: 0,
+      ...counts,
+    },
+    items,
+    page: 0,
+    size: 25,
+    total: items.length,
+    ...paging,
+  };
+}
+
 describe("access", () => {
   it("shows the editorial link only to people who work on content", async () => {
     renderApp(tracks);
@@ -77,7 +104,7 @@ describe("access", () => {
   });
 
   it("offers the desk to an editor", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: editor, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: editor, path: "/editorial" });
 
     expect(await screen.findByRole("link", { name: "Editorial" })).toHaveAttribute("href", "/editorial");
   });
@@ -91,7 +118,7 @@ describe("the queue", () => {
 
   it("lists questions with their status in words and links to each", async () => {
     const { container } = renderApp(
-      { ...tracks, "GET /api/admin/questions": { body: summaries } },
+      { ...tracks, "GET /api/admin/questions": { body: queuePage(summaries) } },
       { as: editor, path: "/editorial" },
     );
 
@@ -109,13 +136,16 @@ describe("the queue", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("filters locally and shows counts using only the unfiltered request", async () => {
+  it("asks the server to narrow, and shows counts of everything rather than of the page", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
       {
         ...tracks,
         "GET /api/admin/questions": (request) => ({
-          body: request.query.get("status") === "DRAFT" ? [summaries[1]] : summaries,
+          body:
+            request.query.get("status") === "DRAFT"
+              ? queuePage([summaries[1]], { all: summaries.length, draft: 1 })
+              : queuePage(summaries, { all: summaries.length, draft: 1 }),
         }),
       },
       { as: editor, path: "/editorial" },
@@ -125,20 +155,225 @@ describe("the queue", () => {
 
     await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(2));
     expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveAttribute("aria-current", "page");
+    // The count is of every draft, not of the rows returned: a tab saying "1" must mean one
+    // exists, which is the whole reason the counts travel with the page.
     expect(screen.getByRole("link", { name: /^Drafts\b/ })).toHaveTextContent("1");
-    expect(fetch.calls.filter((call) => call.path === "/api/admin/questions")).toHaveLength(1);
-    expect(fetch.calls.every((call) => call.query.get("status") === null)).toBe(true);
+    // The narrowing is the server's job now, so the filtered request carries the status.
+    const asked = fetch.calls.filter((call) => call.path === "/api/admin/questions");
+    expect(asked.some((call) => call.query.get("status") === "DRAFT")).toBe(true);
+  });
+
+  it("searches the prompts on the server and keeps the query in the address", async () => {
+    const user = userEvent.setup();
+    const { fetch, router } = renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) => ({
+          body: request.query.get("q")
+            ? queuePage([summaries[0]], { all: 1 })
+            : queuePage(summaries, { all: summaries.length }),
+        }),
+      },
+      { as: editor, path: "/editorial" },
+    );
+
+    await user.type(await screen.findByLabelText("Search the prompts"), "boxing");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+
+    await waitFor(() =>
+      expect(
+        fetch.calls.some(
+          (call) => call.path === "/api/admin/questions" && call.query.get("q") === "boxing",
+        ),
+      ).toBe(true),
+    );
+    expect(router.state.location.search).toContain("q=boxing");
+  });
+
+  it("says a search found nothing rather than that the bank is empty", async () => {
+    renderApp(
+      { ...tracks, "GET /api/admin/questions": { body: queuePage([], { all: 0 }) } },
+      { as: editor, path: "/editorial?q=boxing" },
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: /No question.s prompt contains "boxing"/ }),
+    ).toBeInTheDocument();
+    // Telling an editor to write the first question would be the wrong next step: the bank is
+    // not empty, the search is too narrow.
+    expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
+  });
+
+  it("does not claim a search found nothing while that search is in flight", async () => {
+    const user = userEvent.setup();
+    // The second search is held open, so the assertions below run while it is genuinely in flight.
+    let arrive = () => {};
+    let asked = () => {};
+    const held = new Promise<void>((resolve) => {
+      arrive = resolve;
+    });
+    const requested = new Promise<void>((resolve) => {
+      asked = resolve;
+    });
+
+    renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": async (request) => {
+          if (request.query.get("q") !== "switch") {
+            return { body: queuePage([], { all: 0 }) };
+          }
+          asked();
+          await held;
+          return { body: queuePage(summaries.slice(0, 1), { all: 1 }) };
+        },
+      },
+      { as: editor, path: "/editorial?q=zzz" },
+    );
+
+    await screen.findByRole("heading", { name: /contains "zzz"/ });
+    const field = screen.getByLabelText("Search the prompts");
+    await user.clear(field);
+    await user.type(field, "switch");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+    await requested;
+
+    /*
+     * There are no rows to keep on screen here, so keeping the previous answer keeps only its
+     * conclusion — and that conclusion is about a different search. Saying nothing contains
+     * "switch" before the answer for "switch" has arrived is a guess the screen is about to lose,
+     * and repeating the verdict on "zzz" under a field that now reads "switch" is no better.
+     */
+    expect(screen.queryByRole("heading", { name: /contains "switch"/ })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: /contains "zzz"/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveTextContent("Loading questions");
+
+    arrive();
+    expect(
+      await screen.findByRole("link", { name: "What is printed by this program?" }),
+    ).toBeInTheDocument();
+  });
+
+  it("stops waiting when the search it waited for fails", async () => {
+    const user = userEvent.setup();
+    // Waiting for an answer that never comes would leave "Loading questions" standing next to
+    // the error forever, which is the way the fix above could have gone wrong.
+    renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) =>
+          request.query.get("q") === "switch"
+            ? problem(500, "internal_error")
+            : { body: queuePage([], { all: 0 }) },
+      },
+      { as: editor, path: "/editorial?q=zzz" },
+    );
+
+    await screen.findByRole("heading", { name: /contains "zzz"/ });
+    const field = screen.getByLabelText("Search the prompts");
+    await user.clear(field);
+    await user.type(field, "switch");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+
+    await screen.findByRole("button", { name: "Try again" });
+    expect(screen.queryByText("Loading questions")).not.toBeInTheDocument();
+  });
+
+  it("says a page is past the end rather than that the bank is empty", async () => {
+    const user = userEvent.setup();
+    const { container } = renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) =>
+          request.query.get("page") === "9"
+            ? { body: queuePage([], { all: 4 }, { page: 9, size: 2, total: 4 }) }
+            : { body: queuePage(summaries, { all: 4 }, { size: 2, total: 4 }) },
+      },
+      { as: editor, path: "/editorial?page=9" },
+    );
+
+    expect(
+      await screen.findByRole("heading", { name: "There is no page that far into the queue" }),
+    ).toBeInTheDocument();
+    // Four questions exist, so inviting the editor to write the first one would be a lie, and a
+    // pager here would have to number rows that are not there.
+    expect(screen.queryByText(/Write the first one/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "Pages of the question queue" })).not.toBeInTheDocument();
+    expect(await axe(container)).toHaveNoViolations();
+
+    await user.click(screen.getByRole("button", { name: "Go to the first page" }));
+
+    expect(await screen.findByText("1–2 of 4")).toBeInTheDocument();
+  });
+
+  it("keeps the rows and the counts on screen while the next page is in flight", async () => {
+    const user = userEvent.setup();
+    const later = [
+      { id: "q3", latestRevisionId: "r3", latestRevisionNumber: 1, latestStatus: "APPROVED", prompt: "Which collection keeps insertion order?", topicId: TOPIC_ID },
+      { id: "q4", latestRevisionId: "r4", latestRevisionNumber: 1, latestStatus: "PUBLISHED", prompt: "What does this stream print?", topicId: TOPIC_ID },
+    ];
+    // The second page is held open, so the assertions below run while it is genuinely in flight.
+    let arrive = () => {};
+    let asked = () => {};
+    const held = new Promise<void>((resolve) => {
+      arrive = resolve;
+    });
+    const requested = new Promise<void>((resolve) => {
+      asked = resolve;
+    });
+
+    renderApp(
+      {
+        ...tracks,
+        // Two pages of two, so the pager appears without needing fifty fixtures.
+        "GET /api/admin/questions": async (request) => {
+          if (request.query.get("page") !== "1") {
+            return { body: queuePage(summaries, { all: 4 }, { size: 2, total: 4 }) };
+          }
+          asked();
+          await held;
+          return { body: queuePage(later, { all: 4 }, { page: 1, size: 2, total: 4 }) };
+        },
+      },
+      { as: editor, path: "/editorial" },
+    );
+
+    await screen.findByText("1–2 of 4");
+    const table = await screen.findByRole("table");
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    await requested;
+
+    /*
+     * Each page is its own query, so before this was fixed the table and the tab counts unmounted
+     * right here: the screen went to "Loading questions" with nothing under it and then rebuilt.
+     * The previous page stays, dimmed, until the next one arrives.
+     */
+    await waitFor(() => expect(table).toHaveClass("stale"));
+    expect(within(table).getAllByRole("row")).toHaveLength(3);
+    expect(screen.getByRole("link", { name: /^All\b/ })).toHaveTextContent("4");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    // And the range still describes the rows standing there, not the ones being fetched.
+    expect(screen.getByText("1–2 of 4")).toBeInTheDocument();
+
+    arrive();
+    await screen.findByText("3–4 of 4");
+    // The same table element throughout: a remount would have replaced the node.
+    expect(screen.getByRole("table")).toBe(table);
+    expect(table).not.toHaveClass("stale");
+    expect(
+      screen.getByRole("link", { name: "Which collection keeps insertion order?" }),
+    ).toBeInTheDocument();
   });
 
   it("invites the first question, and only editors can write it", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: editor, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: editor, path: "/editorial" });
 
     expect(await screen.findByRole("heading", { name: "No questions yet" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "New question" })).toHaveAttribute("href", "/editorial/new");
   });
 
   it("hides New question from a reviewer", async () => {
-    renderApp({ ...tracks, "GET /api/admin/questions": { body: [] } }, { as: reviewer, path: "/editorial" });
+    renderApp({ ...tracks, "GET /api/admin/questions": { body: queuePage([]) } }, { as: reviewer, path: "/editorial" });
 
     await screen.findByRole("heading", { name: "No questions yet" });
     expect(screen.queryByRole("link", { name: "New question" })).not.toBeInTheDocument();

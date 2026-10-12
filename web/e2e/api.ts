@@ -85,6 +85,28 @@ interface QuestionContent {
 }
 
 /** A complete single-choice question, clearly labelled as test data. */
+/**
+ * Every question the queue holds for a filter, across its pages.
+ *
+ * The endpoint pages. Reading the first page and treating it as everything is how a top-up loop
+ * silently starts duplicating, so nothing here may assume one request is the whole answer.
+ */
+export async function listQuestions(
+  admin: APIRequestContext,
+  query = "",
+): Promise<QuestionSummary[]> {
+  const all: QuestionSummary[] = [];
+  for (let page = 0; ; page += 1) {
+    const separator = query ? "&" : "";
+    const response = await admin.get(
+      `/api/admin/questions?${query}${separator}size=100&page=${page}`,
+    );
+    const { items } = (await response.json()) as { items: QuestionSummary[] };
+    if (items.length === 0) return all;
+    all.push(...items);
+  }
+}
+
 export function testQuestion(topicId: string, prompt: string): QuestionContent {
   return {
     type: "SINGLE_CHOICE",
@@ -200,7 +222,7 @@ export async function ensurePractisableTopic(
   prompt: string,
   count = 10,
 ): Promise<void> {
-  const all = (await (await admin.get("/api/admin/questions?status=PUBLISHED")).json()) as QuestionSummary[];
+  const all = await listQuestions(admin, "status=PUBLISHED");
   const existing = all.filter((q) => q.topicId === topicId && q.prompt === prompt).length;
   for (let i = existing; i < count; i += 1) {
     await publishNewQuestion(admin, topicId, prompt);

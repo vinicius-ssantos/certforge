@@ -1223,6 +1223,16 @@ export interface components {
             /** @enum {string} */
             type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE" | "GUIDED_RESPONSE";
         };
+        QuestionPage: {
+            counts: components["schemas"]["StatusCounts"];
+            items: components["schemas"]["QuestionSummary"][];
+            /** Format: int32 */
+            page: number;
+            /** Format: int32 */
+            size: number;
+            /** Format: int64 */
+            total: number;
+        };
         QuestionResult: {
             answer: components["schemas"]["Answer"];
             answered: boolean;
@@ -1473,6 +1483,20 @@ export interface components {
             revisionIds?: string[];
             /** Format: uuid */
             topicId: string;
+        };
+        StatusCounts: {
+            /** Format: int32 */
+            all: number;
+            /** Format: int32 */
+            approved: number;
+            /** Format: int32 */
+            deprecated: number;
+            /** Format: int32 */
+            draft: number;
+            /** Format: int32 */
+            published: number;
+            /** Format: int32 */
+            technicalReview: number;
         };
         TopicProgress: {
             accuracy: number | null;
@@ -2040,6 +2064,9 @@ export interface operations {
         parameters: {
             query?: {
                 status?: "DRAFT" | "TECHNICAL_REVIEW" | "APPROVED" | "PUBLISHED" | "DEPRECATED";
+                q?: string;
+                page?: number;
+                size?: number;
             };
             header?: never;
             path?: never;
@@ -2053,7 +2080,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["QuestionSummary"][];
+                    "*/*": components["schemas"]["QuestionPage"];
                 };
             };
         };

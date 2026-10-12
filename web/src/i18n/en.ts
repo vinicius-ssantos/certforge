@@ -22,8 +22,6 @@ const TAG = "en";
 export const en = {
   language: {
     label: "Language",
-    /** Each language is named in itself, which is what a reader scanning the list looks for. */
-    change: "Change language",
   },
 
   layout: {
@@ -610,7 +608,6 @@ export const en = {
       provider: "Provider",
       examVersions: "Exam versions",
       topics: "Topics",
-      versionCount: (total: number, active: number) => `${total} (${active} active)`,
     },
 
     queue: {
@@ -622,7 +619,20 @@ export const en = {
       filterPublished: "Published",
       filterLabel: "Filter by status",
       loading: "Loading questions",
+      searchLabel: "Search the prompts",
+      searchSubmit: "Search",
+      searchClear: "Clear",
+      pagerLabel: "Pages of the question queue",
+      previousPage: "Previous",
+      nextPage: "Next",
+      showing: (first: number, last: number, total: number) => `${first}–${last} of ${total}`,
       emptyWithStatus: "No questions with this status",
+      emptyWithSearch: (query: string) => `No question's prompt contains "${query}"`,
+      emptyBodySearch: "Try fewer words, or clear the search to see the whole queue.",
+      emptyPastEnd: "There is no page that far into the queue",
+      emptyBodyPastEnd:
+        "The queue is shorter than the page this address asks for, which happens to a link kept after the queue changed.",
+      backToFirstPage: "Go to the first page",
       emptyTitle: "No questions yet",
       emptyBodyAuthor: "Write the first one with New question, or import a content pack.",
       emptyBodyReader: "Questions appear here once an editor writes them.",

@@ -99,7 +99,7 @@ Registrar revisão de uma questão que ninguém leu derruba tudo isso, então n�
 
 A revisão é feita por uma conta diferente da do autor, por padrão (`reviewer_must_differ_from_author`; veja o documento do banco de questões para mudar isso em uma instalação com um único mantenedor). O revisor precisa do papel `REVIEWER` e o publicador do papel `ADMINISTRATOR`.
 
-1. Liste o que aguarda revisão: `GET /api/admin/questions?status=TECHNICAL_REVIEW`.
+1. Liste o que aguarda revisão: `GET /api/admin/questions?status=TECHNICAL_REVIEW`. A resposta é uma página de 25 — leia o `total` e caminhe pelo `page` se houver mais, ou peça `size=100`.
 2. Leia cada questão com `GET /api/admin/questions/{id}`. O revisor verifica, como a política de conteúdo exige:
    - existe uma única interpretação defensável do enunciado;
    - a resposta está correta para o Java 21, e qualquer código compila e se comporta como declarado;

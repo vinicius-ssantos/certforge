@@ -21,6 +21,9 @@ import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.questionbank.RevisionStatus;
 import jakarta.servlet.http.Cookie;
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1015,5 +1018,113 @@ class QuestionBankIT {
         .doesNotContainIgnoringCase("correct\"");
     assertThat(bank.findSnapshotQuestion(new QuestionRevisionId(UUID.fromString(draft[1]))))
         .isEmpty();
+  }
+
+  /**
+   * Pages must partition the result: every match appears exactly once across them. The ordering is
+   * by `created_at` and a pack import inserts in one go, so this forces the ties the import
+   * produces and then walks the pages.
+   *
+   * <p><b>What this test cannot do</b> is fail reliably without the tie-break. Tied rows have no
+   * defined order, so Postgres is free to return them consistently and a broken query would pass by
+   * luck. It pins the invariant for whoever reads it next; the argument for the tie-break is in the
+   * query's own comment.
+   */
+  @Test
+  void pagesPartitionTheQueueEvenWhenEveryRevisionSharesATimestamp() throws Exception {
+    String marker = "staurolite";
+    List<String> created = new ArrayList<>();
+    for (int n = 0; n < 4; n++) {
+      created.add(createComplete("Draft " + n + " about " + marker)[0]);
+    }
+    // What a pack import looks like from the database's side: one instant for the whole batch.
+    jdbc.update(
+        "update certforge.qb_question_revision set created_at = ?"
+            + " where question_id in (?, ?, ?, ?)",
+        Timestamp.from(Instant.parse("2026-10-12T00:00:00Z")),
+        UUID.fromString(created.get(0)),
+        UUID.fromString(created.get(1)),
+        UUID.fromString(created.get(2)),
+        UUID.fromString(created.get(3)));
+
+    List<String> walked = new ArrayList<>();
+    for (int page = 0; page < 2; page++) {
+      MvcResult result =
+          send(get("/api/admin/questions?q=" + marker + "&size=2&page=" + page), editor, null)
+              .andExpect(status().isOk())
+              .andExpect(jsonPath("$.total").value(4))
+              .andReturn();
+      walked.addAll(JsonPath.read(result.getResponse().getContentAsString(), "$.items[*].id"));
+    }
+
+    assertThat(walked)
+        .hasSize(4)
+        .doesNotHaveDuplicates()
+        .containsExactlyInAnyOrderElementsOf(created);
+  }
+
+  @Test
+  void theQueueIsPagedAndSearchedOnTheServerWithCountsOfEverythingThatMatches() throws Exception {
+    // This class shares one database across its tests, so the assertions are scoped to a word
+    // only these four prompts carry. That is also the behaviour under test: the narrowing and the
+    // counting both happen in SQL, so a scoped search is a scoped count.
+    String marker = "zygomorphic";
+    createComplete("First draft about " + marker);
+    createComplete("Second draft about " + marker);
+    createComplete("Third draft about " + marker);
+    String[] published = publishNew("Published about " + marker);
+
+    send(get("/api/admin/questions?q=" + marker), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(4)))
+        .andExpect(jsonPath("$.total").value(4))
+        .andExpect(jsonPath("$.counts.all").value(4))
+        .andExpect(jsonPath("$.counts.draft").value(3))
+        .andExpect(jsonPath("$.counts.published").value(1));
+
+    // A page is a page: the items are capped while the totals still describe every match, so a
+    // tab reading "3" means three exist rather than three came back.
+    send(get("/api/admin/questions?q=" + marker + "&size=2"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(2)))
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(2))
+        .andExpect(jsonPath("$.total").value(4))
+        .andExpect(jsonPath("$.counts.all").value(4));
+
+    // The second page carries the rest, and nothing from the first.
+    MvcResult first =
+        send(get("/api/admin/questions?q=" + marker + "&size=2"), editor, null).andReturn();
+    MvcResult second =
+        send(get("/api/admin/questions?q=" + marker + "&size=2&page=1"), editor, null).andReturn();
+    List<String> firstIds =
+        JsonPath.read(first.getResponse().getContentAsString(), "$.items[*].id");
+    List<String> secondIds =
+        JsonPath.read(second.getResponse().getContentAsString(), "$.items[*].id");
+    assertThat(secondIds).hasSize(2).doesNotContainAnyElementsOf(firstIds);
+
+    // The search is case-insensitive, and composes with the status filter. The counts stay with
+    // the search rather than the filter, which is what lets the tabs say how many each state has.
+    send(get("/api/admin/questions?q=" + marker.toUpperCase() + "&status=PUBLISHED"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(1)))
+        .andExpect(jsonPath("$.items[0].id").value(published[0]))
+        .andExpect(jsonPath("$.total").value(1))
+        .andExpect(jsonPath("$.counts.all").value(4));
+
+    send(get("/api/admin/questions?q=" + marker + "-and-nothing-else"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.items", hasSize(0)))
+        .andExpect(jsonPath("$.total").value(0))
+        .andExpect(jsonPath("$.counts.all").value(0));
+
+    // A wildcard an editor typed is a character, not a pattern: unescaped, each of these would
+    // match every question in the bank instead of none of them.
+    send(get("/api/admin/questions?q=" + marker + "%25"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.total").value(0));
+    send(get("/api/admin/questions?q=" + marker + "_"), editor, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.total").value(0));
   }
 }

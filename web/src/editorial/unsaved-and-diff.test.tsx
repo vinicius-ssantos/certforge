@@ -2,7 +2,7 @@ import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
-import { editor, authorableTracks, javaTrack, renderApp, reviewer } from "../test/render";
+import { editor, authorableTracks, emptyQuestionPage, javaTrack, renderApp, reviewer } from "../test/render";
 
 const QUESTION_ID = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const REVISION_ID = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
@@ -96,7 +96,7 @@ describe("unsaved changes", () => {
     renderApp(
       {
         ...tracks,
-        "GET /api/admin/questions": { body: [] },
+        "GET /api/admin/questions": { body: emptyQuestionPage },
         [`GET ${QUESTION_URL}`]: { body: view(revision()) },
         [`PUT /api/admin/question-revisions/${REVISION_ID}`]: {
           body: view(revision({ explanation: "One plus one is two. More." })),

@@ -179,16 +179,33 @@ public class ContentImporter {
     post("/api/auth/login", "{\"email\":\"" + escape(email) + "\",\"password\":\"" + escape(password) + "\"}");
   }
 
+  /**
+   * Every prompt already in the bank, so a second run skips rather than duplicates.
+   *
+   * <p>The queue endpoint pages, so this walks the pages. Reading only the first one would make
+   * the importer believe anything past it is missing and create it again — which is exactly what
+   * `ContentPackImportIT` caught when paging was introduced.
+   */
   private List<String> existingPrompts() throws Exception {
-    HttpResponse<String> response =
-        send(HttpRequest.newBuilder(uri("/api/admin/questions")).GET().build());
-    ensureOk(response, "list questions");
     List<String> prompts = new ArrayList<>();
-    Matcher matcher = PROMPT.matcher(response.body());
-    while (matcher.find()) {
-      prompts.add(unescape(matcher.group(1)));
+    int page = 0;
+    while (true) {
+      HttpResponse<String> response =
+          send(
+              HttpRequest.newBuilder(uri("/api/admin/questions?size=100&page=" + page))
+                  .GET()
+                  .build());
+      ensureOk(response, "list questions");
+      int before = prompts.size();
+      Matcher matcher = PROMPT.matcher(response.body());
+      while (matcher.find()) {
+        prompts.add(unescape(matcher.group(1)));
+      }
+      if (prompts.size() == before) {
+        return prompts;
+      }
+      page++;
     }
-    return prompts;
   }
 
   private String post(String path, String body) throws Exception {

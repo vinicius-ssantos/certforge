@@ -80,12 +80,18 @@ Approval, publication, replacement and deprecation publish an `AuditFact` (actor
 
 | Endpoint | Permission |
 |---|---|
-| `GET /api/admin/questions[?status=]`, `GET /api/admin/questions/{id}` | any of `CONTENT_AUTHOR`, `CONTENT_REVIEW`, `CONTENT_PUBLISH` |
+| `GET /api/admin/questions[?status=&q=&page=&size=]`, `GET /api/admin/questions/{id}` | any of `CONTENT_AUTHOR`, `CONTENT_REVIEW`, `CONTENT_PUBLISH` |
 | `POST /api/admin/questions` | `CONTENT_AUTHOR` |
 | `POST /api/admin/questions/{id}/revisions` | `CONTENT_AUTHOR` |
 | `PUT /api/admin/question-revisions/{id}`, `POST .../{id}/submit` | `CONTENT_AUTHOR` (author only) |
 | `POST .../{id}/approve`, `.../request-changes` | `CONTENT_REVIEW` |
 | `POST .../{id}/publish`, `.../deprecate` | `CONTENT_PUBLISH` |
+The question listing is **paged**: it answers with `{ items, page, size, total, counts }`, not a
+flat array. `page` is 0-based and `size` defaults to 25 with a maximum of 100, so a caller that
+reads the first response and stops has seen 25 of the bank and not all of it. `q` searches the
+prompts, case-insensitively, treating a `%` or `_` as a character. `counts` follows `q` and ignores
+`status`, which is what lets a tab say how many exist in a state rather than how many came back.
+
 
 Every command returns the editorial view of the question. These responses include the answer key and are for editors, reviewers and publishers only.
 

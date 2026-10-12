@@ -125,11 +125,18 @@ try {
 }
 
 // Prompts already in the bank, in any state, so a second run tops up instead of duplicating.
-const listed = await admin.call("GET", "/api/admin/questions");
-if (!listed.ok) {
-  refuse(`Listing the question bank failed with ${listed.status}: ${await body(listed)}`);
+// The queue pages, so this walks every page: stopping at the first would hide the rest of the
+// bank and make this publish duplicates of what is already there.
+const existing = new Set();
+for (let page = 0; ; page += 1) {
+  const listed = await admin.call("GET", `/api/admin/questions?size=100&page=${page}`);
+  if (!listed.ok) {
+    refuse(`Listing the question bank failed with ${listed.status}: ${await body(listed)}`);
+  }
+  const { items } = JSON.parse(await body(listed));
+  if (items.length === 0) break;
+  for (const question of items) existing.add(question.prompt);
 }
-const existing = new Set(JSON.parse(await body(listed)).map((question) => question.prompt));
 
 // ---- the workflow ------------------------------------------------------------------------------
 

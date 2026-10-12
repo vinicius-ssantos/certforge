@@ -25,7 +25,6 @@ const TAG = "pt-BR";
 export const ptBR: Catalog = {
   language: {
     label: "Idioma",
-    change: "Mudar o idioma",
   },
 
   layout: {
@@ -554,8 +553,6 @@ export const ptBR: Catalog = {
       provider: "Fornecedor",
       examVersions: "Versões do exame",
       topics: "Tópicos",
-      versionCount: (total: number, active: number) =>
-        `${total} (${active} ${plural(TAG, active, { one: "ativa", other: "ativas" })})`,
     },
 
     queue: {
@@ -567,7 +564,20 @@ export const ptBR: Catalog = {
       filterPublished: "Publicadas",
       filterLabel: "Filtrar por situação",
       loading: "Carregando as questões",
+      searchLabel: "Buscar nos enunciados",
+      searchSubmit: "Buscar",
+      searchClear: "Limpar",
+      pagerLabel: "Páginas da fila de questões",
+      previousPage: "Anterior",
+      nextPage: "Próxima",
+      showing: (first: number, last: number, total: number) => `${first}–${last} de ${total}`,
       emptyWithStatus: "Nenhuma questão com esta situação",
+      emptyWithSearch: (query: string) => `Nenhum enunciado contém "${query}"`,
+      emptyBodySearch: "Tente menos palavras, ou limpe a busca para ver a fila inteira.",
+      emptyPastEnd: "Não existe página tão adiante na fila",
+      emptyBodyPastEnd:
+        "A fila é mais curta que a página pedida por este endereço, o que acontece com um link guardado depois que a fila mudou.",
+      backToFirstPage: "Ir para a primeira página",
       emptyTitle: "Nenhuma questão ainda",
       emptyBodyAuthor: "Escreva a primeira em Nova questão, ou importe um pacote de conteúdo.",
       emptyBodyReader: "As questões aparecem aqui quando um editor as escreve.",

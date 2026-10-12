@@ -12,7 +12,6 @@ import dev.certforge.questionbank.RevisionStatus;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ExpectedConceptView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.GuidedResponseView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.OptionView;
-import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionSummary;
 import dev.certforge.questionbank.internal.AdminQuestionViews.QuestionView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ReferenceView;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ReviewView;
@@ -80,8 +79,18 @@ class QuestionBankService {
   // ---- reads ---------------------------------------------------------------------------------
 
   @Transactional(readOnly = true)
-  List<QuestionSummary> list(RevisionStatus status) {
-    return repository.summaries(status);
+  /**
+   * One page of the queue plus the counts its tabs show. Both come from the same request, so the
+   * tabs cannot disagree with the list beneath them, and neither costs the browser the whole bank.
+   */
+  AdminQuestionViews.QuestionPage list(RevisionStatus status, String search, int page, int size) {
+    String trimmed = search == null || search.isBlank() ? null : search.trim();
+    return new AdminQuestionViews.QuestionPage(
+        repository.statusCounts(trimmed),
+        repository.summaries(status, trimmed, page, size),
+        page,
+        size,
+        repository.countSummaries(status, trimmed));
   }
 
   @Transactional(readOnly = true)

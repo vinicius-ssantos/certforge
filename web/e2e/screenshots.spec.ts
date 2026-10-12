@@ -1,7 +1,7 @@
 import { mkdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
-import { createStaff, post, put, publishNewQuestion, signedInApi, testQuestion, type QuestionView } from "./api";
+import { createStaff, listQuestions, post, put, publishNewQuestion, signedInApi, testQuestion, type QuestionView } from "./api";
 import { expectNoA11yViolations, register, signIn } from "./helpers";
 import { TOPIC_NAME } from "./seed";
 import { expect, test } from "./test";
@@ -55,9 +55,7 @@ async function captureMockResult(page: Page, adminAccount: { email: string; pass
     if (!track || track.topics.length !== 10) {
       throw new Error("Mock fixture requires all ten certification topics.");
     }
-    const existing = (await (
-      await publisher.get("/api/admin/questions?status=PUBLISHED")
-    ).json()) as Array<{ topicId: string | null }>;
+    const existing = await listQuestions(publisher, "status=PUBLISHED");
     for (const topic of track.topics) {
       const available = existing.filter((question) => question.topicId === topic.id).length;
       for (let index = available; index < 5; index += 1) {
