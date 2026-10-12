@@ -332,6 +332,94 @@
       "sourceGitBlobSha": "8a5842214866198ca40ab4ddb4b493a3632d943c",
       "scope": "Owner explicitly approved current complete wording and answer key; does not authorize API approval, publication or merge.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t09-k8s-pvc-pending": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t09-k8s-pvc-pending/question.json",
+      "sourceGitBlobSha": "455be3d25b8a83f7054419b75f295be00a0f4594",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t09-k8s-hpa-cpu": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t09-k8s-hpa-cpu/question.json",
+      "sourceGitBlobSha": "d49ca2782674b1d0376c25fb1f8f66b634eca2bd",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t09-k8s-cronjob": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t09-k8s-cronjob/question.json",
+      "sourceGitBlobSha": "dfeac5950ba89e07c9c7f3cb624c41816a3fa40c",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t09-k8s-statefulset": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t09-k8s-statefulset/question.json",
+      "sourceGitBlobSha": "0ab7baf172d1fbbe428d810e2d6b5f3c665f0e79",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t10-k8s-service-account": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t10-k8s-service-account/question.json",
+      "sourceGitBlobSha": "3c63948cf35d8adeb3057ae6ec7e1f0a2014a941",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t10-k8s-affinity-node": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t10-k8s-affinity-node/question.json",
+      "sourceGitBlobSha": "aff6e6c39df5c255da6bff50f08f96c76a55f656",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t10-k8s-crashloop": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t10-k8s-crashloop/question.json",
+      "sourceGitBlobSha": "34dd6c1f002caa50239ddb9302014ec9c880c32b",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t10-k8s-ingress-controller": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t10-k8s-ingress-controller/question.json",
+      "sourceGitBlobSha": "4ebff719cc6fa0f70125d75589a22fb2241b68a5",
+      "scope": "Owner expressly approved the existing question and key during editorial review; no API editorial approval, publication or merge authorized.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
