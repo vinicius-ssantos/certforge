@@ -82,12 +82,19 @@ Aprovação, publicação, substituição e depreciação publicam um `AuditFact
 
 | Endpoint | Permissão |
 |---|---|
-| `GET /api/admin/questions[?status=]`, `GET /api/admin/questions/{id}` | qualquer uma entre `CONTENT_AUTHOR`, `CONTENT_REVIEW`, `CONTENT_PUBLISH` |
+| `GET /api/admin/questions[?status=&q=&page=&size=]`, `GET /api/admin/questions/{id}` | qualquer uma entre `CONTENT_AUTHOR`, `CONTENT_REVIEW`, `CONTENT_PUBLISH` |
 | `POST /api/admin/questions` | `CONTENT_AUTHOR` |
 | `POST /api/admin/questions/{id}/revisions` | `CONTENT_AUTHOR` |
 | `PUT /api/admin/question-revisions/{id}`, `POST .../{id}/submit` | `CONTENT_AUTHOR` (somente o autor) |
 | `POST .../{id}/approve`, `.../request-changes` | `CONTENT_REVIEW` |
 | `POST .../{id}/publish`, `.../deprecate` | `CONTENT_PUBLISH` |
+A listagem de questões é **paginada**: ela responde com `{ items, page, size, total, counts }`, e
+não com um array plano. `page` começa em 0 e `size` vale 25 por padrão, com máximo de 100 — então um
+cliente que lê a primeira resposta e para viu 25 do banco, não o banco todo. `q` busca nos
+enunciados, sem diferenciar maiúsculas, tratando `%` ou `_` como caractere. `counts` segue o `q` e
+ignora o `status`, que é o que permite uma aba dizer quantas existem num estado em vez de quantas
+voltaram.
+
 
 Todo comando devolve a visão editorial da questão. Essas respostas incluem o gabarito e são apenas para editores, revisores e publicadores.
 

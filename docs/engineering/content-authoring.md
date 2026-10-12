@@ -97,7 +97,7 @@ Recording a review for a question nobody read defeats all of this, so do not.
 
 Review is done by a different account from the author by default (`reviewer_must_differ_from_author`; see the question-bank document to change this for a single-maintainer setup). The reviewer needs the `REVIEWER` role and the publisher the `ADMINISTRATOR` role.
 
-1. List what awaits review: `GET /api/admin/questions?status=TECHNICAL_REVIEW`.
+1. List what awaits review: `GET /api/admin/questions?status=TECHNICAL_REVIEW`. The answer is a page of 25 — read `total` and walk `page` if there is more, or ask for `size=100`.
 2. Read each question with `GET /api/admin/questions/{id}`. The reviewer checks, as the content policy requires:
    - there is one defensible interpretation of the prompt;
    - the answer is correct for Java 21, and any code compiles and behaves as stated;
