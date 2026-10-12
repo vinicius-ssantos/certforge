@@ -329,6 +329,31 @@ describe("a session that is no longer open", () => {
     expect(await screen.findByRole("heading", { level: 2, name: "This session expired" })).toBeInTheDocument();
   });
 
+  /*
+   * Practising again knows how to follow one conflict -- someone else opened a session for the
+   * topic, so join that one. Every other failure was dropped: the button re-enabled itself and
+   * said nothing, including for a topic that has since lost its published questions.
+   */
+  it("says why practising this topic again failed", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        [`GET /api/study/sessions/${SESSION_ID}`]: {
+          body: session({ status: "COMPLETED", closedAt: "2026-09-30T10:09:00Z" }),
+        },
+        "POST /api/study/sessions": problem(409, "insufficient_content"),
+        "GET /api/study/history/attempts": { body: { items: [], nextCursor: null } },
+      },
+      { path: `/sessions/${SESSION_ID}` },
+    );
+
+    await user.click(await screen.findByRole("button", { name: "Practise this topic again" }));
+
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    // And the way out is still there, so the failure is not a dead end.
+    expect(screen.getByRole("link", { name: "Back to all tracks" })).toBeInTheDocument();
+  });
+
   it("shows a session that cannot be found", async () => {
     renderApp(
       { [`GET /api/study/sessions/${SESSION_ID}`]: problem(404, "session_not_found") },

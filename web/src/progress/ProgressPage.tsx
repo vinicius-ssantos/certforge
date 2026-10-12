@@ -168,6 +168,17 @@ export function ProgressPage() {
       {progress.data && progress.data.length > 0 ? (
         <p className="hint">{t.progress.targetNote(PRACTICE_TARGET_PERCENT)}</p>
       ) : null}
+      {/*
+       * A section that renders nothing when there is nothing to show cannot also render
+       * nothing when it failed to load: a learner with real confidently-wrong answers would
+       * read a clean progress page as "nothing to worry about", and the way to practise them
+       * would simply be absent. The request is secondary, so it says so where it sits rather
+       * than taking over the page.
+       */}
+      {misconceptions.isPending ? <Loading /> : null}
+      {misconceptions.isError ? (
+        <ErrorState error={misconceptions.error} onRetry={() => void misconceptions.refetch()} />
+      ) : null}
       {misconceptions.data ? <Misconceptions rows={misconceptions.data} /> : null}
     </>
   );

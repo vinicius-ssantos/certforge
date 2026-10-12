@@ -8,6 +8,15 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Fixed
 
+- Two screens no longer hide a failed request. On the progress page a failed
+  `GET /api/review/misconceptions` looked exactly like having no misconceptions: the section
+  renders nothing when there is nothing to show, and it rendered nothing when it could not find
+  out either, so a learner with real confidently-wrong answers read a clean page as nothing to
+  worry about and the link to practise those questions was simply absent. At the end of a session,
+  "Practise this topic again" knew how to follow one conflict — someone else opened a session for
+  the topic, so join that one — and dropped every other failure, re-enabling the button and saying
+  nothing, including for a topic that has since lost its published questions. Both now say what
+  happened and keep the way out of the screen.
 - A certification track no longer offers a mock-exam action that the current published content cannot satisfy. The server now exposes mock readiness from the same per-topic eligibility rule used by the planner; the learner sees how many reviewed questions are still missing and in how many topics instead of discovering the shortage through a failed start. An already-active mock remains resumable even if the currently published bank later falls below the blueprint requirement (#138).
 
 ### Added

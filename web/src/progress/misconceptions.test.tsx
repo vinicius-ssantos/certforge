@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
+import { problem } from "../test/fakeServer";
 import { renderApp } from "../test/render";
 
 const TOPIC = "a3000000-0000-4000-8000-000000000001";
@@ -70,6 +71,27 @@ describe("where you were sure and wrong", () => {
     renderApp({ ...noProgress, "GET /api/review/misconceptions": { body: [] } }, at);
 
     await screen.findByRole("heading", { name: "No progress yet" });
+    expect(
+      screen.queryByRole("heading", { name: "Where you were sure and wrong" }),
+    ).not.toBeInTheDocument();
+  });
+
+  /*
+   * Nothing to show and failing to load look the same on a page that renders nothing for both,
+   * and they mean opposite things: one says there is no evidence of being confidently wrong, the
+   * other says the page could not find out. A learner reading the first when the second is true
+   * walks away reassured, and the way to practise those questions is simply missing.
+   */
+  it("says the section failed rather than showing nothing", async () => {
+    renderApp(
+      { ...noProgress, "GET /api/review/misconceptions": problem(500, "internal_error") },
+      at,
+    );
+
+    const failure = await screen.findByRole("alert");
+    expect(failure).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Try again" })).toBeInTheDocument();
+    // And it does not pretend to be the section itself.
     expect(
       screen.queryByRole("heading", { name: "Where you were sure and wrong" }),
     ).not.toBeInTheDocument();
