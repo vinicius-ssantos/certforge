@@ -6,9 +6,9 @@ import { join } from "node:path";
 import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity.mjs";
 
 const pack = "content/infrastructure-devops-foundations";
-test("all twenty-five human sign-offs match exact current question blobs and answer keys", () => {
+test("twenty-five human sign-offs remain valid and five drafts stay pending", () => {
   const state = assertPackReviewsCurrent(pack);
-  assert.equal(state.total, 25);
+  assert.equal(state.total, 30);
   assert.equal(state.accepted, 25);
 });
 test("editing a reviewed prompt revokes its recorded sign-off", () => {
