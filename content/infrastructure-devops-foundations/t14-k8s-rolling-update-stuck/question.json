@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Um Deployment usa `maxUnavailable: 0`, `maxSurge: 1`; durante uma atualização os novos Pods permanecem NotReady. Qual consequência é esperada enquanto as condições permanecerem assim?",
+  "explanation": "O rollout pode ficar sem progredir porque os novos Pods não ficam disponíveis para substituir os antigos preservando a disponibilidade mínima.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Deployment apaga todas as réplicas antigas imediatamente.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "O rollout necessariamente transforma Pods em Jobs.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "O rollout pode ficar sem progredir porque os novos Pods não ficam disponíveis para substituir os antigos preservando a disponibilidade mínima.",
+      "correct": true,
+      "explanation": "O rollout pode ficar sem progredir porque os novos Pods não ficam disponíveis para substituir os antigos preservando a disponibilidade mínima."
+    },
+    {
+      "key": "D",
+      "text": "O scheduler converte automaticamente os Pods NotReady em Services.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

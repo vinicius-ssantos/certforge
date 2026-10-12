@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Uma aplicação obtém `LOG_LEVEL` de um ConfigMap por variável de ambiente no início do processo. O ConfigMap é alterado, mas a variável dentro do contêiner permanece com o valor antigo. Qual ação é adequada para que a aplicação receba a nova variável de ambiente?",
+  "explanation": "Variáveis de ambiente provenientes de ConfigMaps não são atualizadas dentro de processos já iniciados.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Recriar/reiniciar os Pods por meio de novo rollout.",
+      "correct": true,
+      "explanation": "Variáveis de ambiente provenientes de ConfigMaps não são atualizadas dentro de processos já iniciados."
+    },
+    {
+      "key": "B",
+      "text": "Modificar um Service para alterar a variável de ambiente.",
+      "correct": false,
+      "explanation": "Service não altera o ambiente dos processos."
+    },
+    {
+      "key": "C",
+      "text": "Adicionar uma readiness probe.",
+      "correct": false,
+      "explanation": "Readiness não recarrega variáveis de ambiente do processo."
+    },
+    {
+      "key": "D",
+      "text": "Aguardar: todas as variáveis de ambiente são atualizadas automaticamente sem reinício.",
+      "correct": false,
+      "explanation": "A atualização automática de conteúdo montado não implica atualização de variáveis de ambiente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/configuration/configmap/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

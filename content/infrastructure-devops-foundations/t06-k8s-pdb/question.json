@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Um aplicativo tem três réplicas saudáveis e um PodDisruptionBudget com `minAvailable: 2`. Uma operação de manutenção tenta drenar nós usando a API de eviction. Qual é o papel desse PDB?",
+  "explanation": "PDB limita evictions voluntárias de acordo com a disponibilidade mínima.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Garantir que duas réplicas sobreviverão a qualquer falha física simultânea.",
+      "correct": false,
+      "explanation": "PDB não evita interrupções involuntárias decorrentes de falhas de nós."
+    },
+    {
+      "key": "B",
+      "text": "Impedir permanentemente toda exclusão manual ou atualização de Pods.",
+      "correct": false,
+      "explanation": "PDB atua nas interrupções voluntárias que usam a API de eviction, não em todo tipo de exclusão."
+    },
+    {
+      "key": "C",
+      "text": "Restringir interrupções voluntárias para manter pelo menos duas réplicas disponíveis durante a operação.",
+      "correct": true,
+      "explanation": "PDB limita evictions voluntárias de acordo com a disponibilidade mínima."
+    },
+    {
+      "key": "D",
+      "text": "Aumentar automaticamente de três para cinco réplicas.",
+      "correct": false,
+      "explanation": "PDB não é mecanismo de autoscaling."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/disruptions/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

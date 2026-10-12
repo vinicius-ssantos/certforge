@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Uma aplicação deve aguardar uma verificação de pré-requisitos e gerar um arquivo de configuração antes de iniciar o contêiner principal. Qual mecanismo de Pod foi projetado para executar uma etapa que termina antes dos contêineres da aplicação?",
+  "explanation": "Init container, executado antes dos contêineres regulares do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sidecar que roda em loop infinito para sempre.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Init container, executado antes dos contêineres regulares do Pod.",
+      "correct": true,
+      "explanation": "Init container, executado antes dos contêineres regulares do Pod."
+    },
+    {
+      "key": "C",
+      "text": "Service ClusterIP com selector vazio.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Liveness probe como script de provisionamento.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/init-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

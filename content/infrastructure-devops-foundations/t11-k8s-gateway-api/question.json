@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Interpretação de falhas operacionais e comportamento de recursos Kubernetes em cenários de aplicação.",
+  "prompt": "Uma equipe deseja rotear requisições HTTP externas por hostname e caminho usando os recursos padronizados da Gateway API. Qual objeto normalmente expressa as regras de roteamento HTTP e referencia o Gateway?",
+  "explanation": "HTTPRoute com regras de correspondência e referências a serviços de backend.",
+  "options": [
+    {
+      "key": "A",
+      "text": "HTTPRoute com regras de correspondência e referências a serviços de backend.",
+      "correct": true,
+      "explanation": "HTTPRoute com regras de correspondência e referências a serviços de backend."
+    },
+    {
+      "key": "B",
+      "text": "PersistentVolumeClaim com `storageClassName` configurado.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "C",
+      "text": "HorizontalPodAutoscaler com target CPU.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    },
+    {
+      "key": "D",
+      "text": "PodDisruptionBudget com minAvailable.",
+      "correct": false,
+      "explanation": "O recurso proposto não implementa a capacidade solicitada no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/gateway/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Uma aplicação em um Pod precisa consultar a API do Kubernetes com permissões limitadas. Qual abordagem segue o princípio de menor privilégio?",
+  "explanation": "Criar uma ServiceAccount dedicada e associá-la a uma Role limitada por RoleBinding.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Usar automaticamente credenciais de administrador em todos os Pods.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Criar uma ServiceAccount dedicada e associá-la a uma Role limitada por RoleBinding.",
+      "correct": true,
+      "explanation": "Criar uma ServiceAccount dedicada e associá-la a uma Role limitada por RoleBinding."
+    },
+    {
+      "key": "C",
+      "text": "Habilitar hostNetwork para conceder autorização.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Armazenar o token cluster-admin na imagem.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/security/service-accounts/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

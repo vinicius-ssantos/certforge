@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000301",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige interpretar um cenário aplicado, distinguir responsabilidades dos recursos e selecionar o comportamento tecnicamente correto.",
+  "prompt": "Durante um build de uma aplicação Java, a equipe percebe que arquivos locais de build e um diretório com credenciais de desenvolvimento estão sendo enviados no contexto. Qual prática ajuda a excluí-los desse envio?",
+  "explanation": "O .dockerignore remove padrões correspondentes do contexto enviado ao builder.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar EXPOSE ao Dockerfile.",
+      "correct": false,
+      "explanation": "EXPOSE não controla arquivos enviados ao builder."
+    },
+    {
+      "key": "B",
+      "text": "Executar docker ps antes do build.",
+      "correct": false,
+      "explanation": "Listar contêineres não altera o contexto do build."
+    },
+    {
+      "key": "C",
+      "text": "Configurar `.dockerignore` com caminhos como `target/` e `dev-credentials/`.",
+      "correct": true,
+      "explanation": "O .dockerignore remove padrões correspondentes do contexto enviado ao builder."
+    },
+    {
+      "key": "D",
+      "text": "Adicionar `CMD` com o comando de limpeza.",
+      "correct": false,
+      "explanation": "CMD é executado no runtime, não filtra o contexto de build."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial",
+      "url": "https://docs.docker.com/build/concepts/context/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

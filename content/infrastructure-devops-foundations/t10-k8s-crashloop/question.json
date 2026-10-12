@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige identificar o mecanismo correto e diagnosticar um cenário aplicado de operações Kubernetes.",
+  "prompt": "Um Pod mostra `CrashLoopBackOff` depois que a aplicação Java encerra imediatamente ao iniciar. Qual é a investigação inicial mais útil para encontrar a falha do processo?",
+  "explanation": "Consultar `kubectl logs POD --previous` quando houver contêiner anterior e inspecionar `kubectl describe pod`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Consultar `kubectl logs POD --previous` quando houver contêiner anterior e inspecionar `kubectl describe pod`.",
+      "correct": true,
+      "explanation": "Consultar `kubectl logs POD --previous` quando houver contêiner anterior e inspecionar `kubectl describe pod`."
+    },
+    {
+      "key": "B",
+      "text": "Trocar o Service para LoadBalancer.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Aumentar apenas o número de replicas sem ler os logs.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Desativar todas as NetworkPolicies do cluster.",
+      "correct": false,
+      "explanation": "Esta alternativa não resolve o requisito ou a causa descrita no cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

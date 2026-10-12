@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar cenários de operações Kubernetes e diferenciar causas de correções plausíveis.",
+  "prompt": "Uma aplicação consulta um endpoint externo, mas uma NetworkPolicy seleciona seus Pods e impõe isolamento de egress sem regra que permita aquela conexão. O CNI suporta NetworkPolicy. Qual mudança é adequada?",
+  "explanation": "Definir uma regra de egress compatível com os destinos e portas necessários, mantendo o isolamento.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Criar uma readiness probe para o endpoint externo.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Alterar somente o nome do namespace.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "C",
+      "text": "Adicionar `EXPOSE` ao Dockerfile.",
+      "correct": false,
+      "explanation": "Esta alternativa não atua diretamente sobre a causa ou o mecanismo descrito no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Definir uma regra de egress compatível com os destinos e portas necessários, mantendo o isolamento.",
+      "correct": true,
+      "explanation": "Definir uma regra de egress compatível com os destinos e portas necessários, mantendo o isolamento."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000303",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige analisar configuração e efeito operacional de mecanismos de produção do Kubernetes.",
+  "prompt": "Uma equipe quer negar por padrão o tráfego de saída dos Pods selecionados por uma NetworkPolicy, usando um CNI com suporte a egress. Qual configuração estabelece o isolamento inicial?",
+  "explanation": "NetworkPolicy com seletor dos Pods, `policyTypes: [Egress]` e sem regras de egress.",
+  "options": [
+    {
+      "key": "A",
+      "text": "NetworkPolicy com seletor dos Pods, `policyTypes: [Egress]` e sem regras de egress.",
+      "correct": true,
+      "explanation": "NetworkPolicy com seletor dos Pods, `policyTypes: [Egress]` e sem regras de egress."
+    },
+    {
+      "key": "B",
+      "text": "Service do tipo ClusterIP.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "C",
+      "text": "Readiness probe HTTP.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    },
+    {
+      "key": "D",
+      "text": "ConfigMap vazio.",
+      "correct": false,
+      "explanation": "Esta alternativa não implementa o mecanismo solicitado pelo cenário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Documentação oficial Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
