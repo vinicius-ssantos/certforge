@@ -254,6 +254,31 @@ describe("the queue", () => {
     ).toBeInTheDocument();
   });
 
+  it("stops waiting when the search it waited for fails", async () => {
+    const user = userEvent.setup();
+    // Waiting for an answer that never comes would leave "Loading questions" standing next to
+    // the error forever, which is the way the fix above could have gone wrong.
+    renderApp(
+      {
+        ...tracks,
+        "GET /api/admin/questions": (request) =>
+          request.query.get("q") === "switch"
+            ? problem(500, "internal_error")
+            : { body: queuePage([], { all: 0 }) },
+      },
+      { as: editor, path: "/editorial?q=zzz" },
+    );
+
+    await screen.findByRole("heading", { name: /contains "zzz"/ });
+    const field = screen.getByLabelText("Search the prompts");
+    await user.clear(field);
+    await user.type(field, "switch");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+
+    await screen.findByRole("button", { name: "Try again" });
+    expect(screen.queryByText("Loading questions")).not.toBeInTheDocument();
+  });
+
   it("says a page is past the end rather than that the bank is empty", async () => {
     const user = userEvent.setup();
     const { container } = renderApp(
