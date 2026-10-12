@@ -508,6 +508,94 @@
       "sourceGitBlobSha": "fa4289fa76c13158b71a10db8233d6ff0b8cc41a",
       "scope": "Owner expressly approved complete current question and answer key; no authorization to publish or merge.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t13-k8s-pod-unschedulable": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t13-k8s-pod-unschedulable/question.json",
+      "sourceGitBlobSha": "efe4200565330cf29b6f3d642e868dc0631a1633",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t13-k8s-pvc-access-modes": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t13-k8s-pvc-access-modes/question.json",
+      "sourceGitBlobSha": "7ec02e40434da5cb56b95a0fa775d9168ae791eb",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t13-k8s-resource-quota": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t13-k8s-resource-quota/question.json",
+      "sourceGitBlobSha": "c5448537b13b0e2678b01da09f97dd0bece42d2e",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t13-k8s-network-policy-egress": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t13-k8s-network-policy-egress/question.json",
+      "sourceGitBlobSha": "a76788a19536c6427412f99e32d75a22a485ab99",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t14-k8s-hpa-metrics-server": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "B"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t14-k8s-hpa-metrics-server/question.json",
+      "sourceGitBlobSha": "53d2830cced6c9b3d8e7c0cce0fd6c8d0ef72d67",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t14-k8s-rolling-update-stuck": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "C"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t14-k8s-rolling-update-stuck/question.json",
+      "sourceGitBlobSha": "d72956be2be91975161a362745a0f7315494f53a",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t14-k8s-probe-http-500": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "A"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t14-k8s-probe-http-500/question.json",
+      "sourceGitBlobSha": "16c176c73adc2d005e365cdb5ea4c51e2b05eb5a",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t14-k8s-pod-priority-preemption": {
+      "verdict": "APPROVED",
+      "reviewedOn": "2026-10-12",
+      "answerKey": [
+        "D"
+      ],
+      "sourceFile": "content/infrastructure-devops-foundations/t14-k8s-pod-priority-preemption/question.json",
+      "sourceGitBlobSha": "afbdc83e9ac9d0b79532b2d38a1a1b2fd2e54c36",
+      "scope": "Owner explicitly approved current question and key. Not an API editorial approval or authorization for publication/merge.",
+      "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
     }
   },
   "caveats": [
