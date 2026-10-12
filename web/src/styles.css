@@ -585,6 +585,13 @@ fieldset.field > legend {
   color: var(--text);
 }
 
+/* An empty state that offers a way out needs the action clear of the sentence explaining it.
+ * Most empty states have no action and are unaffected. */
+.state > button,
+.state > .button {
+  margin-top: var(--s2);
+}
+
 .notice {
   padding: var(--s3) var(--s4);
   border: 2px solid var(--ok);

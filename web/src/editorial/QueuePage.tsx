@@ -200,7 +200,7 @@ export function QueuePage() {
                   : t.editorial.queue.emptyBodyReader}
           </p>
           {pastEnd ? (
-            <button type="button" className="link-button" onClick={() => go({ page: 0 })}>
+            <button type="button" className="secondary" onClick={() => go({ page: 0 })}>
               {t.editorial.queue.backToFirstPage}
             </button>
           ) : null}
