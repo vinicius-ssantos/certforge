@@ -114,10 +114,10 @@ web:
 [group('check')]
 check: test-content test-backend test-web lint typecheck budget
 
-# The content pack checks: manifests, the editorial adapter and the recorded human reviews.
+# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality.
 [group('check')]
 test-content:
-    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs
+    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs
 
 # The backend suite, on PostgreSQL in Testcontainers.
 [group('check')]
