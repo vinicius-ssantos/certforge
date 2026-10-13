@@ -87,6 +87,21 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- Offline validation of the Dockerfiles, Compose files and Kubernetes YAML embedded in question text,
+  which is the other half of what #167 and #168 ask for. A snippet in a prompt is read as the thing being
+  taught, so a broken indent or an API version the cluster no longer serves teaches that instead. Every
+  fence must now name its language — an unlabelled block gets neither highlighting nor checking, and
+  nothing can tell broken YAML from prose with a colon in it. A block that does not declare itself whole
+  is checked as the fragment it is, which is most of them: `ENTRYPOINT` beside `CMD` teaches how the two
+  combine and should not have to grow a `FROM` to satisfy a tool. A block that does declare itself whole,
+  by carrying `FROM` or `apiVersion` with `kind`, is held to the rules for a file. `pack.json` gained
+  `platformVersions`, the floor at which the pack's own snippets are valid, and it is derived rather than
+  asserted: a named build stage or `COPY --from` needs Docker 17.05, a BuildKit mount 18.09, a heredoc
+  23.0, and a pack recording less than its own files need is refused. A manifest obliges the pack to
+  record a Kubernetes version, and a manifest naming an API version that release removed fails outright.
+  Measured on the way in, which is the number #168 is still owed: the pack holds eleven fenced blocks —
+  two Dockerfiles, one Dockerfile fragment, one Compose fragment, six YAML fragments — and **no manifests
+  at all**, where that issue asks for at least eight YAML scenarios (#167, #168).
 - A quality gate over a whole content pack, for the part of "every option needs an explanation" that a
   schema cannot see. `manifest-pack.mjs` checks one question at a time, so it accepted a pack where 51 of
   the 70 DevOps questions put the same sentence under two or three different wrong options, and where
