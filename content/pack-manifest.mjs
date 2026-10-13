@@ -11,6 +11,15 @@ const KINDS = new Set(["GENERAL", "INTERVIEW", "CERTIFICATION"]);
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const DIGEST = /^sha256:[a-f0-9]{64}$/;
 const DATE = /^\d{4}-\d{2}-\d{2}$/;
+/**
+ * `platformVersions` is the floor at which the pack's own embedded snippets are valid, one entry
+ * per platform it embeds — not a claim about what a learner should run. content/embedded-artifacts
+ * derives that floor from the snippets and refuses a pack that records less than its files need, so
+ * the number is checkable rather than aspirational. Only platforms this project can check offline
+ * are accepted, because a version nothing verifies is a comment pretending to be a constraint.
+ */
+const PLATFORMS = new Set(["docker", "compose", "kubernetes"]);
+const VERSION = /^\d+(?:\.\d+)*$/;
 
 function requiredText(value, name) {
   if (typeof value !== "string" || value.trim() !== value || value.length === 0) {
@@ -41,6 +50,20 @@ export function validatePackManifest(manifest) {
   }
   if (manifest.editorialStatus !== "DRAFT") {
     throw new Error("Invalid pack manifest: new packs must enter as DRAFT");
+  }
+  if (manifest.platformVersions !== undefined) {
+    const versions = manifest.platformVersions;
+    if (!versions || Array.isArray(versions) || typeof versions !== "object") {
+      throw new Error("Invalid pack manifest: platformVersions must be an object");
+    }
+    for (const [platform, version] of Object.entries(versions)) {
+      if (!PLATFORMS.has(platform)) {
+        throw new Error(`Invalid pack manifest: platformVersions.${platform} is not a platform this project validates`);
+      }
+      if (typeof version !== "string" || !VERSION.test(version)) {
+        throw new Error(`Invalid pack manifest: platformVersions.${platform} must be a dotted version`);
+      }
+    }
   }
   if (manifest.trackKind === "CERTIFICATION") {
     const certification = manifest.certification;
