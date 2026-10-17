@@ -31,6 +31,15 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- The pack publisher no longer says a reviewer's sign-off has lapsed when it has not. Pointed at the
+  DevOps pack it printed "edited after vinicius-ssantos reviewed it" for all seventy questions, none of
+  which had been touched: that pack records each verdict against the question file's git blob, checked
+  by `content/review-integrity.mjs`, while the publisher compares the digest the Java pack's
+  `review.json` stores. Two schemes, one reader. A false "edited since review" is worse than a crash,
+  because the warning it imitates is the one protecting the pack this reader does cover, and an
+  operator who learns to scroll past it loses that too. It now refuses a manifest pack up front, says
+  which checker does cover it, and quotes the record's own statement that it is "not an API editorial
+  approval ... and not a publication instruction".
 - Signing out says when it failed. The click dropped the rejection, so a failed
   `POST /api/auth/logout` left the session in place and the screen unchanged — on a shared machine,
   someone could walk away from an account they believed they had closed. It now says the sign-out
