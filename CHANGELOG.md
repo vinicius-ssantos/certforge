@@ -102,6 +102,16 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- `just record-review <question> <verdict>` writes a reviewer's verdict into a pack's `review.json`.
+  Nothing in this repository wrote that file before: six tools read it, and its forty-six entries were
+  typed by hand from the generated packet, which means copying a sha256 by eye once per question. The
+  twenty-four reviews that stand between this project and a startable mock exam would have been
+  twenty-four more chances to mistype one — and a mistyped digest records a verdict against text
+  nobody read, which is the one thing the digest exists to prevent. The verdict is an argument with no
+  default; the tool refuses a verdict it does not know and a question the pack does not have, computes
+  the digest from the question as it stands rather than trusting what it is told, records a renewal
+  when the question has changed since its last review, and writes nothing at all when the record
+  already says exactly this. It cannot produce a verdict, infer one, or assume approval (ADR 0005).
 - **The maintainer may approve their own questions, and the record says that is what happened.** The
   editorial API refused a reviewer who had written the revision, which on a project with one person
   refused the only reviewer there is. Two promises had been running as one: that *a person* checked

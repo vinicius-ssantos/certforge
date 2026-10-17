@@ -118,7 +118,7 @@ check: test-content test-backend test-web lint typecheck budget
 # and the Dockerfiles, Compose files and manifests embedded in question text.
 [group('check')]
 test-content:
-    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs content/embedded-artifacts.test.mjs
+    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs content/embedded-artifacts.test.mjs content/record-review.test.mjs
 
 # The backend suite, on PostgreSQL in Testcontainers.
 [group('check')]
@@ -202,6 +202,15 @@ scan-secrets:
         --source /repo --config /repo/.gitleaks.toml --no-banner --redact
 
 # ---- content and contract --------------------------------------------------------------------
+
+# Record your verdict for one question, with the digest computed from the question as it stands,
+# then rebuild the packet CI compares against. The verdict is yours and has no default: this
+# writes a decision down, it never makes one.
+#     just record-review t03-sealed-permits APPROVED
+[group('content')]
+record-review question verdict pack="content/java-se-21":
+    node content/record-review.mjs --pack {{pack}} --question {{question}} --verdict {{verdict}}
+    node content/build-review-packet.mjs
 
 # Rebuild the packet a technical reviewer works from, after changing the question pack.
 [group('content')]
