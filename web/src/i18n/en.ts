@@ -646,6 +646,33 @@ export const en = {
       noTopicYet: "No topic yet",
     },
 
+    reviewQueue: {
+      title: "Review one by one",
+      loading: "Loading the worklist",
+      loadingQuestion: "Loading the question",
+      progress: (at: number, total: number) => `${at} of ${total}`,
+      inTopic: (topic: string, count: number) =>
+        `${topic} — ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} in this topic`,
+      previous: "Previous question",
+      stageLabel: (at: number, total: number) => `Question ${at} of ${total} under review`,
+      youWroteThis:
+        "You wrote this revision, so approving it will be refused: the reviewer has to be someone other than the author. The question that imported a pack is authored by the account that imported it.",
+      skip: "Skip for now",
+      openOnItsOwn: "Open this question on its own page",
+      shortcuts:
+        "Press a for Approve, p for Request changes, s to skip. The keys move focus to a button; deciding is still a press, because nothing takes an approval back.",
+      emptyTitle: "Nothing is waiting for review",
+      emptyBody: "A question arrives here when its author sends the draft for review.",
+      doneTitle: "That is the end of the worklist",
+      doneBody: (total: number) =>
+        `You went through ${total} ${plural(TAG, total, { one: "question", other: "questions" })}. Anything you skipped is still waiting in the queue.`,
+      backToQueue: "Back to the queue",
+      notAReviewer: "You do not review questions",
+      notAReviewerBody: "This worklist is for the reviewer who decides whether a question is technically right.",
+      fallbackTopic: "Topic",
+      noTopic: "No topic yet",
+    },
+
     catalogTrack: {
       fallbackName: "Track",
       backToCatalog: "Back to the catalog",

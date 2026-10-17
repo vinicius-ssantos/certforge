@@ -102,6 +102,24 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **Review one by one**, a worklist for the person the project waits on. The editorial queue is built
+  for finding one question among a hundred and sixty; clearing a review backlog is the other job, and
+  doing it there costs a return to the queue, a click to open and a scroll to find the place, for every
+  question. The new screen shows one question with everything a reviewer judges, the checklist and the
+  decision beside it, and the next question arrives as soon as this one is decided. Questions are
+  grouped so a topic is finished before the next begins, because reviewing is holding one subject in
+  mind and the queue's own order changes subject at every row. `a` moves focus to Approve, `p` to
+  Request changes, `s` skips, and a skipped question stays in the queue.
+  **It offers no way to decide more than one question at once, and the keys move focus rather than
+  press.** The only promise this product makes is that a person checked each question, and a screen
+  that made approving cheaper than reading would be a machine for producing approvals nobody read —
+  there is no endpoint that takes an approval back. What is cheaper is reaching the question (ADR 0005).
+  The worklist walks every page of the queue rather than the first, because a backlog over a hundred
+  reported as a hundred is the failure #192 was filed for. The address carries the question on screen,
+  so a reload returns to the place in the walk; **Previous question** goes back; focus follows the
+  question that arrives, rather than staying on a button that has just been replaced; and a revision
+  the viewer wrote says so before the press, since the server refuses an author reviewing their own
+  work and the account that imports a pack authors every question in it.
 - Offline validation of the Dockerfiles, Compose files and Kubernetes YAML embedded in question text,
   which is the other half of what #167 and #168 ask for. A snippet in a prompt is read as the thing being
   taught, so a broken indent or an API version the cluster no longer serves teaches that instead. Every
