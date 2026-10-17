@@ -880,6 +880,24 @@ class QuestionBankIT {
   }
 
   @Test
+  void theAdministratorMayReviewTheirOwnRevision() throws Exception {
+    // One maintainer is the ordinary case for this project, and the rule says so: the account
+    // whose judgement is final answers for its own work. The decision still records who made it,
+    // and reviewer equal to author is what makes it legible afterwards as a self-review.
+    User owner = user("ADMINISTRATOR");
+    ResultActions created = send(post("/api/admin/questions"), owner, body("Owner self review"));
+    String revisionId = firstRevisionId(created, 0);
+    send(post("/api/admin/question-revisions/" + revisionId + "/submit"), owner, null)
+        .andExpect(status().isOk());
+
+    send(post("/api/admin/question-revisions/" + revisionId + "/approve"), owner, "{}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].status").value("APPROVED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].reviewerId").value(owner.id().toString()))
+        .andExpect(jsonPath("$.revisions[0].authorId").value(owner.id().toString()));
+  }
+
+  @Test
   void authorCannotReviewTheirOwnRevision() throws Exception {
     User both = user("EDITOR", "REVIEWER");
     ResultActions created = send(post("/api/admin/questions"), both, body("Self review"));

@@ -591,6 +591,38 @@ export const ptBR: Catalog = {
       noTopicYet: "Sem tópico ainda",
     },
 
+    reviewQueue: {
+      title: "Revisar uma a uma",
+      loading: "Carregando a lista de trabalho",
+      loadingQuestion: "Carregando a questão",
+      progress: (at: number, total: number) => `${at} de ${total}`,
+      inTopic: (topic: string, count: number) =>
+        `${topic} — ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} neste tópico`,
+      previous: "Questão anterior",
+      stageLabel: (at: number, total: number) => `Questão ${at} de ${total} em revisão`,
+      youWroteThisSelfReview:
+        "Esta revisão é sua. Aprovar é uma auto-revisão, e fica registrada como tal: a decisão leva seu nome como autor e como revisor, e nada no produto chama isso de revisão independente.",
+      youWroteThis:
+        "Você escreveu esta revisão, então aprovar vai ser recusado: quem revisa tem de ser outra pessoa, não quem escreveu. Questão importada de um pacote tem como autora a conta que importou.",
+      publishWhenApproved: "Publicar assim que eu aprovar",
+      publishWhenApprovedHint:
+        "Para varrer uma fila: transforma os dois toques em um, e o botão passa a dizer \"Aprovar e publicar\", de modo que o que você vai fazer está no botão e não num diálogo.",
+      skip: "Pular por ora",
+      openOnItsOwn: "Abrir esta questão na página dela",
+      shortcuts:
+        "Tecle a para Aprovar, p para Pedir mudanças, s para pular. As teclas levam o foco até o botão; decidir continua sendo apertar, porque nada desfaz uma aprovação.",
+      emptyTitle: "Nada esperando revisão",
+      emptyBody: "Uma questão chega aqui quando quem escreveu envia o rascunho para revisão.",
+      doneTitle: "Fim da lista de trabalho",
+      doneBody: (total: number) =>
+        `Você passou por ${total} ${plural(TAG, total, { one: "questão", other: "questões" })}. O que foi pulado continua na fila.`,
+      backToQueue: "Voltar para a fila",
+      notAReviewer: "Você não revisa questões",
+      notAReviewerBody: "Esta lista é de quem decide se uma questão está tecnicamente correta.",
+      fallbackTopic: "Tópico",
+      noTopic: "Sem tópico ainda",
+    },
+
     catalogTrack: {
       fallbackName: "Trilha",
       backToCatalog: "Voltar para o catálogo",
@@ -650,6 +682,7 @@ export const ptBR: Catalog = {
       notesHeading: "Notas da revisão",
       checked: "Verificado: ",
       decisionLabel: "Decisão da revisão",
+      selfReview: " (auto-revisão: quem revisou foi quem escreveu)",
       decisionApproved: "Aprovada",
       decisionChangesRequested: "Pediu mudanças",
       decidedBy: (reviewer: string) => ` por ${reviewer}`,
@@ -663,6 +696,9 @@ export const ptBR: Catalog = {
       comment: "Comentário",
       commentHint: "Obrigatório quando você pede mudanças. Quem escreveu vai ler.",
       approve: "Aprovar",
+      approveAndPublish: "Aprovar e publicar",
+      approveAndPublishHint:
+        "Um toque faz os dois. Publicar é definitivo: a versão publicada chega a quem estuda e não pode ser editada, só substituída por uma versão nova.",
       requestChanges: "Pedir mudanças",
       requestChangesHint: "Pedir mudanças devolve a versão a quem a escreveu, como rascunho.",
       sayWhatToChange: "Diga o que precisa mudar antes de devolver.",
@@ -670,6 +706,7 @@ export const ptBR: Catalog = {
       publishNote:
         "Só versões aprovadas podem ser publicadas. Uma versão publicada não pode ser editada; uma correção vira uma nova versão.",
       confirmPublishTitle: (revision: number) => `Confirmar a publicação da versão ${revision}`,
+      selfReviewedBy: (name: string) => `${name}, revisando o próprio trabalho`,
       unknownReviewer: "Revisor não registrado",
       unknownApprovalDate: "data da aprovação não registrada",
       confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>

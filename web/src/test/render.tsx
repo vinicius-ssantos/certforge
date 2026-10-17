@@ -46,6 +46,7 @@ export const admin = {
     "CATALOG_MANAGE",
     "CONTENT_AUTHOR",
     "CONTENT_REVIEW",
+    "CONTENT_SELF_REVIEW",
     "CONTENT_PUBLISH",
     "ACCOUNT_MANAGE",
     "AUDIT_READ",

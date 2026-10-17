@@ -20,5 +20,7 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0014](0014-one-topic-one-track.md) | Keep one topic in one track, and put fundamentals in the interview track | **Proposed** |
 | [0015](0015-separate-mock-exam-aggregate.md) | Model mock exams as a separate study aggregate | Accepted |
 | [0016](0016-interview-track-taxonomy.md) | Shape the interview track as a versioned taxonomy, and keep it small | Accepted |
+| [0017](0017-infrastructure-certification-tracks.md) | Add infrastructure and general tracks, with verified exam-version snapshots | **Proposed** |
+| [0018](0018-maintainer-may-review-their-own-work.md) | Let the maintainer review their own work, and say so in the record | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.
