@@ -31,6 +31,12 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- The review panel stops complaining about the last thing you pressed. Reaching for "Request
+  changes", being told to say what needs to change, and then approving instead left that complaint
+  on screen under "Approved." — with a summary link to `#review-comment`, a field the approval had
+  just removed from the page. A reviewer never saw it, because approving takes their panel away
+  with the status; an account that may also publish keeps the panel, and keeps the stale red text
+  too. Every decision now clears what the previous attempt complained about, as it is sent.
 - The pack publisher no longer says a reviewer's sign-off has lapsed when it has not. Pointed at the
   DevOps pack it printed "edited after vinicius-ssantos reviewed it" for all seventy questions, none of
   which had been touched: that pack records each verdict against the question file's git blob, checked
