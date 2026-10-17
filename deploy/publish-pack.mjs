@@ -23,6 +23,8 @@
 // Usage: node deploy/publish-pack.mjs --reviewer-email ... --reviewer-password ...
 //                                     [--url http://localhost:8081] [--pack content/java-se-21] [--dry-run]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD are the author's and the publisher's.
+import { existsSync } from "node:fs";
+import { join } from "node:path";
 import { Session, signInAdmin } from "./lib/session.mjs";
 import { readPack, readReviewRecord, reviewStatusOf } from "../content/pack.mjs";
 
@@ -53,6 +55,24 @@ if (!record) {
   refuse(
     `${pack} has no review.json, so nothing in it has been reviewed.`,
     "\nA person reviews it from docs/release/content-review-packet.md and records the verdict there.",
+  );
+}
+
+// A manifest pack records its reviews the other way round: content/review-integrity.mjs binds each
+// verdict to the question file's git blob, while this script compares the digest content/pack.mjs
+// computes against the one the Java pack's review.json stores. Run over a manifest pack it does not
+// simply fail. It prints "edited after <reviewer> reviewed it" for every question, which is a false
+// statement about a person's review — and the surest way to teach an operator to ignore the warning
+// that exists to protect the pack this scheme does cover.
+if (existsSync(join(pack, "pack.json"))) {
+  const caveats = [record.caveats ?? []].flat().filter((caveat) => typeof caveat === "string");
+  refuse(
+    `${pack} is a manifest pack. Its reviews are recorded against each question's git blob and checked`,
+    "\nby content/review-integrity.mjs, not by the digest scheme this publisher reads, so it would report",
+    "\nevery question as edited since its review. That is untrue, and this refuses rather than print it.",
+    caveats.length > 0 ? `\n\nThe record states what it is:\n  ${caveats.join("\n  ")}` : "",
+    "\n\nTurning those sign-offs into editorial decisions is a separate step, taken in the editorial desk",
+    "\nwith the reviewer's own account.",
   );
 }
 
