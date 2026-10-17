@@ -301,6 +301,102 @@ describe("an account that also publishes", () => {
   });
 });
 
+describe("where the walk starts", () => {
+  // TOPIC_A is the thin one: a mock needs five published questions in each topic, so deciding
+  // here unblocks something and deciding in a full topic does not.
+  const coverage = (a: number, b: number) => ({
+    "GET /api/admin/question-coverage": {
+      body: [
+        { topicId: TOPIC_A, published: a, waitingForReview: 2 },
+        { topicId: TOPIC_B, published: b, waitingForReview: 1 },
+      ],
+    },
+  });
+
+  it("opens on the topic a learner can be given least of", async () => {
+    // The queue's own order would start with TOPIC_A because it comes first; this has to start
+    // with TOPIC_B because TOPIC_B is the one short of questions.
+    renderApp({ ...threeWaiting, ...coverage(5, 1) }, { as: reviewer, ...OPEN });
+
+    expect(await screen.findByText("What does volatile guarantee?")).toBeInTheDocument();
+  });
+
+  it("says how much of the topic exists and how much is waiting", async () => {
+    renderApp({ ...threeWaiting, ...coverage(2, 5) }, { as: reviewer, ...OPEN });
+
+    await screen.findByText("What is 1 + 1?");
+    expect(screen.getByText(/2 published, 2 questions wait here/)).toBeInTheDocument();
+  });
+
+  it("still walks when the coverage cannot be read", async () => {
+    // Losing the priority is not losing the worklist: without it the order is the queue's, which
+    // is what it was before this existed.
+    renderApp(
+      { ...threeWaiting, "GET /api/admin/question-coverage": problem(500, "internal_error") },
+      { as: reviewer, ...OPEN },
+    );
+
+    expect(await screen.findByText("What is 1 + 1?")).toBeInTheDocument();
+    expect(screen.getByText("1 of 3")).toBeInTheDocument();
+  });
+});
+
+describe("the questions you passed over", () => {
+  it("offers them at the end, and walks only those", async () => {
+    // Two skipped, one decided: if the second pass held everything, this would read "1 of 3".
+    const user = userEvent.setup();
+    renderApp(
+      {
+        ...threeWaiting,
+        [`POST /api/admin/question-revisions/${SECOND}-r1/approve`]: {
+          body: { ...question(SECOND, TOPIC_B, "What does volatile guarantee?"), revisions: [{ ...question(SECOND, TOPIC_B, "What does volatile guarantee?").revisions[0], status: "APPROVED" }] },
+        },
+      },
+      { as: reviewer, ...OPEN },
+    );
+    await screen.findByText("What is 1 + 1?");
+
+    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+    await screen.findByText("What is 2 + 2?");
+    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+    await screen.findByText("What does volatile guarantee?");
+    await user.click(screen.getByRole("button", { name: "Approve" }));
+
+    expect(await screen.findByText(/2 questions you passed over are still undecided/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "Go through the 2 you skipped" }));
+
+    expect(await screen.findByText("What is 1 + 1?")).toBeInTheDocument();
+    expect(screen.getByText("1 of 2")).toBeInTheDocument();
+  });
+
+  it("does not offer one that was skipped and then decided", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        ...threeWaiting,
+        [`POST /api/admin/question-revisions/${FIRST}-r1/approve`]: {
+          body: { ...question(FIRST, TOPIC_A, "What is 1 + 1?"), revisions: [{ ...question(FIRST, TOPIC_A, "What is 1 + 1?").revisions[0], status: "APPROVED" }] },
+        },
+      },
+      { as: reviewer, ...OPEN },
+    );
+    await screen.findByText("What is 1 + 1?");
+
+    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+    await screen.findByText("What is 2 + 2?");
+    await user.click(screen.getByRole("button", { name: "Previous question" }));
+    await screen.findByText("What is 1 + 1?");
+    await user.click(screen.getByRole("button", { name: "Approve" }));
+    await screen.findByText("What is 2 + 2?");
+    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+    await screen.findByText("What does volatile guarantee?");
+    await user.click(screen.getByRole("button", { name: "Skip for now" }));
+
+    // Two skipped and still undecided, not three: coming back and deciding settles it.
+    expect(await screen.findByRole("button", { name: "Go through the 2 you skipped" })).toBeInTheDocument();
+  });
+});
+
 describe("the size of the backlog", () => {
   it("walks every page, so a backlog over a hundred is not reported as a hundred", async () => {
     // The server caps a page at 100. Reading only the first is the failure #192 was filed for:

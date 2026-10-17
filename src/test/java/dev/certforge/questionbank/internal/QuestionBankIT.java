@@ -46,6 +46,7 @@ import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
+import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(
@@ -1048,6 +1049,36 @@ class QuestionBankIT {
    * luck. It pins the invariant for whoever reads it next; the argument for the tie-break is in the
    * query's own comment.
    */
+  @Test
+  void coverageCountsWhatTheMockPlannerWouldCount() throws Exception {
+    // The number this endpoint reports is the number a reviewer plans their day around, so it
+    // has to be the same one the planner uses to decide a mock can start. Counting published
+    // revisions with a second query would agree until one of them learned a rule the other did
+    // not -- so this asserts against eligibleForTopic itself, not against a recomputed total.
+    publishNew("Coverage: a published question " + UUID.randomUUID());
+    String[] waiting = createComplete("Coverage: a question waiting " + UUID.randomUUID());
+    submit(waiting[1]);
+
+    String body =
+        send(get("/api/admin/question-coverage"), editor, null)
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    JsonNode rows = json.readTree(body);
+    JsonNode row = null;
+    for (JsonNode candidate : rows) {
+      if (TOPIC.equals(candidate.get("topicId").asText())) {
+        row = candidate;
+      }
+    }
+    assertThat(row).as("the seeded topic is reported").isNotNull();
+    int eligible = bank.eligibleForTopic(new TopicId(UUID.fromString(TOPIC))).size();
+    assertThat(row.get("published").asInt()).isEqualTo(eligible);
+    assertThat(row.get("waitingForReview").asInt()).isPositive();
+  }
+
   @Test
   void pagesPartitionTheQueueEvenWhenEveryRevisionSharesATimestamp() throws Exception {
     String marker = "staurolite";

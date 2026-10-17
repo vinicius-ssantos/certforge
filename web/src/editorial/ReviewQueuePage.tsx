@@ -63,6 +63,8 @@ export function ReviewQueuePage() {
   const [params, setParams] = useSearchParams();
   const [walked, setWalked] = useState<number | null>(null);
   const [publishWhenApproved, setPublishWhenApproved] = useState(rememberedPublishWhenApproved);
+  /** Set when the reviewer asks for a second pass: the walk then holds only what they skipped. */
+  const [onlySkipped, setOnlySkipped] = useState<string[] | null>(null);
 
   /*
    * The worklist is read once and then walked. Its own query key is what makes that safe: every
@@ -96,9 +98,29 @@ export function ReviewQueuePage() {
   });
 
   /*
+   * How close each topic is to being usable, read once beside the worklist. It is what turns
+   * the walk from a list into a plan: the mock needs five published questions in every topic,
+   * so a topic with two is three decisions from unblocking it and a topic with five is none.
+   */
+  const coverage = useQuery({
+    queryKey: ["editorial", "coverage"],
+    staleTime: Infinity,
+    queryFn: () => unwrap(api.GET("/api/admin/question-coverage")),
+  });
+  const publishedIn = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const row of coverage.data ?? []) counts.set(row.topicId, row.published);
+    return counts;
+  }, [coverage.data]);
+
+  /*
    * Grouped by topic, in the order the topics first appear. Reviewing is reading about one subject
    * and then judging it; ten questions of one topic in a row is one context held, where the
    * queue's own order makes the reviewer change subject at every question.
+   *
+   * The topics themselves come in order of how little of each a learner can be given, so the
+   * reviewer starts where decisions unblock something. Until the coverage arrives every topic
+   * counts as nought, which leaves the grouping in place and only the order unsettled.
    */
   const ordered = useMemo(() => {
     const items = worklist.data ?? [];
@@ -107,8 +129,12 @@ export function ReviewQueuePage() {
       const topic = item.topicId ?? "";
       if (!topics.includes(topic)) topics.push(topic);
     }
-    return topics.flatMap((topic) => items.filter((item) => (item.topicId ?? "") === topic));
-  }, [worklist.data]);
+    const thinnestFirst = [...topics].sort(
+      (left, right) => (publishedIn.get(left) ?? 0) - (publishedIn.get(right) ?? 0),
+    );
+    const inOrder = thinnestFirst.flatMap((topic) => items.filter((item) => (item.topicId ?? "") === topic));
+    return onlySkipped ? inOrder.filter((item) => onlySkipped.includes(item.id)) : inOrder;
+  }, [worklist.data, publishedIn, onlySkipped]);
 
   /*
    * The address carries the question on screen, so a reload, a link or a browser Back returns to
@@ -150,6 +176,18 @@ export function ReviewQueuePage() {
   const advance = useCallback(() => move(1), [move]);
 
   /*
+   * Skipping is not deciding, and the end of the walk should not be the end of what you owe.
+   * These two sets are what lets the last screen offer the ones you passed over, without
+   * offering the ones you passed over and later came back and decided.
+   */
+  const [passedOver, setPassedOver] = useState<string[]>([]);
+  const [settled, setSettled] = useState<string[]>([]);
+  const skip = useCallback(() => {
+    if (current) setPassedOver((names) => (names.includes(current.id) ? names : [...names, current.id]));
+    advance();
+  }, [advance, current]);
+
+  /*
    * Where a decision leaves the walk. Approving is the end of the job for a reviewer, so the
    * next question arrives. For an account that also publishes it is not: approving is the first
    * of two presses, and advancing then would carry the question off the screen before it could
@@ -159,10 +197,11 @@ export function ReviewQueuePage() {
    */
   const decided = useCallback(
     (action: string) => {
+      if (current) setSettled((names) => (names.includes(current.id) ? names : [...names, current.id]));
       if (action === "approve" && mayPublish) return;
       advance();
     },
-    [advance, mayPublish],
+    [advance, current, mayPublish],
   );
 
   /*
@@ -194,13 +233,13 @@ export function ReviewQueuePage() {
       const focus = (id: string) => document.getElementById(id)?.focus();
       if (event.key === "a") focus("approve-button");
       else if (event.key === "p") focus("request-changes-button");
-      else if (event.key === "s") advance();
+      else if (event.key === "s") skip();
       else return;
       event.preventDefault();
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [advance]);
+  }, [advance, skip]);
 
   if (!canReview) {
     return (
@@ -212,6 +251,8 @@ export function ReviewQueuePage() {
   }
 
   const total = ordered.length;
+  // Skipped and not since decided: a question you came back to does not count as owed.
+  const stillOwed = passedOver.filter((name) => !settled.includes(name));
   const revisions = [...(question.data?.revisions ?? [])].sort((a, b) => a.number - b.number);
   const revision = revisions[revisions.length - 1];
   const yours = revision?.authorId === account?.id;
@@ -241,6 +282,14 @@ export function ReviewQueuePage() {
       {worklist.data && total > 0 && at >= total ? (
         <EmptyState title={page.doneTitle}>
           <p>{page.doneBody(total)}</p>
+          {stillOwed.length > 0 ? (
+            <>
+              <p>{page.skippedBody(stillOwed.length)}</p>
+              <button type="button" onClick={() => { setOnlySkipped(stillOwed); setWalked(0); }}>
+                {page.reviewSkipped(stillOwed.length)}
+              </button>
+            </>
+          ) : null}
           <button type="button" onClick={() => move(-1)}>
             {page.previous}
           </button>
@@ -258,13 +307,14 @@ export function ReviewQueuePage() {
               {page.inTopic(
                 current.topicId ? (topicNames.get(current.topicId) ?? page.fallbackTopic) : page.noTopic,
                 ordered.filter((item) => (item.topicId ?? "") === (current.topicId ?? "")).length,
+                publishedIn.get(current.topicId ?? "") ?? 0,
               )}
             </p>
             <div className="stack">
               <button type="button" className="secondary" disabled={at === 0} onClick={() => move(-1)}>
                 {page.previous}
               </button>
-              <button type="button" className="secondary" onClick={advance}>
+              <button type="button" className="secondary" onClick={skip}>
                 {page.skip}
               </button>
               <Link to={`/editorial/questions/${current.id}`}>{page.openOnItsOwn}</Link>

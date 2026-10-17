@@ -102,6 +102,17 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- The review worklist starts where decisions unblock something, and offers back what you skipped. It
+  grouped questions by topic, which holds one subject in mind, but took the topics in whatever order
+  the queue had them — alphabetical, an order about names. A mock exam needs five published questions
+  in every topic, so a topic with two is three decisions from unblocking one and a topic with five is
+  none, and the walk now begins with the thinnest. The counts come from a new admin endpoint,
+  `GET /api/admin/question-coverage`, whose `published` is **counted by asking the method the mock
+  planner asks** rather than by a second query that computes the same thing: two counters agree until
+  the day one learns a rule the other does not, and one such rule already exists (guided-response
+  revisions are publishable but never mocked). Losing the endpoint loses the priority and nothing
+  else — the walk falls back to the order it had. At the end, questions passed over are offered as a
+  second pass, minus any you went back and decided (#138).
 - `just record-review <question> <verdict>` writes a reviewer's verdict into a pack's `review.json`.
   Nothing in this repository wrote that file before: six tools read it, and its forty-six entries were
   typed by hand from the generated packet, which means copying a sha256 by eye once per question. The

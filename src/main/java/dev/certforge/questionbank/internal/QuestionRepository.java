@@ -376,6 +376,23 @@ class QuestionRepository {
             });
   }
 
+  /** How many questions of each topic are waiting for a decision, by topic. */
+  Map<UUID, Integer> waitingByTopic() {
+    return jdbc.sql(
+            "select r.topic_id, count(*) as tally"
+                + LATEST_REVISION
+                + " and r.status = 'TECHNICAL_REVIEW' and r.topic_id is not null"
+                + " group by r.topic_id")
+        .query(
+            rs -> {
+              var tally = new LinkedHashMap<UUID, Integer>();
+              while (rs.next()) {
+                tally.put(rs.getObject("topic_id", UUID.class), rs.getInt("tally"));
+              }
+              return tally;
+            });
+  }
+
   long countSummaries(RevisionStatus statusFilter, String search) {
     var statement = jdbc.sql("select count(*)" + LATEST_REVISION + filters(statusFilter, search));
     if (statusFilter != null) {
