@@ -300,6 +300,28 @@ main {
   margin-bottom: 0;
 }
 
+/*
+ * The standing of the worklist, above the question being judged. It stays plain on purpose: the
+ * question underneath is what the reviewer has to read, and a progress bar competing with it
+ * would be the loudest thing on a screen whose job is reading.
+ */
+.review-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s3) var(--s4);
+  margin-bottom: var(--s4);
+}
+
+.review-progress > p[role="status"] {
+  font-weight: 600;
+  margin: 0;
+}
+
+.review-progress > p {
+  margin: 0;
+}
+
 .head-actions {
   display: flex;
   flex-wrap: wrap;
@@ -2302,4 +2324,13 @@ button.mock-nav-button.current {
   .segmented .choice:last-of-type label {
     border-radius: 0 0 var(--radius) var(--radius);
   }
+}
+
+/*
+ * A note that predicts a refusal, rather than reporting one that happened. It is not an alert:
+ * nothing has failed yet, and announcing it as a failure would be a lie about the state.
+ */
+.warn-note {
+  border-left: 3px solid var(--review);
+  padding-left: var(--s3);
 }

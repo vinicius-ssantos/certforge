@@ -36,11 +36,17 @@ export function ReviewPanel({
   revision,
   isLatest,
   topicName,
+  onDecided,
 }: {
   question: EditorialQuestion;
   revision: Revision;
   isLatest: boolean;
   topicName?: string;
+  /**
+   * Where a decision leaves the viewer, when it is not this page. The review queue walks a
+   * worklist, so it moves to the next question instead of staying on the one just decided.
+   */
+  onDecided?: (action: Action) => void;
 }) {
   const t = useText();
   const { locale } = useLocale();
@@ -89,7 +95,9 @@ export function ReviewPanel({
       queryClient.setQueryData(["editorial", "question", updated.id], updated);
       void queryClient.invalidateQueries({ queryKey: ["editorial", "questions"] });
       const notice = { approve: "approved", "request-changes": "changes", publish: "published", deprecate: "retired", "new-revision": "started" }[action];
-      if (action === "new-revision") {
+      if (onDecided && action !== "new-revision") {
+        onDecided(action);
+      } else if (action === "new-revision") {
         const newest = Math.max(...updated.revisions.map((candidate) => candidate.number));
         navigate(`/editorial/questions/${updated.id}?revision=${newest}`, { state: { notice } });
       } else {
@@ -161,10 +169,10 @@ export function ReviewPanel({
             />
           </div>
           <div className="stack decision-actions">
-            <button type="button" className="approve" disabled={decide.isPending} onClick={() => decide.mutate("approve")}>
+            <button id="approve-button" type="button" className="approve" disabled={decide.isPending} onClick={() => decide.mutate("approve")}>
               {panel.approve}
             </button>
-            <button type="button" className="warn" disabled={decide.isPending} onClick={requestChanges}>
+            <button id="request-changes-button" type="button" className="warn" disabled={decide.isPending} onClick={requestChanges}>
               {panel.requestChanges}
             </button>
             <p className="hint">{panel.requestChangesHint}</p>

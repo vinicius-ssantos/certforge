@@ -22,13 +22,19 @@ function noticeFor(kind: string, t: Catalog): string | undefined {
   return notices[kind];
 }
 
-function RevisionWithDecisions({
+/**
+ * One revision with everything a reviewer judges, and the decision controls beside it. Exported
+ * because the review queue shows the same thing; a second rendering of a question under review
+ * would be a second chance to differ from this one.
+ */
+export function RevisionWithDecisions({
   question,
   revision,
   isLatest,
   topicName,
   previous,
   topicNameOf,
+  onDecided,
 }: {
   question: EditorialQuestion;
   revision: Revision;
@@ -36,6 +42,7 @@ function RevisionWithDecisions({
   topicName: string | undefined;
   previous: Revision | undefined;
   topicNameOf: (id: string) => string | undefined;
+  onDecided?: (action: string) => void;
 }) {
   const can = useCanDecide(revision, isLatest);
   const any = can.review || can.publish || can.retire || can.startRevision;
@@ -45,7 +52,19 @@ function RevisionWithDecisions({
       topicName={topicName}
       previous={previous}
       topicNameOf={topicNameOf}
-      {...(any ? { aside: <ReviewPanel question={question} revision={revision} isLatest={isLatest} topicName={topicName} /> } : {})}
+      {...(any
+        ? {
+            aside: (
+              <ReviewPanel
+                question={question}
+                revision={revision}
+                isLatest={isLatest}
+                topicName={topicName}
+                {...(onDecided ? { onDecided } : {})}
+              />
+            ),
+          }
+        : {})}
     />
   );
 }

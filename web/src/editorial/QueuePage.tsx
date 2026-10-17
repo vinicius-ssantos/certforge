@@ -32,6 +32,7 @@ export function QueuePage() {
   const api = useApi();
   const canAuthor = useHasAny("CONTENT_AUTHOR");
   const canManageCatalog = useHasAny("CATALOG_MANAGE");
+  const canReview = useHasAny("CONTENT_REVIEW");
   const topicNames = useTopicNames();
   const [params, setParams] = useSearchParams();
   const requested = params.get("status");
@@ -130,6 +131,11 @@ export function QueuePage() {
       <div className="page-head">
         <h1>{t.editorial.queue.title}</h1>
         <div className="head-actions">
+          {canReview ? (
+            <Link to="/editorial/review" className="button secondary">
+              {t.editorial.reviewQueue.title}
+            </Link>
+          ) : null}
           {canManageCatalog ? (
             <Link to="/editorial/catalog" className="button secondary">
               {t.editorial.catalogTitle}
