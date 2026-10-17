@@ -31,6 +31,16 @@ class RolePermissionTest {
   }
 
   @Test
+  void onlyTheAdministratorMayReviewTheirOwnWork() {
+    // The rule a one-maintainer project needs, kept narrow: the account whose judgement is final
+    // answers for its own revisions, and an author added later still cannot approve their own.
+    assertThat(Role.ADMINISTRATOR.permissions()).contains(Permission.CONTENT_SELF_REVIEW);
+    assertThat(Role.EDITOR.permissions()).doesNotContain(Permission.CONTENT_SELF_REVIEW);
+    assertThat(Role.REVIEWER.permissions()).doesNotContain(Permission.CONTENT_SELF_REVIEW);
+    assertThat(Role.LEARNER.permissions()).doesNotContain(Permission.CONTENT_SELF_REVIEW);
+  }
+
+  @Test
   void returnedPermissionSetIsACopy() {
     Role.LEARNER.permissions().clear();
 

@@ -35,6 +35,7 @@ export function RevisionWithDecisions({
   previous,
   topicNameOf,
   onDecided,
+  publishWhenApproved,
 }: {
   question: EditorialQuestion;
   revision: Revision;
@@ -43,6 +44,8 @@ export function RevisionWithDecisions({
   previous: Revision | undefined;
   topicNameOf: (id: string) => string | undefined;
   onDecided?: (action: string) => void;
+  /** Passed through to the panel: approving publishes too, for a caller that offers that. */
+  publishWhenApproved?: boolean;
 }) {
   const can = useCanDecide(revision, isLatest);
   const any = can.review || can.publish || can.retire || can.startRevision;
@@ -61,6 +64,7 @@ export function RevisionWithDecisions({
                 isLatest={isLatest}
                 topicName={topicName}
                 {...(onDecided ? { onDecided } : {})}
+                {...(publishWhenApproved === undefined ? {} : { publishWhenApproved })}
               />
             ),
           }

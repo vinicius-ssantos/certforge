@@ -55,6 +55,69 @@ const view = (...revisions: Record<string, unknown>[]) => ({
 
 const OPEN = { path: `/editorial/questions/${QUESTION_ID}` };
 
+describe("how a recorded decision reads", () => {
+  it("calls a decision by the author of the revision a self-review", async () => {
+    // The product never claims a second pair of eyes it did not have. The data already says
+    // so -- reviewer and author are the same id -- and this is where a person reads it.
+    renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: {
+          body: view(
+            revision({
+              status: "APPROVED",
+              authorId: admin.id,
+              authorName: "admin@example.com",
+              reviews: [
+                {
+                  reviewerId: admin.id,
+                  reviewerName: "admin@example.com",
+                  decision: "APPROVED",
+                  comment: null,
+                  checklist: [],
+                  decidedAt: "2026-10-01T09:00:00Z",
+                },
+              ],
+            }),
+          ),
+        },
+      },
+      { as: admin, ...OPEN },
+    );
+
+    expect(await screen.findByText(/self-review: the reviewer wrote it/)).toBeInTheDocument();
+  });
+
+  it("does not call an independent decision a self-review", async () => {
+    renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: {
+          body: view(
+            revision({
+              status: "APPROVED",
+              reviews: [
+                {
+                  reviewerId: reviewer.id,
+                  reviewerName: "reviewer@example.com",
+                  decision: "APPROVED",
+                  comment: null,
+                  checklist: [],
+                  decidedAt: "2026-10-01T09:00:00Z",
+                },
+              ],
+            }),
+          ),
+        },
+      },
+      { as: admin, ...OPEN },
+    );
+
+    await screen.findByText(/reviewer@example.com/);
+    expect(screen.queryByText(/self-review/)).not.toBeInTheDocument();
+  });
+});
+
 describe("reviewing", () => {
   it("shows a reviewer the policy checklist and the decision, with no publish section", async () => {
     const { container } = renderApp(

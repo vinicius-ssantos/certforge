@@ -192,7 +192,8 @@ export function RevisionView({
               {revision.reviews.map((review) => (
                 <li key={`${review.reviewerId}-${review.decidedAt}`}>
                   <strong>{decisionLabel(review.decision, t)}</strong>
-                  {review.reviewerName ? view.decidedBy(review.reviewerName) : ""}{" "}
+                  {review.reviewerName ? view.decidedBy(review.reviewerName) : ""}
+                  {review.reviewerId === revision.authorId ? view.selfReview : null}{" "}
                   <time dateTime={review.decidedAt}>{formatDateTime(review.decidedAt, locale)}</time>
                   {review.comment ? <p>{review.comment}</p> : null}
                   {review.checklist.length > 0 ? (

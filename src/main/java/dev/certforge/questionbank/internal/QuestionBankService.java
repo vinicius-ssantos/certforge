@@ -4,6 +4,7 @@ import dev.certforge.audit.AuditFact;
 import dev.certforge.identity.AccountNames;
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.identity.Permission;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
@@ -51,7 +52,6 @@ class QuestionBankService {
   private final AccountNames accountNames;
   private final Clock clock;
   private final ApplicationEventPublisher events;
-  private final QuestionBankProperties properties;
   private final MeterRegistry metrics;
   private final ObservationRegistry observations;
 
@@ -62,7 +62,6 @@ class QuestionBankService {
       AccountNames accountNames,
       Clock clock,
       ApplicationEventPublisher events,
-      QuestionBankProperties properties,
       MeterRegistry metrics,
       ObservationRegistry observations) {
     this.repository = repository;
@@ -71,7 +70,6 @@ class QuestionBankService {
     this.accountNames = accountNames;
     this.clock = clock;
     this.events = events;
-    this.properties = properties;
     this.metrics = metrics;
     this.observations = observations;
   }
@@ -260,10 +258,23 @@ class QuestionBankService {
     }
   }
 
+  /**
+   * Who may decide on a revision they wrote. Everyone needs someone else to check their work,
+   * except the account that holds {@link Permission#CONTENT_SELF_REVIEW} — the one whose judgement
+   * is final because there is nobody above it. That is a narrower rule than the deployment-wide
+   * switch it replaces, which let *any* author approve their own work; an author added to this
+   * project still cannot.
+   *
+   * <p>A self-review is accepted, never disguised: the decision records the reviewer, and a
+   * reviewer equal to the author is what the editorial desk reads to call it a self-review. Nothing
+   * here claims a second pair of eyes that was not there (ADR 0005).
+   */
   private void requireSeparation(ActorId reviewer, Revision revision) {
-    if (properties.requireReviewerSeparation() && revision.authorId().equals(reviewer.value())) {
+    if (revision.authorId().equals(reviewer.value())
+        && !currentActor.has(Permission.CONTENT_SELF_REVIEW)) {
       throw QuestionBankException.forbidden(
-          "reviewer_must_differ_from_author", "A revision cannot be reviewed by its author");
+          "reviewer_must_differ_from_author",
+          "A revision has to be reviewed by someone other than its author");
     }
   }
 

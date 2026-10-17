@@ -15,6 +15,30 @@ import { RevisionWithDecisions } from "./QuestionPage";
 const PAGE_SIZE = 100;
 
 /**
+ * Whether the reviewer asked for approving to publish as well. Remembered per browser, like the
+ * language: it is a convenience of this person's working session, it reaches nobody else, and it
+ * starts off, so a reader of this storage key cannot turn it on for anyone.
+ */
+const PUBLISH_KEY = "certforge.review.publishWhenApproved";
+
+function rememberedPublishWhenApproved(): boolean {
+  try {
+    return localStorage.getItem(PUBLISH_KEY) === "true";
+  } catch {
+    return false;
+  }
+}
+
+function rememberPublishWhenApproved(value: boolean): void {
+  try {
+    localStorage.setItem(PUBLISH_KEY, String(value));
+  } catch {
+    // A private window or blocked site data: the choice holds for this visit and is not
+    // remembered, which is better than failing the click.
+  }
+}
+
+/**
  * Reviewing a worklist instead of a list. The queue screen is built for finding one question among
  * a hundred and sixty; this is built for the other job, which is working through every question
  * waiting for a decision — one at a time, with everything a reviewer judges on the screen, and the
@@ -34,8 +58,11 @@ export function ReviewQueuePage() {
   const account = useAccount();
   const topicNames = useTopicNames();
   const canReview = useHasAny("CONTENT_REVIEW");
+  const maySelfReview = useHasAny("CONTENT_SELF_REVIEW");
+  const mayPublish = useHasAny("CONTENT_PUBLISH");
   const [params, setParams] = useSearchParams();
   const [walked, setWalked] = useState<number | null>(null);
+  const [publishWhenApproved, setPublishWhenApproved] = useState(rememberedPublishWhenApproved);
 
   /*
    * The worklist is read once and then walked. Its own query key is what makes that safe: every
@@ -121,6 +148,22 @@ export function ReviewQueuePage() {
 
   const move = useCallback((by: number) => setWalked(Math.max(0, at + by)), [at]);
   const advance = useCallback(() => move(1), [move]);
+
+  /*
+   * Where a decision leaves the walk. Approving is the end of the job for a reviewer, so the
+   * next question arrives. For an account that also publishes it is not: approving is the first
+   * of two presses, and advancing then would carry the question off the screen before it could
+   * be published, sending the reviewer back to the queue to find it again. So the walk waits on
+   * the same question, the publish step appears where the checklist was, and moving on happens
+   * when the question is actually finished.
+   */
+  const decided = useCallback(
+    (action: string) => {
+      if (action === "approve" && mayPublish) return;
+      advance();
+    },
+    [advance, mayPublish],
+  );
 
   /*
    * Focus follows the walk. The position line is a live region, so a screen reader hears "2 of 3"
@@ -226,6 +269,20 @@ export function ReviewQueuePage() {
               </button>
               <Link to={`/editorial/questions/${current.id}`}>{page.openOnItsOwn}</Link>
             </div>
+            {mayPublish ? (
+              <label className="check">
+                <input
+                  type="checkbox"
+                  checked={publishWhenApproved}
+                  onChange={(event) => {
+                    setPublishWhenApproved(event.target.checked);
+                    rememberPublishWhenApproved(event.target.checked);
+                  }}
+                />
+                {page.publishWhenApproved}
+              </label>
+            ) : null}
+            {mayPublish ? <p className="hint">{page.publishWhenApprovedHint}</p> : null}
             <p className="hint">{page.shortcuts}</p>
           </div>
 
@@ -234,12 +291,18 @@ export function ReviewQueuePage() {
             <ErrorState error={question.error} onRetry={() => void question.refetch()} />
           ) : null}
           {/*
-            * Said before the press rather than after it. The server refuses an author reviewing
-            * their own work, and the account that imports a pack authors every question in it, so
-            * without this a reviewer meets that refusal once per question for a whole pack. The
-            * button stays: this screen predicts the refusal, it does not take the decision away.
+            * Said before the press rather than after it, and which of the two it says depends on
+            * the viewer. An account that may review its own work gets the consequence — the
+            * decision will be recorded as a self-review — and anyone else gets the refusal they
+            * would otherwise meet once per question, since the account that imports a pack
+            * authors every question in it. The button stays either way: this predicts, it does
+            * not decide.
             */}
-          {question.data && yours ? <p className="hint warn-note">{page.youWroteThis}</p> : null}
+          {question.data && yours ? (
+            <p className="hint warn-note">
+              {maySelfReview ? page.youWroteThisSelfReview : page.youWroteThis}
+            </p>
+          ) : null}
           {question.data && revision ? (
             <RevisionWithDecisions
               key={revision.id}
@@ -249,7 +312,8 @@ export function ReviewQueuePage() {
               topicName={revision.topicId ? topicNames.get(revision.topicId) : undefined}
               previous={revisions[revisions.length - 2]}
               topicNameOf={(id: string) => topicNames.get(id)}
-              onDecided={advance}
+              onDecided={decided}
+              publishWhenApproved={publishWhenApproved}
             />
           ) : null}
         </div>

@@ -87,6 +87,23 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **The maintainer may approve their own questions, and the record says that is what happened.** The
+  editorial API refused a reviewer who had written the revision, which on a project with one person
+  refused the only reviewer there is. Two promises had been running as one: that *a person* checked
+  each question, which is ADR 0005 and holds alone, and that *a second person* did, which has never
+  been true here — the Portuguese wording was reviewed by "the project's own author, not an
+  independent reviewer", and the DevOps pack records in its own caveats that it is not independent
+  second-reviewer validation. A new permission, `CONTENT_SELF_REVIEW`, granted by the administrator
+  role alone, lets that account decide on its own work; every other author still needs someone else,
+  so adding a contributor tomorrow does not quietly let them approve themselves. It replaces the
+  deployment-wide `certforge.question-bank.require-reviewer-separation` switch, which turned the rule
+  off for everybody — one mechanism instead of two, and the narrower one survives. **A self-review is
+  accepted, never disguised:** no column was added, because a review whose reviewer is the revision's
+  author already said so in the data, and now the product says it too — the desk reads such a decision
+  as "self-review: the reviewer wrote it", the publish confirmation names the approver as "reviewing
+  their own work", and the review worklist says before the press what the decision will be recorded
+  as. The end-to-end suite stopped relaxing separation, since its fixtures publish as the bootstrap
+  administrator (ADR 0018).
 - **Review one by one**, a worklist for the person the project waits on. The editorial queue is built
   for finding one question among a hundred and sixty; clearing a review backlog is the other job, and
   doing it there costs a return to the queue, a click to open and a scroll to find the place, for every
@@ -105,6 +122,16 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   question that arrives, rather than staying on a button that has just been replaced; and a revision
   the viewer wrote says so before the press, since the server refuses an author reviewing their own
   work and the account that imports a pack authors every question in it.
+  For an account that may publish, approving holds the walk on the same question so the publish
+  step can follow: advancing there carried the question off the screen half finished, and sent the
+  reviewer back to the queue to find it again.
+  **Publish as soon as I approve** then turns the two presses into one, off until it is turned on and
+  remembered in that browser alone. While it is on the button reads "Approve and publish" and says
+  underneath that publishing is final: the irreversible half is written on the control rather than
+  waiting in a dialog that gets dismissed by reflex at the fortieth question. It is still two
+  requests, so the provenance is identical to doing it by hand, and a publish that fails after the
+  approval succeeded holds the walk on a question that is now approved and unpublished — the state it
+  is actually in — instead of reporting it as published and moving on.
 - The 26 previously-unreviewed Topic 01 and Topic 02 Java SE 21 questions now carry the project owner's human technical approval from 2026-10-07, bringing the current reviewed set to 46 of 150. Review provenance supports a per-question `reviewedOn` date so later review batches do not rewrite the date of the original twenty approvals (#139, #140, #80).
 - Interview Prep now has a first-class `GUIDED_RESPONSE` question model: reviewed reference answers, required/optional expected concepts, common mistakes and follow-up prompts are stored with the immutable revision, accepted only on interview tracks, exposed to the editorial API, and never represented as objective `correct=true/false` evidence. The documented first evaluation contract is manual/self-review after a committed response; automated AI grading and learner interview sessions remain separate work (#19).
 - Mock-exam history now lives in its own learner read model: active runs expose participation only, terminal runs expose score and per-topic evidence, weak topics are surfaced against that run's practice target, and none of this changes ordinary topic-practice progress or adaptive-review evidence (#97).
