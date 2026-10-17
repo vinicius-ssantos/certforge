@@ -204,6 +204,103 @@ describe("the review worklist", () => {
   });
 });
 
+describe("an account that also publishes", () => {
+  const approved = () => ({
+    ...question(FIRST, TOPIC_A, "What is 1 + 1?"),
+    revisions: [{ ...question(FIRST, TOPIC_A, "What is 1 + 1?").revisions[0], status: "APPROVED" }],
+  });
+  const published = () => ({
+    ...question(FIRST, TOPIC_A, "What is 1 + 1?"),
+    revisions: [{ ...question(FIRST, TOPIC_A, "What is 1 + 1?").revisions[0], status: "PUBLISHED" }],
+  });
+  const server = {
+    ...threeWaiting,
+    [`POST /api/admin/question-revisions/${FIRST}-r1/approve`]: { body: approved() },
+    [`POST /api/admin/question-revisions/${FIRST}-r1/publish`]: { body: published() },
+  };
+
+  it("stays on the question after approving, so it can be published", async () => {
+    // Approving is the first of two presses for this account. Advancing here would carry the
+    // question off the screen before it could be published, sending them back to the queue.
+    const user = userEvent.setup();
+    renderApp(server, { as: admin, ...OPEN });
+
+    await user.click(await screen.findByRole("button", { name: "Approve" }));
+
+    expect(await screen.findByRole("button", { name: "Publish revision 1" })).toBeInTheDocument();
+    expect(screen.getByText("What is 1 + 1?")).toBeInTheDocument();
+    expect(screen.getByText("1 of 3")).toBeInTheDocument();
+  });
+
+  it("offers the one-press flag, off until it is turned on", async () => {
+    renderApp(server, { as: admin, ...OPEN });
+
+    const flag = await screen.findByRole("checkbox", { name: "Publish as soon as I approve" });
+    expect(flag).not.toBeChecked();
+    // The flag is in the walk's own bar, which renders before the question arrives.
+    await screen.findByText("What is 1 + 1?");
+    // Off means the button promises only what it does.
+    expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument();
+  });
+
+  it("puts what the press will do on the button, not in a dialog", async () => {
+    const user = userEvent.setup();
+    renderApp(server, { as: admin, ...OPEN });
+
+    await user.click(await screen.findByRole("checkbox", { name: "Publish as soon as I approve" }));
+
+    expect(screen.getByRole("button", { name: "Approve and publish" })).toBeInTheDocument();
+    expect(screen.getByText(/Publishing is final/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
+  });
+
+  it("approves and publishes in one press, then moves on", async () => {
+    const user = userEvent.setup();
+    const { fetch } = renderApp(server, { as: admin, ...OPEN });
+    await user.click(await screen.findByRole("checkbox", { name: "Publish as soon as I approve" }));
+
+    await user.click(screen.getByRole("button", { name: "Approve and publish" }));
+
+    expect(await screen.findByText("What is 2 + 2?")).toBeInTheDocument();
+    const calls = fetch.calls.filter((call) => call.path.includes(`${FIRST}-r1/`)).map((call) => call.path);
+    // Two requests, as two presses would have made: the record of what happened is the same.
+    expect(calls).toEqual([
+      `/api/admin/question-revisions/${FIRST}-r1/approve`,
+      `/api/admin/question-revisions/${FIRST}-r1/publish`,
+    ]);
+  });
+
+  it("does not pretend a question is published when only the approval went through", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      { ...server, [`POST /api/admin/question-revisions/${FIRST}-r1/publish`]: problem(500, "internal_error") },
+      { as: admin, ...OPEN },
+    );
+    await user.click(await screen.findByRole("checkbox", { name: "Publish as soon as I approve" }));
+
+    await user.click(screen.getByRole("button", { name: "Approve and publish" }));
+
+    // Approved and unpublished is a real state. The walk stays, the failure is said, and the
+    // publish step is there to try again -- moving on would leave it half done and unsaid.
+    expect(await screen.findByRole("alert")).toBeInTheDocument();
+    expect(screen.getByText("What is 1 + 1?")).toBeInTheDocument();
+    expect(screen.getByText("1 of 3")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Publish revision 1" })).toBeInTheDocument();
+  });
+
+  it("moves on once the question is actually finished", async () => {
+    const user = userEvent.setup();
+    renderApp(server, { as: admin, ...OPEN });
+    await user.click(await screen.findByRole("button", { name: "Approve" }));
+    await user.click(await screen.findByRole("button", { name: "Publish revision 1" }));
+
+    await user.click(screen.getByRole("button", { name: "Yes, publish revision 1" }));
+
+    expect(await screen.findByText("What is 2 + 2?")).toBeInTheDocument();
+    expect(screen.getByText("2 of 3")).toBeInTheDocument();
+  });
+});
+
 describe("the size of the backlog", () => {
   it("walks every page, so a backlog over a hundred is not reported as a hundred", async () => {
     // The server caps a page at 100. Reading only the first is the failure #192 was filed for:

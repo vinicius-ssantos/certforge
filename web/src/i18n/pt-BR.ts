@@ -604,6 +604,9 @@ export const ptBR: Catalog = {
         "Esta revisão é sua. Aprovar é uma auto-revisão, e fica registrada como tal: a decisão leva seu nome como autor e como revisor, e nada no produto chama isso de revisão independente.",
       youWroteThis:
         "Você escreveu esta revisão, então aprovar vai ser recusado: quem revisa tem de ser outra pessoa, não quem escreveu. Questão importada de um pacote tem como autora a conta que importou.",
+      publishWhenApproved: "Publicar assim que eu aprovar",
+      publishWhenApprovedHint:
+        "Para varrer uma fila: transforma os dois toques em um, e o botão passa a dizer \"Aprovar e publicar\", de modo que o que você vai fazer está no botão e não num diálogo.",
       skip: "Pular por ora",
       openOnItsOwn: "Abrir esta questão na página dela",
       shortcuts:
@@ -693,6 +696,9 @@ export const ptBR: Catalog = {
       comment: "Comentário",
       commentHint: "Obrigatório quando você pede mudanças. Quem escreveu vai ler.",
       approve: "Aprovar",
+      approveAndPublish: "Aprovar e publicar",
+      approveAndPublishHint:
+        "Um toque faz os dois. Publicar é definitivo: a versão publicada chega a quem estuda e não pode ser editada, só substituída por uma versão nova.",
       requestChanges: "Pedir mudanças",
       requestChangesHint: "Pedir mudanças devolve a versão a quem a escreveu, como rascunho.",
       sayWhatToChange: "Diga o que precisa mudar antes de devolver.",

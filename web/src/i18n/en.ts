@@ -659,6 +659,9 @@ export const en = {
         "This revision is yours. Approving it is a self-review, and it is recorded as one: the decision carries your name as both author and reviewer, and nothing in the product calls it an independent review.",
       youWroteThis:
         "You wrote this revision, so approving it will be refused: the reviewer has to be someone other than the author. The question that imported a pack is authored by the account that imported it.",
+      publishWhenApproved: "Publish as soon as I approve",
+      publishWhenApprovedHint:
+        "For working through a backlog: it turns the two presses into one, and the button then says \"Approve and publish\" so what you are about to do is on the button rather than in a dialog.",
       skip: "Skip for now",
       openOnItsOwn: "Open this question on its own page",
       shortcuts:
@@ -750,6 +753,9 @@ export const en = {
       comment: "Comment",
       commentHint: "Needed when you ask for changes. The author sees it.",
       approve: "Approve",
+      approveAndPublish: "Approve and publish",
+      approveAndPublishHint:
+        "One press does both. Publishing is final: a published revision reaches learners and cannot be edited, only replaced by a new revision.",
       requestChanges: "Request changes",
       requestChangesHint: "Requesting changes returns the revision to its author as a draft.",
       sayWhatToChange: "Say what needs to change before sending it back.",
