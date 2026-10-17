@@ -216,6 +216,29 @@ describe("reviewing", () => {
     expect(fetch.calls.some((call) => call.path.endsWith("/request-changes"))).toBe(false);
   });
 
+  it("does not keep asking what needs to change after the revision was approved", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: { body: view(revision()) },
+        [`POST ${REV}/approve`]: { body: view(revision({ status: "APPROVED" })) },
+      },
+      { as: admin, ...OPEN },
+    );
+
+    // Pressing the wrong button first is the ordinary way to meet this: the reviewer reaches for
+    // "Request changes", is told to say what, changes their mind and approves.
+    await user.click(await screen.findByRole("button", { name: "Request changes" }));
+    await screen.findByRole("alert");
+    await user.click(screen.getByRole("button", { name: "Approve" }));
+
+    await screen.findByText(/^Approved\./);
+    // The decision went through, so the complaint about a comment is about nothing at all — and it
+    // is the only red thing on a screen that just succeeded.
+    expect(screen.queryByText(/Say what needs to change/)).not.toBeInTheDocument();
+  });
+
   it("sends the revision back with the comment", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(

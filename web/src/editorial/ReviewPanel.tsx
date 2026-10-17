@@ -113,6 +113,15 @@ export function ReviewPanel({
           );
       }
     },
+    // A decision that is on its way makes every complaint about the last attempt stale. Approving
+    // after reaching for "Request changes" first is the ordinary way to see this: for a reviewer
+    // the whole panel goes with the status change, but an account that may also publish keeps it,
+    // and "Say what needs to change" then sits under "Approved." pointing at a field that is no
+    // longer on the page.
+    onMutate: () => {
+      setProblems([]);
+      setFailure(null);
+    },
     onSuccess: (updated, action) => {
       setFailure(null);
       queryClient.setQueryData(["editorial", "question", updated.id], updated);
