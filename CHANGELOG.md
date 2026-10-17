@@ -87,6 +87,24 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **Review one by one**, a worklist for the person the project waits on. The editorial queue is built
+  for finding one question among a hundred and sixty; clearing a review backlog is the other job, and
+  doing it there costs a return to the queue, a click to open and a scroll to find the place, for every
+  question. The new screen shows one question with everything a reviewer judges, the checklist and the
+  decision beside it, and the next question arrives as soon as this one is decided. Questions are
+  grouped so a topic is finished before the next begins, because reviewing is holding one subject in
+  mind and the queue's own order changes subject at every row. `a` moves focus to Approve, `p` to
+  Request changes, `s` skips, and a skipped question stays in the queue.
+  **It offers no way to decide more than one question at once, and the keys move focus rather than
+  press.** The only promise this product makes is that a person checked each question, and a screen
+  that made approving cheaper than reading would be a machine for producing approvals nobody read —
+  there is no endpoint that takes an approval back. What is cheaper is reaching the question (ADR 0005).
+  The worklist walks every page of the queue rather than the first, because a backlog over a hundred
+  reported as a hundred is the failure #192 was filed for. The address carries the question on screen,
+  so a reload returns to the place in the walk; **Previous question** goes back; focus follows the
+  question that arrives, rather than staying on a button that has just been replaced; and a revision
+  the viewer wrote says so before the press, since the server refuses an author reviewing their own
+  work and the account that imports a pack authors every question in it.
 - The 26 previously-unreviewed Topic 01 and Topic 02 Java SE 21 questions now carry the project owner's human technical approval from 2026-10-07, bringing the current reviewed set to 46 of 150. Review provenance supports a per-question `reviewedOn` date so later review batches do not rewrite the date of the original twenty approvals (#139, #140, #80).
 - Interview Prep now has a first-class `GUIDED_RESPONSE` question model: reviewed reference answers, required/optional expected concepts, common mistakes and follow-up prompts are stored with the immutable revision, accepted only on interview tracks, exposed to the editorial API, and never represented as objective `correct=true/false` evidence. The documented first evaluation contract is manual/self-review after a committed response; automated AI grading and learner interview sessions remain separate work (#19).
 - Mock-exam history now lives in its own learner read model: active runs expose participation only, terminal runs expose score and per-topic evidence, weak topics are surfaced against that run's practice target, and none of this changes ordinary topic-practice progress or adaptive-review evidence (#97).

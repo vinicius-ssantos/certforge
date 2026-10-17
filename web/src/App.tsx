@@ -9,6 +9,7 @@ import { CatalogTrackPage } from "./editorial/CatalogTrackPage";
 import { NewQuestionPage } from "./editorial/NewQuestionPage";
 import { QuestionPage } from "./editorial/QuestionPage";
 import { QueuePage } from "./editorial/QueuePage";
+import { ReviewQueuePage } from "./editorial/ReviewQueuePage";
 import { RequireCatalogManage } from "./editorial/RequireCatalogManage";
 import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
@@ -58,6 +59,7 @@ export function App() {
           <Route element={<RequireEditorial />}>
             <Route path="/editorial" element={<QueuePage />} />
             <Route path="/editorial/new" element={<NewQuestionPage />} />
+            <Route path="/editorial/review" element={<ReviewQueuePage />} />
             <Route path="/editorial/questions/:questionId" element={<QuestionPage />} />
             <Route element={<RequireCatalogManage />}>
               <Route path="/editorial/catalog" element={<CatalogPage />} />
