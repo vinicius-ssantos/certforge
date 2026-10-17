@@ -78,6 +78,30 @@ What it cannot check is whether an explanation is *right*, or whether a distract
 someone would actually make. That is a named human's, by ADR 0005, and no count in that file moves
 it. The gate only refuses text that cannot be an explanation of the option it sits under.
 
+### Code inside a question
+
+A snippet in a prompt is read as the thing being taught, so `content/embedded-artifacts.mjs` checks
+every fenced block in a pack: a Dockerfile by instruction, YAML for shape — tabs, indentation in
+steps of two, a key set twice among siblings — and both for what they declare themselves to be.
+**Every fence must name its language.** An unlabelled block gets no highlighting from the renderer
+and no check from here, because nothing can tell whether it is broken YAML or prose with a colon in
+it.
+
+A block that does not declare itself whole is treated as the fragment it is. `ENTRYPOINT` beside
+`CMD` with no `FROM` is a Dockerfile fragment, and `spec:` with a `replicas:` under it is a YAML
+fragment; demanding an `apiVersion` of those would only teach authors to paste whole manifests to
+satisfy a tool. A block *does* declare itself whole by carrying `FROM`, or `apiVersion` with `kind`,
+and then the rules for a file apply: what must come first, which stage a `COPY --from` may name,
+whether the Kubernetes recorded for the pack still serves that API version.
+
+That last one is why `pack.json` carries `platformVersions`. It is the floor at which the pack's own
+snippets are valid — one entry per platform the pack actually embeds — and it is checked rather than
+declared: the gate derives the floor from the files (a named build stage or `COPY --from` needs
+17.05, a BuildKit mount 18.09, a heredoc 23.0) and refuses a pack that records less than its own
+Dockerfiles need. A manifest obliges the pack to record a Kubernetes version, and a manifest naming
+an API version that version has removed fails: applied to such a cluster it would be rejected
+outright, so the question would be teaching something that cannot run.
+
 `quality-debt.json` beside a pack records what that pack is known to owe, by question name, so the
 gate could be switched on over content that does not pass it yet. CI refuses anything the ledger
 does not already list — **and anything the ledger lists that has since been fixed**, so paying a

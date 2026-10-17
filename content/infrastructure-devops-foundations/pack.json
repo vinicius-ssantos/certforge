@@ -7,5 +7,9 @@
   "language": "pt-BR",
   "sourcePolicy": "infrastructure-official-v1",
   "evidenceProfile": "reference-backed-v1",
+  "platformVersions": {
+    "docker": "17.05",
+    "compose": "2.0"
+  },
   "editorialStatus": "DRAFT"
 }
