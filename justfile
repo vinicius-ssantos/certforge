@@ -114,10 +114,11 @@ web:
 [group('check')]
 check: test-content test-backend test-web lint typecheck budget
 
-# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality.
+# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality
+# and the Dockerfiles, Compose files and manifests embedded in question text.
 [group('check')]
 test-content:
-    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs
+    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs content/embedded-artifacts.test.mjs content/record-review.test.mjs
 
 # The backend suite, on PostgreSQL in Testcontainers.
 [group('check')]

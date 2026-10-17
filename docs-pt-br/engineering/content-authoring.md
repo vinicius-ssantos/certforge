@@ -80,6 +80,30 @@ O que ele não checa é se a explicação está *certa*, ou se o distrator é um
 de fato. Isso é de uma pessoa nomeada, pela ADR 0005, e nenhuma contagem daquele arquivo muda isso.
 O portão só recusa texto que não pode ser explicação da alternativa onde está.
 
+### Código dentro de uma questão
+
+Um trecho no enunciado é lido como a coisa que está sendo ensinada, então o
+`content/embedded-artifacts.mjs` checa todo bloco cercado do pacote: Dockerfile por instrução, YAML
+por forma — tabulação, indentação em passos de dois, chave definida duas vezes entre irmãs — e os
+dois pelo que declaram ser. **Toda cerca precisa nomear a linguagem.** Um bloco sem rótulo não recebe
+realce do renderizador nem checagem daqui, porque nada consegue dizer se é YAML quebrado ou prosa com
+dois-pontos no meio.
+
+Um bloco que não se declara completo é tratado como o fragmento que é. `ENTRYPOINT` ao lado de `CMD`
+sem `FROM` é fragmento de Dockerfile, e `spec:` com um `replicas:` embaixo é fragmento de YAML; exigir
+`apiVersion` desses só ensinaria o autor a colar manifesto inteiro para satisfazer uma ferramenta. Um
+bloco *se declara* completo ao trazer `FROM`, ou `apiVersion` com `kind`, e aí valem as regras de
+arquivo: o que precisa vir primeiro, qual estágio um `COPY --from` pode nomear, se o Kubernetes
+registrado para o pacote ainda serve aquela versão de API.
+
+Essa última é a razão de o `pack.json` carregar `platformVersions`. É o piso em que os próprios
+trechos do pacote são válidos — uma entrada por plataforma que o pacote de fato embute — e é checado
+em vez de declarado: o portão deriva o piso dos arquivos (estágio nomeado ou `COPY --from` pedem
+17.05, mount do BuildKit 18.09, heredoc 23.0) e recusa um pacote que registre menos do que os
+próprios Dockerfiles precisam. Um manifesto obriga o pacote a registrar uma versão de Kubernetes, e
+manifesto que nomeia uma versão de API removida nela falha: aplicado a um cluster assim seria
+rejeitado de saída, então a questão estaria ensinando algo que não roda.
+
 O `quality-debt.json` ao lado de um pacote registra o que aquele pacote devidamente deve, por nome de
 questão, para que o portão pudesse ser ligado sobre conteúdo que ainda não passa nele. A CI recusa o
 que o registro não lista — **e também o que o registro lista e já foi corrigido**, de modo que pagar
