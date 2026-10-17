@@ -31,6 +31,12 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- The review panel stops complaining about the last thing you pressed. Reaching for "Request
+  changes", being told to say what needs to change, and then approving instead left that complaint
+  on screen under "Approved." — with a summary link to `#review-comment`, a field the approval had
+  just removed from the page. A reviewer never saw it, because approving takes their panel away
+  with the status; an account that may also publish keeps the panel, and keeps the stale red text
+  too. Every decision now clears what the previous attempt complained about, as it is sent.
 - Signing out says when it failed. The click dropped the rejection, so a failed
   `POST /api/auth/logout` left the session in place and the screen unchanged — on a shared machine,
   someone could walk away from an account they believed they had closed. It now says the sign-out
