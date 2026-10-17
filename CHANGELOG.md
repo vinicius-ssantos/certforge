@@ -31,6 +31,15 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- The pack publisher no longer says a reviewer's sign-off has lapsed when it has not. Pointed at the
+  DevOps pack it printed "edited after vinicius-ssantos reviewed it" for all seventy questions, none of
+  which had been touched: that pack records each verdict against the question file's git blob, checked
+  by `content/review-integrity.mjs`, while the publisher compares the digest the Java pack's
+  `review.json` stores. Two schemes, one reader. A false "edited since review" is worse than a crash,
+  because the warning it imitates is the one protecting the pack this reader does cover, and an
+  operator who learns to scroll past it loses that too. It now refuses a manifest pack up front, says
+  which checker does cover it, and quotes the record's own statement that it is "not an API editorial
+  approval ... and not a publication instruction".
 - Signing out says when it failed. The click dropped the rejection, so a failed
   `POST /api/auth/logout` left the session in place and the screen unchanged — on a shared machine,
   someone could walk away from an account they believed they had closed. It now says the sign-out
@@ -97,6 +106,19 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   the digest from the question as it stands rather than trusting what it is told, records a renewal
   when the question has changed since its last review, and writes nothing at all when the record
   already says exactly this. It cannot produce a verdict, infer one, or assume approval (ADR 0005).
+- A quality gate over a whole content pack, for the part of "every option needs an explanation" that a
+  schema cannot see. `manifest-pack.mjs` checks one question at a time, so it accepted a pack where 51 of
+  the 70 DevOps questions put the same sentence under two or three different wrong options, and where
+  seven sentences were shared by five to eight questions each — 153 of the 280 options explaining
+  nothing in particular. Those are comparative faults: a sentence is only visibly a template when the
+  options sit side by side, and a reference title only visibly names the site rather than the page when
+  the same title appears forty times. The gate now refuses all three, over the pack rather than the
+  question, and `just check` runs the content tests at all — before this they ran only in CI, which is
+  how content could pass locally and fail on the pull request. Because the pack does not pass yet, each
+  debt is recorded by question name in `quality-debt.json` beside it: CI refuses anything the ledger does
+  not list, **and anything the ledger lists that has since been fixed**, so paying a debt means deleting
+  its line. A pack with no ledger has to be clean. What the gate cannot check is whether an explanation is
+  right or a distractor plausible; that stays with the named human reviewer, by ADR 0005 (#167, #168).
 - The 26 previously-unreviewed Topic 01 and Topic 02 Java SE 21 questions now carry the project owner's human technical approval from 2026-10-07, bringing the current reviewed set to 46 of 150. Review provenance supports a per-question `reviewedOn` date so later review batches do not rewrite the date of the original twenty approvals (#139, #140, #80).
 - Interview Prep now has a first-class `GUIDED_RESPONSE` question model: reviewed reference answers, required/optional expected concepts, common mistakes and follow-up prompts are stored with the immutable revision, accepted only on interview tracks, exposed to the editorial API, and never represented as objective `correct=true/false` evidence. The documented first evaluation contract is manual/self-review after a committed response; automated AI grading and learner interview sessions remain separate work (#19).
 - Mock-exam history now lives in its own learner read model: active runs expose participation only, terminal runs expose score and per-topic evidence, weak topics are surfaced against that run's practice target, and none of this changes ordinary topic-practice progress or adaptive-review evidence (#97).

@@ -62,6 +62,31 @@ content/
 
 Ela falha com o nome da questão se a saída, o resultado da compilação ou qualquer invariante divergir.
 
+### O que o portão de qualidade checa, e o que ele não alcança
+
+A regra 5 acima foi texto corrido por muito tempo, e texto corrido não quebra build. O
+`content/pack-quality.mjs` agora checa a parte dela que é mecânica, no pacote inteiro e não em uma
+questão por vez, porque é aí que essas falhas aparecem:
+
+- **Duas alternativas da mesma questão não podem ter a mesma explicação.** Três alternativas sob uma
+  frase são uma explicação impressa três vezes, diga o que a frase disser.
+- **Nenhuma explicação pode ser reusada por duas questões.** Uma frase que serve para toda alternativa
+  errada do pacote é o template que foi preenchido e ficou: ela não é sobre nenhuma delas.
+- **O título de uma referência precisa nomear a página, não o site.** "Documentação oficial" é verdade
+  sobre toda página do host, então não diz nada a quem quer conferir a afirmação — e diz menos ainda
+  a um leitor de tela anunciando quarenta links idênticos.
+
+O que ele não checa é se a explicação está *certa*, ou se o distrator é um erro que alguém cometeria
+de fato. Isso é de uma pessoa nomeada, pela ADR 0005, e nenhuma contagem daquele arquivo muda isso.
+O portão só recusa texto que não pode ser explicação da alternativa onde está.
+
+O `quality-debt.json` ao lado de um pacote registra o que aquele pacote devidamente deve, por nome de
+questão, para que o portão pudesse ser ligado sobre conteúdo que ainda não passa nele. A CI recusa o
+que o registro não lista — **e também o que o registro lista e já foi corrigido**, de modo que pagar
+uma dívida é apagar a linha dela no mesmo commit. Pacote sem registro tem de estar limpo. Rode com
+`just test-content`, que o `just check` agora inclui; antes disso as checagens de conteúdo só rodavam
+na CI, e é por isso que um erro de conteúdo passava local e quebrava no pull request.
+
 ## Importando
 
 Suba a aplicação e o PostgreSQL (veja o [bootstrap do backend](backend-bootstrap.md)) e rode, na raiz do repositório, com as credenciais de uma conta com o papel `EDITOR` (ou `ADMINISTRATOR`):
