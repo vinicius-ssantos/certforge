@@ -108,9 +108,16 @@ web:
 
 # ---- checking the code -----------------------------------------------------------------------
 
-# Everything CI runs that does not need Docker images: the backend suite and all the web checks.
+# Everything CI runs that does not need Docker images: the content checks, the backend suite and
+# all the web checks. The content checks come first because they take under a second and they are
+# the ones that used to fail only in CI, this recipe having never run them.
 [group('check')]
-check: test-backend test-web lint typecheck budget
+check: test-content test-backend test-web lint typecheck budget
+
+# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality.
+[group('check')]
+test-content:
+    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs
 
 # The backend suite, on PostgreSQL in Testcontainers.
 [group('check')]
