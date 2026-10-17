@@ -291,6 +291,21 @@ describe("a refusal the reviewer would otherwise meet one question at a time", (
     expect(screen.getByRole("button", { name: "Approve" })).toBeEnabled();
   });
 
+  it("tells an owner who may self-review what the decision will be recorded as", async () => {
+    // The administrator answers for their own work, so the note is not a refusal any more: it
+    // is what the record will say. Predicting a refusal here would now be simply wrong.
+    const own = question(FIRST, TOPIC_A, "What is 1 + 1?");
+    own.revisions[0]!.authorId = admin.id;
+    renderApp(
+      { ...threeWaiting, [`GET /api/admin/questions/${FIRST}`]: { body: own } },
+      { as: admin, ...OPEN },
+    );
+
+    expect(await screen.findByText(/Approving it is a self-review/)).toBeInTheDocument();
+    expect(screen.queryByText(/will be refused/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Approve" })).toBeEnabled();
+  });
+
   it("says nothing when the revision is someone else's", async () => {
     renderApp(threeWaiting, { as: reviewer, ...OPEN });
 

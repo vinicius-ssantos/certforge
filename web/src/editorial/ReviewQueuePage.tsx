@@ -34,6 +34,7 @@ export function ReviewQueuePage() {
   const account = useAccount();
   const topicNames = useTopicNames();
   const canReview = useHasAny("CONTENT_REVIEW");
+  const maySelfReview = useHasAny("CONTENT_SELF_REVIEW");
   const [params, setParams] = useSearchParams();
   const [walked, setWalked] = useState<number | null>(null);
 
@@ -234,12 +235,18 @@ export function ReviewQueuePage() {
             <ErrorState error={question.error} onRetry={() => void question.refetch()} />
           ) : null}
           {/*
-            * Said before the press rather than after it. The server refuses an author reviewing
-            * their own work, and the account that imports a pack authors every question in it, so
-            * without this a reviewer meets that refusal once per question for a whole pack. The
-            * button stays: this screen predicts the refusal, it does not take the decision away.
+            * Said before the press rather than after it, and which of the two it says depends on
+            * the viewer. An account that may review its own work gets the consequence — the
+            * decision will be recorded as a self-review — and anyone else gets the refusal they
+            * would otherwise meet once per question, since the account that imports a pack
+            * authors every question in it. The button stays either way: this predicts, it does
+            * not decide.
             */}
-          {question.data && yours ? <p className="hint warn-note">{page.youWroteThis}</p> : null}
+          {question.data && yours ? (
+            <p className="hint warn-note">
+              {maySelfReview ? page.youWroteThisSelfReview : page.youWroteThis}
+            </p>
+          ) : null}
           {question.data && revision ? (
             <RevisionWithDecisions
               key={revision.id}

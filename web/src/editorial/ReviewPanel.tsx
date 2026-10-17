@@ -117,7 +117,13 @@ export function ReviewPanel({
   }
 
   const approval = [...revision.reviews].reverse().find((review) => review.decision === "APPROVED");
-  const approvedBy = approval?.reviewerName ?? panel.unknownReviewer;
+  // Named for what it was. A publish confirmation that says "approved by" about a decision the
+  // author made on their own work would be claiming a second pair of eyes that was not there.
+  const reviewerName = approval?.reviewerName ?? panel.unknownReviewer;
+  const approvedBy =
+    approval && approval.reviewerId === revision.authorId
+      ? panel.selfReviewedBy(reviewerName)
+      : reviewerName;
   const approvedAt = approval?.decidedAt
     ? formatDateTime(approval.decidedAt, locale)
     : panel.unknownApprovalDate;

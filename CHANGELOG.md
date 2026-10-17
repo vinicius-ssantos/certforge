@@ -87,6 +87,23 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **The maintainer may approve their own questions, and the record says that is what happened.** The
+  editorial API refused a reviewer who had written the revision, which on a project with one person
+  refused the only reviewer there is. Two promises had been running as one: that *a person* checked
+  each question, which is ADR 0005 and holds alone, and that *a second person* did, which has never
+  been true here — the Portuguese wording was reviewed by "the project's own author, not an
+  independent reviewer", and the DevOps pack records in its own caveats that it is not independent
+  second-reviewer validation. A new permission, `CONTENT_SELF_REVIEW`, granted by the administrator
+  role alone, lets that account decide on its own work; every other author still needs someone else,
+  so adding a contributor tomorrow does not quietly let them approve themselves. It replaces the
+  deployment-wide `certforge.question-bank.require-reviewer-separation` switch, which turned the rule
+  off for everybody — one mechanism instead of two, and the narrower one survives. **A self-review is
+  accepted, never disguised:** no column was added, because a review whose reviewer is the revision's
+  author already said so in the data, and now the product says it too — the desk reads such a decision
+  as "self-review: the reviewer wrote it", the publish confirmation names the approver as "reviewing
+  their own work", and the review worklist says before the press what the decision will be recorded
+  as. The end-to-end suite stopped relaxing separation, since its fixtures publish as the bootstrap
+  administrator (ADR 0018).
 - **Review one by one**, a worklist for the person the project waits on. The editorial queue is built
   for finding one question among a hundred and sixty; clearing a review backlog is the other job, and
   doing it there costs a return to the queue, a click to open and a scroll to find the place, for every

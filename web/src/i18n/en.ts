@@ -655,6 +655,8 @@ export const en = {
         `${topic} — ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} in this topic`,
       previous: "Previous question",
       stageLabel: (at: number, total: number) => `Question ${at} of ${total} under review`,
+      youWroteThisSelfReview:
+        "This revision is yours. Approving it is a self-review, and it is recorded as one: the decision carries your name as both author and reviewer, and nothing in the product calls it an independent review.",
       youWroteThis:
         "You wrote this revision, so approving it will be refused: the reviewer has to be someone other than the author. The question that imported a pack is authored by the account that imported it.",
       skip: "Skip for now",
@@ -734,6 +736,7 @@ export const en = {
       notesHeading: "Review notes",
       checked: "Checked: ",
       decisionLabel: "Review decision",
+      selfReview: " (self-review: the reviewer wrote it)",
       decisionApproved: "Approved",
       decisionChangesRequested: "Asked for changes",
       decidedBy: (reviewer: string) => ` by ${reviewer}`,
@@ -754,6 +757,7 @@ export const en = {
       publishNote:
         "Only approved revisions can be published. A published revision cannot be edited; a correction becomes a new revision.",
       confirmPublishTitle: (revision: number) => `Confirm publishing revision ${revision}`,
+      selfReviewedBy: (name: string) => `${name}, reviewing their own work`,
       unknownReviewer: "Reviewer not recorded",
       unknownApprovalDate: "approval date not recorded",
       confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>

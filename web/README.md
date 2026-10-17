@@ -32,7 +32,6 @@ docker compose up -d postgres
 ./mvnw -DskipTests package
 BOOTSTRAP_ADMIN_EMAIL=e2e-admin@example.com BOOTSTRAP_ADMIN_PASSWORD=e2e-admin-password-123 \
   java -jar target/certforge-*.jar \
-  --certforge.question-bank.require-reviewer-separation=false \
   --certforge.identity.throttle.registrations-per-ip=1000
 ```
 

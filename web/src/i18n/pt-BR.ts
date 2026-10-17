@@ -600,6 +600,8 @@ export const ptBR: Catalog = {
         `${topic} — ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} neste tópico`,
       previous: "Questão anterior",
       stageLabel: (at: number, total: number) => `Questão ${at} de ${total} em revisão`,
+      youWroteThisSelfReview:
+        "Esta revisão é sua. Aprovar é uma auto-revisão, e fica registrada como tal: a decisão leva seu nome como autor e como revisor, e nada no produto chama isso de revisão independente.",
       youWroteThis:
         "Você escreveu esta revisão, então aprovar vai ser recusado: quem revisa tem de ser outra pessoa, não quem escreveu. Questão importada de um pacote tem como autora a conta que importou.",
       skip: "Pular por ora",
@@ -677,6 +679,7 @@ export const ptBR: Catalog = {
       notesHeading: "Notas da revisão",
       checked: "Verificado: ",
       decisionLabel: "Decisão da revisão",
+      selfReview: " (auto-revisão: quem revisou foi quem escreveu)",
       decisionApproved: "Aprovada",
       decisionChangesRequested: "Pediu mudanças",
       decidedBy: (reviewer: string) => ` por ${reviewer}`,
@@ -697,6 +700,7 @@ export const ptBR: Catalog = {
       publishNote:
         "Só versões aprovadas podem ser publicadas. Uma versão publicada não pode ser editada; uma correção vira uma nova versão.",
       confirmPublishTitle: (revision: number) => `Confirmar a publicação da versão ${revision}`,
+      selfReviewedBy: (name: string) => `${name}, revisando o próprio trabalho`,
       unknownReviewer: "Revisor não registrado",
       unknownApprovalDate: "data da aprovação não registrada",
       confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>

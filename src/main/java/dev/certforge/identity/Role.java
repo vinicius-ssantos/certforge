@@ -12,6 +12,7 @@ public enum Role {
       Permission.CATALOG_MANAGE,
       Permission.CONTENT_AUTHOR,
       Permission.CONTENT_REVIEW,
+      Permission.CONTENT_SELF_REVIEW,
       Permission.CONTENT_PUBLISH,
       Permission.ACCOUNT_MANAGE,
       Permission.AUDIT_READ,
