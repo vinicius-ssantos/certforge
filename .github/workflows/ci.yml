@@ -149,7 +149,6 @@ jobs:
           BOOTSTRAP_ADMIN_PASSWORD: e2e-admin-password-123
         run: |
           nohup java -jar target/certforge-*.jar \
-            --certforge.question-bank.require-reviewer-separation=false \
             --certforge.identity.throttle.registrations-per-ip=1000 \
             > backend.log 2>&1 &
           for attempt in $(seq 1 60); do

@@ -655,8 +655,13 @@ export const en = {
         `${topic} — ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} in this topic`,
       previous: "Previous question",
       stageLabel: (at: number, total: number) => `Question ${at} of ${total} under review`,
+      youWroteThisSelfReview:
+        "This revision is yours. Approving it is a self-review, and it is recorded as one: the decision carries your name as both author and reviewer, and nothing in the product calls it an independent review.",
       youWroteThis:
         "You wrote this revision, so approving it will be refused: the reviewer has to be someone other than the author. The question that imported a pack is authored by the account that imported it.",
+      publishWhenApproved: "Publish as soon as I approve",
+      publishWhenApprovedHint:
+        "For working through a backlog: it turns the two presses into one, and the button then says \"Approve and publish\" so what you are about to do is on the button rather than in a dialog.",
       skip: "Skip for now",
       openOnItsOwn: "Open this question on its own page",
       shortcuts:
@@ -734,6 +739,7 @@ export const en = {
       notesHeading: "Review notes",
       checked: "Checked: ",
       decisionLabel: "Review decision",
+      selfReview: " (self-review: the reviewer wrote it)",
       decisionApproved: "Approved",
       decisionChangesRequested: "Asked for changes",
       decidedBy: (reviewer: string) => ` by ${reviewer}`,
@@ -747,6 +753,9 @@ export const en = {
       comment: "Comment",
       commentHint: "Needed when you ask for changes. The author sees it.",
       approve: "Approve",
+      approveAndPublish: "Approve and publish",
+      approveAndPublishHint:
+        "One press does both. Publishing is final: a published revision reaches learners and cannot be edited, only replaced by a new revision.",
       requestChanges: "Request changes",
       requestChangesHint: "Requesting changes returns the revision to its author as a draft.",
       sayWhatToChange: "Say what needs to change before sending it back.",
@@ -754,6 +763,7 @@ export const en = {
       publishNote:
         "Only approved revisions can be published. A published revision cannot be edited; a correction becomes a new revision.",
       confirmPublishTitle: (revision: number) => `Confirm publishing revision ${revision}`,
+      selfReviewedBy: (name: string) => `${name}, reviewing their own work`,
       unknownReviewer: "Reviewer not recorded",
       unknownApprovalDate: "approval date not recorded",
       confirmPublishExplain: (revision: number, topic: string, reviewer: string, date: string) =>

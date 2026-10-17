@@ -22,5 +22,7 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0014](0014-one-topic-one-track.md) | Manter um tópico em uma trilha só, e pôr os fundamentos na trilha de entrevista | **Proposta** |
 | [0015](0015-separate-mock-exam-aggregate.md) | Modelar simulados como um agregado de estudo separado | Aceita |
 | [0016](0016-interview-track-taxonomy.md) | Modelar a trilha de entrevista como uma taxonomia versionada, e mantê-la pequena | Aceita |
+| [0017](0017-infrastructure-certification-tracks.md) | Adicionar trilhas de infraestrutura e gerais, com snapshots verificados de versões de exame | **Proposta** |
+| [0018](0018-maintainer-may-review-their-own-work.md) | Deixar o mantenedor revisar o próprio trabalho, e dizer isso no registro | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.

@@ -37,6 +37,7 @@ export function ReviewPanel({
   isLatest,
   topicName,
   onDecided,
+  publishWhenApproved: publishWhenApprovedProp,
 }: {
   question: EditorialQuestion;
   revision: Revision;
@@ -47,6 +48,13 @@ export function ReviewPanel({
    * worklist, so it moves to the next question instead of staying on the one just decided.
    */
   onDecided?: (action: Action) => void;
+  /**
+   * Publish straight after approving, as one press. Working through a backlog is two presses per
+   * question for an account that publishes, so the worklist offers this; it is off until the
+   * viewer turns it on, and while it is on the button says what it will do rather than leaving
+   * the second half of it to a dialog.
+   */
+  publishWhenApproved?: boolean;
 }) {
   const t = useText();
   const { locale } = useLocale();
@@ -56,6 +64,9 @@ export function ReviewPanel({
   const navigate = useNavigate();
   const location = useLocation();
   const can = useCanDecide(revision, isLatest);
+  // Only an account that may publish can publish, whatever the caller asks for; the server would
+  // refuse anyway, and a button promising two things when it can do one is the worse failure.
+  const publishWhenApproved = publishWhenApprovedProp === true && can.publish;
 
   const [comment, setComment] = useState("");
   const [ticked, setTicked] = useState<string[]>([]);
@@ -66,13 +77,25 @@ export function ReviewPanel({
     mutationFn: async (action: Action) => {
       const path = { revisionId: revision.id };
       switch (action) {
-        case "approve":
-          return unwrap(
+        case "approve": {
+          const approved = await unwrap(
             api.POST("/api/admin/question-revisions/{revisionId}/approve", {
               params: { path },
               body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
             }),
           );
+          if (!publishWhenApproved) {
+            return approved;
+          }
+          // Two requests, exactly as two presses would make: the record of what happened is the
+          // same, and so is what happens when the second one fails. A failure there leaves a
+          // revision approved and unpublished, which is a real state and has to be shown as one,
+          // so the approval reaches the cache before the publish is attempted.
+          queryClient.setQueryData(["editorial", "question", approved.id], approved);
+          return unwrap(
+            api.POST("/api/admin/question-revisions/{revisionId}/publish", { params: { path } }),
+          );
+        }
         case "request-changes":
           return unwrap(
             api.POST("/api/admin/question-revisions/{revisionId}/request-changes", {
@@ -103,9 +126,13 @@ export function ReviewPanel({
       setFailure(null);
       queryClient.setQueryData(["editorial", "question", updated.id], updated);
       void queryClient.invalidateQueries({ queryKey: ["editorial", "questions"] });
-      const notice = { approve: "approved", "request-changes": "changes", publish: "published", deprecate: "retired", "new-revision": "started" }[action];
-      if (onDecided && action !== "new-revision") {
-        onDecided(action);
+      // What happened, which is not always what was pressed: approving with "and publish" on ends
+      // in a published revision, and saying "Approved." there would under-report an irreversible
+      // step — and would leave the worklist waiting for a publish that has already happened.
+      const happened: Action = action === "approve" && publishWhenApproved ? "publish" : action;
+      const notice = { approve: "approved", "request-changes": "changes", publish: "published", deprecate: "retired", "new-revision": "started" }[happened];
+      if (onDecided && happened !== "new-revision") {
+        onDecided(happened);
       } else if (action === "new-revision") {
         const newest = Math.max(...updated.revisions.map((candidate) => candidate.number));
         navigate(`/editorial/questions/${updated.id}?revision=${newest}`, { state: { notice } });
@@ -126,7 +153,13 @@ export function ReviewPanel({
   }
 
   const approval = [...revision.reviews].reverse().find((review) => review.decision === "APPROVED");
-  const approvedBy = approval?.reviewerName ?? panel.unknownReviewer;
+  // Named for what it was. A publish confirmation that says "approved by" about a decision the
+  // author made on their own work would be claiming a second pair of eyes that was not there.
+  const reviewerName = approval?.reviewerName ?? panel.unknownReviewer;
+  const approvedBy =
+    approval && approval.reviewerId === revision.authorId
+      ? panel.selfReviewedBy(reviewerName)
+      : reviewerName;
   const approvedAt = approval?.decidedAt
     ? formatDateTime(approval.decidedAt, locale)
     : panel.unknownApprovalDate;
@@ -179,8 +212,9 @@ export function ReviewPanel({
           </div>
           <div className="stack decision-actions">
             <button id="approve-button" type="button" className="approve" disabled={decide.isPending} onClick={() => decide.mutate("approve")}>
-              {panel.approve}
+              {publishWhenApproved ? panel.approveAndPublish : panel.approve}
             </button>
+            {publishWhenApproved ? <p className="hint">{panel.approveAndPublishHint}</p> : null}
             <button id="request-changes-button" type="button" className="warn" disabled={decide.isPending} onClick={requestChanges}>
               {panel.requestChanges}
             </button>

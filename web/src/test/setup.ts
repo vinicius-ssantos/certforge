@@ -11,4 +11,13 @@ configure({ asyncUtilTimeout: 5000 });
 
 afterEach(() => {
   cleanup();
+  // Browser storage outlives a render, which is the point of it and a trap for the test after:
+  // one test that remembers a preference silently changes what every later test starts from, and
+  // the failure surfaces far from the cause. Each test gets a fresh browser.
+  try {
+    localStorage.clear();
+    sessionStorage.clear();
+  } catch {
+    // Storage can be unavailable; nothing to clear then.
+  }
 });
