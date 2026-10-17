@@ -87,6 +87,16 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- `just record-review <question> <verdict>` writes a reviewer's verdict into a pack's `review.json`.
+  Nothing in this repository wrote that file before: six tools read it, and its forty-six entries were
+  typed by hand from the generated packet, which means copying a sha256 by eye once per question. The
+  twenty-four reviews that stand between this project and a startable mock exam would have been
+  twenty-four more chances to mistype one — and a mistyped digest records a verdict against text
+  nobody read, which is the one thing the digest exists to prevent. The verdict is an argument with no
+  default; the tool refuses a verdict it does not know and a question the pack does not have, computes
+  the digest from the question as it stands rather than trusting what it is told, records a renewal
+  when the question has changed since its last review, and writes nothing at all when the record
+  already says exactly this. It cannot produce a verdict, infer one, or assume approval (ADR 0005).
 - The 26 previously-unreviewed Topic 01 and Topic 02 Java SE 21 questions now carry the project owner's human technical approval from 2026-10-07, bringing the current reviewed set to 46 of 150. Review provenance supports a per-question `reviewedOn` date so later review batches do not rewrite the date of the original twenty approvals (#139, #140, #80).
 - Interview Prep now has a first-class `GUIDED_RESPONSE` question model: reviewed reference answers, required/optional expected concepts, common mistakes and follow-up prompts are stored with the immutable revision, accepted only on interview tracks, exposed to the editorial API, and never represented as objective `correct=true/false` evidence. The documented first evaluation contract is manual/self-review after a committed response; automated AI grading and learner interview sessions remain separate work (#19).
 - Mock-exam history now lives in its own learner read model: active runs expose participation only, terminal runs expose score and per-topic evidence, weak topics are surfaced against that run's practice target, and none of this changes ordinary topic-practice progress or adaptive-review evidence (#97).

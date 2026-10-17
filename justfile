@@ -195,6 +195,15 @@ scan-secrets:
 
 # ---- content and contract --------------------------------------------------------------------
 
+# Record your verdict for one question, with the digest computed from the question as it stands,
+# then rebuild the packet CI compares against. The verdict is yours and has no default: this
+# writes a decision down, it never makes one.
+#     just record-review t03-sealed-permits APPROVED
+[group('content')]
+record-review question verdict pack="content/java-se-21":
+    node content/record-review.mjs --pack {{pack}} --question {{question}} --verdict {{verdict}}
+    node content/build-review-packet.mjs
+
 # Rebuild the packet a technical reviewer works from, after changing the question pack.
 [group('content')]
 review-packet:
