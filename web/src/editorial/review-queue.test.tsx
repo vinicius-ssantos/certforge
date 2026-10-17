@@ -321,6 +321,31 @@ describe("where the walk starts", () => {
     expect(await screen.findByText("What does volatile guarantee?")).toBeInTheDocument();
   });
 
+  it("does not mistake a draft topic absent from coverage for a mock-unblocking zero", async () => {
+    const DRAFT_TOPIC = "a3000000-0000-4000-8000-000000000301";
+    renderApp(
+      {
+        ...threeWaiting,
+        ...coverage(2, 5),
+        "GET /api/admin/questions": {
+          body: page([
+            summary(FIRST, DRAFT_TOPIC, "What is 1 + 1?"),
+            summary(SECOND, TOPIC_B, "What does volatile guarantee?"),
+            summary(THIRD, TOPIC_A, "What is 2 + 2?"),
+          ]),
+        },
+        [`GET /api/admin/questions/${FIRST}`]: {
+          body: question(FIRST, DRAFT_TOPIC, "What is 1 + 1?"),
+        },
+      },
+      { as: reviewer, ...OPEN },
+    );
+
+    await screen.findByText(/2 published, 1 question waits here/);
+    expect(await screen.findByText("What is 2 + 2?")).toBeInTheDocument();
+    expect(screen.queryByText("What is 1 + 1?")).not.toBeInTheDocument();
+  });
+
   it("says how much of the topic exists and how much is waiting", async () => {
     renderApp({ ...threeWaiting, ...coverage(2, 5) }, { as: reviewer, ...OPEN });
 
