@@ -31,6 +31,19 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- The review worklist no longer opens on a track no learner can be given. Ordering topics by how
+  few published questions each has read a missing coverage row as **zero published**, and the rows
+  that are missing are the ones outside the learner-facing catalog — the DevOps track is seeded
+  `DRAFT`, so its ten topics never appear there. Its seventy questions therefore sorted ahead of
+  everything, and the feature that exists to put the twenty-four reviews gating `v0.3.0` first
+  buried them behind a track that cannot be published at all: worse than the alphabetical order it
+  replaced. Absent is now absent rather than zero, and those topics follow the ones whose counts are
+  known. A second defect went with it: the address was written from the unordered list as soon as
+  the worklist arrived, so the question the reviewer landed on was the one the *unprioritized* order
+  had picked, even after the coverage reordered everything. The walk now waits for the coverage
+  before choosing where it starts, and a coverage that fails still leaves the queue's own order.
+  The same mistake was standing in quieter type beside the counter, where such a topic read "0
+  published": not a count of nought but no count at all, and the line now says so.
 - The review panel stops complaining about the last thing you pressed. Reaching for "Request
   changes", being told to say what needs to change, and then approving instead left that complaint
   on screen under "Approved." — with a summary link to `#review-comment`, a field the approval had

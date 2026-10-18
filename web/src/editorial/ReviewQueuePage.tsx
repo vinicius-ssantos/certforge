@@ -119,22 +119,32 @@ export function ReviewQueuePage() {
    * queue's own order makes the reviewer change subject at every question.
    *
    * The topics themselves come in order of how little of each a learner can be given, so the
-   * reviewer starts where decisions unblock something. Until the coverage arrives every topic
-   * counts as nought, which leaves the grouping in place and only the order unsettled.
+   * reviewer starts where decisions unblock something. Until coverage arrives, topics have
+   * unknown counts and retain their queue order. Topics absent from active learner coverage
+   * follow those with known counts instead of being mistaken for zero-published topics.
    */
   const ordered = useMemo(() => {
-    const items = worklist.data ?? [];
+    // Do not choose (or write into the URL) an unprioritized first item before coverage
+    // finishes. An early URL update would keep that item selected even after reordering.
+    const items = coverage.isPending ? [] : (worklist.data ?? []);
     const topics: string[] = [];
     for (const item of items) {
       const topic = item.topicId ?? "";
       if (!topics.includes(topic)) topics.push(topic);
     }
-    const thinnestFirst = [...topics].sort(
-      (left, right) => (publishedIn.get(left) ?? 0) - (publishedIn.get(right) ?? 0),
-    );
+    // A missing coverage row does not mean "zero published": dormant or draft tracks
+    // are absent from the learner-facing catalog and must not jump ahead of active
+    // certification topics whose reviews can unblock a mock exam.
+    const thinnestFirst = [...topics].sort((left, right) => {
+      const leftCount = publishedIn.get(left);
+      const rightCount = publishedIn.get(right);
+      if (leftCount === undefined) return rightCount === undefined ? 0 : 1;
+      if (rightCount === undefined) return -1;
+      return leftCount - rightCount;
+    });
     const inOrder = thinnestFirst.flatMap((topic) => items.filter((item) => (item.topicId ?? "") === topic));
     return onlySkipped ? inOrder.filter((item) => onlySkipped.includes(item.id)) : inOrder;
-  }, [worklist.data, publishedIn, onlySkipped]);
+  }, [worklist.data, publishedIn, onlySkipped, coverage.isPending]);
 
   /*
    * The address carries the question on screen, so a reload, a link or a browser Back returns to
@@ -268,12 +278,12 @@ export function ReviewQueuePage() {
         </div>
       </div>
 
-      {worklist.isPending ? <Loading label={page.loading} /> : null}
+      {worklist.isPending || (worklist.data && coverage.isPending) ? <Loading label={page.loading} /> : null}
       {worklist.isError ? (
         <ErrorState error={worklist.error} onRetry={() => void worklist.refetch()} />
       ) : null}
 
-      {worklist.data && total === 0 ? (
+      {worklist.data && !coverage.isPending && total === 0 ? (
         <EmptyState title={page.emptyTitle}>
           <p>{page.emptyBody}</p>
         </EmptyState>
@@ -303,12 +313,24 @@ export function ReviewQueuePage() {
         <div ref={stage} tabIndex={-1} aria-label={page.stageLabel(at + 1, total)}>
           <div className="review-progress">
             <p role="status">{page.progress(at + 1, total)}</p>
+            {/*
+              * A topic with no coverage row has an unknown count, not a count of nought, and the
+              * line says which. "0 published" there would be the same false statement that put
+              * these topics at the front of the walk, left standing in quieter type.
+              */}
             <p className="hint">
-              {page.inTopic(
-                current.topicId ? (topicNames.get(current.topicId) ?? page.fallbackTopic) : page.noTopic,
-                ordered.filter((item) => (item.topicId ?? "") === (current.topicId ?? "")).length,
-                publishedIn.get(current.topicId ?? "") ?? 0,
-              )}
+              {(() => {
+                const name = current.topicId
+                  ? (topicNames.get(current.topicId) ?? page.fallbackTopic)
+                  : page.noTopic;
+                const waiting = ordered.filter(
+                  (item) => (item.topicId ?? "") === (current.topicId ?? ""),
+                ).length;
+                const published = publishedIn.get(current.topicId ?? "");
+                return published === undefined
+                  ? page.inTopicOutsideCatalog(name, waiting)
+                  : page.inTopic(name, waiting, published);
+              })()}
             </p>
             <div className="stack">
               <button type="button" className="secondary" disabled={at === 0} onClick={() => move(-1)}>
