@@ -313,12 +313,24 @@ export function ReviewQueuePage() {
         <div ref={stage} tabIndex={-1} aria-label={page.stageLabel(at + 1, total)}>
           <div className="review-progress">
             <p role="status">{page.progress(at + 1, total)}</p>
+            {/*
+              * A topic with no coverage row has an unknown count, not a count of nought, and the
+              * line says which. "0 published" there would be the same false statement that put
+              * these topics at the front of the walk, left standing in quieter type.
+              */}
             <p className="hint">
-              {page.inTopic(
-                current.topicId ? (topicNames.get(current.topicId) ?? page.fallbackTopic) : page.noTopic,
-                ordered.filter((item) => (item.topicId ?? "") === (current.topicId ?? "")).length,
-                publishedIn.get(current.topicId ?? "") ?? 0,
-              )}
+              {(() => {
+                const name = current.topicId
+                  ? (topicNames.get(current.topicId) ?? page.fallbackTopic)
+                  : page.noTopic;
+                const waiting = ordered.filter(
+                  (item) => (item.topicId ?? "") === (current.topicId ?? ""),
+                ).length;
+                const published = publishedIn.get(current.topicId ?? "");
+                return published === undefined
+                  ? page.inTopicOutsideCatalog(name, waiting)
+                  : page.inTopic(name, waiting, published);
+              })()}
             </p>
             <div className="stack">
               <button type="button" className="secondary" disabled={at === 0} onClick={() => move(-1)}>

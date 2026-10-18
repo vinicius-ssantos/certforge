@@ -653,6 +653,8 @@ export const en = {
       progress: (at: number, total: number) => `${at} of ${total}`,
       inTopic: (topic: string, count: number, published: number) =>
         `${topic} — ${published} published, ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} here`,
+      inTopicOutsideCatalog: (topic: string, count: number) =>
+        `${topic} — outside the learner catalogue, so publishing here reaches nobody yet; ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} here`,
       previous: "Previous question",
       stageLabel: (at: number, total: number) => `Question ${at} of ${total} under review`,
       youWroteThisSelfReview:

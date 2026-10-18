@@ -598,6 +598,8 @@ export const ptBR: Catalog = {
       progress: (at: number, total: number) => `${at} de ${total}`,
       inTopic: (topic: string, count: number, published: number) =>
         `${topic} — ${published} publicadas, ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} aqui`,
+      inTopicOutsideCatalog: (topic: string, count: number) =>
+        `${topic} — fora do catálogo de quem estuda, então publicar aqui ainda não chega a ninguém; ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} aqui`,
       previous: "Questão anterior",
       stageLabel: (at: number, total: number) => `Questão ${at} de ${total} em revisão`,
       youWroteThisSelfReview:

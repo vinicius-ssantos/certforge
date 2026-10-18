@@ -42,6 +42,8 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   the worklist arrived, so the question the reviewer landed on was the one the *unprioritized* order
   had picked, even after the coverage reordered everything. The walk now waits for the coverage
   before choosing where it starts, and a coverage that fails still leaves the queue's own order.
+  The same mistake was standing in quieter type beside the counter, where such a topic read "0
+  published": not a count of nought but no count at all, and the line now says so.
 - The review panel stops complaining about the last thing you pressed. Reaching for "Request
   changes", being told to say what needs to change, and then approving instead left that complaint
   on screen under "Approved." — with a summary link to `#review-comment`, a field the approval had
