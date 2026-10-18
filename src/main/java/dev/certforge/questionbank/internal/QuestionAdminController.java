@@ -54,6 +54,17 @@ class QuestionAdminController {
     return service.list(status, q, page, size);
   }
 
+  /**
+   * How ready each topic is. Its own path rather than /api/admin/questions/coverage, because that
+   * would sit under a mapping whose next segment is a question id: the two would be distinguished
+   * only by "coverage" not parsing as a UUID, which is a coincidence to depend on.
+   */
+  @GetMapping("/api/admin/question-coverage")
+  @PreAuthorize(READ_ACCESS)
+  List<AdminQuestionViews.TopicCoverage> coverage() {
+    return service.coverage();
+  }
+
   @GetMapping("/api/admin/questions/{questionId}")
   @PreAuthorize(READ_ACCESS)
   QuestionView get(@PathVariable UUID questionId) {

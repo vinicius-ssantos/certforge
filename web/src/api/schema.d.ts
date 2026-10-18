@@ -228,6 +228,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/question-coverage": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["coverage"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/question-revisions/{revisionId}": {
         parameters: {
             query?: never;
@@ -1498,6 +1514,14 @@ export interface components {
             /** Format: int32 */
             technicalReview: number;
         };
+        TopicCoverage: {
+            /** Format: int32 */
+            published: number;
+            /** Format: uuid */
+            topicId: string;
+            /** Format: int32 */
+            waitingForReview: number;
+        };
         TopicProgress: {
             accuracy: number | null;
             /** Format: int32 */
@@ -1912,6 +1936,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AdminTrackView"];
+                };
+            };
+        };
+    };
+    coverage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TopicCoverage"][];
                 };
             };
         };

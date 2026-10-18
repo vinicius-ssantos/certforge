@@ -651,8 +651,8 @@ export const en = {
       loading: "Loading the worklist",
       loadingQuestion: "Loading the question",
       progress: (at: number, total: number) => `${at} of ${total}`,
-      inTopic: (topic: string, count: number) =>
-        `${topic} — ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} in this topic`,
+      inTopic: (topic: string, count: number, published: number) =>
+        `${topic} — ${published} published, ${count} ${plural(TAG, count, { one: "question waits", other: "questions wait" })} here`,
       previous: "Previous question",
       stageLabel: (at: number, total: number) => `Question ${at} of ${total} under review`,
       youWroteThisSelfReview:
@@ -671,6 +671,10 @@ export const en = {
       doneTitle: "That is the end of the worklist",
       doneBody: (total: number) =>
         `You went through ${total} ${plural(TAG, total, { one: "question", other: "questions" })}. Anything you skipped is still waiting in the queue.`,
+      skippedBody: (count: number) =>
+        `${count} ${plural(TAG, count, { one: "question", other: "questions" })} you passed over ${plural(TAG, count, { one: "is", other: "are" })} still undecided.`,
+      reviewSkipped: (count: number) =>
+        `Go through the ${count} you skipped`,
       backToQueue: "Back to the queue",
       notAReviewer: "You do not review questions",
       notAReviewerBody: "This worklist is for the reviewer who decides whether a question is technically right.",

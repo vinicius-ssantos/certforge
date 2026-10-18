@@ -82,6 +82,13 @@ interface AdminQuestionViews {
   record StatusCounts(
       int all, int draft, int technicalReview, int approved, int published, int deprecated) {}
 
+  /**
+   * How much of a topic a learner can actually be given, beside how much of it is waiting for a
+   * decision. {@code published} counts exactly what the mock planner counts, by asking the same
+   * method, so the editorial desk and the planner cannot disagree about whether a topic is ready.
+   */
+  record TopicCoverage(UUID topicId, int published, int waitingForReview) {}
+
   record QuestionSummary(
       UUID id,
       UUID latestRevisionId,

@@ -596,8 +596,8 @@ export const ptBR: Catalog = {
       loading: "Carregando a lista de trabalho",
       loadingQuestion: "Carregando a questão",
       progress: (at: number, total: number) => `${at} de ${total}`,
-      inTopic: (topic: string, count: number) =>
-        `${topic} — ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} neste tópico`,
+      inTopic: (topic: string, count: number, published: number) =>
+        `${topic} — ${published} publicadas, ${count} ${plural(TAG, count, { one: "questão esperando", other: "questões esperando" })} aqui`,
       previous: "Questão anterior",
       stageLabel: (at: number, total: number) => `Questão ${at} de ${total} em revisão`,
       youWroteThisSelfReview:
@@ -616,6 +616,9 @@ export const ptBR: Catalog = {
       doneTitle: "Fim da lista de trabalho",
       doneBody: (total: number) =>
         `Você passou por ${total} ${plural(TAG, total, { one: "questão", other: "questões" })}. O que foi pulado continua na fila.`,
+      skippedBody: (count: number) =>
+        `${count} ${plural(TAG, count, { one: "questão que você pulou continua", other: "questões que você pulou continuam" })} sem decisão.`,
+      reviewSkipped: (count: number) => `Passar pelas ${count} que você pulou`,
       backToQueue: "Voltar para a fila",
       notAReviewer: "Você não revisa questões",
       notAReviewerBody: "Esta lista é de quem decide se uma questão está tecnicamente correta.",

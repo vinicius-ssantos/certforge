@@ -8,6 +8,7 @@ import dev.certforge.identity.Permission;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.preparationcatalog.TopicView;
 import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.questionbank.RevisionStatus;
 import dev.certforge.questionbank.internal.AdminQuestionViews.ExpectedConceptView;
@@ -48,6 +49,7 @@ class QuestionBankService {
 
   private final QuestionRepository repository;
   private final PreparationCatalog catalog;
+  private final QuestionBankReadService readService;
   private final CurrentActor currentActor;
   private final AccountNames accountNames;
   private final Clock clock;
@@ -58,6 +60,7 @@ class QuestionBankService {
   QuestionBankService(
       QuestionRepository repository,
       PreparationCatalog catalog,
+      QuestionBankReadService readService,
       CurrentActor currentActor,
       AccountNames accountNames,
       Clock clock,
@@ -66,6 +69,7 @@ class QuestionBankService {
       ObservationRegistry observations) {
     this.repository = repository;
     this.catalog = catalog;
+    this.readService = readService;
     this.currentActor = currentActor;
     this.accountNames = accountNames;
     this.clock = clock;
@@ -89,6 +93,32 @@ class QuestionBankService {
         page,
         size,
         repository.countSummaries(status, trimmed));
+  }
+
+  /**
+   * How ready each topic is, for a reviewer deciding what to read first. A topic with two published
+   * questions is further from a startable mock than one with five, and the queue's own order knows
+   * nothing about that: it is alphabetical, which is an order about names.
+   *
+   * <p>`published` is counted by asking {@code eligibleForTopic}, the method the mock planner asks.
+   * Counting published revisions here with a second query would be the same number until the day
+   * one of them learned a rule the other did not — the guided-response exclusion is already such a
+   * rule.
+   */
+  @Transactional(readOnly = true)
+  List<AdminQuestionViews.TopicCoverage> coverage() {
+    Map<UUID, Integer> waiting = repository.waitingByTopic();
+    return catalog.activeTracks().stream()
+        .flatMap(track -> track.topics().stream())
+        .map(TopicView::id)
+        .distinct()
+        .map(
+            topic ->
+                new AdminQuestionViews.TopicCoverage(
+                    topic.value(),
+                    readService.eligibleForTopic(topic).size(),
+                    waiting.getOrDefault(topic.value(), 0)))
+        .toList();
   }
 
   @Transactional(readOnly = true)

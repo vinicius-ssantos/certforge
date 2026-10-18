@@ -1982,6 +1982,24 @@
         "required" : [ "all", "approved", "deprecated", "draft", "published", "technicalReview" ],
         "type" : "object"
       },
+      "TopicCoverage" : {
+        "properties" : {
+          "published" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "waitingForReview" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "published", "topicId", "waitingForReview" ],
+        "type" : "object"
+      },
       "TopicProgress" : {
         "properties" : {
           "accuracy" : {
@@ -2627,6 +2645,27 @@
           }
         },
         "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/question-coverage" : {
+      "get" : {
+        "operationId" : "coverage",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/TopicCoverage"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
       }
     },
     "/api/admin/question-revisions/{revisionId}" : {
