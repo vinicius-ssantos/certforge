@@ -75,6 +75,13 @@ questão por vez, porque é aí que essas falhas aparecem:
 - **O título de uma referência precisa nomear a página, não o site.** "Documentação oficial" é verdade
   sobre toda página do host, então não diz nada a quem quer conferir a afirmação — e diz menos ainda
   a um leitor de tela anunciando quarenta links idênticos.
+- **Duas alternativas de uma questão não podem ser lidas igual.** Uma delas está marcada como
+  correta, então quem ler as duas com atenção ainda vai ter de adivinhar, e conhecer o assunto não
+  ajuda. Aqui só se perdoa o que um renderizador perdoa — composição Unicode e sequências de espaço,
+  que o HTML colapsa de todo jeito. Caixa, não: a `t01-boolean-parseboolean` oferece `"TRUE"` e
+  `"TrUe"` porque `Boolean.parseBoolean` ignora caixa, e três questões do Tópico 10 giram em torno de
+  `PT-br` contra `pt-BR` — uma checagem que baixasse a caixa recusaria quatro questões corretas como
+  ambíguas.
 
 O que ele não checa é se a explicação está *certa*, ou se o distrator é um erro que alguém cometeria
 de fato. Isso é de uma pessoa nomeada, pela ADR 0005, e nenhuma contagem daquele arquivo muda isso.

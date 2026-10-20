@@ -3,7 +3,12 @@ import assert from "node:assert/strict";
 import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { assertPackQuality, difficultySpread, inspectPackQuality, repeatedExplanationsWithin } from "./pack-quality.mjs";
+import {
+  assertPackQuality, difficultySpread, indistinguishableOptions, inspectPackQuality,
+  repeatedExplanationsWithin,
+} from "./pack-quality.mjs";
+
+import { readPack } from "./pack.mjs";
 
 const pack = "content/infrastructure-devops-foundations";
 
@@ -105,4 +110,46 @@ test("the difficulty matrix is reported as counts, including the ones that are m
   // The real pack offers all three, which is the matrix #167 and #168 ask for — thinly at the ends.
   const live = inspectPackQuality(pack);
   assert.deepEqual(live.difficulty, { EASY: 4, MEDIUM: 58, HARD: 8 });
+});
+
+test("two options a learner cannot tell apart are refused outright", () => {
+  // Neither pack does this today, over all 220 questions, so there is no ledger entry and no debt:
+  // a question whose options repeat each other cannot be answered as asked, however well the
+  // learner knows the subject.
+  assert.deepEqual(inspectPackQuality(pack).indistinguishable, []);
+
+  withCopy((target) => {
+    edit(target, "t05-dockerignore", (data) => {
+      data.options[1].text = data.options[0].text;
+    });
+    assert.throws(() => assertPackQuality(target), /options A and B with text a learner cannot tell apart/);
+  });
+});
+
+test("the comparison forgives exactly what a renderer forgives, and no more", () => {
+  const options = (...texts) => ({
+    options: texts.map((text, index) => ({ key: "ABCDE"[index], text, correct: index === 0, explanation: `Why ${index}` })),
+  });
+  // Runs of whitespace and surrounding whitespace: HTML collapses both, so these two options are
+  // the same thing on the screen whatever the file says.
+  assert.equal(indistinguishableOptions(options("Use a bind mount", "  Use   a bind  mount ")).length, 1);
+
+  // Case is not forgiven, and this is the reason rather than a preference. These four options are
+  // real: `Boolean.parseBoolean` ignores case, so the question is which spellings parse to true,
+  // and `Locale.forLanguageTag` canonicalises a tag, so `PT-br` and `pt-BR` are the question.
+  // Lowercasing would refuse all of it as ambiguous.
+  assert.deepEqual(indistinguishableOptions(options("\"TRUE\"", "\"TrUe\"")), []);
+  assert.deepEqual(indistinguishableOptions(options("PT-br", "pt-BR")), []);
+  // Nor is anything further: meaning is the reviewer's by ADR 0005.
+  assert.deepEqual(indistinguishableOptions(options("docker rm", "docker rmi")), []);
+  assert.deepEqual(indistinguishableOptions(options("Use a bind mount.", "Use a bind mount")), []);
+});
+
+test("the Java pack is held to the same rule, through its own reader", () => {
+  // pack-quality reads manifest packs; the Java pack has no manifest and goes through pack.mjs, so
+  // the rule is applied to its questions here rather than left to cover only half the content.
+  const leaking = readPack("content/java-se-21")
+    .map((question) => ({ name: question.name, clashes: indistinguishableOptions(question) }))
+    .filter((entry) => entry.clashes.length > 0);
+  assert.deepEqual(leaking, []);
 });

@@ -29,6 +29,40 @@ export function explanationId(text) {
 }
 
 /**
+ * Two options a learner cannot tell apart.
+ *
+ * #166 asks CI to fail on "ambiguidade mecânica detectável". The rest of this file catches
+ * explanations that are templates; this catches the question that cannot be answered as asked: two
+ * options saying the same thing, one of them marked correct. A learner who reads both carefully
+ * still has to guess, and no amount of knowing the subject helps.
+ *
+ * "The same thing" means *renders the same*: the comparison forgives only what a renderer forgives
+ * — Unicode composition, and runs of whitespace, which HTML collapses anyway. Nothing else. Two
+ * options that differ in case are different on the screen, and in this content the case is often the
+ * whole question: `t01-boolean-parseboolean` offers `"TRUE"` and `"TrUe"` because
+ * `Boolean.parseBoolean` ignores case, and three Topic 10 questions turn on `PT-br` against
+ * `pt-BR`. A checker that lowercased would have refused all four as ambiguous, which is how a
+ * checker that implies more than it does ends up worse than none.
+ *
+ * Nothing in either pack trips it, over all 220 questions. It is here so the next pack cannot
+ * introduce it quietly, which is why it fails outright instead of recording a debt.
+ */
+export function indistinguishableOptions(question) {
+  const seen = new Map();
+  const clashes = [];
+  for (const option of question.options) {
+    const normalised = option.text.normalize("NFC").replace(/\s+/g, " ").trim();
+    const earlier = seen.get(normalised);
+    if (earlier === undefined) {
+      seen.set(normalised, option.key);
+    } else {
+      clashes.push({ keys: [earlier, option.key], text: option.text });
+    }
+  }
+  return clashes;
+}
+
+/**
  * The options of one question whose explanation is word-for-word another option's. Returned as the
  * keys that share each text, because that is what an author has to open the file and fix.
  */
@@ -99,6 +133,9 @@ export function inspectPackQuality(pack) {
     repeatedWithin: templated,
     reusedAcrossQuestions: explanationsReusedAcrossQuestions(questions),
     placeholderReferenceTitles: placeholderReferenceTitles(questions),
+    indistinguishable: questions
+      .map((question) => ({ name: question.name, clashes: indistinguishableOptions(question) }))
+      .filter((entry) => entry.clashes.length > 0),
     difficulty: difficultySpread(questions),
   };
 }
@@ -149,6 +186,15 @@ export function assertPackQuality(pack) {
   }
   for (const [id, count] of recordedReuse) {
     problems.push(`explanation ${id} is no longer shared by ${count} questions — strike it off quality-debt.json`);
+  }
+
+  // No ledger entry for this one: nothing in either pack trips it, so there is no debt to record
+  // and a new question that asks a learner to choose between two identical options is simply
+  // refused. A question cannot be answered as asked when two of its options say the same thing.
+  for (const entry of live.indistinguishable) {
+    for (const clash of entry.clashes) {
+      problems.push(`${entry.name} offers options ${clash.keys.join(" and ")} with text a learner cannot tell apart: ${JSON.stringify(clash.text.slice(0, 60))}`);
+    }
   }
 
   const owedTitles = new Set(debt.placeholderReferenceTitles ?? []);
