@@ -1,6 +1,6 @@
 # Multi-track content pack contract — implementation design (#166)
 
-Status: PROPOSED. This is a design contract, **not yet implemented**. Legacy `content/java-se-21` continues unchanged.
+Status: PARTLY IMPLEMENTED. Legacy `content/java-se-21` continues unchanged, and the sections below say which parts of this contract are code and which are still a proposal. The manifest, the question schema, the source policy, the review record, the offline artifact checks and the evidence profiles exist, in `content/pack-manifest.mjs`, `content/manifest-pack.mjs`, `content/review-integrity.mjs`, `content/embedded-artifacts.mjs` and `content/evidence.mjs`; the Terraform, GitHub Actions and container-tool adapters do not.
 
 ## Problem
 
@@ -19,7 +19,7 @@ Each new pack adds `pack.json` to its root:
   "trackVersion": "2026.1",
   "language": "pt-BR",
   "sourcePolicy": "infrastructure-official-v1",
-  "evidenceProfile": "static-v1",
+  "evidenceProfile": "reference-backed-v1",
   "editorialStatus": "DRAFT"
 }
 ```
@@ -30,16 +30,48 @@ Certification packs instead use `trackKind: "CERTIFICATION"` and a `certificatio
 
 Reuse existing question `prompt`, `options`, `type`, `difficulty`, `difficultyRationale`, `explanation`, `references`, `topicId`; add `objectiveKeys` (certification only) and `evidence` metadata. For non-Java tracks `javaRelease` must not be required or silently defaulted. Exactly one correct option for single-choice; multi-choice needs explicit cardinality; each distractor receives an explanation.
 
-## Evidence adapters
+## Evidence profiles and types — implemented
 
-- `reference-backed`: citations to versioned official product documentation; checks URL syntax, version and permitted source domains but does **not** claim logical proof.
-- `dockerfile-static`: syntax/lint with a pinned tool, no daemon privileges, host socket or network.
-- `kubernetes-schema`: schema validation for explicitly pinned Kubernetes API version, strictly offline.
+Every question carries an `evidence` descriptor. There is no silent absence: a question nothing
+mechanical checks says `reference-backed`, and `content/evidence.mjs` counts those as the pack's
+unchecked ones, which is what `node content/stage-editorial-pack.mjs` prints before an import.
+
+A pack's `evidenceProfile` names which of the types its questions may claim. Only these profiles
+exist, and a pack claiming any other name fails the manifest rather than passing unread:
+
+| Profile | Admits |
+| --- | --- |
+| `reference-backed-v1` | `reference-backed` |
+| `static-check-v1` | `reference-backed`, `shell-static-check`, `yaml-static-check`, `manifest-schema-check` |
+
+A claim that a *machine* looked has to point at something a machine here reads, and
+`content/evidence.mjs` refuses one that does not:
+
+- `reference-backed`: official pages, within the pack's source policy, over HTTPS. The weakest and
+  the honest label — the reviewer's reading is the only check. It claims no logical proof.
+- `shell-static-check`: a `dockerfile` block, linted instruction by instruction. A `bash` transcript
+  does **not** corroborate it, because nothing here lints shell.
+- `yaml-static-check`: a `yaml` block, checked for shape — tabs, indentation steps, duplicate
+  sibling keys. This is not a YAML parser and says nothing about meaning.
+- `manifest-schema-check`: a `yaml` block that declares `apiVersion` and `kind`, checked against the
+  Kubernetes version the pack records, so a removed API version fails.
+- `runnable-isolated-test`: named by #166 and admitted by no profile, because nothing in this
+  repository runs one for a manifest pack. The Java pack compiles and runs every question's
+  programme, and it is not a manifest pack.
+
+No check here can approve or publish, and a passing check is not a review.
+
+## Evidence adapters — still proposed
+
 - `github-actions-static`: YAML/actionlint static checks, no workflow execution.
-- `hcl-static`: formatting/validation with fixed terraform binary; no `apply`, cloud authentication or paid resources.
+- `hcl-static`: formatting/validation with a fixed terraform binary; no `apply`, cloud
+  authentication or paid resources.
+- A container-tool adapter for Dockerfiles and manifests, pinned, with no daemon privileges, host
+  socket or network — stronger than the offline checks above, which need no tool at all.
 - Existing `java-program`: unchanged Java 21 compilation and output verification.
 
-Every adapter returns an evidence result with tool/version, fixture digest, status and reason. No adapter can approve or publish.
+Each would record tool, version, fixture digest, status and reason, and each needs a profile that
+admits it before a question may claim it.
 
 ## Editorial workflow and compatibility
 

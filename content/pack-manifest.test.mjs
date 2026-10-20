@@ -10,7 +10,7 @@ const general = () => ({
   trackVersion: "2026.1",
   language: "pt-BR",
   sourcePolicy: "infrastructure-official-v1",
-  evidenceProfile: "static-v1",
+  evidenceProfile: "reference-backed-v1",
   editorialStatus: "DRAFT",
 });
 
@@ -21,6 +21,18 @@ test("rejects undocumented or non-draft packs", () => {
   assert.throws(() => validatePackManifest({ ...general(), editorialStatus: "PUBLISHED" }), /DRAFT/);
   assert.throws(() => validatePackManifest({ ...general(), schemaVersion: 2 }), /schemaVersion/);
   assert.throws(() => validatePackManifest({ ...general(), trackSlug: "Bad Slug" }), /slugs/);
+});
+test("a pack may only claim a level of rigour this project implements", () => {
+  // The field was free text until #166 read it, and the names in circulation — "static-v1" in this
+  // file and in the contract doc, "reference-v1" in the question fixtures — were not implemented
+  // anywhere. A pack claiming one now fails instead of passing unread.
+  for (const profile of ["static-v1", "reference-v1", "runnable-verified-v1"]) {
+    assert.throws(
+      () => validatePackManifest({ ...general(), evidenceProfile: profile }),
+      /is not a profile this project implements/,
+    );
+  }
+  assert.equal(validatePackManifest({ ...general(), evidenceProfile: "static-check-v1" }).evidenceProfile, "static-check-v1");
 });
 test("certification requires a verified version snapshot", () => {
   const certification = { ...general(), trackKind: "CERTIFICATION" };
