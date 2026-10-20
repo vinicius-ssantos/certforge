@@ -363,3 +363,96 @@ describe("a session that is no longer open", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent("does not exist");
   });
 });
+
+describe("the letter beside an option", () => {
+  // The server sends a learner's options in an order derived from their session, because the
+  // authored order gave the answer away: no four-option question in the Java pack answers D. So
+  // the badge counts the options on the screen, and the key still travels with the option.
+  const shuffled = () => {
+    const base = session();
+    const [first, second] = base.questions;
+    return {
+      ...base,
+      questions: [
+        {
+          ...first!,
+          question: {
+            ...first!.question,
+            options: [
+              { key: "C", text: "Third option" },
+              { key: "A", text: "First option" },
+              { key: "B", text: "Second option" },
+            ],
+          },
+        },
+        second!,
+      ],
+    };
+  };
+
+  it("counts the options on the screen instead of repeating the authored key", async () => {
+    renderApp(
+      { [`GET /api/study/sessions/${SESSION_ID}`]: { body: shuffled() } },
+      { path: `/sessions/${SESSION_ID}` },
+    );
+    await screen.findByRole("heading", { level: 2, name: "Question 1 of 2" });
+
+    const options = screen.getAllByRole<HTMLInputElement>("radio", { name: /option/i });
+    // The badge is aria-hidden, so what a screen reader hears is the label prefix: the position of
+    // the option, with the pack's own key nowhere in it.
+    expect(options.map((option) => option.labels?.[0]?.textContent)).toEqual([
+      "Option A: Third option",
+      "Option B: First option",
+      "Option C: Second option",
+    ]);
+  });
+
+  it("submits the key the option carries, not the letter it was given", async () => {
+    const user = userEvent.setup();
+    const { fetch } = renderApp(
+      {
+        [`GET /api/study/sessions/${SESSION_ID}`]: { body: shuffled() },
+        [`POST ${ATTEMPT}`]: { body: result(0, true, ["C"]) },
+      },
+      { path: `/sessions/${SESSION_ID}` },
+    );
+    await screen.findByRole("heading", { level: 2, name: "Question 1 of 2" });
+
+    // The first option on the screen, which the badge calls A and the pack calls C.
+    await user.click(screen.getAllByRole("radio", { name: /option/i })[0]!);
+    await user.click(screen.getByRole("radio", { name: /Medium/ }));
+    await user.click(screen.getByRole("button", { name: "Submit answer" }));
+
+    await screen.findByRole("heading", { level: 2, name: "Correct" });
+    const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === ATTEMPT);
+    // The first option on the screen is the pack's C, and that is what an answer has to say.
+    expect((call?.body as { selectedOptions: string[] }).selectedOptions).toEqual(["C"]);
+  });
+});
+
+describe("the letter beside an answer after it is submitted", () => {
+  it("keeps the letter with the option when the answer is moved to the top", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        [`GET /api/study/sessions/${SESSION_ID}`]: { body: session() },
+        // The learner chose the third option; the feedback shows theirs first.
+        [`POST ${ATTEMPT}`]: { body: result(0, false, ["C"]) },
+      },
+      { path: `/sessions/${SESSION_ID}` },
+    );
+    await screen.findByRole("heading", { level: 2, name: "Question 1 of 2" });
+
+    await user.click(screen.getByRole("radio", { name: /Third option/ }));
+    await user.click(screen.getByRole("radio", { name: /Medium/ }));
+    await user.click(screen.getByRole("button", { name: "Submit answer" }));
+    await screen.findByRole("heading", { level: 2, name: /Not quite/ });
+
+    // "Third option" stood third when it was answered, so it is still C here even though it is now
+    // the first row. Numbering the rows instead would rename the option the learner read.
+    const answers = screen.getAllByRole("listitem");
+    const chosen = answers.find((item) => item.textContent?.includes("Third option"));
+    expect(chosen?.textContent).toContain("Option C:");
+    expect(answers[0]).toBe(chosen);
+  });
+});

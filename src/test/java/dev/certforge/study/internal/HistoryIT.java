@@ -182,8 +182,12 @@ class HistoryIT {
         .andExpect(jsonPath("$.items[0].question.revisionStatus").value("DEPRECATED"))
         .andExpect(jsonPath("$.items[0].question.prompt").value("Original wording"))
         .andExpect(jsonPath("$.items[0].question.explanation").value("Secret overall explanation"))
-        .andExpect(jsonPath("$.items[0].question.options[0].correct").value(true))
-        .andExpect(jsonPath("$.items[0].question.options[0].explanation").value("Secret why A"))
+        // By key, not by position: an attempt is shown with the options in the order that session
+        // presented them, which is not the order they were authored in.
+        .andExpect(jsonPath("$.items[0].question.options[?(@.key == 'A')].correct").value(true))
+        .andExpect(
+            jsonPath("$.items[0].question.options[?(@.key == 'A')].explanation")
+                .value("Secret why A"))
         .andExpect(jsonPath("$.items[0].question.references[0].title").value("JLS"));
   }
 

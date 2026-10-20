@@ -6,6 +6,7 @@ import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { ErrorSummary } from "../ui/Form";
 import { useFocusOnMount } from "../ui/useFocusOnMount";
+import { optionLabel } from "../ui/optionLabel";
 
 /** The levels in the order they are offered, with the wording read from the active catalog. */
 function confidenceLevels(t: Catalog): { value: Confidence; label: string }[] {
@@ -105,7 +106,7 @@ export function QuestionForm({
 
         <fieldset className="options">
           <legend>{multiple ? t.question.chooseAllCorrect : t.question.chooseOneAnswer}</legend>
-          {question.options.map((option) => (
+          {question.options.map((option, index) => (
             <div key={option.key} className="choice">
               <input
                 id={`option-${option.key}`}
@@ -115,12 +116,14 @@ export function QuestionForm({
                 onChange={() => toggle(option.key)}
               />
               {/* The letter is announced by the label's prefix below, so the badge is decoration
-                  to a screen reader and a landmark to everyone else. */}
+                  to a screen reader and a landmark to everyone else. It counts the options on the
+                  screen: the server orders them per session, so the authored key is not the
+                  position. */}
               <span className="key" aria-hidden="true">
-                {option.key}
+                {optionLabel(index)}
               </span>
               <label htmlFor={`option-${option.key}`}>
-                <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
+                <span className="visually-hidden">{t.question.optionPrefix(optionLabel(index))}</span>
                 <English>{option.text}</English>
               </label>
             </div>

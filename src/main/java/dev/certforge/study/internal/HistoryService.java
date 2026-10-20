@@ -110,7 +110,9 @@ class HistoryService implements StudyEvidence {
             revision.type().name(),
             revision.prompt(),
             revision.explanation(),
-            revision.options().stream()
+            // The order that session showed, so a learner reading an old attempt sees the question
+            // they answered rather than the pack's authored order.
+            PresentedOrder.of(row.sessionId(), row.revisionId(), revision.options()).stream()
                 .map(o -> new HistoricalOption(o.key(), o.text(), o.correct(), o.explanation()))
                 .toList(),
             revision.references().stream()

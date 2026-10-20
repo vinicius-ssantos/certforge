@@ -290,7 +290,10 @@ class StudyService {
     List<SessionQuestionView> views = new ArrayList<>();
     for (int position = 0; position < questions.size(); position++) {
       views.add(
-          new SessionQuestionView(position, questions.get(position), answered.contains(position)));
+          new SessionQuestionView(
+              position,
+              PresentedOrder.of(session.id(), questions.get(position)),
+              answered.contains(position)));
     }
     return new SessionView(
         session.id(),

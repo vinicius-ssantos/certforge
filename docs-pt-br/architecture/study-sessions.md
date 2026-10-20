@@ -21,6 +21,34 @@ O aluno inicia uma sessão para um tópico e recebe um conjunto ordenado de ques
 
 Um aluno tem no máximo uma sessão em andamento por tópico. Um segundo início devolve `409 active_session_exists` com o `sessionId` da que está em andamento. Isso é garantido por um índice único parcial, então inícios concorrentes são seguros: exatamente um tem sucesso.
 
+## A ordem em que as alternativas são mostradas
+
+As questões de uma sessão são sorteadas; as alternativas não eram, e ficam guardadas na ordem em que
+foram escritas. Isso transformou um hábito de autoria em informação: nenhuma questão de quatro
+alternativas do pacote Java SE 21 tem D como correta — todas as 147 —, então quem percebia eliminava
+uma alternativa de graça em todo simulado, e o placar e o relatório de fraqueza mediam o pacote, não
+o aluno (#233). Rebalancear as chaves não está disponível, porque o veredito de uma questão revisada
+é registrado contra o texto dela, e editar para melhorar a estatística descarta a revisão de uma
+pessoa ([ADR 0005](../adr/0005-ai-not-source-of-truth.md)).
+
+Então as alternativas de um aluno são apresentadas em uma ordem derivada do id da sessão e do id da
+revisão, pelo `PresentedOrder`:
+
+- ela é **derivada, não sorteada**, então todo payload sobre a mesma questão na mesma sessão
+  concorda — a questão ao ser respondida, a resposta ao ser lida depois, a tentativa no histórico —
+  entre um refetch, um restart e uma visita posterior, sem guardar nada e sem migração;
+- cada alternativa mantém a **chave que o autor deu**, que é o que a resposta envia e o que a
+  correção compara, então nada sobre acerto depende da ordem;
+- a interface mostra a **posição**, não a chave, porque um selo escrito "D, A, C, B" devolveria a
+  ordem autoral à tela. Depois da resposta, quando a alternativa escolhida sobe para o topo, a letra
+  dela continua sendo a que tinha quando a questão foi respondida.
+
+A mesa editorial é a exceção deliberada: o revisor vê as chaves autorais, que são as letras usadas
+pelo pacote e pelo registro de revisão.
+
+Isso remove uma pista acidental do exame. Não esconde o gabarito: os pacotes são publicados em um
+repositório público, e quem os ler vê o que cada questão responde.
+
 ## Snapshot e estabilidade
 
 A sessão guarda os ids das revisões e as suas posições. As revisões de questões são imutáveis, então o snapshot basta para manter a sessão estável:

@@ -6,6 +6,7 @@ import { ApiError, unwrap } from "../api/problem";
 import type { MockExam, Question } from "../api/types";
 import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
+import { optionLabel } from "../ui/optionLabel";
 import { Confirm } from "../ui/Confirm";
 import { ErrorSummary } from "../ui/Form";
 import { Prompt } from "../ui/Prompt";
@@ -327,7 +328,7 @@ function MockQuestion({
         <form onSubmit={submit} noValidate>
           <fieldset>
             <legend>{multiple ? t.mock.chooseAllThatApply : t.mock.chooseOneAnswer}</legend>
-            {question.options.map((option) => (
+            {question.options.map((option, index) => (
               <div key={option.key} className="choice">
                 <input
                   id={`mock-${question.revisionId}-${option.key}`}
@@ -337,7 +338,7 @@ function MockQuestion({
                   onChange={() => toggle(option.key)}
                 />
                 <label htmlFor={`mock-${question.revisionId}-${option.key}`}>
-                  <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span><English>{option.text}</English>
+                  <span className="visually-hidden">{t.question.optionPrefix(optionLabel(index))}</span><English>{option.text}</English>
                 </label>
               </div>
             ))}

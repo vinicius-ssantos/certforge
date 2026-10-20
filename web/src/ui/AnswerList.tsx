@@ -1,5 +1,6 @@
 import { English } from "../i18n/English";
 import { useText } from "../i18n/useText";
+import { optionLabel } from "./optionLabel";
 
 /** One option as any of the three screens below receives it from the API. */
 export type AnswerOption = {
@@ -37,22 +38,28 @@ export function AnswerList({
   chosenFirst?: boolean;
 }) {
   const t = useText();
+  // The letter is where the option stood when the question was answered, so it is taken before this
+  // list is reordered: with `chosenFirst` the learner's answer moves to the top, and relabelling it
+  // "A" would rename the option they read rather than point at it.
+  const labelled = options.map((option, index) => ({ option, label: optionLabel(index) }));
   const ordered = chosenFirst
-    ? [...options].sort((a, b) => Number(chosen.has(b.key)) - Number(chosen.has(a.key)))
-    : options;
+    ? [...labelled].sort(
+        (a, b) => Number(chosen.has(b.option.key)) - Number(chosen.has(a.option.key)),
+      )
+    : labelled;
 
   return (
     <ul className="answers">
-      {ordered.map((option) => (
+      {ordered.map(({ option, label }) => (
         <li key={option.key} className={option.correct ? "answer-correct" : undefined}>
           {/* The letter is announced by the prefix inside the text below, so the badge is
               decoration to a screen reader and a landmark to everyone else. */}
           <span className="key" aria-hidden="true">
-            {option.key}
+            {label}
           </span>
           <div>
             <p className="answer-text">
-              <span className="visually-hidden">{t.question.optionPrefix(option.key)}</span>
+              <span className="visually-hidden">{t.question.optionPrefix(label)}</span>
               <English>{option.text}</English>
             </p>
             <p className={option.correct ? "verdict verdict-ok" : "verdict"}>

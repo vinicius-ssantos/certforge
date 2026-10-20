@@ -84,19 +84,38 @@ test.describe("the learner journey", () => {
 
     await expect(page.getByRole("heading", { level: 2, name: `Question 1 of ${FIXTURE_COUNT}` })).toBeFocused();
     // A question with code has a scrollable code block, which is a tab stop of its own, first.
-    for (let presses = 0; presses < 3 && !(await page.locator("#option-A").evaluate((node) => node === document.activeElement)); presses += 1) {
+    // The options are presented in an order the session decides (#233), so the first tab stop in
+    // the group is whichever option that session put first, not necessarily A.
+    const options = page.locator("fieldset.options input");
+    const firstOption = options.first();
+    for (let presses = 0; presses < 3 && !(await firstOption.evaluate((node) => node === document.activeElement)); presses += 1) {
       await page.keyboard.press("Tab");
     }
-    await expect(page.locator("#option-A")).toBeFocused();
-    await page.keyboard.press("Space");
-    await expect(page.locator("#option-A")).toBeChecked();
-    // Questions come in random order. A multiple-choice question also expects B, and its options
-    // are separate tab stops; a single-choice question's radio group is one.
-    if ((await page.locator("#option-B").getAttribute("type")) === "checkbox") {
-      await page.keyboard.press("Tab");
-      await expect(page.locator("#option-B")).toBeFocused();
+    await expect(firstOption).toBeFocused();
+
+    // Questions come in random order. A single-choice question's radio group is one tab stop, and
+    // the arrow keys move the selection inside it; a multiple-choice question's checkboxes are each
+    // their own tab stop, and it expects A and B. Either way the keys below reach the correct
+    // option, which is what the result at the end of this test is about.
+    if ((await page.locator("#option-A").getAttribute("type")) === "radio") {
       await page.keyboard.press("Space");
-      await expect(page.locator("#option-B")).toBeChecked();
+      for (let presses = 0; presses < 4 && !(await page.locator("#option-A").isChecked()); presses += 1) {
+        await page.keyboard.press("ArrowDown");
+      }
+      await expect(page.locator("#option-A")).toBeChecked();
+    } else {
+      const count = await options.count();
+      for (let index = 0; index < count; index += 1) {
+        if (index > 0) {
+          await page.keyboard.press("Tab");
+        }
+        const option = options.nth(index);
+        await expect(option).toBeFocused();
+        if (["option-A", "option-B"].includes((await option.getAttribute("id")) ?? "")) {
+          await page.keyboard.press("Space");
+          await expect(option).toBeChecked();
+        }
+      }
     }
     for (let presses = 0; presses < 4 && !(await page.locator("#confidence-LOW").evaluate((node) => node === document.activeElement)); presses += 1) {
       await page.keyboard.press("Tab");

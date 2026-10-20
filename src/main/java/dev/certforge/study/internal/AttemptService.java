@@ -304,8 +304,9 @@ class AttemptService {
             .map(RevisionEvidence.Option::key)
             .sorted()
             .toList();
+    // The order the learner answered in, so the reasons line up with the options they read.
     List<OptionAnswer> options =
-        evidence.options().stream()
+        PresentedOrder.of(attempt.sessionId(), attempt.revisionId(), evidence.options()).stream()
             .map(o -> new OptionAnswer(o.key(), o.text(), o.correct(), o.explanation()))
             .toList();
     List<Reference> references =
