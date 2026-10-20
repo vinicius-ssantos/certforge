@@ -115,6 +115,20 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A question whose options read the same is now refused.** One of them is marked correct, so a
+  learner who reads both carefully still has to guess and knowing the subject does not help — the
+  last mechanical form of ambiguity #166 asks CI to fail on. Nothing in either pack does it, over all
+  220 questions, so there is no ledger and no debt: it fails outright, and it is prevention rather
+  than a repair.
+
+  The comparison forgives exactly what a renderer forgives — Unicode composition and runs of
+  whitespace, which HTML collapses anyway — and nothing else, which the first draft got wrong.
+  Lowercasing seemed harmless and refused four correct questions: `t01-boolean-parseboolean` offers
+  `"TRUE"` and `"TrUe"` because `Boolean.parseBoolean` ignores case, and three Topic 10 questions
+  turn on `PT-br` against `pt-BR`. In this content the case is often the whole question, and a
+  checker that implies more than it does is worse than none. The Java pack goes through its own
+  reader, so it is held to the rule explicitly rather than left half covered.
+
 - **What each pack gives away about its own answer key is now measured.** A pack can be entirely
   correct and still be a poor examination, if the right answer can be picked without reading the
   question — and both packs here leak, in opposite ways, neither visible from inside a single

@@ -73,6 +73,12 @@ time, because that is where these faults are visible:
 - **A reference title must name the page, not the site.** "Official documentation" is true of every
   page on the host, so it tells a reviewer who wants to check the claim nothing, and a screen reader
   reading forty identical links tells them less.
+- **No two options of a question may read the same.** One of them is marked correct, so a learner who
+  reads both carefully still has to guess, and knowing the subject does not help. Only what a
+  renderer forgives is forgiven here — Unicode composition and runs of whitespace, which HTML
+  collapses anyway. Case is not: `t01-boolean-parseboolean` offers `"TRUE"` and `"TrUe"` because
+  `Boolean.parseBoolean` ignores case, and three Topic 10 questions turn on `PT-br` against `pt-BR`,
+  so a check that lowercased would refuse four correct questions as ambiguous.
 
 What it cannot check is whether an explanation is *right*, or whether a distractor is a mistake
 someone would actually make. That is a named human's, by ADR 0005, and no count in that file moves
