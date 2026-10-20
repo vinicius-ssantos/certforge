@@ -52,16 +52,35 @@ test.describe("what a screen reader is given", () => {
     await page.getByRole("button", { name: "Practice Controlling program flow" }).click();
     await expect(page.getByRole("heading", { level: 2, name: /^Question 1 of/ })).toBeVisible();
 
+    // The options are presented in an order the session decides (#233), so which of the two comes
+    // first is not fixed and cannot be written into the snapshot below. What is fixed is what a
+    // screen reader is given about them, and that is asserted here: each option is announced with
+    // its position as a letter, counting down the screen, and the two of them are this question's.
+    const announced = await page
+      .getByRole("group", { name: "Choose one answer" })
+      .getByRole("radio")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => (node as HTMLInputElement).labels?.[0]?.textContent?.trim() ?? ""),
+      );
+    expect(announced.map((name) => name.slice(0, "Option A:".length))).toEqual([
+      "Option A:",
+      "Option B:",
+    ]);
+    expect(announced.map((name) => name.replace(/^Option [AB]: /, "")).sort()).toEqual([
+      "A wrong option",
+      "The expected option",
+    ]);
+
     await expect(page.getByRole("region", { name: /^Question 1 of/ })).toMatchAriaSnapshot(`
       - region /Question 1 of \\d+/:
         - heading /Question 1 of \\d+/ [level=2]
         - paragraph: /Which statement about this program is true\\?/
         - group "Choose one answer":
           - text: Choose one answer
-          - 'radio "Option A: The expected option"'
-          - text: "Option A: The expected option"
-          - 'radio "Option B: A wrong option"'
-          - text: "Option B: A wrong option"
+          - 'radio "${announced[0]}"'
+          - text: "${announced[0]}"
+          - 'radio "${announced[1]}"'
+          - text: "${announced[1]}"
         - group "How confident are you?":
           - text: How confident are you?
           - radio "Low – I am guessing"
@@ -89,17 +108,31 @@ test.describe("what a screen reader is given", () => {
     await page.getByRole("button", { name: "Submit answer" }).click();
     await expect(page.getByRole("heading", { level: 2, name: "Correct" })).toBeVisible();
 
+    // The learner's own answer is listed first, so the two rows are in a fixed order; the letter
+    // beside each one is where that option stood when the question was answered, which the session
+    // decided (#233), so it is read from the page and checked rather than written in below.
+    const rows = await page
+      .getByRole("region", { name: "Correct" })
+      .getByRole("listitem")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => node.querySelector(".answer-text")?.textContent?.trim() ?? ""),
+      );
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toMatch(/^Option [AB]: The expected option$/);
+    expect(rows[1]).toMatch(/^Option [AB]: A wrong option$/);
+    expect(rows[0]?.slice(0, "Option A:".length)).not.toEqual(rows[1]?.slice(0, "Option A:".length));
+
     await expect(page.getByRole("region", { name: "Correct" })).toMatchAriaSnapshot(`
       - region "Correct":
         - heading "Correct" [level=2]
         - paragraph: /Which statement about this program is true\\?/
         - list:
           - listitem:
-            - paragraph: "Option A: The expected option"
+            - paragraph: "${rows[0]}"
             - paragraph: Your answer. Correct answer.
             - paragraph: Expected by the test.
           - listitem:
-            - paragraph: "Option B: A wrong option"
+            - paragraph: "${rows[1]}"
             - paragraph: Incorrect answer.
             - paragraph: Wrong on purpose.
         - heading "Explanation" [level=3]
