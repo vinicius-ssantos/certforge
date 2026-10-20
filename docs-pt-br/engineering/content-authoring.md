@@ -80,6 +80,31 @@ O que ele não checa é se a explicação está *certa*, ou se o distrator é um
 de fato. Isso é de uma pessoa nomeada, pela ADR 0005, e nenhuma contagem daquele arquivo muda isso.
 O portão só recusa texto que não pode ser explicação da alternativa onde está.
 
+### O que o pacote entrega do próprio gabarito
+
+Um pacote pode estar inteiramente correto e ainda ser um exame ruim, se a resposta certa dá para
+escolher sem ler a questão. O `content/answer-tells.mjs` mede as duas pistas que são mecânicas e
+registra o que cada pacote já vaza no seu próprio `answer-tells.json`, para que o número não cresça
+calado — e não fique no arquivo depois que a pista for fechada, o que deixaria a próxima entrar
+atrás dela.
+
+Os dois pacotes vazam, de formas opostas, e nenhuma delas é visível de dentro de uma questão só:
+
+- o `java-se-21` **não tem nenhuma questão de quatro alternativas cuja correta seja D** — todas as
+  147 —, então quem perceber elimina uma alternativa de graça. O comprimento das alternativas dele
+  não diz nada.
+- o `infrastructure-devops-foundations` distribui bem as chaves e se entrega pelo **comprimento**: a
+  alternativa mais longa é a correta em 54 de 70, contra uma chance de aproximadamente uma em quatro.
+
+Então, ao escrever: varie qual chave carrega a resposta, e não deixe a correta ser a longa e
+cuidadosa enquanto os distratores são curtos. As duas coisas são mais fáceis de acertar escrevendo
+do que de consertar depois, porque consertar significa editar a questão — e editar questão revisada
+descarta o veredito registrado contra aquele texto.
+
+O registro é um retrato, não uma meta, e o portão não conserta nenhum dos dois pacotes: a #233 trata
+de parar a pista do pacote Java onde as alternativas são apresentadas ao aluno, o que não custa
+revisão nenhuma.
+
 ### Código dentro de uma questão
 
 Um trecho no enunciado é lido como a coisa que está sendo ensinada, então o

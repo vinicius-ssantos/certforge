@@ -78,6 +78,29 @@ What it cannot check is whether an explanation is *right*, or whether a distract
 someone would actually make. That is a named human's, by ADR 0005, and no count in that file moves
 it. The gate only refuses text that cannot be an explanation of the option it sits under.
 
+### What the pack gives away about its own key
+
+A pack can be entirely correct and still be a poor examination, if the right answer can be picked
+without reading the question. `content/answer-tells.mjs` measures the two tells that are mechanical
+and records what each pack already leaks in its own `answer-tells.json`, so the number cannot
+quietly grow — and cannot be left behind once a leak is closed, which would let the next one in
+behind it.
+
+Both packs leak, in opposite ways, and neither is visible from inside a single question:
+
+- `java-se-21` has **no four-option question whose correct answer is D** — all 147 of them, so a
+  learner who notices eliminates an option for free. Its option lengths say nothing.
+- `infrastructure-devops-foundations` spreads its keys evenly and gives itself away by **length**:
+  the longest option is the correct one in 54 of 70, against a chance of about one in four.
+
+So when you write a question: vary which key carries the answer, and do not let the correct option
+be the long careful one while the distractors are short. Both are easier to get right while writing
+than to repair afterwards, because repairing one means editing the question, and editing a reviewed
+question discards the verdict recorded against its text.
+
+The ledger is a record, not a target, and the gate cannot fix either pack: #233 covers stopping the
+Java pack's tell where the options are presented to a learner, which costs no review.
+
 ### Code inside a question
 
 A snippet in a prompt is read as the thing being taught, so `content/embedded-artifacts.mjs` checks

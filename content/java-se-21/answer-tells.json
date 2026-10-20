@@ -1,0 +1,9 @@
+{
+  "note": "What this pack gives away about its own answer key, recorded so it cannot quietly get worse. A correct D in any four-option question, or the longest option becoming the correct one more often than this, fails the gate in content/answer-tells.mjs. These numbers are not a target: closing a line means editing questions, and 46 of these carry a human verdict bound to the text as it stands, so the leak is held level here and stopped where the options are presented to a learner instead.",
+  "recordedOn": "2026-10-20",
+  "total": 150,
+  "longestIsCorrect": 23,
+  "neverCorrect": [
+    { "options": 4, "key": "D", "questions": 147 }
+  ]
+}
