@@ -250,7 +250,8 @@ class MockExamService {
     Map<UUID, TopicAccumulator> perTopic = new LinkedHashMap<>();
 
     for (SnapshotQuestion item : snapshot) {
-      PublishedQuestion question = snapshotQuestion(item.revisionId());
+      PublishedQuestion question =
+          PresentedOrder.of(sessionId, snapshotQuestion(item.revisionId()));
       RevisionEvidence evidence = evidence(item.revisionId());
       MockExamResponse response = responses.get(item.position());
       List<String> selected = response == null ? List.of() : response.selectedOptions();
@@ -278,7 +279,7 @@ class MockExamService {
               selected,
               answered,
               isCorrect,
-              answer(evidence)));
+              answer(sessionId, evidence)));
     }
 
     int total = session.questionCount();
@@ -371,7 +372,7 @@ class MockExamService {
           new MockExamQuestionView(
               position,
               new TopicId(item.topicId()),
-              questions.get(position),
+              PresentedOrder.of(session.id(), questions.get(position)),
               answered.contains(position)));
     }
 
@@ -460,15 +461,16 @@ class MockExamService {
     }
   }
 
-  private static Answer answer(RevisionEvidence evidence) {
+  private static Answer answer(UUID sessionId, RevisionEvidence evidence) {
     List<String> correctOptions =
         evidence.options().stream()
             .filter(RevisionEvidence.Option::correct)
             .map(RevisionEvidence.Option::key)
             .sorted()
             .toList();
+    // The order the question was sat in, so the reasons line up with the options that were read.
     List<OptionAnswer> options =
-        evidence.options().stream()
+        PresentedOrder.of(sessionId, evidence.revisionId().value(), evidence.options()).stream()
             .map(
                 option ->
                     new OptionAnswer(

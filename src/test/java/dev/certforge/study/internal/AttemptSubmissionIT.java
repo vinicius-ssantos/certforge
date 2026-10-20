@@ -260,8 +260,59 @@ class AttemptSubmissionIT {
         .andExpect(jsonPath("$.revisionId").value(session.revisions().get(position)))
         .andExpect(jsonPath("$.answer.correctOptions[0]").value("A"))
         .andExpect(jsonPath("$.answer.explanation").value("Secret overall explanation"))
-        .andExpect(jsonPath("$.answer.options[1].explanation").value("Secret why B"))
+        // By key and not by position: the options are presented in an order derived from the
+        // session, so B is not the second one on the screen and asserting that it is would be
+        // asserting the authored order this deliberately stopped serving.
+        .andExpect(jsonPath("$.answer.options[?(@.key == 'B')].explanation").value("Secret why B"))
         .andExpect(jsonPath("$.answer.references[0].title").value("JLS"));
+  }
+
+  @Test
+  void theAnswerComesBackInTheOrderTheQuestionWasAnsweredIn() throws Exception {
+    // The fixture question has two options, so half of all sessions present them in the authored
+    // order and a single session would prove nothing: the two payloads would agree by accident
+    // whether or not either of them orders anything. So this walks sessions until it finds one that
+    // reorders, checking the agreement in every round, and says so plainly if none does — which
+    // would itself mean the ordering had stopped working.
+    List<String> authored = List.of("A", "B");
+    boolean reordered = false;
+    for (int attempt = 0; attempt < 16 && !reordered; attempt++) {
+      Started session = startSession(learner, TOPIC, 2);
+      int position = singlePosition(session);
+
+      List<String> presented = optionKeys(session, position);
+      assertThat(presented).containsExactlyInAnyOrderElementsOf(authored);
+      // Asking again gives the same order: it is derived from the session, not drawn per request.
+      assertThat(optionKeys(session, position)).isEqualTo(presented);
+
+      List<String> answered =
+          JsonPath.read(
+              submit(learner, session, position, key(), answer("HIGH", 1000, "A"))
+                  .andExpect(status().isCreated())
+                  .andReturn()
+                  .getResponse()
+                  .getContentAsString(),
+              "$.answer.options[*].key");
+      // The two payloads are built in different places from different records. If they disagreed,
+      // the reasons would sit under the wrong options on the screen that shows them.
+      assertThat(answered).isEqualTo(presented);
+
+      reordered = !presented.equals(authored);
+      close(learner, session, "abandon");
+    }
+    assertThat(reordered)
+        .as("no session in sixteen presented the two options in anything but the authored order")
+        .isTrue();
+  }
+
+  private List<String> optionKeys(Started session, int position) throws Exception {
+    return JsonPath.read(
+        mvc.perform(get("/api/study/sessions/" + session.id()).cookie(learner.session()))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(),
+        "$.questions[" + position + "].question.options[*].key");
   }
 
   @Test

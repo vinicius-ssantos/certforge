@@ -113,6 +113,31 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 - A certification track no longer offers a mock-exam action that the current published content cannot satisfy. The server now exposes mock readiness from the same per-topic eligibility rule used by the planner; the learner sees how many reviewed questions are still missing and in how many topics instead of discovering the shortage through a failed start. An already-active mock remains resumable even if the currently published bank later falls below the blueprint requirement (#138).
 
+- **A learner could answer the Java pack by position.** The questions of a session are shuffled; the
+  options were not, and they are read in the order they were authored in. No four-option question in
+  the Java SE 21 pack has a correct D — all 147 of them — so eliminating D was free in every mock
+  exam built from it, and the score and the blueprint-based weakness report that is this release's
+  headline claim measured the pack rather than the learner. Rebalancing the keys was not available:
+  a reviewed question's verdict is recorded against its text, so editing one to improve its optics
+  discards a person's review.
+
+  A learner's options are now presented in an order derived from their session id and the revision
+  id. Derived rather than drawn, so every payload about the same question in the same session agrees
+  — the question as it is answered, the answer as it is read afterwards, the attempt in the history
+  — across a refetch, a restart and a later visit, with nothing stored and no migration. Each option
+  keeps the key its author gave it, which is what an answer submits and what grading compares, so
+  nothing about correctness depends on the order.
+
+  The badge now counts the options on the screen instead of repeating the authored key, which would
+  have put the authored order straight back on it and read "D, A, C, B" while doing so. After an
+  answer, when the learner's own option is moved to the top, its letter stays the one it had when
+  the question was answered: numbering the rows would rename the option they read. The editorial
+  desk is deliberately unchanged, because a reviewer works with the letters the pack and the review
+  record use.
+
+  This removes an accidental tell from the examination. It does not hide the answer key: the packs
+  are published in a public repository, and anyone reading them sees what every question answers.
+
 ### Added
 
 - **What each pack gives away about its own answer key is now measured.** A pack can be entirely

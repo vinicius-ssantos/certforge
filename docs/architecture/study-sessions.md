@@ -19,6 +19,34 @@ A learner starts a session for one topic and receives an ordered set of publishe
 
 A learner has at most one session in progress per topic. A second start returns `409 active_session_exists` with the `sessionId` of the one in progress. This is enforced by a partial unique index, so concurrent starts are safe: exactly one succeeds.
 
+## The order the options are shown in
+
+The questions of a session are shuffled; the options were not, and they are stored in the order they
+were authored in. That turned an authoring habit into information: no four-option question in the
+Java SE 21 pack has a correct D, in all 147 of them, so a learner who noticed eliminated an option
+for free in every exam built from it, and the score and the weakness report measured the pack rather
+than the learner (#233). Rebalancing the keys is not available, because a reviewed question's
+verdict is recorded against its text and editing one to improve its optics discards a person's
+review ([ADR 0005](../adr/0005-ai-not-source-of-truth.md)).
+
+So a learner's options are presented in an order derived from their session id and the revision id,
+by `PresentedOrder`:
+
+- it is **derived, not drawn**, so every payload about the same question in the same session agrees
+  — the question as it is answered, the answer as it is read afterwards, the attempt in the history
+  — across a refetch, a restart and a later visit, with nothing stored and no migration;
+- each option keeps the **key the author gave it**, which is what an answer submits and what grading
+  compares, so nothing about correctness depends on the order;
+- the interface shows the **position** rather than the key, because a badge reading "D, A, C, B"
+  would put the authored order back on the screen. After an answer, when the learner's own option is
+  moved to the top, its letter stays the one it had when the question was answered.
+
+The editorial desk is deliberately the exception: a reviewer sees the authored keys, which are the
+letters the pack and the review record use.
+
+This removes an accidental tell from the examination. It does not hide the answer key: the packs are
+published in a public repository, and anyone reading them sees what every question answers.
+
 ## Snapshot and stability
 
 The session stores the revision ids and their positions. Question revisions are immutable, so the snapshot is enough to keep a session stable:
