@@ -111,12 +111,11 @@ test.describe("what a screen reader is given", () => {
     // The learner's own answer is listed first, so the two rows are in a fixed order; the letter
     // beside each one is where that option stood when the question was answered, which the session
     // decided (#233), so it is read from the page and checked rather than written in below.
-    const rows = await page
-      .getByRole("region", { name: "Correct" })
-      .getByRole("listitem")
-      .evaluateAll((nodes) =>
-        nodes.map((node) => node.querySelector(".answer-text")?.textContent?.trim() ?? ""),
-      );
+    // Scoped to the answers list: the region also carries the "Read more" references, whose links
+    // are list items too, so a query for every list item in it came back with three.
+    const rows = (await page.locator(".answers > li .answer-text").allTextContents()).map((text) =>
+      text.trim(),
+    );
     expect(rows).toHaveLength(2);
     expect(rows[0]).toMatch(/^Option [AB]: The expected option$/);
     expect(rows[1]).toMatch(/^Option [AB]: A wrong option$/);
