@@ -148,16 +148,26 @@ budget:
     cd web && npm run build && npm run budget
 
 # The browser tests against a dev server. Needs `npx playwright install chromium` once.
+#
+# The suite signs in as an administrator to write the questions it then practises on, and it takes
+# that account from E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD, falling back to an account of its own
+# invention. The stack these recipes start bootstraps the administrator declared at the top of this
+# file instead, so the first thing either recipe did was fail to log in, before a single test ran.
+# CI never noticed: the workflow sets BOOTSTRAP_ADMIN_* to the suite's own defaults and calls npm
+# directly, so the recipe that exists to run what CI runs could not run at all. These now tell the
+# suite which administrator the stack has, whichever one you chose.
 [group('check')]
 e2e:
-    cd web && npm run e2e
+    cd web && E2E_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" npm run e2e
 
 # The browser tests against the release images, which is what CI does.
 [group('check')]
 e2e-release:
     {{release_test}} up --build -d
     @just _wait
-    cd web && npm run build && E2E_BASE_URL={{web_url}} npm run e2e
+    cd web && npm run build && E2E_BASE_URL={{web_url}} \
+        E2E_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
+        npm run e2e
 
 # ---- checking a running stack ----------------------------------------------------------------
 

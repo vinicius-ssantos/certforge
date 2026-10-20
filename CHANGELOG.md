@@ -31,6 +31,18 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **`just e2e` and `just e2e-release` could not run.** The browser suite signs in as an
+  administrator to write the questions it then practises on, and it takes that account from
+  `E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD`, falling back to an account of its own invention. The
+  stack those recipes start bootstraps the administrator declared at the top of the justfile
+  instead, so both failed at the first login, before a single test ran. CI never noticed, because
+  the workflow sets `BOOTSTRAP_ADMIN_*` to the suite's own defaults and calls npm directly — so the
+  recipe whose whole purpose is "run what CI runs" was the one thing that could not. The recipes now
+  tell the suite which administrator the stack has, whichever one you chose.
+
+  This is why #235's first CI run was red: `just check` does not include the browser tests, and the
+  command that would have caught it locally did not work.
+
 - The review worklist no longer opens on a track no learner can be given. Ordering topics by how
   few published questions each has read a missing coverage row as **zero published**, and the rows
   that are missing are the ones outside the learner-facing catalog — the DevOps track is seeded
