@@ -1,0 +1,7 @@
+{
+  "note": "What this pack gives away about its own answer key, recorded so it cannot quietly get worse. Its keys are spread evenly across A to D; what it leaks is length, and the gate in content/answer-tells.mjs fails if the longest option becomes the correct one more often than this. The 54 are a debt owed by the question text, not a check to relax: shortening the correct option or giving the distractors the same weight is a person's edit, and editing a question discards the sign-off recorded against its bytes.",
+  "recordedOn": "2026-10-20",
+  "total": 70,
+  "longestIsCorrect": 54,
+  "neverCorrect": []
+}

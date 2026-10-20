@@ -115,6 +115,25 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **What each pack gives away about its own answer key is now measured.** A pack can be entirely
+  correct and still be a poor examination, if the right answer can be picked without reading the
+  question — and both packs here leak, in opposite ways, neither visible from inside a single
+  question. `java-se-21` has no four-option question whose correct answer is D, in all 147 of them,
+  so eliminating D is free; its option lengths are at chance. `infrastructure-devops-foundations`
+  spreads its keys evenly across A–D and gives itself away by length instead: the longest option is
+  the correct one in 54 of 70, against a chance of about one in four.
+
+  `content/answer-tells.mjs` records what each pack already leaks in its own `answer-tells.json` and
+  fails if it grows — or if a leak is closed and left on the ledger, which would let the next one in
+  behind it. Keys are only compared between questions offering the same number of options, since E
+  cannot answer a question that stops at D, and a tie for longest is not counted, since two options
+  of the same length point at neither.
+
+  The gate cannot fix either pack: rebalancing a key means editing a question, and a reviewed
+  question's verdict is bound to the text as it stands, so tidying the statistics would discard a
+  person's review to gain one. #233 covers stopping the Java pack's tell where the options are
+  presented to a learner, which costs no review.
+
 - **A pack's claim about how rigorously it was checked is now checked.** `evidenceProfile` sat in
   every manifest as free text that nothing read, so a pack could claim any level of rigour and carry
   nothing at all; three different names were in circulation — `static-v1` in the contract document
