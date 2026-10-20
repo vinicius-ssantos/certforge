@@ -24,7 +24,7 @@ the pack is not learner-facing and its question has **no recorded human review**
 For this new format, stage a validated set of editorial API requests without publishing:
 
 ```sh
-node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs
+just test-content   # or: node --test content/*.test.mjs
 node content/stage-editorial-pack.mjs content/infrastructure-devops-foundations /tmp/certforge-infra-stage
 java content/ContentImporter.java --pack /tmp/certforge-infra-stage --dry-run
 # Optional with an authorized author account against an initialized CertForge instance:
@@ -36,9 +36,17 @@ one. It only writes local request JSON. The existing Java importer optionally se
 those requests and submits each revision for technical review; it never approves or
 publishes. The server must have applied migrations through V18 first.
 
+Staging prints what the pack's questions stand on before anything is imported, and
+refuses a question that claims a check nothing here performs. A question nothing
+mechanical checks says so — `reference-backed` — and the count of those is printed,
+because for them the reviewer's reading is the only check. The profiles and what each
+type answers to are in
+[`docs/engineering/multi-track-content-contract.md`](../docs/engineering/multi-track-content-contract.md).
+
 Caveats: this is a narrow, temporary compatibility adapter. The editorial API does
-not yet persist `objectiveKeys`, snapshot digests or evidence adapter results; these
-fields remain in the source pack. **Certification packs are rejected by the staging
-adapter** until their objective evidence can be persisted. Generic source policies
-and deterministic evidence runners are not implemented yet. The Java SE 21 pack,
+not yet persist `objectiveKeys`, snapshot digests or evidence results; these fields
+remain in the source pack. **Certification packs are rejected by the staging
+adapter** until their objective evidence can be persisted. The offline checks are
+shape checks, not tool runs: no pinned container, Kubernetes or Terraform tool runs
+over a pack, so no profile admits `runnable-isolated-test`. The Java SE 21 pack,
 digests and its established import path are unchanged.

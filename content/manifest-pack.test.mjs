@@ -8,7 +8,7 @@ import { readManifestPack, reviewDigestV2, validateGeneralQuestion } from "./man
 const manifest = {
   schemaVersion: 1, packId: "infra", trackSlug: "infra", trackKind: "GENERAL",
   trackVersion: "2026.1", language: "pt-BR", sourcePolicy: "official-v1",
-  evidenceProfile: "reference-v1", editorialStatus: "DRAFT",
+  evidenceProfile: "reference-backed-v1", editorialStatus: "DRAFT",
 };
 const sample = () => ({
   topicId: "a3000000-0000-4000-8000-000000000301",
@@ -58,15 +58,23 @@ test("infrastructure evidence only accepts official Docker and Kubernetes hosts"
 });
 
 test("evidence descriptors are explicit and unknown types fail closed", () => {
-  for (const type of [
-    "reference-backed", "shell-static-check", "yaml-static-check",
-    "manifest-schema-check", "runnable-isolated-test",
-  ]) {
-    assert.equal(validateGeneralQuestion({ ...sample(), evidence: { type } }, manifest).evidence.type, type);
+  // The vocabulary is fixed, and what a pack may claim from it is its evidenceProfile: this one
+  // claims nothing mechanical, so every question in it stands on its references.
+  assert.equal(validateGeneralQuestion({ ...sample(), evidence: { type: "reference-backed" } }, manifest).evidence.type, "reference-backed");
+  for (const type of ["shell-static-check", "yaml-static-check", "manifest-schema-check", "runnable-isolated-test"]) {
+    assert.throws(() => validateGeneralQuestion({ ...sample(), evidence: { type } }, manifest), /not permitted by the pack/);
+  }
+  const checked = { ...manifest, evidenceProfile: "static-check-v1" };
+  for (const type of ["reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check"]) {
+    assert.equal(validateGeneralQuestion({ ...sample(), evidence: { type } }, checked).evidence.type, type);
   }
   for (const evidence of [{ type: "unverified" }, { type: "code-executed" }, { type: "" }, []]) {
-    assert.throws(() => validateGeneralQuestion({ ...sample(), evidence }, manifest), /evidence descriptor/);
+    assert.throws(() => validateGeneralQuestion({ ...sample(), evidence }, checked), /evidence descriptor/);
   }
+  // A question with no descriptor is not a question with no evidence; it is a question that has
+  // not said. content/evidence.mjs counts the unchecked ones, and it can only count what is named.
+  const { evidence, ...silent } = sample();
+  assert.throws(() => validateGeneralQuestion(silent, manifest), /evidence descriptor/);
 });
 
 test("exam questions must bind to their objectives", () => {

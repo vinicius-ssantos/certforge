@@ -21,6 +21,35 @@ const DATE = /^\d{4}-\d{2}-\d{2}$/;
 const PLATFORMS = new Set(["docker", "compose", "kubernetes"]);
 const VERSION = /^\d+(?:\.\d+)*$/;
 
+/**
+ * The kinds of evidence a question may stand on, from #166. `reference-backed` is the weakest and
+ * the honest name for a question nothing mechanical checks: the only check is the reviewer reading
+ * it against the pages it cites. The others each claim a machine looked, and content/evidence.mjs
+ * refuses a claim no machine in this repository can make good on.
+ */
+export const EVIDENCE_TYPES = new Set([
+  "reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check",
+  "runnable-isolated-test",
+]);
+
+/**
+ * What a pack's `evidenceProfile` means. It was a free-text string for as long as nothing read it,
+ * which let a pack claim any level of rigour while carrying nothing at all — the one thing the
+ * editorial rules exist to prevent. A profile now names exactly which evidence types its questions
+ * may claim, and a pack whose profile is not listed here fails rather than passing unread.
+ *
+ * `static-check-v1` admits the offline checks content/embedded-artifacts.mjs already performs. No
+ * pack declares it yet: the infrastructure pack's questions could claim those checks, but their
+ * text is signed off against its git blob, and rewriting a question to decorate it would discard a
+ * person's review to gain a label.
+ */
+export const EVIDENCE_PROFILES = {
+  "reference-backed-v1": ["reference-backed"],
+  "static-check-v1": [
+    "reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check",
+  ],
+};
+
 function requiredText(value, name) {
   if (typeof value !== "string" || value.trim() !== value || value.length === 0) {
     throw new Error(`Invalid pack manifest: ${name} must be a nonempty, trimmed string`);
@@ -50,6 +79,12 @@ export function validatePackManifest(manifest) {
   }
   if (manifest.editorialStatus !== "DRAFT") {
     throw new Error("Invalid pack manifest: new packs must enter as DRAFT");
+  }
+  if (!(manifest.evidenceProfile in EVIDENCE_PROFILES)) {
+    throw new Error(
+      `Invalid pack manifest: evidenceProfile ${JSON.stringify(manifest.evidenceProfile)} is not a profile`
+      + ` this project implements (${Object.keys(EVIDENCE_PROFILES).join(", ")})`,
+    );
   }
   if (manifest.platformVersions !== undefined) {
     const versions = manifest.platformVersions;

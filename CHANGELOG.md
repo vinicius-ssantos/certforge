@@ -115,6 +115,34 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A pack's claim about how rigorously it was checked is now checked.** `evidenceProfile` sat in
+  every manifest as free text that nothing read, so a pack could claim any level of rigour and carry
+  nothing at all; three different names were in circulation — `static-v1` in the contract document
+  and in one test fixture, `reference-v1` in another, `reference-backed-v1` in the only real pack —
+  and not one of them was implemented anywhere. A profile now names exactly which kinds of evidence
+  its questions may claim, and a pack naming a profile this project does not implement fails instead
+  of passing unread.
+
+  Every question carries an evidence descriptor, so there is no silent absence: a question nothing
+  mechanical checks says `reference-backed`, which is what seventy of seventy in the infrastructure
+  pack honestly are, and `node content/stage-editorial-pack.mjs` prints that count before an import
+  rather than leaving an operator to assume the build looked. That is #166's "questões sem evidência
+  executável são explicitamente identificadas": the state is named in the file, so it can be counted.
+
+  A claim that a *machine* looked has to point at something a machine here reads. `shell-static-check`
+  answers to a Dockerfile the build lints and not to a shell transcript, which nothing here lints;
+  `manifest-schema-check` answers to a block declaring `apiVersion` and `kind`, not to any YAML; and
+  `runnable-isolated-test`, which #166 names, is admitted by no profile because nothing in this
+  repository runs one. A missing check leaves a question honestly labelled unchecked, which is
+  survivable; a claimed check that never ran is worse than no label, because the reviewer relaxes
+  over it.
+
+  The contract document said otherwise in both languages — it was marked "not yet implemented" while
+  most of it was, and it listed an evidence vocabulary (`dockerfile-static`, `kubernetes-schema`) the
+  code refuses — so it now describes what exists and keeps a separate, honest list of what does not.
+  Related: the content test list was written out twice, in `justfile` and in `ci.yml`, where a new
+  test file added to one was a check CI never ran; both now take every `content/*.test.mjs`.
+
 - The review worklist starts where decisions unblock something, and offers back what you skipped. It
   grouped questions by topic, which holds one subject in mind, but took the topics in whatever order
   the queue had them — alphabetical, an order about names. A mock exam needs five published questions

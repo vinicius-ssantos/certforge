@@ -114,11 +114,13 @@ web:
 [group('check')]
 check: test-content test-backend test-web lint typecheck budget
 
-# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality
-# and the Dockerfiles, Compose files and manifests embedded in question text.
+# The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality,
+# what each question evidences and the Dockerfiles, Compose files and manifests embedded in question
+# text. Every content test, by glob: the list used to be written out here and again in ci.yml, and a
+# new file added to one of them was a check CI did not run.
 [group('check')]
 test-content:
-    node --test content/pack-manifest.test.mjs content/manifest-pack.test.mjs content/editorial-pack.test.mjs content/review-integrity.test.mjs content/pack-quality.test.mjs content/embedded-artifacts.test.mjs content/record-review.test.mjs
+    node --test content/*.test.mjs
 
 # The backend suite, on PostgreSQL in Testcontainers.
 [group('check')]

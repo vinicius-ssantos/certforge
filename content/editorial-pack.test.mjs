@@ -71,3 +71,33 @@ test("staging fails closed when a previously approved question changes", () => {
     rmSync(temp, { recursive: true, force: true });
   }
 });
+
+test("staging says what the questions stand on, and refuses a claim nothing backs", () => {
+  const temp = mkdtempSync(join(tmpdir(), "certforge-stage-evidence-"));
+  try {
+    const result = stageEditorialPack("content/infrastructure-devops-foundations", join(temp, "staged"));
+    // Seventy questions of prose and quoted snippets, and the operator about to import them is
+    // told so rather than left to assume the build checked something.
+    assert.equal(result.evidenceProfile, "reference-backed-v1");
+    assert.deepEqual(result.evidenceByType, { "reference-backed": 70 });
+    assert.equal(result.withoutExecutableEvidence, 70);
+
+    const source = join(temp, "claimed");
+    cpSync("content/infrastructure-devops-foundations", source, { recursive: true });
+    // Relabelling a question edits its file, which discards the sign-off recorded against that
+    // file's bytes — the reason the real pack claims nothing mechanical even though the build does
+    // lint some of its blocks. Dropping the record here leaves the evidence gate as the one on test.
+    rmSync(join(source, "review.json"));
+    const manifest = JSON.parse(readFileSync(join(source, "pack.json"), "utf8"));
+    writeFileSync(join(source, "pack.json"), JSON.stringify({ ...manifest, evidenceProfile: "static-check-v1" }));
+    const path = join(source, "t01-image-vs-container", "question.json");
+    const question = JSON.parse(readFileSync(path, "utf8"));
+    // It embeds no code block at all, so there is nothing for a static check to have looked at.
+    writeFileSync(path, JSON.stringify({ ...question, evidence: { type: "yaml-static-check" } }));
+    const destination = join(temp, "refused");
+    assert.throws(() => stageEditorialPack(source, destination), /claims yaml-static-check/);
+    assert.equal(existsSync(destination), false);
+  } finally {
+    rmSync(temp, { recursive: true, force: true });
+  }
+});

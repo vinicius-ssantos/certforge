@@ -3,7 +3,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
-import { loadPackManifest } from "./pack-manifest.mjs";
+import { EVIDENCE_PROFILES, EVIDENCE_TYPES, loadPackManifest } from "./pack-manifest.mjs";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CHOICES = new Set(["SINGLE_CHOICE", "MULTIPLE_CHOICE"]);
@@ -71,13 +71,18 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
   } else if (question.objectiveKeys !== undefined) {
     fail(name, "non-certification questions must not claim exam objectives");
   }
-  if (question.evidence !== undefined) {
-    const evidence = question.evidence;
-    const evidenceTypes = new Set(["reference-backed", "shell-static-check", "yaml-static-check", "manifest-schema-check", "runnable-isolated-test"]);
-    if (!evidence || Array.isArray(evidence) || typeof evidence !== "object"
-        || !evidenceTypes.has(evidence.type)) {
-      fail(name, "unsupported evidence descriptor");
-    }
+  // Every question says what its answer stands on. There is no silent absence: a question nothing
+  // mechanical checks declares `reference-backed`, which is #166's "questões sem evidência
+  // executável são explicitamente identificadas" — the state is named in the file rather than
+  // inferred from a missing key, and content/evidence.mjs can therefore count it.
+  const evidence = question.evidence;
+  if (!evidence || Array.isArray(evidence) || typeof evidence !== "object"
+      || !EVIDENCE_TYPES.has(evidence.type)) {
+    fail(name, "unsupported evidence descriptor");
+  }
+  const permitted = EVIDENCE_PROFILES[manifest.evidenceProfile] ?? [];
+  if (!permitted.includes(evidence.type)) {
+    fail(name, `evidence ${evidence.type} is not permitted by the pack's ${manifest.evidenceProfile} profile`);
   }
   return question;
 }

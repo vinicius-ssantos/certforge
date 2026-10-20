@@ -13,6 +13,10 @@ if (!source || !destination || process.argv.length !== 4) {
   try {
     const result = stageEditorialPack(source, destination);
     console.log(`staged ${result.count} draft request(s) for ${result.trackSlug} at ${result.destinationDir}`);
+    console.log(`evidence: ${result.evidenceProfile} — ${Object.entries(result.evidenceByType).map(([type, count]) => `${count} ${type}`).join(", ")}`);
+    if (result.withoutExecutableEvidence > 0) {
+      console.log(`${result.withoutExecutableEvidence} of ${result.count} carry no executable evidence: for those, a reviewer reading them against the pages they cite is the only check.`);
+    }
     console.log(`Preflight: java content/ContentImporter.java --pack "${destination}" --dry-run`);
     console.log("Review and submit with an authorized CONTENT_AUTHOR account; publication remains manual.");
   } catch (error) {

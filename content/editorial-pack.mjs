@@ -3,6 +3,7 @@
 // them. This adapter must not pretend they have been stored or independently verified.
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { assertEvidence } from "./evidence.mjs";
 import { readManifestPack } from "./manifest-pack.mjs";
 import { assertPackReviewsCurrent } from "./review-integrity.mjs";
 
@@ -34,6 +35,9 @@ export function stageEditorialPack(sourceDir, destinationDir) {
   if (existsSync(join(sourceDir, "review.json"))) {
     assertPackReviewsCurrent(sourceDir);
   }
+  // What the questions about to be imported stand on. The count of unchecked ones is returned and
+  // printed, because the reviewer who reads them next is the only check those ones get.
+  const evidence = assertEvidence(sourceDir);
   if (manifest.trackKind === "CERTIFICATION") {
     throw new Error("Certification packs need verified objective-to-API persistence before import");
   }
@@ -43,5 +47,12 @@ export function stageEditorialPack(sourceDir, destinationDir) {
     mkdirSync(target);
     writeFileSync(join(target, "question.json"), JSON.stringify(toEditorialRequest(question), null, 2) + "\n");
   }
-  return { count: questions.length, trackSlug: manifest.trackSlug, destinationDir };
+  return {
+    count: questions.length,
+    trackSlug: manifest.trackSlug,
+    destinationDir,
+    evidenceProfile: evidence.profile,
+    evidenceByType: evidence.byType,
+    withoutExecutableEvidence: evidence.withoutExecutableEvidence.length,
+  };
 }
