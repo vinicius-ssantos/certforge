@@ -8,7 +8,7 @@ Issue: #8 — Criar o pacote inicial de conteúdo autoral de certificação Java
 
 `content/java-se-21/` contém 150 questões originais para a trilha Oracle Java SE 21 Developer: quinze por tópico, de escolha única e de múltipla escolha, do fácil ao difícil. Cada questão tem uma explicação por alternativa, referências autoritativas e uma justificativa de dificuldade.
 
-**Status de revisão: misto.** As 20 questões iniciais foram revisadas tecnicamente em 2026-10-02 e mantêm esse veredito registrado. As 130 questões adicionadas depois foram redigidas com apoio de IA a partir das especificações e da documentação da API do Java SE 21 e ainda não foram revisadas por uma pessoa. Nada no repositório publica uma questão não revisada: o importador cria rascunhos e os submete para revisão técnica, e publicar continua sendo uma decisão editorial humana.
+**Status de revisão: misto.** Parte do pacote tem veredito humano registrado e o resto não; quanto está em [`content/README.md`](../../content/README.md), onde os números são conferidos contra o registro, e quais questões, no pacote de revisão gerado. As que ninguém revisou foram redigidas com apoio de IA a partir das especificações e da documentação da API do Java SE 21. Nada no repositório publica uma questão não revisada: o importador cria rascunhos e os submete para revisão técnica, e publicar continua sendo uma decisão editorial humana.
 
 O que a ferramenta comprova automaticamente, a cada build:
 
@@ -259,7 +259,7 @@ Nenhum teste confere a segunda. É disciplina, e o único papel da automação a
 | 9 E/S em Java | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localização | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Entre as vinte questões iniciais já revisadas, três são conceituais e não têm código executável: `t01-integer-boxing-guarantee`, `t06-stream-facts` e `t07-exports-and-opens`. No pacote atual de 150 questões, 69 possuem programas de verificação executáveis e 81 são conceituais/sustentadas por referências. As vinte iniciais revisadas respondem por 17 executáveis e 3 conceituais; todas as 130 questões posteriores ainda aguardam revisão técnica humana, tenham ou não um programa de apoio. O pacote de revisão deriva a lista completa atual em vez de repeti-la aqui, então ela não envelhece.
+Toda questão do pacote carrega hoje um programa que a build compila para Java 21, executa e confere se imprime o que a questão afirma — as três que eram conceituais quando isto foi escrito (`t01-integer-boxing-guarantee`, `t06-stream-facts` e `t07-exports-and-opens`) foram convertidas, e a `t07-exports-and-opens` virou um grafo de módulos. Programa é evidência da resposta, não revisão: questão com programa continua esperando uma pessoa, e o pacote de revisão deriva o estado atual completo em vez de repeti-lo aqui. Este parágrafo repetia, dizia que sessenta e nove das cento e cinquenta eram executáveis muito depois de todas serem, e terminava afirmando que não envelhecia.
 
 A `t07-requires-transitive` era a quarta. Agora ela carrega um grafo de três módulos em `modules/`, em que `app` só declara `requires lib`, usa um tipo de `util`, e compila porque `lib` declara `requires transitive util` — tire o `transitive` e o build falha com `package u is not visible`. É a conversão que a [ADR 0011](../adr/0011-grade-content-evidence.md) pede, e ela manteve a revisão registrada, porque nada do que o revisor leu mudou.
 
