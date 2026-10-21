@@ -31,6 +31,17 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **A fresh `npm install` blamed the wrong package.** `web/package.json` declared `engines.node:
+  ">=24"` while the dependency tree requires `^22.22.2 || ^24.15.0 || >=26.0.0` — jsdom and three of
+  its dependencies say so, and have since jsdom 30.1.1 arrived in #44. With `engine-strict=true` in
+  `web/.npmrc`, installing on node 24.0 to 24.14 therefore failed with `notsup` naming
+  `@asamuzakjp/css-color`, which is nobody's idea of where to look, and `just web` runs
+  `npm install`. Nothing outside that field documents the requirement at all.
+
+  The field now says `>=24.15`, so npm names the project's own requirement and the version actually
+  installed. It changes nothing for an existing install or for CI, which runs the latest 24.x; it
+  changes what a contributor is told when they cannot install.
+
 - **The content README understated the owner's own review work by thirteen reviews, for thirteen
   days.** It said thirty-three of 150 questions carried a recorded human review and 117 were
   unreviewed; `review.json` has held 46 and 104 since #160 landed on 2026-10-08, every one of them

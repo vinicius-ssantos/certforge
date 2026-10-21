@@ -5,7 +5,7 @@
   "type": "module",
   "description": "CertForge learner web application",
   "engines": {
-    "node": ">=24"
+    "node": ">=24.15"
   },
   "scripts": {
     "dev": "vite",
