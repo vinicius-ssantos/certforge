@@ -6,7 +6,7 @@ Issue: #8 — Create the initial authorial Java certification content pack. Poli
 
 `content/java-se-21/` holds 150 original questions for the Oracle Java SE 21 Developer track: fifteen per topic, single-choice and multiple-choice, easy to hard. Every question has a per-option explanation, authoritative references, and a difficulty rationale.
 
-**Review status: mixed.** The initial 20 questions were technically reviewed on 2026-10-02 and retain that recorded verdict. The 130 questions added afterwards were drafted with AI assistance from the Java SE 21 specifications and API documentation and have not been reviewed by a person yet. Nothing in the repository publishes an unreviewed question: the importer creates drafts and submits them for technical review, and publishing remains a human editorial decision.
+**Review status: mixed.** Some of the pack carries a recorded human verdict and the rest does not; how much is in [`content/README.md`](../../content/README.md), where the figures are checked against the record, and which questions in the generated packet. The ones a person has not reviewed were drafted with AI assistance from the Java SE 21 specifications and API documentation. Nothing in the repository publishes an unreviewed question: the importer creates drafts and submits them for technical review, and publishing remains a human editorial decision.
 
 What the tooling does prove, automatically, on every build:
 
@@ -254,7 +254,7 @@ No test can check the second one. It is a discipline, and the only thing automat
 | 9 Java I/O | `t09-read-all-lines`, `t09-serialization-facts` |
 | 10 Localization | `t10-resource-bundle-fallback`, `t10-locale-to-string` |
 
-Among the initial twenty reviewed questions, three are conceptual and have no runnable code: `t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`. Across the current 150-question pack, 69 questions carry runnable verification programs and 81 are conceptual/reference-backed. The initial reviewed twenty account for 17 runnable and 3 conceptual questions; all 130 later questions still await human technical review regardless of whether a program backs them. The review packet derives the complete current list rather than repeating it here, so it cannot go stale.
+Every question in the pack now carries a programme the build compiles for Java 21, runs, and checks prints what the question claims — the three that were conceptual when this was written (`t01-integer-boxing-guarantee`, `t06-stream-facts` and `t07-exports-and-opens`) were converted, and `t07-exports-and-opens` became a module graph. A programme is evidence for the answer and not a review: a question with one still awaits a person, and the review packet derives the complete current state rather than repeating it here. This paragraph used to repeat it, said sixty-nine of the hundred and fifty were runnable long after all of them were, and ended by claiming it could not go stale.
 
 `t07-requires-transitive` used to be a fourth. It now carries a three-module graph under `modules/`, where `app` requires only `lib`, uses a type from `util`, and compiles because `lib` declares `requires transitive util` — remove the `transitive` and the build fails with `package u is not visible`. That is the conversion [ADR 0011](../adr/0011-grade-content-evidence.md) asks for, and it kept its recorded review, because nothing the reviewer read changed.
 

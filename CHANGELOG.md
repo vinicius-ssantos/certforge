@@ -31,6 +31,24 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **The content README understated the owner's own review work by thirteen reviews, for thirteen
+  days.** It said thirty-three of 150 questions carried a recorded human review and 117 were
+  unreviewed; `review.json` has held 46 and 104 since #160 landed on 2026-10-08, every one of them
+  APPROVED and none stale. It also attributed 13 of those reviews to 2026-10-07 and #139 when 26
+  were recorded that day, thirteen in Topic 01 and thirteen in Topic 02. And it said 69 questions
+  carried runnable programmes against 81 conceptual ones, long after all 150 carried one — the epic
+  for this release already said "150 of 150", so the repository contradicted itself.
+
+  The figures are corrected, and `content/readme-figures.test.mjs` now reads them back out of the
+  file and compares them with the record, so prose stating a fact about `review.json` is checked
+  like anything else that states one. A reworded sentence fails that check and says which pattern to
+  move, rather than quietly stopping being verified.
+
+  The authoring guide carried the same figures in both languages, in a paragraph that ended by
+  claiming the packet "derives the complete current list rather than repeating it here, so it cannot
+  go stale" — while being the stale thing, naming three questions as conceptual that had all been
+  converted. There the fix is to stop restating counts and keep the pointer.
+
 - **`just e2e` and `just e2e-release` could not run.** The browser suite signs in as an
   administrator to write the questions it then practises on, and it takes that account from
   `E2E_ADMIN_EMAIL` and `E2E_ADMIN_PASSWORD`, falling back to an account of its own invention. The
