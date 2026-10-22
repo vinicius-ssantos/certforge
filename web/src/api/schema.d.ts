@@ -998,7 +998,7 @@ export interface components {
             /** Format: uuid */
             id: string;
             /** Format: int32 */
-            javaRelease: number;
+            javaRelease: number | null;
             label: string;
             objectivesUrl: string;
         };

@@ -12,13 +12,13 @@ O [modelo de domínio](domain-model.md) deixou em aberto se `CertificationProfil
 |---|---|---|
 | `PreparationTrack` | Identidade estável, slug, nome, `TrackKind`, tópicos | `DRAFT` → `ACTIVE` ⇄ `INACTIVE` |
 | `CertificationProfile` | Provedor e nome da certificação. Exatamente um por trilha de certificação | Acompanha a trilha |
-| `ExamVersion` | Código e nome da prova, release do Java alvo, URL oficial dos objetivos e o mapeamento explícito de tópicos | `DRAFT` → `ACTIVE` ⇄ `INACTIVE`; no máximo um `ACTIVE` por trilha |
+| `ExamVersion` | Código e nome da prova, a release do Java alvo *se a prova for sobre uma*, URL oficial dos objetivos e o mapeamento explícito de tópicos | `DRAFT` → `ACTIVE` ⇄ `INACTIVE`; no máximo um `ACTIVE` por trilha |
 | `Topic` | Id estável, slug, nome de exibição, pai opcional | Pertence a uma trilha; só é visível por meio de um mapeamento |
 
 Por que este formato:
 
 - O perfil é identidade estável e nunca precisa de ciclo de vida próprio, então fica como um registro um-para-um da trilha em vez de um agregado separado.
-- A versão da prova é a unidade que muda quando uma prova é revisada, então carrega o ciclo de vida, a release do Java alvo e o mapeamento de objetivos.
+- A versão da prova é a unidade que muda quando uma prova é revisada, então carrega o ciclo de vida, o mapeamento de objetivos e — para uma prova que seja sobre uma — a release do Java alvo. A [ADR 0017](../adr/0017-infrastructure-certification-tracks.md) decidiu que prova de Kubernetes ou AWS não carrega release em vez de carregar uma sintética, então a release é opcional de ponta a ponta: a requisição administrativa pode omitir, a view do aluno serve null, e as duas telas que a mostram deixam de fora em vez de imprimir vazio. Uma questão publicada nessa prova também não pode carregar release, que é a mesma regra `java_release_mismatch` lida do outro lado.
 - Os dados específicos de certificação ficam em `catalog_certification_profile` e `catalog_exam_version`. A tabela genérica `catalog_track` não tem campos de certificação, e não existe nenhum campo de entrevista em lugar algum.
 
 ## Visibilidade para o aluno

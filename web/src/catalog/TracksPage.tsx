@@ -69,9 +69,13 @@ export function TracksPage() {
                 <Link to={`/tracks/${track.slug}`}>{track.name}</Link>
               </h2>
               <p>{track.certificationName}</p>
+              {/* A release is a Java fact; an exam that is not about one carries none (ADR
+                  0017), and the row reads without it rather than with an empty slot. */}
               <p className="muted">
-                {track.provider} · {track.examVersion.label} ·{" "}
-                {t.tracks.javaRelease(track.examVersion.javaRelease)}
+                {track.provider} · {track.examVersion.label}
+                {track.examVersion.javaRelease === null
+                  ? null
+                  : ` · ${t.tracks.javaRelease(track.examVersion.javaRelease)}`}
               </p>
               <p className="muted">{t.tracks.topicCount(track.topics.length)}</p>
               {/* Where the learner is on this track, not only what the track is. Absent until

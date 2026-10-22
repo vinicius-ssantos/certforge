@@ -81,7 +81,9 @@ class CatalogAdminService {
       String label,
       String examCode,
       String examName,
-      int javaRelease,
+      // Null for a certification that is not about a Java release, which ADR 0017 decided and
+      // V17 made room for in the column. Only a Java exam names one.
+      Integer javaRelease,
       String objectivesUrl) {
     track(trackId);
     repository.insertExamVersion(

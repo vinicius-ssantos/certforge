@@ -384,6 +384,64 @@ class PreparationCatalogIT {
             jsonPath("$[?(@.slug=='java-certification')]", org.hamcrest.Matchers.hasSize(1)));
   }
 
+  /**
+   * ADR 0017 decision 2: a certification exam may carry no Java release, and a Kubernetes or AWS
+   * exam carries none rather than a synthetic one. V17 made the column nullable for it. Until this
+   * test, the application refused anyway — the admin request took a primitive int, so a CKAD exam
+   * could not be registered, and TopicContext threw IllegalArgumentException for a certification
+   * without a release, so a topic mapped into one by hand produced a 500 instead of a context.
+   */
+  @Test
+  void aCertificationExamNeedsNoJavaReleaseAndIsStillServed() throws Exception {
+    String trackId = createTrack(slug());
+    ResultActions created =
+        send(
+                post("/api/admin/catalog/tracks/" + trackId + "/exam-versions"),
+                admin,
+                "{\"label\":\"CKAD 2026\",\"examCode\":\"CKAD\",\"examName\":\"Certified Kubernetes"
+                    + " Application Developer\",\"objectivesUrl\":\"https://example.com/ckad\"}")
+            .andExpect(status().isCreated());
+    String versionId = firstOf(created, "$.examVersions[?(@.label=='CKAD 2026')].id");
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='CKAD 2026')].javaRelease")
+                .value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())));
+
+    String topicId = createTopic(trackId, "pods-" + slug(), null);
+    map(versionId, topicId);
+    // The track opens before its version, which is the order the lifecycle requires.
+    send(post("/api/admin/catalog/tracks/" + trackId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+    send(post("/api/admin/catalog/exam-versions/" + versionId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+
+    // The module contract answers for it, with no release rather than a fabricated one.
+    var context = catalog.findActiveTopicContext(new TopicId(UUID.fromString(topicId)));
+    assertThat(context).isPresent();
+    assertThat(context.orElseThrow().kind()).isEqualTo(TrackKind.CERTIFICATION);
+    assertThat(context.orElseThrow().javaRelease()).isEmpty();
+
+    // And a learner is served the track without a Java release being invented for it.
+    mvc.perform(get("/api/catalog/tracks").cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$[?(@.examVersion.examCode=='CKAD')].examVersion.javaRelease")
+                .value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.nullValue())));
+  }
+
+  @Test
+  void aJavaExamStillCarriesItsRelease() throws Exception {
+    String trackId = createTrack(slug());
+    String versionId = createExamVersion(trackId, "V1");
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].javaRelease")
+                .value(org.hamcrest.Matchers.contains(21)));
+    assertThat(versionId).isNotBlank();
+  }
+
   @Test
   void anInterviewTopicHasAContextWithNoJavaRelease() {
     UUID trackId = UUID.randomUUID();

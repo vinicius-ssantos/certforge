@@ -138,10 +138,13 @@ export function TrackPage() {
         <>
           <p>{track.data.certificationName}</p>
           {/* The version's label already carries the exam code — "Java SE 21 (1Z0-830)" — so
-              appending it again printed it twice. */}
+              appending it again printed it twice. A release is a Java fact and an exam that is not
+              about one carries none (ADR 0017), so it is left out rather than printed empty. */}
           <p className="muted">
-            {track.data.provider} · {track.data.examVersion.label} ·{" "}
-            {t.track.javaRelease(track.data.examVersion.javaRelease)}
+            {track.data.provider} · {track.data.examVersion.label}
+            {track.data.examVersion.javaRelease === null
+              ? null
+              : ` · ${t.track.javaRelease(track.data.examVersion.javaRelease)}`}
           </p>
           <p>
             <a href={track.data.examVersion.objectivesUrl} target="_blank" rel="noopener noreferrer">

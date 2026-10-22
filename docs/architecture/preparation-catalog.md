@@ -10,13 +10,13 @@ The [domain model](domain-model.md) left open whether `CertificationProfile` and
 |---|---|---|
 | `PreparationTrack` | Stable identity, slug, name, `TrackKind`, topics | `DRAFT` → `ACTIVE` ⇄ `INACTIVE` |
 | `CertificationProfile` | Provider and certification name. Exactly one per certification track | Follows its track |
-| `ExamVersion` | Exam code and name, target Java release, official objectives URL, and the explicit topic mapping | `DRAFT` → `ACTIVE` ⇄ `INACTIVE`; at most one `ACTIVE` per track |
+| `ExamVersion` | Exam code and name, the target Java release *if the exam is about one*, official objectives URL, and the explicit topic mapping | `DRAFT` → `ACTIVE` ⇄ `INACTIVE`; at most one `ACTIVE` per track |
 | `Topic` | Stable id, slug, display name, optional parent | Belongs to a track; visible only through a mapping |
 
 Why this shape:
 
 - The profile is stable identity and never needs its own lifecycle, so it stays a one-to-one record of the track instead of a separate aggregate.
-- The exam version is the unit that changes when an exam is revised, so it carries the lifecycle, the target Java release and the objective mapping.
+- The exam version is the unit that changes when an exam is revised, so it carries the lifecycle, the objective mapping and — for an exam that is about one — the target Java release. [ADR 0017](../adr/0017-infrastructure-certification-tracks.md) decided that a Kubernetes or AWS exam carries no release rather than a synthetic one, so the release is optional end to end: the admin request may omit it, the learner view serves null, and the two screens that show it leave it out instead of printing an empty one. A question published to such an exam must carry no release either, which is the same `java_release_mismatch` rule read in the other direction.
 - Certification-specific data lives in `catalog_certification_profile` and `catalog_exam_version`. The generic `catalog_track` table holds no certification fields, and no interview fields exist anywhere.
 
 ## Learner visibility

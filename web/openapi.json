@@ -517,7 +517,7 @@
           },
           "javaRelease" : {
             "format" : "int32",
-            "type" : "integer"
+            "type" : [ "integer", "null" ]
           },
           "label" : {
             "type" : "string"
