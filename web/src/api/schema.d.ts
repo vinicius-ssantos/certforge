@@ -100,6 +100,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/catalog/exam-versions/{examVersionId}/objectives": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["setObjectives"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/catalog/exam-versions/{examVersionId}/topics": {
         parameters: {
             query?: never;
@@ -844,6 +860,7 @@ export interface components {
             objectivesUrl: string | null;
             status: string;
             topics: components["schemas"]["AdminMappingView"][];
+            verifiedObjectives: components["schemas"]["AdminObjectiveSnapshotView"];
         };
         AdminMappingView: {
             objectiveRef: string | null;
@@ -853,6 +870,20 @@ export interface components {
             topicId: string;
             /** Format: int32 */
             weight: number | null;
+        };
+        AdminObjectiveSnapshotView: {
+            objectives: components["schemas"]["AdminObjectiveView"][];
+            providerVersion: string;
+            sourceDigest: string;
+            sourceUrl: string;
+            status: string;
+            /** Format: date */
+            verifiedOn: string;
+        };
+        AdminObjectiveView: {
+            key: string;
+            sourceRef: string | null;
+            title: string;
         };
         AdminTopicView: {
             /** Format: uuid */
@@ -1183,6 +1214,11 @@ export interface components {
             /** Format: uuid */
             trackId: string;
         };
+        ObjectiveEntry: {
+            key: string;
+            sourceRef: string;
+            title: string;
+        };
         OptionAnswer: {
             correct: boolean;
             explanation: string;
@@ -1485,6 +1521,14 @@ export interface components {
         SetMappingsRequest: {
             topics: components["schemas"]["MappingEntry"][];
         };
+        SetObjectivesRequest: {
+            objectives: components["schemas"]["ObjectiveEntry"][];
+            providerVersion: string;
+            sourceDigest: string;
+            sourceUrl: string;
+            /** Format: date */
+            verifiedOn: string;
+        };
         SourceFile: {
             body: string;
             path: string;
@@ -1714,6 +1758,32 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["AdminTrackView"];
+                };
+            };
+        };
+    };
+    setObjectives: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                examVersionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetObjectivesRequest"];
+            };
+        };
         responses: {
             /** @description OK */
             200: {

@@ -2,6 +2,8 @@ package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.TrackKind;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveSnapshotRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Repository;
 class CatalogRepository {
 
   private static final String STATUS = "status";
+  private static final String VERSION = "version";
   private static final String SLUG = "slug";
   private static final String NAME = "name";
   private static final String TRACK_ID = "trackId";
@@ -219,13 +222,88 @@ class CatalogRepository {
               "insert into certforge.catalog_track_version_topic"
                   + " (track_version_id, topic_id, objective_ref, position, weight)"
                   + " values (:version, :topic, :ref, :position, :weight)")
-          .param("version", trackVersionId)
+          .param(VERSION, trackVersionId)
           .param("topic", mapping.topicId())
           .param("ref", mapping.objectiveRef())
           .param("position", mapping.position())
           .param("weight", mapping.weight())
           .update();
     }
+  }
+
+  /**
+   * Replaces the verified snapshot of one exam version and the objectives read from it.
+   *
+   * <p>The objectives are deleted and rewritten rather than merged, because a snapshot is one
+   * reading of one page: an objective that is no longer on the page is not an objective. The
+   * snapshot row is upserted so that re-reading the page keeps the same exam version.
+   */
+  void replaceObjectives(ObjectiveSnapshotRow snapshot, List<ObjectiveRow> objectives) {
+    jdbc.sql(
+            "insert into certforge.catalog_exam_objective_snapshot"
+                + " (track_version_id, provider_version, verified_on, source_url, source_digest,"
+                + " status) values (:version, :providerVersion, :verifiedOn, :url, :digest, :status)"
+                + " on conflict (track_version_id) do update set"
+                + " provider_version = excluded.provider_version,"
+                + " verified_on = excluded.verified_on, source_url = excluded.source_url,"
+                + " source_digest = excluded.source_digest, status = excluded.status,"
+                + " recorded_at = now()")
+        .param(VERSION, snapshot.trackVersionId())
+        .param("providerVersion", snapshot.providerVersion())
+        .param("verifiedOn", snapshot.verifiedOn())
+        .param("url", snapshot.sourceUrl())
+        .param("digest", snapshot.sourceDigest())
+        .param("status", snapshot.status())
+        .update();
+    jdbc.sql("delete from certforge.catalog_exam_objective where track_version_id = :version")
+        .param(VERSION, snapshot.trackVersionId())
+        .update();
+    for (ObjectiveRow objective : objectives) {
+      jdbc.sql(
+              "insert into certforge.catalog_exam_objective"
+                  + " (track_version_id, objective_key, title, source_ref)"
+                  + " values (:version, :key, :title, :ref)")
+          .param(VERSION, objective.trackVersionId())
+          .param("key", objective.objectiveKey())
+          .param("title", objective.title())
+          .param("ref", objective.sourceRef())
+          .update();
+    }
+  }
+
+  Optional<ObjectiveSnapshotRow> findObjectiveSnapshot(UUID trackVersionId) {
+    return jdbc.sql(
+            "select track_version_id, provider_version, verified_on, source_url, source_digest,"
+                + " status from certforge.catalog_exam_objective_snapshot"
+                + " where track_version_id = :version")
+        .param(VERSION, trackVersionId)
+        .query(
+            (rs, n) ->
+                new ObjectiveSnapshotRow(
+                    rs.getObject("track_version_id", UUID.class),
+                    rs.getString("provider_version"),
+                    rs.getObject("verified_on", java.time.LocalDate.class),
+                    rs.getString("source_url"),
+                    rs.getString("source_digest"),
+                    rs.getString(STATUS)))
+        .optional();
+  }
+
+  /** The objectives of one snapshot, in key order, which is the order a page lists them in. */
+  List<ObjectiveRow> findObjectives(UUID trackVersionId) {
+    return jdbc.sql(
+            "select track_version_id, objective_key, title, source_ref"
+                + " from certforge.catalog_exam_objective where track_version_id = :version"
+                + " order by objective_key")
+        .param(VERSION, trackVersionId)
+        .query(
+            (rs, n) ->
+                new ObjectiveRow(
+                    rs.getObject("track_version_id", UUID.class),
+                    rs.getString("objective_key"),
+                    rs.getString("title"),
+                    rs.getString("source_ref")))
+        .list();
   }
 
   /** The active topic row if it is mapped in the active exam version of an active track. */
@@ -295,7 +373,7 @@ class CatalogRepository {
         rs.getString("slug"),
         rs.getString("name"),
         TrackKind.valueOf(rs.getString("kind")),
-        CatalogStatus.valueOf(rs.getString("status")),
+        CatalogStatus.valueOf(rs.getString(STATUS)),
         rs.getString("provider"),
         rs.getString("certification_name"));
   }
@@ -305,7 +383,7 @@ class CatalogRepository {
         rs.getObject("id", UUID.class),
         rs.getObject("track_id", UUID.class),
         rs.getString("label"),
-        CatalogStatus.valueOf(rs.getString("status")),
+        CatalogStatus.valueOf(rs.getString(STATUS)),
         rs.getString("exam_code"),
         rs.getString("exam_name"),
         // getObject rather than getInt: an interview version has no exam row, and getInt would

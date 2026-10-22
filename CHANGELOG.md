@@ -202,6 +202,28 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A verified reading of a provider's objectives page can be recorded.** V17 added the tables for
+  it a release ago and left them "deliberately nullable for existing versions until source
+  governance has verified the official objectives" — and nothing in the application could write one.
+  So the verification those tables exist to record could not be recorded, no exam objective could
+  exist, and nothing could cite one: the half of #165 that asks a question to map to an objective had
+  no objective to map to.
+
+  `PUT /api/admin/catalog/exam-versions/{id}/objectives` records a reading: the provider's own
+  version name, the date, the HTTPS page it came from, a `sha256:` digest of that page, and the
+  objectives found on it. The admin track view shows what is recorded, or null while nobody has
+  read the page — "not verified" and "verified and found nothing" are different states, and the
+  second one cannot be recorded. A later reading replaces the earlier one, because a snapshot is one
+  reading of one page and an objective no longer listed is not an objective.
+
+  Recording a reading does not make a question official. It records what the provider published, so
+  this project's own material can say which objective it prepares for — never that it came from the
+  exam, which is what ADR 0017 requires of a certification profile.
+
+  One rule I wrote in the service turned out to be unreachable — a reading with no objectives is
+  refused by the request before the service sees it — and a mutation check found it. It is gone
+  rather than kept as a branch that looks like a rule and never runs.
+
 - **A question whose options read the same is now refused.** One of them is marked correct, so a
   learner who reads both carefully still has to guess and knowing the subject does not help — the
   last mechanical form of ambiguity #166 asks CI to fail on. Nothing in either pack does it, over all

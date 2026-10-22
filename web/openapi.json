@@ -59,9 +59,13 @@
               "$ref" : "#/components/schemas/AdminMappingView"
             },
             "type" : "array"
+          },
+          "verifiedObjectives" : {
+            "$ref" : "#/components/schemas/AdminObjectiveSnapshotView",
+            "type" : "null"
           }
         },
-        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl", "status", "topics" ],
+        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl", "status", "topics", "verifiedObjectives" ],
         "type" : "object"
       },
       "AdminMappingView" : {
@@ -83,6 +87,49 @@
           }
         },
         "required" : [ "objectiveRef", "position", "topicId", "weight" ],
+        "type" : "object"
+      },
+      "AdminObjectiveSnapshotView" : {
+        "properties" : {
+          "objectives" : {
+            "items" : {
+              "$ref" : "#/components/schemas/AdminObjectiveView"
+            },
+            "type" : "array"
+          },
+          "providerVersion" : {
+            "type" : "string"
+          },
+          "sourceDigest" : {
+            "type" : "string"
+          },
+          "sourceUrl" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "verifiedOn" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "objectives", "providerVersion", "sourceDigest", "sourceUrl", "status", "verifiedOn" ],
+        "type" : "object"
+      },
+      "AdminObjectiveView" : {
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "sourceRef" : {
+            "type" : [ "string", "null" ]
+          },
+          "title" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "sourceRef", "title" ],
         "type" : "object"
       },
       "AdminTopicView" : {
@@ -1033,6 +1080,27 @@
         "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "passingPercentage", "questionCount", "questions", "status", "trackId" ],
         "type" : "object"
       },
+      "ObjectiveEntry" : {
+        "properties" : {
+          "key" : {
+            "maxLength" : 120,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "sourceRef" : {
+            "maxLength" : 500,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "title" : {
+            "maxLength" : 400,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "sourceRef", "title" ],
+        "type" : "object"
+      },
       "OptionAnswer" : {
         "properties" : {
           "correct" : {
@@ -1903,6 +1971,40 @@
         "required" : [ "topics" ],
         "type" : "object"
       },
+      "SetObjectivesRequest" : {
+        "properties" : {
+          "objectives" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ObjectiveEntry"
+            },
+            "maxItems" : 200,
+            "minItems" : 1,
+            "type" : "array"
+          },
+          "providerVersion" : {
+            "maxLength" : 100,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "sourceDigest" : {
+            "minLength" : 1,
+            "pattern" : "^sha256:[0-9a-f]{64}$",
+            "type" : "string"
+          },
+          "sourceUrl" : {
+            "maxLength" : 500,
+            "minLength" : 0,
+            "pattern" : "^https://\\S+$",
+            "type" : "string"
+          },
+          "verifiedOn" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "objectives", "providerVersion", "sourceDigest", "sourceUrl", "verifiedOn" ],
+        "type" : "object"
+      },
       "SourceFile" : {
         "properties" : {
           "body" : {
@@ -2356,6 +2458,43 @@
             "type" : "string"
           }
         } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/AdminTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-admin-controller" ]
+      }
+    },
+    "/api/admin/catalog/exam-versions/{examVersionId}/objectives" : {
+      "put" : {
+        "operationId" : "setObjectives",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "examVersionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/SetObjectivesRequest"
+              }
+            }
+          },
+          "required" : true
+        },
         "responses" : {
           "200" : {
             "content" : {

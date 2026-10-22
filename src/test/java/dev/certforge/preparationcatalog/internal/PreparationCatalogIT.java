@@ -478,6 +478,153 @@ class PreparationCatalogIT {
     assertThat(context.orElseThrow().javaRelease()).isEmpty();
   }
 
+  // ---- verified exam objectives (#165) -------------------------------------------------------
+
+  private static final String DIGEST = "sha256:" + "a".repeat(64);
+
+  private ResultActions setObjectives(String versionId, String body) throws Exception {
+    return send(put("/api/admin/catalog/exam-versions/" + versionId + "/objectives"), admin, body);
+  }
+
+  private static String reading(String providerVersion, String verifiedOn, String objectives) {
+    return "{\"providerVersion\":\""
+        + providerVersion
+        + "\",\"verifiedOn\":\""
+        + verifiedOn
+        + "\",\"sourceUrl\":\"https://example.com/objectives\",\"sourceDigest\":\""
+        + DIGEST
+        + "\",\"objectives\":["
+        + objectives
+        + "]}";
+  }
+
+  /**
+   * V17 added the snapshot tables for #165 and left them "deliberately nullable for existing
+   * versions until source governance has verified the official objectives". Nothing in the
+   * application could write one, so the verification they exist to record could not be recorded,
+   * and nothing could cite an objective because no objective could exist.
+   */
+  @Test
+  void aVerifiedReadingOfTheObjectivesPageIsRecordedAndShown() throws Exception {
+    String trackId = createTrack(slug());
+    String versionId = createExamVersion(trackId, "V1");
+
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives")
+                .value(org.hamcrest.Matchers.contains(nullValue())));
+
+    setObjectives(
+            versionId,
+            reading(
+                "2026-01",
+                "2026-10-22",
+                "{\"key\":\"1.1\",\"title\":\"Define and build images\",\"sourceRef\":\"Design\"},"
+                    + "{\"key\":\"2.1\",\"title\":\"Use probes\",\"sourceRef\":null}"))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.providerVersion")
+                .value(hasItem("2026-01")))
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.verifiedOn")
+                .value(hasItem("2026-10-22")))
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.status")
+                .value(hasItem("VERIFIED")))
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.objectives[*].key")
+                .value(org.hamcrest.Matchers.contains("1.1", "2.1")));
+  }
+
+  @Test
+  void rereadingThePageReplacesTheObjectivesItNoLongerLists() throws Exception {
+    String trackId = createTrack(slug());
+    String versionId = createExamVersion(trackId, "V1");
+    setObjectives(
+            versionId, reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Gone\"}"))
+        .andExpect(status().isOk());
+
+    // A snapshot is one reading of one page: an objective no longer on it is not an objective.
+    setObjectives(
+            versionId, reading("2027-01", "2027-01-05", "{\"key\":\"9.9\",\"title\":\"New\"}"))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.objectives[*].key")
+                .value(org.hamcrest.Matchers.contains("9.9")))
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.providerVersion")
+                .value(hasItem("2027-01")));
+  }
+
+  @Test
+  void anUnverifiableReadingIsRefusedBeforeItReachesTheDatabase() throws Exception {
+    String trackId = createTrack(slug());
+    String versionId = createExamVersion(trackId, "V1");
+    String one = "{\"key\":\"1.1\",\"title\":\"Define and build images\"}";
+
+    // A page read over plain HTTP, or a digest that is not one, is not provenance.
+    setObjectives(
+            versionId,
+            reading("2026-01", "2026-10-22", one).replace("https://example", "http://example"))
+        .andExpect(status().isBadRequest());
+    setObjectives(
+            versionId, reading("2026-01", "2026-10-22", one).replace(DIGEST, "sha256:not-a-digest"))
+        .andExpect(status().isBadRequest());
+    // A verification that found no objectives verified nothing.
+    setObjectives(versionId, reading("2026-01", "2026-10-22", ""))
+        .andExpect(status().isBadRequest());
+    // Two titles under one key is a reading of the page that cannot be right.
+    setObjectives(
+            versionId,
+            reading(
+                "2026-01",
+                "2026-10-22",
+                "{\"key\":\"1.1\",\"title\":\"One\"},{\"key\":\"1.1\",\"title\":\"Two\"}"))
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("duplicate_objective_key"));
+
+    // None of them left anything behind.
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives")
+                .value(org.hamcrest.Matchers.contains(nullValue())));
+  }
+
+  @Test
+  void anInterviewTaxonomyHasNoProviderPageToVerify() throws Exception {
+    // Built directly, the way the interview-context test above does: the admin API creates
+    // certification tracks, and an interview taxonomy is seeded rather than authored here.
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status) values"
+            + " (?, 'interview-"
+            + slug()
+            + "', 'Java Backend', 'INTERVIEW', 'DRAFT')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status) values"
+            + " (?, ?, 'Taxonomy 1', 'DRAFT')",
+        versionId,
+        trackId);
+
+    setObjectives(
+            versionId.toString(),
+            reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Anything\"}"))
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("objectives_need_an_exam"));
+  }
+
+  @Test
+  void objectivesCannotBeRecordedForAnExamVersionThatDoesNotExist() throws Exception {
+    setObjectives(
+            UUID.randomUUID().toString(),
+            reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Anything\"}"))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("exam_version_not_found"));
+  }
+
   // ---- lifecycle -----------------------------------------------------------------------------
 
   @Test

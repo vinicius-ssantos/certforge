@@ -2,9 +2,13 @@ package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminExamVersionView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminMappingView;
+import dev.certforge.preparationcatalog.internal.AdminViews.AdminObjectiveSnapshotView;
+import dev.certforge.preparationcatalog.internal.AdminViews.AdminObjectiveView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminTopicView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminTrackView;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveSnapshotRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
@@ -112,6 +116,44 @@ class CatalogAdminService {
     }
     validateMappings(version, mappings);
     repository.replaceMappings(examVersionId, mappings);
+    return getTrack(version.trackId());
+  }
+
+  /**
+   * Records what someone read off the provider's own objectives page, and the objectives they read.
+   *
+   * <p>This is the governance step V17 left room for: an exam version can exist before anyone has
+   * verified its objectives, and the Java SE 21 exam is in that state today. Nothing in the
+   * application could write a snapshot until now, so the tables added for #165 held nothing and the
+   * verification they exist to record could not be recorded.
+   *
+   * <p>Two rules the tables cannot state. The version must be a certification, because an interview
+   * taxonomy has no provider to read; and a key may appear once, because two titles under one key
+   * is a reading of the page that cannot be right. A third — that a reading names at least one
+   * objective, since a verification that found none verified nothing — lives on the request as
+   * {@code @Size(min = 1)}, where it is a 400 naming the field. It was here too until a mutation
+   * check showed the branch could not be reached: bean validation refuses the empty list first.
+   *
+   * <p>Re-reading the page replaces the objectives rather than merging them: an objective that is
+   * no longer on the page is not an objective. Once a question can cite an objective (the rest of
+   * #165) this will have to refuse a removal that would orphan one.
+   */
+  @Transactional
+  AdminTrackView setObjectives(
+      UUID examVersionId, ObjectiveSnapshotRow snapshot, List<ObjectiveRow> objectives) {
+    TrackVersionRow version = examVersion(examVersionId);
+    if (!version.isCertification()) {
+      throw CatalogException.conflict(
+          "objectives_need_an_exam", "Only a certification version has objectives to verify");
+    }
+    Set<String> keys = new HashSet<>();
+    for (ObjectiveRow objective : objectives) {
+      if (!keys.add(objective.objectiveKey())) {
+        throw CatalogException.invalid(
+            "duplicate_objective_key", "An objective key appears more than once");
+      }
+    }
+    repository.replaceObjectives(snapshot, objectives);
     return getTrack(version.trackId());
   }
 
@@ -232,6 +274,33 @@ class CatalogAdminService {
             () -> CatalogException.notFound("exam_version_not_found", "Exam version not found"));
   }
 
+  /**
+   * The verified snapshot of one exam version, or null when nobody has read the provider's page
+   * yet. Null rather than an empty shape: "not verified" and "verified and found nothing" are
+   * different states, and the second one cannot be recorded (setObjectives refuses it).
+   */
+  private AdminObjectiveSnapshotView verifiedObjectives(UUID examVersionId) {
+    return repository
+        .findObjectiveSnapshot(examVersionId)
+        .map(
+            snapshot ->
+                new AdminObjectiveSnapshotView(
+                    snapshot.providerVersion(),
+                    snapshot.verifiedOn(),
+                    snapshot.sourceUrl(),
+                    snapshot.sourceDigest(),
+                    snapshot.status(),
+                    repository.findObjectives(examVersionId).stream()
+                        .map(
+                            objective ->
+                                new AdminObjectiveView(
+                                    objective.objectiveKey(),
+                                    objective.title(),
+                                    objective.sourceRef()))
+                        .toList()))
+        .orElse(null);
+  }
+
   private AdminTrackView view(TrackRow track) {
     List<AdminExamVersionView> versions =
         repository.findExamVersions(track.id()).stream()
@@ -250,7 +319,8 @@ class CatalogAdminService {
                                 m ->
                                     new AdminMappingView(
                                         m.topicId(), m.objectiveRef(), m.position(), m.weight()))
-                            .toList()))
+                            .toList(),
+                        verifiedObjectives(version.id())))
             .toList();
     List<AdminTopicView> topics =
         repository.findTopics(track.id()).stream()

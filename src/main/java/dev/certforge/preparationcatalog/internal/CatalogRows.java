@@ -1,6 +1,7 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.TrackKind;
+import java.time.LocalDate;
 import java.util.UUID;
 
 /** Persistence rows. They never leave the module. */
@@ -38,6 +39,23 @@ interface CatalogRows {
   }
 
   record TopicRow(UUID id, UUID trackId, UUID parentId, String slug, String name) {}
+
+  /**
+   * What was read off the provider's own page, and when. V17 made this separate from the exam
+   * version's identity so that a version can exist before anyone has verified its objectives — the
+   * Java SE 21 exam is in exactly that state — and so that re-reading the page is a new snapshot
+   * rather than an edit to the exam.
+   */
+  record ObjectiveSnapshotRow(
+      UUID trackVersionId,
+      String providerVersion,
+      LocalDate verifiedOn,
+      String sourceUrl,
+      String sourceDigest,
+      String status) {}
+
+  /** One objective of a verified snapshot. {@code sourceRef} is where on the page it was read. */
+  record ObjectiveRow(UUID trackVersionId, String objectiveKey, String title, String sourceRef) {}
 
   /**
    * A topic's place in one track version. {@code objectiveRef} is the exam objective it answers and
