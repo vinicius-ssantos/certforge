@@ -2,12 +2,15 @@ package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminTrackView;
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveSnapshotRow;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -98,6 +101,36 @@ class CatalogAdminController {
     return service.setMappings(examVersionId, rows);
   }
 
+  /**
+   * Records the verified objectives of one exam version: what was read, from where, and when.
+   *
+   * <p>PUT because it is one reading of one page replacing another, not an append.
+   */
+  @PutMapping("/exam-versions/{examVersionId}/objectives")
+  AdminTrackView setObjectives(
+      @PathVariable UUID examVersionId, @Valid @RequestBody SetObjectivesRequest request) {
+    List<ObjectiveRow> objectives =
+        request.objectives().stream()
+            .map(
+                entry ->
+                    new ObjectiveRow(
+                        examVersionId,
+                        entry.key().trim(),
+                        entry.title().trim(),
+                        entry.sourceRef() == null ? null : entry.sourceRef().trim()))
+            .toList();
+    return service.setObjectives(
+        examVersionId,
+        new ObjectiveSnapshotRow(
+            examVersionId,
+            request.providerVersion().trim(),
+            request.verifiedOn(),
+            request.sourceUrl().trim(),
+            request.sourceDigest().trim(),
+            "VERIFIED"),
+        objectives);
+  }
+
   @PostMapping("/exam-versions/{examVersionId}/activate")
   AdminTrackView activateExamVersion(@PathVariable UUID examVersionId) {
     return service.activateExamVersion(examVersionId);
@@ -148,4 +181,23 @@ class CatalogAdminController {
       @NotNull UUID topicId,
       @NotBlank @Size(max = 300) String objectiveRef,
       @Min(0) int position) {}
+
+  /**
+   * One reading of a provider's objectives page. The digest is of the page as it was read, so a
+   * later reading that produces a different digest is a different snapshot and says so; the shapes
+   * are checked here so that a bad one is a 400 naming the field rather than a constraint violation
+   * from the database.
+   */
+  record SetObjectivesRequest(
+      @NotBlank @Size(max = 100) String providerVersion,
+      @NotNull LocalDate verifiedOn,
+      @NotBlank @Size(max = 500) @Pattern(regexp = "^https://\\S+$") String sourceUrl,
+      @NotBlank @Pattern(regexp = "^sha256:[0-9a-f]{64}$") String sourceDigest,
+      @NotNull @Valid @Size(min = 1, max = 200) List<ObjectiveEntry> objectives) {}
+
+  /** {@code sourceRef} is where on the page the objective was read, and may be omitted. */
+  record ObjectiveEntry(
+      @NotBlank @Size(max = 120) String key,
+      @NotBlank @Size(max = 400) String title,
+      @Size(max = 500) String sourceRef) {}
 }

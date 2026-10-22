@@ -89,6 +89,13 @@ class AuthorizationMatrixIT {
           Map.entry(
               "PUT /api/admin/catalog/exam-versions/{examVersionId}/topics", "{\"topics\":[]}"),
           Map.entry(
+              "PUT /api/admin/catalog/exam-versions/{examVersionId}/objectives",
+              "{\"providerVersion\":\"2026-01\",\"verifiedOn\":\"2026-10-22\","
+                  + "\"sourceUrl\":\"https://example.com/objectives\","
+                  + "\"sourceDigest\":\"sha256:"
+                  + "a".repeat(64)
+                  + "\",\"objectives\":[{\"key\":\"1.1\",\"title\":\"T\"}]}"),
+          Map.entry(
               "POST /api/admin/catalog/tracks/{trackId}/topics",
               "{\"slug\":\"matrix\",\"name\":\"M\"}"),
           Map.entry("PUT /api/admin/catalog/topics/{topicId}", "{\"name\":\"M\"}"),

@@ -52,11 +52,22 @@ Administration (`CATALOG_MANAGE` permission). Every command returns the updated 
 | `POST .../tracks/{id}/activate`, `.../deactivate` | Track lifecycle |
 | `POST .../tracks/{id}/exam-versions` | Create a draft exam version |
 | `PUT .../exam-versions/{id}/topics` | Replace the topic mapping (draft only) |
+| `PUT .../exam-versions/{id}/objectives` | Record one verified reading of the provider's objectives page, and the objectives it found |
 | `POST .../exam-versions/{id}/activate`, `.../deactivate` | Exam version lifecycle |
 | `POST .../tracks/{id}/topics` | Create a topic, optionally under a parent |
 | `PUT .../topics/{id}` | Correct a topic's display name |
 
-Failures use the same RFC 9457 problem responses as identity, with stable codes such as `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep` and `validation_failed`.
+Failures use the same RFC 9457 problem responses as identity, with stable codes such as `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep`, `objectives_need_an_exam`, `duplicate_objective_key` and `validation_failed`.
+
+### Verified exam objectives
+
+An exam version can exist before anyone has read the provider's objectives page, and the Java SE 21 exam is in that state. `PUT .../exam-versions/{id}/objectives` records a reading: the provider's own version name, the date, the HTTPS page it was read from, a `sha256:` digest of that page, and the objectives found on it. The reading replaces the previous one, because a snapshot is one reading of one page and an objective that is no longer listed is not an objective.
+
+What this is for: [ADR 0017](../adr/0017-infrastructure-certification-tracks.md) requires that no certification is claimed without a verified version and date, and V17 added the tables for it. Until now nothing in the application could write one, so the verification could not be recorded and no objective could exist to be cited. A question citing an objective is the next step (#165), and it will have to refuse a reading that removes an objective some published question still claims.
+
+Two rules the tables cannot state: only a certification version has a provider page to read (`objectives_need_an_exam`), and an objective key appears once in a reading (`duplicate_objective_key`). A reading with no objectives is refused by the request itself, since a verification that found none verified nothing.
+
+Recording a reading does **not** make a question official. It records what the provider published, so that this project's own material can say which objective it prepares for — never that it came from the exam.
 
 ## Seed data and traceability
 

@@ -1,6 +1,7 @@
 package dev.certforge.preparationcatalog.internal;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +34,23 @@ interface AdminViews {
       @Schema(nullable = true) Integer javaRelease,
       @Schema(nullable = true) String objectivesUrl,
       String status,
-      List<AdminMappingView> topics) {}
+      List<AdminMappingView> topics,
+      /** What someone read off the provider's page, or null while nobody has read it. */
+      @Schema(nullable = true) AdminObjectiveSnapshotView verifiedObjectives) {}
+
+  /**
+   * One reading of a provider's objectives page, with the objectives it found. The digest is of the
+   * page as it was read, so that a later reading can be compared with it rather than trusted.
+   */
+  record AdminObjectiveSnapshotView(
+      String providerVersion,
+      LocalDate verifiedOn,
+      String sourceUrl,
+      String sourceDigest,
+      String status,
+      List<AdminObjectiveView> objectives) {}
+
+  record AdminObjectiveView(String key, String title, @Schema(nullable = true) String sourceRef) {}
 
   /** {@code objectiveRef} is null for an interview version, which cites no exam objective. */
   record AdminMappingView(

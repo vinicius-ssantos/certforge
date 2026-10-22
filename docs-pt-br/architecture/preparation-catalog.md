@@ -54,11 +54,22 @@ Administração (permissão `CATALOG_MANAGE`). Todo comando devolve a visão atu
 | `POST .../tracks/{id}/activate`, `.../deactivate` | Ciclo de vida da trilha |
 | `POST .../tracks/{id}/exam-versions` | Cria uma versão de prova em rascunho |
 | `PUT .../exam-versions/{id}/topics` | Substitui o mapeamento de tópicos (somente rascunho) |
+| `PUT .../exam-versions/{id}/objectives` | Registra uma leitura verificada da página de objetivos do fornecedor e os objetivos encontrados nela |
 | `POST .../exam-versions/{id}/activate`, `.../deactivate` | Ciclo de vida da versão da prova |
 | `POST .../tracks/{id}/topics` | Cria um tópico, opcionalmente sob um pai |
 | `PUT .../topics/{id}` | Corrige o nome de exibição de um tópico |
 
-As falhas usam as mesmas respostas de problema RFC 9457 da identidade, com códigos estáveis como `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep` e `validation_failed`.
+As falhas usam as mesmas respostas de problema RFC 9457 da identidade, com códigos estáveis como `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep`, `objectives_need_an_exam`, `duplicate_objective_key` e `validation_failed`.
+
+### Objetivos de prova verificados
+
+Uma versão de prova pode existir antes de alguém ler a página de objetivos do fornecedor — a prova Java SE 21 está exatamente nesse estado. O `PUT .../exam-versions/{id}/objectives` registra uma leitura: o nome da versão segundo o fornecedor, a data, a página HTTPS de onde foi lida, um digest `sha256:` dessa página e os objetivos encontrados nela. A leitura substitui a anterior, porque um snapshot é uma leitura de uma página e objetivo que não está mais listado não é objetivo.
+
+Para que isso serve: a [ADR 0017](../adr/0017-infrastructure-certification-tracks.md) exige que nenhuma certificação seja afirmada sem versão e data de conferência, e a V17 criou as tabelas para isso. Até agora nada na aplicação podia escrever uma, então a verificação não podia ser registrada e nenhum objetivo podia existir para ser citado. Questão citando objetivo é o próximo passo (#165), e ele vai ter de recusar leitura que remova objetivo ainda citado por questão publicada.
+
+Duas regras que as tabelas não conseguem afirmar: só versão de certificação tem página de fornecedor a ler (`objectives_need_an_exam`), e uma chave de objetivo aparece uma vez por leitura (`duplicate_objective_key`). Leitura sem objetivo nenhum é recusada pela própria requisição, já que verificação que não achou nada não verificou nada.
+
+Registrar uma leitura **não** torna questão oficial. Registra o que o fornecedor publicou, para que o material deste projeto possa dizer para qual objetivo ele prepara — nunca que veio da prova.
 
 ## Dados iniciais e rastreabilidade
 
