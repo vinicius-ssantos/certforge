@@ -9,9 +9,15 @@ import java.util.Optional;
  *
  * <p>{@code javaRelease} is the release the version's exam targets, which only a certification has.
  * ADR 0016 rejected making it blindly nullable, because a null would then mean "interview" only to
- * a reader who already knew that. So the kind is carried explicitly and the constructor enforces
- * the relationship: a certification context always has a release, and an interview context never
- * does. Callers read it through {@link #javaRelease()}, which cannot be mistaken for a number.
+ * a reader who already knew that. So the kind is carried explicitly, and the constructor enforces
+ * the half of the relationship that holds: nothing but a certification carries a release.
+ *
+ * <p>It used to enforce the other half too — that a certification always carries one — and that was
+ * a Java fact wearing a certification's clothes. ADR 0017 decided a Kubernetes or AWS exam carries
+ * no release rather than a synthetic one, and V17 made the column nullable for it, so the invariant
+ * turned a decision the project had already taken into an {@link IllegalArgumentException} the
+ * moment anyone acted on it. Callers read it through {@link #javaRelease()}, which cannot be
+ * mistaken for a number.
  */
 public record TopicContext(
     TopicId topicId,
@@ -25,15 +31,12 @@ public record TopicContext(
     Objects.requireNonNull(trackId, "trackId");
     Objects.requireNonNull(trackVersionId, "trackVersionId");
     Objects.requireNonNull(kind, "kind");
-    if (kind == TrackKind.CERTIFICATION && release == null) {
-      throw new IllegalArgumentException("A certification context must carry a Java release");
-    }
     if (kind != TrackKind.CERTIFICATION && release != null) {
       throw new IllegalArgumentException("Only a certification context carries a Java release");
     }
   }
 
-  /** The Java release the exam targets, present only for a certification context. */
+  /** The Java release the exam targets, present only for a Java certification. */
   public Optional<Integer> javaRelease() {
     return Optional.ofNullable(release);
   }

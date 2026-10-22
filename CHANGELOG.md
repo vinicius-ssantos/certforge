@@ -31,6 +31,27 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **A Kubernetes or AWS certification could not be registered, two years of decisions
+  notwithstanding.** [ADR 0017](docs/adr/0017-infrastructure-certification-tracks.md) decided it in
+  so many words — "permit a certification exam without `java_release`; it remains populated for Java
+  SE 21 and null for non-Java exams. Do not use a synthetic Java release for Kubernetes or AWS" —
+  and V17 made the column nullable to match. The application never followed: the admin request took
+  a primitive `int`, so `POST /exam-versions` refused a CKAD exam outright, and `TopicContext`
+  threw `IllegalArgumentException` for a certification without a release, so a row inserted by hand
+  turned into a 500 the first time a question on its topic was published. The learner-facing
+  `ExamVersionView` held a primitive too, so serving such a track would have failed before it
+  rendered. Nothing tested any of it, which is how a recorded decision stayed unimplemented while
+  the migration that enabled it was merged.
+
+  The release is now optional end to end: the request may omit it, the view serves null and declares
+  it nullable in the contract, and `TopicContext` enforces only the half of the invariant that holds
+  — nothing but a certification carries a release. A question published to such an exam must carry
+  no release either, which is the existing `java_release_mismatch` rule read the other way.
+
+  The two learner screens that print the release leave it out when there is none, rather than
+  reading "Java null". No existing track changes: the Java exam still carries 21, and the only
+  screens affected are those of a certification nobody could create until now.
+
 - **A fresh `npm install` blamed the wrong package.** `web/package.json` declared `engines.node:
   ">=24"` while the dependency tree requires `^22.22.2 || ^24.15.0 || >=26.0.0` — jsdom and three of
   its dependencies say so, and have since jsdom 30.1.1 arrived in #44. With `engine-strict=true` in

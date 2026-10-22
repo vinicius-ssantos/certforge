@@ -131,7 +131,8 @@ class CatalogAdminController {
       @NotBlank @Size(max = 100) String label,
       @NotBlank @Size(max = 32) String examCode,
       @NotBlank @Size(max = 200) String examName,
-      @Min(1) int javaRelease,
+      /** Omitted for an exam that is not about a Java release — CKAD, CKA, an AWS associate. */
+      @Min(1) Integer javaRelease,
       @NotBlank @Size(max = 500) @Pattern(regexp = "^https://\\S+$") String objectivesUrl) {}
 
   record CreateTopicRequest(

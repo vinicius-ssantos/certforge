@@ -114,3 +114,36 @@ describe("navigation", () => {
     await waitFor(() => expect(document.title).toBe("Java Certification · CertForge"));
   });
 });
+
+describe("a certification that is not about a Java release", () => {
+  // ADR 0017: a Kubernetes or AWS exam carries no release rather than a synthetic one, and the
+  // server now serves null for it. These two screens printed it unconditionally, so a null would
+  // have read "Java null" with a separator in front of it.
+  const ckad = {
+    ...javaTrack,
+    slug: "cncf-ckad",
+    name: "CKAD",
+    provider: "CNCF",
+    certificationName: "Certified Kubernetes Application Developer",
+    examVersion: { ...javaTrack.examVersion, label: "CKAD 2026", examCode: "CKAD", javaRelease: null },
+  };
+
+  it("names the exam without inventing a release, in the list", async () => {
+    renderApp({ "GET /api/catalog/tracks": { body: [ckad] } });
+
+    const line = await screen.findByText(/CNCF · CKAD 2026/);
+    expect(line.textContent).toBe("CNCF · CKAD 2026");
+    expect(screen.queryByText(/Java/)).not.toBeInTheDocument();
+  });
+
+  it("names the exam without inventing a release, on the track", async () => {
+    renderApp(
+      { "GET /api/catalog/tracks/cncf-ckad": { body: ckad } },
+      { path: "/tracks/cncf-ckad" },
+    );
+
+    const line = await screen.findByText(/CNCF · CKAD 2026/);
+    expect(line.textContent).toBe("CNCF · CKAD 2026");
+    expect(screen.queryByText(/Java/)).not.toBeInTheDocument();
+  });
+});
