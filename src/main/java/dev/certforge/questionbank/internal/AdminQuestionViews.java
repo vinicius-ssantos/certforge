@@ -28,6 +28,8 @@ interface AdminQuestionViews {
       List<OptionView> options,
       @Schema(nullable = true) GuidedResponseView guidedResponse,
       List<ReferenceView> references,
+      /** The exam objectives this revision claims to prepare for; empty for most questions. */
+      List<String> objectiveKeys,
       UUID authorId,
       @Schema(nullable = true) String authorName,
       /**

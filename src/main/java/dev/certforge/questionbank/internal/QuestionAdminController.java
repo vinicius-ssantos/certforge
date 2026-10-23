@@ -139,7 +139,13 @@ class QuestionAdminController {
       @Valid @Size(max = 8) List<OptionRequest> options,
       @Valid GuidedResponseRequest guidedResponse,
       @Valid @Size(max = 10) List<ReferenceRequest> references,
-      @Valid VerificationRequest verification) {
+      @Valid VerificationRequest verification,
+      /**
+       * The exam objectives this question prepares for, by the provider's key. Optional, and empty
+       * for every question that is not about a certification exam; publishing refuses a key the
+       * exam's verified objectives do not contain.
+       */
+      @Size(max = 20) List<@NotBlank @Size(max = 120) String> objectiveKeys) {
 
     /** Compatibility constructor for existing objective-question imports/tests. */
     RevisionRequest(
@@ -165,6 +171,7 @@ class QuestionAdminController {
           options,
           null,
           references,
+          null,
           null);
     }
 
@@ -213,7 +220,8 @@ class QuestionAdminController {
                       : verification.files().stream()
                           .map(f -> new RevisionContent.SourceFile(f.path(), f.body()))
                           .toList(),
-                  verification.output()));
+                  verification.output()),
+          objectiveKeys == null ? List.of() : objectiveKeys);
     }
   }
 

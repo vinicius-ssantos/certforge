@@ -12,6 +12,10 @@ export function toEditorialRequest(question) {
     type: question.type,
     topicId: question.topicId,
     javaRelease: null,
+    // Carried now that the editorial API stores them (#165): a question says which exam objectives
+    // it prepares for, and publishing refuses a key the exam's verified objectives do not list. A
+    // pack with no objectiveKeys sends none, which is every pack that is not about an exam.
+    objectiveKeys: question.objectiveKeys ?? [],
     difficulty: question.difficulty,
     difficultyRationale: question.difficultyRationale,
     prompt: question.prompt,
@@ -38,9 +42,14 @@ export function stageEditorialPack(sourceDir, destinationDir) {
   // What the questions about to be imported stand on. The count of unchecked ones is returned and
   // printed, because the reviewer who reads them next is the only check those ones get.
   const evidence = assertEvidence(sourceDir);
-  if (manifest.trackKind === "CERTIFICATION") {
-    throw new Error("Certification packs need verified objective-to-API persistence before import");
-  }
+  // Certification packs were refused here while the editorial API dropped objectiveKeys: importing
+  // one meant losing the mapping the manifest schema demands of every certification question, and
+  // losing it silently. The API stores them now and publishing checks them against the exam's
+  // verified objectives, so the refusal has nothing left to protect.
+  //
+  // What staging still cannot check is that the exam those keys belong to has been read into this
+  // installation's catalog, because staging contacts nothing. That is checked where it can be: the
+  // import creates drafts, and publishing refuses a key the exam does not verify.
   mkdirSync(destinationDir, { recursive: false });
   for (const question of questions) {
     const target = join(destinationDir, question.name);

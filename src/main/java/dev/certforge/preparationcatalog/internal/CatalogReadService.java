@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +73,13 @@ class CatalogReadService implements PreparationCatalog {
                     new TrackVersionId(row.versionId()),
                     row.kind(),
                     row.javaRelease()));
+  }
+
+  @Override
+  public Set<String> verifiedObjectiveKeys(TrackVersionId trackVersionId) {
+    return repository.findObjectives(trackVersionId.value()).stream()
+        .map(CatalogRows.ObjectiveRow::objectiveKey)
+        .collect(java.util.stream.Collectors.toUnmodifiableSet());
   }
 
   @Override

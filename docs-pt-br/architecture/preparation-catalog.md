@@ -61,6 +61,15 @@ Administração (permissão `CATALOG_MANAGE`). Todo comando devolve a visão atu
 
 As falhas usam as mesmas respostas de problema RFC 9457 da identidade, com códigos estáveis como `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep`, `objectives_need_an_exam`, `duplicate_objective_key` e `validation_failed`.
 
+### O que uma questão declara, e quando isso é conferido
+
+Uma questão diz para quais objetivos de prova ela prepara pelo `objectiveKeys` da sua revisão — as chaves que o fornecedor usa, carregadas por um pacote de conteúdo e armazenadas desde a #165. Declarar não é obrigatório: toda questão do pacote Java SE 21 e toda questão de entrevista não declaram nenhuma.
+
+A declaração é texto livre enquanto a questão é rascunho, e a razão é que rascunho se escreve cedo: antes de o tópico estar mapeado numa versão de prova ativa e, muitas vezes, antes de alguém ter lido os objetivos da prova. Uma chave estrangeira ali recusaria autoria comum. Então a declaração é conferida nos dois momentos em que dá:
+
+- **publicar** recusa chave que o snapshot verificado da prova não lista (`objective_not_verified`), e diz com todas as letras quando ninguém leu a página ainda. É o momento em que a declaração vira declaração para um aluno;
+- **registrar uma nova leitura** recusa derrubar objetivo que questão publicada ainda declara (`objective_claimed_by_published_question`), para que os dois não se afastem depois. O catálogo pergunta ao banco de questões pela `PublishedObjectiveClaims`, interface que este módulo declara e o conteúdo implementa, porque conteúdo depende do catálogo e a dependência não pode correr nos dois sentidos.
+
 ### Objetivos de prova verificados
 
 Uma versão de prova pode existir antes de alguém ler a página de objetivos do fornecedor — a prova Java SE 21 está exatamente nesse estado. O `PUT .../exam-versions/{id}/objectives` registra uma leitura: o nome da versão segundo o fornecedor, a data, a página HTTPS de onde foi lida, um digest `sha256:` dessa página e os objetivos encontrados nela. A leitura substitui a anterior, porque um snapshot é uma leitura de uma página e objetivo que não está mais listado não é objetivo.

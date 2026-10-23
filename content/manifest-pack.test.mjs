@@ -111,3 +111,23 @@ test("the seeded infrastructure pack is a valid unpublished draft", () => {
   assert.equal(pack.questions.length, 70);
   assert.equal(pack.questions.find((q) => q.name === "t01-image-vs-container").topicId, "a3000000-0000-4000-8000-000000000301");
 });
+
+test("the directory names a question, and a name inside the file does not take it over", () => {
+  const dir = mkdtempSync(join(tmpdir(), "certforge-name-"));
+  try {
+    const pack = join(dir, "pack");
+    mkdirSync(join(pack, "t01-real"), { recursive: true });
+    writeFileSync(join(pack, "pack.json"), JSON.stringify(manifest));
+    // A question.json carrying its own name: harmless until it disagrees with the directory, and
+    // then every lookup keyed on the name — the review record, both quality ledgers — would read a
+    // directory that is not this one.
+    writeFileSync(
+      join(pack, "t01-real", "question.json"),
+      JSON.stringify({ ...sample(), name: "t99-somewhere-else" }),
+    );
+
+    assert.deepEqual(readManifestPack(pack).questions.map((question) => question.name), ["t01-real"]);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});

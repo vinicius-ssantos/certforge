@@ -1,5 +1,7 @@
 package dev.certforge.preparationcatalog.internal;
 
+import dev.certforge.preparationcatalog.PublishedObjectiveClaims;
+import dev.certforge.preparationcatalog.TrackVersionId;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminExamVersionView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminMappingView;
 import dev.certforge.preparationcatalog.internal.AdminViews.AdminObjectiveSnapshotView;
@@ -30,9 +32,11 @@ class CatalogAdminService {
   static final Pattern SLUG = Pattern.compile("^[a-z0-9]+(-[a-z0-9]+)*$");
 
   private final CatalogRepository repository;
+  private final PublishedObjectiveClaims claims;
 
-  CatalogAdminService(CatalogRepository repository) {
+  CatalogAdminService(CatalogRepository repository, PublishedObjectiveClaims claims) {
     this.repository = repository;
+    this.claims = claims;
   }
 
   // ---- reads ---------------------------------------------------------------------------------
@@ -152,6 +156,19 @@ class CatalogAdminService {
         throw CatalogException.invalid(
             "duplicate_objective_key", "An objective key appears more than once");
       }
+    }
+    // A reading may drop an objective, because the page may have dropped it. What it may not do is
+    // drop one a published question still claims: that question would go on citing something the
+    // page no longer lists, and nothing would say so. The question is asked through a port this
+    // module owns, so content still depends on the catalog and not the other way round.
+    Set<String> dropped = new HashSet<>(claims.claimedIn(new TrackVersionId(examVersionId)));
+    dropped.removeAll(keys);
+    if (!dropped.isEmpty()) {
+      throw CatalogException.conflict(
+          "objective_claimed_by_published_question",
+          "Published questions still claim "
+              + String.join(", ", dropped.stream().sorted().toList())
+              + "; deprecate or revise them before dropping those objectives");
     }
     repository.replaceObjectives(snapshot, objectives);
     return getTrack(version.trackId());
