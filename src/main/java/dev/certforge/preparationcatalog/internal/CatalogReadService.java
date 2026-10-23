@@ -1,6 +1,7 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.ExamVersionView;
+import dev.certforge.preparationcatalog.InterviewTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
 import dev.certforge.preparationcatalog.TopicContext;
@@ -61,6 +62,29 @@ class CatalogReadService implements PreparationCatalog {
    * out of it. The view is certification-shaped -- it names an exam -- so going through it was what
    * made an interview topic produce no context at all (ADR 0016).
    */
+  @Override
+  public Optional<InterviewTrackView> activeInterviewTrack(String slug) {
+    return repository
+        .findActiveTrackBySlug(slug)
+        .filter(track -> track.kind() == TrackKind.INTERVIEW)
+        .flatMap(
+            track ->
+                repository
+                    .findActiveExamVersion(track.id())
+                    // The mirror image of the certification filter in toView: an interview version
+                    // is the one without an exam beside it, and that absence is what identifies it.
+                    .filter(version -> !version.isCertification())
+                    .map(
+                        version ->
+                            new InterviewTrackView(
+                                new PreparationTrackId(track.id()),
+                                track.slug(),
+                                track.name(),
+                                new TrackVersionId(version.id()),
+                                version.label(),
+                                topicTree(track.id(), version.id()))));
+  }
+
   @Override
   public Optional<TopicContext> findActiveTopicContext(TopicId id) {
     return repository

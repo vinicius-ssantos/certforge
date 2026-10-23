@@ -363,7 +363,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_1"];
+        get: operations["list_2"];
         put?: never;
         post: operations["create"];
         delete?: never;
@@ -379,7 +379,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_3"];
+        get: operations["get_4"];
         put?: never;
         post?: never;
         delete?: never;
@@ -661,6 +661,86 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/interviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_1"];
+        put?: never;
+        post: operations["start_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/{sessionId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_3"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/{sessionId}/abandon": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["abandon_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/{sessionId}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["complete_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/{sessionId}/items/{position}/answer": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["answer"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/mock-exams": {
         parameters: {
             query?: never;
@@ -912,6 +992,13 @@ export interface components {
             references: components["schemas"]["Reference"][];
             verification: components["schemas"]["Verification"];
         };
+        AnswerRequest: {
+            /** @enum {string} */
+            confidence: "LOW" | "MEDIUM" | "HIGH";
+            /** Format: int64 */
+            elapsedMillis?: number;
+            selectedOptions?: string[];
+        };
         AttemptHistoryItem: {
             confidence: string;
             correct: boolean;
@@ -1043,6 +1130,12 @@ export interface components {
             required: boolean;
             text: string;
         };
+        GuidedOutcome: {
+            commonMistakes: string[];
+            expectedConcepts: components["schemas"]["ExpectedConceptView"][];
+            followUps: string[];
+            referenceAnswer: string;
+        };
         GuidedResponseRequest: {
             commonMistakes?: string[];
             expectedConcepts?: components["schemas"]["ExpectedConceptRequest"][];
@@ -1076,6 +1169,61 @@ export interface components {
         HistoricalReference: {
             title: string;
             url: string;
+        };
+        InterviewAnswerView: {
+            confidence: string;
+            /** Format: int64 */
+            elapsedMillis: number;
+            guided: components["schemas"]["GuidedOutcome"];
+            itemKind: string;
+            objective: components["schemas"]["ObjectiveOutcome"];
+            /** Format: int32 */
+            position: number;
+            /** Format: uuid */
+            revisionId: string;
+            /** Format: date-time */
+            submittedAt: string;
+        };
+        InterviewItemView: {
+            answered: boolean;
+            /** Format: int32 */
+            position: number;
+            question: components["schemas"]["PublishedQuestion"];
+            /** Format: uuid */
+            topicId: string;
+        };
+        InterviewSessionSummary: {
+            /** Format: int32 */
+            answeredCount: number;
+            /** Format: date-time */
+            closedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: uuid */
+            id: string;
+            /** Format: int32 */
+            itemCount: number;
+            status: string;
+            /** Format: uuid */
+            trackVersionId: string;
+        };
+        InterviewSessionView: {
+            /** Format: date-time */
+            closedAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: uuid */
+            id: string;
+            items: components["schemas"]["InterviewItemView"][];
+            /** Format: int32 */
+            requestedCount: number;
+            status: string;
+            /** Format: uuid */
+            trackVersionId: string;
         };
         LoginRequest: {
             email: string;
@@ -1219,9 +1367,23 @@ export interface components {
             sourceRef: string;
             title: string;
         };
+        ObjectiveOutcome: {
+            correct: boolean;
+            correctOptions: string[];
+            explanation: string;
+            options: components["schemas"]["OptionAnswerView"][];
+            references: components["schemas"]["ReferenceView"][];
+            selectedOptions: string[];
+        };
         OptionAnswer: {
             correct: boolean;
             explanation: string;
+            key: string;
+            text: string;
+        };
+        OptionAnswerView: {
+            correct: boolean;
+            explanation: string | null;
             key: string;
             text: string;
         };
@@ -1258,10 +1420,10 @@ export interface components {
             text: string;
         };
         PublishedQuestion: {
-            /** @enum {string} */
-            difficulty: "EASY" | "MEDIUM" | "HARD";
+            /** @enum {string|null} */
+            difficulty: "EASY" | "MEDIUM" | "HARD" | null;
             /** Format: int32 */
-            javaRelease: number;
+            javaRelease: number | null;
             options: components["schemas"]["PublishedOption"][];
             prompt: string;
             /** Format: uuid */
@@ -2176,7 +2338,7 @@ export interface operations {
             };
         };
     };
-    list_1: {
+    list_2: {
         parameters: {
             query?: {
                 status?: "DRAFT" | "TECHNICAL_REVIEW" | "APPROVED" | "PUBLISHED" | "DEPRECATED";
@@ -2225,7 +2387,7 @@ export interface operations {
             };
         };
     };
-    get_3: {
+    get_4: {
         parameters: {
             query?: never;
             header?: never;
@@ -2616,6 +2778,147 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["PageSessionHistoryItem"];
+                };
+            };
+        };
+    };
+    list_1: {
+        parameters: {
+            query?: {
+                status?: "IN_PROGRESS" | "COMPLETED" | "ABANDONED" | "EXPIRED";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewSessionSummary"][];
+                };
+            };
+        };
+    };
+    start_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StartRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    get_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    abandon_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    complete_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    answer: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string;
+            };
+            path: {
+                sessionId: string;
+                position: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnswerRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewAnswerView"];
                 };
             };
         };

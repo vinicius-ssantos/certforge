@@ -49,12 +49,13 @@ class InterviewRepository {
       SnapshotItem item = items.get(position);
       jdbc.sql(
               "insert into certforge.interview_session_question"
-                  + " (session_id, position, revision_id, topic_id)"
-                  + " values (:session, :position, :revision, :topic)")
+                  + " (session_id, position, revision_id, topic_id, item_kind)"
+                  + " values (:session, :position, :revision, :topic, :kind)")
           .param(SESSION, session.id())
           .param(POSITION, position)
           .param("revision", item.revisionId())
           .param("topic", item.topicId())
+          .param("kind", item.itemKind().name())
           .update();
     }
   }
@@ -95,7 +96,8 @@ class InterviewRepository {
   /** The snapshot of a session, in session order. */
   List<SnapshotItem> snapshot(UUID sessionId) {
     return jdbc.sql(
-            "select position, revision_id, topic_id from certforge.interview_session_question"
+            "select position, revision_id, topic_id, item_kind"
+                + " from certforge.interview_session_question"
                 + " where session_id = :session order by position")
         .param(SESSION, sessionId)
         .query(
@@ -103,14 +105,16 @@ class InterviewRepository {
                 new SnapshotItem(
                     rs.getInt(POSITION),
                     rs.getObject("revision_id", UUID.class),
-                    rs.getObject("topic_id", UUID.class)))
+                    rs.getObject("topic_id", UUID.class),
+                    ItemKind.valueOf(rs.getString("item_kind"))))
         .list();
   }
 
   /** The revision at one position, or empty when the session has no such position. */
   Optional<SnapshotItem> itemAt(UUID sessionId, int position) {
     return jdbc.sql(
-            "select position, revision_id, topic_id from certforge.interview_session_question"
+            "select position, revision_id, topic_id, item_kind"
+                + " from certforge.interview_session_question"
                 + " where session_id = :session and position = :position")
         .param(SESSION, sessionId)
         .param(POSITION, position)
@@ -119,7 +123,8 @@ class InterviewRepository {
                 new SnapshotItem(
                     rs.getInt(POSITION),
                     rs.getObject("revision_id", UUID.class),
-                    rs.getObject("topic_id", UUID.class)))
+                    rs.getObject("topic_id", UUID.class),
+                    ItemKind.valueOf(rs.getString("item_kind"))))
         .optional();
   }
 
@@ -239,6 +244,10 @@ class InterviewRepository {
     return OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
   }
 
-  /** One item of a session snapshot. */
-  record SnapshotItem(int position, UUID revisionId, UUID topicId) {}
+  /**
+   * One item of a session snapshot, including what kind of item it was when the session started:
+   * answering it later reads the kind from here rather than from the question, so a session stays
+   * reproducible from its own evidence.
+   */
+  record SnapshotItem(int position, UUID revisionId, UUID topicId, ItemKind itemKind) {}
 }

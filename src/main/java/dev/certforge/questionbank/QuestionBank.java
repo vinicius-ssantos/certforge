@@ -36,6 +36,16 @@ public interface QuestionBank {
   Optional<GuidedMaterial> findGuidedMaterial(QuestionRevisionId revisionId);
 
   /**
+   * The learner-safe view of a revision an interview session snapshotted, objective or guided.
+   *
+   * <p>{@link #findSnapshotQuestion(QuestionRevisionId)} is the objective-only read every other
+   * flow uses, and it stays that way: a guided revision returned there would reach code that grades
+   * an empty option set. This one exists because an interview session snapshotted the guided
+   * revision deliberately and has to be able to show it again.
+   */
+  Optional<PublishedQuestion> findInterviewSnapshotQuestion(QuestionRevisionId revisionId);
+
+  /**
    * The learner-safe view of a revision that has been published, even if it has since been
    * deprecated. A study session snapshots revisions when it starts and must keep showing exactly
    * those, so later deprecation or replacement does not change an existing session. Empty for

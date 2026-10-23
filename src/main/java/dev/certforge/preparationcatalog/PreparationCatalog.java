@@ -16,6 +16,14 @@ public interface PreparationCatalog {
   /** The active track with the given slug. */
   Optional<TrackView> activeTrack(String slug);
 
+  /**
+   * The active interview track with the given slug, and the live version of its taxonomy.
+   *
+   * <p>{@link #activeTrack(String)} cannot answer for one: a {@link TrackView} names an exam and an
+   * interview version has none, so that read filters interview tracks out by construction.
+   */
+  Optional<InterviewTrackView> activeInterviewTrack(String slug);
+
   /** The topic if it is part of the active exam version of an active track. */
   Optional<TopicView> findActiveTopic(TopicId id);
 

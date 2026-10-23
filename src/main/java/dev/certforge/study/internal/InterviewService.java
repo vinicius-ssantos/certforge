@@ -2,11 +2,10 @@ package dev.certforge.study.internal;
 
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.preparationcatalog.InterviewTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
-import dev.certforge.preparationcatalog.TrackKind;
-import dev.certforge.preparationcatalog.TrackView;
 import dev.certforge.questionbank.GuidedMaterial;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
@@ -48,8 +47,8 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * <p>The third study aggregate (ADR 0020). A session spans a subset of an interview track's topics,
  * mixes objective and guided-response items, and treats them differently where it matters: an
- * objective answer is graded and hands back the answer material, and a guided answer is recorded and
- * hands back what a reviewer wrote down. Nothing here scores a guided answer, and nothing here
+ * objective answer is graded and hands back the answer material, and a guided answer is recorded
+ * and hands back what a reviewer wrote down. Nothing here scores a guided answer, and nothing here
  * writes to study attempts, so certification readiness is untouched by interview practice.
  */
 @Service
@@ -85,8 +84,8 @@ class InterviewService {
   /**
    * Starts a session on one interview track, over every topic of it or the subset asked for.
    *
-   * <p>The subset is the point of the aggregate: preparing for one role is not preparing for a whole
-   * taxonomy. An empty subset means the whole track.
+   * <p>The subset is the point of the aggregate: preparing for one role is not preparing for a
+   * whole taxonomy. An empty subset means the whole track.
    */
   @Transactional
   InterviewSessionView start(String trackSlug, List<UUID> topicIds, Integer requestedCount) {
@@ -94,18 +93,18 @@ class InterviewService {
     Instant now = clock.instant().truncatedTo(ChronoUnit.MICROS);
     repository.expireDue(learner.value(), now);
 
-    TrackView track =
+    // Not activeTrack: a learner TrackView names an exam, so it filters interview tracks out by
+    // construction. This read is the one shaped for a taxonomy.
+    InterviewTrackView track =
         catalog
-            .activeTrack(trackSlug)
-            .filter(candidate -> candidate.kind() == TrackKind.INTERVIEW)
+            .activeInterviewTrack(trackSlug)
             .orElseThrow(
                 () ->
                     StudyException.notFound(
                         "interview_track_not_found", "No active interview track with that slug"));
 
     List<TopicId> topics = chosenTopics(track, topicIds);
-    int count =
-        requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
+    int count = requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
     if (count < 1 || count > properties.maxQuestionCount()) {
       throw StudyException.invalid(
           "question_count_out_of_range",
@@ -113,7 +112,7 @@ class InterviewService {
     }
 
     repository
-        .findActive(learner.value(), track.examVersion().id().value())
+        .findActive(learner.value(), track.versionId().value())
         .ifPresent(
             existing -> {
               throw StudyException.conflict(
@@ -125,7 +124,14 @@ class InterviewService {
     List<SnapshotItem> pool = new ArrayList<>();
     for (TopicId topic : topics) {
       for (PublishedQuestion question : questionBank.eligibleForInterview(topic)) {
-        pool.add(new SnapshotItem(0, question.revisionId().value(), topic.value()));
+        pool.add(
+            new SnapshotItem(
+                0,
+                question.revisionId().value(),
+                topic.value(),
+                question.type() == QuestionType.GUIDED_RESPONSE
+                    ? ItemKind.GUIDED
+                    : ItemKind.OBJECTIVE));
       }
     }
     if (pool.size() < count) {
@@ -142,7 +148,7 @@ class InterviewService {
         new InterviewSession(
             UUID.randomUUID(),
             learner.value(),
-            track.examVersion().id().value(),
+            track.versionId().value(),
             SessionStatus.IN_PROGRESS,
             count,
             now,
@@ -152,9 +158,7 @@ class InterviewService {
       repository.insert(session, chosen);
     } catch (DuplicateKeyException race) {
       InterviewSession winner =
-          repository
-              .findActive(learner.value(), track.examVersion().id().value())
-              .orElseThrow(() -> race);
+          repository.findActive(learner.value(), track.versionId().value()).orElseThrow(() -> race);
       throw StudyException.conflict(
           "active_interview_session_exists",
           "An interview session for this track is already in progress",
@@ -164,7 +168,7 @@ class InterviewService {
   }
 
   /** Every active topic of the track, or the subset asked for, refusing a topic outside it. */
-  private List<TopicId> chosenTopics(TrackView track, List<UUID> topicIds) {
+  private List<TopicId> chosenTopics(InterviewTrackView track, List<UUID> topicIds) {
     List<TopicId> all = new ArrayList<>();
     collect(track.topics(), all);
     if (topicIds == null || topicIds.isEmpty()) {
@@ -222,12 +226,16 @@ class InterviewService {
    *
    * <p>The item decides what happens, not the request: an objective item is graded against its
    * options, and a guided item records that it was answered and returns the reviewed material. A
-   * request that sends options for a guided item is refused rather than ignored, because ignoring it
-   * would leave a learner believing their selection meant something.
+   * request that sends options for a guided item is refused rather than ignored, because ignoring
+   * it would leave a learner believing their selection meant something.
    */
   @Transactional
   InterviewAnswerView answer(
-      UUID sessionId, int position, String key, List<String> selectedOptions, Confidence confidence,
+      UUID sessionId,
+      int position,
+      String key,
+      List<String> selectedOptions,
+      Confidence confidence,
       long elapsedMillis) {
     ActorId learner = currentActor.require();
     requireKey(key);
@@ -260,15 +268,19 @@ class InterviewService {
           "question_already_answered", "This question has already been answered");
     }
 
+    // The kind is the snapshot's, not a fresh read of the question: the question bank returns no
+    // evidence at all for a guided revision, by design, and a session has to stay answerable from
+    // what it recorded when it started.
+    ItemKind kind = item.itemKind();
     RevisionEvidence evidence =
-        questionBank
-            .findRevision(new QuestionRevisionId(item.revisionId()))
-            .orElseThrow(
-                () ->
-                    new IllegalStateException(
-                        "Revision " + item.revisionId() + " of a session is not readable"));
-    ItemKind kind =
-        evidence.type() == QuestionType.GUIDED_RESPONSE ? ItemKind.GUIDED : ItemKind.OBJECTIVE;
+        kind == ItemKind.OBJECTIVE
+            ? questionBank
+                .findRevision(new QuestionRevisionId(item.revisionId()))
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Revision " + item.revisionId() + " of a session is not readable"))
+            : null;
     if (kind == ItemKind.GUIDED && !selected.isEmpty()) {
       throw StudyException.invalid(
           "guided_item_takes_no_options",
@@ -304,12 +316,14 @@ class InterviewService {
           "idempotency_key_reused", "That idempotency key was used for a different answer");
     }
     RevisionEvidence evidence =
-        questionBank
-            .findRevision(new QuestionRevisionId(response.revisionId()))
-            .orElseThrow(
-                () ->
-                    new IllegalStateException(
-                        "Revision " + response.revisionId() + " of a response is not readable"));
+        response.itemKind() == ItemKind.OBJECTIVE
+            ? questionBank
+                .findRevision(new QuestionRevisionId(response.revisionId()))
+                .orElseThrow(
+                    () ->
+                        new IllegalStateException(
+                            "Revision " + response.revisionId() + " is not readable"))
+            : null;
     return answerView(response, evidence);
   }
 
@@ -343,7 +357,9 @@ class InterviewService {
               .orElseThrow(
                   () ->
                       new IllegalStateException(
-                          "Guided revision " + response.revisionId() + " has no reviewed material"));
+                          "Guided revision "
+                              + response.revisionId()
+                              + " has no reviewed material"));
       guided =
           new GuidedOutcome(
               material.referenceAnswer(),
@@ -413,8 +429,7 @@ class InterviewService {
     for (SnapshotItem item : repository.snapshot(session.id())) {
       PublishedQuestion question =
           questionBank
-              .findSnapshotQuestion(new QuestionRevisionId(item.revisionId()))
-              .or(() -> interviewSnapshot(item.revisionId()))
+              .findInterviewSnapshotQuestion(new QuestionRevisionId(item.revisionId()))
               .orElseThrow(
                   () ->
                       new IllegalStateException(
@@ -436,28 +451,6 @@ class InterviewService {
         session.expiresAt(),
         session.closedAt(),
         items);
-  }
-
-  /**
-   * A guided revision, which {@code findSnapshotQuestion} does not return: that read is the
-   * objective-only one every other flow uses. An interview session snapshotted it on purpose.
-   */
-  private Optional<PublishedQuestion> interviewSnapshot(UUID revisionId) {
-    return questionBank
-        .findRevision(new QuestionRevisionId(revisionId))
-        .filter(evidence -> evidence.type() == QuestionType.GUIDED_RESPONSE)
-        .map(
-            evidence ->
-                new PublishedQuestion(
-                    evidence.questionId(),
-                    evidence.revisionId(),
-                    evidence.revisionNumber(),
-                    evidence.type(),
-                    evidence.topicId(),
-                    evidence.javaRelease(),
-                    null,
-                    evidence.prompt(),
-                    List.of()));
   }
 
   private static void requireKey(String key) {
@@ -487,8 +480,7 @@ class InterviewService {
     Set<String> known = new HashSet<>();
     evidence.options().forEach(option -> known.add(option.key()));
     if (!known.containsAll(selected)) {
-      throw StudyException.invalid(
-          "invalid_option", "An option does not belong to this question");
+      throw StudyException.invalid("invalid_option", "An option does not belong to this question");
     }
     if (evidence.type() == QuestionType.SINGLE_CHOICE && selected.size() != 1) {
       throw StudyException.invalid(
@@ -510,7 +502,14 @@ class InterviewService {
   private static String fingerprint(
       UUID sessionId, int position, List<String> selected, Confidence confidence, long elapsed) {
     String canonical =
-        sessionId + "|" + position + "|" + String.join(",", selected) + "|" + confidence + "|"
+        sessionId
+            + "|"
+            + position
+            + "|"
+            + String.join(",", selected)
+            + "|"
+            + confidence
+            + "|"
             + elapsed;
     try {
       byte[] hash =

@@ -68,3 +68,10 @@ necessary in the first place.
 Nothing here scores a guided answer, so an interview session cannot tell a learner how they did. It
 can tell them what a reviewer expected, which is the honest version of the same help, and it is what
 ADR 0019 decided.
+
+Building it also found two primitives where a null belonged. `PublishedQuestion.javaRelease` threw
+while building the learner view of an interview question, which targets no Java release; it is
+nullable now. And a learner `TrackView` cannot represent an interview track at all — it names an
+exam, by construction — so the catalog gained a read shaped for a taxonomy, `activeInterviewTrack`.
+Both are the same mistake as the certification exam that could not exist without a Java release
+(#250), found one and two layers down.

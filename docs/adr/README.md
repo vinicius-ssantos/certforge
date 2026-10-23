@@ -23,5 +23,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0017](0017-infrastructure-certification-tracks.md) | Add infrastructure and general tracks, with verified exam-version snapshots | **Proposed** |
 | [0018](0018-maintainer-may-review-their-own-work.md) | Let the maintainer review their own work, and say so in the record | Accepted |
 | [0019](0019-behavioural-preparation-is-guidance-not-grading.md) | Behavioural preparation is reviewed guidance, and nothing about it is scored | Accepted |
+| [0020](0020-interview-sessions-as-a-third-aggregate.md) | Model interview sessions as a third study aggregate | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.

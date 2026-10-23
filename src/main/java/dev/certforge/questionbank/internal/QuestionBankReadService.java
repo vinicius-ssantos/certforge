@@ -71,6 +71,18 @@ class QuestionBankReadService implements QuestionBank {
   }
 
   @Override
+  public Optional<PublishedQuestion> findInterviewSnapshotQuestion(QuestionRevisionId revisionId) {
+    return repository
+        .findRevision(revisionId.value())
+        .filter(
+            revision ->
+                revision.status() == RevisionStatus.PUBLISHED
+                    || revision.status() == RevisionStatus.DEPRECATED)
+        .filter(revision -> revision.publishedAt() != null)
+        .map(QuestionBankReadService::learnerView);
+  }
+
+  @Override
   public Optional<GuidedMaterial> findGuidedMaterial(QuestionRevisionId revisionId) {
     return repository
         .findRevision(revisionId.value())

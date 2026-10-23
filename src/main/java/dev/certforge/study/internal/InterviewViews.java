@@ -80,9 +80,11 @@ interface InterviewViews {
       List<String> commonMistakes,
       List<String> followUps) {}
 
-  record ExpectedConceptView(String text, boolean required, @Schema(nullable = true) String explanation) {}
+  record ExpectedConceptView(
+      String text, boolean required, @Schema(nullable = true) String explanation) {}
 
-  record OptionAnswerView(String key, String text, boolean correct, @Schema(nullable = true) String explanation) {}
+  record OptionAnswerView(
+      String key, String text, boolean correct, @Schema(nullable = true) String explanation) {}
 
   record ReferenceView(String title, String url) {}
 }

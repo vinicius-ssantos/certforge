@@ -30,10 +30,14 @@ CREATE INDEX interview_session_learner
 -- deprecation of a revision never changes a session in flight, and a completed session cannot be
 -- rewritten by a content edit.
 CREATE TABLE certforge.interview_session_question (
-    session_id  UUID NOT NULL REFERENCES certforge.interview_session (id),
-    position    INT  NOT NULL CHECK (position >= 0),
-    revision_id UUID NOT NULL REFERENCES certforge.qb_question_revision (id),
-    topic_id    UUID NOT NULL REFERENCES certforge.catalog_topic (id),
+    session_id  UUID        NOT NULL REFERENCES certforge.interview_session (id),
+    position    INT         NOT NULL CHECK (position >= 0),
+    revision_id UUID        NOT NULL REFERENCES certforge.qb_question_revision (id),
+    topic_id    UUID        NOT NULL REFERENCES certforge.catalog_topic (id),
+    -- What kind of item this was when the session started, which is how answering it later knows
+    -- whether to grade it. It is part of the snapshot rather than read back from the question for
+    -- the same reason the revision id is: a session has to be reproducible from its own evidence.
+    item_kind   VARCHAR(16) NOT NULL CHECK (item_kind IN ('OBJECTIVE', 'GUIDED')),
     PRIMARY KEY (session_id, position),
     UNIQUE (session_id, revision_id)
 );
