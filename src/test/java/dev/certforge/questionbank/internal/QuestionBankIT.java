@@ -156,6 +156,163 @@ class QuestionBankIT {
     return mvc.perform(request);
   }
 
+  // ---- objectives a question claims (#165) ---------------------------------------------------
+
+  private static String bodyClaiming(String prompt, String... objectiveKeys) {
+    String keys =
+        java.util.Arrays.stream(objectiveKeys)
+            .map(key -> "\"" + key + "\"")
+            .collect(java.util.stream.Collectors.joining(","));
+    return body(prompt).replaceFirst("\\}$", ",\"objectiveKeys\":[" + keys + "]}");
+  }
+
+  /**
+   * Clears every reading of the seeded exam's objectives and every claim against it.
+   *
+   * <p>These tests share one seeded exam version, so one of them publishing a question that claims
+   * an objective would decide what the next one is allowed to read — the rule under test is exactly
+   * "a reading may not drop a claimed objective". Each test therefore starts from no reading and no
+   * claim, which is the state the exam is actually in today, and the rules are exercised through
+   * the API from there.
+   */
+  private void resetObjectiveFixtures() {
+    jdbc.update(
+        "delete from certforge.qb_revision_objective_key where revision_id in"
+            + " (select id from certforge.qb_question_revision where track_version_id = ?::uuid)",
+        examVersionId());
+    jdbc.update(
+        "delete from certforge.catalog_exam_objective_snapshot where track_version_id = ?::uuid",
+        examVersionId());
+  }
+
+  /** Records a verified reading of the seeded exam's objectives page, with the given keys. */
+  private void verifyObjectives(String... objectiveKeys) throws Exception {
+    String objectives =
+        java.util.Arrays.stream(objectiveKeys)
+            .map(key -> "{\"key\":\"" + key + "\",\"title\":\"Objective " + key + "\"}")
+            .collect(java.util.stream.Collectors.joining(","));
+    send(
+            put("/api/admin/catalog/exam-versions/" + examVersionId() + "/objectives"),
+            admin,
+            "{\"providerVersion\":\"2026-01\",\"verifiedOn\":\"2026-10-22\","
+                + "\"sourceUrl\":\"https://example.com/objectives\",\"sourceDigest\":\"sha256:"
+                + "a".repeat(64)
+                + "\",\"objectives\":["
+                + objectives
+                + "]}")
+        .andExpect(status().isOk());
+  }
+
+  private String examVersionId() {
+    return jdbc.queryForObject(
+        "select tv.id::text from certforge.catalog_track_version tv"
+            + " join certforge.catalog_track_version_topic tvt on tvt.track_version_id = tv.id"
+            + " where tvt.topic_id = ?::uuid and tv.status = 'ACTIVE'",
+        String.class,
+        TOPIC);
+  }
+
+  @Test
+  void aQuestionCarriesTheObjectivesItClaimsAndKeepsThemAcrossReads() throws Exception {
+    resetObjectiveFixtures();
+    verifyObjectives("1.1", "2.2");
+    ResultActions created =
+        send(
+                post("/api/admin/questions"),
+                editor,
+                bodyClaiming("Claims two objectives", "2.2", "1.1"))
+            .andExpect(status().isCreated())
+            // In key order, which is how the page lists them, not the order they were sent.
+            .andExpect(jsonPath("$.revisions[0].objectiveKeys").value(hasItem("1.1")));
+
+    String revisionId = firstRevisionId(created, 0);
+    send(get("/api/admin/questions/" + questionId(created)), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].objectiveKeys").value(hasItem("1.1")));
+
+    submit(revisionId);
+    approve(revisionId);
+    publish(revisionId).andExpect(status().isOk());
+  }
+
+  @Test
+  void aClaimTheExamDoesNotVerifyIsRefusedAtPublication() throws Exception {
+    resetObjectiveFixtures();
+    verifyObjectives("1.1");
+
+    // Authoring it is allowed: a draft is written before the exam's objectives are read, often
+    // before its topic is mapped, so the keys cannot be resolved against anything yet.
+    ResultActions created =
+        send(post("/api/admin/questions"), editor, bodyClaiming("Claims 9.9", "9.9"))
+            .andExpect(status().isCreated());
+    String revisionId = firstRevisionId(created, 0);
+    submit(revisionId);
+    approve(revisionId);
+
+    // Publishing is where the claim becomes a claim to a learner, so that is where it is checked.
+    publish(revisionId)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("objective_not_verified"));
+  }
+
+  @Test
+  void aClaimAgainstAnExamNobodyHasReadSaysSo() throws Exception {
+    resetObjectiveFixtures();
+    // No verified reading at all for this exam version: the message says that rather than listing
+    // the keys it does not have.
+    ResultActions created =
+        send(post("/api/admin/questions"), editor, bodyClaiming("Claims 1.1 blindly", "1.1"))
+            .andExpect(status().isCreated());
+    String revisionId = firstRevisionId(created, 0);
+    submit(revisionId);
+    approve(revisionId);
+
+    publish(revisionId)
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("objective_not_verified"))
+        .andExpect(
+            jsonPath("$.title").value(org.hamcrest.Matchers.containsString("nobody has read")));
+  }
+
+  @Test
+  void aRereadingMayNotDropAnObjectiveAPublishedQuestionClaims() throws Exception {
+    resetObjectiveFixtures();
+    verifyObjectives("1.1", "2.2");
+    ResultActions created =
+        send(post("/api/admin/questions"), editor, bodyClaiming("Claims 1.1", "1.1"))
+            .andExpect(status().isCreated());
+    String revisionId = firstRevisionId(created, 0);
+    submit(revisionId);
+    approve(revisionId);
+    publish(revisionId).andExpect(status().isOk());
+
+    // 2.2 is claimed by nothing, so the page may drop it.
+    verifyObjectives("1.1");
+
+    // 1.1 is claimed by a published question, so dropping it would leave that question citing
+    // something the page no longer lists.
+    send(
+            put("/api/admin/catalog/exam-versions/" + examVersionId() + "/objectives"),
+            admin,
+            "{\"providerVersion\":\"2027-01\",\"verifiedOn\":\"2027-01-05\","
+                + "\"sourceUrl\":\"https://example.com/objectives\",\"sourceDigest\":\"sha256:"
+                + "b".repeat(64)
+                + "\",\"objectives\":[{\"key\":\"3.3\",\"title\":\"Only this one\"}]}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("objective_claimed_by_published_question"));
+  }
+
+  @Test
+  void aQuestionThatClaimsNothingPublishesWhateverTheExamHasRead() throws Exception {
+    resetObjectiveFixtures();
+    // Every question in the Java pack is this case, and it must stay unaffected: no claim, no
+    // check, whether or not anyone has read the exam's objectives.
+    String[] ids = publishNew("Claims no objective at all");
+    send(get("/api/admin/questions/" + ids[0]), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].objectiveKeys").value(org.hamcrest.Matchers.empty()));
+  }
+
   private static String body(String prompt) {
     return body(prompt, "SINGLE_CHOICE", TOPIC, 21, true, false);
   }

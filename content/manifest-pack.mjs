@@ -96,7 +96,10 @@ export function readManifestPack(directory) {
     .map((name) => {
       const path = join(directory, name, "question.json");
       const question = JSON.parse(readFileSync(path, "utf8"));
-      return { name, ...validateGeneralQuestion(question, manifest, name) };
+      // The directory name wins, deliberately: it is the identity the review record and the
+      // quality ledgers key on. Spread first and it could be overridden by a `name` field inside
+      // question.json, which would point every lookup at a directory that is not this one.
+      return { ...validateGeneralQuestion(question, manifest, name), name };
     });
   if (questions.length === 0) throw new Error("A content pack must contain at least one question");
   return { manifest, questions };

@@ -1411,6 +1411,7 @@ export interface components {
             guidedResponse?: components["schemas"]["GuidedResponseRequest"];
             /** Format: int32 */
             javaRelease?: number;
+            objectiveKeys?: string[];
             options?: components["schemas"]["OptionRequest"][];
             prompt?: string;
             references?: components["schemas"]["ReferenceRequest"][];
@@ -1442,6 +1443,7 @@ export interface components {
             javaRelease: number | null;
             /** Format: int32 */
             number: number;
+            objectiveKeys: string[];
             options: components["schemas"]["OptionView"][];
             prompt: string | null;
             /** Format: date-time */

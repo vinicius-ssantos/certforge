@@ -59,6 +59,15 @@ Administration (`CATALOG_MANAGE` permission). Every command returns the updated 
 
 Failures use the same RFC 9457 problem responses as identity, with stable codes such as `slug_already_exists`, `exam_version_not_editable`, `active_exam_version_exists`, `track_not_active`, `exam_version_has_no_topics`, `topic_not_in_track`, `parent_topic_not_mapped`, `duplicate_topic`, `duplicate_position`, `topic_too_deep`, `objectives_need_an_exam`, `duplicate_objective_key` and `validation_failed`.
 
+### What a question claims, and when it is checked
+
+A question says which exam objectives it prepares for through `objectiveKeys` on its revision — the keys the provider uses, carried by a content pack and stored since #165. Nothing is required to claim one: every question in the Java SE 21 pack and every interview question claims none.
+
+A claim is free text while the question is a draft, and the reason is that a draft is written early: before its topic is mapped into an active exam version, often before anyone has read the exam's objectives at all. A foreign key would refuse ordinary authoring. So the claim is checked at the two moments it can be:
+
+- **publishing** refuses a key the exam's verified snapshot does not list (`objective_not_verified`), and says so plainly when nobody has read the page yet. That is the moment a claim becomes a claim to a learner;
+- **recording a new reading** refuses to drop an objective a published question still claims (`objective_claimed_by_published_question`), so the two cannot drift apart afterwards. The catalog asks the question bank through `PublishedObjectiveClaims`, an interface this module declares and content implements, because content depends on the catalog and the dependency cannot run both ways.
+
 ### Verified exam objectives
 
 An exam version can exist before anyone has read the provider's objectives page, and the Java SE 21 exam is in that state. `PUT .../exam-versions/{id}/objectives` records a reading: the provider's own version name, the date, the HTTPS page it was read from, a `sha256:` digest of that page, and the objectives found on it. The reading replaces the previous one, because a snapshot is one reading of one page and an objective that is no longer listed is not an objective.

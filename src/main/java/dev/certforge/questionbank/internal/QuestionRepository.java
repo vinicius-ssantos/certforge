@@ -30,6 +30,7 @@ class QuestionRepository {
   private static final String NOW = "now";
   private static final String QUESTION_ID = "questionId";
   private static final String REVISION_ID = "revisionId";
+  private static final String VERSION = "version";
   private static final String REVISION_IDS = "revisionIds";
   private static final String REVISION_ID_COLUMN = "revision_id";
   private static final String STATUS = "status";
@@ -137,6 +138,33 @@ class QuestionRepository {
     }
   }
 
+  /** The exam objectives one revision claims, in key order. */
+  private List<String> objectiveKeys(UUID revisionId) {
+    return jdbc.sql(
+            "select objective_key from certforge.qb_revision_objective_key"
+                + " where revision_id = :revisionId order by objective_key")
+        .param(REVISION_ID, revisionId)
+        .query(String.class)
+        .list();
+  }
+
+  /**
+   * The objective keys claimed by revisions of one exam version that are published.
+   *
+   * <p>Read when a new reading of the provider's page would drop an objective: a published question
+   * citing a key that the page no longer lists is the drift this prevents.
+   */
+  List<String> publishedObjectiveKeys(UUID trackVersionId) {
+    return jdbc.sql(
+            "select distinct k.objective_key from certforge.qb_revision_objective_key k"
+                + " join certforge.qb_question_revision r on r.id = k.revision_id"
+                + " where r.track_version_id = :version and r.status = 'PUBLISHED'"
+                + " order by k.objective_key")
+        .param(VERSION, trackVersionId)
+        .query(String.class)
+        .list();
+  }
+
   private void replaceChildren(UUID revisionId, RevisionContent c) {
     jdbc.sql("delete from certforge.qb_revision_option where revision_id = :revisionId")
         .param(REVISION_ID, revisionId)
@@ -159,6 +187,17 @@ class QuestionRepository {
     jdbc.sql("delete from certforge.qb_revision_verification_file where revision_id = :revisionId")
         .param(REVISION_ID, revisionId)
         .update();
+    jdbc.sql("delete from certforge.qb_revision_objective_key where revision_id = :revisionId")
+        .param(REVISION_ID, revisionId)
+        .update();
+    for (String key : c.objectiveKeys()) {
+      jdbc.sql(
+              "insert into certforge.qb_revision_objective_key (revision_id, objective_key)"
+                  + " values (:revisionId, :key)")
+          .param(REVISION_ID, revisionId)
+          .param("key", key)
+          .update();
+    }
     writeVerificationFiles(revisionId, c);
     int position = 0;
     for (RevisionContent.Option option : c.options()) {
@@ -286,7 +325,7 @@ class QuestionRepository {
                 + " where topic_id = :topic and track_version_id = :version"
                 + " and status = 'PUBLISHED' order by published_at, revision_number")
         .param("topic", topicId)
-        .param("version", trackVersionId)
+        .param(VERSION, trackVersionId)
         .query(this::mapRevision)
         .list();
   }
@@ -297,7 +336,7 @@ class QuestionRepository {
                 + " where question_id = :questionId and track_version_id = :version"
                 + " and status = 'PUBLISHED'")
         .param(QUESTION_ID, questionId)
-        .param("version", trackVersionId)
+        .param(VERSION, trackVersionId)
         .query(this::mapRevision)
         .optional();
   }
@@ -461,7 +500,7 @@ class QuestionRepository {
             "update certforge.qb_question_revision set status = 'PUBLISHED',"
                 + " track_version_id = :version, published_by = :by, published_at = :now"
                 + " where id = :id")
-        .param("version", trackVersionId)
+        .param(VERSION, trackVersionId)
         .param("by", publishedBy)
         .param(NOW, utc(now))
         .param(ID, id)
@@ -570,7 +609,8 @@ class QuestionRepository {
             options,
             guidedResponse,
             references,
-            verification);
+            verification,
+            objectiveKeys(id));
     return new Revision(
         id,
         rs.getObject("question_id", UUID.class),

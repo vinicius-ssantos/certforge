@@ -1677,6 +1677,16 @@
             "minimum" : 1,
             "type" : "integer"
           },
+          "objectiveKeys" : {
+            "items" : {
+              "maxLength" : 120,
+              "minLength" : 0,
+              "type" : "string"
+            },
+            "maxItems" : 20,
+            "minItems" : 0,
+            "type" : "array"
+          },
           "options" : {
             "items" : {
               "$ref" : "#/components/schemas/OptionRequest"
@@ -1763,6 +1773,12 @@
             "format" : "int32",
             "type" : "integer"
           },
+          "objectiveKeys" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
           "options" : {
             "items" : {
               "$ref" : "#/components/schemas/OptionView"
@@ -1813,7 +1829,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "guidedResponse", "id", "javaRelease", "number", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
+        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "guidedResponse", "id", "javaRelease", "number", "objectiveKeys", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
         "type" : "object"
       },
       "RolesRequest" : {

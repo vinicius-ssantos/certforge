@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -242,6 +243,24 @@ class QuestionBankService {
       throw QuestionBankException.conflict(
           "java_release_mismatch", "The revision targets a different Java release than the exam");
     }
+    // A claimed objective becomes a claim to a learner here, so here is where it has to be true.
+    // The keys are free text while the question is a draft — the exam's objectives may not have
+    // been read yet, and often the topic is not even mapped — and publishing is the first moment
+    // the exam is known. A key the verified snapshot does not list is refused rather than
+    // published: a question claiming an objective nobody has read is the claim ADR 0017 forbids.
+    List<String> claimed = revision.content().objectiveKeys();
+    if (!claimed.isEmpty()) {
+      Set<String> verified = catalog.verifiedObjectiveKeys(context.trackVersionId());
+      List<String> unknown =
+          claimed.stream().filter(key -> !verified.contains(key)).sorted().toList();
+      if (!unknown.isEmpty()) {
+        throw QuestionBankException.conflict(
+            "objective_not_verified",
+            "The exam has no verified objective "
+                + String.join(", ", unknown)
+                + (verified.isEmpty() ? "; nobody has read its objectives page yet" : ""));
+      }
+    }
     Instant now = clock.instant();
     repository
         .findPublishedForContext(revision.questionId(), context.trackVersionId().value())
@@ -374,6 +393,7 @@ class QuestionBankService {
                 c.guidedResponse().commonMistakes(),
                 c.guidedResponse().followUps()),
         c.references().stream().map(ref -> new ReferenceView(ref.title(), ref.url())).toList(),
+        c.objectiveKeys(),
         r.authorId(),
         names.get(r.authorId()),
         r.trackVersionId(),

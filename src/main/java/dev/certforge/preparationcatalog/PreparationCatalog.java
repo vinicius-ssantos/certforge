@@ -2,6 +2,7 @@ package dev.certforge.preparationcatalog;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Read contract of the preparation catalog for other modules. It only ever returns active content;
@@ -20,6 +21,16 @@ public interface PreparationCatalog {
 
   /** The publishing context of an active topic, or empty if it is not active. */
   Optional<TopicContext> findActiveTopicContext(TopicId id);
+
+  /**
+   * The objective keys of one exam version's verified snapshot, or empty when nobody has read the
+   * provider's page for it.
+   *
+   * <p>The question bank asks this when publishing a revision that claims an objective: a claim
+   * against a page nobody has read, or a key that page does not list, is refused there rather than
+   * stored and believed.
+   */
+  Set<String> verifiedObjectiveKeys(TrackVersionId trackVersionId);
 
   /**
    * What kind of preparation the topic's track is, whatever state either is in.

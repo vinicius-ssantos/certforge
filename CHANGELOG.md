@@ -202,6 +202,17 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A question can say which exam objectives it prepares for, and the claim is checked.** `objectiveKeys` has been in the manifest schema since the content contract was written — required of every certification question — and the editorial adapter dropped it on the way in, so `stageEditorialPack` refused certification packs outright rather than lose it silently. That refusal is gone, because the thing it protected now exists.
+
+  A claim is free text while the question is a draft, deliberately: a draft is written before its topic is mapped into an active exam version and usually before anyone has read the exam's objectives, so a foreign key would refuse ordinary authoring. It is checked at the two moments it can be. **Publishing** refuses a key the exam's verified snapshot does not list, and says plainly when nobody has read the page at all — that is where a claim becomes a claim to a learner. **Recording a new reading** of the provider's page refuses to drop an objective a published question still claims, so the two cannot drift apart afterwards.
+
+  The catalog asks the question bank that second question through an interface the catalog declares and content implements, because content depends on the catalog and the dependency cannot run both ways; `ModularityTest` holds that line.
+
+  None of this makes a question official. It records which objective this project's own material prepares for, which is what ADR 0017 asks of a certification profile.
+
+- **A question's identity is its directory, and a `name` inside its file can no longer take it over.** `readManifestPack` built each question as `{ name, ...the file }`, so a `name` field in `question.json` would win — and the name is what the review record and both quality ledgers key on, so a question could have pointed every lookup at a directory that was not its own. Found while building a fixture, which is the only reason it was found at all: no pack carries that field today.
+
+
 - **A verified reading of a provider's objectives page can be recorded.** V17 added the tables for
   it a release ago and left them "deliberately nullable for existing versions until source
   governance has verified the official objectives" — and nothing in the application could write one.

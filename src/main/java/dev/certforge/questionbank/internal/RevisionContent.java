@@ -24,11 +24,21 @@ record RevisionContent(
     GuidedResponse guidedResponse,
     List<Reference> references,
     /** What the build compiled and what it printed. Null when the question has no programme. */
-    Verification verification) {
+    Verification verification,
+    /**
+     * The exam objectives this question says it prepares for, by the key the provider uses.
+     *
+     * <p>Empty for every question in the Java SE 21 pack and for every interview question: the keys
+     * only mean anything against an exam whose objectives someone has read, and claiming one is
+     * optional. Publishing refuses a key the exam's verified objectives do not contain, which is
+     * where the claim stops being free text.
+     */
+    List<String> objectiveKeys) {
 
   RevisionContent {
     options = options == null ? List.of() : List.copyOf(options);
     references = references == null ? List.of() : List.copyOf(references);
+    objectiveKeys = objectiveKeys == null ? List.of() : List.copyOf(objectiveKeys);
   }
 
   /**
@@ -62,7 +72,8 @@ record RevisionContent(
         options,
         guidedResponse,
         references,
-        null);
+        null,
+        List.of());
   }
 
   /**
@@ -91,7 +102,8 @@ record RevisionContent(
         options,
         null,
         references,
-        null);
+        null,
+        List.of());
   }
 
   record Option(String key, String text, boolean correct, String explanation) {}
