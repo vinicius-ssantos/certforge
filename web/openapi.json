@@ -48,6 +48,9 @@
           "label" : {
             "type" : "string"
           },
+          "objectivesStatus" : {
+            "type" : "string"
+          },
           "objectivesUrl" : {
             "type" : [ "string", "null" ]
           },
@@ -65,7 +68,7 @@
             "type" : "null"
           }
         },
-        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl", "status", "topics", "verifiedObjectives" ],
+        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesStatus", "objectivesUrl", "status", "topics", "verifiedObjectives" ],
         "type" : "object"
       },
       "AdminMappingView" : {
@@ -2011,6 +2014,10 @@
             "maxLength" : 500,
             "minLength" : 0,
             "pattern" : "^https://\\S+$",
+            "type" : "string"
+          },
+          "status" : {
+            "pattern" : "^(VERIFIED|STALE|RETIRED)$",
             "type" : "string"
           },
           "verifiedOn" : {
