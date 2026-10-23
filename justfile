@@ -112,7 +112,7 @@ web:
 # all the web checks. The content checks come first because they take under a second and they are
 # the ones that used to fail only in CI, this recipe having never run them.
 [group('check')]
-check: test-content test-backend test-web lint typecheck budget
+check: test-content test-backend test-web lint typecheck contract-check budget
 
 # The content pack checks: manifests, the editorial adapter, recorded human reviews, pack quality,
 # what each question evidences and the Dockerfiles, Compose files and manifests embedded in question
@@ -136,6 +136,16 @@ test-web:
 [group('check')]
 lint:
     cd web && npm run lint
+
+# The generated API types against the contract they are generated from.
+#
+# CI runs this and `just check` did not, so a stale src/api/schema.d.ts passed every local check and
+# failed the web job — three times in one day, each time after a `just contract` whose own failure
+# went unnoticed. The fast gate now covers it: the point of the fast gate is that passing it means
+# something.
+[group('check')]
+contract-check:
+    cd web && npm run api:check
 
 # TypeScript, for the app and for the browser tests.
 [group('check')]
