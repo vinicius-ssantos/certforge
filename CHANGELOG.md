@@ -31,6 +31,12 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **`just check` did not check the one thing CI checks that it did not.** CI compares the generated
+  `web/src/api/schema.d.ts` with `openapi.json` (`npm run api:check`); the fast gate never did. So a
+  stale generated file passed every local check and failed the web job — three times in one day,
+  each time after a `just contract` whose own failure I had redirected away. `just check` now runs
+  it, and the recipe says why: the point of a fast gate is that passing it means something.
+
 - **A Kubernetes or AWS certification could not be registered, two years of decisions
   notwithstanding.** [ADR 0017](docs/adr/0017-infrastructure-certification-tracks.md) decided it in
   so many words — "permit a certification exam without `java_release`; it remains populated for Java
