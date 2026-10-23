@@ -18,6 +18,24 @@ public interface QuestionBank {
   List<PublishedQuestion> eligibleForTopic(TopicId topicId);
 
   /**
+   * Published, learner-safe questions of one topic for an interview session, **including
+   * guided-response ones**.
+   *
+   * <p>This is the one read where the guided filter does not apply. Study, review and mock exclude
+   * guided revisions because those flows grade an answer against options, and a guided question has
+   * none — an empty option set falling through objective grading would mark a free-form answer
+   * wrong. An interview session knows the difference and dispatches on {@link
+   * PublishedQuestion#type()}, which is why it may see them (ADR 0020).
+   */
+  List<PublishedQuestion> eligibleForInterview(TopicId topicId);
+
+  /**
+   * What a reviewer wrote down about a guided question, for showing after the learner has answered
+   * it. Empty for an objective question, which has an answer key instead.
+   */
+  Optional<GuidedMaterial> findGuidedMaterial(QuestionRevisionId revisionId);
+
+  /**
    * The learner-safe view of a revision that has been published, even if it has since been
    * deprecated. A study session snapshots revisions when it starts and must keep showing exactly
    * those, so later deprecation or replacement does not change an existing session. Empty for
