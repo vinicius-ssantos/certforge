@@ -127,7 +127,10 @@ class CatalogAdminController {
             request.verifiedOn(),
             request.sourceUrl().trim(),
             request.sourceDigest().trim(),
-            "VERIFIED"),
+            // VERIFIED unless the reader says otherwise. STALE is how a person records that the
+            // provider's page has moved on and this reading has not caught up yet: nothing here
+            // fetches that page, by policy, so staleness is an observation and not a computation.
+            request.status() == null ? "VERIFIED" : request.status()),
         objectives);
   }
 
@@ -193,7 +196,14 @@ class CatalogAdminController {
       @NotNull LocalDate verifiedOn,
       @NotBlank @Size(max = 500) @Pattern(regexp = "^https://\\S+$") String sourceUrl,
       @NotBlank @Pattern(regexp = "^sha256:[0-9a-f]{64}$") String sourceDigest,
-      @NotNull @Valid @Size(min = 1, max = 200) List<ObjectiveEntry> objectives) {}
+      @NotNull @Valid @Size(min = 1, max = 200) List<ObjectiveEntry> objectives,
+      /**
+       * Omitted for an ordinary reading, which is VERIFIED. STALE records that the provider has
+       * published something newer and this reading has not caught up; RETIRED, that the exam is
+       * gone. Both are observations a person makes, because nothing here reads a provider's page by
+       * itself.
+       */
+      @Pattern(regexp = "^(VERIFIED|STALE|RETIRED)$") String status) {}
 
   /** {@code sourceRef} is where on the page the objective was read, and may be omitted. */
   record ObjectiveEntry(

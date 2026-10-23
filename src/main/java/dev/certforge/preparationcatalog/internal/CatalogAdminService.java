@@ -318,6 +318,21 @@ class CatalogAdminService {
         .orElse(null);
   }
 
+  /**
+   * One word for whether this version's objectives can be relied on. Computed rather than stored,
+   * because two of the four states are facts about other rows: a taxonomy version has no provider
+   * page, and a certification nobody has read has no snapshot to carry a status.
+   */
+  private String objectivesStatus(TrackVersionRow version) {
+    if (!version.isCertification()) {
+      return "NOT_A_CERTIFICATION";
+    }
+    return repository
+        .findObjectiveSnapshot(version.id())
+        .map(ObjectiveSnapshotRow::status)
+        .orElse("UNVERIFIED");
+  }
+
   private AdminTrackView view(TrackRow track) {
     List<AdminExamVersionView> versions =
         repository.findExamVersions(track.id()).stream()
@@ -337,7 +352,8 @@ class CatalogAdminService {
                                     new AdminMappingView(
                                         m.topicId(), m.objectiveRef(), m.position(), m.weight()))
                             .toList(),
-                        verifiedObjectives(version.id())))
+                        verifiedObjectives(version.id()),
+                        objectivesStatus(version)))
             .toList();
     List<AdminTopicView> topics =
         repository.findTopics(track.id()).stream()

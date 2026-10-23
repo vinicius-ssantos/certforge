@@ -36,7 +36,20 @@ interface AdminViews {
       String status,
       List<AdminMappingView> topics,
       /** What someone read off the provider's page, or null while nobody has read it. */
-      @Schema(nullable = true) AdminObjectiveSnapshotView verifiedObjectives) {}
+      @Schema(nullable = true) AdminObjectiveSnapshotView verifiedObjectives,
+      /**
+       * Whether this version's objectives can be relied on, as one word rather than as the absence
+       * of an object: {@code UNVERIFIED} when nobody has read the provider's page, otherwise what
+       * the reading says about itself — {@code VERIFIED}, {@code STALE} when the provider has moved
+       * on, {@code RETIRED} when the exam is gone. {@code NOT_A_CERTIFICATION} for a taxonomy
+       * version, which has no provider page to read.
+       *
+       * <p>#177 asks for a mechanism that flags profiles with unverified or outdated objectives.
+       * This is it, and it flags rather than refuses: the Java SE 21 exam has been active for two
+       * releases without a reading, so refusing to activate an unverified version would have locked
+       * the one track this project ships out of being re-activated.
+       */
+      String objectivesStatus) {}
 
   /**
    * One reading of a provider's objectives page, with the objectives it found. The digest is of the

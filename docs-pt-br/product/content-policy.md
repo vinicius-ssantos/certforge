@@ -26,6 +26,50 @@ O conteúdo que o projeto **publica**: os pacotes em `content/`, que este reposi
 - Questões publicadas sem resposta e explicação revisadas.
 - Conteúdo Java ambíguo quanto à versão.
 
+## Governança de fontes de certificação
+
+Um perfil de certificação aqui é **material de estudo autoral**. Nunca é cópia das questões de uma
+prova, nunca é derivado delas e nunca é apresentado como tal. Nenhuma trilha é rotulada "oficial",
+porque não existe autorização para isso.
+
+**Dois tipos de fonte, e eles não se substituem.** Uma *fonte conceitual* — a documentação do próprio
+produto, uma especificação, uma referência de API — é evidência de que uma **resposta** está correta.
+Um *documento de prova* — a página de objetivos publicada pelo fornecedor — é evidência de que a
+questão é **sobre algo que a prova cobre**. Fonte conceitual nunca estabelece cobertura, e página de
+objetivos nunca estabelece correção. Misturar as duas é como um quiz começa a insinuar que veio de
+uma prova.
+
+**Uma leitura, registrada.** Cobertura vem de um lugar só: uma leitura da página de objetivos do
+próprio fornecedor, registrada com o nome da versão segundo ele, a data em que foi lida, a página
+HTTPS de onde veio, um digest `sha256:` dessa página e os objetivos encontrados nela. Nada neste
+projeto busca essa página sozinho — não há raspagem automática, por política —, então uma leitura é
+um ato que uma pessoa realiza e assina.
+
+**Status, e o que cada estado pode afirmar.**
+
+| Estado | Significado | O que pode ser afirmado |
+|---|---|---|
+| `UNVERIFIED` | ninguém leu a página do fornecedor para esta versão | a trilha pode existir e ser estudada; **nenhuma cobertura de objetivos de prova pode ser afirmada** |
+| `VERIFIED` | existe uma leitura e se acredita que está vigente | cobertura dos objetivos daquela leitura |
+| `STALE` | o fornecedor publicou algo mais novo e a leitura não acompanhou | a leitura pode ser lida e **não pode ser apresentada como vigente** |
+| `RETIRED` | a prova não existe mais | apenas histórico |
+
+`STALE` é observação, não cálculo: idade não é desatualização, e os objetivos de uma prova estável
+podem ter anos e estar exatos. Quem percebe que o fornecedor mudou registra.
+
+**Quando o fornecedor muda a prova.** Leia a página nova e registre. A leitura nova substitui a
+anterior — um snapshot é uma leitura de uma página, então objetivo que não está mais listado não é
+mais objetivo. Uma coisa que a leitura nova não pode fazer: derrubar objetivo que uma questão
+publicada ainda declara. Essa questão seguiria citando algo que a página não lista mais, e a recusa
+nomeia as chaves para que sejam revisadas ou depreciadas antes.
+
+**O que a CI garante, e o que ela não alcança.** A build recusa referência fora da política de fontes
+da trilha, página lida em HTTP puro, digest que não é digest, leitura sem objetivo nenhum, chave de
+objetivo repetida e questão publicada contra objetivo que a leitura da prova não lista. O que a build
+não faz é ler a página do fornecedor, julgar se um objetivo foi transcrito fielmente ou saber que uma
+prova mudou. Isso é de uma pessoa nomeada, pela [ADR 0005](../adr/0005-ai-not-source-of-truth.md), e
+build verde nunca significa prova verificada.
+
 ## Metadados obrigatórios
 
 Toda questão publicável deve incluir:

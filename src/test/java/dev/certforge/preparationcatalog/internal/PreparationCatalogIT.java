@@ -625,6 +625,73 @@ class PreparationCatalogIT {
         .andExpect(jsonPath("$.code").value("exam_version_not_found"));
   }
 
+  @Test
+  void anExamVersionSaysWhetherItsObjectivesCanBeReliedOn() throws Exception {
+    String trackId = createTrack(slug());
+    String versionId = createExamVersion(trackId, "V1");
+
+    // Nobody has read the provider's page: one word, not the absence of an object. #177 asks for a
+    // mechanism that flags exactly this, and the Java SE 21 exam has been in this state for two
+    // releases — which is why it flags rather than refusing to activate.
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].objectivesStatus")
+                .value(hasItem("UNVERIFIED")));
+
+    setObjectives(
+            versionId,
+            reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Build images\"}"))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].objectivesStatus")
+                .value(hasItem("VERIFIED")));
+
+    // The provider has published something newer and this reading has not caught up. Nothing here
+    // fetches their page, by policy, so a person records the observation.
+    setObjectives(
+            versionId,
+            reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Build images\"}")
+                .replaceFirst("\\}$", ",\"status\":\"STALE\"}"))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].objectivesStatus").value(hasItem("STALE")))
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='V1')].verifiedObjectives.status")
+                .value(hasItem("STALE")));
+
+    // And a status that is not one of the three is refused rather than stored.
+    setObjectives(
+            versionId,
+            reading("2026-01", "2026-10-22", "{\"key\":\"1.1\",\"title\":\"Build images\"}")
+                .replaceFirst("\\}$", ",\"status\":\"PROBABLY_FINE\"}"))
+        .andExpect(status().isBadRequest());
+  }
+
+  @Test
+  void aTaxonomyVersionHasNoProviderPageToBeVerifiedAgainst() throws Exception {
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status) values"
+            + " (?, 'interview-"
+            + slug()
+            + "', 'Java Backend', 'INTERVIEW', 'DRAFT')",
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status) values"
+            + " (?, ?, 'Taxonomy 1', 'DRAFT')",
+        versionId,
+        trackId);
+
+    // Not UNVERIFIED, which would read as a thing left undone. There is nothing to verify.
+    send(get("/api/admin/catalog/tracks/" + trackId), admin, null)
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$.examVersions[?(@.label=='Taxonomy 1')].objectivesStatus")
+                .value(hasItem("NOT_A_CERTIFICATION")));
+  }
+
   // ---- lifecycle -----------------------------------------------------------------------------
 
   @Test
