@@ -857,6 +857,7 @@ export interface components {
             /** Format: int32 */
             javaRelease: number | null;
             label: string;
+            objectivesStatus: string;
             objectivesUrl: string | null;
             status: string;
             topics: components["schemas"]["AdminMappingView"][];
@@ -1528,6 +1529,7 @@ export interface components {
             providerVersion: string;
             sourceDigest: string;
             sourceUrl: string;
+            status?: string;
             /** Format: date */
             verifiedOn: string;
         };
