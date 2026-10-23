@@ -75,6 +75,45 @@ A projeção nunca deve divergir em operação normal; isso existe para detectar
 | `GET /api/progress/topics` | Progresso por tópico |
 | `GET /api/progress/reconciliation` | Compara o progresso armazenado com as tentativas |
 | `POST /api/progress/rebuild` | Recalcula o progresso armazenado |
+| `GET /api/study/interviews/evidence` | O que a prática de entrevista mostrou, por tópico, com as respostas por trás de cada número |
+
+## Evidência de entrevista, que não é nota
+
+A prática de entrevista tem evidência própria e, de propósito, nenhum número de prontidão.
+O `GET /api/study/interviews/evidence?trackSlug=…` informa, por tópico que o aluno praticou:
+
+- **itens objetivos**: quantos foram respondidos, quantos certos e — os dois que uma taxa de acerto
+  esconde — as respostas em que o aluno estava **seguro e errado**, e aquelas em que estava **certo e
+  inseguro**. Errar com confiança é um problema diferente de acertar no chute, e um percentual faria
+  a média dos dois e não diria nenhum;
+- **itens guiados**: quantos foram praticados e quais conceitos esperados o aluno **disse** que a
+  própria resposta não cobriu, os mais frequentes primeiro, com as palavras do revisor para cada um.
+
+Quatro propriedades valem, e a #23 pediu cada uma delas:
+
+1. **Todo número pode ser explicado pelo que está guardado.** Cada contagem carrega os ids das
+   respostas por trás dela, então o aluno pode ler as respostas em vez de confiar na contagem.
+2. **Nada é armazenado.** A view inteira é derivada das respostas quando é pedida, então
+   "reconstruir dá o mesmo resultado" é verdade porque não há o que reconstruir.
+3. **Evidência de item guiado nunca é apresentada como correção.** Os dois tipos são contados
+   separados e nunca somados, porque um é corrigido e o outro não
+   ([ADR 0019](../adr/0019-behavioural-preparation-is-guidance-not-grading.md)).
+4. **Não existe nota.** Nenhum percentual de prontidão, nenhuma probabilidade, nenhum sinal de
+   contratação ou empregabilidade, e nenhum campo onde um deles possa ser acrescentado. Tópico nunca
+   praticado fica ausente em vez de aparecer como zero: ausência de evidência não é evidência de
+   fraqueza.
+
+### De onde vem a cobertura de conceitos
+
+O produto não consegue julgar o que uma resposta guiada cobriu, porque ele nunca recebe a resposta.
+Então ele pergunta: ao responder um item guiado, o aluno pode marcar quais conceitos esperados acha
+que cobriu, e essas marcas ficam registradas ao lado da resposta e congeladas com ela. Não marcar
+nada significa apenas que ele não disse.
+
+Isso faz de toda afirmação sobre cobertura uma afirmação que o aluno fez, numa data, sobre uma
+questão — "você marcou *durable duplicate detection* como não coberto duas vezes" — em vez de uma
+medição de uma pessoa. Marca sobre conceito que a questão não lista é recusada, e questão objetiva
+tem alternativas, não conceitos, então marcar um ali também é recusado.
 
 ## Adiado
 
