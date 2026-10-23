@@ -225,6 +225,32 @@
         "required" : [ "correctOptions", "explanation", "options", "references", "verification" ],
         "type" : "object"
       },
+      "AnswerRequest" : {
+        "properties" : {
+          "confidence" : {
+            "enum" : [ "LOW", "MEDIUM", "HIGH" ],
+            "type" : "string"
+          },
+          "elapsedMillis" : {
+            "format" : "int64",
+            "maximum" : 86400000,
+            "minimum" : 0,
+            "type" : "integer"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "maxLength" : 1,
+              "minLength" : 0,
+              "type" : "string"
+            },
+            "maxItems" : 8,
+            "minItems" : 0,
+            "type" : "array"
+          }
+        },
+        "required" : [ "confidence" ],
+        "type" : "object"
+      },
       "AttemptHistoryItem" : {
         "properties" : {
           "confidence" : {
@@ -612,6 +638,33 @@
         "required" : [ "explanation", "required", "text" ],
         "type" : "object"
       },
+      "GuidedOutcome" : {
+        "properties" : {
+          "commonMistakes" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "expectedConcepts" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ExpectedConceptView"
+            },
+            "type" : "array"
+          },
+          "followUps" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "referenceAnswer" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "commonMistakes", "expectedConcepts", "followUps", "referenceAnswer" ],
+        "type" : "object"
+      },
       "GuidedResponseRequest" : {
         "properties" : {
           "commonMistakes" : {
@@ -743,6 +796,138 @@
           }
         },
         "required" : [ "title", "url" ],
+        "type" : "object"
+      },
+      "InterviewAnswerView" : {
+        "properties" : {
+          "confidence" : {
+            "type" : "string"
+          },
+          "elapsedMillis" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "guided" : {
+            "$ref" : "#/components/schemas/GuidedOutcome",
+            "type" : "null"
+          },
+          "itemKind" : {
+            "type" : "string"
+          },
+          "objective" : {
+            "$ref" : "#/components/schemas/ObjectiveOutcome",
+            "type" : "null"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "submittedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "confidence", "elapsedMillis", "guided", "itemKind", "objective", "position", "revisionId", "submittedAt" ],
+        "type" : "object"
+      },
+      "InterviewItemView" : {
+        "properties" : {
+          "answered" : {
+            "type" : "boolean"
+          },
+          "position" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "question" : {
+            "$ref" : "#/components/schemas/PublishedQuestion"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answered", "position", "question", "topicId" ],
+        "type" : "object"
+      },
+      "InterviewSessionSummary" : {
+        "properties" : {
+          "answeredCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "itemCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "trackVersionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "answeredCount", "closedAt", "createdAt", "expiresAt", "id", "itemCount", "status", "trackVersionId" ],
+        "type" : "object"
+      },
+      "InterviewSessionView" : {
+        "properties" : {
+          "closedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "expiresAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "items" : {
+            "items" : {
+              "$ref" : "#/components/schemas/InterviewItemView"
+            },
+            "type" : "array"
+          },
+          "requestedCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "trackVersionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "closedAt", "createdAt", "expiresAt", "id", "items", "requestedCount", "status", "trackVersionId" ],
         "type" : "object"
       },
       "LoginRequest" : {
@@ -1104,6 +1289,42 @@
         "required" : [ "key", "sourceRef", "title" ],
         "type" : "object"
       },
+      "ObjectiveOutcome" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "correctOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "explanation" : {
+            "type" : "string"
+          },
+          "options" : {
+            "items" : {
+              "$ref" : "#/components/schemas/OptionAnswerView"
+            },
+            "type" : "array"
+          },
+          "references" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ReferenceView"
+            },
+            "type" : "array"
+          },
+          "selectedOptions" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "correct", "correctOptions", "explanation", "options", "references", "selectedOptions" ],
+        "type" : "object"
+      },
       "OptionAnswer" : {
         "properties" : {
           "correct" : {
@@ -1111,6 +1332,24 @@
           },
           "explanation" : {
             "type" : "string"
+          },
+          "key" : {
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "correct", "explanation", "key", "text" ],
+        "type" : "object"
+      },
+      "OptionAnswerView" : {
+        "properties" : {
+          "correct" : {
+            "type" : "boolean"
+          },
+          "explanation" : {
+            "type" : [ "string", "null" ]
           },
           "key" : {
             "type" : "string"
@@ -1240,11 +1479,11 @@
         "properties" : {
           "difficulty" : {
             "enum" : [ "EASY", "MEDIUM", "HARD" ],
-            "type" : "string"
+            "type" : [ "string", "null" ]
           },
           "javaRelease" : {
             "format" : "int32",
-            "type" : "integer"
+            "type" : [ "integer", "null" ]
           },
           "options" : {
             "items" : {
@@ -3023,7 +3262,7 @@
     },
     "/api/admin/questions" : {
       "get" : {
-        "operationId" : "list_1",
+        "operationId" : "list_2",
         "parameters" : [ {
           "in" : "query",
           "name" : "status",
@@ -3106,7 +3345,7 @@
     },
     "/api/admin/questions/{questionId}" : {
       "get" : {
-        "operationId" : "get_3",
+        "operationId" : "get_4",
         "parameters" : [ {
           "in" : "path",
           "name" : "questionId",
@@ -3572,6 +3811,195 @@
           }
         },
         "tags" : [ "history-controller" ]
+      }
+    },
+    "/api/study/interviews" : {
+      "get" : {
+        "operationId" : "list_1",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "enum" : [ "IN_PROGRESS", "COMPLETED", "ABANDONED", "EXPIRED" ],
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/InterviewSessionSummary"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      },
+      "post" : {
+        "operationId" : "start_2",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/StartRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewSessionView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/{sessionId}" : {
+      "get" : {
+        "operationId" : "get_3",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewSessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/{sessionId}/abandon" : {
+      "post" : {
+        "operationId" : "abandon_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewSessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/{sessionId}/complete" : {
+      "post" : {
+        "operationId" : "complete_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewSessionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/{sessionId}/items/{position}/answer" : {
+      "post" : {
+        "operationId" : "answer",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "in" : "header",
+          "name" : "Idempotency-Key",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/AnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewAnswerView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "interview-controller" ]
       }
     },
     "/api/study/mock-exams" : {

@@ -88,7 +88,11 @@ public final class EditorialFixtures {
     return publishBody(multipleBody(topicId, prompt));
   }
 
-  private Published publishBody(String body) throws Exception {
+  /**
+   * Publishes a question from a body the caller writes, for content these helpers do not shape: an
+   * interview session needs a guided-response question, which has no options at all.
+   */
+  public Published publishBody(String body) throws Exception {
     Account author = editor();
     MvcResult created =
         send(post("/api/admin/questions"), author.session(), body)

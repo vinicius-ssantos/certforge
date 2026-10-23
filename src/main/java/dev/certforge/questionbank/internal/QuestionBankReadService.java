@@ -2,6 +2,7 @@ package dev.certforge.questionbank.internal;
 
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.questionbank.GuidedMaterial;
 import dev.certforge.questionbank.PublishedOption;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
@@ -49,6 +50,59 @@ class QuestionBankReadService implements QuestionBank {
                     .map(QuestionBankReadService::learnerView)
                     .toList())
         .orElse(List.of());
+  }
+
+  /**
+   * The same read as {@link #eligibleForTopic(TopicId)} without the guided filter: an interview
+   * session is the one flow that knows what to do with a question that has no options (ADR 0020).
+   */
+  @Override
+  public List<PublishedQuestion> eligibleForInterview(TopicId topicId) {
+    return catalog
+        .findActiveTopicContext(topicId)
+        .map(
+            context ->
+                repository
+                    .findPublishedByTopic(topicId.value(), context.trackVersionId().value())
+                    .stream()
+                    .map(QuestionBankReadService::learnerView)
+                    .toList())
+        .orElse(List.of());
+  }
+
+  @Override
+  public Optional<PublishedQuestion> findInterviewSnapshotQuestion(QuestionRevisionId revisionId) {
+    return repository
+        .findRevision(revisionId.value())
+        .filter(
+            revision ->
+                revision.status() == RevisionStatus.PUBLISHED
+                    || revision.status() == RevisionStatus.DEPRECATED)
+        .filter(revision -> revision.publishedAt() != null)
+        .map(QuestionBankReadService::learnerView);
+  }
+
+  @Override
+  public Optional<GuidedMaterial> findGuidedMaterial(QuestionRevisionId revisionId) {
+    return repository
+        .findRevision(revisionId.value())
+        .filter(revision -> revision.content().type() == QuestionType.GUIDED_RESPONSE)
+        .filter(revision -> revision.content().guidedResponse() != null)
+        .map(
+            revision -> {
+              RevisionContent.GuidedResponse guided = revision.content().guidedResponse();
+              return new GuidedMaterial(
+                  new QuestionRevisionId(revision.id()),
+                  guided.referenceAnswer(),
+                  guided.expectedConcepts().stream()
+                      .map(
+                          concept ->
+                              new GuidedMaterial.ExpectedConcept(
+                                  concept.text(), concept.required(), concept.explanation()))
+                      .toList(),
+                  guided.commonMistakes(),
+                  guided.followUps());
+            });
   }
 
   @Override

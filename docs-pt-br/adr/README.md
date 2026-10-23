@@ -25,5 +25,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0017](0017-infrastructure-certification-tracks.md) | Adicionar trilhas de infraestrutura e gerais, com snapshots verificados de versões de exame | **Proposta** |
 | [0018](0018-maintainer-may-review-their-own-work.md) | Deixar o mantenedor revisar o próprio trabalho, e dizer isso no registro | Aceita |
 | [0019](0019-behavioural-preparation-is-guidance-not-grading.md) | Preparação comportamental é orientação revisada, e nada nela é pontuado | Aceita |
+| [0020](0020-interview-sessions-as-a-third-aggregate.md) | Modelar sessões de entrevista como um terceiro agregado de estudo | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.
