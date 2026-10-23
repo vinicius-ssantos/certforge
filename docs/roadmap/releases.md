@@ -7,30 +7,43 @@ Each release must create a demonstrable user outcome. Infrastructure-only milest
 ### What the tracker holds, and what is still undecided
 
 This section exists because the roadmap and the issue tracker said different things about what
-the project is building, and neither could be read as the plan (#200). It records what is true;
-it does not decide what is open.
+the project is building, and neither could be read as the plan (#200). The questions it raised were
+answered on 2026-10-23 and are recorded below.
 
 `v0.4.0` through `v0.7.0` carry no issues at all, which is this policy working as written: they
 are hypotheses, and filing issues against them now would be planning scope the policy says not to
 plan yet.
 
-Two directions carry issues without carrying a release number:
+Two directions carry issues and **neither will carry a release number**, decided by the owner on
+2026-10-23 (#200):
 
-| Direction | Milestone | Issues | In this document |
+| Direction | Milestone | Issues | Place |
 |---|---|---|---|
-| Interview Prep | `Interview Prep — foundation` | 18 | yes, as an unscheduled parallel direction |
-| Infrastructure, DevOps and Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 14 | **no** |
+| Interview Prep | `Interview Prep — foundation` | 18 | parallel direction, unnumbered |
+| Infrastructure, DevOps and Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 13 | parallel direction, unnumbered |
 
-**Three questions are open and are the owner's, tracked in #200.** Until they are answered, neither
-direction has a place in the sequence above, and this table is the honest description of that:
+**Why neither is numbered.** The numbered sequence is a progression of what the product can *do* —
+study, simulate an exam, analyse code, run it safely, plan, assist. Both of these directions are
+breadth of *content*: they add subjects to prepare for, not capabilities. Numbering them would claim
+the product gains something it does not, and it would make two content directions compete for the
+same release slots with the one reviewer this project has.
 
-1. Does the infrastructure direction belong here — a numbered release, a second parallel direction,
-   or deferred? Fourteen issues is more than any numbered release except `v0.1.0`.
-2. Is Interview Prep's scheduling condition below met? Eighteen issues is a lot of planning for a
-   direction this document says is not scheduled.
-3. Should #166 — generalising content packs, evidence checks and editorial validation beyond Java —
-   be separated from #164? It is machinery this project already has, and the foundation the other
-   thirteen stand on; those thirteen are content for exams nobody here has sat.
+**The rule that follows from having one reviewer.** A parallel direction may be planned at any time
+and is **worked only when no numbered release is in flight**. The constraint is not engineering
+capacity; it is review capacity. Every question drafted for a parallel direction joins the queue in
+front of the reviews a numbered release is waiting on, and the reviews are the slow part
+([ADR 0005](../adr/0005-ai-not-source-of-truth.md)).
+
+**Interview Prep's scheduling condition is met**, and this is what met it: the reusable learning
+model stopped being a promise when the infrastructure pack went through the same manifest, evidence
+and review machinery as the Java pack, which is what #166 closed. Met is not the same as scheduled —
+by the rule above it stays unnumbered and unworked while `v0.3.0` is unfinished, and its eighteen
+issues stay open, because a researched backlog is not noise.
+
+**The infrastructure epic no longer contains platform work.** #166 asked for the content machinery to
+generalise beyond Java and is closed; #165 — the catalog model, exam-version snapshots and what a
+question may claim about an exam objective — is closed with it. What remains under #164 is content
+and curriculum, and it is blocked on #177 (source governance) and on review capacity, in that order.
 
 ## `v0.1.0` — Study Core
 
@@ -94,13 +107,27 @@ Interview Prep must reuse proven study primitives where appropriate, but it must
 
 See [Interview Prep direction](../product/interview-prep.md).
 
-## Second direction, not yet placed — Infrastructure, DevOps and Cloud Native
+## Parallel product direction — Infrastructure, DevOps and Cloud Native
 
-#164 and its thirteen children — Kubernetes, AWS and Terraform certification paths, Linux and
-networking, CI/CD, hands-on labs, source governance and exam-content ethics — exist as a populated
-milestone and have no place in the sequence above. **That is an open question, not a decision**
-recorded here: see #200 and the table in the policy section. This heading exists so that reading
-this document no longer leaves a reader believing the direction does not exist.
+#164 and its remaining children — Kubernetes, AWS and Terraform certification paths, Linux and
+networking, CI/CD, hands-on labs, source governance and exam-content ethics — are a parallel
+direction with no release number, on the same footing as Interview Prep and for the same reason:
+they add subjects to prepare for, not capabilities.
+
+The platform half of this direction is finished. #166 generalised content packs, evidence checks and
+editorial validation beyond Java, and #165 settled the catalog model, exam-version snapshots, what a
+verified reading of a provider's objectives page records, and what a question may claim about an
+objective. A Kubernetes or AWS exam can now be registered, which it could not be while the
+application demanded a Java release of every certification.
+
+What remains is content and curriculum, and it is ordered: **#177 first** — the source policy, the
+version-monitoring mechanism, and the ethics of exam content — because no certification profile
+should be authored before the rules about what may be read, cited and claimed are published. Then
+the packs, in batches small enough to be reviewed rather than queued.
+
+One boundary that is not a scheduling question: a certification profile here is **authored study
+material**. It is never a copy of, derived from, or presented as an exam's own questions, and no
+track is labelled official without authorisation that does not exist today.
 
 ## Release gates
 

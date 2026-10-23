@@ -8,33 +8,46 @@ Cada release deve criar um resultado demonstrável para o usuário. Marcos exclu
 
 ### O que o tracker tem, e o que segue indeciso
 
-Esta seção existe porque o roadmap e o tracker de issues diziam coisas diferentes sobre o que o
-projeto está construindo, e nenhum dos dois podia ser lido como o plano (#200). Ela registra o que
-é verdade; não decide o que está aberto.
+Esta seção existe porque o roadmap e o rastreador de issues diziam coisas diferentes sobre o que o
+projeto está construindo, e nenhum dos dois podia ser lido como o plano (#200). As perguntas que ela
+levantou foram respondidas em 2026-10-23 e estão registradas abaixo.
 
 De `v0.4.0` a `v0.7.0` não há uma única issue, e isso é esta política funcionando como escrita:
 são hipóteses, e abrir issues contra elas agora seria planejar escopo que a própria política diz
 para não planejar ainda.
 
-Duas direções têm issues sem ter número de release:
+Duas direções têm issues e **nenhuma das duas terá número de release**, decidido pelo dono do
+projeto em 2026-10-23 (#200):
 
-| Direção | Marco | Issues | Neste documento |
+| Direção | Marco | Issues | Lugar |
 |---|---|---|---|
-| Interview Prep | `Interview Prep — foundation` | 18 | sim, como direção paralela não agendada |
-| Infraestrutura, DevOps e Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 14 | **não** |
+| Interview Prep | `Interview Prep — foundation` | 18 | direção paralela, sem número |
+| Infraestrutura, DevOps e Cloud Native | `Infrastructure, DevOps and Cloud Native tracks` | 13 | direção paralela, sem número |
 
-**Três perguntas estão abertas e são do dono do projeto, registradas na #200.** Até que sejam
-respondidas, nenhuma das duas direções tem lugar na sequência acima, e esta tabela é a descrição
-honesta disso:
+**Por que nenhuma é numerada.** A sequência numerada é uma progressão do que o produto *faz* —
+estudar, simular prova, analisar código, executá-lo com segurança, planejar, assistir. Estas duas
+direções são largura de *conteúdo*: acrescentam assuntos para estudar, não capacidades. Numerá-las
+afirmaria que o produto ganha algo que não ganha, e faria duas direções de conteúdo competirem pelos
+mesmos slots de release com o único revisor que este projeto tem.
 
-1. A direção de infraestrutura pertence a este documento — como release numerada, como segunda
-   direção paralela, ou adiada? Quatorze issues é mais que qualquer release numerada exceto a
-   `v0.1.0`.
-2. A condição de agendamento do Interview Prep, abaixo, foi atendida? Dezoito issues é muito
-   planejamento para uma direção que este documento diz não estar agendada.
-3. A #166 — generalizar os pacotes de conteúdo, as checagens de evidência e a validação editorial
-   além do Java — deve ser separada da #164? É maquinário que este projeto já tem, e é a base sobre
-   a qual as outras treze se apoiam; essas treze são conteúdo para exames que ninguém aqui prestou.
+**A regra que decorre de haver um revisor só.** Uma direção paralela pode ser planejada a qualquer
+momento e é **trabalhada somente quando nenhuma release numerada está em voo**. A restrição não é
+capacidade de engenharia; é capacidade de revisão. Toda questão redigida para uma direção paralela
+entra na fila à frente das revisões que uma release numerada está esperando, e as revisões são a
+parte lenta ([ADR 0005](../adr/0005-ai-not-source-of-truth.md)).
+
+**A condição de agendamento do Interview Prep foi atendida**, e foi isto que a atendeu: o modelo de
+aprendizado reutilizável deixou de ser promessa quando o pacote de infraestrutura passou pelo mesmo
+maquinário de manifesto, evidência e revisão do pacote Java, que é o que a #166 fechou. Atendida não
+é o mesmo que agendada — pela regra acima ela segue sem número e sem ser trabalhada enquanto a
+`v0.3.0` não terminar, e suas dezoito issues permanecem abertas, porque backlog pesquisado não é
+ruído.
+
+**O épico de infraestrutura não contém mais trabalho de plataforma.** A #166 pedia que o maquinário
+de conteúdo generalizasse além do Java e está fechada; a #165 — o modelo de catálogo, os snapshots
+de versão de prova e o que uma questão pode declarar sobre um objetivo — fechou com ela. O que resta
+sob a #164 é conteúdo e currículo, e está bloqueado pela #177 (governança de fontes) e pela
+capacidade de revisão, nessa ordem.
 
 ## `v0.1.0` — Study Core
 
@@ -98,13 +111,29 @@ O Interview Prep deve reutilizar as primitivas de estudo já comprovadas onde fo
 
 Veja a [direção do Interview Prep](../product/interview-prep.md).
 
-## Segunda direção, ainda sem lugar — Infraestrutura, DevOps e Cloud Native
+## Direção paralela — Infraestrutura, DevOps e Cloud Native
 
-A #164 e suas treze filhas — trilhas de certificação Kubernetes, AWS e Terraform, Linux e redes,
-CI/CD, laboratórios práticos, governança de fontes e ética de conteúdo de exame — existem como um
-marco populado e não têm lugar na sequência acima. **Isso é uma pergunta aberta, não uma decisão**
-registrada aqui: veja a #200 e a tabela na seção de política. Este título existe para que ler este
-documento não deixe mais o leitor acreditando que a direção não existe.
+A #164 e suas filhas restantes — trilhas de certificação Kubernetes, AWS e Terraform, Linux e redes,
+CI/CD, laboratórios práticos, governança de fontes e ética de conteúdo de exame — são uma direção
+paralela sem número de release, no mesmo pé do Interview Prep e pelo mesmo motivo: acrescentam
+assuntos para estudar, não capacidades.
+
+A metade de plataforma desta direção está pronta. A #166 generalizou os pacotes de conteúdo, as
+checagens de evidência e a validação editorial além do Java, e a #165 resolveu o modelo de catálogo,
+os snapshots de versão de prova, o que uma leitura verificada da página de objetivos do fornecedor
+registra e o que uma questão pode declarar sobre um objetivo. Uma prova de Kubernetes ou da AWS já
+pode ser registrada, o que não era possível enquanto a aplicação exigia release do Java de toda
+certificação.
+
+O que resta é conteúdo e currículo, e está ordenado: **primeiro a #177** — a política de fontes, o
+mecanismo de monitoramento de versão e a ética de conteúdo de exame — porque nenhum perfil de
+certificação deve ser escrito antes de publicadas as regras sobre o que pode ser lido, citado e
+declarado. Depois os pacotes, em lotes pequenos o suficiente para serem revisados em vez de
+enfileirados.
+
+Um limite que não é questão de agendamento: um perfil de certificação aqui é **material de estudo
+autoral**. Nunca é cópia das questões de uma prova, nem derivado delas, nem apresentado como tal, e
+nenhuma trilha é rotulada oficial sem uma autorização que hoje não existe.
 
 ## Gates de release
 
