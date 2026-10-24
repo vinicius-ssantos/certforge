@@ -70,7 +70,7 @@ describe("signing in", () => {
     await user.click(screen.getByRole("button", { name: "Sign in" }));
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Certification tracks" }),
+      await screen.findByRole("heading", { level: 1, name: "Tracks" }),
     ).toBeInTheDocument();
     const login = fetch.calls.find((call) => call.path === "/api/auth/login");
     expect(login?.headers.get("X-XSRF-TOKEN")).toBe("test-csrf-token");
@@ -145,7 +145,7 @@ describe("creating an account", () => {
     await user.click(screen.getByRole("button", { name: "Create account" }));
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Certification tracks" }),
+      await screen.findByRole("heading", { level: 1, name: "Tracks" }),
     ).toBeInTheDocument();
     expect(fetch.calls.map((call) => call.path)).toContain("/api/auth/register");
     expect(fetch.calls.map((call) => call.path)).toContain("/api/auth/login");
@@ -183,7 +183,7 @@ describe("session handling", () => {
     await user.click(screen.getByRole("button", { name: "Try again" }));
 
     expect(
-      await screen.findByRole("heading", { level: 1, name: "Certification tracks" }),
+      await screen.findByRole("heading", { level: 1, name: "Tracks" }),
     ).toBeInTheDocument();
   });
 
@@ -220,7 +220,7 @@ describe("session handling", () => {
 
     expect(await screen.findByRole("alert")).toHaveTextContent("still signed in");
     // And it does not pretend otherwise: the tracks are still there, not the sign-in page.
-    expect(screen.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Tracks" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
   });
 });

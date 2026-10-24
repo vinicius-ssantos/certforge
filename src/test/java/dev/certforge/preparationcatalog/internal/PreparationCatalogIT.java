@@ -442,6 +442,98 @@ class PreparationCatalogIT {
     assertThat(versionId).isNotBlank();
   }
 
+  /**
+   * A learner can now find general-knowledge preparation (#176), which until now they could not:
+   * the certification read filters it out by construction, same as an interview track, so the only
+   * route to a general taxonomy was knowing its slug already -- and there was no endpoint that
+   * would have told them even that.
+   */
+  @Test
+  void aLearnerSeesActiveGeneralTaxonomiesAndNothingElseOnThatPath() throws Exception {
+    String generalSlug = "general-" + slug();
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'Infrastructure foundations', 'GENERAL', 'ACTIVE')",
+        trackId,
+        generalSlug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'docker-containers', 'Docker and Containers')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+
+    // An active interview track, to prove this path is not "anything active with no exam" --
+    // an interview taxonomy also has none, and would slip through a filter on certification-ness
+    // alone. Interview tracks are seeded DRAFT, so this is built fresh and active.
+    String interviewSlug = "interview-" + slug();
+    UUID interviewTrackId = UUID.randomUUID();
+    UUID interviewVersionId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'An active interview track', 'INTERVIEW', 'ACTIVE')",
+        interviewTrackId,
+        interviewSlug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        interviewVersionId,
+        interviewTrackId);
+
+    mvc.perform(get("/api/catalog/general-tracks").cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$[?(@.slug=='" + generalSlug + "')].topics[0].name")
+                .value(org.hamcrest.Matchers.hasItem("Docker and Containers")))
+        // The real seeded infrastructure track is DRAFT: real content, not yet opened to anyone.
+        .andExpect(
+            jsonPath(
+                "$[?(@.slug=='infrastructure-devops-foundations')]", org.hamcrest.Matchers.empty()))
+        // A certification is not a general taxonomy, and this path is not another way to read
+        // one: the two shapes stay apart, which is why they are two paths.
+        .andExpect(jsonPath("$[?(@.slug=='java-certification')]", org.hamcrest.Matchers.empty()))
+        // Nor is an interview taxonomy, even an active one with no exam either -- the kind has to
+        // be checked, not only the absence of a certification.
+        .andExpect(
+            jsonPath("$[?(@.slug=='" + interviewSlug + "')]", org.hamcrest.Matchers.empty()));
+
+    mvc.perform(get("/api/catalog/general-tracks/" + generalSlug).cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.versionLabel").value("Taxonomy 1"))
+        .andExpect(jsonPath("$.topics[0].slug").value("docker-containers"));
+
+    mvc.perform(get("/api/catalog/general-tracks/java-certification").cookie(learner))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("general_track_not_found"));
+
+    mvc.perform(get("/api/catalog/general-tracks")).andExpect(status().isUnauthorized());
+  }
+
+  /** Both rows are DRAFT: real content, waiting on review, not a learner-visible track yet. */
+  @Test
+  void theSeededGeneralTrackIsNotOfferedToLearnersYet() throws Exception {
+    assertThat(catalog.activeTracks())
+        .extracting("slug")
+        .doesNotContain("infrastructure-devops-foundations");
+    assertThat(catalog.activeGeneralTrack("infrastructure-devops-foundations")).isEmpty();
+    assertThat(catalog.activeGeneralTracks())
+        .extracting("slug")
+        .doesNotContain("infrastructure-devops-foundations");
+  }
+
   @Test
   void anInterviewTopicHasAContextWithNoJavaRelease() {
     UUID trackId = UUID.randomUUID();

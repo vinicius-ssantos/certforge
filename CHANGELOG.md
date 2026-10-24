@@ -208,6 +208,29 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A learner can browse and study a general-knowledge track beside a certification one, on the
+  same page, with one shared history (#176's first slice).** `GET /api/catalog/general-tracks`
+  and `/{slug}` give a `GENERAL`-kind track the same learner-facing read a certification track and
+  an interview taxonomy already have — `GeneralTrackView` is the structural twin of
+  `InterviewTrackView`: a taxonomy version and its topics, no exam. The tracks page lists both
+  kinds as one set of cards, and a general track's own page starts a session on its topics
+  through the same `POST /api/study/sessions` a certification track already uses.
+
+  No new session, attempt or progress machinery was needed, and that absence is the finding: the
+  whole pipeline is already keyed by topic id alone, with no idea which kind of track a topic
+  belongs to. "Switch between a certification and a general track without losing history" is true
+  because there is only ever one history to begin with — proved end to end in a new e2e spec that
+  activates the real seeded `infrastructure-devops-foundations` taxonomy (still `DRAFT` until its
+  own content is reviewed) and walks browse → session → answer → history on a fixture question.
+
+  Found two defects along the way, one in this slice and one in #24's still-open PR. First: a
+  general track's version label — real seed data already reads "Taxonomy 2026.1" on its own —
+  was about to be shown as "Taxonomy Taxonomy 2026.1", doubled by a template that assumed the
+  label never said so itself. Caught before merging by a test that asserts the composed string
+  rather than just that *a* string renders. Checking whether the same template existed anywhere
+  else found it had already been written once more, in #24's open interview screens, against the
+  identical seeded wording ("Taxonomy 1"); fixed there too, in that PR, before it could ship.
+
 - **A job description becomes weighted preparation, and every weight has words behind it.**
   `POST /api/study/interviews/blueprints` takes an advert as pasted, plus any requirements the
   learner typed, and returns the canonical topics it actually talks about — each with a weight from

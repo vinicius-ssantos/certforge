@@ -41,6 +41,15 @@ export function TracksPage() {
     queryKey: ["tracks"],
     queryFn: () => unwrap(api.GET("/api/catalog/tracks")),
   });
+  // General-knowledge tracks (#176): a learner studies both from one list, one history, one
+  // progress -- the switch between a certification and a general taxonomy is just which card
+  // they click, because the session, attempt and progress machinery underneath is kind-agnostic
+  // already. A fetch failure here is shown beside the certification one rather than hiding it;
+  // the learner can still see and study what loaded.
+  const generalTracks = useQuery({
+    queryKey: ["general-tracks"],
+    queryFn: () => unwrap(api.GET("/api/catalog/general-tracks")),
+  });
   /*
    * The cards render without this. A learner who has answered nothing, and a failure to read
    * progress, both leave the cards saying what each track is — which is what they said before.
@@ -51,12 +60,15 @@ export function TracksPage() {
   });
   const standing = standings(progress.data ?? []);
 
+  const nothingToShow =
+    tracks.data && generalTracks.data && tracks.data.length === 0 && generalTracks.data.length === 0;
+
   return (
     <>
       <h1>{t.tracks.title}</h1>
       {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
       {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
-      {tracks.data && tracks.data.length === 0 ? (
+      {nothingToShow ? (
         <EmptyState title={t.tracks.emptyTitle}>
           <p>{t.tracks.emptyBody}</p>
         </EmptyState>
@@ -80,6 +92,36 @@ export function TracksPage() {
               <p className="muted">{t.tracks.topicCount(track.topics.length)}</p>
               {/* Where the learner is on this track, not only what the track is. Absent until
                   they have answered something on it: two zeroes say less than nothing. */}
+              {standing.has(track.slug) ? (
+                <dl className="stat">
+                  <div>
+                    <dt>{t.progress.attempted}</dt>
+                    <dd>{standing.get(track.slug)!.attempted}</dd>
+                  </div>
+                  <div>
+                    <dt>{t.progress.accuracy}</dt>
+                    <dd>{`${Math.round(standing.get(track.slug)!.accuracy * 100)}%`}</dd>
+                  </div>
+                </dl>
+              ) : null}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {generalTracks.isError ? (
+        <ErrorState error={generalTracks.error} onRetry={() => void generalTracks.refetch()} />
+      ) : null}
+      {generalTracks.data && generalTracks.data.length > 0 ? (
+        <ul className="cards">
+          {generalTracks.data.map((track) => (
+            <li key={track.id} className="card">
+              <h2>
+                <Link to={`/general-tracks/${track.slug}`}>{track.name}</Link>
+              </h2>
+              <p className="muted">
+                {track.versionLabel} · {t.tracks.topicCount(track.topics.length)}
+              </p>
               {standing.has(track.slug) ? (
                 <dl className="stat">
                   <div>
