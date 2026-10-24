@@ -152,16 +152,24 @@ Follow-up prompts are also revision content. The first implementation may presen
 
 ## Job-specific preparation
 
-A future workflow may accept a job description and produce an explicit study blueprint, for example:
+**Built, and decided by [ADR 0021](../adr/0021-job-description-blueprints-explain-every-weight.md).** A learner pastes a job description and gets a blueprint: the canonical topics the advert actually talks about, each with a weight from 1 to 5 on the same scale the taxonomy uses, and a list of the requirements it could not place.
 
-- Java — high;
-- Spring — high;
-- microservices — high;
-- messaging — high;
-- AWS — high;
-- finance-domain concerns — medium.
+The weight is a count, not an opinion. One point per distinct term of that topic found in the description, capped at 5, matched against a reviewed dictionary of terms per topic. So every weight has words behind it:
 
-The generated blueprint must show why each topic was selected. It must not silently rewrite the canonical interview track or fabricate experience requirements.
+| Topic | Weight | Because the advert said |
+|---|---|---|
+| Spring | 2 | "spring boot", "spring" |
+| Messaging | 1 | "kafka" |
+| Cloud and operations | 1 | "kubernetes" |
+
+Four things the blueprint will not do, and each one is a rule in code with a test:
+
+- **It does not weigh with a model.** #22 defers opaque AI-only weighting, and the reason is that a weight is advice about where someone spends a week. A model may propose terms for the dictionary, which a human reviews; it may not hand a learner a number with nothing behind it.
+- **It does not touch the canonical taxonomy.** The editorial weights in the table above stay what they are for everyone else. A blueprint built for one taxonomy and applied to another is refused outright rather than silently reinterpreted.
+- **It does not guess at what it did not understand.** An in-house framework comes back named, as a requirement nobody recognised, for the learner to weigh themselves.
+- **It says nothing about the learner.** No fit, no readiness for the role, no probability of an offer, no inferred experience. It weighs topics; it does not assess people. The learner can also overrule any weight, and the record then says the weight was theirs and not the advert's.
+
+A session started from a blueprint draws its questions in weight order, so the topics the advert leaned on are the ones the session asks about.
 
 ## Progress evidence
 

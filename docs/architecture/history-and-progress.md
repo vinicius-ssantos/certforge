@@ -111,6 +111,23 @@ question — "you marked *durable duplicate detection* as not covered twice" —
 measurement of a person. A mark about a concept the question does not list is refused, and an
 objective question has options rather than concepts, so marking one there is refused too.
 
+## A blueprint's weights, which are not progress either
+
+A job-description blueprint ([ADR 0021](../adr/0021-job-description-blueprints-explain-every-weight.md))
+also produces numbers per topic, and they are not progress and not readiness. They say what one
+advert talked about, nothing about the learner, and they live with the blueprint rather than in the
+projection above.
+
+The weight is a count: distinct terms of that topic found in the description, capped at 5. The terms
+are stored with it, so the number is never the whole record — "Messaging, 3, because the advert said
+*kafka*, *idempotency*, *dead letter queue*" is what a learner is shown. A weight they set
+themselves is stored as theirs.
+
+The one place the two meet is the draw: a session started from a blueprint orders its pool by weight
+before cutting it to the requested count, so a heavier topic is what the session asks about. Nothing
+flows the other way — practising from a blueprint contributes to interview evidence exactly as any
+other interview session does, and to certification readiness not at all.
+
 ## Deferred
 
 Spaced repetition, mastery levels, readiness forecasts, streaks, leaderboards, cross-user analytics, mock-exam reports, and first-attempt accuracy.

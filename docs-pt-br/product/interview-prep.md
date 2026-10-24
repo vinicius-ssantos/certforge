@@ -144,16 +144,24 @@ A plataforma não deve converter isso automaticamente em um valor determinístic
 
 ## Preparação específica para uma vaga
 
-Um fluxo futuro poderá aceitar uma descrição de vaga e produzir um blueprint de estudo explícito, por exemplo:
+**Construída, e decidida pela [ADR 0021](../adr/0021-job-description-blueprints-explain-every-weight.md).** O aluno cola uma descrição de vaga e recebe um blueprint: os tópicos canônicos sobre os quais o anúncio realmente fala, cada um com um peso de 1 a 5 na mesma escala que a taxonomia usa, e a lista dos requisitos que ele não conseguiu situar.
 
-- Java — alta;
-- Spring — alta;
-- microsserviços — alta;
-- mensageria — alta;
-- AWS — alta;
-- preocupações do domínio financeiro — média.
+O peso é uma contagem, não uma opinião. Um ponto por termo distinto daquele tópico encontrado na descrição, limitado a 5, casado contra um dicionário revisado de termos por tópico. Então cada peso tem palavras por trás:
 
-O blueprint gerado deve mostrar por que cada tópico foi selecionado. Ele não deve reescrever silenciosamente a trilha de entrevista canônica nem fabricar requisitos de experiência.
+| Tópico | Peso | Porque o anúncio disse |
+|---|---|---|
+| Spring | 2 | "spring boot", "spring" |
+| Mensageria | 1 | "kafka" |
+| Nuvem e operações | 1 | "kubernetes" |
+
+Quatro coisas que o blueprint não faz, e cada uma é uma regra em código com teste:
+
+- **Ele não pondera com um modelo.** A #22 adia ponderação opaca só por IA, e o motivo é que um peso é um conselho sobre onde alguém vai gastar uma semana. Um modelo pode propor termos para o dicionário, que um humano revisa; ele não pode entregar ao aluno um número sem nada por trás.
+- **Ele não mexe na taxonomia canônica.** Os pesos editoriais da tabela acima continuam o que são para todo mundo. Um blueprint construído para uma taxonomia e aplicado a outra é recusado de saída, em vez de reinterpretado em silêncio.
+- **Ele não adivinha o que não entendeu.** Um framework interno da empresa volta nomeado, como requisito que ninguém reconheceu, para o aluno pesar por conta própria.
+- **Ele não diz nada sobre o aluno.** Nenhum fit, nenhuma prontidão para a vaga, nenhuma probabilidade de proposta, nenhuma experiência inferida. Ele pesa tópicos; não avalia pessoas. O aluno também pode sobrepor qualquer peso, e aí o registro diz que o peso foi dele e não do anúncio.
+
+Uma sessão iniciada a partir de um blueprint sorteia suas perguntas na ordem dos pesos, então os tópicos em que o anúncio se apoiou são os que a sessão cobra.
 
 ## Evidências de progresso
 

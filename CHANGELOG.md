@@ -208,6 +208,33 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **A job description becomes weighted preparation, and every weight has words behind it.**
+  `POST /api/study/interviews/blueprints` takes an advert as pasted, plus any requirements the
+  learner typed, and returns the canonical topics it actually talks about — each with a weight from
+  1 to 5 on the same scale the taxonomy uses, and the exact terms that earned it, and whether each
+  term was read from the description or from a requirement. "Why is Messaging weighted three?" is
+  answered with three words.
+
+  The weighting is a count against a reviewed dictionary of terms per topic, not a model's opinion.
+  #22 defers opaque AI-only weighting and [ADR 0021](docs/adr/0021-job-description-blueprints-explain-every-weight.md)
+  says why that line is worth keeping: a weight is advice about where someone spends a week of their
+  life, and if the only answer to *why* is that a model said so, the learner cannot disagree with
+  it, because there is nothing to disagree with. A model may propose terms for the dictionary, which
+  a human reviews, exactly as ADR 0005 has content authoring work.
+
+  Four refusals, each a rule with a test that fails when the rule is removed. A blueprint never
+  writes to the canonical taxonomy, and one built for another taxonomy is refused rather than
+  reinterpreted. A requirement the dictionary does not recognise comes back **named**, so the
+  learner can weigh an in-house framework themselves instead of the product pretending to know what
+  it means. A weight the learner overrules is recorded as theirs and never attributed to the
+  advert. And a blueprint says nothing about the learner — no fit, no readiness for the role, no
+  probability of an offer, no inferred experience; it weighs topics, it does not assess people.
+
+  A session started from a blueprint draws in weight order, so the topics the advert leaned on are
+  the ones it asks about. That is proved by drawing five sessions in a row, because a single draw of
+  two questions from a pool of four comes out right one time in six by chance alone — which is how
+  the first version of that test passed while the rule was switched off.
+
 - **Interview practice has its own evidence, and deliberately no readiness number.**
   `GET /api/study/interviews/evidence` reports, per topic practised, how many objective items were
   answered and right — and the two cases a single accuracy figure hides: the responses where the

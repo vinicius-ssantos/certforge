@@ -115,6 +115,23 @@ questão — "você marcou *durable duplicate detection* como não coberto duas 
 medição de uma pessoa. Marca sobre conceito que a questão não lista é recusada, e questão objetiva
 tem alternativas, não conceitos, então marcar um ali também é recusado.
 
+## Os pesos de um blueprint, que também não são progresso
+
+Um blueprint de descrição de vaga ([ADR 0021](../adr/0021-job-description-blueprints-explain-every-weight.md))
+também produz números por tópico, e eles não são progresso nem prontidão. Eles dizem sobre o que um
+anúncio falou, nada sobre o aluno, e vivem com o blueprint em vez de na projeção acima.
+
+O peso é uma contagem: termos distintos daquele tópico encontrados na descrição, limitada a 5. Os
+termos ficam guardados com ele, então o número nunca é o registro inteiro — "Mensageria, 3, porque o
+anúncio disse *kafka*, *idempotency*, *dead letter queue*" é o que o aluno vê. Um peso que ele mesmo
+definiu é guardado como dele.
+
+O único ponto em que os dois se encontram é o sorteio: uma sessão iniciada a partir de um blueprint
+ordena seu conjunto por peso antes de cortá-lo na quantidade pedida, então um tópico mais pesado é o
+que a sessão cobra. Nada flui no sentido contrário — praticar a partir de um blueprint contribui
+para a evidência de entrevista exatamente como qualquer outra sessão de entrevista, e para prontidão
+de certificação não contribui em nada.
+
 ## Adiado
 
 Repetição espaçada, níveis de domínio, previsões de prontidão, streaks, leaderboards, análise entre usuários, relatórios de simulado e acerto na primeira tentativa.
