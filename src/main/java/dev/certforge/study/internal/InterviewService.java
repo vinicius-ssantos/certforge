@@ -56,6 +56,7 @@ import org.springframework.transaction.annotation.Transactional;
 class InterviewService {
 
   private final InterviewRepository repository;
+  private final BlueprintService blueprints;
   private final PreparationCatalog catalog;
   private final QuestionBank questionBank;
   private final CurrentActor currentActor;
@@ -65,6 +66,7 @@ class InterviewService {
 
   InterviewService(
       InterviewRepository repository,
+      BlueprintService blueprints,
       PreparationCatalog catalog,
       QuestionBank questionBank,
       CurrentActor currentActor,
@@ -72,6 +74,7 @@ class InterviewService {
       StudyProperties properties,
       RandomGenerator random) {
     this.repository = repository;
+    this.blueprints = blueprints;
     this.catalog = catalog;
     this.questionBank = questionBank;
     this.currentActor = currentActor;
@@ -89,7 +92,8 @@ class InterviewService {
    * whole taxonomy. An empty subset means the whole track.
    */
   @Transactional
-  InterviewSessionView start(String trackSlug, List<UUID> topicIds, Integer requestedCount) {
+  InterviewSessionView start(
+      String trackSlug, List<UUID> topicIds, Integer requestedCount, UUID blueprintId) {
     ActorId learner = currentActor.require();
     Instant now = clock.instant().truncatedTo(ChronoUnit.MICROS);
     repository.expireDue(learner.value(), now);
@@ -104,7 +108,27 @@ class InterviewService {
                     StudyException.notFound(
                         "interview_track_not_found", "No active interview track with that slug"));
 
-    List<TopicId> topics = chosenTopics(track, topicIds);
+    // A blueprint is the learner's own reading of a role, so it chooses the topics and how much
+    // of the session each one gets. Asking for both a blueprint and a topic list is refused rather
+    // than silently preferring one: the learner would not know which of their two answers was used.
+    if (blueprintId != null && topicIds != null && !topicIds.isEmpty()) {
+      throw StudyException.invalid(
+          "blueprint_and_topics",
+          "Choose a blueprint or a list of topics, not both: a blueprint already chooses topics");
+    }
+    Map<UUID, Integer> weights =
+        blueprintId == null
+            ? Map.of()
+            : blueprints.weightsOf(blueprintId, track.versionId().value());
+    List<TopicId> topics =
+        blueprintId == null
+            ? chosenTopics(track, topicIds)
+            : weights.keySet().stream().map(TopicId::new).toList();
+    if (topics.isEmpty()) {
+      throw StudyException.conflict(
+          "blueprint_weighs_nothing",
+          "That blueprint matched no topic, so there is nothing to practise from it");
+    }
     int count = requestedCount == null ? properties.defaultQuestionCount() : requestedCount;
     if (count < 1 || count > properties.maxQuestionCount()) {
       throw StudyException.invalid(
@@ -143,6 +167,14 @@ class InterviewService {
     }
     List<SnapshotItem> chosen = new ArrayList<>(pool);
     java.util.Collections.shuffle(chosen, random);
+    if (!weights.isEmpty()) {
+      // Heavier topics first, so the questions the blueprint asked for survive the cut to the
+      // requested count.
+      // Within a weight the shuffled order stands, so two sessions from one blueprint still differ.
+      chosen.sort(
+          Comparator.comparingInt((SnapshotItem item) -> weights.getOrDefault(item.topicId(), 0))
+              .reversed());
+    }
     chosen = new ArrayList<>(chosen.subList(0, count));
 
     InterviewSession session =

@@ -45,7 +45,8 @@ class InterviewController {
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   InterviewSessionView start(@Valid @RequestBody StartRequest request) {
-    return service.start(request.trackSlug(), request.topicIds(), request.questionCount());
+    return service.start(
+        request.trackSlug(), request.topicIds(), request.questionCount(), request.blueprintId());
   }
 
   @GetMapping
@@ -102,7 +103,13 @@ class InterviewController {
   record StartRequest(
       @NotBlank @Size(max = 100) String trackSlug,
       @Size(max = 30) List<UUID> topicIds,
-      Integer questionCount) {}
+      Integer questionCount,
+      /**
+       * A blueprint of the learner's own, which chooses the topics and weights them. Cannot be
+       * combined with {@code topicIds}: two answers to the same question, and the learner would not
+       * know which was used.
+       */
+      UUID blueprintId) {}
 
   /**
    * {@code selectedOptions} is empty for a guided item, where the learner's own answer stays in

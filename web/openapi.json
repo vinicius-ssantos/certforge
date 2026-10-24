@@ -442,6 +442,65 @@
         "required" : [ "id", "kind", "name", "slug", "status", "topics" ],
         "type" : "object"
       },
+      "BlueprintTopicView" : {
+        "properties" : {
+          "matchedTerms" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MatchView"
+            },
+            "type" : "array"
+          },
+          "source" : {
+            "type" : "string"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "topicSlug" : {
+            "type" : "string"
+          },
+          "weight" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "matchedTerms", "source", "topicId", "topicSlug", "weight" ],
+        "type" : "object"
+      },
+      "BlueprintView" : {
+        "properties" : {
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "jobTitle" : {
+            "type" : [ "string", "null" ]
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/BlueprintTopicView"
+            },
+            "type" : "array"
+          },
+          "trackVersionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "unrecognisedRequirements" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "createdAt", "id", "jobTitle", "topics", "trackVersionId", "unrecognisedRequirements" ],
+        "type" : "object"
+      },
       "ConceptMarkView" : {
         "properties" : {
           "conceptPosition" : {
@@ -518,6 +577,44 @@
           }
         },
         "required" : [ "examCode", "examName", "label", "objectivesUrl" ],
+        "type" : "object"
+      },
+      "CreateRequest" : {
+        "properties" : {
+          "jobTitle" : {
+            "maxLength" : 200,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "requirements" : {
+            "items" : {
+              "maxLength" : 300,
+              "minLength" : 0,
+              "type" : "string"
+            },
+            "maxItems" : 50,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "sourceText" : {
+            "maxLength" : 20000,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "trackSlug" : {
+            "maxLength" : 100,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "weights" : {
+            "additionalProperties" : {
+              "format" : "int32",
+              "type" : "integer"
+            },
+            "type" : "object"
+          }
+        },
+        "required" : [ "trackSlug" ],
         "type" : "object"
       },
       "CreateTopicRequest" : {
@@ -1034,6 +1131,18 @@
           }
         },
         "required" : [ "objectiveRef", "position", "topicId" ],
+        "type" : "object"
+      },
+      "MatchView" : {
+        "properties" : {
+          "foundIn" : {
+            "type" : "string"
+          },
+          "term" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "foundIn", "term" ],
         "type" : "object"
       },
       "Misconception" : {
@@ -3386,7 +3495,7 @@
     },
     "/api/admin/questions" : {
       "get" : {
-        "operationId" : "list_2",
+        "operationId" : "list_3",
         "parameters" : [ {
           "in" : "query",
           "name" : "status",
@@ -3441,7 +3550,7 @@
         "tags" : [ "question-admin-controller" ]
       },
       "post" : {
-        "operationId" : "create",
+        "operationId" : "create_1",
         "requestBody" : {
           "content" : {
             "application/json" : {
@@ -3469,7 +3578,7 @@
     },
     "/api/admin/questions/{questionId}" : {
       "get" : {
-        "operationId" : "get_4",
+        "operationId" : "get_5",
         "parameters" : [ {
           "in" : "path",
           "name" : "questionId",
@@ -3991,6 +4100,80 @@
           }
         },
         "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/blueprints" : {
+      "get" : {
+        "operationId" : "list_2",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/BlueprintView"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "blueprint-controller" ]
+      },
+      "post" : {
+        "operationId" : "create",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BlueprintView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "blueprint-controller" ]
+      }
+    },
+    "/api/study/interviews/blueprints/{blueprintId}" : {
+      "get" : {
+        "operationId" : "get_4",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "blueprintId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BlueprintView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "blueprint-controller" ]
       }
     },
     "/api/study/interviews/evidence" : {

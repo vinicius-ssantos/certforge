@@ -363,9 +363,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_2"];
+        get: operations["list_3"];
         put?: never;
-        post: operations["create"];
+        post: operations["create_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -379,7 +379,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_4"];
+        get: operations["get_5"];
         put?: never;
         post?: never;
         delete?: never;
@@ -671,6 +671,38 @@ export interface paths {
         get: operations["list_1"];
         put?: never;
         post: operations["start_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/blueprints": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_2"];
+        put?: never;
+        post: operations["create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/study/interviews/blueprints/{blueprintId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_4"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1087,6 +1119,26 @@ export interface components {
             status: string;
             topics: components["schemas"]["AuthorableTopic"][];
         };
+        BlueprintTopicView: {
+            matchedTerms: components["schemas"]["MatchView"][];
+            source: string;
+            /** Format: uuid */
+            topicId: string;
+            topicSlug: string;
+            /** Format: int32 */
+            weight: number;
+        };
+        BlueprintView: {
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: uuid */
+            id: string;
+            jobTitle: string | null;
+            topics: components["schemas"]["BlueprintTopicView"][];
+            /** Format: uuid */
+            trackVersionId: string;
+            unrecognisedRequirements: string[];
+        };
         ConceptMarkView: {
             /** Format: int32 */
             conceptPosition: number;
@@ -1112,6 +1164,15 @@ export interface components {
             javaRelease?: number;
             label: string;
             objectivesUrl: string;
+        };
+        CreateRequest: {
+            jobTitle?: string;
+            requirements?: string[];
+            sourceText?: string;
+            trackSlug: string;
+            weights?: {
+                [key: string]: number;
+            };
         };
         CreateTopicRequest: {
             name: string;
@@ -1277,6 +1338,10 @@ export interface components {
             position: number;
             /** Format: uuid */
             topicId: string;
+        };
+        MatchView: {
+            foundIn: string;
+            term: string;
         };
         Misconception: {
             /** Format: int32 */
@@ -2398,7 +2463,7 @@ export interface operations {
             };
         };
     };
-    list_2: {
+    list_3: {
         parameters: {
             query?: {
                 status?: "DRAFT" | "TECHNICAL_REVIEW" | "APPROVED" | "PUBLISHED" | "DEPRECATED";
@@ -2423,7 +2488,7 @@ export interface operations {
             };
         };
     };
-    create: {
+    create_1: {
         parameters: {
             query?: never;
             header?: never;
@@ -2447,7 +2512,7 @@ export interface operations {
             };
         };
     };
-    get_4: {
+    get_5: {
         parameters: {
             query?: never;
             header?: never;
@@ -2884,6 +2949,72 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    list_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BlueprintView"][];
+                };
+            };
+        };
+    };
+    create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BlueprintView"];
+                };
+            };
+        };
+    };
+    get_4: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                blueprintId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["BlueprintView"];
                 };
             };
         };

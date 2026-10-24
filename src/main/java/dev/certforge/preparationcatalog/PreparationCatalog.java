@@ -49,4 +49,15 @@ public interface PreparationCatalog {
    * refuse perfectly ordinary drafts.
    */
   Optional<TrackKind> findTrackKindOfTopic(TopicId id);
+
+  /**
+   * The slug of a topic, whatever kind of track it belongs to and whether or not it is mapped into
+   * an active version.
+   *
+   * <p>{@link #findActiveTopic(TopicId)} cannot answer for an interview topic: it reads through the
+   * learner track views, which name an exam and therefore exclude interview tracks. This reads the
+   * topic itself, and exists so that something holding a topic id — a blueprint, for instance — can
+   * name it without knowing what kind of track it came from.
+   */
+  Optional<String> findTopicSlug(TopicId id);
 }

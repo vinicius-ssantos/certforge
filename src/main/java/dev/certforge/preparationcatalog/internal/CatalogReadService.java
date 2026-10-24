@@ -107,6 +107,11 @@ class CatalogReadService implements PreparationCatalog {
   }
 
   @Override
+  public Optional<String> findTopicSlug(TopicId id) {
+    return repository.findTopic(id.value()).map(CatalogRows.TopicRow::slug);
+  }
+
+  @Override
   public Optional<TrackKind> findTrackKindOfTopic(TopicId id) {
     return repository.findTrackKindOfTopic(id.value());
   }

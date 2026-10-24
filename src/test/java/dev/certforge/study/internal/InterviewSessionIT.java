@@ -53,6 +53,7 @@ class InterviewSessionIT {
   private static EditorialFixtures fixtures;
   private static String trackSlug;
   private static String topicId;
+  private static String springTopicId;
   private static String objectiveRevision;
   private static String guidedRevision;
   private Account learner;
@@ -103,11 +104,40 @@ class InterviewSessionIT {
         topic);
     topicId = topic.toString();
 
-    objectiveRevision = publishObjective();
+    // A few more topics so a blueprint has something to weigh. "messaging" and "spring" carry
+    // published questions, so a blueprint that weighs one above the other changes which questions a
+    // session asks; the rest exist only to be weighted, which is what a blueprint does to a
+    // taxonomy.
+    for (String extra :
+        List.of("concurrency", "spring", "testing", "system-design", "cloud-operations")) {
+      UUID id = UUID.randomUUID();
+      jdbc.update(
+          "insert into certforge.catalog_topic (id, track_id, slug, name) values (?, ?, ?, ?)",
+          id,
+          track,
+          extra,
+          extra);
+      jdbc.update(
+          "insert into certforge.catalog_track_version_topic"
+              + " (track_version_id, topic_id, objective_ref, position, weight)"
+              + " values (?, ?, null, ?, 3)",
+          version,
+          id,
+          1
+              + List.of("concurrency", "spring", "testing", "system-design", "cloud-operations")
+                  .indexOf(extra));
+      if (extra.equals("spring")) {
+        springTopicId = id.toString();
+      }
+    }
+
+    objectiveRevision = publishObjective(topicId, "idempotent consumer");
     guidedRevision = publishGuided();
+    publishObjective(springTopicId, "bean scope");
+    publishObjective(springTopicId, "constructor injection");
   }
 
-  private String publishObjective() throws Exception {
+  private String publishObjective(String topic, String subject) throws Exception {
     String body =
         """
         {
@@ -116,7 +146,7 @@ class InterviewSessionIT {
           "seniority":"SENIOR",
           "difficulty":"MEDIUM",
           "difficultyRationale":"One concept, asked directly",
-          "prompt":"Which statement about an idempotent consumer is true?",
+          "prompt":"Which statement about %s is true?",
           "explanation":"Secret overall explanation",
           "options":[
             {"key":"A","text":"It can process the same message twice safely","correct":true,
@@ -128,7 +158,7 @@ class InterviewSessionIT {
                          "url":"https://www.enterpriseintegrationpatterns.com/"}]
         }
         """
-            .formatted(topicId);
+            .formatted(topic, subject);
     return fixtures.publishBody(body).revisionId();
   }
 
@@ -174,8 +204,15 @@ class InterviewSessionIT {
   }
 
   private String startBoth() throws Exception {
+    // Pinned to the topic that carries both kinds of item, rather than trusting the pool to hold
+    // nothing else: another topic's questions exist so a blueprint has something to weigh.
     ResultActions started =
-        startSession("{\"trackSlug\":\"" + trackSlug + "\",\"questionCount\":2}")
+        startSession(
+                "{\"trackSlug\":\""
+                    + trackSlug
+                    + "\",\"topicIds\":[\""
+                    + topicId
+                    + "\"],\"questionCount\":2}")
             .andExpect(status().isCreated());
     return JsonPath.read(started.andReturn().getResponse().getContentAsString(), "$.id");
   }
@@ -607,6 +644,369 @@ class InterviewSessionIT {
                         "update certforge.interview_response_concept set covered = true"
                             + " where covered = false")))
         .isNotNull();
+  }
+
+  // ---- the job-description blueprint (#22) ---------------------------------------------------
+
+  private static final String ADVERT =
+      "Senior Java engineer. You will work with Spring Boot and Kafka, design for scalability,"
+          + " and care about testing. Experience with Kubernetes is a plus.";
+
+  private ResultActions createBlueprint(String body) throws Exception {
+    return send(post("/api/study/interviews/blueprints"), body);
+  }
+
+  private String blueprintFrom(String body) throws Exception {
+    return JsonPath.read(
+        createBlueprint(body)
+            .andExpect(status().isCreated())
+            .andReturn()
+            .getResponse()
+            .getContentAsString(),
+        "$.id");
+  }
+
+  @Test
+  void everyWeightCanBeExplainedByAWordFromTheAdvert() throws Exception {
+    String body =
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"jobTitle\":\"Senior Java engineer\","
+            + "\"sourceText\":\""
+            + ADVERT
+            + "\"}";
+
+    createBlueprint(body)
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.jobTitle").value("Senior Java engineer"))
+        // Spring was named twice in the advert — "Spring Boot" is also the term "spring" — so it
+        // weighs more than a topic mentioned once, and both words are in the payload.
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='spring')].matchedTerms[*].term")
+                .value(org.hamcrest.Matchers.hasItems("spring", "spring boot")))
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='messaging')].matchedTerms[*].term")
+                .value(org.hamcrest.Matchers.hasItem("kafka")))
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='messaging')].source")
+                .value(org.hamcrest.Matchers.hasItem("MATCHED")))
+        // Every topic in the blueprint has at least one term behind it: a weight with no source
+        // would be exactly the opaque weighting #22 defers.
+        .andExpect(
+            jsonPath("$.topics[?(@.matchedTerms.length() == 0 && @.source == 'MATCHED')]")
+                .value(org.hamcrest.Matchers.empty()));
+  }
+
+  @Test
+  void aTopicTheAdvertNeverMentionsIsNotInTheBlueprintAtAll() throws Exception {
+    String body = "{\"trackSlug\":\"" + trackSlug + "\",\"sourceText\":\"We use Kafka.\"}";
+
+    createBlueprint(body)
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.topics.length()").value(1))
+        .andExpect(jsonPath("$.topics[0].topicSlug").value("messaging"));
+  }
+
+  @Test
+  void aRequirementNobodyRecognisesIsSurfacedRatherThanGuessedAt() throws Exception {
+    String body =
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"sourceText\":\"Backend role.\","
+            + "\"requirements\":[\"Kafka\",\"Fluency in Klingon\",\"Our in-house FooBar framework\"]}";
+
+    createBlueprint(body)
+        .andExpect(status().isCreated())
+        // What was understood is weighted; what was not is named back to the learner, so they can
+        // weigh it themselves instead of the product pretending to know what it means.
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='messaging')].matchedTerms[*].foundIn")
+                .value(org.hamcrest.Matchers.hasItem("REQUIREMENT")))
+        .andExpect(
+            jsonPath("$.unrecognisedRequirements")
+                .value(
+                    org.hamcrest.Matchers.containsInAnyOrder(
+                        "Fluency in Klingon", "Our in-house FooBar framework")));
+  }
+
+  @Test
+  void aLearnerWeightIsRecordedAsTheirsAndNotAsSomethingTheAdvertSaid() throws Exception {
+    String concurrency = topicIdOf("concurrency");
+    String body =
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"sourceText\":\"We use Kafka.\","
+            + "\"weights\":{\""
+            + concurrency
+            + "\":5}}";
+
+    createBlueprint(body)
+        .andExpect(status().isCreated())
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='concurrency')].weight")
+                .value(org.hamcrest.Matchers.hasItem(5)))
+        // The advert never mentioned concurrency, and the blueprint says who did.
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='concurrency')].source")
+                .value(org.hamcrest.Matchers.hasItem("LEARNER")))
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='concurrency')].matchedTerms")
+                .value(org.hamcrest.Matchers.contains(org.hamcrest.Matchers.empty())));
+  }
+
+  @Test
+  void aBlueprintSaysNothingAboutTheLearner() throws Exception {
+    String id =
+        blueprintFrom("{\"trackSlug\":\"" + trackSlug + "\",\"sourceText\":\"" + ADVERT + "\"}");
+    String body =
+        send(get("/api/study/interviews/blueprints/" + id), null)
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+
+    // #22 defers hiring probability and forbids fabricated experience. The absence is the feature.
+    assertThat(body)
+        .doesNotContain("fit")
+        .doesNotContain("probability")
+        .doesNotContain("readiness")
+        .doesNotContain("score")
+        .doesNotContain("experience");
+  }
+
+  @Test
+  void aBlueprintIsReproducibleFromItsSavedInputs() throws Exception {
+    String body =
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"sourceText\":\""
+            + ADVERT
+            + "\","
+            + "\"requirements\":[\"Kubernetes\"]}";
+    String first = blueprintFrom(body);
+    String second = blueprintFrom(body);
+
+    String one = topicsAndTermsOf(first);
+    String two = topicsAndTermsOf(second);
+    // The same inputs through the same reviewed dictionary give the same mapping, which is what
+    // makes a blueprint something a learner can be shown rather than asked to trust.
+    assertThat(two).isEqualTo(one);
+  }
+
+  @Test
+  void theCanonicalTaxonomyIsUntouchedByABlueprint() throws Exception {
+    Integer before =
+        jdbc.queryForObject(
+            "select count(*) from certforge.catalog_track_version_topic", Integer.class);
+    Integer canonical = canonicalWeightOf("concurrency");
+    blueprintFrom(
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"sourceText\":\""
+            + ADVERT
+            + "\","
+            + "\"weights\":{\""
+            + topicIdOf("concurrency")
+            + "\":5}}");
+
+    // A blueprint weighs the taxonomy for one learner; it never edits it for everyone. The first
+    // version of this assertion looked for any row of weight 5 and found four — the seeded
+    // taxonomy uses that scale itself, which is the point of keeping the two apart.
+    assertThat(
+            jdbc.queryForObject(
+                "select count(*) from certforge.catalog_track_version_topic", Integer.class))
+        .isEqualTo(before);
+    assertThat(canonicalWeightOf("concurrency")).isEqualTo(canonical);
+  }
+
+  @Test
+  void aBlueprintChoosesTheTopicsOfASessionAndCannotBeCombinedWithAList() throws Exception {
+    String id =
+        blueprintFrom("{\"trackSlug\":\"" + trackSlug + "\",\"sourceText\":\"We use Kafka.\"}");
+
+    // Two answers to the same question: the learner would not know which was used.
+    startSession(
+            "{\"trackSlug\":\""
+                + trackSlug
+                + "\",\"blueprintId\":\""
+                + id
+                + "\","
+                + "\"topicIds\":[\""
+                + topicId
+                + "\"]}")
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("blueprint_and_topics"));
+
+    startSession(
+            "{\"trackSlug\":\""
+                + trackSlug
+                + "\",\"blueprintId\":\""
+                + id
+                + "\",\"questionCount\":2}")
+        .andExpect(status().isCreated())
+        .andExpect(jsonPath("$.items.length()").value(2));
+  }
+
+  @Test
+  void aWordyAdvertIsStillWeighedOnTheScaleTheTaxonomyUses() throws Exception {
+    // Seven Spring terms in one advert, and the scale only goes to five. Capping is not cosmetic:
+    // the table refuses a weight outside 1..5, so without it this advert would be a server error.
+    String body =
+        "{\"trackSlug\":\""
+            + trackSlug
+            + "\",\"sourceText\":\"Spring, Spring Boot, Spring MVC, Spring Security, Spring Data,"
+            + " Spring Framework and WebFlux.\"}";
+
+    createBlueprint(body)
+        .andExpect(status().isCreated())
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='spring')].weight")
+                .value(org.hamcrest.Matchers.hasItem(5)))
+        // The cap hides nothing: all seven terms are still named, so the learner sees that the
+        // advert said more than the scale can express.
+        .andExpect(
+            jsonPath("$.topics[?(@.topicSlug=='spring')].matchedTerms.length()")
+                .value(org.hamcrest.Matchers.hasItem(7)));
+  }
+
+  @Test
+  void theHeavierTopicIsWhatASessionActuallyAsksAbout() throws Exception {
+    // Spring is named twice in this advert and Kafka once, so Spring weighs more. The pool holds
+    // four questions across the two topics and each session asks for two.
+    String id =
+        blueprintFrom(
+            "{\"trackSlug\":\""
+                + trackSlug
+                + "\",\"sourceText\":\"We use Spring Boot, the Spring ecosystem, and Kafka.\"}");
+
+    // Drawn repeatedly on purpose. One draw proves nothing: a shuffle that ignored the weight
+    // entirely would still hand back two Spring questions about one time in six, and a test that
+    // passes one time in six is a test that passes by luck. Five draws in a row is the weight.
+    for (int draw = 0; draw < 5; draw++) {
+      String body =
+          startSession(
+                  "{\"trackSlug\":\""
+                      + trackSlug
+                      + "\",\"blueprintId\":\""
+                      + id
+                      + "\",\"questionCount\":2}")
+              .andExpect(status().isCreated())
+              .andExpect(jsonPath("$.items.length()").value(2))
+              .andReturn()
+              .getResponse()
+              .getContentAsString();
+
+      assertThat(JsonPath.<List<String>>read(body, "$.items[*].topicId"))
+          .as("draw %d asked about the topic the advert barely mentioned", draw)
+          .containsExactly(springTopicId, springTopicId);
+
+      send(post("/api/study/interviews/" + JsonPath.read(body, "$.id") + "/abandon"), null)
+          .andExpect(status().isOk());
+    }
+  }
+
+  @Test
+  void aBlueprintBuiltForAnotherTaxonomyIsRefusedRatherThanAppliedToThisOne() throws Exception {
+    // Two interview tracks, each with its own taxonomy. A blueprint names topic ids, and those ids
+    // mean nothing in another track: applied there it would weigh topics that do not exist, so the
+    // session would be drawn from nothing. Refusing says which of the two inputs is wrong.
+    String otherTrack = seedSecondInterviewTrack();
+    String id =
+        blueprintFrom("{\"trackSlug\":\"" + otherTrack + "\",\"sourceText\":\"We use Kafka.\"}");
+
+    startSession("{\"trackSlug\":\"" + trackSlug + "\",\"blueprintId\":\"" + id + "\"}")
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("blueprint_of_another_track"));
+  }
+
+  @Test
+  void aBlueprintThatMatchedNothingCannotStartASession() throws Exception {
+    // An advert the dictionary recognises nothing in still produces a blueprint — it records what
+    // was read — but there is nothing to practise from it, and saying so beats an empty session.
+    String id =
+        blueprintFrom(
+            "{\"trackSlug\":\"" + trackSlug + "\",\"sourceText\":\"We are hiring someone nice.\"}");
+
+    startSession("{\"trackSlug\":\"" + trackSlug + "\",\"blueprintId\":\"" + id + "\"}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("blueprint_weighs_nothing"));
+  }
+
+  /** A second active interview track, so a blueprint can be built for the wrong taxonomy. */
+  private String seedSecondInterviewTrack() {
+    UUID track = UUID.randomUUID();
+    UUID version = UUID.randomUUID();
+    UUID topic = UUID.randomUUID();
+    String slug = "interview-other-" + UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'Another interview', 'INTERVIEW', 'ACTIVE')",
+        track,
+        slug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        version,
+        track);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'messaging', 'Messaging')",
+        topic,
+        track);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        version,
+        topic);
+    return slug;
+  }
+
+  @Test
+  void aBlueprintOfAnotherLearnerIsNotFound() throws Exception {
+    String id =
+        blueprintFrom("{\"trackSlug\":\"" + trackSlug + "\",\"sourceText\":\"We use Kafka.\"}");
+    learner = fixtures.user();
+
+    send(get("/api/study/interviews/blueprints/" + id), null)
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("blueprint_not_found"));
+  }
+
+  /** The canonical weight the taxonomy gives a topic, which a blueprint must never change. */
+  private Integer canonicalWeightOf(String slug) {
+    return jdbc.queryForObject(
+        "select tvt.weight from certforge.catalog_track_version_topic tvt"
+            + " join certforge.catalog_topic t on t.id = tvt.topic_id"
+            + " join certforge.catalog_track tr on tr.id = t.track_id"
+            + " where tr.slug = ? and t.slug = ?",
+        Integer.class,
+        trackSlug,
+        slug);
+  }
+
+  private String topicIdOf(String slug) {
+    return jdbc.queryForObject(
+        "select t.id::text from certforge.catalog_topic t"
+            + " join certforge.catalog_track_version_topic tvt on tvt.topic_id = t.id"
+            + " join certforge.catalog_track_version tv on tv.id = tvt.track_version_id"
+            + " join certforge.catalog_track tr on tr.id = tv.track_id"
+            + " where tr.slug = ? and t.slug = ?",
+        String.class,
+        trackSlug,
+        slug);
+  }
+
+  private String topicsAndTermsOf(String blueprintId) throws Exception {
+    String body =
+        send(get("/api/study/interviews/blueprints/" + blueprintId), null)
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
+    return JsonPath.read(body, "$.topics[*].topicSlug").toString()
+        + JsonPath.read(body, "$.topics[*].weight").toString()
+        + JsonPath.read(body, "$.topics[*].matchedTerms[*].term").toString();
   }
 
   @Test

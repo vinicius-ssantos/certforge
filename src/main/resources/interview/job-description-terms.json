@@ -1,0 +1,64 @@
+{
+  "note": "Terms that reach a canonical interview topic, for #22. This is a reviewed dictionary and not a model: #22 defers opaque AI-only weighting, so the mapping has to be something a learner can be shown. Every match recorded in a blueprint names the term from this file, so 'why is Concurrency weighted three' is answerable by pointing at three rows. Add a term by editing this file in a pull request, where it is reviewed like any other content; nothing infers a term at runtime.",
+  "matching": "Case-insensitive, on word boundaries, so 'spring' does not match 'springboard' and 'JPA' does not match 'JPAX'. A term matches once per topic however often it appears: a description that says Kafka nine times is not nine times more about messaging.",
+  "topics": {
+    "java-language-runtime": [
+      "java", "jvm", "garbage collection", "gc tuning", "records", "sealed",
+      "pattern matching", "virtual threads", "project loom", "jmh", "bytecode"
+    ],
+    "concurrency": [
+      "concurrency", "concurrent", "multithreading", "multi-threading", "thread safety",
+      "threads", "executorservice", "completablefuture", "reactive", "race condition",
+      "locks", "atomic", "parallel"
+    ],
+    "object-oriented-design": [
+      "object-oriented", "oop", "solid", "design patterns", "clean code", "refactoring",
+      "dependency injection", "composition", "inheritance", "clean architecture",
+      "hexagonal", "ports and adapters"
+    ],
+    "data-structures-algorithms": [
+      "algorithms", "data structures", "complexity", "big-o", "big o", "sorting",
+      "hashmap", "collections", "leetcode", "optimisation", "optimization"
+    ],
+    "spring": [
+      "spring", "spring boot", "spring framework", "spring mvc", "spring security",
+      "spring data", "webflux", "micronaut", "quarkus", "jakarta ee", "java ee"
+    ],
+    "persistence": [
+      "jpa", "hibernate", "sql", "postgresql", "postgres", "mysql", "oracle database",
+      "mongodb", "redis", "flyway", "liquibase", "transactions", "indexing",
+      "query optimisation", "query optimization", "jdbc", "orm"
+    ],
+    "testing": [
+      "testing", "unit tests", "unit testing", "integration tests", "integration testing",
+      "junit", "mockito", "testcontainers", "tdd", "bdd", "test automation",
+      "code coverage", "contract tests", "mutation testing"
+    ],
+    "domain-boundaries": [
+      "ddd", "domain-driven", "domain driven", "bounded context", "aggregate",
+      "ubiquitous language", "event storming", "modular monolith", "domain model",
+      "anti-corruption layer"
+    ],
+    "distributed-systems": [
+      "microservices", "distributed", "idempotency", "idempotent", "resilience",
+      "circuit breaker", "retries", "eventual consistency", "cap theorem", "saga",
+      "service mesh", "grpc", "rest api", "api gateway", "load balancing"
+    ],
+    "messaging": [
+      "kafka", "rabbitmq", "activemq", "sqs", "sns", "pub/sub", "pubsub",
+      "event-driven", "event driven", "message broker", "queues", "streaming",
+      "outbox", "dead letter"
+    ],
+    "cloud-operations": [
+      "aws", "azure", "gcp", "google cloud", "kubernetes", "k8s", "docker",
+      "containers", "terraform", "ci/cd", "jenkins", "github actions", "gitlab ci",
+      "observability", "prometheus", "grafana", "opentelemetry", "sre",
+      "infrastructure as code", "helm", "serverless", "lambda"
+    ],
+    "system-design": [
+      "system design", "architecture", "scalability", "scalable", "high availability",
+      "caching", "capacity planning", "throughput", "latency", "trade-offs",
+      "tradeoffs", "technical design", "architectural decision"
+    ]
+  }
+}
