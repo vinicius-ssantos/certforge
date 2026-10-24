@@ -693,6 +693,19 @@ export const ptBR: Catalog = {
       decidedBy: (reviewer: string) => ` por ${reviewer}`,
     },
 
+    objectiveSources: {
+      heading: "Onde o objetivo citado foi lido",
+      loading: "Carregando a fonte do objetivo",
+      notACertification: "Este tópico pertence a uma taxonomia que não cita nenhum exame.",
+      statusVerified: "Verificado contra a página do fornecedor",
+      statusUnverified: "Ninguém leu a página do fornecedor ainda",
+      statusStale: "O fornecedor publicou algo mais novo",
+      statusRetired: "O exame está retirado",
+      sourcePage: "Página do fornecedor",
+      verifiedOn: (date: string) => `lido em ${date}`,
+      keyNotOnCurrentPage: "não está na leitura atual da página",
+    },
+
     reviewPanel: {
       policyLegend: "Política de conteúdo",
       checklistCount: (checked: number, total: number) => `${checked} de ${total} verificados`,

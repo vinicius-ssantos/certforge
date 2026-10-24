@@ -55,6 +55,13 @@ performs and signs.
 `STALE` is an observation, not a computation: age is not staleness, and a stable exam's objectives
 can be years old and exactly right. A person who notices the provider has moved on records it.
 
+**The reviewer sees it, not only the administrator who recorded it.** A reviewer judging whether a
+question's claimed objective is real reads the same status, source page and verification date
+beside the question's own references — a reference is evidence for the *answer*; this is the
+separate evidence that the *objective* it claims is a real line on the provider's page. Reaching it
+needs no catalog-administration permission: reading the source you are judging a claim against is
+not administering the catalog.
+
 **When a provider changes an exam.** Read the new page and record it. The new reading replaces the
 previous one — a snapshot is one reading of one page, so an objective no longer listed is no longer
 an objective. One thing a new reading may not do: drop an objective that a published question still

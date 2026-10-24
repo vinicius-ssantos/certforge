@@ -37,6 +37,24 @@ export function formatTime(iso: string, locale: string): string {
   return found.format(new Date(iso));
 }
 
+/**
+ * The day alone, no time of day -- a plain `date` field such as "an objective's page was last
+ * verified on". Parsed with the `T00:00:00` suffix rather than passed straight to `Date`: a bare
+ * `2026-10-22` is parsed as UTC midnight, which is already yesterday evening in a browser west of
+ * Greenwich, and the date on screen would disagree with the date in the payload for no reason a
+ * reader could see.
+ */
+const dateFormatters = new Map<string, Intl.DateTimeFormat>();
+
+export function formatDate(isoDate: string, locale: string): string {
+  let found = dateFormatters.get(locale);
+  if (!found) {
+    found = new Intl.DateTimeFormat(locale, { dateStyle: "medium" });
+    dateFormatters.set(locale, found);
+  }
+  return found.format(new Date(`${isoDate}T00:00:00`));
+}
+
 /** How each session status is named. Unknown statuses are shown as the code, as before. */
 export function statusLabel(status: string, t: Catalog): string {
   const labels: Record<string, string> = {

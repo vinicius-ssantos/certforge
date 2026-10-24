@@ -1,10 +1,13 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.internal.CatalogRows.MappingRow;
+import dev.certforge.preparationcatalog.internal.CatalogRows.ObjectiveSnapshotRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TopicRow;
 import dev.certforge.preparationcatalog.internal.CatalogRows.TrackVersionRow;
 import dev.certforge.preparationcatalog.internal.EditorialViews.AuthorableTopic;
 import dev.certforge.preparationcatalog.internal.EditorialViews.AuthorableTrack;
+import dev.certforge.preparationcatalog.internal.EditorialViews.ObjectiveSourceEntry;
+import dev.certforge.preparationcatalog.internal.EditorialViews.ObjectiveSourceView;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -125,6 +128,49 @@ class EditorialCatalogService {
               }
             });
     return refs;
+  }
+
+  /**
+   * Where this exam version's objectives were read, and whether that reading can still be trusted
+   * (#177). The same data {@code CatalogAdminController} serves, reached without {@code
+   * CATALOG_MANAGE}: a reviewer judging a question's objective claim has to be able to read this,
+   * and reading it is not administering the catalog.
+   *
+   * <p>Keyed by the topic rather than by an exam version id, and that is not incidental. {@code
+   * RevisionView.examVersionId} is null until a revision publishes -- {@code markPublished} is the
+   * only writer of {@code track_version_id} -- so a reviewer deciding a revision in {@code
+   * TECHNICAL_REVIEW}, which is the one moment this exists for, would have no id to ask with. A
+   * topic always has one: {@link #relevantVersion(UUID)} is the same "version a question written
+   * now would be published against" that topic authoring already resolves, so asking by topic shows
+   * the reviewer the version their decision actually bears on, before and after publication alike.
+   */
+  @Transactional(readOnly = true)
+  ObjectiveSourceView objectiveSourcesForTopic(UUID topicId) {
+    TopicRow topic =
+        repository
+            .findTopic(topicId)
+            .orElseThrow(() -> CatalogException.notFound("topic_not_found", "Topic not found"));
+    Optional<TrackVersionRow> version = relevantVersion(topic.trackId());
+    if (version.isEmpty() || !version.get().isCertification()) {
+      // No version to read from at all, or an interview taxonomy version, which cites no exam --
+      // two different facts that read the same to a reviewer: there is no provider page here.
+      // (The same distinction CatalogAdminService's objectivesStatus already draws for admins.)
+      return new ObjectiveSourceView("NOT_A_CERTIFICATION", null, null, List.of());
+    }
+    UUID examVersionId = version.get().id();
+    Optional<ObjectiveSnapshotRow> snapshot = repository.findObjectiveSnapshot(examVersionId);
+    List<ObjectiveSourceEntry> objectives =
+        repository.findObjectives(examVersionId).stream()
+            .map(
+                objective ->
+                    new ObjectiveSourceEntry(
+                        objective.objectiveKey(), objective.title(), objective.sourceRef()))
+            .toList();
+    return new ObjectiveSourceView(
+        snapshot.map(ObjectiveSnapshotRow::status).orElse("UNVERIFIED"),
+        snapshot.map(ObjectiveSnapshotRow::sourceUrl).orElse(null),
+        snapshot.map(ObjectiveSnapshotRow::verifiedOn).orElse(null),
+        objectives);
   }
 
   /** The version a question written now would be published against. */

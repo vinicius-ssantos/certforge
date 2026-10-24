@@ -1,9 +1,12 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.internal.EditorialViews.AuthorableTrack;
+import dev.certforge.preparationcatalog.internal.EditorialViews.ObjectiveSourceView;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +43,18 @@ class EditorialCatalogController {
   @GetMapping("/topics")
   List<AuthorableTrack> topics() {
     return service.authorableTracks();
+  }
+
+  /**
+   * Where the exam version a question on this topic would publish against had its objectives read,
+   * and whether that reading is current (#177). A reviewer judging a question's claimed objective
+   * keys reads this beside the question's own references, which are evidence for the answer rather
+   * than for the objective. Keyed by topic rather than by exam version id because a revision
+   * carries no exam version id until it publishes -- see {@link
+   * EditorialCatalogService#objectiveSourcesForTopic}.
+   */
+  @GetMapping("/topics/{topicId}/objective-sources")
+  ObjectiveSourceView objectiveSources(@PathVariable UUID topicId) {
+    return service.objectiveSourcesForTopic(topicId);
   }
 }

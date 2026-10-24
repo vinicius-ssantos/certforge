@@ -313,6 +313,75 @@ class QuestionBankIT {
         .andExpect(jsonPath("$.revisions[0].objectiveKeys").value(org.hamcrest.Matchers.empty()));
   }
 
+  // ---- where an objective was read, for a reviewer to see (#177) -----------------------------
+
+  /**
+   * A reviewer judging whether a question's claimed objective is real had no way to see where it
+   * was read or whether that reading is current: {@code CatalogAdminController} carries the same
+   * data but requires {@code CATALOG_MANAGE}, which a reviewer has no reason to hold.
+   *
+   * <p>Keyed by the question's topic, not by an exam version id: a revision carries no exam version
+   * id before it publishes, which is exactly when a reviewer is deciding it.
+   */
+  @Test
+  void aReviewerReadsWhereAnObjectiveWasReadAndWhetherItIsCurrent() throws Exception {
+    resetObjectiveFixtures();
+    verifyObjectives("1.1");
+
+    // Nobody with only STUDY reaches this at all -- it is editorial content, not learner content.
+    send(get("/api/editorial/catalog/topics/" + TOPIC + "/objective-sources"), null, null)
+        .andExpect(status().isUnauthorized());
+
+    // A plain reviewer, with no CATALOG_MANAGE, is the point of the issue.
+    send(get("/api/editorial/catalog/topics/" + TOPIC + "/objective-sources"), reviewer, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.status").value("VERIFIED"))
+        .andExpect(jsonPath("$.sourceUrl").value("https://example.com/objectives"))
+        .andExpect(jsonPath("$.verifiedOn").value("2026-10-22"))
+        .andExpect(jsonPath("$.objectives[0].key").value("1.1"))
+        .andExpect(jsonPath("$.objectives[0].title").value("Objective 1.1"));
+  }
+
+  @Test
+  void anObjectiveNobodyHasReadSaysSoRatherThanHidingTheQuestion() throws Exception {
+    resetObjectiveFixtures();
+
+    send(get("/api/editorial/catalog/topics/" + TOPIC + "/objective-sources"), reviewer, null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.status").value("UNVERIFIED"))
+        .andExpect(jsonPath("$.sourceUrl").value(nullValue()))
+        .andExpect(jsonPath("$.objectives").isEmpty());
+  }
+
+  @Test
+  void anInterviewTopicCitesNoExamAndSaysSoRatherThanUnverified() throws Exception {
+    // A topic of the seeded (draft) interview taxonomy: its track has no provider page to read,
+    // which is a fact about the taxonomy, not a reading nobody has done yet (the distinction
+    // CatalogAdminService.objectivesStatus already draws for the admin screen). Draft, not
+    // active -- this read is editorial, and an editor writes for a draft taxonomy before it ever
+    // opens.
+    String interviewTopic = "a3000000-0000-4000-8000-000000000101";
+
+    send(
+            get("/api/editorial/catalog/topics/" + interviewTopic + "/objective-sources"),
+            reviewer,
+            null)
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.status").value("NOT_A_CERTIFICATION"))
+        .andExpect(jsonPath("$.sourceUrl").value(nullValue()))
+        .andExpect(jsonPath("$.objectives").isEmpty());
+  }
+
+  @Test
+  void anUnknownTopicIsNotFoundRatherThanAnEmptyReading() throws Exception {
+    send(
+            get("/api/editorial/catalog/topics/" + UUID.randomUUID() + "/objective-sources"),
+            reviewer,
+            null)
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("topic_not_found"));
+  }
+
   private static String body(String prompt) {
     return body(prompt, "SINGLE_CHOICE", TOPIC, 21, true, false);
   }

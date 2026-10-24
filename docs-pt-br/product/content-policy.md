@@ -57,6 +57,13 @@ um ato que uma pessoa realiza e assina.
 `STALE` é observação, não cálculo: idade não é desatualização, e os objetivos de uma prova estável
 podem ter anos e estar exatos. Quem percebe que o fornecedor mudou registra.
 
+**O revisor vê isso, não só quem administra e registrou.** Um revisor julgando se o objetivo
+citado por uma questão é real lê o mesmo status, a mesma página fonte e a mesma data de
+verificação ao lado das próprias referências da questão — uma referência é evidência para a
+*resposta*; isto é a evidência separada de que o *objetivo* citado é uma linha real na página do
+fornecedor. Chegar até isso não exige permissão de administração do catálogo: ler a fonte contra a
+qual se julga uma afirmação não é administrar o catálogo.
+
 **Quando o fornecedor muda a prova.** Leia a página nova e registre. A leitura nova substitui a
 anterior — um snapshot é uma leitura de uma página, então objetivo que não está mais listado não é
 mais objetivo. Uma coisa que a leitura nova não pode fazer: derrubar objetivo que uma questão

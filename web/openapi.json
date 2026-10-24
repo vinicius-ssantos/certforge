@@ -1536,6 +1536,43 @@
         "required" : [ "correct", "correctOptions", "explanation", "options", "references", "selectedOptions" ],
         "type" : "object"
       },
+      "ObjectiveSourceEntry" : {
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "sourceRef" : {
+            "type" : [ "string", "null" ]
+          },
+          "title" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "sourceRef", "title" ],
+        "type" : "object"
+      },
+      "ObjectiveSourceView" : {
+        "properties" : {
+          "objectives" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ObjectiveSourceEntry"
+            },
+            "type" : "array"
+          },
+          "sourceUrl" : {
+            "type" : [ "string", "null" ]
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "verifiedOn" : {
+            "format" : "date",
+            "type" : [ "string", "null" ]
+          }
+        },
+        "required" : [ "objectives", "sourceUrl", "status", "verifiedOn" ],
+        "type" : "object"
+      },
       "OptionAnswer" : {
         "properties" : {
           "correct" : {
@@ -3804,6 +3841,33 @@
                     "$ref" : "#/components/schemas/AuthorableTrack"
                   },
                   "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "editorial-catalog-controller" ]
+      }
+    },
+    "/api/editorial/catalog/topics/{topicId}/objective-sources" : {
+      "get" : {
+        "operationId" : "objectiveSources",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "topicId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ObjectiveSourceView"
                 }
               }
             },
