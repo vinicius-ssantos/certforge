@@ -219,6 +219,17 @@ class InterviewRepository {
     }
   }
 
+  /** Whether this response already carries the learner's marks, which are written once. */
+  boolean hasConceptMarks(UUID responseId) {
+    return Boolean.TRUE.equals(
+        jdbc.sql(
+                "select exists (select 1 from certforge.interview_response_concept"
+                    + " where response_id = :response)")
+            .param("response", responseId)
+            .query(Boolean.class)
+            .single());
+  }
+
   /**
    * Every response of one learner on one track version, with its topic, for building the evidence
    * read model.

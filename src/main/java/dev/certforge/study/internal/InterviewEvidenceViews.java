@@ -36,8 +36,27 @@ interface InterviewEvidenceViews {
       TopicId topicId,
       ObjectiveEvidenceView objective,
       GuidedEvidenceView guided,
-      /** The strongest claim this view makes, in words rather than as a number. */
-      List<String> signals) {}
+      /** The strongest claim this view makes, named rather than reduced to a number. */
+      List<EvidenceSignalView> signals) {}
+
+  /**
+   * One thing the evidence says, as a name and the counts behind it.
+   *
+   * <p>A name rather than a sentence, because the first version of this view composed English prose
+   * on the server and an interface that is translated ([ADR
+   * 0012](../../../../../../docs/adr/0012-interface-language.md)) could not say it in Portuguese.
+   * The kind and the figures are the claim; the wording belongs to whoever is reading.
+   *
+   * <p>Every kind is a restatement of a count the caller can already see and check, never an
+   * inference about the learner: {@code SURE_AND_WRONG} with {@code count} 2 is two responses, and
+   * their ids are in the payload beside it.
+   *
+   * @param kind {@code SURE_AND_WRONG}, {@code UNSURE_AND_RIGHT}, {@code CONCEPT_MARKED_MISSED},
+   *     {@code GUIDED_PRACTISED_WITH_NO_MISSES} or {@code PRACTISED_NOTHING_TO_SINGLE_OUT}
+   * @param count the number behind the claim: responses, or times a concept was marked
+   * @param concept the reviewer's own wording for the concept, for the kinds that name one
+   */
+  record EvidenceSignalView(String kind, int count, @Schema(nullable = true) String concept) {}
 
   /**
    * Objective items, which are graded.

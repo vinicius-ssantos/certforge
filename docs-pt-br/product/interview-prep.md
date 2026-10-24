@@ -185,6 +185,11 @@ Qualquer indicador agregado de prontidão deve permanecer explicável.
 
 ## Fronteira da IA
 
+**O contrato que um futuro entrevistador conversacional consumiria já está definido:**
+[a fronteira do entrevistador de IA](../architecture/ai-interviewer-boundary.md) nomeia exatamente
+o que ele pode ler, o que pode dizer, e o que nunca pode produzir — decidido antes de qualquer
+implementação, conforme a #24.
+
 No futuro, a IA poderá:
 
 - sugerir explicações complementares;
