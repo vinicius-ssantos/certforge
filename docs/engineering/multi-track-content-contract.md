@@ -97,4 +97,6 @@ admits it before a question may claim it.
 
 ## Explicit non-goals
 
-No automatic external scraping, no automatic source verification, no bypass of the editorial review, no generic remote shell execution, no unversioned exam claims, and no learner-facing GENERAL tracks in this first step.
+No automatic external scraping, no automatic source verification, no bypass of the editorial review, no generic remote shell execution, no unversioned exam claims, and no learner-facing GENERAL tracks in this first step of the *import pipeline* described above.
+
+That non-goal was about the pipeline, not about whether a learner could ever reach a GENERAL track once one existed. #176 has since given the catalog and the UI a general-track read path, the structural twin of the interview one: `GET /api/catalog/general-tracks(/{slug})` and a card beside certification tracks on the home page. It changes nothing here -- an `ACTIVE` general track is still something a human has to set, there is still no importer that writes one, and the seeded `infrastructure-devops-foundations` track stays `DRAFT`, unreachable by this read, until its content pack has been through the review this document is about.

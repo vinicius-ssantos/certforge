@@ -24,6 +24,22 @@ public interface PreparationCatalog {
    */
   Optional<InterviewTrackView> activeInterviewTrack(String slug);
 
+  /**
+   * Every active general-knowledge track, each with the live version of its taxonomy (#176).
+   *
+   * <p>The plural of {@link #activeGeneralTrack(String)}, for a learner browsing what there is to
+   * study rather than asking for one track by name they already know.
+   */
+  List<GeneralTrackView> activeGeneralTracks();
+
+  /**
+   * The active general track with the given slug, and the live version of its taxonomy.
+   *
+   * <p>The structural twin of {@link #activeInterviewTrack(String)}: a general track cites no exam
+   * either, so {@link #activeTrack(String)} cannot answer for it for the same reason.
+   */
+  Optional<GeneralTrackView> activeGeneralTrack(String slug);
+
   /** The topic if it is part of the active exam version of an active track. */
   Optional<TopicView> findActiveTopic(TopicId id);
 

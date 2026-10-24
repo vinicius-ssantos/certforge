@@ -132,7 +132,7 @@ export const ptBR: Catalog = {
   },
 
   tracks: {
-    title: "Trilhas de certificação",
+    title: "Trilhas",
     loading: "Carregando as trilhas",
     emptyTitle: "Nenhuma trilha disponível ainda",
     emptyBody: "Volte em breve. As trilhas aparecem aqui quando são publicadas.",

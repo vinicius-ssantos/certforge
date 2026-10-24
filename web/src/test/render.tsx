@@ -174,6 +174,9 @@ export function renderApp(
       ? { body: options.as ?? account }
       : { status: 401, body: { code: "unauthenticated", status: 401, title: "Unauthorized" } },
     "GET /api/auth/csrf": { body: { headerName: "X-XSRF-TOKEN", token: "test-csrf-token" } },
+    // Empty by default (#176): most tests are about certification tracks and have no reason to
+    // care that this call exists. A test exercising general tracks overrides it via `routes`.
+    "GET /api/catalog/general-tracks": { body: [] },
     "GET /api/study/mock-exams/availability": {
       body: {
         activeSessionId: null,

@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router";
 import { LoginPage } from "./auth/LoginPage";
 import { RegisterPage } from "./auth/RegisterPage";
 import { RequireAuth } from "./auth/RequireAuth";
+import { GeneralTrackPage } from "./catalog/GeneralTrackPage";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
 import { CatalogPage } from "./editorial/CatalogPage";
@@ -49,6 +50,7 @@ export function App() {
         <Route element={<RequireAuth />}>
           <Route index element={<TracksPage />} />
           <Route path="/tracks/:slug" element={<TrackPage />} />
+          <Route path="/general-tracks/:slug" element={<GeneralTrackPage />} />
           <Route path="/sessions/:sessionId" element={<SessionPage />} />
           <Route path="/mock-exams/:sessionId" element={<MockExamPage />} />
           <Route path="/mock-exams/:sessionId/result" element={<MockExamResultPage />} />
