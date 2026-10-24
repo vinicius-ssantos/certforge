@@ -468,7 +468,6 @@ export const ptBR: Catalog = {
       "Uma taxonomia de entrevista fica disponível quando é publicada. As trilhas de certificação estão na página inicial.",
     topicCount: (count: number) =>
       `${count} ${plural(TAG, count, { one: "tópico", other: "tópicos" })}`,
-    taxonomy: (label: string) => `Taxonomia ${label}`,
     browseHeading: "Tópicos desta taxonomia",
     weightLabel: (weight: number) => `Cobrado em entrevistas: ${weight} de 5`,
     startHeading: "Começar uma sessão",

@@ -182,7 +182,10 @@ function TrackSection({ track }: { track: InterviewTrack }) {
     <section aria-labelledby={`track-${track.id}`} className="panel">
       <h2 id={`track-${track.id}`}>{track.name}</h2>
       <p className="muted">
-        {t.interview.taxonomy(track.versionLabel)} · {t.interview.topicCount(flat.length)}
+        {/* The label already reads naturally on its own -- "Taxonomy 1" -- the same way a
+            certification's exam version label does, so it is shown as given rather than
+            wrapped in another word that would double up on real seed data. */}
+        {track.versionLabel} · {t.interview.topicCount(flat.length)}
       </p>
 
       <h3>{t.interview.browseHeading}</h3>

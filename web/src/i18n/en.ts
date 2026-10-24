@@ -517,7 +517,6 @@ export const en = {
       "An interview taxonomy becomes available once it is published. Certification tracks are on the home page.",
     topicCount: (count: number) =>
       `${count} ${plural(TAG, count, { one: "topic", other: "topics" })}`,
-    taxonomy: (label: string) => `Taxonomy ${label}`,
     browseHeading: "Topics in this taxonomy",
     weightLabel: (weight: number) => `Asked in interviews: ${weight} of 5`,
     startHeading: "Start a session",

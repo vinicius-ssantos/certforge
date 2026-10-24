@@ -165,6 +165,10 @@ describe("interview preparation", () => {
     );
 
     expect(await screen.findByRole("heading", { name: "Java Backend interview" })).toBeTruthy();
+    // The label is shown as given, not wrapped in another word: real seed data already reads
+    // "Taxonomy 1" on its own, and a second "Taxonomy" prefixed in front of it would be a visible
+    // doubling, not a translation.
+    expect(screen.getByText(/Taxonomy 1 ·/)).toBeTruthy();
     // Topic names are reviewed content and stay in English in every locale (ADR 0012).
     await userEvent.click(await screen.findByLabelText("Concurrency"));
     await userEvent.click(screen.getByRole("button", { name: "Start session" }));
