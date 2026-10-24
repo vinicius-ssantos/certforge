@@ -91,7 +91,7 @@ test.describe("general-knowledge preparation", () => {
     await page.getByLabel("The expected option").check();
     await page.getByLabel("High – I am certain").check();
     await page.getByRole("button", { name: "Submit answer" }).click();
-    await expect(page.getByText("Correct")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Correct" })).toBeVisible();
     await page.getByRole("button", { name: "End session without finishing" }).click();
     await page.getByRole("button", { name: "Yes, end the session" }).click();
 
