@@ -230,6 +230,15 @@ class InterviewSessionIT {
     return positions.get(0);
   }
 
+  /**
+   * The learner saying what their own answer covered, which is a separate call because the concepts
+   * are hidden until the answer is committed.
+   */
+  private ResultActions mark(String sessionId, int position, String body) throws Exception {
+    return send(
+        post("/api/study/interviews/" + sessionId + "/items/" + position + "/concepts"), body);
+  }
+
   private ResultActions answer(String sessionId, int position, String key, String body)
       throws Exception {
     MockHttpServletRequestBuilder request =
@@ -526,16 +535,14 @@ class InterviewSessionIT {
         // it so the learner can read what they answered rather than trust a count.
         .andExpect(jsonPath("$.topics[0].objective.sureAndWrong.length()").value(1))
         .andExpect(jsonPath("$.topics[0].objective.unsureAndRight.length()").value(1))
+        // Named, not narrated: the interface is translated (ADR 0012), so the claim travels as a
+        // kind and a count and the wording belongs to whoever is reading it.
         .andExpect(
-            jsonPath("$.topics[0].signals")
-                .value(
-                    org.hamcrest.Matchers.hasItem(
-                        org.hamcrest.Matchers.containsString("confident and wrong"))))
+            jsonPath("$.topics[0].signals[*].kind")
+                .value(org.hamcrest.Matchers.hasItems("SURE_AND_WRONG", "UNSURE_AND_RIGHT")))
         .andExpect(
-            jsonPath("$.topics[0].signals")
-                .value(
-                    org.hamcrest.Matchers.hasItem(
-                        org.hamcrest.Matchers.containsString("right but unsure"))));
+            jsonPath("$.topics[0].signals[?(@.kind=='SURE_AND_WRONG')].count")
+                .value(org.hamcrest.Matchers.hasItem(1)));
   }
 
   @Test
@@ -546,8 +553,11 @@ class InterviewSessionIT {
             sessionId,
             position,
             "evidence-guided1",
-            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":60000,"
-                + "\"coveredConcepts\":{\"0\":true,\"1\":false}}")
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":60000}")
+        .andExpect(status().isCreated());
+    // Said after reading what a reviewer expected, which is the only moment a learner can say it
+    // honestly -- and the reason this is not a field on the answer above.
+    mark(sessionId, position, "{\"coveredConcepts\":{\"0\":true,\"1\":false}}")
         .andExpect(status().isCreated());
 
     evidence()
@@ -561,12 +571,11 @@ class InterviewSessionIT {
         .andExpect(jsonPath("$.topics[0].guided.conceptsMarkedMissed[0].times").value(1))
         .andExpect(
             jsonPath("$.topics[0].guided.conceptsMarkedMissed[0].responses.length()").value(1))
-        // Said by the learner, about their own answer: the signal says so in those words.
+        // Said by the learner, about their own answer, and the signal carries the reviewer's own
+        // wording for the concept rather than a label this product invented.
         .andExpect(
-            jsonPath("$.topics[0].signals")
-                .value(
-                    org.hamcrest.Matchers.hasItem(
-                        org.hamcrest.Matchers.containsString("you marked"))));
+            jsonPath("$.topics[0].signals[?(@.kind=='CONCEPT_MARKED_MISSED')].concept")
+                .value(org.hamcrest.Matchers.hasItem("durable duplicate detection")));
   }
 
   @Test
@@ -576,8 +585,9 @@ class InterviewSessionIT {
             sessionId,
             positionOf(sessionId, guidedRevision),
             "evidence-stable1",
-            "{\"selectedOptions\":[],\"confidence\":\"MEDIUM\",\"elapsedMillis\":1000,"
-                + "\"coveredConcepts\":{\"1\":false}}")
+            "{\"selectedOptions\":[],\"confidence\":\"MEDIUM\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    mark(sessionId, positionOf(sessionId, guidedRevision), "{\"coveredConcepts\":{\"1\":false}}")
         .andExpect(status().isCreated());
     answer(
             sessionId,
@@ -596,13 +606,16 @@ class InterviewSessionIT {
   @Test
   void marksAreRefusedWhenTheyAreAboutSomethingTheQuestionDoesNotList() throws Exception {
     String sessionId = startBoth();
+    int guided = positionOf(sessionId, guidedRevision);
+    int objective = positionOf(sessionId, objectiveRevision);
 
     answer(
             sessionId,
-            positionOf(sessionId, guidedRevision),
+            guided,
             "evidence-bad-con1",
-            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
-                + "\"coveredConcepts\":{\"7\":false}}")
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    mark(sessionId, guided, "{\"coveredConcepts\":{\"7\":false}}")
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("unknown_expected_concept"));
 
@@ -610,12 +623,44 @@ class InterviewSessionIT {
     // accepting it would record a statement about a question that has nothing to state it about.
     answer(
             sessionId,
-            positionOf(sessionId, objectiveRevision),
+            objective,
             "evidence-bad-con2",
-            "{\"selectedOptions\":[\"A\"],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
-                + "\"coveredConcepts\":{\"0\":true}}")
+            "{\"selectedOptions\":[\"A\"],\"confidence\":\"LOW\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    mark(sessionId, objective, "{\"coveredConcepts\":{\"0\":true}}")
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.code").value("objective_item_has_no_concepts"));
+  }
+
+  /**
+   * The marks are about an answer, so there has to be one; and once said, they stand. Both are what
+   * makes the evidence rebuildable: a count of what a learner said is only honest if nothing can be
+   * said about an answer that does not exist, or said twice about one that does.
+   */
+  @Test
+  void marksNeedAnAnswerFirstAndAreSaidOnlyOnce() throws Exception {
+    String sessionId = startBoth();
+    int guided = positionOf(sessionId, guidedRevision);
+
+    mark(sessionId, guided, "{\"coveredConcepts\":{\"0\":true}}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("item_not_answered_yet"));
+
+    answer(
+            sessionId,
+            guided,
+            "evidence-once-1",
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    mark(sessionId, guided, "{\"coveredConcepts\":{\"0\":true}}").andExpect(status().isCreated());
+    mark(sessionId, guided, "{\"coveredConcepts\":{\"0\":false}}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("concepts_already_marked"));
+
+    // The first word stands, and the evidence still says what was said the first time.
+    evidence()
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.topics[0].guided.conceptsMarkedMissed.length()").value(0));
   }
 
   @Test
@@ -632,8 +677,9 @@ class InterviewSessionIT {
             sessionId,
             positionOf(sessionId, guidedRevision),
             "evidence-frozen1",
-            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
-                + "\"coveredConcepts\":{\"0\":false}}")
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    mark(sessionId, positionOf(sessionId, guidedRevision), "{\"coveredConcepts\":{\"0\":false}}")
         .andExpect(status().isCreated());
 
     // A weakness signal is only rebuildable if what it was built from cannot be rewritten.

@@ -67,22 +67,33 @@ class CatalogReadService implements PreparationCatalog {
     return repository
         .findActiveTrackBySlug(slug)
         .filter(track -> track.kind() == TrackKind.INTERVIEW)
-        .flatMap(
-            track ->
-                repository
-                    .findActiveExamVersion(track.id())
-                    // The mirror image of the certification filter in toView: an interview version
-                    // is the one without an exam beside it, and that absence is what identifies it.
-                    .filter(version -> !version.isCertification())
-                    .map(
-                        version ->
-                            new InterviewTrackView(
-                                new PreparationTrackId(track.id()),
-                                track.slug(),
-                                track.name(),
-                                new TrackVersionId(version.id()),
-                                version.label(),
-                                topicTree(track.id(), version.id()))));
+        .flatMap(this::toInterviewView);
+  }
+
+  @Override
+  public List<InterviewTrackView> activeInterviewTracks() {
+    return repository.findTracks(CatalogStatus.ACTIVE).stream()
+        .filter(track -> track.kind() == TrackKind.INTERVIEW)
+        .map(this::toInterviewView)
+        .flatMap(Optional::stream)
+        .toList();
+  }
+
+  private Optional<InterviewTrackView> toInterviewView(CatalogRows.TrackRow track) {
+    return repository
+        .findActiveExamVersion(track.id())
+        // The mirror image of the certification filter in toView: an interview version is the one
+        // without an exam beside it, and that absence is what identifies it.
+        .filter(version -> !version.isCertification())
+        .map(
+            version ->
+                new InterviewTrackView(
+                    new PreparationTrackId(track.id()),
+                    track.slug(),
+                    track.name(),
+                    new TrackVersionId(version.id()),
+                    version.label(),
+                    topicTree(track.id(), version.id())));
   }
 
   @Override

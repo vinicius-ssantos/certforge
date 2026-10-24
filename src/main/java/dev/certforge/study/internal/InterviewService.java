@@ -269,8 +269,7 @@ class InterviewService {
       String key,
       List<String> selectedOptions,
       Confidence confidence,
-      long elapsedMillis,
-      Map<Integer, Boolean> coveredConcepts) {
+      long elapsedMillis) {
     ActorId learner = currentActor.require();
     requireKey(key);
     List<String> selected = normalize(selectedOptions);
@@ -322,14 +321,6 @@ class InterviewService {
     }
     if (kind == ItemKind.OBJECTIVE) {
       validate(evidence, selected);
-      if (!coveredConcepts.isEmpty()) {
-        throw StudyException.invalid(
-            "objective_item_has_no_concepts",
-            "An objective question is graded against its options, not against expected concepts");
-      }
-    }
-    if (kind == ItemKind.GUIDED) {
-      validateConcepts(item.revisionId(), coveredConcepts);
     }
 
     Instant now = clock.instant().truncatedTo(ChronoUnit.MICROS);
@@ -349,10 +340,55 @@ class InterviewService {
             key,
             fingerprint);
     repository.insertResponse(response);
-    // The learner's own marks about their own answer: evidence they created, recorded beside the
-    // response and immutable with it (#23). Nothing scores them.
-    repository.insertConceptMarks(response.id(), coveredConcepts);
     return answerView(response, evidence);
+  }
+
+  /**
+   * The learner's own marks about which expected concepts their own answer covered (#23).
+   *
+   * <p>A separate step from answering, and it has to be one: the concepts are reviewed criteria,
+   * hidden until the response is committed, so at the moment of answering the learner has not been
+   * shown them. The first version of this took the marks on the answer request, which asked a
+   * learner to assess themselves against a list they were not allowed to read yet -- a field only a
+   * client that invented the marks could fill.
+   *
+   * <p>Recorded once. The marks are immutable evidence beside the response, so changing one's mind
+   * later is a second sitting of the question, not an edit of what was said about the first.
+   */
+  @Transactional
+  InterviewAnswerView markConcepts(UUID sessionId, int position, Map<Integer, Boolean> marks) {
+    InterviewSession session = owned(sessionId);
+    if (session.status() != SessionStatus.IN_PROGRESS) {
+      throw StudyException.conflict(
+          "session_not_in_progress", "The session is no longer in progress");
+    }
+    SnapshotItem item =
+        repository
+            .itemAt(sessionId, position)
+            .orElseThrow(() -> StudyException.notFound("question_not_found", "Question not found"));
+    InterviewResponse response =
+        repository
+            .findAt(sessionId, position)
+            .orElseThrow(
+                () ->
+                    StudyException.conflict(
+                        "item_not_answered_yet",
+                        "Answer the question first: these marks are about your own answer"));
+    if (item.itemKind() != ItemKind.GUIDED) {
+      throw StudyException.invalid(
+          "objective_item_has_no_concepts",
+          "An objective question is graded against its options, not against expected concepts");
+    }
+    if (repository.hasConceptMarks(response.id())) {
+      throw StudyException.conflict(
+          "concepts_already_marked",
+          "You have already said what this answer covered, and that is kept as you said it");
+    }
+    validateConcepts(item.revisionId(), marks);
+    // Evidence the learner created, recorded beside the response and immutable with it (#23).
+    // Nothing scores it.
+    repository.insertConceptMarks(response.id(), marks);
+    return answerView(response, null);
   }
 
   private InterviewAnswerView replay(InterviewResponse response, String fingerprint) {

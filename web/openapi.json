@@ -231,12 +231,6 @@
             "enum" : [ "LOW", "MEDIUM", "HIGH" ],
             "type" : "string"
           },
-          "coveredConcepts" : {
-            "additionalProperties" : {
-              "type" : "boolean"
-            },
-            "type" : "object"
-          },
           "elapsedMillis" : {
             "format" : "int64",
             "maximum" : 86400000,
@@ -710,6 +704,22 @@
         "required" : [ "expected", "stored", "topicId" ],
         "type" : "object"
       },
+      "EvidenceSignalView" : {
+        "properties" : {
+          "concept" : {
+            "type" : [ "string", "null" ]
+          },
+          "count" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "kind" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "concept", "count", "kind" ],
+        "type" : "object"
+      },
       "ExamVersionView" : {
         "properties" : {
           "examCode" : {
@@ -1097,6 +1107,63 @@
         "required" : [ "closedAt", "createdAt", "expiresAt", "id", "items", "requestedCount", "status", "trackVersionId" ],
         "type" : "object"
       },
+      "InterviewStartRequest" : {
+        "properties" : {
+          "blueprintId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "questionCount" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicIds" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "maxItems" : 30,
+            "minItems" : 0,
+            "type" : "array"
+          },
+          "trackSlug" : {
+            "maxLength" : 100,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "required" : [ "trackSlug" ],
+        "type" : "object"
+      },
+      "InterviewTrackView" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicView"
+            },
+            "type" : "array"
+          },
+          "versionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "versionLabel" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "name", "slug", "topics", "versionId", "versionLabel" ],
+        "type" : "object"
+      },
       "LoginRequest" : {
         "properties" : {
           "email" : {
@@ -1131,6 +1198,17 @@
           }
         },
         "required" : [ "objectiveRef", "position", "topicId" ],
+        "type" : "object"
+      },
+      "MarkRequest" : {
+        "properties" : {
+          "coveredConcepts" : {
+            "additionalProperties" : {
+              "type" : "boolean"
+            },
+            "type" : "object"
+          }
+        },
         "type" : "object"
       },
       "MatchView" : {
@@ -2585,7 +2663,7 @@
           },
           "signals" : {
             "items" : {
-              "type" : "string"
+              "$ref" : "#/components/schemas/EvidenceSignalView"
             },
             "type" : "array"
           },
@@ -3745,6 +3823,53 @@
         "tags" : [ "auth-controller" ]
       }
     },
+    "/api/catalog/interview-tracks" : {
+      "get" : {
+        "operationId" : "interviewTracks",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/InterviewTrackView"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-controller" ]
+      }
+    },
+    "/api/catalog/interview-tracks/{slug}" : {
+      "get" : {
+        "operationId" : "interviewTrack",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "slug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-controller" ]
+      }
+    },
     "/api/catalog/tracks" : {
       "get" : {
         "operationId" : "tracks_1",
@@ -4081,7 +4206,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/StartRequest"
+                "$ref" : "#/components/schemas/InterviewStartRequest"
               }
             }
           },
@@ -4315,6 +4440,51 @@
             "application/json" : {
               "schema" : {
                 "$ref" : "#/components/schemas/AnswerRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewAnswerView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/{sessionId}/items/{position}/concepts" : {
+      "post" : {
+        "operationId" : "markConcepts",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "path",
+          "name" : "position",
+          "required" : true,
+          "schema" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/MarkRequest"
               }
             }
           },

@@ -2334,3 +2334,85 @@ button.mock-nav-button.current {
   border-left: 3px solid var(--review);
   padding-left: var(--s3);
 }
+
+/*
+ * Interview preparation (#24).
+ *
+ * The one thing these rules have to carry is that an objective item and a guided item are not the
+ * same kind of thing: one is graded, the other is not graded by anything (ADR 0019). They are told
+ * apart by a named label, in words, with the colour as reinforcement rather than as the message —
+ * a learner who cannot distinguish the two hues still reads which kind they are looking at.
+ */
+.item-kind {
+  font-size: var(--t-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 var(--s2);
+  padding-left: var(--s3);
+  border-left: 3px solid var(--border-strong);
+  color: var(--muted);
+}
+
+.item-kind-objective {
+  border-left-color: var(--accent);
+}
+
+.item-kind-guided {
+  border-left-color: var(--review);
+}
+
+/* Lists of reviewed prose: mistakes, follow-ups, what the evidence says. */
+.interview-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--s3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s2);
+}
+
+.interview-list > li {
+  padding-left: var(--s3);
+  border-left: 2px solid var(--border);
+}
+
+/* The terms behind one weight, which are short and belong on one line each. */
+.interview-terms {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: var(--t-sm);
+}
+
+.interview-answer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--s1) var(--s3);
+  margin: var(--s3) 0;
+}
+
+.interview-answer dt {
+  color: var(--muted);
+  font-size: var(--t-sm);
+}
+
+.interview-answer dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+/*
+ * The weights table. It can outgrow a narrow screen because the third column holds the words
+ * behind a weight, so it scrolls inside its own container rather than widening the page.
+ */
+.weights {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.weights th[scope="row"] {
+  font-weight: 600;
+  text-align: left;
+}
