@@ -82,5 +82,5 @@ export async function signIn(page: Page, account: { email: string; password: str
   await page.getByLabel("Email").fill(account.email);
   await page.getByLabel("Password").fill(account.password);
   await page.getByRole("button", { name: "Sign in" }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Certification tracks" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Tracks" })).toBeVisible();
 }
