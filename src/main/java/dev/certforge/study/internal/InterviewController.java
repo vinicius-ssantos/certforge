@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -34,9 +35,11 @@ import org.springframework.web.bind.annotation.RestController;
 class InterviewController {
 
   private final InterviewService service;
+  private final InterviewEvidenceService evidenceService;
 
-  InterviewController(InterviewService service) {
+  InterviewController(InterviewService service, InterviewEvidenceService evidenceService) {
     this.service = service;
+    this.evidenceService = evidenceService;
   }
 
   @PostMapping
@@ -72,7 +75,14 @@ class InterviewController {
         key,
         request.selectedOptions(),
         request.confidence(),
-        request.elapsedMillis());
+        request.elapsedMillis(),
+        request.coveredConcepts() == null ? Map.of() : request.coveredConcepts());
+  }
+
+  /** What interview practice has shown, with the responses behind every number (#23). */
+  @GetMapping("/evidence")
+  InterviewEvidenceViews.InterviewEvidenceView evidence(@RequestParam String trackSlug) {
+    return evidenceService.of(trackSlug);
   }
 
   @PostMapping("/{sessionId}/complete")
@@ -102,5 +112,12 @@ class InterviewController {
   record AnswerRequest(
       @Size(max = 8) List<@NotBlank @Size(max = 1) String> selectedOptions,
       @NotNull Confidence confidence,
-      @Min(0) @Max(86400000) long elapsedMillis) {}
+      @Min(0) @Max(86400000) long elapsedMillis,
+      /**
+       * For a guided item: which expected concepts the learner says their own answer covered, by
+       * the concept's position, true for covered and false for not. Optional, and marking nothing
+       * means only that they did not say — it is not a claim that nothing was covered. The product
+       * never fills this in, because it never reads the answer (ADR 0019).
+       */
+      @Size(max = 20) Map<Integer, Boolean> coveredConcepts) {}
 }

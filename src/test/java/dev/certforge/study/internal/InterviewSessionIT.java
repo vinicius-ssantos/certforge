@@ -424,6 +424,191 @@ class InterviewSessionIT {
         .andExpect(jsonPath("$.code").value("interview_track_not_found"));
   }
 
+  // ---- what practice has shown (#23) ---------------------------------------------------------
+
+  private ResultActions evidence() throws Exception {
+    return send(get("/api/study/interviews/evidence?trackSlug=" + trackSlug), null);
+  }
+
+  /**
+   * #23 asks for weakness evidence "rather than an opaque readiness score", and the strongest form
+   * of that requirement is the absence: there is no score anywhere in this payload, and these
+   * assertions are what keeps one from being added later without someone noticing.
+   */
+  @Test
+  void evidenceCarriesNoScoreOfAnyKind() throws Exception {
+    String sessionId = startBoth();
+    int position = positionOf(sessionId, objectiveRevision);
+    answer(
+            sessionId,
+            position,
+            "evidence-none-01",
+            "{\"selectedOptions\":[\"A\"],\"confidence\":\"HIGH\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+
+    String body =
+        evidence().andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+
+    assertThat(body)
+        .doesNotContain("readiness")
+        .doesNotContain("score")
+        .doesNotContain("probability")
+        .doesNotContain("percent")
+        .doesNotContain("employab")
+        .doesNotContain("hiring");
+  }
+
+  @Test
+  void aConfidentMistakeAndAnUnsureSuccessAreToldApartAndCarryTheirResponses() throws Exception {
+    String sessionId = startBoth();
+    int position = positionOf(sessionId, objectiveRevision);
+    // Sure and wrong: option B is the wrong one, and the learner said HIGH.
+    answer(
+            sessionId,
+            position,
+            "evidence-wrong-1",
+            "{\"selectedOptions\":[\"B\"],\"confidence\":\"HIGH\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+    send(post("/api/study/interviews/" + sessionId + "/complete"), null).andExpect(status().isOk());
+
+    // A second sitting, right but unsure.
+    String second = startBoth();
+    int secondPosition = positionOf(second, objectiveRevision);
+    answer(
+            second,
+            secondPosition,
+            "evidence-right-1",
+            "{\"selectedOptions\":[\"A\"],\"confidence\":\"LOW\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+
+    evidence()
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.topics[0].objective.answered").value(2))
+        .andExpect(jsonPath("$.topics[0].objective.correct").value(1))
+        // The two cases a single accuracy figure would have hidden, each with the response behind
+        // it so the learner can read what they answered rather than trust a count.
+        .andExpect(jsonPath("$.topics[0].objective.sureAndWrong.length()").value(1))
+        .andExpect(jsonPath("$.topics[0].objective.unsureAndRight.length()").value(1))
+        .andExpect(
+            jsonPath("$.topics[0].signals")
+                .value(
+                    org.hamcrest.Matchers.hasItem(
+                        org.hamcrest.Matchers.containsString("confident and wrong"))))
+        .andExpect(
+            jsonPath("$.topics[0].signals")
+                .value(
+                    org.hamcrest.Matchers.hasItem(
+                        org.hamcrest.Matchers.containsString("right but unsure"))));
+  }
+
+  @Test
+  void aConceptTheLearnerSaysTheyMissedIsCountedWithTheReviewersOwnWords() throws Exception {
+    String sessionId = startBoth();
+    int position = positionOf(sessionId, guidedRevision);
+    answer(
+            sessionId,
+            position,
+            "evidence-guided1",
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":60000,"
+                + "\"coveredConcepts\":{\"0\":true,\"1\":false}}")
+        .andExpect(status().isCreated());
+
+    evidence()
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.topics[0].guided.practised").value(1))
+        .andExpect(jsonPath("$.topics[0].guided.conceptsMarkedMissed.length()").value(1))
+        // The reviewer's own wording for the concept, not a label this product invented.
+        .andExpect(
+            jsonPath("$.topics[0].guided.conceptsMarkedMissed[0].text")
+                .value("durable duplicate detection"))
+        .andExpect(jsonPath("$.topics[0].guided.conceptsMarkedMissed[0].times").value(1))
+        .andExpect(
+            jsonPath("$.topics[0].guided.conceptsMarkedMissed[0].responses.length()").value(1))
+        // Said by the learner, about their own answer: the signal says so in those words.
+        .andExpect(
+            jsonPath("$.topics[0].signals")
+                .value(
+                    org.hamcrest.Matchers.hasItem(
+                        org.hamcrest.Matchers.containsString("you marked"))));
+  }
+
+  @Test
+  void rebuildingTheEvidenceGivesTheSameAnswer() throws Exception {
+    String sessionId = startBoth();
+    answer(
+            sessionId,
+            positionOf(sessionId, guidedRevision),
+            "evidence-stable1",
+            "{\"selectedOptions\":[],\"confidence\":\"MEDIUM\",\"elapsedMillis\":1000,"
+                + "\"coveredConcepts\":{\"1\":false}}")
+        .andExpect(status().isCreated());
+    answer(
+            sessionId,
+            positionOf(sessionId, objectiveRevision),
+            "evidence-stable2",
+            "{\"selectedOptions\":[\"B\"],\"confidence\":\"HIGH\",\"elapsedMillis\":1000}")
+        .andExpect(status().isCreated());
+
+    // Nothing is stored: #23 asks that rebuilding a projection yield the same result, and it is
+    // derived from the responses every time it is asked, so two calls cannot disagree.
+    String first = evidence().andReturn().getResponse().getContentAsString();
+    String again = evidence().andReturn().getResponse().getContentAsString();
+    assertThat(again).isEqualTo(first);
+  }
+
+  @Test
+  void marksAreRefusedWhenTheyAreAboutSomethingTheQuestionDoesNotList() throws Exception {
+    String sessionId = startBoth();
+
+    answer(
+            sessionId,
+            positionOf(sessionId, guidedRevision),
+            "evidence-bad-con1",
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
+                + "\"coveredConcepts\":{\"7\":false}}")
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("unknown_expected_concept"));
+
+    // And an objective question has options, not concepts: marking one is a category error, and
+    // accepting it would record a statement about a question that has nothing to state it about.
+    answer(
+            sessionId,
+            positionOf(sessionId, objectiveRevision),
+            "evidence-bad-con2",
+            "{\"selectedOptions\":[\"A\"],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
+                + "\"coveredConcepts\":{\"0\":true}}")
+        .andExpect(status().isBadRequest())
+        .andExpect(jsonPath("$.code").value("objective_item_has_no_concepts"));
+  }
+
+  @Test
+  void aTopicNeverPractisedIsAbsentRatherThanReportedAsZero() throws Exception {
+    // A learner who has practised nothing: no topics at all, rather than a row of zeroes that
+    // would read as evidence of weakness where there is no evidence.
+    evidence().andExpect(status().isOk()).andExpect(jsonPath("$.topics.length()").value(0));
+  }
+
+  @Test
+  void selfAssessmentIsImmutableOnceRecorded() throws Exception {
+    String sessionId = startBoth();
+    answer(
+            sessionId,
+            positionOf(sessionId, guidedRevision),
+            "evidence-frozen1",
+            "{\"selectedOptions\":[],\"confidence\":\"LOW\",\"elapsedMillis\":1000,"
+                + "\"coveredConcepts\":{\"0\":false}}")
+        .andExpect(status().isCreated());
+
+    // A weakness signal is only rebuildable if what it was built from cannot be rewritten.
+    assertThat(
+            org.assertj.core.api.Assertions.catchThrowable(
+                () ->
+                    jdbc.update(
+                        "update certforge.interview_response_concept set covered = true"
+                            + " where covered = false")))
+        .isNotNull();
+  }
+
   @Test
   void anotherLearnersSessionIsNotFoundRatherThanForbidden() throws Exception {
     String sessionId = startBoth();

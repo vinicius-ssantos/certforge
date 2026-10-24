@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.HexFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -236,7 +237,8 @@ class InterviewService {
       String key,
       List<String> selectedOptions,
       Confidence confidence,
-      long elapsedMillis) {
+      long elapsedMillis,
+      Map<Integer, Boolean> coveredConcepts) {
     ActorId learner = currentActor.require();
     requireKey(key);
     List<String> selected = normalize(selectedOptions);
@@ -288,6 +290,14 @@ class InterviewService {
     }
     if (kind == ItemKind.OBJECTIVE) {
       validate(evidence, selected);
+      if (!coveredConcepts.isEmpty()) {
+        throw StudyException.invalid(
+            "objective_item_has_no_concepts",
+            "An objective question is graded against its options, not against expected concepts");
+      }
+    }
+    if (kind == ItemKind.GUIDED) {
+      validateConcepts(item.revisionId(), coveredConcepts);
     }
 
     Instant now = clock.instant().truncatedTo(ChronoUnit.MICROS);
@@ -307,6 +317,9 @@ class InterviewService {
             key,
             fingerprint);
     repository.insertResponse(response);
+    // The learner's own marks about their own answer: evidence they created, recorded beside the
+    // response and immutable with it (#23). Nothing scores them.
+    repository.insertConceptMarks(response.id(), coveredConcepts);
     return answerView(response, evidence);
   }
 
@@ -474,6 +487,27 @@ class InterviewService {
       throw StudyException.invalid("duplicate_option", "An option was selected more than once");
     }
     return distinct.stream().sorted().toList();
+  }
+
+  /**
+   * The marks have to be about concepts this question actually lists, or the evidence would record
+   * a statement about something that does not exist.
+   */
+  private void validateConcepts(UUID revisionId, Map<Integer, Boolean> marks) {
+    if (marks.isEmpty()) {
+      return;
+    }
+    int concepts =
+        questionBank
+            .findGuidedMaterial(new QuestionRevisionId(revisionId))
+            .map(material -> material.expectedConcepts().size())
+            .orElse(0);
+    for (Integer position : marks.keySet()) {
+      if (position == null || position < 0 || position >= concepts) {
+        throw StudyException.invalid(
+            "unknown_expected_concept", "That expected concept is not part of this question");
+      }
+    }
   }
 
   private static void validate(RevisionEvidence evidence, List<String> selected) {

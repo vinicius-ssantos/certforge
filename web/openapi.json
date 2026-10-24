@@ -231,6 +231,12 @@
             "enum" : [ "LOW", "MEDIUM", "HIGH" ],
             "type" : "string"
           },
+          "coveredConcepts" : {
+            "additionalProperties" : {
+              "type" : "boolean"
+            },
+            "type" : "object"
+          },
           "elapsedMillis" : {
             "format" : "int64",
             "maximum" : 86400000,
@@ -436,6 +442,34 @@
         "required" : [ "id", "kind", "name", "slug", "status", "topics" ],
         "type" : "object"
       },
+      "ConceptMarkView" : {
+        "properties" : {
+          "conceptPosition" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "responses" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "revisionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "text" : {
+            "type" : "string"
+          },
+          "times" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "conceptPosition", "responses", "revisionId", "text", "times" ],
+        "type" : "object"
+      },
       "CountsView" : {
         "properties" : {
           "attempted" : {
@@ -638,6 +672,26 @@
         "required" : [ "explanation", "required", "text" ],
         "type" : "object"
       },
+      "GuidedEvidenceView" : {
+        "properties" : {
+          "conceptsMarkedMissed" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ConceptMarkView"
+            },
+            "type" : "array"
+          },
+          "lastPractisedAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "practised" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "conceptsMarkedMissed", "lastPractisedAt", "practised" ],
+        "type" : "object"
+      },
       "GuidedOutcome" : {
         "properties" : {
           "commonMistakes" : {
@@ -832,6 +886,22 @@
           }
         },
         "required" : [ "confidence", "elapsedMillis", "guided", "itemKind", "objective", "position", "revisionId", "submittedAt" ],
+        "type" : "object"
+      },
+      "InterviewEvidenceView" : {
+        "properties" : {
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicEvidenceView"
+            },
+            "type" : "array"
+          },
+          "trackVersionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "topics", "trackVersionId" ],
         "type" : "object"
       },
       "InterviewItemView" : {
@@ -1287,6 +1357,38 @@
           }
         },
         "required" : [ "key", "sourceRef", "title" ],
+        "type" : "object"
+      },
+      "ObjectiveEvidenceView" : {
+        "properties" : {
+          "answered" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "lastAnsweredAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
+          "sureAndWrong" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "unsureAndRight" : {
+            "items" : {
+              "format" : "uuid",
+              "type" : "string"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "answered", "correct", "lastAnsweredAt", "sureAndWrong", "unsureAndRight" ],
         "type" : "object"
       },
       "ObjectiveOutcome" : {
@@ -2362,6 +2464,28 @@
           }
         },
         "required" : [ "published", "topicId", "waitingForReview" ],
+        "type" : "object"
+      },
+      "TopicEvidenceView" : {
+        "properties" : {
+          "guided" : {
+            "$ref" : "#/components/schemas/GuidedEvidenceView"
+          },
+          "objective" : {
+            "$ref" : "#/components/schemas/ObjectiveEvidenceView"
+          },
+          "signals" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "guided", "objective", "signals", "topicId" ],
         "type" : "object"
       },
       "TopicProgress" : {
@@ -3864,6 +3988,32 @@
               }
             },
             "description" : "Created"
+          }
+        },
+        "tags" : [ "interview-controller" ]
+      }
+    },
+    "/api/study/interviews/evidence" : {
+      "get" : {
+        "operationId" : "evidence",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "trackSlug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/InterviewEvidenceView"
+                }
+              }
+            },
+            "description" : "OK"
           }
         },
         "tags" : [ "interview-controller" ]

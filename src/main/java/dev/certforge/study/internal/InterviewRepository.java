@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -22,6 +23,9 @@ class InterviewRepository {
   private static final String STATUS = "status";
   private static final String NOW = "now";
   private static final String POSITION = "position";
+  private static final String VERSION = "version";
+  private static final String REVISION_ID = "revision_id";
+  private static final String ITEM_KIND = "item_kind";
   private static final String SELECT_SESSION =
       "select id, learner_id, track_version_id, status, requested_count, created_at, expires_at,"
           + " closed_at from certforge.interview_session";
@@ -40,7 +44,7 @@ class InterviewRepository {
                 + " values (:id, :learner, :version, :count, :created, :expires)")
         .param(ID, session.id())
         .param(LEARNER, session.learnerId())
-        .param("version", session.trackVersionId())
+        .param(VERSION, session.trackVersionId())
         .param("count", session.requestedCount())
         .param("created", utc(session.createdAt()))
         .param("expires", utc(session.expiresAt()))
@@ -73,7 +77,7 @@ class InterviewRepository {
                 + " where learner_id = :learner and track_version_id = :version"
                 + " and status = 'IN_PROGRESS'")
         .param(LEARNER, learnerId)
-        .param("version", trackVersionId)
+        .param(VERSION, trackVersionId)
         .query(InterviewRepository::map)
         .optional();
   }
@@ -104,9 +108,9 @@ class InterviewRepository {
             (rs, n) ->
                 new SnapshotItem(
                     rs.getInt(POSITION),
-                    rs.getObject("revision_id", UUID.class),
+                    rs.getObject(REVISION_ID, UUID.class),
                     rs.getObject("topic_id", UUID.class),
-                    ItemKind.valueOf(rs.getString("item_kind"))))
+                    ItemKind.valueOf(rs.getString(ITEM_KIND))))
         .list();
   }
 
@@ -122,9 +126,9 @@ class InterviewRepository {
             (rs, n) ->
                 new SnapshotItem(
                     rs.getInt(POSITION),
-                    rs.getObject("revision_id", UUID.class),
+                    rs.getObject(REVISION_ID, UUID.class),
                     rs.getObject("topic_id", UUID.class),
-                    ItemKind.valueOf(rs.getString("item_kind"))))
+                    ItemKind.valueOf(rs.getString(ITEM_KIND))))
         .optional();
   }
 
@@ -201,6 +205,85 @@ class InterviewRepository {
         .update();
   }
 
+  /** The learner's own marks about one response. */
+  void insertConceptMarks(UUID responseId, Map<Integer, Boolean> marks) {
+    for (Map.Entry<Integer, Boolean> mark : marks.entrySet()) {
+      jdbc.sql(
+              "insert into certforge.interview_response_concept"
+                  + " (response_id, concept_position, covered)"
+                  + " values (:response, :position, :covered)")
+          .param("response", responseId)
+          .param(POSITION, mark.getKey())
+          .param("covered", mark.getValue())
+          .update();
+    }
+  }
+
+  /**
+   * Every response of one learner on one track version, with its topic, for building the evidence
+   * read model.
+   *
+   * <p>Read rather than stored: #23 requires that rebuilding a projection gives the same answer,
+   * and the only way to be sure of that is to have nothing to rebuild from but the evidence itself.
+   */
+  List<EvidenceRow> evidenceOf(UUID learnerId, UUID trackVersionId) {
+    return jdbc.sql(
+            "select r.id, r.revision_id, r.item_kind, r.correct, r.confidence, r.submitted_at,"
+                + " q.topic_id from certforge.interview_response r"
+                + " join certforge.interview_session s on s.id = r.session_id"
+                + " join certforge.interview_session_question q"
+                + "   on q.session_id = r.session_id and q.position = r.position"
+                + " where r.learner_id = :learner and s.track_version_id = :version"
+                + " order by r.submitted_at, r.id")
+        .param(LEARNER, learnerId)
+        .param(VERSION, trackVersionId)
+        .query(
+            (rs, n) ->
+                new EvidenceRow(
+                    rs.getObject("id", UUID.class),
+                    rs.getObject(REVISION_ID, UUID.class),
+                    rs.getObject("topic_id", UUID.class),
+                    ItemKind.valueOf(rs.getString(ITEM_KIND)),
+                    rs.getObject("correct", Boolean.class),
+                    Confidence.valueOf(rs.getString("confidence")),
+                    rs.getObject("submitted_at", OffsetDateTime.class).toInstant()))
+        .list();
+  }
+
+  /** The concepts a learner marked as not covered, for the responses of one track version. */
+  List<ConceptMarkRow> conceptsMarkedMissed(UUID learnerId, UUID trackVersionId) {
+    return jdbc.sql(
+            "select c.response_id, c.concept_position, r.revision_id"
+                + " from certforge.interview_response_concept c"
+                + " join certforge.interview_response r on r.id = c.response_id"
+                + " join certforge.interview_session s on s.id = r.session_id"
+                + " where c.covered = false and r.learner_id = :learner"
+                + " and s.track_version_id = :version"
+                + " order by r.revision_id, c.concept_position, c.response_id")
+        .param(LEARNER, learnerId)
+        .param(VERSION, trackVersionId)
+        .query(
+            (rs, n) ->
+                new ConceptMarkRow(
+                    rs.getObject("response_id", UUID.class),
+                    rs.getObject(REVISION_ID, UUID.class),
+                    rs.getInt("concept_position")))
+        .list();
+  }
+
+  /** One answered item, as the evidence read model sees it. */
+  record EvidenceRow(
+      UUID responseId,
+      UUID revisionId,
+      UUID topicId,
+      ItemKind itemKind,
+      Boolean correct,
+      Confidence confidence,
+      Instant submittedAt) {}
+
+  /** One concept a learner said their answer did not cover. */
+  record ConceptMarkRow(UUID responseId, UUID revisionId, int conceptPosition) {}
+
   private JdbcClient.StatementSpec selectResponse(String where) {
     return jdbc.sql(
         "select id, session_id, position, learner_id, revision_id, item_kind, selected_options,"
@@ -229,8 +312,8 @@ class InterviewRepository {
         rs.getObject("session_id", UUID.class),
         rs.getInt(POSITION),
         rs.getObject("learner_id", UUID.class),
-        rs.getObject("revision_id", UUID.class),
-        ItemKind.valueOf(rs.getString("item_kind")),
+        rs.getObject(REVISION_ID, UUID.class),
+        ItemKind.valueOf(rs.getString(ITEM_KIND)),
         rs.getString("selected_options"),
         correct,
         Confidence.valueOf(rs.getString("confidence")),

@@ -677,6 +677,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/interviews/evidence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["evidence"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/interviews/{sessionId}": {
         parameters: {
             query?: never;
@@ -996,6 +1012,9 @@ export interface components {
         AnswerRequest: {
             /** @enum {string} */
             confidence: "LOW" | "MEDIUM" | "HIGH";
+            coveredConcepts?: {
+                [key: string]: boolean;
+            };
             /** Format: int64 */
             elapsedMillis?: number;
             selectedOptions?: string[];
@@ -1068,6 +1087,16 @@ export interface components {
             status: string;
             topics: components["schemas"]["AuthorableTopic"][];
         };
+        ConceptMarkView: {
+            /** Format: int32 */
+            conceptPosition: number;
+            responses: string[];
+            /** Format: uuid */
+            revisionId: string;
+            text: string;
+            /** Format: int32 */
+            times: number;
+        };
         CountsView: {
             /** Format: int32 */
             attempted: number;
@@ -1131,6 +1160,13 @@ export interface components {
             required: boolean;
             text: string;
         };
+        GuidedEvidenceView: {
+            conceptsMarkedMissed: components["schemas"]["ConceptMarkView"][];
+            /** Format: date-time */
+            lastPractisedAt: string | null;
+            /** Format: int32 */
+            practised: number;
+        };
         GuidedOutcome: {
             commonMistakes: string[];
             expectedConcepts: components["schemas"]["ExpectedConceptView"][];
@@ -1184,6 +1220,11 @@ export interface components {
             revisionId: string;
             /** Format: date-time */
             submittedAt: string;
+        };
+        InterviewEvidenceView: {
+            topics: components["schemas"]["TopicEvidenceView"][];
+            /** Format: uuid */
+            trackVersionId: string;
         };
         InterviewItemView: {
             answered: boolean;
@@ -1367,6 +1408,16 @@ export interface components {
             key: string;
             sourceRef: string;
             title: string;
+        };
+        ObjectiveEvidenceView: {
+            /** Format: int32 */
+            answered: number;
+            /** Format: int32 */
+            correct: number;
+            /** Format: date-time */
+            lastAnsweredAt: string | null;
+            sureAndWrong: string[];
+            unsureAndRight: string[];
         };
         ObjectiveOutcome: {
             correct: boolean;
@@ -1731,6 +1782,13 @@ export interface components {
             topicId: string;
             /** Format: int32 */
             waitingForReview: number;
+        };
+        TopicEvidenceView: {
+            guided: components["schemas"]["GuidedEvidenceView"];
+            objective: components["schemas"]["ObjectiveEvidenceView"];
+            signals: string[];
+            /** Format: uuid */
+            topicId: string;
         };
         TopicProgress: {
             accuracy: number | null;
@@ -2826,6 +2884,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["InterviewSessionView"];
+                };
+            };
+        };
+    };
+    evidence: {
+        parameters: {
+            query: {
+                trackSlug: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewEvidenceView"];
                 };
             };
         };

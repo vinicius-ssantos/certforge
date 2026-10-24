@@ -208,6 +208,33 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **Interview practice has its own evidence, and deliberately no readiness number.**
+  `GET /api/study/interviews/evidence` reports, per topic practised, how many objective items were
+  answered and right — and the two cases a single accuracy figure hides: the responses where the
+  learner was **sure and wrong**, and those where they were **right but unsure**. Erring with
+  confidence is a different problem from guessing correctly, and a percentage averages them into
+  neither. Guided items are counted separately and never added to the objective ones, because one
+  kind is graded and the other is not.
+
+  Every count carries the ids of the responses behind it, so a learner can read what they answered
+  rather than trust a number. Nothing is stored: the whole view is derived from the immutable
+  responses when it is asked, which is why "rebuilding gives the same result" holds — there is
+  nothing to rebuild. A topic never practised is absent rather than reported as zero, because no
+  evidence is not evidence of weakness.
+
+  There is no score of any kind, and a test asserts the absence by searching the payload for the
+  words: no readiness, no percentage, no probability, no hiring or employability signal. #23 asked
+  for that absence in so many words, and the records have no field a verdict could live in.
+
+- **A learner can say which expected concepts their own guided answer covered.** #23 asks for
+  concept coverage, and ADR 0019 forbids the only other way to get it: the product never receives a
+  guided answer, so it cannot judge what one covered. It asks instead. The marks are recorded beside
+  the response and frozen with it, so every statement about coverage is one the learner made, on a
+  date, about a question — "you marked *durable duplicate detection* as not covered twice" — rather
+  than a measurement of a person. Marking nothing means only that they did not say. A mark about a
+  concept the question does not list is refused, and so is one on an objective question, which has
+  options rather than concepts.
+
 - **A question can say which exam objectives it prepares for, and the claim is checked.** `objectiveKeys` has been in the manifest schema since the content contract was written — required of every certification question — and the editorial adapter dropped it on the way in, so `stageEditorialPack` refused certification packs outright rather than lose it silently. That refusal is gone, because the thing it protected now exists.
 
   A claim is free text while the question is a draft, deliberately: a draft is written before its topic is mapped into an active exam version and usually before anyone has read the exam's objectives, so a foreign key would refuse ordinary authoring. It is checked at the two moments it can be. **Publishing** refuses a key the exam's verified snapshot does not list, and says plainly when nobody has read the page at all — that is where a claim becomes a claim to a learner. **Recording a new reading** of the provider's page refuses to drop an objective a published question still claims, so the two cannot drift apart afterwards.

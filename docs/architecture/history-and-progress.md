@@ -73,6 +73,43 @@ The projection should never drift in normal operation; these exist to detect and
 | `GET /api/progress/topics` | Topic progress |
 | `GET /api/progress/reconciliation` | Compare stored progress with the attempts |
 | `POST /api/progress/rebuild` | Recompute stored progress |
+| `GET /api/study/interviews/evidence` | What interview practice has shown, per topic, with the responses behind each number |
+
+## Interview evidence, which is not a score
+
+Interview practice has its own evidence, and deliberately no readiness number.
+`GET /api/study/interviews/evidence?trackSlug=…` reports, per topic the learner has practised:
+
+- **objective items**: how many were answered, how many were right, and — the two a single accuracy
+  figure hides — the responses where the learner was **sure and wrong**, and those where they were
+  **right but unsure**. Being confidently wrong is a different problem from guessing correctly, and
+  a percentage would average them into neither;
+- **guided items**: how many were practised, and which expected concepts the learner **said** their
+  own answer did not cover, most often first, in the reviewer's own words for each.
+
+Four properties hold, and #23 asked for each of them:
+
+1. **Every number can be explained from what is stored.** Each count carries the ids of the
+   responses behind it, so a learner can read the answers rather than trust the count.
+2. **Nothing is stored.** The whole view is derived from the responses when it is asked, so
+   "rebuilding gives the same result" is true because there is nothing to rebuild.
+3. **Guided evidence is never presented as correctness.** The two kinds are counted separately and
+   never added, because one is graded and the other is not ([ADR 0019](../adr/0019-behavioural-preparation-is-guidance-not-grading.md)).
+4. **There is no score.** No readiness percentage, no probability, no hiring or employability
+   signal, and no field for one to be added into. A topic never practised is absent rather than
+   reported as zero: no evidence is not evidence of weakness.
+
+### Where concept coverage comes from
+
+The product cannot judge what a guided answer covered, because it never receives the answer. So it
+asks: when a learner answers a guided item they may mark which expected concepts they think they
+covered, and those marks are recorded beside the response and frozen with it. Marking nothing means
+only that they did not say.
+
+That makes every statement about coverage a statement the learner made, on a date, about a
+question — "you marked *durable duplicate detection* as not covered twice" — rather than a
+measurement of a person. A mark about a concept the question does not list is refused, and an
+objective question has options rather than concepts, so marking one there is refused too.
 
 ## Deferred
 
