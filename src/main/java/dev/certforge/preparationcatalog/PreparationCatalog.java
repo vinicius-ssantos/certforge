@@ -25,6 +25,15 @@ public interface PreparationCatalog {
   Optional<InterviewTrackView> activeInterviewTrack(String slug);
 
   /**
+   * Every active interview track, each with the live version of its taxonomy.
+   *
+   * <p>The plural of the read above, and for the same reason: a learner browsing interview
+   * preparation cannot find it through {@link #activeTracks()}, which answers only for
+   * certifications.
+   */
+  List<InterviewTrackView> activeInterviewTracks();
+
+  /**
    * Every active general-knowledge track, each with the live version of its taxonomy (#176).
    *
    * <p>The plural of {@link #activeGeneralTrack(String)}, for a learner browsing what there is to

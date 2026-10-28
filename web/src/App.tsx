@@ -14,6 +14,14 @@ import { ReviewQueuePage } from "./editorial/ReviewQueuePage";
 import { RequireCatalogManage } from "./editorial/RequireCatalogManage";
 import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
+import {
+  BlueprintPage,
+  BlueprintsPage,
+  NewBlueprintPage,
+} from "./interview/BlueprintPage";
+import { EvidencePage } from "./interview/EvidencePage";
+import { InterviewSessionPage } from "./interview/InterviewSessionPage";
+import { InterviewsPage } from "./interview/InterviewsPage";
 import { useText } from "./i18n/useText";
 import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
@@ -52,6 +60,14 @@ export function App() {
           <Route path="/tracks/:slug" element={<TrackPage />} />
           <Route path="/general-tracks/:slug" element={<GeneralTrackPage />} />
           <Route path="/sessions/:sessionId" element={<SessionPage />} />
+          {/* Interview preparation. The blueprint routes come before the session route so a
+              literal path is never read as a session id. */}
+          <Route path="/interviews" element={<InterviewsPage />} />
+          <Route path="/interviews/evidence" element={<EvidencePage />} />
+          <Route path="/interviews/blueprints" element={<BlueprintsPage />} />
+          <Route path="/interviews/blueprints/new" element={<NewBlueprintPage />} />
+          <Route path="/interviews/blueprints/:blueprintId" element={<BlueprintPage />} />
+          <Route path="/interviews/:sessionId" element={<InterviewSessionPage />} />
           <Route path="/mock-exams/:sessionId" element={<MockExamPage />} />
           <Route path="/mock-exams/:sessionId/result" element={<MockExamResultPage />} />
           <Route path="/history" element={<HistoryPage />} />

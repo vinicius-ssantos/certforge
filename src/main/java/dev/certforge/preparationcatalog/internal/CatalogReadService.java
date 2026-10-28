@@ -65,16 +65,17 @@ class CatalogReadService implements PreparationCatalog {
    */
   @Override
   public Optional<InterviewTrackView> activeInterviewTrack(String slug) {
-    return nonCertificationVersion(slug, TrackKind.INTERVIEW)
-        .map(
-            match ->
-                new InterviewTrackView(
-                    new PreparationTrackId(match.track().id()),
-                    match.track().slug(),
-                    match.track().name(),
-                    new TrackVersionId(match.version().id()),
-                    match.version().label(),
-                    topicTree(match.track().id(), match.version().id())));
+    return nonCertificationVersion(slug, TrackKind.INTERVIEW).map(this::toInterviewView);
+  }
+
+  @Override
+  public List<InterviewTrackView> activeInterviewTracks() {
+    return repository.findTracks(CatalogStatus.ACTIVE).stream()
+        .filter(track -> track.kind() == TrackKind.INTERVIEW)
+        .map(this::nonCertificationVersion)
+        .flatMap(Optional::stream)
+        .map(this::toInterviewView)
+        .toList();
   }
 
   @Override
@@ -92,6 +93,16 @@ class CatalogReadService implements PreparationCatalog {
     return nonCertificationVersion(slug, TrackKind.GENERAL).map(this::toGeneralView);
   }
 
+  private InterviewTrackView toInterviewView(TaxonomyMatch match) {
+    return new InterviewTrackView(
+        new PreparationTrackId(match.track().id()),
+        match.track().slug(),
+        match.track().name(),
+        new TrackVersionId(match.version().id()),
+        match.version().label(),
+        topicTree(match.track().id(), match.version().id()));
+  }
+
   private GeneralTrackView toGeneralView(TaxonomyMatch match) {
     return new GeneralTrackView(
         new PreparationTrackId(match.track().id()),
@@ -103,9 +114,9 @@ class CatalogReadService implements PreparationCatalog {
   }
 
   /**
-   * A track of the given kind, slug and status, with the version its topics would be drawn from,
-   * found the same way for every kind that is not a certification: an active track whose active
-   * version carries no exam, which is what {@link #activeInterviewTrack(String)} and {@link
+   * A track of the given kind and slug, with the version its topics would be drawn from, found the
+   * same way for every kind that is not a certification: an active track whose active version
+   * carries no exam, which is what {@link #activeInterviewTrack(String)} and {@link
    * #activeGeneralTrack(String)} both read -- the mirror image of the certification filter in
    * {@link #toView(TrackRow)}.
    */

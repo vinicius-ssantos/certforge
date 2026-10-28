@@ -443,6 +443,63 @@ class PreparationCatalogIT {
   }
 
   /**
+   * A learner can find interview preparation, which until now they could not: the certification
+   * read filters interview tracks out by construction, so the only route to a taxonomy was knowing
+   * its slug already.
+   */
+  @Test
+  void aLearnerSeesActiveInterviewTaxonomiesAndNothingElseOnThatPath() throws Exception {
+    String interviewSlug = "interview-" + slug();
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'Java Backend interview', 'INTERVIEW', 'ACTIVE')",
+        trackId,
+        interviewSlug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'concurrency', 'Concurrency')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 4)",
+        versionId,
+        topicId);
+
+    mvc.perform(get("/api/catalog/interview-tracks").cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(
+            jsonPath("$[?(@.slug=='" + interviewSlug + "')].topics[0].name")
+                .value(org.hamcrest.Matchers.hasItem("Concurrency")))
+        // The seeded taxonomy is DRAFT, and a draft is not preparation anyone may start.
+        .andExpect(
+            jsonPath("$[?(@.slug=='java-backend-interview')]", org.hamcrest.Matchers.empty()))
+        // A certification is not an interview taxonomy, and this path is not another way to read
+        // one: the two shapes stay apart, which is why they are two paths.
+        .andExpect(jsonPath("$[?(@.slug=='java-certification')]", org.hamcrest.Matchers.empty()));
+
+    mvc.perform(get("/api/catalog/interview-tracks/" + interviewSlug).cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.versionLabel").value("Taxonomy 1"))
+        .andExpect(jsonPath("$.topics[0].slug").value("concurrency"));
+
+    mvc.perform(get("/api/catalog/interview-tracks/java-certification").cookie(learner))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("interview_track_not_found"));
+
+    mvc.perform(get("/api/catalog/interview-tracks")).andExpect(status().isUnauthorized());
+  }
+
+  /**
    * A learner can now find general-knowledge preparation (#176), which until now they could not:
    * the certification read filters it out by construction, same as an interview track, so the only
    * route to a general taxonomy was knowing its slug already -- and there was no endpoint that
