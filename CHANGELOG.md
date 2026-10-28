@@ -31,6 +31,18 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   is being examined on it, and that is also the only honest reason practice said no.
 ### Fixed
 
+- **An interview session could not be started through the generated client, because a different
+  endpoint's request body silently won the name.** Two controllers each declared a nested
+  `record StartRequest`, the study session's and the interview session's. A schema name in
+  OpenAPI is the simple class name, so one replaced the other: `POST /api/study/interviews` was
+  published with the study session's body (`topicId`, `revisionIds`), which has no `trackSlug` —
+  and the generated TypeScript client refused to compile the moment a screen tried to call it.
+  Nothing failed before that. The contract was regenerated and committed in that state across two
+  merged PRs, because nothing read the generated schema and asked whether the right endpoint was
+  behind it. Renamed to `InterviewStartRequest`, and a new test, `ContractSchemaNamesTest`, fails
+  the build when any two controller records share a simple name — checked in the source, since the
+  generated file holds only the winner and says nothing about the loser.
+
 - **`just check` did not check the one thing CI checks that it did not.** CI compares the generated
   `web/src/api/schema.d.ts` with `openapi.json` (`npm run api:check`); the fast gate never did. So a
   stale generated file passed every local check and failed the web job — three times in one day,
@@ -207,6 +219,32 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   are published in a public repository, and anyone reading them sees what every question answers.
 
 ### Added
+
+- **Interview preparation has a learner-facing experience: browse the taxonomy, run a session that
+  mixes a graded item with one nothing grades, read a job description as a weighted blueprint, and
+  see what practice has shown (#24).** Four screens, all reachable from a new "Interviews" link:
+
+  - starting a session, by choosing topics directly or by handing it a blueprint;
+  - the session itself, where an objective item and a guided item are told apart by a labelled
+    kind rather than by colour alone, and a guided item's own answer stays in a text area that is
+    never sent — the request carries only that the item was answered, how sure, and how long;
+  - a blueprint's weights, each with the words that earned it and a visible statement that it says
+    nothing about the learner, per [ADR 0021](docs/adr/0021-job-description-blueprints-explain-every-weight.md);
+  - the evidence screen, where a signal from the server is read as a kind and a count rather than
+    English prose, so the sentence shown is in the reader's own language rather than the server's.
+
+  Building the guided screen found a defect in #23's own contract: the learner's marks of which
+  expected concepts their answer covered travelled on the *answer* request, which asked them to
+  assess themselves against concepts they had not been shown yet — the reveal only happens after
+  the answer is committed. Marking is now its own step,
+  `POST /api/study/interviews/{sessionId}/items/{position}/concepts`, callable only after an answer
+  exists and only once; the database trigger that makes a mark immutable did not need to change,
+  because marking twice was always a conflict, just one nothing before now could reach.
+
+  Also found: the interview session's own start request and the study session's shared one Java
+  record name, `StartRequest`. OpenAPI publishes a schema under the simple class name, so the two
+  collapsed into one and the interview endpoint was published with the wrong body — covered
+  separately below, and now guarded by a test.
 
 - **A job description becomes weighted preparation, and every weight has words behind it.**
   `POST /api/study/interviews/blueprints` takes an advert as pasted, plus any requirements the

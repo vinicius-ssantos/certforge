@@ -193,6 +193,11 @@ Any aggregate readiness indicator must remain explainable.
 
 ## AI boundary
 
+**The contract a future conversational interviewer would consume is already defined:**
+[the AI interviewer boundary](../architecture/ai-interviewer-boundary.md) names exactly what it
+may read, what it may say, and what it may never produce — decided before anything implements it,
+per #24.
+
 AI may later:
 
 - suggest supplementary explanations;
