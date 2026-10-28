@@ -597,6 +597,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/editorial/catalog/topics/{topicId}/objective-sources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["objectiveSources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/progress/rebuild": {
         parameters: {
             query?: never;
@@ -1607,6 +1623,18 @@ export interface components {
             options: components["schemas"]["OptionAnswerView"][];
             references: components["schemas"]["ReferenceView"][];
             selectedOptions: string[];
+        };
+        ObjectiveSourceEntry: {
+            key: string;
+            sourceRef: string | null;
+            title: string;
+        };
+        ObjectiveSourceView: {
+            objectives: components["schemas"]["ObjectiveSourceEntry"][];
+            sourceUrl: string | null;
+            status: string;
+            /** Format: date */
+            verifiedOn: string | null;
         };
         OptionAnswer: {
             correct: boolean;
@@ -2929,6 +2957,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AuthorableTrack"][];
+                };
+            };
+        };
+    };
+    objectiveSources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                topicId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["ObjectiveSourceView"];
                 };
             };
         };

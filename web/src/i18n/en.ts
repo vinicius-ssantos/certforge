@@ -886,6 +886,24 @@ export const en = {
       decidedBy: (reviewer: string) => ` by ${reviewer}`,
     },
 
+    /**
+     * Where an objective was read, beside a question's own claim (#177). A revision's own
+     * `references` are evidence for the *answer*; these strings are for the separate, often
+     * missing evidence that the *objective* it claims is a real line on the exam's own page.
+     */
+    objectiveSources: {
+      heading: "Where the claimed objective was read",
+      loading: "Loading the objective source",
+      notACertification: "This topic belongs to a taxonomy that cites no exam.",
+      statusVerified: "Verified against the provider's page",
+      statusUnverified: "Nobody has read the provider's page yet",
+      statusStale: "The provider has published something newer",
+      statusRetired: "The exam is retired",
+      sourcePage: "Provider's page",
+      verifiedOn: (date: string) => `read ${date}`,
+      keyNotOnCurrentPage: "not on the current reading of the page",
+    },
+
     reviewPanel: {
       policyLegend: "Content policy",
       checklistCount: (checked: number, total: number) => `${checked} of ${total} checked`,

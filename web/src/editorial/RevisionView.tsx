@@ -6,6 +6,7 @@ import type { Catalog } from "../i18n/en";
 import { useLocale, useText } from "../i18n/useText";
 import { Prompt } from "../ui/Prompt";
 import { checklist, difficultyLabels, typeLabels } from "./labels";
+import { ObjectiveSources } from "./ObjectiveSources";
 import { RevisionDiff } from "./RevisionDiff";
 
 /** How a recorded decision reads. An unknown decision is shown as its code, as before. */
@@ -180,6 +181,10 @@ export function RevisionView({
                 </li>
               ))}
             </ul>
+            {/* A reference above is evidence the answer is correct; this is the separate,
+                often-missing evidence that the claimed objective is a real line on the exam's own
+                page (#177). Renders nothing when the revision claims no objective. */}
+            <ObjectiveSources topicId={revision.topicId} objectiveKeys={revision.objectiveKeys} />
           </section>
         )}
 

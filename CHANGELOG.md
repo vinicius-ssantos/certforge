@@ -280,6 +280,27 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   else found it had already been written once more, in #24's open interview screens, against the
   identical seeded wording ("Taxonomy 1"); fixed there too, in that PR, before it could ship.
 
+- **A reviewer can now see where a question's claimed exam objective was actually read, and
+  whether that reading is current (#177).** `GET /api/editorial/catalog/topics/{topicId}/objective-sources`
+  returns the provider's page, the date it was verified, and the title and page location of each
+  objective — reachable with `CONTENT_REVIEW` alone, no `CATALOG_MANAGE` required, which is new:
+  the same data existed on the admin catalog screen, but a plain reviewer has no reason to hold
+  that permission and had no other way to see it. Shown on the question-review screen beside the
+  revision's own references, because the two are different claims: a reference is evidence the
+  *answer* is correct, this is the separate, frequently-missing evidence that the *objective* a
+  question claims is a real line on the exam's own page.
+
+  Keyed by the question's topic rather than by an exam version id, which is the detail that made
+  this useful rather than theoretical: a revision carries no exam version id until the moment it
+  publishes — `markPublished` is the only writer of that column — so an endpoint keyed the other
+  way would have shown nothing to the one audience this exists for, a reviewer deciding a
+  revision still in `TECHNICAL_REVIEW`. Resolved through the same "version a question written now
+  would publish against" lookup topic authoring already uses, so a draft taxonomy or an
+  unmapped topic reads as a plain, named absence (`NOT_A_CERTIFICATION`) rather than an error.
+
+  Mutation-checked: the permission guard and the non-certification guard were each switched off
+  in turn, and the test suite caught both.
+
 - **A job description becomes weighted preparation, and every weight has words behind it.**
   `POST /api/study/interviews/blueprints` takes an advert as pasted, plus any requirements the
   learner typed, and returns the canonical topics it actually talks about — each with a weight from
