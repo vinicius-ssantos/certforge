@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>25</java.version>
-        <spring-modulith.version>2.1.1</spring-modulith.version>
+        <spring-modulith.version>2.1.2</spring-modulith.version>
         <springdoc.version>3.1.1</springdoc.version>
         <!--
           Security fixes ahead of the Spring Boot 4.1.1 managed versions (image scan, 2026-10-01):
