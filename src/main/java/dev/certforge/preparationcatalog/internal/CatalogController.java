@@ -1,5 +1,6 @@
 package dev.certforge.preparationcatalog.internal;
 
+import dev.certforge.preparationcatalog.GeneralTrackView;
 import dev.certforge.preparationcatalog.InterviewTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TrackView;
@@ -11,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Learner catalog. Exposes active content a learner may study, in the two shapes it comes in: a
- * certification track, which names an exam, and an interview taxonomy, which does not.
+ * Learner catalog. Exposes active content a learner may study, in the three shapes it comes in: a
+ * certification track, which names an exam; an interview taxonomy; and a general-knowledge taxonomy
+ * (#176) -- the latter two cite none.
  *
- * <p>They are separate paths rather than one list with a kind field, because the two views carry
- * different things — an exam version and a Java release on one side, a taxonomy version on the
- * other — and a single payload would have to make both nullable to say either.
+ * <p>They are separate paths rather than one list with a kind field, because the views carry
+ * different things -- an exam version and a Java release on one side, a taxonomy version on the
+ * other -- and a single payload would have to make both nullable to say either.
  */
 @RestController
 @RequestMapping("/api/catalog")
@@ -54,5 +56,20 @@ class CatalogController {
             () ->
                 CatalogException.notFound(
                     "interview_track_not_found", "No active interview track with that slug"));
+  }
+
+  @GetMapping("/general-tracks")
+  List<GeneralTrackView> generalTracks() {
+    return catalog.activeGeneralTracks();
+  }
+
+  @GetMapping("/general-tracks/{slug}")
+  GeneralTrackView generalTrack(@PathVariable String slug) {
+    return catalog
+        .activeGeneralTrack(slug)
+        .orElseThrow(
+            () ->
+                CatalogException.notFound(
+                    "general_track_not_found", "No active general track with that slug"));
   }
 }

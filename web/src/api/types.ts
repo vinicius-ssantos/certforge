@@ -7,6 +7,7 @@ type Schemas = components["schemas"];
 
 export type Account = Schemas["AccountView"];
 export type Track = Schemas["TrackView"];
+export type GeneralTrack = Schemas["GeneralTrackView"];
 export type Topic = Schemas["TopicView"];
 export type ExamVersion = Schemas["ExamVersionView"];
 export type Session = Schemas["SessionView"];

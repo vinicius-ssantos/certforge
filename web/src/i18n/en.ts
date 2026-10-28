@@ -149,7 +149,7 @@ export const en = {
     checkingSession: "Checking your session",
   },
   tracks: {
-    title: "Certification tracks",
+    title: "Tracks",
     loading: "Loading tracks",
     emptyTitle: "No tracks are available yet",
     emptyBody: "Check back soon. Tracks appear here once they are published.",

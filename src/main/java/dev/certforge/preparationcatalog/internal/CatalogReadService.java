@@ -1,6 +1,7 @@
 package dev.certforge.preparationcatalog.internal;
 
 import dev.certforge.preparationcatalog.ExamVersionView;
+import dev.certforge.preparationcatalog.GeneralTrackView;
 import dev.certforge.preparationcatalog.InterviewTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
@@ -64,37 +65,76 @@ class CatalogReadService implements PreparationCatalog {
    */
   @Override
   public Optional<InterviewTrackView> activeInterviewTrack(String slug) {
-    return repository
-        .findActiveTrackBySlug(slug)
-        .filter(track -> track.kind() == TrackKind.INTERVIEW)
-        .flatMap(this::toInterviewView);
+    return nonCertificationVersion(slug, TrackKind.INTERVIEW).map(this::toInterviewView);
   }
 
   @Override
   public List<InterviewTrackView> activeInterviewTracks() {
     return repository.findTracks(CatalogStatus.ACTIVE).stream()
         .filter(track -> track.kind() == TrackKind.INTERVIEW)
-        .map(this::toInterviewView)
+        .map(this::nonCertificationVersion)
         .flatMap(Optional::stream)
+        .map(this::toInterviewView)
         .toList();
   }
 
-  private Optional<InterviewTrackView> toInterviewView(CatalogRows.TrackRow track) {
+  @Override
+  public List<GeneralTrackView> activeGeneralTracks() {
+    return repository.findTracks(CatalogStatus.ACTIVE).stream()
+        .filter(track -> track.kind() == TrackKind.GENERAL)
+        .map(this::nonCertificationVersion)
+        .flatMap(Optional::stream)
+        .map(this::toGeneralView)
+        .toList();
+  }
+
+  @Override
+  public Optional<GeneralTrackView> activeGeneralTrack(String slug) {
+    return nonCertificationVersion(slug, TrackKind.GENERAL).map(this::toGeneralView);
+  }
+
+  private InterviewTrackView toInterviewView(TaxonomyMatch match) {
+    return new InterviewTrackView(
+        new PreparationTrackId(match.track().id()),
+        match.track().slug(),
+        match.track().name(),
+        new TrackVersionId(match.version().id()),
+        match.version().label(),
+        topicTree(match.track().id(), match.version().id()));
+  }
+
+  private GeneralTrackView toGeneralView(TaxonomyMatch match) {
+    return new GeneralTrackView(
+        new PreparationTrackId(match.track().id()),
+        match.track().slug(),
+        match.track().name(),
+        new TrackVersionId(match.version().id()),
+        match.version().label(),
+        topicTree(match.track().id(), match.version().id()));
+  }
+
+  /**
+   * A track of the given kind and slug, with the version its topics would be drawn from, found the
+   * same way for every kind that is not a certification: an active track whose active version
+   * carries no exam, which is what {@link #activeInterviewTrack(String)} and {@link
+   * #activeGeneralTrack(String)} both read -- the mirror image of the certification filter in
+   * {@link #toView(TrackRow)}.
+   */
+  private Optional<TaxonomyMatch> nonCertificationVersion(String slug, TrackKind kind) {
+    return repository
+        .findActiveTrackBySlug(slug)
+        .filter(track -> track.kind() == kind)
+        .flatMap(this::nonCertificationVersion);
+  }
+
+  private Optional<TaxonomyMatch> nonCertificationVersion(TrackRow track) {
     return repository
         .findActiveExamVersion(track.id())
-        // The mirror image of the certification filter in toView: an interview version is the one
-        // without an exam beside it, and that absence is what identifies it.
         .filter(version -> !version.isCertification())
-        .map(
-            version ->
-                new InterviewTrackView(
-                    new PreparationTrackId(track.id()),
-                    track.slug(),
-                    track.name(),
-                    new TrackVersionId(version.id()),
-                    version.label(),
-                    topicTree(track.id(), version.id())));
+        .map(version -> new TaxonomyMatch(track, version));
   }
+
+  private record TaxonomyMatch(TrackRow track, TrackVersionRow version) {}
 
   @Override
   public Optional<TopicContext> findActiveTopicContext(TopicId id) {

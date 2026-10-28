@@ -93,7 +93,7 @@ function queuePage(
 describe("access", () => {
   it("shows the editorial link only to people who work on content", async () => {
     renderApp(tracks);
-    await screen.findByRole("heading", { level: 1, name: "Certification tracks" });
+    await screen.findByRole("heading", { level: 1, name: "Tracks" });
     expect(screen.queryByRole("link", { name: "Editorial" })).not.toBeInTheDocument();
   });
 

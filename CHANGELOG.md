@@ -246,6 +246,40 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   collapsed into one and the interview endpoint was published with the wrong body — covered
   separately below, and now guarded by a test.
 
+- **A learner can browse and study a general-knowledge track beside a certification one, on the
+  same page, with one shared history (#176's first slice).** `GET /api/catalog/general-tracks`
+  and `/{slug}` give a `GENERAL`-kind track the same learner-facing read a certification track and
+  an interview taxonomy already have — `GeneralTrackView` is the structural twin of
+  `InterviewTrackView`: a taxonomy version and its topics, no exam. The tracks page lists both
+  kinds as one set of cards, and a general track's own page starts a session on its topics
+  through the same `POST /api/study/sessions` a certification track already uses.
+
+  No new *session or attempt* machinery was needed: `StudyService.doStart` already resolves a
+  topic through `findActiveTopicContext`, with no idea which `TrackKind` it belongs to. Progress
+  was the one place that did know, and the e2e spec below is what caught it.
+
+  "Switch between a certification and a general track without losing history" is proved end to
+  end in a new e2e spec that activates the real seeded `infrastructure-devops-foundations`
+  taxonomy (still `DRAFT` until its own content is reviewed) and walks browse → session → answer
+  → history on a fixture question.
+
+  Found three defects along the way, two in this slice and one in #24's still-open PR.
+
+  `ProgressService.topics()` built every entry's `trackSlug` by looping `catalog.activeTracks()` —
+  certification only. A general track's topic fell through to the "topic no longer in an active
+  track" branch, carrying no slug and no name, so a learner's own general-track card never showed
+  an attempt at all; the e2e spec's own assertion on that card is what surfaced it, not a unit
+  test, because every existing progress test only ever used certification topics. Fixed by adding
+  the same loop over `catalog.activeGeneralTracks()` — and deliberately *not* over interview
+  tracks, which ADR 0020 already decided must never move certification readiness.
+
+  Second: a general track's version label — real seed data already reads "Taxonomy 2026.1" on its
+  own — was about to be shown as "Taxonomy Taxonomy 2026.1", doubled by a template that assumed
+  the label never said so itself. Caught before merging by a test that asserts the composed string
+  rather than just that *a* string renders. Checking whether the same template existed anywhere
+  else found it had already been written once more, in #24's open interview screens, against the
+  identical seeded wording ("Taxonomy 1"); fixed there too, in that PR, before it could ship.
+
 - **A reviewer can now see where a question's claimed exam objective was actually read, and
   whether that reading is current (#177).** `GET /api/editorial/catalog/topics/{topicId}/objective-sources`
   returns the provider's page, the date it was verified, and the title and page location of each
