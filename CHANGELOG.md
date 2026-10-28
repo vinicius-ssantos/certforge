@@ -216,17 +216,28 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   kinds as one set of cards, and a general track's own page starts a session on its topics
   through the same `POST /api/study/sessions` a certification track already uses.
 
-  No new session, attempt or progress machinery was needed, and that absence is the finding: the
-  whole pipeline is already keyed by topic id alone, with no idea which kind of track a topic
-  belongs to. "Switch between a certification and a general track without losing history" is true
-  because there is only ever one history to begin with — proved end to end in a new e2e spec that
-  activates the real seeded `infrastructure-devops-foundations` taxonomy (still `DRAFT` until its
-  own content is reviewed) and walks browse → session → answer → history on a fixture question.
+  No new *session or attempt* machinery was needed: `StudyService.doStart` already resolves a
+  topic through `findActiveTopicContext`, with no idea which `TrackKind` it belongs to. Progress
+  was the one place that did know, and the e2e spec below is what caught it.
 
-  Found two defects along the way, one in this slice and one in #24's still-open PR. First: a
-  general track's version label — real seed data already reads "Taxonomy 2026.1" on its own —
-  was about to be shown as "Taxonomy Taxonomy 2026.1", doubled by a template that assumed the
-  label never said so itself. Caught before merging by a test that asserts the composed string
+  "Switch between a certification and a general track without losing history" is proved end to
+  end in a new e2e spec that activates the real seeded `infrastructure-devops-foundations`
+  taxonomy (still `DRAFT` until its own content is reviewed) and walks browse → session → answer
+  → history on a fixture question.
+
+  Found three defects along the way, two in this slice and one in #24's still-open PR.
+
+  `ProgressService.topics()` built every entry's `trackSlug` by looping `catalog.activeTracks()` —
+  certification only. A general track's topic fell through to the "topic no longer in an active
+  track" branch, carrying no slug and no name, so a learner's own general-track card never showed
+  an attempt at all; the e2e spec's own assertion on that card is what surfaced it, not a unit
+  test, because every existing progress test only ever used certification topics. Fixed by adding
+  the same loop over `catalog.activeGeneralTracks()` — and deliberately *not* over interview
+  tracks, which ADR 0020 already decided must never move certification readiness.
+
+  Second: a general track's version label — real seed data already reads "Taxonomy 2026.1" on its
+  own — was about to be shown as "Taxonomy Taxonomy 2026.1", doubled by a template that assumed
+  the label never said so itself. Caught before merging by a test that asserts the composed string
   rather than just that *a* string renders. Checking whether the same template existed anywhere
   else found it had already been written once more, in #24's open interview screens, against the
   identical seeded wording ("Taxonomy 1"); fixed there too, in that PR, before it could ship.

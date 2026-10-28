@@ -2,6 +2,7 @@ package dev.certforge.progress.internal;
 
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.preparationcatalog.GeneralTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
@@ -77,13 +78,29 @@ class ProgressService {
 
   // ---- reading -------------------------------------------------------------------------------
 
-  /** One entry per topic of the active tracks, in catalog order, then any other topic with data. */
+  /**
+   * One entry per topic of the active certification and general-knowledge tracks, in catalog order,
+   * then any other topic with data.
+   *
+   * <p>General tracks (#176) are included here deliberately, and interview tracks are not. A
+   * general-knowledge study session uses the exact same study-session and attempt pipeline a
+   * certification one does, so its topics belong in this same progress; an interview session is its
+   * own aggregate with its own evidence, and ADR 0020 decided in so many words that practising it
+   * "does not move certification readiness" -- adding it here would be exactly that move.
+   */
   @Transactional(readOnly = true)
   List<TopicProgress> topics() {
     Map<UUID, Counts> stored = repository.find(currentActor.require().value());
     List<TopicProgress> result = new ArrayList<>();
     Set<UUID> shown = new HashSet<>();
     for (TrackView track : catalog.activeTracks()) {
+      for (TopicView topic : flatten(track.topics())) {
+        UUID id = topic.id().value();
+        shown.add(id);
+        result.add(view(topic.id(), topic.name(), track.slug(), stored.get(id)));
+      }
+    }
+    for (GeneralTrackView track : catalog.activeGeneralTracks()) {
       for (TopicView topic : flatten(track.topics())) {
         UUID id = topic.id().value();
         shown.add(id);

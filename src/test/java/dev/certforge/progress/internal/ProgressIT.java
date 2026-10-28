@@ -150,6 +150,64 @@ class ProgressIT {
     assertThat(untouched.get("lastActivityAt")).isNull();
   }
 
+  /**
+   * A general-knowledge track uses the exact same study-session and attempt pipeline a
+   * certification track does (#176), and its progress entries have to say so: {@code trackSlug} is
+   * what the tracks page groups a learner's standing by, and a topic whose entry carries none reads
+   * as though it were never on a track at all.
+   */
+  @Test
+  void aGeneralTrackTopicCarriesItsOwnTrackSlugInProgress() throws Exception {
+    String slug = "general-progress-" + UUID.randomUUID();
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'General progress fixture', 'GENERAL', 'ACTIVE')",
+        trackId,
+        slug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'general-progress-topic', 'General Progress Topic')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 3)",
+        versionId,
+        topicId);
+    String generalTopic = topicId.toString();
+    for (int i = 1; i <= 2; i++) {
+      fixtures.publishBody(
+          "{\"type\":\"SINGLE_CHOICE\",\"topicId\":\""
+              + generalTopic
+              + "\",\"difficulty\":\"MEDIUM\",\"difficultyRationale\":\"Fixture rationale\","
+              + "\"prompt\":\"General progress fixture "
+              + i
+              + "\",\"explanation\":\"Secret overall explanation\","
+              + "\"options\":[{\"key\":\"A\",\"text\":\"First\",\"correct\":true,"
+              + "\"explanation\":\"Secret why A\"},{\"key\":\"B\",\"text\":\"Second\","
+              + "\"correct\":false,\"explanation\":\"Secret why B\"}],"
+              + "\"references\":[{\"title\":\"Test data\",\"url\":\"https://example.com/test-data\"}]}");
+    }
+
+    Started started = study.start(learner, generalTopic, 2);
+    study.answerOk(learner, started, 0, "A");
+    study.abandon(learner, started);
+
+    Map<String, Object> result = entry(learner, generalTopic);
+    assertThat(result).containsEntry("attempted", 1).containsEntry("correct", 1);
+    assertThat(result).containsEntry("trackSlug", slug);
+    assertThat(result.get("topicName")).isEqualTo("General Progress Topic");
+  }
+
   @Test
   void everyCatalogTopicIsListedInCatalogOrderEvenWithoutActivity() throws Exception {
     mvc.perform(get("/api/progress/topics").cookie(learner.session()))
