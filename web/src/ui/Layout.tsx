@@ -53,6 +53,7 @@ export function Layout() {
               <NavLink to="/" end>
                 {t.layout.tracks}
               </NavLink>
+              <NavLink to="/interviews">{t.layout.interviews}</NavLink>
               <NavLink to="/review">{t.layout.review}</NavLink>
               <NavLink to="/progress">{t.layout.progress}</NavLink>
               <NavLink to="/history">{t.layout.history}</NavLink>

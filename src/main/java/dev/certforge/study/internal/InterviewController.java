@@ -44,7 +44,7 @@ class InterviewController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  InterviewSessionView start(@Valid @RequestBody StartRequest request) {
+  InterviewSessionView start(@Valid @RequestBody InterviewStartRequest request) {
     return service.start(
         request.trackSlug(), request.topicIds(), request.questionCount(), request.blueprintId());
   }
@@ -76,7 +76,22 @@ class InterviewController {
         key,
         request.selectedOptions(),
         request.confidence(),
-        request.elapsedMillis(),
+        request.elapsedMillis());
+  }
+
+  /**
+   * What the learner says their own guided answer covered, which can only be said after they have
+   * read what a reviewer expected -- so it is its own step, not a field on the answer above.
+   */
+  @PostMapping("/{sessionId}/items/{position}/concepts")
+  @ResponseStatus(HttpStatus.CREATED)
+  InterviewAnswerView markConcepts(
+      @PathVariable UUID sessionId,
+      @PathVariable int position,
+      @Valid @RequestBody MarkRequest request) {
+    return service.markConcepts(
+        sessionId,
+        position,
         request.coveredConcepts() == null ? Map.of() : request.coveredConcepts());
   }
 
@@ -100,7 +115,7 @@ class InterviewController {
    * {@code topicIds} empty means the whole track; {@code questionCount} is optional and the server
    * applies its default and limits.
    */
-  record StartRequest(
+  record InterviewStartRequest(
       @NotBlank @Size(max = 100) String trackSlug,
       @Size(max = 30) List<UUID> topicIds,
       Integer questionCount,
@@ -119,12 +134,14 @@ class InterviewController {
   record AnswerRequest(
       @Size(max = 8) List<@NotBlank @Size(max = 1) String> selectedOptions,
       @NotNull Confidence confidence,
-      @Min(0) @Max(86400000) long elapsedMillis,
-      /**
-       * For a guided item: which expected concepts the learner says their own answer covered, by
-       * the concept's position, true for covered and false for not. Optional, and marking nothing
-       * means only that they did not say — it is not a claim that nothing was covered. The product
-       * never fills this in, because it never reads the answer (ADR 0019).
-       */
-      @Size(max = 20) Map<Integer, Boolean> coveredConcepts) {}
+      @Min(0) @Max(86400000) long elapsedMillis) {}
+
+  /**
+   * Which expected concepts the learner says their own guided answer covered, by the concept's
+   * position, true for covered and false for not.
+   *
+   * <p>Marking nothing means only that they did not say — it is not a claim that nothing was
+   * covered. The product never fills this in, because it never reads the answer (ADR 0019).
+   */
+  record MarkRequest(@Size(max = 20) Map<Integer, Boolean> coveredConcepts) {}
 }

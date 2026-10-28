@@ -10,6 +10,7 @@ import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.study.Confidence;
 import dev.certforge.study.internal.InterviewEvidenceViews.ConceptMarkView;
+import dev.certforge.study.internal.InterviewEvidenceViews.EvidenceSignalView;
 import dev.certforge.study.internal.InterviewEvidenceViews.GuidedEvidenceView;
 import dev.certforge.study.internal.InterviewEvidenceViews.InterviewEvidenceView;
 import dev.certforge.study.internal.InterviewEvidenceViews.ObjectiveEvidenceView;
@@ -188,35 +189,29 @@ class InterviewEvidenceService {
    * restatement of a count the caller can already see and check, never an inference about the
    * learner: "sure and wrong twice" is two responses, and the ids are in the payload.
    */
-  private List<String> signals(
+  private List<EvidenceSignalView> signals(
       ObjectiveEvidenceView objective, GuidedEvidenceView guided, List<UUID> guidedResponses) {
-    List<String> signals = new ArrayList<>();
+    List<EvidenceSignalView> signals = new ArrayList<>();
     if (!objective.sureAndWrong().isEmpty()) {
-      signals.add(
-          "confident and wrong on "
-              + objective.sureAndWrong().size()
-              + " objective question(s): worth re-reading rather than re-practising");
+      signals.add(new EvidenceSignalView("SURE_AND_WRONG", objective.sureAndWrong().size(), null));
     }
     if (!objective.unsureAndRight().isEmpty()) {
       signals.add(
-          "right but unsure on "
-              + objective.unsureAndRight().size()
-              + " objective question(s): the knowledge may be there without the confidence");
+          new EvidenceSignalView("UNSURE_AND_RIGHT", objective.unsureAndRight().size(), null));
     }
     if (!guided.conceptsMarkedMissed().isEmpty()) {
       ConceptMarkView first = guided.conceptsMarkedMissed().getFirst();
-      signals.add(
-          "you marked \"" + first.text() + "\" as not covered " + first.times() + " time(s)");
+      // The reviewer's own wording travels with the signal. Translating a concept would be
+      // translating reviewed content, which ADR 0012 keeps in English for exactly this reason.
+      signals.add(new EvidenceSignalView("CONCEPT_MARKED_MISSED", first.times(), first.text()));
     }
     if (guided.practised() > 0 && guided.conceptsMarkedMissed().isEmpty()) {
       signals.add(
-          "practised "
-              + guided.practised()
-              + " guided question(s) and marked no concept as missed; nothing here scores those"
-              + " answers, so this says what you said and no more");
+          new EvidenceSignalView("GUIDED_PRACTISED_WITH_NO_MISSES", guided.practised(), null));
     }
     if (!guidedResponses.isEmpty() && signals.isEmpty()) {
-      signals.add("practised, with nothing in the evidence to single out");
+      signals.add(
+          new EvidenceSignalView("PRACTISED_NOTHING_TO_SINGLE_OUT", guidedResponses.size(), null));
     }
     return List.copyOf(signals);
   }

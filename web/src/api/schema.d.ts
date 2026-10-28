@@ -485,6 +485,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/catalog/interview-tracks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["interviewTracks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalog/interview-tracks/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["interviewTrack"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/catalog/tracks": {
         parameters: {
             query?: never;
@@ -805,6 +837,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/interviews/{sessionId}/items/{position}/concepts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["markConcepts"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/mock-exams": {
         parameters: {
             query?: never;
@@ -1060,9 +1108,6 @@ export interface components {
         AnswerRequest: {
             /** @enum {string} */
             confidence: "LOW" | "MEDIUM" | "HIGH";
-            coveredConcepts?: {
-                [key: string]: boolean;
-            };
             /** Format: int64 */
             elapsedMillis?: number;
             selectedOptions?: string[];
@@ -1217,6 +1262,12 @@ export interface components {
             /** Format: uuid */
             topicId: string;
         };
+        EvidenceSignalView: {
+            concept: string | null;
+            /** Format: int32 */
+            count: number;
+            kind: string;
+        };
         ExamVersionView: {
             examCode: string;
             examName: string;
@@ -1344,6 +1395,24 @@ export interface components {
             /** Format: uuid */
             trackVersionId: string;
         };
+        InterviewStartRequest: {
+            /** Format: uuid */
+            blueprintId?: string;
+            /** Format: int32 */
+            questionCount?: number;
+            topicIds?: string[];
+            trackSlug: string;
+        };
+        InterviewTrackView: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            slug: string;
+            topics: components["schemas"]["TopicView"][];
+            /** Format: uuid */
+            versionId: string;
+            versionLabel: string;
+        };
         LoginRequest: {
             email: string;
             password: string;
@@ -1354,6 +1423,11 @@ export interface components {
             position: number;
             /** Format: uuid */
             topicId: string;
+        };
+        MarkRequest: {
+            coveredConcepts?: {
+                [key: string]: boolean;
+            };
         };
         MatchView: {
             foundIn: string;
@@ -1879,7 +1953,7 @@ export interface components {
         TopicEvidenceView: {
             guided: components["schemas"]["GuidedEvidenceView"];
             objective: components["schemas"]["ObjectiveEvidenceView"];
-            signals: string[];
+            signals: components["schemas"]["EvidenceSignalView"][];
             /** Format: uuid */
             topicId: string;
         };
@@ -2699,6 +2773,48 @@ export interface operations {
             };
         };
     };
+    interviewTracks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewTrackView"][];
+                };
+            };
+        };
+    };
+    interviewTrack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewTrackView"];
+                };
+            };
+        };
+    };
     tracks_1: {
         parameters: {
             query?: never;
@@ -2988,7 +3104,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["StartRequest"];
+                "application/json": components["schemas"]["InterviewStartRequest"];
             };
         };
         responses: {
@@ -3172,6 +3288,33 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["AnswerRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["InterviewAnswerView"];
+                };
+            };
+        };
+    };
+    markConcepts: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+                position: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MarkRequest"];
             };
         };
         responses: {
