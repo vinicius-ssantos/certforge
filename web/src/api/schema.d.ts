@@ -485,6 +485,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/catalog/general-tracks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["generalTracks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/catalog/general-tracks/{slug}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["generalTrack"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/catalog/interview-tracks": {
         parameters: {
             query?: never;
@@ -1271,6 +1303,16 @@ export interface components {
             explanation: string | null;
             required: boolean;
             text: string;
+        };
+        GeneralTrackView: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            slug: string;
+            topics: components["schemas"]["TopicView"][];
+            /** Format: uuid */
+            versionId: string;
+            versionLabel: string;
         };
         GuidedEvidenceView: {
             conceptsMarkedMissed: components["schemas"]["ConceptMarkView"][];
@@ -2741,6 +2783,48 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["AccountView"];
+                };
+            };
+        };
+    };
+    generalTracks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GeneralTrackView"][];
+                };
+            };
+        };
+    };
+    generalTrack: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["GeneralTrackView"];
                 };
             };
         };

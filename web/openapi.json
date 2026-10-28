@@ -779,6 +779,35 @@
         "required" : [ "explanation", "required", "text" ],
         "type" : "object"
       },
+      "GeneralTrackView" : {
+        "properties" : {
+          "id" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "slug" : {
+            "type" : "string"
+          },
+          "topics" : {
+            "items" : {
+              "$ref" : "#/components/schemas/TopicView"
+            },
+            "type" : "array"
+          },
+          "versionId" : {
+            "format" : "uuid",
+            "type" : "string"
+          },
+          "versionLabel" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "id", "name", "slug", "topics", "versionId", "versionLabel" ],
+        "type" : "object"
+      },
       "GuidedEvidenceView" : {
         "properties" : {
           "conceptsMarkedMissed" : {
@@ -3821,6 +3850,53 @@
           }
         },
         "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/catalog/general-tracks" : {
+      "get" : {
+        "operationId" : "generalTracks",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/GeneralTrackView"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-controller" ]
+      }
+    },
+    "/api/catalog/general-tracks/{slug}" : {
+      "get" : {
+        "operationId" : "generalTrack",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "slug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/GeneralTrackView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "catalog-controller" ]
       }
     },
     "/api/catalog/interview-tracks" : {
