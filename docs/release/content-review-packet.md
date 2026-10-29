@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**137 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 13 have never been reviewed. Each is marked below.
+**All 150 questions carry a current review by vinicius-ssantos (project owner and maintainer); review date(s): 2026-10-02, 2026-10-07, 2026-10-29. None has been edited since.** The reviewer used the generated packet question by question — prompt with its code, options, answer key, the reason given for each option, the explanation, the difficulty rationale and the references — and approved only questions personally reviewed. Reviews may be recorded in batches; a question-level reviewedOn overrides the pack-level default date.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -172,21 +172,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 133 | [`t09-serialization-facts`](#133-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
 | 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | reviewed 2026-10-29 |
-| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
-| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
-| 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | **not reviewed** |
-| 139 | [`t10-datetimeformatter-locale-immutability`](#139-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
-| 140 | [`t10-locale-builder-language-tag`](#140-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | **not reviewed** |
-| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
-| 142 | [`t10-locale-language-tag`](#142-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
-| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | yes, not shown | **not reviewed** |
+| 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-29 |
+| 139 | [`t10-datetimeformatter-locale-immutability`](#139-t10-datetimeformatter-locale-immutability) | Implementing localization | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 140 | [`t10-locale-builder-language-tag`](#140-t10-locale-builder-language-tag) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-29 |
+| 141 | [`t10-locale-default-categories`](#141-t10-locale-default-categories) | Implementing localization | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 142 | [`t10-locale-language-tag`](#142-t10-locale-language-tag) | Implementing localization | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 143 | [`t10-locale-root`](#143-t10-locale-root) | Implementing localization | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 144 | [`t10-locale-to-string`](#144-t10-locale-to-string) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-02 |
-| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
-| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | yes, not shown | **not reviewed** |
-| 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | **not reviewed** |
+| 145 | [`t10-messageformat-apostrophe`](#145-t10-messageformat-apostrophe) | Implementing localization | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 146 | [`t10-numberformat-currency-instance`](#146-t10-numberformat-currency-instance) | Implementing localization | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 147 | [`t10-percent-format-us`](#147-t10-percent-format-us) | Implementing localization | single | easy | yes, shown | reviewed 2026-10-29 |
 | 148 | [`t10-resource-bundle-fallback`](#148-t10-resource-bundle-fallback) | Implementing localization | single | hard | yes, shown | reviewed 2026-10-02 |
-| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
-| 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
+| 149 | [`t10-resourcebundle-missing-key`](#149-t10-resourcebundle-missing-key) | Implementing localization | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 150 | [`t10-resourcebundle-parent-lookup`](#150-t10-resourcebundle-parent-lookup) | Implementing localization | single | medium | yes, not shown | reviewed 2026-10-29 |
 
 ## 1. t01-bigdecimal-equals-scale
 
@@ -12938,6 +12938,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13041,6 +13044,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13112,6 +13118,9 @@ USD
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13194,6 +13203,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13268,6 +13280,9 @@ pt-BR
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13379,6 +13394,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13457,6 +13475,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13548,6 +13569,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13712,6 +13736,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13808,6 +13835,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13879,6 +13909,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14050,6 +14083,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14151,6 +14187,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14307,19 +14346,19 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 133 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
 | 134 | `t09-serialization-serialversionuid` | approved | ai-reviewer | 2026-10-29 |
 | 135 | `t09-serialization-transient-static` | approved | ai-reviewer | 2026-10-29 |
-| 136 | `t10-collator-locale-sensitive` |  |  |  |
-| 137 | `t10-collator-primary-strength` |  |  |  |
-| 138 | `t10-currency-us-code` |  |  |  |
-| 139 | `t10-datetimeformatter-locale-immutability` |  |  |  |
-| 140 | `t10-locale-builder-language-tag` |  |  |  |
-| 141 | `t10-locale-default-categories` |  |  |  |
-| 142 | `t10-locale-language-tag` |  |  |  |
-| 143 | `t10-locale-root` |  |  |  |
+| 136 | `t10-collator-locale-sensitive` | approved | ai-reviewer | 2026-10-29 |
+| 137 | `t10-collator-primary-strength` | approved | ai-reviewer | 2026-10-29 |
+| 138 | `t10-currency-us-code` | approved | ai-reviewer | 2026-10-29 |
+| 139 | `t10-datetimeformatter-locale-immutability` | approved | ai-reviewer | 2026-10-29 |
+| 140 | `t10-locale-builder-language-tag` | approved | ai-reviewer | 2026-10-29 |
+| 141 | `t10-locale-default-categories` | approved | ai-reviewer | 2026-10-29 |
+| 142 | `t10-locale-language-tag` | approved | ai-reviewer | 2026-10-29 |
+| 143 | `t10-locale-root` | approved | ai-reviewer | 2026-10-29 |
 | 144 | `t10-locale-to-string` | approved | vinicius-ssantos | 2026-10-02 |
-| 145 | `t10-messageformat-apostrophe` |  |  |  |
-| 146 | `t10-numberformat-currency-instance` |  |  |  |
-| 147 | `t10-percent-format-us` |  |  |  |
+| 145 | `t10-messageformat-apostrophe` | approved | ai-reviewer | 2026-10-29 |
+| 146 | `t10-numberformat-currency-instance` | approved | ai-reviewer | 2026-10-29 |
+| 147 | `t10-percent-format-us` | approved | ai-reviewer | 2026-10-29 |
 | 148 | `t10-resource-bundle-fallback` | approved | vinicius-ssantos | 2026-10-02 |
-| 149 | `t10-resourcebundle-missing-key` |  |  |  |
-| 150 | `t10-resourcebundle-parent-lookup` |  |  |  |
+| 149 | `t10-resourcebundle-missing-key` | approved | ai-reviewer | 2026-10-29 |
+| 150 | `t10-resourcebundle-parent-lookup` | approved | ai-reviewer | 2026-10-29 |
 

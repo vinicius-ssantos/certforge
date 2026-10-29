@@ -1543,6 +1543,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t10-collator-locale-sensitive": {
+      "verdict": "APPROVED",
+      "digest": "sha256:45619c2f8059eccf95f19fb0add9ba36af084101691d1988b4fe746eccbc15a2",
+      "verified": "sha256:96478308144957575b0e3a31315fca8385a7e3c55c1732ce34c8193b4af27582",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-collator-primary-strength": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c64cc569041156e77b870213d24024126a210ca760a421b41c24a5a0d33c3e1c",
+      "verified": "sha256:fd1fca3ad0ca08f90bcc5c51e7051ae1a8fd4021c3a9f511df4097d181a50b09",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-currency-us-code": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a3689e4003c1638ba7b4cb620463c619e58bd8cedda3f07fe8a17bbb999f8bcb",
+      "verified": "sha256:a26cdf3a6e709124385d4d7eb9bff6b897a58ed5597fbab779b89849dbe81b21",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-datetimeformatter-locale-immutability": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a0f737bdcf04c1464c89dfaa58036be7287af8ec3bfde4b8b11bdd4e23d2013e",
+      "verified": "sha256:ad797b0b8f709714b4b0819414a0f279ed8511ec63e035275db74f2c4df20c50",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-locale-builder-language-tag": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bbc010b1c5eafda18d1edd11cb4c80b2da043bccb3749905d34e1f383de7cbb6",
+      "verified": "sha256:2a67f1a4675ab88705c1a2bbe30bdd800f22c737e7f8c0328825cd247bd078ad",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-locale-default-categories": {
+      "verdict": "APPROVED",
+      "digest": "sha256:06751e113eaf965fe3b43914d465e9dfe6bb26f67944f8e145b6394f588181be",
+      "verified": "sha256:57b3deaa6b51167f7c9c17fd1298b65c1a53d8ded9085082a23072bc86af00de",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-locale-language-tag": {
+      "verdict": "APPROVED",
+      "digest": "sha256:705582ca1e729220da81dd8a18408652f0ed6793c10aeb1945635f40ef18b15f",
+      "verified": "sha256:f9255f4fedfc0efc4ff828d92ffd36d2f7a8a0bcde2e97a5b6f6c290955a8e2f",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-locale-root": {
+      "verdict": "APPROVED",
+      "digest": "sha256:32ecd121d71971fa44f34099eebf69463ab775ae14f4870332d5b50e2113fda3",
+      "verified": "sha256:92026d263d35c3acfce8d5516c4f006533d4ec28ad295be0e46e64a45d6181f1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-messageformat-apostrophe": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c3d71e5fa72ad299941fb5f4367b7d6a405cdff775262054005453d31faa2437",
+      "verified": "sha256:b9f7156261b46d9435dbb860deb5393b0e12af4ffc52d2006a670d167b2a3cb5",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-numberformat-currency-instance": {
+      "verdict": "APPROVED",
+      "digest": "sha256:44c22d1667f1a812f25e40ae1fe8e0c8a7d0ed0361877297873aa484084d9ba8",
+      "verified": "sha256:7faae9f5d63a20a372562eab6417ef6b3cf33adb324ca361868946da2432e932",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-percent-format-us": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ccc0d3d7e6cf41fcabc6526ff72e3731a61acdec7a23047da01ce3e390792a64",
+      "verified": "sha256:72da55d317fd997b93138b8646a2238e806a4c4566d1e854277b5a583d8aef23",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-resourcebundle-missing-key": {
+      "verdict": "APPROVED",
+      "digest": "sha256:75d80ee81a1b01cda2b9202a9e43bf4a84ebfc1d2021e4438722201546ae9803",
+      "verified": "sha256:917956b3fc18810b8cbe30669a2be82ff1b3ef85d7b17c9107191f833464560c",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t10-resourcebundle-parent-lookup": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a573de6bbbdb78b",
+      "verified": "sha256:0513944940b00223f5575658b8c97c1507f199a59a7d312b0eeee8d3198951e8",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }

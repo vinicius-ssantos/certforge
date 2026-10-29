@@ -27,19 +27,20 @@ test("the README's review figures are the ones in the record", () => {
   const humanReviewed = reviewed.length - aiReviewed.length;
 
   const stated = readme().match(
-    /(\d+) of them carry recorded human reviews; (\d+) carry a provisional AI review awaiting a human's confirmation; (\d+) remain deliberately unreviewed/,
+    /(\d+) of them carry recorded human reviews; the other (\d+) carry a provisional AI review awaiting a human's confirmation/,
   );
   assert.ok(stated, "the sentence stating the review figures was reworded; move this pattern with it");
   assert.equal(Number(stated[1]), humanReviewed);
   assert.equal(Number(stated[2]), aiReviewed.length);
-  assert.equal(Number(stated[3]), questions.length - reviewed.length);
+  // The sentence only has two figures left to state once nothing is unreviewed; this keeps that true.
+  assert.equal(questions.length - reviewed.length, 0);
 });
 
 test("the README's claim that every question carries a programme is the pack's", () => {
   const questions = readPack(PACK);
   const withoutProgram = questions.filter((question) => !question.code && !question.expected);
 
-  const stated = readme().match(/Every one of the (\d+), reviewed or not, now carries a programme/);
+  const stated = readme().match(/Every one of the (\d+) also carries a programme/);
   assert.ok(stated, "the sentence stating the verified figure was reworded; move this pattern with it");
   assert.equal(Number(stated[1]), questions.length);
   // The claim is about all of them, so one question without a programme makes the sentence false.

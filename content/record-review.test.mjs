@@ -20,10 +20,25 @@ function withCopy(work) {
   }
 }
 
-/** A question of the pack that nobody has reviewed yet, so the tests record a real first verdict. */
+/**
+ * A question of the pack that nobody has reviewed yet, so the tests record a real first verdict.
+ * Made unreviewed in this copy regardless of whether the real pack currently has one: whether any
+ * question is still unreviewed is a fact about today's backlog (zero, since Topic 10 closed it
+ * out), not something this test should depend on to stay meaningful tomorrow.
+ */
 function unreviewed(target) {
   const record = readReviewRecord(target);
-  const found = readPack(target).find((question) => !record.questions[question.name]);
+  let found = readPack(target).find((question) => !record.questions[question.name]);
+  if (!found) {
+    found = readPack(target)[0];
+    delete record.questions[found.name];
+    const original = readFileSync(join(target, "review.json"), "utf8");
+    let rewritten = JSON.stringify(record, null, 2) + "\n";
+    if (original.includes("\r\n")) {
+      rewritten = rewritten.replace(/\n/g, "\r\n");
+    }
+    writeFileSync(join(target, "review.json"), rewritten);
+  }
   assert.ok(found, "the pack should still hold an unreviewed question");
   return found;
 }
@@ -246,8 +261,10 @@ test("ADR 0023: a human re-recording an AI-reviewed question reverts the entry t
 
 test("writes the file the way it found it", () => {
   withCopy((target) => {
-    const before = readFileSync(join(target, "review.json"), "utf8");
+    // unreviewed() may itself rewrite the file to synthesize a fixture (see its own comment);
+    // "found it" means as recordReview found it, so the snapshot is taken after that setup.
     const question = unreviewed(target);
+    const before = readFileSync(join(target, "review.json"), "utf8");
 
     recordReview(target, { question: question.name, verdict: "APPROVED", on: "2026-10-17" });
 
