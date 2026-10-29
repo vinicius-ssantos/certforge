@@ -7,24 +7,32 @@ const PACK = "content/java-se-21";
 const readme = () => readFileSync("content/README.md", "utf8");
 
 /**
- * content/README.md states how much of the Java pack a person has reviewed and how much of it the
- * build proves. Those are facts about review.json and the pack, kept in prose by hand, and they had
- * drifted: the file said thirty-three reviewed and sixty-nine runnable while the record held 46 and
- * every one of the 150 carried a programme. Nobody noticed, because nothing read it.
+ * content/README.md states how much of the Java pack a person has reviewed, how much an AI reviewer
+ * has (ADR 0022, ADR 0024), and how much the build proves. Those are facts about review.json and the
+ * pack, kept in prose by hand, and they had drifted before: the file said thirty-three reviewed and
+ * sixty-nine runnable while the record held 46 and every one of the 150 carried a programme. Nobody
+ * noticed, because nothing read it.
  *
  * So the sentences carrying the numbers are read here and compared with the record. If one of them
  * is reworded the match fails and says so, which is the point: the figure and the sentence move
- * together or the build stops.
+ * together or the build stops. Human and AI reviews are counted separately on purpose: folding an
+ * AI-reviewed count into "human reviews" would be exactly the undisclosed claim ADR 0022 exists to
+ * prevent.
  */
 test("the README's review figures are the ones in the record", () => {
   const questions = readPack(PACK);
   const record = readReviewRecord(PACK);
   const reviewed = questions.filter((question) => reviewStatusOf(record, question).state === "reviewed");
+  const aiReviewed = reviewed.filter((question) => reviewStatusOf(record, question).reviewer === "ai-reviewer");
+  const humanReviewed = reviewed.length - aiReviewed.length;
 
-  const stated = readme().match(/(\d+) of them carry recorded human reviews; (\d+) remain deliberately unreviewed/);
+  const stated = readme().match(
+    /(\d+) of them carry recorded human reviews; (\d+) carry a provisional AI review awaiting a human's confirmation; (\d+) remain deliberately unreviewed/,
+  );
   assert.ok(stated, "the sentence stating the review figures was reworded; move this pattern with it");
-  assert.equal(Number(stated[1]), reviewed.length);
-  assert.equal(Number(stated[2]), questions.length - reviewed.length);
+  assert.equal(Number(stated[1]), humanReviewed);
+  assert.equal(Number(stated[2]), aiReviewed.length);
+  assert.equal(Number(stated[3]), questions.length - reviewed.length);
 });
 
 test("the README's claim that every question carries a programme is the pack's", () => {

@@ -269,6 +269,188 @@
       "digest": "sha256:0afae2a7218a5d3803639c7ee84cf3a310257d9d93ebae0f2d0af3c2ffd406ef",
       "verified": "sha256:e4265b8eaa0d0e5c93ff5c0ee686a8732def082906a190c4e9a68ea776550879",
       "reviewedOn": "2026-10-07"
+    },
+    "t03-class-method-beats-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a09b6917beb7f093ff3abb555a96fabc70f9dd5ab7c0f222b21461173f92398f",
+      "verified": "sha256:e1baa8868cedc31f372697b54cfc24add3848fb1eca22f059db79a6468ea3660",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-constructor-order-super-first": {
+      "verdict": "APPROVED",
+      "digest": "sha256:215053665d7d437cf0e91cc9e9682017b2a9359da1f94b2a8cddcf0366837a4e",
+      "verified": "sha256:38164fbd17603d73f696b8b4d72664d735bb6a7c88577687fd2ae33fd6964153",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-covariant-return": {
+      "verdict": "APPROVED",
+      "digest": "sha256:26eeff7f3509172605a9ff9dc38ed7baecbf83c9534bc1890e2f5059bd22b95c",
+      "verified": "sha256:5f8456bc6933e830d9bf618baaba6b4de30fb8f3a54565bafcb224ec005f12ac",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-default-method-conflict": {
+      "verdict": "APPROVED",
+      "digest": "sha256:eb4409af4125d56ff4a03527eb2e922dfd072622a1414b72cfc421f545166833",
+      "verified": "sha256:0407b514e56e15f8764cc85df455d3d942fb909dd51961cf2c1c01ebd06ba41c",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-enum-constructor-access": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c116ca78accd40bbd6dbc8e897375631b0e7d4f7dceea2f4a44267192f53df2e",
+      "verified": "sha256:b042cec1c11c3c328da127cd9ddb6cad1550ae9c33c544c20be6419d643731eb",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-generic-erasure-overload": {
+      "verdict": "APPROVED",
+      "digest": "sha256:af0d595ad57d2ddebe8eca2b73029cc48ba82e3ecded0f39b758852aaa5458be",
+      "verified": "sha256:55aa1567b680ce7e410119ca9009140233eafe54ddef78989af23a8cb21cf631",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-overload-most-specific": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1b6f352210c6837847f625af4e8baaaa292dfd33fe43182cc6ebd1bf46154355",
+      "verified": "sha256:89cee1eb5c2d6baba862eaf04eca4bb4e699f346aad4d4ac0db2bd1d9ff26829",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-private-interface-method": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cb5b92dca6b5a7d30cff7a1bdb4f8c2824df319cd28332d32d1ead6e35f48ff9",
+      "verified": "sha256:83ddaf777dcb7396db7f0182d4c6fb69016d0021000b371a89680166dd9652f9",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-record-compact-normalization": {
+      "verdict": "APPROVED",
+      "digest": "sha256:df04a9d6024d47016bfe1f545c0be5e73b773d6309724d67b6110e0ea2c64ca1",
+      "verified": "sha256:7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-record-components-members": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0ff6b907dc8f3ebd5c84b47981593c5acf73d18ad45fc74bbcd638d25717afb8",
+      "verified": "sha256:5d32b44ece875af3c57add5452b1ee090de3669abe1dcb83bfe132646b2efe2d",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-record-pattern-destructuring": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2d81362b7973114d78b82a45730f51fcc36af4f20570da3711a89060723ebca5",
+      "verified": "sha256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-sealed-direct-subclass-modifier": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0589970f182f47e2dba49a322d5becd6a7e221066cebe87e959d38c6a866d48a",
+      "verified": "sha256:bbf56540e044771e3af895d10d58b2d50df37f7bb503cc622ffb703bef188de8",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t03-static-method-hiding": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c69a40b4585bd500240ea0eadf5abac62bdb30a8917aed93a76b84165fb57f4b",
+      "verified": "sha256:145ac6a9fe5a81caccbfd546f5ad24e46b1783ad847662c871a6a36a7c2e43db",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
