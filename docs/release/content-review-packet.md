@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**46 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07. 0 have been edited since being reviewed and need a new one; 104 have never been reviewed. Each is marked below.
+**59 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 91 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -67,21 +67,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 28 | [`t02-switch-null-default-combination`](#28-t02-switch-null-default-combination) | Controlling program flow | single | hard | yes, not shown | reviewed 2026-10-07 |
 | 29 | [`t02-switch-rule-no-fallthrough`](#29-t02-switch-rule-no-fallthrough) | Controlling program flow | single | easy | yes, not shown | reviewed 2026-10-07 |
 | 30 | [`t02-switch-yield-block`](#30-t02-switch-yield-block) | Controlling program flow | single | medium | yes, not shown | reviewed 2026-10-07 |
-| 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
-| 32 | [`t03-constructor-order-super-first`](#32-t03-constructor-order-super-first) | Object-oriented concepts in Java | single | easy | yes, shown | **not reviewed** |
-| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
-| 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | yes, not shown | **not reviewed** |
-| 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | yes, not shown | **not reviewed** |
-| 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | yes, not shown | **not reviewed** |
-| 37 | [`t03-overload-most-specific`](#37-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
+| 31 | [`t03-class-method-beats-default`](#31-t03-class-method-beats-default) | Object-oriented concepts in Java | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 32 | [`t03-constructor-order-super-first`](#32-t03-constructor-order-super-first) | Object-oriented concepts in Java | single | easy | yes, shown | reviewed 2026-10-29 |
+| 33 | [`t03-covariant-return`](#33-t03-covariant-return) | Object-oriented concepts in Java | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 34 | [`t03-default-method-conflict`](#34-t03-default-method-conflict) | Object-oriented concepts in Java | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 35 | [`t03-enum-constructor-access`](#35-t03-enum-constructor-access) | Object-oriented concepts in Java | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 36 | [`t03-generic-erasure-overload`](#36-t03-generic-erasure-overload) | Object-oriented concepts in Java | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 37 | [`t03-overload-most-specific`](#37-t03-overload-most-specific) | Object-oriented concepts in Java | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 38 | [`t03-overload-null`](#38-t03-overload-null) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-02 |
-| 39 | [`t03-private-interface-method`](#39-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
-| 40 | [`t03-record-compact-normalization`](#40-t03-record-compact-normalization) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
-| 41 | [`t03-record-components-members`](#41-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
+| 39 | [`t03-private-interface-method`](#39-t03-private-interface-method) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 40 | [`t03-record-compact-normalization`](#40-t03-record-compact-normalization) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-29 |
+| 41 | [`t03-record-components-members`](#41-t03-record-components-members) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 42 | [`t03-record-facts`](#42-t03-record-facts) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-02 |
-| 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | **not reviewed** |
-| 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | yes, not shown | **not reviewed** |
-| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | yes, not shown | **not reviewed** |
+| 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-29 |
+| 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
 | 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | yes, not shown | **not reviewed** |
 | 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
@@ -2790,6 +2790,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -2870,6 +2873,9 @@ AB
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -2960,6 +2966,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3050,6 +3059,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3151,6 +3163,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3237,6 +3252,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3322,6 +3340,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3509,6 +3530,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3583,6 +3607,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3687,6 +3714,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3856,6 +3886,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -3952,6 +3985,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4041,6 +4077,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13929,21 +13968,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 28 | `t02-switch-null-default-combination` | approved | vinicius-ssantos | 2026-10-07 |
 | 29 | `t02-switch-rule-no-fallthrough` | approved | vinicius-ssantos | 2026-10-07 |
 | 30 | `t02-switch-yield-block` | approved | vinicius-ssantos | 2026-10-07 |
-| 31 | `t03-class-method-beats-default` |  |  |  |
-| 32 | `t03-constructor-order-super-first` |  |  |  |
-| 33 | `t03-covariant-return` |  |  |  |
-| 34 | `t03-default-method-conflict` |  |  |  |
-| 35 | `t03-enum-constructor-access` |  |  |  |
-| 36 | `t03-generic-erasure-overload` |  |  |  |
-| 37 | `t03-overload-most-specific` |  |  |  |
+| 31 | `t03-class-method-beats-default` | approved | ai-reviewer | 2026-10-29 |
+| 32 | `t03-constructor-order-super-first` | approved | ai-reviewer | 2026-10-29 |
+| 33 | `t03-covariant-return` | approved | ai-reviewer | 2026-10-29 |
+| 34 | `t03-default-method-conflict` | approved | ai-reviewer | 2026-10-29 |
+| 35 | `t03-enum-constructor-access` | approved | ai-reviewer | 2026-10-29 |
+| 36 | `t03-generic-erasure-overload` | approved | ai-reviewer | 2026-10-29 |
+| 37 | `t03-overload-most-specific` | approved | ai-reviewer | 2026-10-29 |
 | 38 | `t03-overload-null` | approved | vinicius-ssantos | 2026-10-02 |
-| 39 | `t03-private-interface-method` |  |  |  |
-| 40 | `t03-record-compact-normalization` |  |  |  |
-| 41 | `t03-record-components-members` |  |  |  |
+| 39 | `t03-private-interface-method` | approved | ai-reviewer | 2026-10-29 |
+| 40 | `t03-record-compact-normalization` | approved | ai-reviewer | 2026-10-29 |
+| 41 | `t03-record-components-members` | approved | ai-reviewer | 2026-10-29 |
 | 42 | `t03-record-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 43 | `t03-record-pattern-destructuring` |  |  |  |
-| 44 | `t03-sealed-direct-subclass-modifier` |  |  |  |
-| 45 | `t03-static-method-hiding` |  |  |  |
+| 43 | `t03-record-pattern-destructuring` | approved | ai-reviewer | 2026-10-29 |
+| 44 | `t03-sealed-direct-subclass-modifier` | approved | ai-reviewer | 2026-10-29 |
+| 45 | `t03-static-method-hiding` | approved | ai-reviewer | 2026-10-29 |
 | 46 | `t04-autocloseable-close-contract` |  |  |  |
 | 47 | `t04-catch-order-unreachable` |  |  |  |
 | 48 | `t04-finally-abrupt-completion` |  |  |  |
