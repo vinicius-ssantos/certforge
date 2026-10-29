@@ -221,7 +221,7 @@ for (const { question, status } of approved) {
   const steps = isAi
     ? [
         [admin, "submit", undefined],
-        [aiReviewer, "ai-approve", { comment }],
+        [aiReviewer, "ai-approve", { comment, checklist: status.checklist ?? [] }],
       ]
     : [
         [admin, "submit", undefined],

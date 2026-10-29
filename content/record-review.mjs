@@ -15,13 +15,14 @@
 // Usage:
 //   node content/record-review.mjs --question t03-sealed-permits --verdict APPROVED
 //                                  [--pack content/java-se-21] [--on 2026-10-17] [--reviewer handle]
-//                                  [--ai-reviewed]
+//                                  [--ai-reviewed] [--checklist ITEM,ITEM]
 //
-// --ai-reviewed (ADR 0023) records the entry's reviewer as the fixed, disclosed "ai-reviewer"
-// identity instead of leaving it to mean the pack's own named human reviewer. It is incompatible
-// with --reviewer -- the identity it records is not a free-text claim -- and refuses a question
-// that carries verification evidence, the same restriction the live ai-approve endpoint enforces
-// (ADR 0022 decision 1): the AI reviewer may approve Asserted-tier content only.
+// --ai-reviewed (ADR 0023, widened to every tier by ADR 0024) records the entry's reviewer as the
+// fixed, disclosed "ai-reviewer" identity instead of leaving it to mean the pack's own named human
+// reviewer. It is incompatible with --reviewer -- the identity it records is not a free-text claim.
+// --checklist records, per question, which of the live policy checklist items (ReviewChecklist on
+// the server) the AI reviewer actually ticked; the server validates the codes when the entry is
+// later played through ai-approve, so this does not duplicate that list.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readPack, readReviewRecord, reviewDigest, verifiedDigest } from "./pack.mjs";
@@ -43,7 +44,7 @@ function refuse(...lines) {
  * different, and `unchanged` when the record already says exactly this — which makes running the
  * same command twice harmless rather than a second decision.
  */
-export function recordReview(pack, { question: name, verdict, on, reviewer, aiReviewed = false }) {
+export function recordReview(pack, { question: name, verdict, on, reviewer, aiReviewed = false, checklist }) {
   if (!VERDICTS.has(verdict)) {
     refuse(`${verdict} is not a verdict. Use one of: ${[...VERDICTS].join(", ")}.`);
   }
@@ -55,6 +56,9 @@ export function recordReview(pack, { question: name, verdict, on, reviewer, aiRe
       "--ai-reviewed and --reviewer do not mix: the AI reviewer's identity is fixed and disclosed,",
       "not a name you pass in.",
     );
+  }
+  if (checklist && !aiReviewed) {
+    refuse("--checklist only applies to an AI review (--ai-reviewed): a human's checklist is recorded for the whole pack.");
   }
   if (existsSync(join(pack, "pack.json"))) {
     refuse(
@@ -74,17 +78,13 @@ export function recordReview(pack, { question: name, verdict, on, reviewer, aiRe
 
   const digest = reviewDigest(question);
   const verified = verifiedDigest(question);
-  if (aiReviewed && verified !== null) {
-    refuse(
-      `${name} carries verification evidence (the Verified tier). The AI reviewer may only record`,
-      "an Asserted-tier question (ADR 0022 decision 1, ADR 0023 decision 3) -- this one still needs",
-      "a human.",
-    );
-  }
   const entries = record.questions ?? {};
   const previous = entries[name];
   const reviewedOn = on ?? new Date().toISOString().slice(0, 10);
   const nextReviewer = aiReviewed ? "ai-reviewer" : undefined;
+  const nextChecklist = aiReviewed ? [...new Set(checklist ?? [])] : undefined;
+  const sorted = (list) => [...new Set(list ?? [])].sort();
+  const sameChecklist = (a, b) => JSON.stringify(sorted(a)) === JSON.stringify(sorted(b));
   const outcome = !previous
     ? "recorded"
     : previous.digest !== digest
@@ -93,7 +93,9 @@ export function recordReview(pack, { question: name, verdict, on, reviewer, aiRe
         ? "changed"
         : (previous.reviewer ?? undefined) !== nextReviewer
           ? "changed"
-          : "unchanged";
+          : !sameChecklist(previous.checklist, nextChecklist)
+            ? "changed"
+            : "unchanged";
   if (outcome === "unchanged") {
     return { outcome, name, verdict, digest, reviewedOn: previous.reviewedOn ?? record.reviewedOn };
   }
@@ -114,6 +116,7 @@ export function recordReview(pack, { question: name, verdict, on, reviewer, aiRe
     verified,
     reviewedOn,
     ...(nextReviewer ? { reviewer: nextReviewer } : {}),
+    ...(nextChecklist && nextChecklist.length > 0 ? { checklist: nextChecklist } : {}),
   };
   record.questions = entries;
   write(pack, record);
@@ -137,12 +140,14 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split("\\").join
   const args = process.argv.slice(2);
   const pack = option(args, "pack", "content/java-se-21");
   try {
+    const checklistArg = option(args, "checklist");
     const result = recordReview(pack, {
       question: option(args, "question"),
       verdict: option(args, "verdict", ""),
       on: option(args, "on"),
       reviewer: option(args, "reviewer"),
       aiReviewed: args.includes("--ai-reviewed"),
+      checklist: checklistArg ? checklistArg.split(",").filter(Boolean) : undefined,
     });
     const said = {
       recorded: `recorded ${result.verdict} for ${result.name} on ${result.reviewedOn}`,

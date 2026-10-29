@@ -1163,7 +1163,10 @@ class QuestionBankIT {
   }
 
   @Test
-  void anAiReviewerCannotApproveARevisionThatCarriesVerificationEvidence() throws Exception {
+  void anAiReviewerApprovesAVerifiedRevisionTooAndRecordsWhatItChecked() throws Exception {
+    // ADR 0024: the Asserted-only restriction was lifted once the real backlog turned out to be
+    // entirely Verified-tier. The checklist is what makes this different from an ordinary approval:
+    // it is the AI reviewer's own record of the judgement a compiler cannot supply.
     User aiReviewer = user("AI_REVIEWER");
     ResultActions created =
         send(post("/api/admin/questions"), editor, bodyWithVerification("Already verified"))
@@ -1171,9 +1174,15 @@ class QuestionBankIT {
     String revisionId = firstRevisionId(created, 0);
     submit(revisionId);
 
-    send(post("/api/admin/question-revisions/" + revisionId + "/ai-approve"), aiReviewer, "{}")
-        .andExpect(status().isConflict())
-        .andExpect(jsonPath("$.code").value("ai_review_requires_asserted_tier"));
+    send(
+            post("/api/admin/question-revisions/" + revisionId + "/ai-approve"),
+            aiReviewer,
+            "{\"checklist\":[\"NO_AMBIGUITY\",\"REASONS_ACCURATE\"]}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].status").value("PUBLISHED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].decision").value("AI_APPROVED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist.length()").value(2))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].checklist[0]").value("NO_AMBIGUITY"));
   }
 
   @Test

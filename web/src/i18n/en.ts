@@ -950,7 +950,7 @@ export const en = {
       startRevision: "Start a new revision",
       aiApproveHeading: "AI-reviewer fast lane",
       aiApproveNote:
-        "Approves and publishes in one step, provisionally (ADR 0022). Only works on a revision with no verification evidence; a reviewer must confirm it within the window or it stops being offered for new study.",
+        "Approves and publishes in one step, provisionally (ADR 0022, ADR 0024). Tick what you actually checked; a reviewer must confirm it within the window or it stops being offered for new study.",
       aiApprove: "Approve and publish as the AI reviewer",
       confirmAiReviewHeading: "Confirm the AI reviewer's approval",
       confirmAiReviewNote:

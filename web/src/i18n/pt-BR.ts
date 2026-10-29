@@ -886,7 +886,7 @@ export const ptBR: Catalog = {
       startRevision: "Começar uma nova versão",
       aiApproveHeading: "Via rápida da revisora de IA",
       aiApproveNote:
-        "Aprova e publica em um passo só, provisoriamente (ADR 0022). Só funciona numa versão sem evidência de verificação; uma revisora precisa confirmar dentro do prazo ou ela para de ser oferecida para novo estudo.",
+        "Aprova e publica em um passo só, provisoriamente (ADR 0022, ADR 0024). Marque o que você de fato checou; uma revisora precisa confirmar dentro do prazo ou ela para de ser oferecida para novo estudo.",
       aiApprove: "Aprovar e publicar como revisora de IA",
       confirmAiReviewHeading: "Confirmar a aprovação da revisora de IA",
       confirmAiReviewNote:

@@ -218,25 +218,24 @@ class QuestionBankService {
   }
 
   /**
-   * The AI-reviewer fast lane (ADR 0022): approves an Asserted-tier revision and publishes it in
-   * the same step, recorded as {@code AI_APPROVED} rather than {@code APPROVED} so nothing
-   * downstream can read it as an independent human decision. {@link #confirmAiReview} is how a
+   * The AI-reviewer fast lane (ADR 0022, widened to every tier by ADR 0024): approves a revision
+   * and publishes it in the same step, recorded as {@code AI_APPROVED} rather than {@code APPROVED}
+   * so nothing downstream can read it as an independent human decision. {@code checklist} is the
+   * same policy checklist {@link #approve} records, because a Verified-tier approval now asks the
+   * AI reviewer for exactly the judgement a compiler cannot supply (ADR 0024 decision 2); it was
+   * not needed while the fast lane only reached Asserted content. {@link #confirmAiReview} is how a
    * {@code CONTENT_REVIEW} account makes it permanent within the window; until then, {@link
    * QuestionBankReadService} derives its lapse from this one review, with no stored deadline.
    */
   @Transactional
-  QuestionView aiApprove(UUID revisionId, String comment) {
+  QuestionView aiApprove(UUID revisionId, String comment, List<String> checklist) {
+    List<String> ticked = ReviewChecklist.validate(checklist);
     ActorId actor = currentActor.require();
     Revision revision = revision(revisionId);
     requireStatus(revision, RevisionStatus.TECHNICAL_REVIEW, "revision_not_in_review");
     requireSeparation(actor, revision);
-    if (revision.content().verification() != null) {
-      throw QuestionBankException.conflict(
-          "ai_review_requires_asserted_tier",
-          "An AI reviewer may only approve a revision with no verification evidence");
-    }
     Instant now = clock.instant();
-    repository.insertReview(revisionId, actor.value(), "AI_APPROVED", comment, List.of(), now);
+    repository.insertReview(revisionId, actor.value(), "AI_APPROVED", comment, ticked, now);
     repository.setStatus(revisionId, RevisionStatus.APPROVED);
     audit(actor, ACTION_AI_APPROVED, revisionId, now);
     doPublish(revisionId);

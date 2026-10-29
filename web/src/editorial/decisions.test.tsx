@@ -279,14 +279,16 @@ describe("reviewing", () => {
 });
 
 describe("the AI reviewer's fast lane (ADR 0022)", () => {
-  it("shows the AI-approve action to an account holding CONTENT_AI_REVIEW, and nothing else review-shaped", async () => {
+  it("shows the AI-approve action and its own checklist (ADR 0024) to an account holding CONTENT_AI_REVIEW", async () => {
     renderApp(
       { ...tracks, [`GET ${URL}`]: { body: view(revision()) } },
       { as: aiReviewer, ...OPEN },
     );
 
     expect(await screen.findByRole("button", { name: /approve and publish as the ai reviewer/i })).toBeInTheDocument();
-    expect(screen.queryByRole("group", { name: "Content policy" })).not.toBeInTheDocument();
+    // A checklist now belongs to this path too, since ADR 0024 widened it to Verified-tier content:
+    // the AI reviewer is now the one vouching for exactly what these items ask.
+    expect(screen.getByRole("group", { name: "Content policy" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
   });
 
@@ -332,10 +334,13 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
       { as: aiReviewer, ...OPEN },
     );
 
+    await user.click(await screen.findByRole("checkbox", { name: /nothing in the wording is ambiguous/i }));
     await user.click(await screen.findByRole("button", { name: /approve and publish as the ai reviewer/i }));
 
     expect(await screen.findByText("Current status:")).toHaveTextContent("Published");
-    expect(fetch.calls.some((call) => call.path === `${REV}/ai-approve`)).toBe(true);
+    const call = fetch.calls.find((entry) => entry.path === `${REV}/ai-approve`);
+    expect(call).toBeTruthy();
+    expect(call?.body).toEqual({ checklist: ["NO_AMBIGUITY"] });
     expect(screen.getByText(/not yet independently confirmed/)).toBeInTheDocument();
   });
 

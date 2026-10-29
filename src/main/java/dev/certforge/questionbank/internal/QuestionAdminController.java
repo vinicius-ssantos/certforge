@@ -124,7 +124,10 @@ class QuestionAdminController {
   @PreAuthorize("hasAuthority('CONTENT_AI_REVIEW')")
   QuestionView aiApprove(
       @PathVariable UUID revisionId, @Valid @RequestBody(required = false) ReviewRequest request) {
-    return service.aiApprove(revisionId, request == null ? null : request.comment());
+    return service.aiApprove(
+        revisionId,
+        request == null ? null : request.comment(),
+        request == null ? null : request.checklist());
   }
 
   /**

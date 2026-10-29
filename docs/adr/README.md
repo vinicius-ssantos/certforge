@@ -27,5 +27,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0021](0021-job-description-blueprints-explain-every-weight.md) | Weigh a job description with a reviewed dictionary, and explain every weight | Accepted |
 | [0022](0022-ai-reviewer-provisional-publication.md) | Let an AI reviewer provisionally approve and publish Asserted-tier content, disclosed and time-boxed | Accepted |
 | [0023](0023-ai-reviewer-fast-lane-for-content-packs.md) | Extend the AI-reviewer fast lane to the content-pack publishing scripts | Accepted |
+| [0024](0024-ai-reviewer-verified-tier.md) | Extend the AI-reviewer fast lane to Verified-tier content, with its own recorded checklist | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.
