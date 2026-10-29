@@ -29,7 +29,8 @@ class PresentedOrderTest {
         21,
         Difficulty.EASY,
         "Prompt",
-        AUTHORED.stream().map(key -> new PublishedOption(key, "Text " + key)).toList());
+        AUTHORED.stream().map(key -> new PublishedOption(key, "Text " + key)).toList(),
+        false);
   }
 
   @Test

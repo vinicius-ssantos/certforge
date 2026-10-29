@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
 import { problem } from "../test/fakeServer";
-import { admin, editor, authorableTracks, javaTrack, renderApp, reviewer } from "../test/render";
+import { admin, aiReviewer, editor, authorableTracks, javaTrack, renderApp, reviewer } from "../test/render";
 
 const QUESTION_ID = "dddddddd-dddd-4ddd-8ddd-dddddddddddd";
 const REVISION_ID = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
@@ -275,6 +275,151 @@ describe("reviewing", () => {
     await user.click(await screen.findByRole("button", { name: "Approve" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("cannot be reviewed by the person who wrote it");
+  });
+});
+
+describe("the AI reviewer's fast lane (ADR 0022)", () => {
+  it("shows the AI-approve action to an account holding CONTENT_AI_REVIEW, and nothing else review-shaped", async () => {
+    renderApp(
+      { ...tracks, [`GET ${URL}`]: { body: view(revision()) } },
+      { as: aiReviewer, ...OPEN },
+    );
+
+    expect(await screen.findByRole("button", { name: /approve and publish as the ai reviewer/i })).toBeInTheDocument();
+    expect(screen.queryByRole("group", { name: "Content policy" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
+  });
+
+  it("reaches the editorial desk from the main nav link, holding CONTENT_AI_REVIEW alone", async () => {
+    // The permission is new; the nav link's own allow-list is a second place that could have
+    // predated it the same way RequireEditorial's did, and did -- this is what the e2e run caught.
+    renderApp({ ...tracks, [`GET /api/admin/questions`]: { body: { counts: {}, items: [], page: 0, size: 25, total: 0 } } }, { as: aiReviewer });
+
+    await screen.findByRole("heading", { level: 1, name: "Tracks" });
+    expect(
+      within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", { name: "Editorial" }),
+    ).toBeInTheDocument();
+  });
+
+  it("approves and publishes in one request, and the result is published", async () => {
+    const user = userEvent.setup();
+    const { fetch } = renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: { body: view(revision()) },
+        [`POST ${REV}/ai-approve`]: {
+          body: view(
+            revision({
+              status: "PUBLISHED",
+              publishedAt: "2026-10-29T12:00:00Z",
+              publishedBy: aiReviewer.id,
+              publishedByName: "ai-reviewer@example.com",
+              aiReviewConfirmBy: "2026-11-12T12:00:00Z",
+              reviews: [
+                {
+                  reviewerId: aiReviewer.id,
+                  reviewerName: "ai-reviewer@example.com",
+                  decision: "AI_APPROVED",
+                  comment: null,
+                  checklist: [],
+                  decidedAt: "2026-10-29T12:00:00Z",
+                },
+              ],
+            }),
+          ),
+        },
+      },
+      { as: aiReviewer, ...OPEN },
+    );
+
+    await user.click(await screen.findByRole("button", { name: /approve and publish as the ai reviewer/i }));
+
+    expect(await screen.findByText("Current status:")).toHaveTextContent("Published");
+    expect(fetch.calls.some((call) => call.path === `${REV}/ai-approve`)).toBe(true);
+    expect(screen.getByText(/not yet independently confirmed/)).toBeInTheDocument();
+  });
+
+  it("offers a reviewer the confirmation, and it makes the deadline disappear", async () => {
+    const user = userEvent.setup();
+    const aiApprovedRevision = revision({
+      status: "PUBLISHED",
+      publishedAt: "2026-10-29T12:00:00Z",
+      publishedBy: aiReviewer.id,
+      publishedByName: "ai-reviewer@example.com",
+      aiReviewConfirmBy: "2026-11-12T12:00:00Z",
+      reviews: [
+        {
+          reviewerId: aiReviewer.id,
+          reviewerName: "ai-reviewer@example.com",
+          decision: "AI_APPROVED",
+          comment: null,
+          checklist: [],
+          decidedAt: "2026-10-29T12:00:00Z",
+        },
+      ],
+    });
+    const { fetch } = renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: { body: view(aiApprovedRevision) },
+        [`POST ${REV}/confirm-ai-review`]: {
+          body: view({
+            ...aiApprovedRevision,
+            aiReviewConfirmBy: null,
+            reviews: [
+              ...aiApprovedRevision.reviews,
+              {
+                reviewerId: reviewer.id,
+                reviewerName: "reviewer@example.com",
+                decision: "AI_REVIEW_CONFIRMED",
+                comment: null,
+                checklist: [],
+                decidedAt: "2026-10-30T09:00:00Z",
+              },
+            ],
+          }),
+        },
+      },
+      { as: reviewer, ...OPEN },
+    );
+
+    expect(await screen.findByText(/not yet independently confirmed/)).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: /confirm this ai-reviewed publication/i }));
+
+    await waitFor(() => expect(screen.queryByText(/not yet independently confirmed/)).not.toBeInTheDocument());
+    expect(fetch.calls.some((call) => call.path === `${REV}/confirm-ai-review`)).toBe(true);
+  });
+
+  it("does not offer the confirmation for an ordinarily-approved publication", async () => {
+    renderApp(
+      {
+        ...tracks,
+        [`GET ${URL}`]: {
+          body: view(
+            revision({
+              status: "PUBLISHED",
+              publishedAt: "2026-10-29T12:00:00Z",
+              publishedBy: admin.id,
+              publishedByName: "admin@example.com",
+              reviews: [
+                {
+                  reviewerId: reviewer.id,
+                  reviewerName: "reviewer@example.com",
+                  decision: "APPROVED",
+                  comment: null,
+                  checklist: [],
+                  decidedAt: "2026-10-29T11:00:00Z",
+                },
+              ],
+            }),
+          ),
+        },
+      },
+      { as: reviewer, ...OPEN },
+    );
+
+    expect(await screen.findByText("Current status:")).toHaveTextContent("Published");
+    expect(screen.queryByRole("button", { name: /confirm this ai-reviewed publication/i })).not.toBeInTheDocument();
   });
 });
 

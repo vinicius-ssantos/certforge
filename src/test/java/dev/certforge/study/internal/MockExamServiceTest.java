@@ -274,7 +274,8 @@ class MockExamServiceTest {
             21,
             Difficulty.MEDIUM,
             prompt,
-            publishedOptions);
+            publishedOptions,
+            false);
     List<RevisionEvidence.Option> options =
         List.of(
             new RevisionEvidence.Option(

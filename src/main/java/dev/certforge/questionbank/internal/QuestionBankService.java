@@ -42,6 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 class QuestionBankService {
 
   static final String ACTION_APPROVED = "QUESTION_REVISION_APPROVED";
+  static final String ACTION_AI_APPROVED = "QUESTION_REVISION_AI_APPROVED";
+  static final String ACTION_AI_REVIEW_CONFIRMED = "QUESTION_REVISION_AI_REVIEW_CONFIRMED";
   static final String ACTION_PUBLISHED = "QUESTION_REVISION_PUBLISHED";
   static final String ACTION_REPLACED = "QUESTION_REVISION_REPLACED";
   static final String ACTION_DEPRECATED = "QUESTION_REVISION_DEPRECATED";
@@ -57,6 +59,7 @@ class QuestionBankService {
   private final ApplicationEventPublisher events;
   private final MeterRegistry metrics;
   private final ObservationRegistry observations;
+  private final QuestionBankProperties properties;
 
   QuestionBankService(
       QuestionRepository repository,
@@ -67,7 +70,8 @@ class QuestionBankService {
       Clock clock,
       ApplicationEventPublisher events,
       MeterRegistry metrics,
-      ObservationRegistry observations) {
+      ObservationRegistry observations,
+      QuestionBankProperties properties) {
     this.repository = repository;
     this.catalog = catalog;
     this.readService = readService;
@@ -77,6 +81,7 @@ class QuestionBankService {
     this.events = events;
     this.metrics = metrics;
     this.observations = observations;
+    this.properties = properties;
   }
 
   // ---- reads ---------------------------------------------------------------------------------
@@ -210,6 +215,55 @@ class QuestionBankService {
         revisionId, actor.value(), "CHANGES_REQUESTED", comment, ticked, clock.instant());
     repository.setStatus(revisionId, RevisionStatus.DRAFT);
     return transitioned("changes_requested", revision.questionId());
+  }
+
+  /**
+   * The AI-reviewer fast lane (ADR 0022): approves an Asserted-tier revision and publishes it in
+   * the same step, recorded as {@code AI_APPROVED} rather than {@code APPROVED} so nothing
+   * downstream can read it as an independent human decision. {@link #confirmAiReview} is how a
+   * {@code CONTENT_REVIEW} account makes it permanent within the window; until then, {@link
+   * QuestionBankReadService} derives its lapse from this one review, with no stored deadline.
+   */
+  @Transactional
+  QuestionView aiApprove(UUID revisionId, String comment) {
+    ActorId actor = currentActor.require();
+    Revision revision = revision(revisionId);
+    requireStatus(revision, RevisionStatus.TECHNICAL_REVIEW, "revision_not_in_review");
+    requireSeparation(actor, revision);
+    if (revision.content().verification() != null) {
+      throw QuestionBankException.conflict(
+          "ai_review_requires_asserted_tier",
+          "An AI reviewer may only approve a revision with no verification evidence");
+    }
+    Instant now = clock.instant();
+    repository.insertReview(revisionId, actor.value(), "AI_APPROVED", comment, List.of(), now);
+    repository.setStatus(revisionId, RevisionStatus.APPROVED);
+    audit(actor, ACTION_AI_APPROVED, revisionId, now);
+    doPublish(revisionId);
+    return transitioned("ai_approved", revision.questionId());
+  }
+
+  /**
+   * Records the independent human check that turns an {@code AI_APPROVED} publication permanent
+   * (ADR 0022). The revision stays {@code PUBLISHED}; this adds a review, it does not change
+   * status. Confirming after the window has already lapsed the revision out of new selection is
+   * still accepted: the content did not change, only whether it was being offered to a new learner.
+   */
+  @Transactional
+  QuestionView confirmAiReview(UUID revisionId, String comment, List<String> checklist) {
+    List<String> ticked = ReviewChecklist.validate(checklist);
+    ActorId actor = currentActor.require();
+    Revision revision = revision(revisionId);
+    requireStatus(revision, RevisionStatus.PUBLISHED, "revision_not_published");
+    requireSeparation(actor, revision);
+    if (!AiReview.pending(repository.findReviews(revisionId))) {
+      throw QuestionBankException.conflict(
+          "no_pending_ai_review", "This revision has no unconfirmed AI approval to confirm");
+    }
+    Instant now = clock.instant();
+    repository.insertReview(revisionId, actor.value(), "AI_REVIEW_CONFIRMED", comment, ticked, now);
+    audit(actor, ACTION_AI_REVIEW_CONFIRMED, revisionId, now);
+    return transitioned("ai_review_confirmed", revision.questionId());
   }
 
   // ---- publication ---------------------------------------------------------------------------
@@ -413,6 +467,7 @@ class QuestionBankService {
                         review.comment(),
                         review.checklist(),
                         review.decidedAt()))
-            .toList());
+            .toList(),
+        AiReview.confirmBy(reviews, properties.aiReviewConfirmationWindow()).orElse(null));
   }
 }

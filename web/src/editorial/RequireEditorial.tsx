@@ -6,7 +6,7 @@ import { EmptyState } from "../ui/States";
 /** The editorial desk is for authors, reviewers and publishers; everyone else is told so. */
 export function RequireEditorial() {
   const t = useText();
-  const allowed = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH");
+  const allowed = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH", "CONTENT_AI_REVIEW");
   if (!allowed) {
     return (
       <>

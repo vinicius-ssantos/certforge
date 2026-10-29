@@ -1137,6 +1137,152 @@ class QuestionBankIT {
         .andExpect(jsonPath("$.code").value("reviewer_must_differ_from_author"));
   }
 
+  // ---- AI reviewer fast lane (ADR 0022) -------------------------------------------------------
+
+  private static String bodyWithVerification(String prompt) {
+    return body(prompt)
+        .replaceFirst(
+            "\\}$",
+            ",\"verification\":{\"files\":[{\"path\":\"Main.java\",\"body\":\"class Main {}\"}],"
+                + "\"output\":\"ok\"}}");
+  }
+
+  @Test
+  void anAiReviewerApprovesAndPublishesAnAssertedRevisionInOneStep() throws Exception {
+    User aiReviewer = user("AI_REVIEWER");
+    String[] ids = createComplete("Approved by the AI reviewer");
+    submit(ids[1]);
+
+    send(post("/api/admin/question-revisions/" + ids[1] + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].status").value("PUBLISHED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[0].decision").value("AI_APPROVED"))
+        .andExpect(
+            jsonPath("$.revisions[0].reviews[0].reviewerId").value(aiReviewer.id().toString()))
+        .andExpect(jsonPath("$.revisions[0].aiReviewConfirmBy").exists());
+  }
+
+  @Test
+  void anAiReviewerCannotApproveARevisionThatCarriesVerificationEvidence() throws Exception {
+    User aiReviewer = user("AI_REVIEWER");
+    ResultActions created =
+        send(post("/api/admin/questions"), editor, bodyWithVerification("Already verified"))
+            .andExpect(status().isCreated());
+    String revisionId = firstRevisionId(created, 0);
+    submit(revisionId);
+
+    send(post("/api/admin/question-revisions/" + revisionId + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("ai_review_requires_asserted_tier"));
+  }
+
+  @Test
+  void anAiReviewerCannotApproveTheirOwnRevision() throws Exception {
+    User both = user("EDITOR", "AI_REVIEWER");
+    ResultActions created = send(post("/api/admin/questions"), both, body("AI self review"));
+    String revisionId = firstRevisionId(created, 0);
+    send(post("/api/admin/question-revisions/" + revisionId + "/submit"), both, null)
+        .andExpect(status().isOk());
+
+    send(post("/api/admin/question-revisions/" + revisionId + "/ai-approve"), both, "{}")
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.code").value("reviewer_must_differ_from_author"));
+  }
+
+  @Test
+  void confirmingAnAiApprovalMakesItPermanentAndClearsTheDeadline() throws Exception {
+    User aiReviewer = user("AI_REVIEWER");
+    String[] ids = createComplete("Confirmed afterwards");
+    submit(ids[1]);
+    send(post("/api/admin/question-revisions/" + ids[1] + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isOk());
+
+    send(
+            post("/api/admin/question-revisions/" + ids[1] + "/confirm-ai-review"),
+            reviewer,
+            "{\"comment\":\"Checked it myself\"}")
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.revisions[0].status").value("PUBLISHED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[1].decision").value("AI_REVIEW_CONFIRMED"))
+        .andExpect(jsonPath("$.revisions[0].reviews[1].reviewerId").value(reviewer.id().toString()))
+        .andExpect(jsonPath("$.revisions[0].aiReviewConfirmBy").value(nullValue()));
+  }
+
+  @Test
+  void confirmingTheAuthorsOwnAiApprovedRevisionIsRefused() throws Exception {
+    // Holding CONTENT_REVIEW clears the endpoint's own authority check; it is requireSeparation,
+    // inside the service, that still has to catch the author confirming their own AI approval.
+    User both = user("EDITOR", "REVIEWER");
+    User aiReviewer = user("AI_REVIEWER");
+    ResultActions created =
+        send(post("/api/admin/questions"), both, body("Author tries to confirm their own"));
+    String revisionId = firstRevisionId(created, 0);
+    send(post("/api/admin/question-revisions/" + revisionId + "/submit"), both, null)
+        .andExpect(status().isOk());
+    send(post("/api/admin/question-revisions/" + revisionId + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isOk());
+
+    send(post("/api/admin/question-revisions/" + revisionId + "/confirm-ai-review"), both, "{}")
+        .andExpect(status().isForbidden())
+        .andExpect(jsonPath("$.code").value("reviewer_must_differ_from_author"));
+  }
+
+  @Test
+  void confirmAiReviewRefusesARevisionWithNoPendingAiApproval() throws Exception {
+    String[] ids = publishNew("Humanly approved, nothing to confirm");
+
+    send(post("/api/admin/question-revisions/" + ids[1] + "/confirm-ai-review"), reviewer, "{}")
+        .andExpect(status().isConflict())
+        .andExpect(jsonPath("$.code").value("no_pending_ai_review"));
+  }
+
+  @Test
+  void anAiApprovedQuestionDisclosesItToTheLearnerUntilAHumanConfirmsIt() throws Exception {
+    User aiReviewer = user("AI_REVIEWER");
+    String[] ids = createComplete("Disclosed while unconfirmed");
+    submit(ids[1]);
+    send(post("/api/admin/question-revisions/" + ids[1] + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isOk());
+
+    QuestionRevisionId revisionId = new QuestionRevisionId(UUID.fromString(ids[1]));
+    assertThat(bank.findPublished(revisionId).orElseThrow().aiReviewed()).isTrue();
+    assertThat(bank.eligibleForTopic(new TopicId(UUID.fromString(TOPIC))))
+        .filteredOn(q -> q.revisionId().equals(revisionId))
+        .extracting(PublishedQuestion::aiReviewed)
+        .containsExactly(true);
+
+    send(post("/api/admin/question-revisions/" + ids[1] + "/confirm-ai-review"), reviewer, "{}")
+        .andExpect(status().isOk());
+    assertThat(bank.findPublished(revisionId).orElseThrow().aiReviewed()).isFalse();
+  }
+
+  @Test
+  void anUnconfirmedAiApprovalLapsesOutOfNewSelectionAfterTheWindowButStaysVisibleOnceShown()
+      throws Exception {
+    User aiReviewer = user("AI_REVIEWER");
+    String[] ids = createComplete("Lapses after the window");
+    submit(ids[1]);
+    send(post("/api/admin/question-revisions/" + ids[1] + "/ai-approve"), aiReviewer, "{}")
+        .andExpect(status().isOk());
+
+    // The default window is 14 days; backdating the decision past that is simpler and more direct
+    // than reconfiguring the window for this one test.
+    jdbc.update(
+        "update certforge.qb_content_review set decided_at = ?"
+            + " where revision_id = ? and decision = 'AI_APPROVED'",
+        Timestamp.from(Instant.now().minus(java.time.Duration.ofDays(30))),
+        UUID.fromString(ids[1]));
+
+    QuestionRevisionId revisionId = new QuestionRevisionId(UUID.fromString(ids[1]));
+    assertThat(bank.eligibleForTopic(new TopicId(UUID.fromString(TOPIC))))
+        .extracting(q -> q.revisionId())
+        .doesNotContain(revisionId);
+    // A learner who was already shown this revision -- or one re-reading history -- still sees it;
+    // only new selection stops offering it (ADR 0022 decision 5).
+    assertThat(bank.findPublished(revisionId)).isPresent();
+    assertThat(bank.findSnapshotQuestion(revisionId)).isPresent();
+  }
+
   // ---- database-level immutability -----------------------------------------------------------
 
   @Test

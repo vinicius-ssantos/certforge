@@ -10,9 +10,17 @@ import { ErrorSummary } from "../ui/Form";
 import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { errorMessage } from "../ui/messages";
+import { pendingAiApproval } from "./aiReview";
 import { checklist } from "./labels";
 
-type Action = "approve" | "request-changes" | "publish" | "deprecate" | "new-revision";
+type Action =
+  | "approve"
+  | "request-changes"
+  | "publish"
+  | "deprecate"
+  | "new-revision"
+  | "ai-approve"
+  | "confirm-ai-review";
 
 /**
  * What the viewer may do with a revision, as far as the interface can tell. The server decides
@@ -21,10 +29,17 @@ type Action = "approve" | "request-changes" | "publish" | "deprecate" | "new-rev
  */
 export function useCanDecide(revision: Revision, isLatest: boolean) {
   const review = useHasAny("CONTENT_REVIEW");
+  const aiReview = useHasAny("CONTENT_AI_REVIEW");
   const publish = useHasAny("CONTENT_PUBLISH");
   const author = useHasAny("CONTENT_AUTHOR");
   return {
     review: review && revision.status === "TECHNICAL_REVIEW",
+    // ADR 0022: the AI-reviewer fast lane. The server alone knows whether the revision is
+    // Asserted-tier; this only gates on the stage and the permission, the same way every other
+    // flag here leaves the real refusal to the server.
+    aiApprove: aiReview && revision.status === "TECHNICAL_REVIEW",
+    confirmAiReview:
+      review && revision.status === "PUBLISHED" && pendingAiApproval(revision.reviews),
     publish: publish && (revision.status === "TECHNICAL_REVIEW" || revision.status === "APPROVED"),
     retire: publish && revision.status === "PUBLISHED",
     startRevision: author && isLatest && (revision.status === "PUBLISHED" || revision.status === "DEPRECATED"),
@@ -111,6 +126,20 @@ export function ReviewPanel({
           return unwrap(
             api.POST("/api/admin/questions/{questionId}/revisions", { params: { path: { questionId: question.id } } }),
           );
+        case "ai-approve":
+          return unwrap(
+            api.POST("/api/admin/question-revisions/{revisionId}/ai-approve", {
+              params: { path },
+              body: comment.trim() ? { comment: comment.trim() } : {},
+            }),
+          );
+        case "confirm-ai-review":
+          return unwrap(
+            api.POST("/api/admin/question-revisions/{revisionId}/confirm-ai-review", {
+              params: { path },
+              body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
+            }),
+          );
       }
     },
     // A decision that is on its way makes every complaint about the last attempt stale. Approving
@@ -130,7 +159,15 @@ export function ReviewPanel({
       // in a published revision, and saying "Approved." there would under-report an irreversible
       // step — and would leave the worklist waiting for a publish that has already happened.
       const happened: Action = action === "approve" && publishWhenApproved ? "publish" : action;
-      const notice = { approve: "approved", "request-changes": "changes", publish: "published", deprecate: "retired", "new-revision": "started" }[happened];
+      const notice = {
+        approve: "approved",
+        "request-changes": "changes",
+        publish: "published",
+        deprecate: "retired",
+        "new-revision": "started",
+        "ai-approve": "published",
+        "confirm-ai-review": "confirmed",
+      }[happened];
       if (onDecided && happened !== "new-revision") {
         onDecided(happened);
       } else if (action === "new-revision") {
@@ -168,7 +205,14 @@ export function ReviewPanel({
   // Stable between renders: the summary takes focus when this array changes.
   const shown = useMemo(() => (failure ? [...problems, { message: failure }] : problems), [problems, failure]);
 
-  if (!can.review && !can.publish && !can.retire && !can.startRevision) {
+  if (
+    !can.review &&
+    !can.aiApprove &&
+    !can.confirmAiReview &&
+    !can.publish &&
+    !can.retire &&
+    !can.startRevision
+  ) {
     return null;
   }
 
@@ -224,6 +268,36 @@ export function ReviewPanel({
       ) : (
         <ErrorSummary problems={shown} />
       )}
+
+      {can.aiApprove ? (
+        <section className="publish" aria-labelledby="ai-approve-heading">
+          <h2 id="ai-approve-heading">{panel.aiApproveHeading}</h2>
+          <p>{panel.aiApproveNote}</p>
+          <button
+            id="ai-approve-button"
+            type="button"
+            disabled={decide.isPending}
+            onClick={() => decide.mutate("ai-approve")}
+          >
+            {panel.aiApprove}
+          </button>
+        </section>
+      ) : null}
+
+      {can.confirmAiReview ? (
+        <section className="publish" aria-labelledby="confirm-ai-review-heading">
+          <h2 id="confirm-ai-review-heading">{panel.confirmAiReviewHeading}</h2>
+          <p>{panel.confirmAiReviewNote}</p>
+          <button
+            id="confirm-ai-review-button"
+            type="button"
+            disabled={decide.isPending}
+            onClick={() => decide.mutate("confirm-ai-review")}
+          >
+            {panel.confirmAiReview}
+          </button>
+        </section>
+      ) : null}
 
       {can.publish ? (
         <section className="publish publish-danger" aria-labelledby="publish-heading">

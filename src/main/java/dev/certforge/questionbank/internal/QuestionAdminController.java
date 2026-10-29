@@ -36,7 +36,7 @@ class QuestionAdminController {
 
   private static final String AUTHOR_ACCESS = "hasAuthority('CONTENT_AUTHOR')";
   private static final String READ_ACCESS =
-      "hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH')";
+      "hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH', 'CONTENT_AI_REVIEW')";
 
   private final QuestionBankService service;
 
@@ -112,6 +112,32 @@ class QuestionAdminController {
   QuestionView requestChanges(
       @PathVariable UUID revisionId, @Valid @RequestBody RequiredReviewRequest request) {
     return service.requestChanges(revisionId, request.comment(), request.checklist());
+  }
+
+  /**
+   * The AI-reviewer fast lane (ADR 0022): approves and publishes an Asserted-tier revision in one
+   * step, provisionally. {@code CONTENT_AI_REVIEW} alone grants this -- never {@code
+   * CONTENT_REVIEW} or {@code CONTENT_PUBLISH}, which this one action deliberately folds together
+   * for this path only.
+   */
+  @PostMapping("/api/admin/question-revisions/{revisionId}/ai-approve")
+  @PreAuthorize("hasAuthority('CONTENT_AI_REVIEW')")
+  QuestionView aiApprove(
+      @PathVariable UUID revisionId, @Valid @RequestBody(required = false) ReviewRequest request) {
+    return service.aiApprove(revisionId, request == null ? null : request.comment());
+  }
+
+  /**
+   * The independent human check that makes an {@code AI_APPROVED} publication permanent (ADR 0022).
+   */
+  @PostMapping("/api/admin/question-revisions/{revisionId}/confirm-ai-review")
+  @PreAuthorize("hasAuthority('CONTENT_REVIEW')")
+  QuestionView confirmAiReview(
+      @PathVariable UUID revisionId, @Valid @RequestBody(required = false) ReviewRequest request) {
+    return service.confirmAiReview(
+        revisionId,
+        request == null ? null : request.comment(),
+        request == null ? null : request.checklist());
   }
 
   @PostMapping("/api/admin/question-revisions/{revisionId}/publish")

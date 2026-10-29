@@ -35,6 +35,14 @@ export const reviewer = {
   permissions: ["STUDY", "CONTENT_REVIEW"],
 };
 
+export const aiReviewer = {
+  id: "66666666-6666-4666-8666-666666666666",
+  email: "ai-reviewer@example.com",
+  enabled: true,
+  roles: ["AI_REVIEWER"],
+  permissions: ["STUDY", "CONTENT_AI_REVIEW"],
+};
+
 export const admin = {
   id: "77777777-7777-4777-8777-777777777777",
   email: "admin@example.com",

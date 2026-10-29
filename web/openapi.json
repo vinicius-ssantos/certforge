@@ -1832,6 +1832,9 @@
       },
       "PublishedQuestion" : {
         "properties" : {
+          "aiReviewed" : {
+            "type" : "boolean"
+          },
           "difficulty" : {
             "enum" : [ "EASY", "MEDIUM", "HARD" ],
             "type" : [ "string", "null" ]
@@ -1870,7 +1873,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "difficulty", "javaRelease", "options", "prompt", "questionId", "revisionId", "revisionNumber", "topicId", "type" ],
+        "required" : [ "aiReviewed", "difficulty", "javaRelease", "options", "prompt", "questionId", "revisionId", "revisionNumber", "topicId", "type" ],
         "type" : "object"
       },
       "QuestionPage" : {
@@ -2326,6 +2329,10 @@
       },
       "RevisionView" : {
         "properties" : {
+          "aiReviewConfirmBy" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
           "authorId" : {
             "format" : "uuid",
             "type" : "string"
@@ -2426,14 +2433,14 @@
             "type" : "string"
           }
         },
-        "required" : [ "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "guidedResponse", "id", "javaRelease", "number", "objectiveKeys", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
+        "required" : [ "aiReviewConfirmBy", "authorId", "authorName", "createdAt", "deprecatedAt", "difficulty", "difficultyRationale", "examVersionId", "explanation", "guidedResponse", "id", "javaRelease", "number", "objectiveKeys", "options", "prompt", "publishedAt", "publishedBy", "publishedByName", "references", "reviews", "seniority", "status", "submittedAt", "topicId", "type" ],
         "type" : "object"
       },
       "RolesRequest" : {
         "properties" : {
           "roles" : {
             "items" : {
-              "enum" : [ "LEARNER", "EDITOR", "REVIEWER", "ADMINISTRATOR" ],
+              "enum" : [ "LEARNER", "EDITOR", "REVIEWER", "AI_REVIEWER", "ADMINISTRATOR" ],
               "type" : "string"
             },
             "type" : "array",
@@ -3483,9 +3490,81 @@
         "tags" : [ "question-admin-controller" ]
       }
     },
+    "/api/admin/question-revisions/{revisionId}/ai-approve" : {
+      "post" : {
+        "operationId" : "aiApprove",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReviewRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
     "/api/admin/question-revisions/{revisionId}/approve" : {
       "post" : {
         "operationId" : "approve",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "revisionId",
+          "required" : true,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ReviewRequest"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/QuestionView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "question-admin-controller" ]
+      }
+    },
+    "/api/admin/question-revisions/{revisionId}/confirm-ai-review" : {
+      "post" : {
+        "operationId" : "confirmAiReview",
         "parameters" : [ {
           "in" : "path",
           "name" : "revisionId",

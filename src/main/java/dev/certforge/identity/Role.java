@@ -8,6 +8,13 @@ public enum Role {
   LEARNER(Permission.STUDY),
   EDITOR(Permission.CONTENT_AUTHOR),
   REVIEWER(Permission.CONTENT_REVIEW),
+  /**
+   * An account acting as the AI reviewer ADR 0022 names: it may approve and publish an
+   * Asserted-tier revision provisionally, and nothing else. Never grant {@link
+   * Permission#CONTENT_REVIEW} to the same account that holds this role -- that would make its
+   * approvals final, which is exactly what ADR 0022 does not allow.
+   */
+  AI_REVIEWER(Permission.CONTENT_AI_REVIEW),
   ADMINISTRATOR(
       Permission.CATALOG_MANAGE,
       Permission.CONTENT_AUTHOR,

@@ -102,6 +102,7 @@ export function QuestionForm({
       </h2>
       <ErrorSummary problems={shown} />
       <form onSubmit={submit} noValidate>
+        {question.aiReviewed ? <p className="hint ai-reviewed-notice">{t.question.aiReviewedNotice}</p> : null}
         <Prompt text={question.prompt} />
 
         <fieldset className="options">

@@ -31,7 +31,8 @@ class QuestionSelectorTest {
                     21,
                     Difficulty.EASY,
                     "Prompt " + i,
-                    List.of()))
+                    List.of(),
+                    false))
         .toList();
   }
 

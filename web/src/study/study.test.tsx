@@ -8,7 +8,12 @@ import { javaTrack, renderApp } from "../test/render";
 const SESSION_ID = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
 const TOPIC_ID = javaTrack.topics[0]!.id;
 
-function question(position: number, type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE", prompt: string) {
+function question(
+  position: number,
+  type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE",
+  prompt: string,
+  aiReviewed = false,
+) {
   return {
     answered: false,
     position,
@@ -26,6 +31,7 @@ function question(position: number, type: "SINGLE_CHOICE" | "MULTIPLE_CHOICE", p
         { key: "B", text: "Second option" },
         { key: "C", text: "Third option" },
       ],
+      aiReviewed,
     },
   };
 }
@@ -145,6 +151,29 @@ describe("answering questions", () => {
     expect(screen.queryByText(/correct answer/i)).not.toBeInTheDocument();
     expect(fetch.calls.some((call) => call.path.endsWith("/attempt"))).toBe(false);
     expect(await axe(container)).toHaveNoViolations();
+  });
+
+  it("discloses a question published on an unconfirmed AI approval (ADR 0022)", async () => {
+    await openSession({
+      [`GET /api/study/sessions/${SESSION_ID}`]: {
+        body: session({
+          questions: [
+            question(0, "SINGLE_CHOICE", "Which option compiles?", true),
+            question(1, "MULTIPLE_CHOICE", "Which options are checked exceptions?"),
+          ],
+        }),
+      },
+    });
+
+    expect(
+      screen.getByText(/Reviewed by an AI reviewer, not yet independently confirmed/),
+    ).toBeInTheDocument();
+  });
+
+  it("says nothing about AI review for an ordinarily-reviewed question", async () => {
+    await openSession();
+
+    expect(screen.queryByText(/Reviewed by an AI reviewer/)).not.toBeInTheDocument();
   });
 
   it("asks for an answer and a confidence level before sending anything", async () => {

@@ -42,6 +42,7 @@ function objectiveItem(position: number) {
         { key: "A", text: "It can process the same message twice safely" },
         { key: "B", text: "It needs exactly-once delivery from the broker" },
       ],
+      aiReviewed: false,
     },
   };
 }
@@ -61,6 +62,7 @@ function guidedItem(position: number) {
       difficulty: "HARD" as const,
       prompt: "How would you make a message consumer idempotent?",
       options: [],
+      aiReviewed: false,
     },
   };
 }

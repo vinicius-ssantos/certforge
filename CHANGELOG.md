@@ -220,6 +220,36 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **An AI reviewer can approve and publish Asserted-tier content in one step, provisionally, until a
+  person confirms it ([ADR 0022](docs/adr/0022-ai-reviewer-provisional-publication.md)).** The
+  editorial review backlog is gated one-for-one on a human's time for content with no mechanical
+  verification evidence behind it (the Asserted tier, [ADR 0011](docs/adr/0011-grade-content-evidence.md)).
+  This narrows [ADR 0005](docs/adr/0005-ai-not-source-of-truth.md)'s "AI cannot approve content" with
+  one disclosed, time-boxed exception: a dedicated account holding the new `CONTENT_AI_REVIEW`
+  permission (role `AI_REVIEWER`) may call `POST /api/admin/question-revisions/{id}/ai-approve`,
+  which approves and publishes a Technical-Review Asserted revision in one request — refused outright
+  if the revision carries verification evidence, which still needs exactly the ordinary human
+  approval.
+
+  The decision is recorded as `AI_APPROVED`, never as `APPROVED`, the same way a self-review is
+  recorded as what it is rather than disguised as independent review
+  ([ADR 0018](docs/adr/0018-maintainer-may-review-their-own-work.md)). It is provisional for a
+  configured window (`certforge.editorial.ai-review-confirmation-window`, default 14 days): any
+  account holding `CONTENT_REVIEW` — never the revision's own author — can confirm it via
+  `POST /api/admin/question-revisions/{id}/confirm-ai-review`, recorded as `AI_REVIEW_CONFIRMED`,
+  which makes it permanent. Unconfirmed and past the window, the revision stops appearing in either
+  read that offers a learner something new to study, derived fresh against the clock on every call
+  rather than by a stored flag or a scheduled job (in the spirit of
+  [ADR 0013](docs/adr/0013-derived-review-queue.md)) — a learner already mid-session keeps seeing a
+  revision they were already shown, since that read never asks this question.
+
+  Disclosed to the learner, not only the editorial desk: a `PublishedQuestion` now carries
+  `aiReviewed`, true exactly while a publication is AI-approved and unconfirmed, shown beside the
+  question itself in study, mock-exam and interview sessions alike, since all three already compose
+  this one learner-safe view. The editorial desk shows the same thing as a reviewer's note, plus the
+  confirmation deadline, and offers the "Approve and publish as the AI reviewer" and "Confirm this
+  AI-reviewed publication" actions to the accounts that may use them.
+
 - **Interview preparation has a learner-facing experience: browse the taxonomy, run a session that
   mixes a graded item with one nothing grades, read a job description as a weighted blueprint, and
   see what practice has shown (#24).** Four screens, all reachable from a new "Interviews" link:

@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/editorial/catalog")
-@PreAuthorize("hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH')")
+@PreAuthorize(
+    "hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH', 'CONTENT_AI_REVIEW')")
 class EditorialCatalogController {
 
   private final EditorialCatalogService service;

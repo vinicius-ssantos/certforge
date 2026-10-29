@@ -5,6 +5,7 @@ import { English } from "../i18n/English";
 import type { Catalog } from "../i18n/en";
 import { useLocale, useText } from "../i18n/useText";
 import { Prompt } from "../ui/Prompt";
+import { pendingAiApproval } from "./aiReview";
 import { checklist, difficultyLabels, typeLabels } from "./labels";
 import { ObjectiveSources } from "./ObjectiveSources";
 import { RevisionDiff } from "./RevisionDiff";
@@ -14,6 +15,8 @@ function decisionLabel(decision: string, t: Catalog): string {
   const known: Record<string, string> = {
     APPROVED: t.editorial.revisionView.decisionApproved,
     CHANGES_REQUESTED: t.editorial.revisionView.decisionChangesRequested,
+    AI_APPROVED: t.editorial.revisionView.decisionAiApproved,
+    AI_REVIEW_CONFIRMED: t.editorial.revisionView.decisionAiReviewConfirmed,
   };
   return known[decision] ?? decision;
 }
@@ -61,6 +64,11 @@ export function RevisionView({
           {revision.authorName ? view.writtenBy(revision.authorName) : view.authorUnknown}
           {revision.publishedByName ? view.publishedBy(revision.publishedByName) : ""}
         </p>
+        {pendingAiApproval(revision.reviews) && revision.aiReviewConfirmBy ? (
+          <p role="status" className="hint ai-review-pending">
+            {view.aiReviewPendingConfirmation(formatDateTime(revision.aiReviewConfirmBy, locale))}
+          </p>
+        ) : null}
         {previous ? <RevisionDiff previous={previous} revision={revision} topicName={topicNameOf ?? (() => undefined)} /> : null}
         <section className="stage" aria-labelledby="learner-view">
           <h2 id="learner-view">{view.learnerViewHeading}</h2>

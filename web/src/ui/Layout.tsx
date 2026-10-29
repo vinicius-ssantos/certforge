@@ -37,7 +37,7 @@ export function Layout() {
   const mainRef = useRef<HTMLElement>(null);
   const t = useText();
   const { state, logout } = useAuth();
-  const editorial = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH");
+  const editorial = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH", "CONTENT_AI_REVIEW");
   useRouteFocus(mainRef);
 
   return (
