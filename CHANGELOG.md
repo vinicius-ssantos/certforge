@@ -220,6 +220,30 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **The AI-reviewer fast lane reaches the content-pack publishing scripts
+  ([ADR 0023](docs/adr/0023-ai-reviewer-fast-lane-for-content-packs.md)).** `deploy/publish-pack.mjs`,
+  `content/record-review.mjs` and `content/pack.mjs` are the scripts behind #80's backlog of
+  unreviewed Java SE 21 questions, and on inspection they are not a second storage system: they drive
+  the same live editorial API ADR 0022 built against, by script instead of by browser.
+  `review.json` gets one new, optional, per-question field, `reviewer`, written only by
+  `record-review.mjs --ai-reviewed` and read as `"ai-reviewer"` rather than the pack's named human
+  reviewer — disclosed, never disguised, the same way ADR 0022 itself never writes `AI_APPROVED` as
+  `APPROVED`. `publish-pack.mjs` now drives two paths through one pack: a question reviewed by the AI
+  reviewer goes through `submit` → `ai-approve` on a new `AI_REVIEWER`-role account
+  (`--ai-reviewer-email`/`--ai-reviewer-password`), a question reviewed by the pack's human still goes
+  through `submit` → `approve` → `publish` exactly as before. A new script,
+  `deploy/grant-ai-reviewer.mjs` (mirroring `deploy/grant-reviewer.mjs`), creates or finds an account
+  and grants it `AI_REVIEWER`, refusing an account that already holds `REVIEWER` or `ADMINISTRATOR` —
+  the same restriction [Role.java](src/main/java/dev/certforge/identity/Role.java)'s own Javadoc
+  already states for that role.
+
+  Scope is identical to ADR 0022's own restriction: Asserted-tier only. `record-review.mjs` refuses
+  `--ai-reviewed` on a question that carries verification evidence, the same refusal the live
+  `ai-approve` endpoint gives a Verified-tier revision. Checking the real pack while building this
+  found that every one of its 104 currently-unreviewed questions is Verified-tier — the backlog this
+  ADR was asked to relieve turned out to need exactly the human judgement (plausibility, completeness,
+  accessibility) that tier has always required, unchanged by either ADR.
+
 - **An AI reviewer can approve and publish Asserted-tier content in one step, provisionally, until a
   person confirms it ([ADR 0022](docs/adr/0022-ai-reviewer-provisional-publication.md)).** The
   editorial review backlog is gated one-for-one on a human's time for content with no mechanical
