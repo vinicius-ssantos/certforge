@@ -451,6 +451,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t04-autocloseable-close-contract": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5ab0f4c702acf4f07745dea13ba6aee30aa0aa83a65f39c3b264cca0aff86787",
+      "verified": "sha256:b2c7bd5525dbd1cea47cfb88d9b4cc8425ebd2be978b21abe97620971612593a",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-catch-order-unreachable": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e3960611c7004121f66ad18889cfbca1a5397b083d8e94f24539f969cd9e7eda",
+      "verified": "sha256:727f14af6460e6c58f3749f341b8c506133e786f9d6ff31be23bb0c95eab7a0e",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-finally-abrupt-completion": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9dbca48fc750ec8264bdb1aa0f6e7ed476b1ecf903b1ebcf0065712cea2f859a",
+      "verified": "sha256:3c259ed3deb3e27cb83273ac37621df8abc76d6f73d00d32cfebb2d4da5cc35f",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-finally-return-overrides": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a43c494c1b43844f14542816074a36c70d2ac84f89ff9c2b2643e31d1f3e0275",
+      "verified": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-multicatch-parameter-reassignment": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fa6d1845fdb457fa94622d83cf09f8eb88382f4efab0da5f5a5c9f875ae3d8d3",
+      "verified": "sha256:fa47524547f6c4505c2fbe84550043626b9c940c3aa76937a6f46587fce1a202",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-multicatch-related-types": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1aeb4003a853b4838c8b30c803b2cabb36edad84a40cba6956339dfb850be01",
+      "verified": "sha256:a8ceb15f3a09eef6e07a6b0cede57f49eb476cb48385b3736f7db9c016317dbe",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-overriding-checked-exception": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8df117237acec009efb84ecffeaf663a6797508f33efdffed8fbf57c920ce86f",
+      "verified": "sha256:a4739b9c4c56133f90ab1b12450a5cfe2e23c3999b1dda25c4a4c883bb9705e1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-precise-rethrow": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fd973e7f0541b87083711dfba1ed50be57d516e0e9c863dfe0054f07e8530b3a",
+      "verified": "sha256:5b6c01404af159275127e5426fa81f74c45a7a073e30fc7858285bd2b6fbfca1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-suppressed-exception": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cd0599da3ec29c624c4da95798535333a9a8d079a228203e2eba8b0ec4920801",
+      "verified": "sha256:6e35d6dc6d650b03717dd826fc3e47b5e6c1b09f89ee68447e9e1f97ffce32f1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-suppressed-order-multiple-resources": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e2afec415f841ba095bf49077be501f107cc048be213badd67d0f5b03c200d58",
+      "verified": "sha256:a5186120410130f105bfeefc2d996f16fdb4811641c073fb2282b43b72ca7c85",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-throw-null": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1b15e315ff179c1db4dd6dfea334a0d2857377ff88374ff1fc7d35b764902fea",
+      "verified": "sha256:f0ea31173b30fc8f6659dbb196761b5a87cba2a5599d8ef252b6549a90acfeca",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-try-resource-effectively-final": {
+      "verdict": "APPROVED",
+      "digest": "sha256:db2ba98db1d5be314931368482ebace892c0c97439bf3e587e636a582557ee78",
+      "verified": "sha256:d602e4580e6ae67a48937fb08cfce2df19ea07e3d2480886e566c4275c11b0b4",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t04-unchecked-exception-classes": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f3298bb15abaf556983f5edaf62617f681d111db362c160d980d3ed043d895ca",
+      "verified": "sha256:5eee7a971bcbce1dd4d19b4a3b8a910fbf5e5498b4eb2ff756c052853dbc637a",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
