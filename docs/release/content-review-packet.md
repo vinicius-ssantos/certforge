@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**72 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 78 have never been reviewed. Each is marked below.
+**85 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 65 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -97,21 +97,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 59 | [`t04-try-with-resources-order`](#59-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
 | 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | yes, not shown | reviewed 2026-10-29 |
-| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
-| 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
-| 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
+| 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-29 |
+| 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 64 | [`t05-immutable-and-fixed-size-lists`](#64-t05-immutable-and-fixed-size-lists) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 65 | [`t05-list-first-last`](#65-t05-list-first-last) | Arrays and collections | single | easy | yes, shown | **not reviewed** |
+| 65 | [`t05-list-first-last`](#65-t05-list-first-last) | Arrays and collections | single | easy | yes, shown | reviewed 2026-10-29 |
 | 66 | [`t05-list-remove-overload`](#66-t05-list-remove-overload) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-02 |
-| 67 | [`t05-map-merge-null-removes`](#67-t05-map-merge-null-removes) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
-| 68 | [`t05-map-of-null-rejection`](#68-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | yes, not shown | **not reviewed** |
-| 69 | [`t05-sequenced-collection-reversed`](#69-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
-| 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
-| 71 | [`t05-set-of-duplicate-elements`](#71-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | **not reviewed** |
-| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | yes, not shown | **not reviewed** |
-| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
-| 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
-| 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
+| 67 | [`t05-map-merge-null-removes`](#67-t05-map-merge-null-removes) | Arrays and collections | single | medium | yes, shown | reviewed 2026-10-29 |
+| 68 | [`t05-map-of-null-rejection`](#68-t05-map-of-null-rejection) | Arrays and collections | multiple | easy | yes, not shown | reviewed 2026-10-29 |
+| 69 | [`t05-sequenced-collection-reversed`](#69-t05-sequenced-collection-reversed) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 70 | [`t05-sequencedmap-first-entry`](#70-t05-sequencedmap-first-entry) | Arrays and collections | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 71 | [`t05-set-of-duplicate-elements`](#71-t05-set-of-duplicate-elements) | Arrays and collections | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 72 | [`t05-treeset-comparator-uniqueness`](#72-t05-treeset-comparator-uniqueness) | Arrays and collections | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
 | 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
@@ -5550,6 +5550,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5621,6 +5624,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5703,6 +5709,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5863,6 +5872,9 @@ ac
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6014,6 +6026,9 @@ false
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6100,6 +6115,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6184,6 +6202,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6270,6 +6291,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6350,6 +6374,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6438,6 +6465,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6533,6 +6563,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6624,6 +6657,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6715,6 +6751,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14037,21 +14076,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 58 | `t04-try-resource-effectively-final` | approved | ai-reviewer | 2026-10-29 |
 | 59 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
 | 60 | `t04-unchecked-exception-classes` | approved | ai-reviewer | 2026-10-29 |
-| 61 | `t05-arrays-aslist-backed` |  |  |  |
-| 62 | `t05-arrays-binarysearch-insertion-point` |  |  |  |
-| 63 | `t05-generic-invariance` |  |  |  |
+| 61 | `t05-arrays-aslist-backed` | approved | ai-reviewer | 2026-10-29 |
+| 62 | `t05-arrays-binarysearch-insertion-point` | approved | ai-reviewer | 2026-10-29 |
+| 63 | `t05-generic-invariance` | approved | ai-reviewer | 2026-10-29 |
 | 64 | `t05-immutable-and-fixed-size-lists` | approved | vinicius-ssantos | 2026-10-02 |
-| 65 | `t05-list-first-last` |  |  |  |
+| 65 | `t05-list-first-last` | approved | ai-reviewer | 2026-10-29 |
 | 66 | `t05-list-remove-overload` | approved | vinicius-ssantos | 2026-10-02 |
-| 67 | `t05-map-merge-null-removes` |  |  |  |
-| 68 | `t05-map-of-null-rejection` |  |  |  |
-| 69 | `t05-sequenced-collection-reversed` |  |  |  |
-| 70 | `t05-sequencedmap-first-entry` |  |  |  |
-| 71 | `t05-set-of-duplicate-elements` |  |  |  |
-| 72 | `t05-treeset-comparator-uniqueness` |  |  |  |
-| 73 | `t05-unmodifiable-list-view` |  |  |  |
-| 74 | `t05-wildcard-extends-read` |  |  |  |
-| 75 | `t05-wildcard-super-integer` |  |  |  |
+| 67 | `t05-map-merge-null-removes` | approved | ai-reviewer | 2026-10-29 |
+| 68 | `t05-map-of-null-rejection` | approved | ai-reviewer | 2026-10-29 |
+| 69 | `t05-sequenced-collection-reversed` | approved | ai-reviewer | 2026-10-29 |
+| 70 | `t05-sequencedmap-first-entry` | approved | ai-reviewer | 2026-10-29 |
+| 71 | `t05-set-of-duplicate-elements` | approved | ai-reviewer | 2026-10-29 |
+| 72 | `t05-treeset-comparator-uniqueness` | approved | ai-reviewer | 2026-10-29 |
+| 73 | `t05-unmodifiable-list-view` | approved | ai-reviewer | 2026-10-29 |
+| 74 | `t05-wildcard-extends-read` | approved | ai-reviewer | 2026-10-29 |
+| 75 | `t05-wildcard-super-integer` | approved | ai-reviewer | 2026-10-29 |
 | 76 | `t06-collectors-tomap-duplicate-key` |  |  |  |
 | 77 | `t06-findfirst-ordered-stream` |  |  |  |
 | 78 | `t06-flatmap-flatten` |  |  |  |
