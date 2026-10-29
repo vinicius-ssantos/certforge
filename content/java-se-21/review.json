@@ -1179,6 +1179,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t08-atomic-compare-and-set": {
+      "verdict": "APPROVED",
+      "digest": "sha256:17c17ce269af9930b241c1e49b43b7fb7bb4bd4a09ac2928284c564c1045516e",
+      "verified": "sha256:e6740d09a48abfcf5cb7342913a1e15938b5b57cac05bd201367c4ea63a84dea",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-atomicinteger-update-and-get": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aa0cb64474b787f8cd89175c40f0752e93b0e5036cc4223311386b4f0939438a",
+      "verified": "sha256:e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-completablefuture-join-vs-get": {
+      "verdict": "APPROVED",
+      "digest": "sha256:14321ec79b2165f614edf4f2d5ddc7317f2864917e3401e01dec22a22d28eec5",
+      "verified": "sha256:21123a300fcabd121ce8203fdc72ccb7b295b4fe526f7ee7d5280c92b1cb3d67",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-computeifabsent-null-result": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4ec4df65caf132089ec1c6672a5803d2b3dcd57f36cc94d43940eee60f68750f",
+      "verified": "sha256:add2dc8e9babb3791c67936bbfe5048020ba1ce96cefef971defb3434283a662",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-concurrenthashmap-null": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b99d271cbeebe7c0b5f423208757f0a94ffa2ed5c743b121de4993d5ad04b15d",
+      "verified": "sha256:24d06a1079ae59d80990aee990dd97f9d140a2e4ada58cd38d27c6482dfbb678",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-countdownlatch-count": {
+      "verdict": "APPROVED",
+      "digest": "sha256:67e34440e89aaf31b59c484b5398a1595ad7febd0a1db59916e5938583dee299",
+      "verified": "sha256:5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-reentrantlock-finally": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b9324efa5ffec39661e998a15d4eedcb57ba539a569f18e95f125b302e7429e5",
+      "verified": "sha256:9b8a0b697e5b54cbe9f4885e4c58cc9a2c128e4e32959150c59a7f1c4ad5aa70",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-start-virtual-thread": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1b132edc5296249a8b8757c486af2aee1fcc34c6da91c2d9b77ea394d5c79d4e",
+      "verified": "sha256:e251b62af39c798917a2f2404b2b180ba9dcab8b31c11c057bc4d2cbadc6e7c8",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-synchronized-method-lock": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4f125eae41ebdaf5848763f381a655694e5136b0181abb22389d94b43b89ca9d",
+      "verified": "sha256:f4472e283f026d84223166eeb17f09bebf26af1daf55d2417f5a1b368195d246",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-synchronized-reentrant": {
+      "verdict": "APPROVED",
+      "digest": "sha256:296d4d4085ed01b5f051a28e6f727b6062e7a83d81afc293ab18ededcd02fe41",
+      "verified": "sha256:645463869f8424eb28594ad097d8c9eba4befd80ff341e5933cd47c335b3fbf1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-thread-interrupted-clears": {
+      "verdict": "APPROVED",
+      "digest": "sha256:71375a89cf8aabd9cc8856353444ff8243a365043d557c5cfe86115164150af9",
+      "verified": "sha256:ae1048f9f18946800e804ffade294d987bcd9e2d0788343733dc04ad53d75908",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-virtual-thread-builder-unstarted": {
+      "verdict": "APPROVED",
+      "digest": "sha256:53730eb4d45aa175cd1613c46fbc597f2b457294e8837b3a2d9fa9c5736826a7",
+      "verified": "sha256:343e0e1342de3a34bdf2df42d3acf889d593391dfe164e715bfb11b78b832d64",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t08-volatile-increment": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8609867a28550ce1fee60fe3a3164645d2375d2866cb551f2cf9941d3d1edecb",
+      "verified": "sha256:f54950daca7e5deae007690cf5e471c9ebb80c8b0a62386a786f615f5964384c",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
