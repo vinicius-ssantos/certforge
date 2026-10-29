@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**124 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 26 have never been reviewed. Each is marked below.
+**137 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 13 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -157,21 +157,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 118 | [`t08-virtual-thread-builder-unstarted`](#118-t08-virtual-thread-builder-unstarted) | Managing concurrent code execution | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 119 | [`t08-virtual-thread-daemon`](#119-t08-virtual-thread-daemon) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-02 |
 | 120 | [`t08-volatile-increment`](#120-t08-volatile-increment) | Managing concurrent code execution | single | medium | yes, not shown | reviewed 2026-10-29 |
-| 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
-| 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | yes, not shown | **not reviewed** |
-| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
-| 127 | [`t09-path-normalize-namecount`](#127-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 128 | [`t09-path-relativize`](#128-t09-path-relativize) | Java I/O API | single | medium | yes, shown | **not reviewed** |
-| 129 | [`t09-path-resolve-absolute`](#129-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
+| 121 | [`t09-bufferedreader-readline`](#121-t09-bufferedreader-readline) | Java I/O API | multiple | easy | yes, not shown | reviewed 2026-10-29 |
+| 122 | [`t09-dataoutput-readutf`](#122-t09-dataoutput-readutf) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-29 |
+| 123 | [`t09-files-copy-existing-target`](#123-t09-files-copy-existing-target) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 124 | [`t09-files-lines-close`](#124-t09-files-lines-close) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 125 | [`t09-files-readstring-utf8`](#125-t09-files-readstring-utf8) | Java I/O API | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 126 | [`t09-files-walk-close`](#126-t09-files-walk-close) | Java I/O API | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 127 | [`t09-path-normalize-namecount`](#127-t09-path-normalize-namecount) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-29 |
+| 128 | [`t09-path-relativize`](#128-t09-path-relativize) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-29 |
+| 129 | [`t09-path-resolve-absolute`](#129-t09-path-resolve-absolute) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 130 | [`t09-randomaccessfile-seek`](#130-t09-randomaccessfile-seek) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 131 | [`t09-read-all-lines`](#131-t09-read-all-lines) | Java I/O API | single | medium | yes, shown | reviewed 2026-10-02 |
-| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | yes, not shown | **not reviewed** |
+| 132 | [`t09-reader-vs-inputstream`](#132-t09-reader-vs-inputstream) | Java I/O API | multiple | easy | yes, not shown | reviewed 2026-10-29 |
 | 133 | [`t09-serialization-facts`](#133-t09-serialization-facts) | Java I/O API | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | yes, not shown | **not reviewed** |
-| 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | **not reviewed** |
+| 134 | [`t09-serialization-serialversionuid`](#134-t09-serialization-serialversionuid) | Java I/O API | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 135 | [`t09-serialization-transient-static`](#135-t09-serialization-transient-static) | Java I/O API | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 136 | [`t10-collator-locale-sensitive`](#136-t10-collator-locale-sensitive) | Implementing localization | single | medium | yes, not shown | **not reviewed** |
 | 137 | [`t10-collator-primary-strength`](#137-t10-collator-primary-strength) | Implementing localization | single | hard | yes, not shown | **not reviewed** |
 | 138 | [`t10-currency-us-code`](#138-t10-currency-us-code) | Implementing localization | single | easy | yes, shown | **not reviewed** |
@@ -11393,6 +11393,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11473,6 +11476,9 @@ Java
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11568,6 +11574,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11680,6 +11689,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11771,6 +11783,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11903,6 +11918,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -11974,6 +11992,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12046,6 +12067,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12128,6 +12152,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12244,6 +12271,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12438,6 +12468,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12695,6 +12728,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -12795,6 +12831,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14253,21 +14292,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 118 | `t08-virtual-thread-builder-unstarted` | approved | ai-reviewer | 2026-10-29 |
 | 119 | `t08-virtual-thread-daemon` | approved | vinicius-ssantos | 2026-10-02 |
 | 120 | `t08-volatile-increment` | approved | ai-reviewer | 2026-10-29 |
-| 121 | `t09-bufferedreader-readline` |  |  |  |
-| 122 | `t09-dataoutput-readutf` |  |  |  |
-| 123 | `t09-files-copy-existing-target` |  |  |  |
-| 124 | `t09-files-lines-close` |  |  |  |
-| 125 | `t09-files-readstring-utf8` |  |  |  |
-| 126 | `t09-files-walk-close` |  |  |  |
-| 127 | `t09-path-normalize-namecount` |  |  |  |
-| 128 | `t09-path-relativize` |  |  |  |
-| 129 | `t09-path-resolve-absolute` |  |  |  |
-| 130 | `t09-randomaccessfile-seek` |  |  |  |
+| 121 | `t09-bufferedreader-readline` | approved | ai-reviewer | 2026-10-29 |
+| 122 | `t09-dataoutput-readutf` | approved | ai-reviewer | 2026-10-29 |
+| 123 | `t09-files-copy-existing-target` | approved | ai-reviewer | 2026-10-29 |
+| 124 | `t09-files-lines-close` | approved | ai-reviewer | 2026-10-29 |
+| 125 | `t09-files-readstring-utf8` | approved | ai-reviewer | 2026-10-29 |
+| 126 | `t09-files-walk-close` | approved | ai-reviewer | 2026-10-29 |
+| 127 | `t09-path-normalize-namecount` | approved | ai-reviewer | 2026-10-29 |
+| 128 | `t09-path-relativize` | approved | ai-reviewer | 2026-10-29 |
+| 129 | `t09-path-resolve-absolute` | approved | ai-reviewer | 2026-10-29 |
+| 130 | `t09-randomaccessfile-seek` | approved | ai-reviewer | 2026-10-29 |
 | 131 | `t09-read-all-lines` | approved | vinicius-ssantos | 2026-10-02 |
-| 132 | `t09-reader-vs-inputstream` |  |  |  |
+| 132 | `t09-reader-vs-inputstream` | approved | ai-reviewer | 2026-10-29 |
 | 133 | `t09-serialization-facts` | approved | vinicius-ssantos | 2026-10-02 |
-| 134 | `t09-serialization-serialversionuid` |  |  |  |
-| 135 | `t09-serialization-transient-static` |  |  |  |
+| 134 | `t09-serialization-serialversionuid` | approved | ai-reviewer | 2026-10-29 |
+| 135 | `t09-serialization-transient-static` | approved | ai-reviewer | 2026-10-29 |
 | 136 | `t10-collator-locale-sensitive` |  |  |  |
 | 137 | `t10-collator-primary-strength` |  |  |  |
 | 138 | `t10-currency-us-code` |  |  |  |
