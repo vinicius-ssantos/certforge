@@ -36,7 +36,7 @@ class QuestionAdminController {
 
   private static final String AUTHOR_ACCESS = "hasAuthority('CONTENT_AUTHOR')";
   private static final String READ_ACCESS =
-      "hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH')";
+      "hasAnyAuthority('CONTENT_AUTHOR', 'CONTENT_REVIEW', 'CONTENT_PUBLISH', 'CONTENT_AI_REVIEW')";
 
   private final QuestionBankService service;
 
