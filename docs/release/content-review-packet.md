@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**85 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 65 have never been reviewed. Each is marked below.
+**98 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 52 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -112,21 +112,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 73 | [`t05-unmodifiable-list-view`](#73-t05-unmodifiable-list-view) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 74 | [`t05-wildcard-extends-read`](#74-t05-wildcard-extends-read) | Arrays and collections | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 75 | [`t05-wildcard-super-integer`](#75-t05-wildcard-super-integer) | Arrays and collections | multiple | medium | yes, not shown | reviewed 2026-10-29 |
-| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | yes, not shown | **not reviewed** |
-| 80 | [`t06-generate-limit-count`](#80-t06-generate-limit-count) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
-| 81 | [`t06-intstream-average`](#81-t06-intstream-average) | Streams and lambda expressions | single | easy | yes, shown | **not reviewed** |
-| 82 | [`t06-lambda-effectively-final`](#82-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
-| 83 | [`t06-lambda-this-enclosing-instance`](#83-t06-lambda-this-enclosing-instance) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 84 | [`t06-parallel-foreachordered`](#84-t06-parallel-foreachordered) | Streams and lambda expressions | single | medium | yes, shown | **not reviewed** |
-| 85 | [`t06-reduce-empty-identity`](#85-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
+| 76 | [`t06-collectors-tomap-duplicate-key`](#76-t06-collectors-tomap-duplicate-key) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 77 | [`t06-findfirst-ordered-stream`](#77-t06-findfirst-ordered-stream) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 78 | [`t06-flatmap-flatten`](#78-t06-flatmap-flatten) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 79 | [`t06-functional-interface-extra-methods`](#79-t06-functional-interface-extra-methods) | Streams and lambda expressions | multiple | hard | yes, not shown | reviewed 2026-10-29 |
+| 80 | [`t06-generate-limit-count`](#80-t06-generate-limit-count) | Streams and lambda expressions | single | easy | yes, shown | reviewed 2026-10-29 |
+| 81 | [`t06-intstream-average`](#81-t06-intstream-average) | Streams and lambda expressions | single | easy | yes, shown | reviewed 2026-10-29 |
+| 82 | [`t06-lambda-effectively-final`](#82-t06-lambda-effectively-final) | Streams and lambda expressions | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 83 | [`t06-lambda-this-enclosing-instance`](#83-t06-lambda-this-enclosing-instance) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 84 | [`t06-parallel-foreachordered`](#84-t06-parallel-foreachordered) | Streams and lambda expressions | single | medium | yes, shown | reviewed 2026-10-29 |
+| 85 | [`t06-reduce-empty-identity`](#85-t06-reduce-empty-identity) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 86 | [`t06-stream-facts`](#86-t06-stream-facts) | Streams and lambda expressions | multiple | medium | yes, not shown | reviewed 2026-10-02 |
 | 87 | [`t06-stream-laziness`](#87-t06-stream-laziness) | Streams and lambda expressions | single | hard | yes, shown | reviewed 2026-10-02 |
-| 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | **not reviewed** |
-| 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | yes, not shown | **not reviewed** |
-| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | **not reviewed** |
+| 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
 | 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
 | 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | reviewed 2026-10-02 |
@@ -6840,6 +6840,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6919,6 +6922,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -6997,6 +7003,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7129,6 +7138,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7200,6 +7212,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7271,6 +7286,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7351,6 +7369,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7459,6 +7480,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7529,6 +7553,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7606,6 +7633,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7889,6 +7919,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -7973,6 +8006,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8064,6 +8100,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14091,21 +14130,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 73 | `t05-unmodifiable-list-view` | approved | ai-reviewer | 2026-10-29 |
 | 74 | `t05-wildcard-extends-read` | approved | ai-reviewer | 2026-10-29 |
 | 75 | `t05-wildcard-super-integer` | approved | ai-reviewer | 2026-10-29 |
-| 76 | `t06-collectors-tomap-duplicate-key` |  |  |  |
-| 77 | `t06-findfirst-ordered-stream` |  |  |  |
-| 78 | `t06-flatmap-flatten` |  |  |  |
-| 79 | `t06-functional-interface-extra-methods` |  |  |  |
-| 80 | `t06-generate-limit-count` |  |  |  |
-| 81 | `t06-intstream-average` |  |  |  |
-| 82 | `t06-lambda-effectively-final` |  |  |  |
-| 83 | `t06-lambda-this-enclosing-instance` |  |  |  |
-| 84 | `t06-parallel-foreachordered` |  |  |  |
-| 85 | `t06-reduce-empty-identity` |  |  |  |
+| 76 | `t06-collectors-tomap-duplicate-key` | approved | ai-reviewer | 2026-10-29 |
+| 77 | `t06-findfirst-ordered-stream` | approved | ai-reviewer | 2026-10-29 |
+| 78 | `t06-flatmap-flatten` | approved | ai-reviewer | 2026-10-29 |
+| 79 | `t06-functional-interface-extra-methods` | approved | ai-reviewer | 2026-10-29 |
+| 80 | `t06-generate-limit-count` | approved | ai-reviewer | 2026-10-29 |
+| 81 | `t06-intstream-average` | approved | ai-reviewer | 2026-10-29 |
+| 82 | `t06-lambda-effectively-final` | approved | ai-reviewer | 2026-10-29 |
+| 83 | `t06-lambda-this-enclosing-instance` | approved | ai-reviewer | 2026-10-29 |
+| 84 | `t06-parallel-foreachordered` | approved | ai-reviewer | 2026-10-29 |
+| 85 | `t06-reduce-empty-identity` | approved | ai-reviewer | 2026-10-29 |
 | 86 | `t06-stream-facts` | approved | vinicius-ssantos | 2026-10-02 |
 | 87 | `t06-stream-laziness` | approved | vinicius-ssantos | 2026-10-02 |
-| 88 | `t06-stream-single-use` |  |  |  |
-| 89 | `t06-string-length-method-reference` |  |  |  |
-| 90 | `t06-to-unmodifiable-list-null` |  |  |  |
+| 88 | `t06-stream-single-use` | approved | ai-reviewer | 2026-10-29 |
+| 89 | `t06-string-length-method-reference` | approved | ai-reviewer | 2026-10-29 |
+| 90 | `t06-to-unmodifiable-list-null` | approved | ai-reviewer | 2026-10-29 |
 | 91 | `t07-automatic-module-jar` |  |  |  |
 | 92 | `t07-export-does-not-make-type-public` |  |  |  |
 | 93 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
