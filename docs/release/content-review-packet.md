@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**59 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 91 have never been reviewed. Each is marked below.
+**72 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 78 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -82,21 +82,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 43 | [`t03-record-pattern-destructuring`](#43-t03-record-pattern-destructuring) | Object-oriented concepts in Java | single | medium | yes, shown | reviewed 2026-10-29 |
 | 44 | [`t03-sealed-direct-subclass-modifier`](#44-t03-sealed-direct-subclass-modifier) | Object-oriented concepts in Java | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 45 | [`t03-static-method-hiding`](#45-t03-static-method-hiding) | Object-oriented concepts in Java | single | medium | yes, not shown | reviewed 2026-10-29 |
-| 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
-| 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | yes, not shown | **not reviewed** |
-| 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
+| 46 | [`t04-autocloseable-close-contract`](#46-t04-autocloseable-close-contract) | Handling exceptions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 47 | [`t04-catch-order-unreachable`](#47-t04-catch-order-unreachable) | Handling exceptions | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 48 | [`t04-finally-abrupt-completion`](#48-t04-finally-abrupt-completion) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-29 |
 | 49 | [`t04-finally-return`](#49-t04-finally-return) | Handling exceptions | single | easy | yes, shown | reviewed 2026-10-02 |
-| 50 | [`t04-finally-return-overrides`](#50-t04-finally-return-overrides) | Handling exceptions | single | medium | yes, shown | **not reviewed** |
-| 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
-| 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | yes, not shown | **not reviewed** |
-| 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | yes, not shown | **not reviewed** |
-| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
-| 55 | [`t04-suppressed-exception`](#55-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
-| 56 | [`t04-suppressed-order-multiple-resources`](#56-t04-suppressed-order-multiple-resources) | Handling exceptions | single | hard | yes, shown | **not reviewed** |
-| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | yes, not shown | **not reviewed** |
-| 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | yes, not shown | **not reviewed** |
+| 50 | [`t04-finally-return-overrides`](#50-t04-finally-return-overrides) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-29 |
+| 51 | [`t04-multicatch-parameter-reassignment`](#51-t04-multicatch-parameter-reassignment) | Handling exceptions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 52 | [`t04-multicatch-related-types`](#52-t04-multicatch-related-types) | Handling exceptions | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 53 | [`t04-overriding-checked-exception`](#53-t04-overriding-checked-exception) | Handling exceptions | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 54 | [`t04-precise-rethrow`](#54-t04-precise-rethrow) | Handling exceptions | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 55 | [`t04-suppressed-exception`](#55-t04-suppressed-exception) | Handling exceptions | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 56 | [`t04-suppressed-order-multiple-resources`](#56-t04-suppressed-order-multiple-resources) | Handling exceptions | single | hard | yes, shown | reviewed 2026-10-29 |
+| 57 | [`t04-throw-null`](#57-t04-throw-null) | Handling exceptions | single | hard | yes, not shown | reviewed 2026-10-29 |
+| 58 | [`t04-try-resource-effectively-final`](#58-t04-try-resource-effectively-final) | Handling exceptions | multiple | medium | yes, not shown | reviewed 2026-10-29 |
 | 59 | [`t04-try-with-resources-order`](#59-t04-try-with-resources-order) | Handling exceptions | single | medium | yes, shown | reviewed 2026-10-02 |
-| 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | yes, not shown | **not reviewed** |
+| 60 | [`t04-unchecked-exception-classes`](#60-t04-unchecked-exception-classes) | Handling exceptions | multiple | easy | yes, not shown | reviewed 2026-10-29 |
 | 61 | [`t05-arrays-aslist-backed`](#61-t05-arrays-aslist-backed) | Arrays and collections | multiple | medium | yes, not shown | **not reviewed** |
 | 62 | [`t05-arrays-binarysearch-insertion-point`](#62-t05-arrays-binarysearch-insertion-point) | Arrays and collections | single | medium | yes, shown | **not reviewed** |
 | 63 | [`t05-generic-invariance`](#63-t05-generic-invariance) | Arrays and collections | single | medium | yes, not shown | **not reviewed** |
@@ -4177,6 +4177,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4263,6 +4266,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4343,6 +4349,9 @@ thrown
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4498,6 +4507,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4585,6 +4597,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4667,6 +4682,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4779,6 +4797,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4881,6 +4902,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -4971,6 +4995,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5054,6 +5081,9 @@ body B A
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5138,6 +5168,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5230,6 +5263,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -5418,6 +5454,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -13983,21 +14022,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 43 | `t03-record-pattern-destructuring` | approved | ai-reviewer | 2026-10-29 |
 | 44 | `t03-sealed-direct-subclass-modifier` | approved | ai-reviewer | 2026-10-29 |
 | 45 | `t03-static-method-hiding` | approved | ai-reviewer | 2026-10-29 |
-| 46 | `t04-autocloseable-close-contract` |  |  |  |
-| 47 | `t04-catch-order-unreachable` |  |  |  |
-| 48 | `t04-finally-abrupt-completion` |  |  |  |
+| 46 | `t04-autocloseable-close-contract` | approved | ai-reviewer | 2026-10-29 |
+| 47 | `t04-catch-order-unreachable` | approved | ai-reviewer | 2026-10-29 |
+| 48 | `t04-finally-abrupt-completion` | approved | ai-reviewer | 2026-10-29 |
 | 49 | `t04-finally-return` | approved | vinicius-ssantos | 2026-10-02 |
-| 50 | `t04-finally-return-overrides` |  |  |  |
-| 51 | `t04-multicatch-parameter-reassignment` |  |  |  |
-| 52 | `t04-multicatch-related-types` |  |  |  |
-| 53 | `t04-overriding-checked-exception` |  |  |  |
-| 54 | `t04-precise-rethrow` |  |  |  |
-| 55 | `t04-suppressed-exception` |  |  |  |
-| 56 | `t04-suppressed-order-multiple-resources` |  |  |  |
-| 57 | `t04-throw-null` |  |  |  |
-| 58 | `t04-try-resource-effectively-final` |  |  |  |
+| 50 | `t04-finally-return-overrides` | approved | ai-reviewer | 2026-10-29 |
+| 51 | `t04-multicatch-parameter-reassignment` | approved | ai-reviewer | 2026-10-29 |
+| 52 | `t04-multicatch-related-types` | approved | ai-reviewer | 2026-10-29 |
+| 53 | `t04-overriding-checked-exception` | approved | ai-reviewer | 2026-10-29 |
+| 54 | `t04-precise-rethrow` | approved | ai-reviewer | 2026-10-29 |
+| 55 | `t04-suppressed-exception` | approved | ai-reviewer | 2026-10-29 |
+| 56 | `t04-suppressed-order-multiple-resources` | approved | ai-reviewer | 2026-10-29 |
+| 57 | `t04-throw-null` | approved | ai-reviewer | 2026-10-29 |
+| 58 | `t04-try-resource-effectively-final` | approved | ai-reviewer | 2026-10-29 |
 | 59 | `t04-try-with-resources-order` | approved | vinicius-ssantos | 2026-10-02 |
-| 60 | `t04-unchecked-exception-classes` |  |  |  |
+| 60 | `t04-unchecked-exception-classes` | approved | ai-reviewer | 2026-10-29 |
 | 61 | `t05-arrays-aslist-backed` |  |  |  |
 | 62 | `t05-arrays-binarysearch-insertion-point` |  |  |  |
 | 63 | `t05-generic-invariance` |  |  |  |
