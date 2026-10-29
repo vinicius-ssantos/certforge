@@ -264,6 +264,17 @@ reviewer email password:
 publish-content reviewer_email reviewer_password:
     node deploy/publish-pack.mjs --url {{web_url}} --reviewer-email {{ quote(reviewer_email) }} --reviewer-password {{ quote(reviewer_password) }}
 
+# Give an account the AI_REVIEWER role (ADR 0022, ADR 0023), creating it if it does not exist yet.
+[group('content')]
+grant-ai-reviewer email password:
+    node deploy/grant-ai-reviewer.mjs --url {{web_url}} --email {{ quote(email) }} --password {{ quote(password) }}
+
+# Publishes only the questions review.json marks as AI-reviewed (ADR 0023), through a single
+# ai-approve call per question. Provisional: a human must still confirm each one within the window.
+[group('content')]
+publish-content-ai ai_reviewer_email ai_reviewer_password:
+    node deploy/publish-pack.mjs --url {{web_url}} --ai-reviewer-email {{ quote(ai_reviewer_email) }} --ai-reviewer-password {{ quote(ai_reviewer_password) }}
+
 # Regenerate the API contract from the backend and the types the web app is built against.
 [group('content')]
 contract:

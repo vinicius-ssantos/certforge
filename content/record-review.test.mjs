@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { readPack, readReviewRecord, reviewStatusOf } from "./pack.mjs";
+import { readPack, readReviewRecord, reviewStatusOf, verifiedDigest } from "./pack.mjs";
 import { recordReview, RefusedError } from "./record-review.mjs";
 
 const pack = "content/java-se-21";
@@ -25,6 +25,33 @@ function unreviewed(target) {
   const record = readReviewRecord(target);
   const found = readPack(target).find((question) => !record.questions[question.name]);
   assert.ok(found, "the pack should still hold an unreviewed question");
+  return found;
+}
+
+/**
+ * A question of the given tier, made unreviewed in this copy regardless of whether the real pack
+ * currently has one unreviewed: which tier is unreviewed right now (or even present at all) is a
+ * fact about today's backlog, not something these tests should depend on to stay meaningful
+ * tomorrow. The Asserted tier happens to be empty in the real pack as this is written -- every
+ * question now carries a verified program -- so that case is synthesized: a copy of a real question
+ * with its `expected.txt` removed, which is exactly what Asserted means and changes nothing
+ * `reviewDigest` reads, so the review a person already gave the text still applies to it.
+ */
+function unreviewedOfTier(target, { verified }) {
+  let found = readPack(target).find((question) => (verifiedDigest(question) !== null) === verified);
+  if (!found && !verified) {
+    const donor = readPack(target)[0];
+    const expectedFile = join(target, donor.name, "expected.txt");
+    if (existsSync(expectedFile)) {
+      rmSync(expectedFile);
+    }
+    found = readPack(target).find((question) => question.name === donor.name);
+  }
+  assert.ok(found, `the pack should hold a ${verified ? "Verified" : "Asserted"}-tier question`);
+  assert.equal((verifiedDigest(found) !== null), verified, "fixture must actually be of the asked tier");
+  const record = readReviewRecord(target);
+  delete record.questions[found.name];
+  writeFileSync(join(target, "review.json"), JSON.stringify(record, null, 2) + "\n");
   return found;
 }
 
@@ -140,6 +167,62 @@ test("refuses to record a different reviewer than the record names", () => {
       () => recordReview(target, { question: question.name, verdict: "APPROVED", reviewer: "someone-else" }),
       /second reviewer is a claim/,
     );
+  });
+});
+
+test("ADR 0023: records an AI review as a disclosed reviewer, distinct from the pack's human one", () => {
+  withCopy((target) => {
+    const question = unreviewedOfTier(target, { verified: false });
+    const record = readReviewRecord(target);
+
+    const result = recordReview(target, { question: question.name, verdict: "APPROVED", on: "2026-10-29", aiReviewed: true });
+
+    assert.equal(result.outcome, "recorded");
+    const status = reviewStatusOf(readReviewRecord(target), question);
+    assert.equal(status.reviewer, "ai-reviewer");
+    assert.notEqual(status.reviewer, record.reviewer);
+    // Every other entry still reads as the pack's own human reviewer; this is the one disclosed
+    // exception, not a change to what an ordinary entry means.
+    const other = readPack(target).find((candidate) => record.questions[candidate.name] && candidate.name !== question.name);
+    if (other) {
+      assert.equal(reviewStatusOf(readReviewRecord(target), other).reviewer, record.reviewer);
+    }
+  });
+});
+
+test("ADR 0023: refuses an AI review of a Verified-tier question", () => {
+  withCopy((target) => {
+    const question = unreviewedOfTier(target, { verified: true });
+
+    assert.throws(
+      () => recordReview(target, { question: question.name, verdict: "APPROVED", aiReviewed: true }),
+      /still needs.*a human/s,
+    );
+    assert.equal(readReviewRecord(target).questions[question.name], undefined);
+  });
+});
+
+test("ADR 0023: --ai-reviewed and --reviewer do not mix", () => {
+  withCopy((target) => {
+    const question = unreviewedOfTier(target, { verified: false });
+
+    assert.throws(
+      () => recordReview(target, { question: question.name, verdict: "APPROVED", aiReviewed: true, reviewer: "someone" }),
+      /do not mix/,
+    );
+  });
+});
+
+test("ADR 0023: a human re-recording an AI-reviewed question reverts the entry to the pack's own reviewer", () => {
+  withCopy((target) => {
+    const question = unreviewedOfTier(target, { verified: false });
+    recordReview(target, { question: question.name, verdict: "APPROVED", on: "2026-10-29", aiReviewed: true });
+    const record = readReviewRecord(target);
+
+    const result = recordReview(target, { question: question.name, verdict: "APPROVED", on: "2026-10-30" });
+
+    assert.equal(result.outcome, "changed");
+    assert.equal(reviewStatusOf(readReviewRecord(target), question).reviewer, record.reviewer);
   });
 });
 

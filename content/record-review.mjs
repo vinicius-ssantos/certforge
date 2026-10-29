@@ -15,6 +15,13 @@
 // Usage:
 //   node content/record-review.mjs --question t03-sealed-permits --verdict APPROVED
 //                                  [--pack content/java-se-21] [--on 2026-10-17] [--reviewer handle]
+//                                  [--ai-reviewed]
+//
+// --ai-reviewed (ADR 0023) records the entry's reviewer as the fixed, disclosed "ai-reviewer"
+// identity instead of leaving it to mean the pack's own named human reviewer. It is incompatible
+// with --reviewer -- the identity it records is not a free-text claim -- and refuses a question
+// that carries verification evidence, the same restriction the live ai-approve endpoint enforces
+// (ADR 0022 decision 1): the AI reviewer may approve Asserted-tier content only.
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readPack, readReviewRecord, reviewDigest, verifiedDigest } from "./pack.mjs";
@@ -36,12 +43,18 @@ function refuse(...lines) {
  * different, and `unchanged` when the record already says exactly this — which makes running the
  * same command twice harmless rather than a second decision.
  */
-export function recordReview(pack, { question: name, verdict, on, reviewer }) {
+export function recordReview(pack, { question: name, verdict, on, reviewer, aiReviewed = false }) {
   if (!VERDICTS.has(verdict)) {
     refuse(`${verdict} is not a verdict. Use one of: ${[...VERDICTS].join(", ")}.`);
   }
   if (on !== undefined && !DATE.test(on)) {
     refuse(`${on} is not a date. Use YYYY-MM-DD.`);
+  }
+  if (aiReviewed && reviewer) {
+    refuse(
+      "--ai-reviewed and --reviewer do not mix: the AI reviewer's identity is fixed and disclosed,",
+      "not a name you pass in.",
+    );
   }
   if (existsSync(join(pack, "pack.json"))) {
     refuse(
@@ -61,16 +74,26 @@ export function recordReview(pack, { question: name, verdict, on, reviewer }) {
 
   const digest = reviewDigest(question);
   const verified = verifiedDigest(question);
+  if (aiReviewed && verified !== null) {
+    refuse(
+      `${name} carries verification evidence (the Verified tier). The AI reviewer may only record`,
+      "an Asserted-tier question (ADR 0022 decision 1, ADR 0023 decision 3) -- this one still needs",
+      "a human.",
+    );
+  }
   const entries = record.questions ?? {};
   const previous = entries[name];
   const reviewedOn = on ?? new Date().toISOString().slice(0, 10);
+  const nextReviewer = aiReviewed ? "ai-reviewer" : undefined;
   const outcome = !previous
     ? "recorded"
     : previous.digest !== digest
       ? "renewed"
       : previous.verdict !== verdict
         ? "changed"
-        : "unchanged";
+        : (previous.reviewer ?? undefined) !== nextReviewer
+          ? "changed"
+          : "unchanged";
   if (outcome === "unchanged") {
     return { outcome, name, verdict, digest, reviewedOn: previous.reviewedOn ?? record.reviewedOn };
   }
@@ -85,7 +108,13 @@ export function recordReview(pack, { question: name, verdict, on, reviewer }) {
     );
   }
 
-  entries[name] = { verdict, digest, verified, reviewedOn };
+  entries[name] = {
+    verdict,
+    digest,
+    verified,
+    reviewedOn,
+    ...(nextReviewer ? { reviewer: nextReviewer } : {}),
+  };
   record.questions = entries;
   write(pack, record);
   return { outcome, name, verdict, digest, reviewedOn, was: previous };
@@ -113,6 +142,7 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split("\\").join
       verdict: option(args, "verdict", ""),
       on: option(args, "on"),
       reviewer: option(args, "reviewer"),
+      aiReviewed: args.includes("--ai-reviewed"),
     });
     const said = {
       recorded: `recorded ${result.verdict} for ${result.name} on ${result.reviewedOn}`,
