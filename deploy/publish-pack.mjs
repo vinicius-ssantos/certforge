@@ -21,8 +21,13 @@
 // names an account will fail the build rather than slip through.
 //
 // Usage: node deploy/publish-pack.mjs --reviewer-email ... --reviewer-password ...
+//                                     [--ai-reviewer-email ... --ai-reviewer-password ...]
 //                                     [--url http://localhost:8081] [--pack content/java-se-21] [--dry-run]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD are the author's and the publisher's.
+//
+// A question whose review.json entry names "ai-reviewer" (ADR 0023) is published through a single
+// ai-approve call on the --ai-reviewer-* account instead of the ordinary approve-then-publish on
+// --reviewer-*. Either pair is required only when the run actually has a question that needs it.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { Session, signInAdmin } from "./lib/session.mjs";
@@ -41,6 +46,8 @@ const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL;
 const adminPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD;
 const reviewerEmail = option("reviewer-email", process.env.CERTFORGE_REVIEWER_EMAIL);
 const reviewerPassword = option("reviewer-password", process.env.CERTFORGE_REVIEWER_PASSWORD);
+const aiReviewerEmail = option("ai-reviewer-email", process.env.CERTFORGE_AI_REVIEWER_EMAIL);
+const aiReviewerPassword = option("ai-reviewer-password", process.env.CERTFORGE_AI_REVIEWER_PASSWORD);
 
 function refuse(...message) {
   console.error(...message);
@@ -104,6 +111,9 @@ if (approved.length === 0) {
   refuse("Nothing in this pack is both reviewed and approved. Nothing to publish.");
 }
 
+const approvedAi = approved.filter(({ status }) => status.reviewer === "ai-reviewer");
+const approvedHuman = approved.filter(({ status }) => status.reviewer !== "ai-reviewer");
+
 console.log(`${approved.length} question(s) carry a current recorded approval.`);
 if (dryRun) {
   for (const { question } of approved) {
@@ -118,9 +128,10 @@ if (dryRun) {
 if (!adminEmail || !adminPassword) {
   refuse("Set BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD to the administrator's.");
 }
-if (!reviewerEmail || !reviewerPassword) {
+if (approvedHuman.length > 0 && (!reviewerEmail || !reviewerPassword)) {
   refuse(
-    "Provide --reviewer-email and --reviewer-password for an existing account with the REVIEWER role.",
+    "Provide --reviewer-email and --reviewer-password for an existing account with the REVIEWER role:",
+    `${approvedHuman.length} approved question(s) were reviewed by a person, not the AI reviewer.`,
     "\nThis script does not create one: the reviewer it records must be the person who did the review.",
   );
 }
@@ -128,6 +139,19 @@ if (reviewerEmail === adminEmail) {
   refuse(
     "The reviewer you passed is the administrator, which authors and publishes here, so it cannot review.",
     "\nThe release refuses it too (reviewer_must_differ_from_author). Use a second account.",
+  );
+}
+if (approvedAi.length > 0 && (!aiReviewerEmail || !aiReviewerPassword)) {
+  refuse(
+    "Provide --ai-reviewer-email and --ai-reviewer-password for an account with the AI_REVIEWER role",
+    `(ADR 0023): ${approvedAi.length} approved question(s) were reviewed by the AI reviewer, not a person.`,
+    "\nCreate or grant one with: just grant-ai-reviewer <email> <password>",
+  );
+}
+if (aiReviewerEmail === adminEmail) {
+  refuse(
+    "The AI-reviewer account you passed is the administrator, which authors and publishes here, so it",
+    "\ncannot review either. The release refuses it too (reviewer_must_differ_from_author).",
   );
 }
 
@@ -138,10 +162,20 @@ async function body(response) {
 const admin = new Session(url);
 await signInAdmin(admin, adminEmail, adminPassword);
 const reviewer = new Session(url);
-try {
-  await reviewer.signIn(reviewerEmail, reviewerPassword);
-} catch (error) {
-  refuse(`The reviewer account you passed could not sign in: ${error.message}`);
+if (approvedHuman.length > 0) {
+  try {
+    await reviewer.signIn(reviewerEmail, reviewerPassword);
+  } catch (error) {
+    refuse(`The reviewer account you passed could not sign in: ${error.message}`);
+  }
+}
+const aiReviewer = new Session(url);
+if (approvedAi.length > 0) {
+  try {
+    await aiReviewer.signIn(aiReviewerEmail, aiReviewerPassword);
+  } catch (error) {
+    refuse(`The AI-reviewer account you passed could not sign in: ${error.message}`);
+  }
 }
 
 // Prompts already in the bank, in any state, so a second run tops up instead of duplicating.
@@ -176,14 +210,24 @@ for (const { question, status } of approved) {
   }
   const revisionId = JSON.parse(await body(created)).revisions[0].id;
 
-  const comment =
-    `Approved by ${status.reviewer} on ${status.reviewedOn}, recorded in ${pack}/review.json ` +
-    `against ${status.recordedDigest}. ${record.method}`;
-  const steps = [
-    [admin, "submit", undefined],
-    [reviewer, "approve", { comment, checklist: record.checklist ?? [] }],
-    [admin, "publish", undefined],
-  ];
+  const isAi = status.reviewer === "ai-reviewer";
+  const comment = isAi
+    ? `Approved by the AI reviewer on ${status.reviewedOn}, recorded in ${pack}/review.json against ` +
+      `${status.recordedDigest} (ADR 0023). Provisional until a CONTENT_REVIEW account confirms it.`
+    : `Approved by ${status.reviewer} on ${status.reviewedOn}, recorded in ${pack}/review.json ` +
+      `against ${status.recordedDigest}. ${record.method}`;
+  // The AI-reviewer fast lane (ADR 0022) approves and publishes in the same call; the human path
+  // still has two separate steps, by a different account each.
+  const steps = isAi
+    ? [
+        [admin, "submit", undefined],
+        [aiReviewer, "ai-approve", { comment }],
+      ]
+    : [
+        [admin, "submit", undefined],
+        [reviewer, "approve", { comment, checklist: record.checklist ?? [] }],
+        [admin, "publish", undefined],
+      ];
   for (const [who, step, payload] of steps) {
     const response = await who.call("POST", `/api/admin/question-revisions/${revisionId}/${step}`, { body: payload });
     if (!response.ok) {
@@ -191,10 +235,16 @@ for (const { question, status } of approved) {
       if (step === "approve" && response.status === 403) {
         refuse(`The reviewer account may not approve. Grant it the REVIEWER role with 'just reviewer', then run this again.\n${detail}`);
       }
+      if (step === "ai-approve" && response.status === 403) {
+        refuse(
+          `The AI-reviewer account may not ai-approve. Grant it the AI_REVIEWER role with`,
+          `'just grant-ai-reviewer', then run this again.\n${detail}`,
+        );
+      }
       refuse(`The ${step} of ${name} failed with ${response.status}: ${detail}`);
     }
   }
-  console.log(`published ${name}`);
+  console.log(`published ${name}${isAi ? " (AI-reviewed, provisional)" : ""}`);
   published += 1;
 }
 

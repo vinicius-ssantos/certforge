@@ -134,7 +134,9 @@ export function reviewStatusOf(record, question) {
     verificationAdded: textHolds && recorded === null && verified !== null,
     whatChanged: textHolds ? (verificationHolds ? null : "the verified output") : "the text",
     verdict: entry.verdict,
-    reviewer: record.reviewer,
+    // Absent, this entry means the pack's named human reviewer, as it always has. Present and
+    // "ai-reviewer", it is the one entry ADR 0023 lets differ: disclosed, never read as the human's.
+    reviewer: entry.reviewer ?? record.reviewer,
     reviewedOn: entry.reviewedOn ?? record.reviewedOn,
     recordedDigest: entry.digest,
     currentDigest: current,
