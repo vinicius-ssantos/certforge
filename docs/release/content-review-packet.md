@@ -2,7 +2,7 @@
 
 Generated from `content/java-se-21` by `content/build-review-packet.mjs`. **Do not edit by hand**: regenerate it, and make changes in the pack. Verdicts live in `content/java-se-21/review.json`.
 
-**98 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 52 have never been reviewed. Each is marked below.
+**111 of 150 questions carry a current review** by vinicius-ssantos; review date(s): 2026-10-02, 2026-10-07, 2026-10-29. 0 have been edited since being reviewed and need a new one; 39 have never been reviewed. Each is marked below.
 
 The build checks that every code snippet compiles for Java 21 and prints what the question says (the "Verified by the build" lines), and that an option carrying that output is the one marked correct. It cannot judge wording, ambiguity, the quality of the explanations or whether the question tests the exam objective. That is what a human review is for.
 
@@ -127,21 +127,21 @@ The checks, from the [content policy](../product/content-policy.md):
 | 88 | [`t06-stream-single-use`](#88-t06-stream-single-use) | Streams and lambda expressions | single | easy | yes, not shown | reviewed 2026-10-29 |
 | 89 | [`t06-string-length-method-reference`](#89-t06-string-length-method-reference) | Streams and lambda expressions | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 90 | [`t06-to-unmodifiable-list-null`](#90-t06-to-unmodifiable-list-null) | Streams and lambda expressions | multiple | medium | yes, not shown | reviewed 2026-10-29 |
-| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
-| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
+| 91 | [`t07-automatic-module-jar`](#91-t07-automatic-module-jar) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 92 | [`t07-export-does-not-make-type-public`](#92-t07-export-does-not-make-type-public) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-29 |
 | 93 | [`t07-exports-and-opens`](#93-t07-exports-and-opens) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | reviewed 2026-10-02 |
-| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | yes, not shown | **not reviewed** |
-| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
-| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
-| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | yes, not shown | **not reviewed** |
-| 98 | [`t07-object-module-name`](#98-t07-object-module-name) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
-| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | **not reviewed** |
-| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | **not reviewed** |
-| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
+| 94 | [`t07-implicit-java-base`](#94-t07-implicit-java-base) | Packaging, deploying and the Java Platform Module System | single | easy | yes, not shown | reviewed 2026-10-29 |
+| 95 | [`t07-import-wildcard-no-subpackages`](#95-t07-import-wildcard-no-subpackages) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 96 | [`t07-java-module-launch`](#96-t07-java-module-launch) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 97 | [`t07-module-service-directives`](#97-t07-module-service-directives) | Packaging, deploying and the Java Platform Module System | multiple | medium | yes, not shown | reviewed 2026-10-29 |
+| 98 | [`t07-object-module-name`](#98-t07-object-module-name) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | reviewed 2026-10-29 |
+| 99 | [`t07-open-module-semantics`](#99-t07-open-module-semantics) | Packaging, deploying and the Java Platform Module System | multiple | hard | yes, not shown | reviewed 2026-10-29 |
+| 100 | [`t07-qualified-exports`](#100-t07-qualified-exports) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-29 |
+| 101 | [`t07-requires-static`](#101-t07-requires-static) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | reviewed 2026-10-29 |
 | 102 | [`t07-requires-transitive`](#102-t07-requires-transitive) | Packaging, deploying and the Java Platform Module System | single | medium | yes, not shown | reviewed 2026-10-02 |
-| 103 | [`t07-static-import-member`](#103-t07-static-import-member) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | **not reviewed** |
-| 104 | [`t07-unnamed-module-isnamed`](#104-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | **not reviewed** |
-| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | **not reviewed** |
+| 103 | [`t07-static-import-member`](#103-t07-static-import-member) | Packaging, deploying and the Java Platform Module System | single | easy | yes, shown | reviewed 2026-10-29 |
+| 104 | [`t07-unnamed-module-isnamed`](#104-t07-unnamed-module-isnamed) | Packaging, deploying and the Java Platform Module System | single | medium | yes, shown | reviewed 2026-10-29 |
+| 105 | [`t07-unnamed-package-import`](#105-t07-unnamed-package-import) | Packaging, deploying and the Java Platform Module System | single | hard | yes, not shown | reviewed 2026-10-29 |
 | 106 | [`t08-atomic-compare-and-set`](#106-t08-atomic-compare-and-set) | Managing concurrent code execution | single | medium | yes, shown | **not reviewed** |
 | 107 | [`t08-atomicinteger-update-and-get`](#107-t08-atomicinteger-update-and-get) | Managing concurrent code execution | single | easy | yes, shown | **not reviewed** |
 | 108 | [`t08-completablefuture-join-vs-get`](#108-t08-completablefuture-join-vs-get) | Managing concurrent code execution | multiple | hard | yes, not shown | **not reviewed** |
@@ -8215,6 +8215,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8344,6 +8347,9 @@ class Helper {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8619,6 +8625,9 @@ module app {}
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8704,6 +8713,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8798,6 +8810,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -8961,6 +8976,9 @@ public final class Loud implements Greeter {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9029,6 +9047,9 @@ java.base
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9186,6 +9207,9 @@ open module lib {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9359,6 +9383,9 @@ public final class Named {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9494,6 +9521,9 @@ public final class Flag {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9704,6 +9734,9 @@ The code in the question compiles for Java 21 and prints:
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9772,6 +9805,9 @@ false
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -9863,6 +9899,9 @@ public class Main {
 
 ### Review
 
+**Approved** by ai-reviewer on 2026-10-29. The question has not changed since, so that verdict still applies.
+
+A second reviewer is still worth having. To review it again, make the checks below and record your own verdict:
 
 - [ ] There is one defensible interpretation of the prompt.
 - [ ] The answer is correct for Java 21, and any code compiles and behaves as stated.
@@ -14145,21 +14184,21 @@ To record: `"digest": "sha256:9183a5dace306d729fbeabaef26c1f80a4aa02ef2b777fdc6a
 | 88 | `t06-stream-single-use` | approved | ai-reviewer | 2026-10-29 |
 | 89 | `t06-string-length-method-reference` | approved | ai-reviewer | 2026-10-29 |
 | 90 | `t06-to-unmodifiable-list-null` | approved | ai-reviewer | 2026-10-29 |
-| 91 | `t07-automatic-module-jar` |  |  |  |
-| 92 | `t07-export-does-not-make-type-public` |  |  |  |
+| 91 | `t07-automatic-module-jar` | approved | ai-reviewer | 2026-10-29 |
+| 92 | `t07-export-does-not-make-type-public` | approved | ai-reviewer | 2026-10-29 |
 | 93 | `t07-exports-and-opens` | approved | vinicius-ssantos | 2026-10-02 |
-| 94 | `t07-implicit-java-base` |  |  |  |
-| 95 | `t07-import-wildcard-no-subpackages` |  |  |  |
-| 96 | `t07-java-module-launch` |  |  |  |
-| 97 | `t07-module-service-directives` |  |  |  |
-| 98 | `t07-object-module-name` |  |  |  |
-| 99 | `t07-open-module-semantics` |  |  |  |
-| 100 | `t07-qualified-exports` |  |  |  |
-| 101 | `t07-requires-static` |  |  |  |
+| 94 | `t07-implicit-java-base` | approved | ai-reviewer | 2026-10-29 |
+| 95 | `t07-import-wildcard-no-subpackages` | approved | ai-reviewer | 2026-10-29 |
+| 96 | `t07-java-module-launch` | approved | ai-reviewer | 2026-10-29 |
+| 97 | `t07-module-service-directives` | approved | ai-reviewer | 2026-10-29 |
+| 98 | `t07-object-module-name` | approved | ai-reviewer | 2026-10-29 |
+| 99 | `t07-open-module-semantics` | approved | ai-reviewer | 2026-10-29 |
+| 100 | `t07-qualified-exports` | approved | ai-reviewer | 2026-10-29 |
+| 101 | `t07-requires-static` | approved | ai-reviewer | 2026-10-29 |
 | 102 | `t07-requires-transitive` | approved | vinicius-ssantos | 2026-10-02 |
-| 103 | `t07-static-import-member` |  |  |  |
-| 104 | `t07-unnamed-module-isnamed` |  |  |  |
-| 105 | `t07-unnamed-package-import` |  |  |  |
+| 103 | `t07-static-import-member` | approved | ai-reviewer | 2026-10-29 |
+| 104 | `t07-unnamed-module-isnamed` | approved | ai-reviewer | 2026-10-29 |
+| 105 | `t07-unnamed-package-import` | approved | ai-reviewer | 2026-10-29 |
 | 106 | `t08-atomic-compare-and-set` |  |  |  |
 | 107 | `t08-atomicinteger-update-and-get` |  |  |  |
 | 108 | `t08-completablefuture-join-vs-get` |  |  |  |

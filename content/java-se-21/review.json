@@ -997,6 +997,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t07-automatic-module-jar": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5a2b2389fc23b58486d0185fe3a0ac8f7c1ffcdd52c34c56051364a37bbc7a05",
+      "verified": "sha256:5a84fc70b7f7fff49c4dcfeb32fd6b3433d2b2906de962db4eb6ff648b05285b",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-export-does-not-make-type-public": {
+      "verdict": "APPROVED",
+      "digest": "sha256:50bcfb63b67b99ba3b18bba6c56b000d5fdcd7451a82a76cad5ce5a688a3fec2",
+      "verified": "sha256:a6a96d4dd098bc83278a738421356322f8fa69f3043dc81ff81abe57afb3bed0",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-implicit-java-base": {
+      "verdict": "APPROVED",
+      "digest": "sha256:302368d054243688dbc08c428c3dc200a926535e51db483e40c9d6fd91e276cf",
+      "verified": "sha256:b47db13ac12eca1af4818d70924422538ba95a7825ac3a80cdbbdc6d8e5cafb8",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-import-wildcard-no-subpackages": {
+      "verdict": "APPROVED",
+      "digest": "sha256:43060253989d0fe57642ffc88a5c42a62d5e7fb3e697178efb05a0c997cab6fa",
+      "verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-java-module-launch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:49013ae0d1abeadfc8b477eba0d80d6488f765c2be186e9f8cd4ca4602a5c4e2",
+      "verified": "sha256:89b9e6b7bd210be67a88f45bad724d8c67fcd44253131820512698704d2fc2b9",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-module-service-directives": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7f5761fbe4cd0b6cf743e04adcb2c4f7049c728a375f09568660c3b724463518",
+      "verified": "sha256:02ba7787ad244576db685cfd89ffe6a07695123b62acb4205c55cd05d257d2ff",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-object-module-name": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f2314933ad3a586df114dfd06231ac646b061a82ddc11f5db92da391129d46ac",
+      "verified": "sha256:15ddf5da1c7c9d5569e10556cc6458d01ca6143fea0a2289e698be96195a473e",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-open-module-semantics": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6579987de80fa73f74e7d20f23bd56365d4b6057f436a33ce5a88b0b9ff4f9b7",
+      "verified": "sha256:37563b482716882d7df61eb7411262ab3dd09c36c4228e9d2d0df6b251aa72d7",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-qualified-exports": {
+      "verdict": "APPROVED",
+      "digest": "sha256:61c6926e97278a450283d77df8269d74d9e6580ea7d6055efa728a5b69aabe92",
+      "verified": "sha256:cb2fec7270c07e63bcab6f4b4cb4c3a2f73d005558f81f8c73b4c95bebd4f00e",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-requires-static": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b14de1ffacaa6bd8ab128eb13c6a77b79fff103d9da421a9f142fc5bb8af828b",
+      "verified": "sha256:b7021ceb205085071e10e567e045853ae1c06478b100a69c657120a42b2d8629",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-static-import-member": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2b5edd88a0ea0ace6a570e0f0b3b200abb61bdedba4943bdc4493ebff7ff00cb",
+      "verified": "sha256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-unnamed-module-isnamed": {
+      "verdict": "APPROVED",
+      "digest": "sha256:64c9d9597f36df9fb522b9a919b4e3e022e013fcdb9061ccd8c5c7dbd226f919",
+      "verified": "sha256:fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t07-unnamed-package-import": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0727e44c54bbedc2d6825377f9e8089b2b944c749a243cccb7dec735e3280fb1",
+      "verified": "sha256:4995b9e3e19ed548c6c6eddb276db6916442bafa2238a6e4f7e214864343441f",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
