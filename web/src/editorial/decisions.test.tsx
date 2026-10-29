@@ -290,6 +290,17 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
     expect(screen.queryByRole("button", { name: "Approve" })).not.toBeInTheDocument();
   });
 
+  it("reaches the editorial desk from the main nav link, holding CONTENT_AI_REVIEW alone", async () => {
+    // The permission is new; the nav link's own allow-list is a second place that could have
+    // predated it the same way RequireEditorial's did, and did -- this is what the e2e run caught.
+    renderApp({ ...tracks, [`GET /api/admin/questions`]: { body: { counts: {}, items: [], page: 0, size: 25, total: 0 } } }, { as: aiReviewer });
+
+    await screen.findByRole("heading", { level: 1, name: "Tracks" });
+    expect(
+      within(screen.getByRole("navigation", { name: "Main" })).getByRole("link", { name: "Editorial" }),
+    ).toBeInTheDocument();
+  });
+
   it("approves and publishes in one request, and the result is published", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
