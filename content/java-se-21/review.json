@@ -815,6 +815,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t06-collectors-tomap-duplicate-key": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cdeedf8681b1d62f18cbfd46eb73ee2797a2999757d59964c3bfd20802cb253b",
+      "verified": "sha256:bc985617b6e5969c4dd2a4fbbf129eeece5a38f6d180e56723a04039a844b0a6",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-findfirst-ordered-stream": {
+      "verdict": "APPROVED",
+      "digest": "sha256:260c1a2671e757cb81b0b5572abf5f7d6b6ed1c86c3e4b0d4c36ab357793803d",
+      "verified": "sha256:919b1feae12cce04d4be8a2db134dcc55918835923581f04b314f67827a1fd79",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-flatmap-flatten": {
+      "verdict": "APPROVED",
+      "digest": "sha256:81a1d82b3b182549e43a2d4d1a5c38735f05ee764f2aaa461e8faba802341afc",
+      "verified": "sha256:2845c0bc29c91c151ba08de4543b3ea7bb5e4c5187727da74f7d9677b5c29a56",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-functional-interface-extra-methods": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a7c2eeed5b5430583895ba7bcc5741a85d8baa0e1d28600f8919a5197ec642dd",
+      "verified": "sha256:c9108b77def2326441479f5fd4ece664208fd0aa5bcf8cee5deb697426406e99",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-generate-limit-count": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f091d17ace9ae04839d3867d74e1cc9d199443fff810a4fc40a970d374b8ab3f",
+      "verified": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-intstream-average": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1c43a1fd4bd129da4acc8db59e518230410c27b8053a2ff7838c43a0fd249f3e",
+      "verified": "sha256:d84bdb34d4eeef4034d77e5403f850e35bc4a51b1143e3a83510e1aaad839748",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-lambda-effectively-final": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e5ebba5c9d6aeaef72da6498990ea36c3a1b80e5266da18c242d5fc478e7c75e",
+      "verified": "sha256:8e39abccc00b372f3acc69f0e730030f8894bad24f80e7a38cc06d4296d0d575",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-lambda-this-enclosing-instance": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1a0fa4c0cdeafcc273869919ee6d954b9b3f67ee60d3bc0a0bcb6930fdf7e600",
+      "verified": "sha256:301a76363ca57c469d680e15619185c4025b0e0a8de566564b8ca36a5f0531ed",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-parallel-foreachordered": {
+      "verdict": "APPROVED",
+      "digest": "sha256:efd8e2428504e30d4d844daf0c730dc85c4d85b7720eb301d4ab5a639f6229bd",
+      "verified": "sha256:1be2e452b46d7a0d9656bbb1f768e8248eba1b75baed65f5d99eafa948899a6a",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-reduce-empty-identity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ece7c2a1eb9fcf982e92b36c2c350fe2c7809be39feb1fe1e90504b91691d6e9",
+      "verified": "sha256:58be70435548b36e1ad6bfb817cb3a42f4dda0b4aea4a73051c28afc99e5fbd5",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-stream-single-use": {
+      "verdict": "APPROVED",
+      "digest": "sha256:80d54f91c7915d958a4f1c86e90cc2f3f3b7f5d9322012d1153d9047e0339099",
+      "verified": "sha256:1aafff8ce370c21522f9bedb4d4f4b0009e26247f551996cadd949ac5dd98eef",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-string-length-method-reference": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f37197deee9a5b4d33b7e31daae1b23fbcca2f567c2d568a722e28d001878169",
+      "verified": "sha256:caa32181978516c56c61c0c4532df9864957e8394293a6fc04d39c32dea0d0f8",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t06-to-unmodifiable-list-null": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c91c23d786aa7a72f121ae51ced32639fbcecd5e76d108216ccc8578dfbc6940",
+      "verified": "sha256:defc11ffa0d793417c6cfb30e889baaa84e03c2208ef85397506ffdac57ca5d9",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
