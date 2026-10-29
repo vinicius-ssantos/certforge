@@ -1361,6 +1361,188 @@
         "REASONS_ACCURATE",
         "OFFICIAL_REFERENCES"
       ]
+    },
+    "t09-bufferedreader-readline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fcb833284302075e88da9b405e83b435dcaf7c0b287cbc63a2d7137a9d743252",
+      "verified": "sha256:f01dd0ea238839691f2b05311ec5e8c0c43124091f9ba9c33ac4f7f75150160f",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-dataoutput-readutf": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3e2c82dfb7891e2b7d70aa7bf82b7ae32d26eacc904ce5e2210eb1e7aae4be1d",
+      "verified": "sha256:c1ba60ce13586503a21a05e9ef0bb959f1ba74a1d37bcfcbf5fc6bfb548f684d",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-files-copy-existing-target": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4c1181a937681c69dd6710c681116b68fcff0bd97b724641a787e081b9567d47",
+      "verified": "sha256:81107834f27d0803fc4d530c928a5e15cc7129e72e362b9263b49b918ff9cfd5",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-files-lines-close": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0a3e70e4bd494ec6327a81001e8de2d509ffd6dc8c903803e0369c34beffed0c",
+      "verified": "sha256:6375607bfe48fdf99823980353f91b7ad971d1d7a92cd17ac447476b8de6886b",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-files-readstring-utf8": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e9a22d566e7a8783558af0b1a6bcea1fceabc6d10bd22fd202c2a7e9a1b0766a",
+      "verified": "sha256:d8788c76d115b7dbc997048a434dcb9bb54287ea39df1de52d0a856e2d781237",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-files-walk-close": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5e9695c9a3bc4c5ec4a87ae43692aef4cf9a8088ddc8a26a4943108ac92139f9",
+      "verified": "sha256:8353460381256744b9d2aadd5057dd4efcfcc9c3ba259c8fbb1d7ed1a61458d1",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-path-normalize-namecount": {
+      "verdict": "APPROVED",
+      "digest": "sha256:02a1596e2429d19d205c95aedfeee8ef892c44a5b32cdc2cf2a9ec0302a75c59",
+      "verified": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-path-relativize": {
+      "verdict": "APPROVED",
+      "digest": "sha256:47f4978490c788ecb3e77fb477ea5f6cecc077cf483abdfe0a81a92053a09e1d",
+      "verified": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-path-resolve-absolute": {
+      "verdict": "APPROVED",
+      "digest": "sha256:318920b7b1473dca3a6026de7b1fa03ac05160f8b68f49f2121dad39c11c51d9",
+      "verified": "sha256:3f08f4afba8ebce4952768900268c6703b9b0160dc1fd3a8d248def1125a0433",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-randomaccessfile-seek": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f913982a40f0b407c922cc322ea8b5b984ed485116675ddc040db21eb4bbde37",
+      "verified": "sha256:74518199e6d506170aaa15e747d4bd2a0ed7d49e2f2e5732363ed542cc8ff78b",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-reader-vs-inputstream": {
+      "verdict": "APPROVED",
+      "digest": "sha256:084a77712d356fef2f848f7bb7c316bbc9fdad4acd90ec627496aee4e9baa40a",
+      "verified": "sha256:e6ed654adf7c0254cd594ba503ac3fbf64c92d2f38eccb98503776569369df19",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-serialization-serialversionuid": {
+      "verdict": "APPROVED",
+      "digest": "sha256:eabf60d3125103fadc932759a076d195daad85172c0fd13df63e97e4d435d660",
+      "verified": "sha256:4b93b8dec6265fd8f14bf5c9d1158f3bb0ef9461909916abfb52167d0c3bc689",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
+    },
+    "t09-serialization-transient-static": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8da42eededa956e63011fa2b3c1952447bd65e19649f6d9f4097914795f847ac",
+      "verified": "sha256:157a6f47144a48e9fb2fb9af3836d4a85cea2049e8a4f01a86e23a720e93540c",
+      "reviewedOn": "2026-10-29",
+      "reviewer": "ai-reviewer",
+      "checklist": [
+        "TECHNICAL_ACCURACY",
+        "CODE_VERIFIED",
+        "NO_AMBIGUITY",
+        "REASONS_ACCURATE",
+        "OFFICIAL_REFERENCES"
+      ]
     }
   }
 }
