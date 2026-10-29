@@ -118,4 +118,15 @@ A reviewer must verify:
 
 ## AI policy
 
-AI may help brainstorm, simplify, translate, or generate candidate variations. It may not publish content, approve correctness, invent citations, or override deterministic evidence and human review.
+AI may help brainstorm, simplify, translate, or generate candidate variations. It may not publish content, approve correctness, invent citations, or override deterministic evidence and human review --
+with one narrow, disclosed, time-boxed exception.
+
+**The AI-reviewer fast lane ([ADR 0022](../adr/0022-ai-reviewer-provisional-publication.md)).** An
+account holding `CONTENT_AI_REVIEW` may approve and publish a revision that carries no verification
+evidence (the Asserted tier, [ADR 0011](../adr/0011-grade-content-evidence.md)) in one step. That
+approval is provisional: it is recorded as `AI_APPROVED`, never disguised as an ordinary approval, and
+a learner currently looking at that question is told it was reviewed by AI and not yet independently
+confirmed. Unless an account holding `CONTENT_REVIEW` -- never the revision's own author -- confirms it
+within the configured window, it stops being offered to a learner starting new study, though a learner
+already shown it keeps seeing it. A revision with verification evidence is never eligible for this
+path; it still needs exactly the human approval this policy has always required.

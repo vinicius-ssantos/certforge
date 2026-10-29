@@ -27,5 +27,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0019](0019-behavioural-preparation-is-guidance-not-grading.md) | Preparação comportamental é orientação revisada, e nada nela é pontuado | Aceita |
 | [0020](0020-interview-sessions-as-a-third-aggregate.md) | Modelar sessões de entrevista como um terceiro agregado de estudo | Aceita |
 | [0021](0021-job-description-blueprints-explain-every-weight.md) | Pesar uma descrição de vaga com um dicionário revisado, e explicar cada peso | Aceita |
+| [0022](0022-ai-reviewer-provisional-publication.md) | Deixar um revisor de IA aprovar e publicar provisoriamente conteúdo da camada Asserted, com aviso e prazo | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.

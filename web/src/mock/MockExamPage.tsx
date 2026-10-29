@@ -321,6 +321,7 @@ function MockQuestion({
   return (
     <>
       <ErrorSummary problems={shownProblems} />
+      {question.aiReviewed ? <p className="hint ai-reviewed-notice">{t.question.aiReviewedNotice}</p> : null}
       <Prompt text={question.prompt} />
       {answered ? (
         <p role="status" className="notice">{t.mock.answerSubmitted}</p>

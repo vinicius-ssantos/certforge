@@ -218,7 +218,8 @@ class MockExamPlannerTest {
               21,
               Difficulty.MEDIUM,
               "Prompt " + i,
-              List.of()));
+              List.of(),
+              false));
     }
     assertThat(seen).hasSize(count);
     return List.copyOf(questions);

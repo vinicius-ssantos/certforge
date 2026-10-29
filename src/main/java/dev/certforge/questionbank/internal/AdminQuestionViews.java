@@ -46,7 +46,12 @@ interface AdminQuestionViews {
       @Schema(nullable = true) UUID publishedBy,
       @Schema(nullable = true) String publishedByName,
       @Schema(nullable = true) Instant deprecatedAt,
-      List<ReviewView> reviews) {}
+      List<ReviewView> reviews,
+      /**
+       * When an unconfirmed {@code AI_APPROVED} decision (ADR 0022) stops being eligible for new
+       * study unless a {@code CONTENT_REVIEW} account confirms it first. Null when there is none.
+       */
+      @Schema(nullable = true) Instant aiReviewConfirmBy) {}
 
   record OptionView(String key, String text, boolean correct, String explanation) {}
 

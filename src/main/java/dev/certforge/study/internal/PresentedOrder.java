@@ -50,7 +50,8 @@ final class PresentedOrder {
         question.javaRelease(),
         question.difficulty(),
         question.prompt(),
-        of(session, question.revisionId().value(), question.options()));
+        of(session, question.revisionId().value(), question.options()),
+        question.aiReviewed());
   }
 
   private static long seed(UUID session, UUID revision) {

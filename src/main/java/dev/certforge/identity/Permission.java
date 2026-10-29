@@ -17,6 +17,14 @@ public enum Permission {
    */
   CONTENT_SELF_REVIEW,
   CONTENT_PUBLISH,
+  /**
+   * May approve and publish a revision that has no mechanical verification evidence (the Asserted
+   * tier, ADR 0011), in one step, provisionally (ADR 0022). Separate from {@link #CONTENT_REVIEW}
+   * because the claim is narrower and weaker: this account's approval is not final, expires unless
+   * a {@code CONTENT_REVIEW} account confirms it within a configured window, and never applies to a
+   * revision that carries verification evidence.
+   */
+  CONTENT_AI_REVIEW,
   ACCOUNT_MANAGE,
   AUDIT_READ,
   OPERATIONS_VIEW

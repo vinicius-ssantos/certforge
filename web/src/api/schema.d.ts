@@ -276,6 +276,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/question-revisions/{revisionId}/ai-approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["aiApprove"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/question-revisions/{revisionId}/approve": {
         parameters: {
             query?: never;
@@ -286,6 +302,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["approve"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/question-revisions/{revisionId}/confirm-ai-review": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["confirmAiReview"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1681,6 +1713,7 @@ export interface components {
             text: string;
         };
         PublishedQuestion: {
+            aiReviewed: boolean;
             /** @enum {string|null} */
             difficulty: "EASY" | "MEDIUM" | "HARD" | null;
             /** Format: int32 */
@@ -1847,6 +1880,8 @@ export interface components {
             verification?: components["schemas"]["VerificationRequest"];
         };
         RevisionView: {
+            /** Format: date-time */
+            aiReviewConfirmBy: string | null;
             /** Format: uuid */
             authorId: string;
             authorName: string | null;
@@ -1885,7 +1920,7 @@ export interface components {
             type: string;
         };
         RolesRequest: {
-            roles: ("LEARNER" | "EDITOR" | "REVIEWER" | "ADMINISTRATOR")[];
+            roles: ("LEARNER" | "EDITOR" | "REVIEWER" | "AI_REVIEWER" | "ADMINISTRATOR")[];
         };
         SessionHistoryItem: {
             /** Format: int32 */
@@ -2489,7 +2524,59 @@ export interface operations {
             };
         };
     };
+    aiApprove: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                revisionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["QuestionView"];
+                };
+            };
+        };
+    };
     approve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                revisionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["ReviewRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["QuestionView"];
+                };
+            };
+        };
+    };
+    confirmAiReview: {
         parameters: {
             query?: never;
             header?: never;
