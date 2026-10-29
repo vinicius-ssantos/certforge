@@ -130,7 +130,7 @@ export function ReviewPanel({
           return unwrap(
             api.POST("/api/admin/question-revisions/{revisionId}/ai-approve", {
               params: { path },
-              body: comment.trim() ? { comment: comment.trim() } : {},
+              body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
             }),
           );
         case "confirm-ai-review":
@@ -273,6 +273,25 @@ export function ReviewPanel({
         <section className="publish" aria-labelledby="ai-approve-heading">
           <h2 id="ai-approve-heading">{panel.aiApproveHeading}</h2>
           <p>{panel.aiApproveNote}</p>
+          <fieldset>
+            <legend>{panel.policyLegend}</legend>
+            <p role="status" className="hint">{panel.checklistCount(ticked.length, checklist(t).length)}</p>
+            {checklist(t).map((item) => (
+              <label key={item.code} className="check">
+                <input
+                  type="checkbox"
+                  name={item.code}
+                  checked={ticked.includes(item.code)}
+                  onChange={(event) =>
+                    setTicked((current) =>
+                      event.target.checked ? [...current, item.code] : current.filter((code) => code !== item.code),
+                    )
+                  }
+                />
+                {item.label}
+              </label>
+            ))}
+          </fieldset>
           <button
             id="ai-approve-button"
             type="button"

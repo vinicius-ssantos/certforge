@@ -137,6 +137,9 @@ export function reviewStatusOf(record, question) {
     // Absent, this entry means the pack's named human reviewer, as it always has. Present and
     // "ai-reviewer", it is the one entry ADR 0023 lets differ: disclosed, never read as the human's.
     reviewer: entry.reviewer ?? record.reviewer,
+    // Per-question, recorded only for an AI review (ADR 0024 decision 3); empty for an ordinary
+    // entry, whose checklist is the pack-wide `record.checklist` a caller already has.
+    checklist: entry.checklist ?? [],
     reviewedOn: entry.reviewedOn ?? record.reviewedOn,
     recordedDigest: entry.digest,
     currentDigest: current,

@@ -190,15 +190,33 @@ test("ADR 0023: records an AI review as a disclosed reviewer, distinct from the 
   });
 });
 
-test("ADR 0023: refuses an AI review of a Verified-tier question", () => {
+test("ADR 0024: an AI review of a Verified-tier question records its own checklist", () => {
   withCopy((target) => {
     const question = unreviewedOfTier(target, { verified: true });
 
+    const result = recordReview(target, {
+      question: question.name,
+      verdict: "APPROVED",
+      on: "2026-10-29",
+      aiReviewed: true,
+      checklist: ["NO_AMBIGUITY", "REASONS_ACCURATE", "NO_AMBIGUITY"],
+    });
+
+    assert.equal(result.outcome, "recorded");
+    const status = reviewStatusOf(readReviewRecord(target), question);
+    assert.equal(status.reviewer, "ai-reviewer");
+    assert.deepEqual(status.checklist, ["NO_AMBIGUITY", "REASONS_ACCURATE"]);
+  });
+});
+
+test("ADR 0023: --checklist without --ai-reviewed is refused", () => {
+  withCopy((target) => {
+    const question = unreviewedOfTier(target, { verified: false });
+
     assert.throws(
-      () => recordReview(target, { question: question.name, verdict: "APPROVED", aiReviewed: true }),
-      /still needs.*a human/s,
+      () => recordReview(target, { question: question.name, verdict: "APPROVED", checklist: ["NO_AMBIGUITY"] }),
+      /only applies to an AI review/,
     );
-    assert.equal(readReviewRecord(target).questions[question.name], undefined);
   });
 });
 

@@ -220,6 +220,23 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Added
 
+- **The AI-reviewer fast lane now reaches Verified-tier content too, and records its own checklist
+  ([ADR 0024](docs/adr/0024-ai-reviewer-verified-tier.md)).** ADR 0022 restricted the fast lane to
+  Asserted-tier content on purpose: a Verified-tier revision already has a compiler's proof the answer
+  is correct, and what remained was the judgement a compiler cannot supply. Checking the real
+  `content/java-se-21` backlog while building ADR 0023 found every one of its 104 unreviewed questions
+  is Verified-tier — the restriction, however well-reasoned, turned out to keep the AI reviewer out of
+  the one thing #80 needs. The product owner was asked directly, with the tradeoff stated plainly, and
+  said to lift it.
+
+  `QuestionBankService.aiApprove` and `content/record-review.mjs --ai-reviewed` no longer refuse a
+  Verified-tier revision. Everything else about the fast lane is unchanged — provisional, disclosed,
+  confirmed or lapsed within the same window. What's new: `aiApprove` gains the same `checklist` field
+  `approve` already has, because the AI reviewer is now the one vouching for distractor plausibility
+  and explanation completeness, not a compiler. `record-review.mjs --ai-reviewed --checklist
+  ITEM,ITEM` records that checklist per question (the pack's human reviewer still carries one
+  pack-wide), and `publish-pack.mjs` carries it through to the live `ai-approve` call.
+
 - **The AI-reviewer fast lane reaches the content-pack publishing scripts
   ([ADR 0023](docs/adr/0023-ai-reviewer-fast-lane-for-content-packs.md)).** `deploy/publish-pack.mjs`,
   `content/record-review.mjs` and `content/pack.mjs` are the scripts behind #80's backlog of
