@@ -270,10 +270,12 @@ grant-ai-reviewer email password:
     node deploy/grant-ai-reviewer.mjs --url {{web_url}} --email {{ quote(email) }} --password {{ quote(password) }}
 
 # Publishes only the questions review.json marks as AI-reviewed (ADR 0023), through a single
-# ai-approve call per question. Provisional: a human must still confirm each one within the window.
+# ai-approve call per question, and leaves any human-approved questions in the same pack untouched
+# (--ai-reviewed-only): it never needs a human reviewer's credentials to clear a check for work it
+# is not doing. Provisional: a human must still confirm each one within the window.
 [group('content')]
 publish-content-ai ai_reviewer_email ai_reviewer_password:
-    node deploy/publish-pack.mjs --url {{web_url}} --ai-reviewer-email {{ quote(ai_reviewer_email) }} --ai-reviewer-password {{ quote(ai_reviewer_password) }}
+    node deploy/publish-pack.mjs --url {{web_url}} --ai-reviewed-only --ai-reviewer-email {{ quote(ai_reviewer_email) }} --ai-reviewer-password {{ quote(ai_reviewer_password) }}
 
 # Regenerate the API contract from the backend and the types the web app is built against.
 [group('content')]
