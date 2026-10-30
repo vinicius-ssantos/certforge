@@ -28,6 +28,13 @@
 // A question whose review.json entry names "ai-reviewer" (ADR 0023) is published through a single
 // ai-approve call on the --ai-reviewer-* account instead of the ordinary approve-then-publish on
 // --reviewer-*. Either pair is required only when the run actually has a question that needs it.
+//
+// --ai-reviewed-only restricts the run to those AI-reviewed questions and does not require
+// --reviewer-email/--reviewer-password at all, even when the pack also holds human-approved
+// questions: it leaves every one of those untouched rather than publish them under a reviewer
+// account this run did not ask for. A human-approved question's publish stays a separate run, with
+// the actual reviewer's own credentials -- this flag exists so the AI reviewer's lane never needs
+// them to clear a credential check for work it is not doing.
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { Session, signInAdmin } from "./lib/session.mjs";
@@ -39,6 +46,7 @@ const option = (name, fallback) => {
   return at >= 0 ? args[at + 1] : fallback;
 };
 const dryRun = args.includes("--dry-run");
+const aiReviewedOnly = args.includes("--ai-reviewed-only");
 
 const url = option("url", process.env.E2E_BASE_URL ?? "http://localhost:8081");
 const pack = option("pack", "content/java-se-21");
@@ -107,16 +115,27 @@ if (held.length > 0) {
   }
   console.error("");
 }
-if (approved.length === 0) {
-  refuse("Nothing in this pack is both reviewed and approved. Nothing to publish.");
-}
-
 const approvedAi = approved.filter(({ status }) => status.reviewer === "ai-reviewer");
 const approvedHuman = approved.filter(({ status }) => status.reviewer !== "ai-reviewer");
+const toPublish = aiReviewedOnly ? approvedAi : approved;
+
+if (toPublish.length === 0) {
+  refuse(
+    aiReviewedOnly
+      ? "Nothing in this pack is both AI-reviewed and approved. Nothing to publish."
+      : "Nothing in this pack is both reviewed and approved. Nothing to publish.",
+  );
+}
 
 console.log(`${approved.length} question(s) carry a current recorded approval.`);
+if (aiReviewedOnly && approvedHuman.length > 0) {
+  console.log(
+    `--ai-reviewed-only: leaving ${approvedHuman.length} human-approved question(s) untouched;`,
+    "publish those separately with --reviewer-email/--reviewer-password.",
+  );
+}
 if (dryRun) {
-  for (const { question } of approved) {
+  for (const { question } of toPublish) {
     console.log(`would publish ${question.name}`);
   }
   console.log(`\ndry run: nothing was contacted. ${held.length} held back.`);
@@ -128,7 +147,7 @@ if (dryRun) {
 if (!adminEmail || !adminPassword) {
   refuse("Set BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD to the administrator's.");
 }
-if (approvedHuman.length > 0 && (!reviewerEmail || !reviewerPassword)) {
+if (!aiReviewedOnly && approvedHuman.length > 0 && (!reviewerEmail || !reviewerPassword)) {
   refuse(
     "Provide --reviewer-email and --reviewer-password for an existing account with the REVIEWER role:",
     `${approvedHuman.length} approved question(s) were reviewed by a person, not the AI reviewer.`,
@@ -162,7 +181,7 @@ async function body(response) {
 const admin = new Session(url);
 await signInAdmin(admin, adminEmail, adminPassword);
 const reviewer = new Session(url);
-if (approvedHuman.length > 0) {
+if (!aiReviewedOnly && approvedHuman.length > 0) {
   try {
     await reviewer.signIn(reviewerEmail, reviewerPassword);
   } catch (error) {
@@ -196,7 +215,7 @@ for (let page = 0; ; page += 1) {
 
 let published = 0;
 let skipped = 0;
-for (const { question, status } of approved) {
+for (const { question, status } of toPublish) {
   if (existing.has(question.prompt)) {
     console.log(`skip      ${question.name} (already in the bank)`);
     skipped += 1;
