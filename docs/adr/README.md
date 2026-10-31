@@ -29,5 +29,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0023](0023-ai-reviewer-fast-lane-for-content-packs.md) | Extend the AI-reviewer fast lane to the content-pack publishing scripts | Accepted |
 | [0024](0024-ai-reviewer-verified-tier.md) | Extend the AI-reviewer fast lane to Verified-tier content, with its own recorded checklist | Accepted |
 | [0025](0025-ai-reviewer-approval-is-final.md) | Make the AI reviewer's approval final, with no human confirmation step | Accepted |
+| [0026](0026-ai-reviewer-fast-lane-for-every-pack.md) | Extend the AI reviewer's fast lane to every content pack and track kind | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.
