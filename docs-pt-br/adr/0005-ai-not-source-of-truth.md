@@ -2,7 +2,12 @@
 
 > Tradução de [`docs/adr/0005-ai-not-source-of-truth.md`](../../docs/adr/0005-ai-not-source-of-truth.md). O inglês é a fonte canônica.
 
-- Status: Aceita
+- Status: Aceita. "O conteúdo publicado exige revisão técnica humana" (Consequências, abaixo) não
+  vale mais sem ressalva: a [ADR 0022](0022-ai-reviewer-provisional-publication.md), a
+  [ADR 0024](0024-ai-reviewer-verified-tier.md) e a [ADR 0025](0025-ai-reviewer-approval-is-final.md)
+  abrem uma exceção nomeada e divulgada, na qual a própria aprovação de uma revisora de IA é o que
+  publica o conteúdo, definitivamente, sem nenhuma revisão humana dele. Essa exceção se limita à via
+  rápida que essas ADRs definem; todo outro caminho que esta ADR descreve permanece inalterado.
 - Data: 2026-07-30
 
 ## Contexto

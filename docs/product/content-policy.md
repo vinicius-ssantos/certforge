@@ -119,14 +119,13 @@ A reviewer must verify:
 ## AI policy
 
 AI may help brainstorm, simplify, translate, or generate candidate variations. It may not publish content, approve correctness, invent citations, or override deterministic evidence and human review --
-with one narrow, disclosed, time-boxed exception.
+with one narrow, disclosed exception.
 
 **The AI-reviewer fast lane ([ADR 0022](../adr/0022-ai-reviewer-provisional-publication.md),
-[ADR 0024](../adr/0024-ai-reviewer-verified-tier.md)).** An account holding `CONTENT_AI_REVIEW` may
-approve and publish a revision of either evidence tier ([ADR 0011](../adr/0011-grade-content-evidence.md))
-in one step, recording which policy checks it made the same way a human reviewer's checklist does. That
-approval is provisional: it is recorded as `AI_APPROVED`, never disguised as an ordinary approval, and a
-learner currently looking at that question is told it was reviewed by AI and not yet independently
-confirmed. Unless an account holding `CONTENT_REVIEW` -- never the revision's own author -- confirms it
-within the configured window, it stops being offered to a learner starting new study, though a learner
-already shown it keeps seeing it.
+[ADR 0024](../adr/0024-ai-reviewer-verified-tier.md), [ADR 0025](../adr/0025-ai-reviewer-approval-is-final.md)).**
+An account holding `CONTENT_AI_REVIEW` may approve and publish a revision of either evidence tier
+([ADR 0011](../adr/0011-grade-content-evidence.md)) in one step, recording which policy checks it made the
+same way a human reviewer's checklist does. That approval is recorded as `AI_APPROVED`, never disguised as
+an ordinary approval, and a learner looking at that question is told it was reviewed by AI and not by a
+person. The approval is final: there is no confirmation step and no window, and it is eligible for new
+study exactly as an ordinarily-approved revision is, from the moment it publishes.

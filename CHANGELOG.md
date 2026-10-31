@@ -6,6 +6,26 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Changed
+
+- **The AI-reviewer fast lane's approval is now final, not provisional
+  ([ADR 0025](docs/adr/0025-ai-reviewer-approval-is-final.md)).** ADR 0022 built the fast lane as a
+  disclosed, time-boxed exception: an `AI_APPROVED` publication stayed eligible for new study only
+  until a `CONTENT_REVIEW` account confirmed it within a 14-day window, or it lapsed back out on its
+  own. That confirmation step turned out to be the same bottleneck moved rather than removed — a
+  human still had to read every AI-approved question a second time, on a clock — and it was, in
+  substance, the gap [epic #199](https://github.com/vinicius-ssantos/certforge/issues/199) (`v0.3.0`
+  Mock Exams) described as work "no agent can close." The product owner was asked directly, with the
+  tradeoff stated plainly — this reverses ADR 0022's own rejected alternative of permanent AI
+  approval with no human confirmation ever required — and said to remove the human gate for good.
+
+  `confirmAiReview`, the `/api/admin/question-revisions/{revisionId}/confirm-ai-review` endpoint,
+  the `AI_REVIEW_CONFIRMED` decision code, the derived lapse/pending/confirm-by reads,
+  `aiReviewConfirmBy`, and the `certforge.editorial.ai-review-confirmation-window` setting are all
+  removed, not left dormant. An `AI_APPROVED` revision is eligible for new study immediately and
+  permanently, exactly like an ordinarily-approved one; disclosure to the learner that it was
+  reviewed by AI and not by a person continues, and no longer carries a deadline.
+
 ### Security
 
 - **A mock exam could be answered by practising its own questions.** Practice and the mock draw

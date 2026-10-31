@@ -308,22 +308,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/admin/question-revisions/{revisionId}/confirm-ai-review": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["confirmAiReview"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/admin/question-revisions/{revisionId}/deprecate": {
         parameters: {
             query?: never;
@@ -1880,8 +1864,6 @@ export interface components {
             verification?: components["schemas"]["VerificationRequest"];
         };
         RevisionView: {
-            /** Format: date-time */
-            aiReviewConfirmBy: string | null;
             /** Format: uuid */
             authorId: string;
             authorName: string | null;
@@ -2551,32 +2533,6 @@ export interface operations {
         };
     };
     approve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                revisionId: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["ReviewRequest"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["QuestionView"];
-                };
-            };
-        };
-    };
-    confirmAiReview: {
         parameters: {
             query?: never;
             header?: never;

@@ -10,17 +10,9 @@ import { ErrorSummary } from "../ui/Form";
 import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { errorMessage } from "../ui/messages";
-import { pendingAiApproval } from "./aiReview";
 import { checklist } from "./labels";
 
-type Action =
-  | "approve"
-  | "request-changes"
-  | "publish"
-  | "deprecate"
-  | "new-revision"
-  | "ai-approve"
-  | "confirm-ai-review";
+type Action = "approve" | "request-changes" | "publish" | "deprecate" | "new-revision" | "ai-approve";
 
 /**
  * What the viewer may do with a revision, as far as the interface can tell. The server decides
@@ -34,12 +26,10 @@ export function useCanDecide(revision: Revision, isLatest: boolean) {
   const author = useHasAny("CONTENT_AUTHOR");
   return {
     review: review && revision.status === "TECHNICAL_REVIEW",
-    // ADR 0022: the AI-reviewer fast lane. The server alone knows whether the revision is
-    // Asserted-tier; this only gates on the stage and the permission, the same way every other
-    // flag here leaves the real refusal to the server.
+    // ADR 0022/0025: the AI-reviewer fast lane. The server alone knows whether the revision is
+    // eligible; this only gates on the stage and the permission, the same way every other flag
+    // here leaves the real refusal to the server.
     aiApprove: aiReview && revision.status === "TECHNICAL_REVIEW",
-    confirmAiReview:
-      review && revision.status === "PUBLISHED" && pendingAiApproval(revision.reviews),
     publish: publish && (revision.status === "TECHNICAL_REVIEW" || revision.status === "APPROVED"),
     retire: publish && revision.status === "PUBLISHED",
     startRevision: author && isLatest && (revision.status === "PUBLISHED" || revision.status === "DEPRECATED"),
@@ -133,13 +123,6 @@ export function ReviewPanel({
               body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
             }),
           );
-        case "confirm-ai-review":
-          return unwrap(
-            api.POST("/api/admin/question-revisions/{revisionId}/confirm-ai-review", {
-              params: { path },
-              body: { checklist: ticked, ...(comment.trim() ? { comment: comment.trim() } : {}) },
-            }),
-          );
       }
     },
     // A decision that is on its way makes every complaint about the last attempt stale. Approving
@@ -166,7 +149,6 @@ export function ReviewPanel({
         deprecate: "retired",
         "new-revision": "started",
         "ai-approve": "published",
-        "confirm-ai-review": "confirmed",
       }[happened];
       if (onDecided && happened !== "new-revision") {
         onDecided(happened);
@@ -205,14 +187,7 @@ export function ReviewPanel({
   // Stable between renders: the summary takes focus when this array changes.
   const shown = useMemo(() => (failure ? [...problems, { message: failure }] : problems), [problems, failure]);
 
-  if (
-    !can.review &&
-    !can.aiApprove &&
-    !can.confirmAiReview &&
-    !can.publish &&
-    !can.retire &&
-    !can.startRevision
-  ) {
+  if (!can.review && !can.aiApprove && !can.publish && !can.retire && !can.startRevision) {
     return null;
   }
 
@@ -299,21 +274,6 @@ export function ReviewPanel({
             onClick={() => decide.mutate("ai-approve")}
           >
             {panel.aiApprove}
-          </button>
-        </section>
-      ) : null}
-
-      {can.confirmAiReview ? (
-        <section className="publish" aria-labelledby="confirm-ai-review-heading">
-          <h2 id="confirm-ai-review-heading">{panel.confirmAiReviewHeading}</h2>
-          <p>{panel.confirmAiReviewNote}</p>
-          <button
-            id="confirm-ai-review-button"
-            type="button"
-            disabled={decide.isPending}
-            onClick={() => decide.mutate("confirm-ai-review")}
-          >
-            {panel.confirmAiReview}
           </button>
         </section>
       ) : null}

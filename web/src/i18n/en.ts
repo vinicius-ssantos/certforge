@@ -197,8 +197,7 @@ export const en = {
     confidenceHigh: "High – I am certain",
     submitting: "Submitting…",
     submit: "Submit answer",
-    aiReviewedNotice:
-      "Reviewed by an AI reviewer, not yet independently confirmed by a person (ADR 0022).",
+    aiReviewedNotice: "Reviewed by an AI reviewer, not a person (ADR 0022, ADR 0025).",
   },
 
   feedback: {
@@ -885,11 +884,9 @@ export const en = {
       selfReview: " (self-review: the reviewer wrote it)",
       decisionApproved: "Approved",
       decisionChangesRequested: "Asked for changes",
-      decisionAiApproved: "Approved by the AI reviewer (provisional)",
-      decisionAiReviewConfirmed: "Confirmed by an independent reviewer",
+      decisionAiApproved: "Approved by the AI reviewer",
       decidedBy: (reviewer: string) => ` by ${reviewer}`,
-      aiReviewPendingConfirmation: (confirmBy: string) =>
-        `Approved by the AI reviewer, not yet independently confirmed by a person. Unless a reviewer confirms it, it stops being offered for new study after ${confirmBy}.`,
+      aiReviewedDisclosure: "Approved by the AI reviewer, not by a person (ADR 0025).",
     },
 
     /**
@@ -950,12 +947,8 @@ export const en = {
       startRevision: "Start a new revision",
       aiApproveHeading: "AI-reviewer fast lane",
       aiApproveNote:
-        "Approves and publishes in one step, provisionally (ADR 0022, ADR 0024). Tick what you actually checked; a reviewer must confirm it within the window or it stops being offered for new study.",
+        "Approves and publishes in one step (ADR 0022, ADR 0024, ADR 0025). This decision is final, the same as an ordinary approval; tick what you actually checked.",
       aiApprove: "Approve and publish as the AI reviewer",
-      confirmAiReviewHeading: "Confirm the AI reviewer's approval",
-      confirmAiReviewNote:
-        "This revision is already published on the AI reviewer's approval alone. Confirming it as an independent reviewer makes it permanent.",
-      confirmAiReview: "Confirm this AI-reviewed publication",
     },
 
     editor: {
@@ -1047,7 +1040,6 @@ export const en = {
         published: "Published. Learners can now get this question in their sessions.",
         retired: "Retired. It stays in history and no new session will use it.",
         started: "New revision started as a draft, copied from the previous one.",
-        confirmed: "Confirmed. This AI-reviewed publication is now permanent.",
       },
     },
 

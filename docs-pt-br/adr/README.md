@@ -30,5 +30,6 @@ As ADRs registram decisões que são estruturalmente importantes, custosas de re
 | [0022](0022-ai-reviewer-provisional-publication.md) | Deixar um revisor de IA aprovar e publicar provisoriamente conteúdo da camada Asserted, com aviso e prazo | Aceita |
 | [0023](0023-ai-reviewer-fast-lane-for-content-packs.md) | Estender a via rápida da revisora de IA aos scripts de publicação de pacotes de conteúdo | Aceita |
 | [0024](0024-ai-reviewer-verified-tier.md) | Estender a via rápida da revisora de IA à camada Verified, com seu próprio checklist registrado | Aceita |
+| [0025](0025-ai-reviewer-approval-is-final.md) | Tornar definitiva a aprovação da revisora de IA, sem etapa de confirmação humana | Aceita |
 
 Novas ADRs devem incluir contexto, decisão, consequências, alternativas rejeitadas e status. ADRs substituídas permanecem no histórico e apontam para sua substituta.

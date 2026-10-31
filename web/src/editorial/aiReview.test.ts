@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { pendingAiApproval } from "./aiReview";
+import { aiApproved } from "./aiReview";
 import type { Revision } from "../api/types";
 
 function review(decision: string, decidedAt: string): Revision["reviews"][number] {
@@ -13,30 +13,16 @@ function review(decision: string, decidedAt: string): Revision["reviews"][number
   };
 }
 
-describe("pendingAiApproval", () => {
-  it("is false when nothing was ever AI-approved", () => {
-    expect(pendingAiApproval([review("APPROVED", "2026-10-01T00:00:00Z")])).toBe(false);
+describe("aiApproved", () => {
+  it("is false when the revision was approved by a person", () => {
+    expect(aiApproved([review("APPROVED", "2026-10-01T00:00:00Z")])).toBe(false);
   });
 
-  it("is true right after an AI approval with nothing confirming it since", () => {
-    expect(pendingAiApproval([review("AI_APPROVED", "2026-10-01T00:00:00Z")])).toBe(true);
+  it("is true when the AI reviewer approved it", () => {
+    expect(aiApproved([review("AI_APPROVED", "2026-10-01T00:00:00Z")])).toBe(true);
   });
 
-  it("is false once a confirmation after the approval exists", () => {
-    expect(
-      pendingAiApproval([
-        review("AI_APPROVED", "2026-10-01T00:00:00Z"),
-        review("AI_REVIEW_CONFIRMED", "2026-10-05T00:00:00Z"),
-      ]),
-    ).toBe(false);
-  });
-
-  it("ignores a confirmation that predates the approval it is asked about", () => {
-    expect(
-      pendingAiApproval([
-        review("AI_REVIEW_CONFIRMED", "2026-09-01T00:00:00Z"),
-        review("AI_APPROVED", "2026-10-01T00:00:00Z"),
-      ]),
-    ).toBe(true);
+  it("is false with no reviews at all", () => {
+    expect(aiApproved([])).toBe(false);
   });
 });

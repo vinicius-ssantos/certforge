@@ -48,8 +48,7 @@ export function RevisionWithDecisions({
   publishWhenApproved?: boolean;
 }) {
   const can = useCanDecide(revision, isLatest);
-  const any =
-    can.review || can.aiApprove || can.confirmAiReview || can.publish || can.retire || can.startRevision;
+  const any = can.review || can.aiApprove || can.publish || can.retire || can.startRevision;
   return (
     <RevisionView
       revision={revision}
