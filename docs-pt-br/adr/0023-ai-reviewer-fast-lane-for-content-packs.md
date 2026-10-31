@@ -2,7 +2,12 @@
 
 > Tradução de [`docs/adr/0023-ai-reviewer-fast-lane-for-content-packs.md`](../../docs/adr/0023-ai-reviewer-fast-lane-for-content-packs.md). O inglês é a fonte canônica.
 
-- Status: **Aceita**
+- Status: **Aceita**. A decisão 6 e a seção de Consequências abaixo descrevem o prazo de confirmação
+  e a expiração derivada como a ADR 0022 originalmente os especificou; a
+  [ADR 0025](0025-ai-reviewer-approval-is-final.md) removeu os dois do mecanismo vivo que esta ADR
+  chama, então uma questão publicada por este pipeline agora é definitiva no momento em que é
+  publicada, exatamente como uma publicada por uma revisora humana -- não "tão provisória quanto",
+  como ainda dizem a decisão 6 e a primeira consequência abaixo.
 - Data: 2026-10-29
 - Issue: nenhuma; o responsável pelo produto pediu diretamente que a exceção da ADR 0022 alcançasse a
   fila de pacotes de conteúdo (#80 e suas sub-issues por tópico), depois de confirmar que é um sistema

@@ -1,6 +1,10 @@
 # ADR 0023: Extend the AI-reviewer fast lane to the content-pack publishing scripts
 
-- Status: **Accepted**
+- Status: **Accepted**. Decision 6 and the Consequences section below describe the confirmation
+  window and derived lapse as ADR 0022 originally specified them; [ADR 0025](0025-ai-reviewer-approval-is-final.md)
+  removed both from the live mechanism this ADR calls through, so a question published by this
+  pipeline is now final the moment it publishes, exactly like one published by a human reviewer --
+  not "exactly as provisional," as decision 6 and the first consequence below still say.
 - Date: 2026-10-29
 - Issue: none; the product owner asked directly for ADR 0022's exception to reach the content-pack
   backlog (#80 and its per-topic sub-issues), after confirming it is a different system from the live

@@ -303,7 +303,7 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
     ).toBeInTheDocument();
   });
 
-  it("approves and publishes in one request, and the result is published", async () => {
+  it("approves and publishes in one request, final, with no confirmation step (ADR 0025)", async () => {
     const user = userEvent.setup();
     const { fetch } = renderApp(
       {
@@ -316,7 +316,6 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
               publishedAt: "2026-10-29T12:00:00Z",
               publishedBy: aiReviewer.id,
               publishedByName: "ai-reviewer@example.com",
-              aiReviewConfirmBy: "2026-11-12T12:00:00Z",
               reviews: [
                 {
                   reviewerId: aiReviewer.id,
@@ -341,61 +340,11 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
     const call = fetch.calls.find((entry) => entry.path === `${REV}/ai-approve`);
     expect(call).toBeTruthy();
     expect(call?.body).toEqual({ checklist: ["NO_AMBIGUITY"] });
-    expect(screen.getByText(/not yet independently confirmed/)).toBeInTheDocument();
+    expect(screen.getByText(/not by a person/)).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /confirm this ai-reviewed publication/i })).not.toBeInTheDocument();
   });
 
-  it("offers a reviewer the confirmation, and it makes the deadline disappear", async () => {
-    const user = userEvent.setup();
-    const aiApprovedRevision = revision({
-      status: "PUBLISHED",
-      publishedAt: "2026-10-29T12:00:00Z",
-      publishedBy: aiReviewer.id,
-      publishedByName: "ai-reviewer@example.com",
-      aiReviewConfirmBy: "2026-11-12T12:00:00Z",
-      reviews: [
-        {
-          reviewerId: aiReviewer.id,
-          reviewerName: "ai-reviewer@example.com",
-          decision: "AI_APPROVED",
-          comment: null,
-          checklist: [],
-          decidedAt: "2026-10-29T12:00:00Z",
-        },
-      ],
-    });
-    const { fetch } = renderApp(
-      {
-        ...tracks,
-        [`GET ${URL}`]: { body: view(aiApprovedRevision) },
-        [`POST ${REV}/confirm-ai-review`]: {
-          body: view({
-            ...aiApprovedRevision,
-            aiReviewConfirmBy: null,
-            reviews: [
-              ...aiApprovedRevision.reviews,
-              {
-                reviewerId: reviewer.id,
-                reviewerName: "reviewer@example.com",
-                decision: "AI_REVIEW_CONFIRMED",
-                comment: null,
-                checklist: [],
-                decidedAt: "2026-10-30T09:00:00Z",
-              },
-            ],
-          }),
-        },
-      },
-      { as: reviewer, ...OPEN },
-    );
-
-    expect(await screen.findByText(/not yet independently confirmed/)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: /confirm this ai-reviewed publication/i }));
-
-    await waitFor(() => expect(screen.queryByText(/not yet independently confirmed/)).not.toBeInTheDocument());
-    expect(fetch.calls.some((call) => call.path === `${REV}/confirm-ai-review`)).toBe(true);
-  });
-
-  it("does not offer the confirmation for an ordinarily-approved publication", async () => {
+  it("discloses an AI approval but not an ordinarily-approved publication", async () => {
     renderApp(
       {
         ...tracks,
@@ -424,7 +373,7 @@ describe("the AI reviewer's fast lane (ADR 0022)", () => {
     );
 
     expect(await screen.findByText("Current status:")).toHaveTextContent("Published");
-    expect(screen.queryByRole("button", { name: /confirm this ai-reviewed publication/i })).not.toBeInTheDocument();
+    expect(screen.queryByText(/not by a person/)).not.toBeInTheDocument();
   });
 });
 

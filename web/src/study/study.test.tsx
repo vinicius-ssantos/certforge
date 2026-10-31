@@ -153,7 +153,7 @@ describe("answering questions", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
-  it("discloses a question published on an unconfirmed AI approval (ADR 0022)", async () => {
+  it("discloses a question approved by the AI reviewer (ADR 0022, ADR 0025)", async () => {
     await openSession({
       [`GET /api/study/sessions/${SESSION_ID}`]: {
         body: session({
@@ -165,9 +165,7 @@ describe("answering questions", () => {
       },
     });
 
-    expect(
-      screen.getByText(/Reviewed by an AI reviewer, not yet independently confirmed/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/Reviewed by an AI reviewer, not a person/)).toBeInTheDocument();
   });
 
   it("says nothing about AI review for an ordinarily-reviewed question", async () => {

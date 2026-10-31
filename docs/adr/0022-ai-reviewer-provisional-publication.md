@@ -1,6 +1,8 @@
 # ADR 0022: Let an AI reviewer provisionally approve and publish Asserted-tier content, disclosed and time-boxed
 
-- Status: **Accepted**
+- Status: **Accepted**, with decision 4 (the confirmation window) and decision 5 (derived lapse)
+  superseded by [ADR 0025](0025-ai-reviewer-approval-is-final.md): an AI approval is now final, not
+  provisional. Decisions 1-3, 6 and 7 below stand as written.
 - Date: 2026-10-29
 - Issue: none; the product owner asked for this exception directly, aware that it amends [ADR 0005](0005-ai-not-source-of-truth.md), [ADR 0011](0011-grade-content-evidence.md) and [ADR 0018](0018-maintainer-may-review-their-own-work.md)
 

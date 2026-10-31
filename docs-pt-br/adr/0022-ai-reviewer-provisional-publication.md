@@ -2,7 +2,9 @@
 
 > Tradução de [`docs/adr/0022-ai-reviewer-provisional-publication.md`](../../docs/adr/0022-ai-reviewer-provisional-publication.md). O inglês é a fonte canônica.
 
-- Status: **Aceita**
+- Status: **Aceita**, com a decisão 4 (o prazo de confirmação) e a decisão 5 (a expiração derivada)
+  substituídas pela [ADR 0025](0025-ai-reviewer-approval-is-final.md): uma aprovação de IA agora é
+  definitiva, não provisória. As decisões 1-3, 6 e 7 abaixo continuam valendo como escritas.
 - Data: 2026-10-29
 - Issue: nenhuma; o responsável pelo produto pediu essa exceção diretamente, consciente de que ela altera a [ADR 0005](0005-ai-not-source-of-truth.md), a [ADR 0011](0011-grade-content-evidence.md) e a [ADR 0018](0018-maintainer-may-review-their-own-work.md)
 

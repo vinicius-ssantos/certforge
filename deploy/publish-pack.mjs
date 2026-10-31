@@ -232,7 +232,7 @@ for (const { question, status } of toPublish) {
   const isAi = status.reviewer === "ai-reviewer";
   const comment = isAi
     ? `Approved by the AI reviewer on ${status.reviewedOn}, recorded in ${pack}/review.json against ` +
-      `${status.recordedDigest} (ADR 0023). Provisional until a CONTENT_REVIEW account confirms it.`
+      `${status.recordedDigest} (ADR 0023, ADR 0025). Final: no confirmation step follows this.`
     : `Approved by ${status.reviewer} on ${status.reviewedOn}, recorded in ${pack}/review.json ` +
       `against ${status.recordedDigest}. ${record.method}`;
   // The AI-reviewer fast lane (ADR 0022) approves and publishes in the same call; the human path
@@ -263,7 +263,7 @@ for (const { question, status } of toPublish) {
       refuse(`The ${step} of ${name} failed with ${response.status}: ${detail}`);
     }
   }
-  console.log(`published ${name}${isAi ? " (AI-reviewed, provisional)" : ""}`);
+  console.log(`published ${name}${isAi ? " (AI-reviewed)" : ""}`);
   published += 1;
 }
 

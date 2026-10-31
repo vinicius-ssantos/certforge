@@ -27,7 +27,7 @@ test("the README's review figures are the ones in the record", () => {
   const humanReviewed = reviewed.length - aiReviewed.length;
 
   const stated = readme().match(
-    /(\d+) of them carry recorded human reviews; the other (\d+) carry a provisional AI review awaiting a human's confirmation/,
+    /(\d+) of them carry recorded human reviews; the other (\d+) carry a final AI review/,
   );
   assert.ok(stated, "the sentence stating the review figures was reworded; move this pattern with it");
   assert.equal(Number(stated[1]), humanReviewed);

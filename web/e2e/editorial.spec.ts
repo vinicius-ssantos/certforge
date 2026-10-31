@@ -153,12 +153,12 @@ test.describe("the editorial desk", () => {
     await expectNoA11yViolations(page);
   });
 
-  test("an AI reviewer approves and publishes in one step, provisionally, until a reviewer confirms it (ADR 0022)", async ({
+  test("an AI reviewer approves and publishes in one step, final, with no confirmation step (ADR 0022, ADR 0025)", async ({
     page,
     browser,
     isMobile,
   }) => {
-    test.skip(isMobile, "a workflow check across three people; the layout is covered by the other tests");
+    test.skip(isMobile, "a workflow check across two people; the layout is covered by the other tests");
     const label = `E2E AI-reviewer question ${Date.now()}`;
 
     const author = await createStaff(["LEARNER", "EDITOR"]);
@@ -170,7 +170,7 @@ test.describe("the editorial desk", () => {
     await expect(page.getByText(/Sent for review/)).toBeVisible();
 
     // The AI reviewer approves and publishes in one press -- no separate publish step exists for
-    // this path -- and the page discloses that nobody independent has confirmed it yet.
+    // this path, and no confirmation step either: the decision is disclosed and final.
     const aiPage = await (await browser.newContext()).newPage();
     await signIn(aiPage, await createStaff(["LEARNER", "AI_REVIEWER"]));
     await openQuestion(aiPage, "Waiting for review", label);
@@ -179,19 +179,18 @@ test.describe("the editorial desk", () => {
     await aiPage.getByRole("button", { name: "Approve and publish as the AI reviewer" }).click();
     await expect(aiPage.getByRole("status").filter({ hasText: /^Published./ })).toBeFocused();
     await expect(aiPage.getByText("Current status:")).toContainText("Published");
-    await expect(aiPage.getByText(/not yet independently confirmed/)).toBeVisible();
+    await expect(aiPage.getByText(/not by a person/)).toBeVisible();
+    await expect(aiPage.getByRole("button", { name: /confirm this ai-reviewed publication/i })).toHaveCount(0);
     await aiPage.context().close();
 
-    // An independent reviewer confirms it; the disclosure and the deadline both disappear, and the
-    // publication is now as permanent as an ordinarily-approved one.
+    // A reviewer opening the same question afterwards sees the same permanent disclosure, and has
+    // nothing left to confirm: there is no confirmation step to offer them.
     const reviewerPage = await (await browser.newContext()).newPage();
     await signIn(reviewerPage, await createStaff(["LEARNER", "REVIEWER"]));
     await openQuestion(reviewerPage, "Published", label);
-    await expect(reviewerPage.getByText(/not yet independently confirmed/)).toBeVisible();
+    await expect(reviewerPage.getByText(/not by a person/)).toBeVisible();
     await expectNoA11yViolations(reviewerPage);
-    await reviewerPage.getByRole("button", { name: "Confirm this AI-reviewed publication" }).click();
-    await expect(reviewerPage.getByRole("status").filter({ hasText: /^Confirmed\./ })).toBeFocused();
-    await expect(reviewerPage.getByText(/not yet independently confirmed/)).toHaveCount(0);
+    await expect(reviewerPage.getByRole("button", { name: /confirm this ai-reviewed publication/i })).toHaveCount(0);
     await reviewerPage.context().close();
   });
 

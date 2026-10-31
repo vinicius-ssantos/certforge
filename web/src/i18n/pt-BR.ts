@@ -181,8 +181,7 @@ export const ptBR: Catalog = {
     confidenceHigh: "Alta – tenho certeza",
     submitting: "Enviando…",
     submit: "Enviar resposta",
-    aiReviewedNotice:
-      "Revisada por uma revisora de IA, ainda não confirmada independentemente por uma pessoa (ADR 0022).",
+    aiReviewedNotice: "Revisada por uma revisora de IA, não por uma pessoa (ADR 0022, ADR 0025).",
   },
 
   feedback: {
@@ -826,11 +825,9 @@ export const ptBR: Catalog = {
       selfReview: " (auto-revisão: quem revisou foi quem escreveu)",
       decisionApproved: "Aprovada",
       decisionChangesRequested: "Pediu mudanças",
-      decisionAiApproved: "Aprovada pela revisora de IA (provisório)",
-      decisionAiReviewConfirmed: "Confirmada por uma revisora independente",
+      decisionAiApproved: "Aprovada pela revisora de IA",
       decidedBy: (reviewer: string) => ` por ${reviewer}`,
-      aiReviewPendingConfirmation: (confirmBy: string) =>
-        `Aprovada pela revisora de IA, ainda não confirmada independentemente por uma pessoa. A menos que uma revisora confirme, para de ser oferecida para novo estudo depois de ${confirmBy}.`,
+      aiReviewedDisclosure: "Aprovada pela revisora de IA, não por uma pessoa (ADR 0025).",
     },
 
     objectiveSources: {
@@ -886,12 +883,8 @@ export const ptBR: Catalog = {
       startRevision: "Começar uma nova versão",
       aiApproveHeading: "Via rápida da revisora de IA",
       aiApproveNote:
-        "Aprova e publica em um passo só, provisoriamente (ADR 0022, ADR 0024). Marque o que você de fato checou; uma revisora precisa confirmar dentro do prazo ou ela para de ser oferecida para novo estudo.",
+        "Aprova e publica em um passo só (ADR 0022, ADR 0024, ADR 0025). Esta decisão é definitiva, igual a uma aprovação comum; marque o que você de fato checou.",
       aiApprove: "Aprovar e publicar como revisora de IA",
-      confirmAiReviewHeading: "Confirmar a aprovação da revisora de IA",
-      confirmAiReviewNote:
-        "Esta versão já está publicada só com a aprovação da revisora de IA. Confirmá-la como revisora independente a torna permanente.",
-      confirmAiReview: "Confirmar esta publicação revisada por IA",
     },
 
     editor: {
@@ -983,7 +976,6 @@ export const ptBR: Catalog = {
         published: "Publicada. Quem estuda já pode receber esta questão nas sessões.",
         retired: "Retirada. Continua no histórico e nenhuma sessão nova vai usá-la.",
         started: "Nova versão começada como rascunho, copiada da anterior.",
-        confirmed: "Confirmada. Esta publicação revisada por IA agora é permanente.",
       },
     },
 

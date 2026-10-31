@@ -11,7 +11,6 @@ import dev.certforge.questionbank.QuestionRevisionId;
 import dev.certforge.questionbank.QuestionType;
 import dev.certforge.questionbank.RevisionEvidence;
 import dev.certforge.questionbank.RevisionStatus;
-import java.time.Clock;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,18 +27,10 @@ class QuestionBankReadService implements QuestionBank {
 
   private final QuestionRepository repository;
   private final PreparationCatalog catalog;
-  private final Clock clock;
-  private final QuestionBankProperties properties;
 
-  QuestionBankReadService(
-      QuestionRepository repository,
-      PreparationCatalog catalog,
-      Clock clock,
-      QuestionBankProperties properties) {
+  QuestionBankReadService(QuestionRepository repository, PreparationCatalog catalog) {
     this.repository = repository;
     this.catalog = catalog;
-    this.clock = clock;
-    this.properties = properties;
   }
 
   @Override
@@ -56,7 +47,6 @@ class QuestionBankReadService implements QuestionBank {
                     // separate interview-session contract rather than letting an empty option set
                     // fall through objective grading.
                     .filter(revision -> revision.content().type() != QuestionType.GUIDED_RESPONSE)
-                    .filter(this::notLapsed)
                     .map(this::learnerViewDisclosed)
                     .toList())
         .orElse(List.of());
@@ -75,7 +65,6 @@ class QuestionBankReadService implements QuestionBank {
                 repository
                     .findPublishedByTopic(topicId.value(), context.trackVersionId().value())
                     .stream()
-                    .filter(this::notLapsed)
                     .map(this::learnerViewDisclosed)
                     .toList())
         .orElse(List.of());
@@ -93,22 +82,8 @@ class QuestionBankReadService implements QuestionBank {
         .map(this::learnerViewDisclosed);
   }
 
-  /**
-   * Whether a question picked for a *new* selection is still offered. A revision currently
-   * published on an unconfirmed AI approval (ADR 0022) past its confirmation window is excluded
-   * here, derived fresh against the clock every time — never a stored flag a batch job would have
-   * to flip. A learner already shown this revision keeps seeing it regardless: that read is {@link
-   * #findSnapshotQuestion} and {@link #findInterviewSnapshotQuestion}, neither of which calls this.
-   */
-  private boolean notLapsed(Revision revision) {
-    return !AiReview.lapsed(
-        repository.findReviews(revision.id()),
-        clock.instant(),
-        properties.aiReviewConfirmationWindow());
-  }
-
   private PublishedQuestion learnerViewDisclosed(Revision revision) {
-    return learnerView(revision, AiReview.pending(repository.findReviews(revision.id())));
+    return learnerView(revision, AiReview.approved(repository.findReviews(revision.id())));
   }
 
   @Override
