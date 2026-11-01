@@ -1,6 +1,6 @@
 # ADR 0025: Make the AI reviewer's approval final, with no human confirmation step
 
-- Status: **Accepted**
+- Status: **Accepted.** Decision 4's scope restriction is superseded by [ADR 0026](0026-ai-reviewer-fast-lane-for-every-pack.md), which extends this fast lane to every pack; everything else below still holds.
 - Date: 2026-10-31
 - Issue: none; the product owner asked for this directly, aware that it reverses [ADR 0022](0022-ai-reviewer-provisional-publication.md)'s own rejected alternative ("permanent AI approval, with no human confirmation ever required") and narrows [ADR 0005](0005-ai-not-source-of-truth.md) and [ADR 0011](0011-grade-content-evidence.md) further than [ADR 0022](0022-ai-reviewer-provisional-publication.md) and [ADR 0024](0024-ai-reviewer-verified-tier.md) already had
 

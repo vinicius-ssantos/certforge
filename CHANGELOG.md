@@ -26,6 +26,16 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
   permanently, exactly like an ordinarily-approved one; disclosure to the learner that it was
   reviewed by AI and not by a person continues, and no longer carries a deadline.
 
+- **The AI-reviewer fast lane now reaches every content pack, not only Java SE 21
+  ([ADR 0026](docs/adr/0026-ai-reviewer-fast-lane-for-every-pack.md)).** ADR 0022, ADR 0024 and
+  ADR 0025 each said explicitly that the fast lane stayed scoped to the one pack that already had
+  a prior AI audit behind it. The product owner asked for it to cover every pack and track kind
+  instead, aware that new tracks (Interview Prep, Infrastructure/DevOps/Cloud Native) carry no
+  equivalent prior audit, so an `AI_APPROVED` revision there has had no independent check at all
+  before this ADR. Nothing about the mechanism itself changes: the same `CONTENT_AI_REVIEW`
+  permission, the same authorship-separation rule, the same disclosure, the same finality — only
+  which packs it reaches is wider.
+
 ### Security
 
 - **A mock exam could be answered by practising its own questions.** Practice and the mock draw

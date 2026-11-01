@@ -122,10 +122,12 @@ AI may help brainstorm, simplify, translate, or generate candidate variations. I
 with one narrow, disclosed exception.
 
 **The AI-reviewer fast lane ([ADR 0022](../adr/0022-ai-reviewer-provisional-publication.md),
-[ADR 0024](../adr/0024-ai-reviewer-verified-tier.md), [ADR 0025](../adr/0025-ai-reviewer-approval-is-final.md)).**
+[ADR 0024](../adr/0024-ai-reviewer-verified-tier.md), [ADR 0025](../adr/0025-ai-reviewer-approval-is-final.md),
+[ADR 0026](../adr/0026-ai-reviewer-fast-lane-for-every-pack.md)).**
 An account holding `CONTENT_AI_REVIEW` may approve and publish a revision of either evidence tier
 ([ADR 0011](../adr/0011-grade-content-evidence.md)) in one step, recording which policy checks it made the
 same way a human reviewer's checklist does. That approval is recorded as `AI_APPROVED`, never disguised as
 an ordinary approval, and a learner looking at that question is told it was reviewed by AI and not by a
 person. The approval is final: there is no confirmation step and no window, and it is eligible for new
-study exactly as an ordinarily-approved revision is, from the moment it publishes.
+study exactly as an ordinarily-approved revision is, from the moment it publishes. The lane reaches every
+content pack and track kind (ADR 0026), not only the Java SE 21 pack it started with.

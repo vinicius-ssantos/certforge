@@ -2,7 +2,7 @@
 
 > Tradução de [`docs/adr/0025-ai-reviewer-approval-is-final.md`](../../docs/adr/0025-ai-reviewer-approval-is-final.md). O inglês é a fonte canônica.
 
-- Status: **Aceita**
+- Status: **Aceita.** A restrição de escopo da decisão 4 é substituída pela [ADR 0026](0026-ai-reviewer-fast-lane-for-every-pack.md), que estende esta via rápida a todo pacote; o restante abaixo continua válido.
 - Data: 2026-10-31
 - Issue: nenhuma; o responsável pelo produto pediu isso diretamente, consciente de que isso reverte a alternativa que a própria [ADR 0022](0022-ai-reviewer-provisional-publication.md) havia rejeitado ("aprovação de IA permanente, sem nunca exigir confirmação humana") e estreita ainda mais a [ADR 0005](0005-ai-not-source-of-truth.md) e a [ADR 0011](0011-grade-content-evidence.md), além do que a [ADR 0022](0022-ai-reviewer-provisional-publication.md) e a [ADR 0024](0024-ai-reviewer-verified-tier.md) já haviam feito
 
