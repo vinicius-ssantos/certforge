@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires applying the interface-vs-abstract-class trade-off to a concrete design with both a shared-state requirement and a cross-hierarchy capability requirement, rather than reciting a generic definition of either.",
+  "prompt": "You are designing a Shape hierarchy where Circle, Square, and similar classes share a common color field and a common, already-implemented describe() method that reads color, but each subtype must still implement its own area(). Separately, you want unrelated classes (e.g., a Drawable UI widget that is not a Shape at all) to also be able to declare that they support area()-style behavior. Which design is most defensible in Java?",
+  "explanation": "An abstract class can hold shared instance state (the color field) and a shared concrete method (describe()) while still forcing subclasses to implement area(). Because Java allows a class to extend only one class but implement any number of interfaces, exposing area() through a separate interface lets both the Shape hierarchy and unrelated classes like Drawable implement it, without forcing Drawable into the Shape hierarchy just to get that one capability.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Use a single interface Shape with default methods for describe() and color handled via a static field declared in the interface.",
+      "correct": false,
+      "explanation": "Fields declared in an interface are implicitly public, static, and final — a single shared constant across every implementer — so they cannot hold a per-instance color value that differs between a red Circle and a blue Square."
+    },
+    {
+      "key": "B",
+      "text": "Use a separate abstract class per shape and duplicate the color field and describe() method in each one, since Java forbids sharing implementation code between abstract classes.",
+      "correct": false,
+      "explanation": "Java does not forbid this at all — a single abstract superclass can hold shared fields and concrete methods that every subclass inherits, which is the entire point of using an abstract class instead of duplicating code."
+    },
+    {
+      "key": "C",
+      "text": "Use only an interface for everything, including color, by passing a color value as an explicit parameter to every method call instead of storing it as per-object state, so every caller is responsible for tracking and forwarding each shape's current color on each invocation.",
+      "correct": false,
+      "explanation": "This abandons per-object state management entirely, forcing every caller to track and pass color manually; it does not model color as part of a shape's own identity, which is what the original design calls for."
+    },
+    {
+      "key": "D",
+      "text": "Use an abstract class AbstractShape for the shared color field and describe() method, implemented by Circle/Square; separately expose an Area interface with area() so Drawable can implement it too, since Java allows many interfaces but only one superclass.",
+      "correct": true,
+      "explanation": "This uses each mechanism for what it's good at: the abstract class carries shared per-instance state and a shared implementation, while the interface lets an unrelated class gain the area()-style capability without being forced into the Shape class hierarchy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Abstract Methods and Classes (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html"
+    },
+    {
+      "title": "Creating an Interface (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

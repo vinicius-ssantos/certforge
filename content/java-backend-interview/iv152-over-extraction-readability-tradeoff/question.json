@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires weighing a genuine readability/maintainability trade-off rather than applying a simple rule like 'shorter methods are always better'.",
+  "prompt": "A 12-line method is refactored into nine private one-line methods, most of which are called from exactly one place:\n\n```java\nvoid processOrder(Order order) {\n    validate(order);\n    applyDiscount(order);\n    reserveInventory(order);\n    chargePayment(order);\n    notifyCustomer(order);\n}\n\nprivate void validate(Order order) { checkNotNull(order); }\nprivate void checkNotNull(Order order) {\n    if (order == null) throw new IllegalArgumentException();\n}\n// ... four more single-line, single-use private methods follow the same pattern\n```\n\nOne reviewer says: \"This is cleaner now -- every method is tiny.\" A second reviewer disagrees, arguing that following the logic now requires jumping between many one-line, single-use methods with no reuse benefit. Which position best reflects the readability/maintainability trade-off at play?",
+  "explanation": "Extracting a method is worth it when it gives a meaningful name to logic a reader would otherwise have to parse line-by-line, or when it enables reuse. Splitting single-use one-liners into separate methods purely to make each method short adds indirection -- jumping across the file -- without adding clarity or reuse, so it can reduce readability even though each individual method looks simple.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The second reviewer is simply wrong, because shorter methods are always more maintainable regardless of how they're used, even when a method exists only to shrink a line count and is called from exactly one place in the whole codebase.",
+      "correct": false,
+      "explanation": "Method length alone is not what drives maintainability; a short method extracted from meaningful, reusable logic helps readability, but a short method that exists only to shrink a line count and is called from exactly one place can hurt readability by forcing a reader to jump around."
+    },
+    {
+      "key": "B",
+      "text": "The first reviewer is wrong -- methods should never be extracted unless the resulting method is reused in at least two places.",
+      "correct": false,
+      "explanation": "Reuse is one good reason to extract a method, but it is not the only one; extracting to give a well-named abstraction to a chunk of logic can be valuable even with a single call site, so a strict 'two call sites or never' rule goes too far in the other direction."
+    },
+    {
+      "key": "C",
+      "text": "Both reviewers are equally valid opinions with no way to judge which design is better.",
+      "correct": false,
+      "explanation": "This isn't purely subjective: the trade-off can be evaluated by asking whether the split adds a meaningful name or reuse benefit that offsets the added indirection, which is a concrete criterion rather than an unresolvable matter of taste."
+    },
+    {
+      "key": "D",
+      "text": "Extracting a method helps when it names logic a reader would otherwise parse line-by-line, or enables reuse; splitting single-use one-liners just to shrink line counts adds indirection without adding clarity.",
+      "correct": true,
+      "explanation": "This matches the internal-quality trade-off Fowler describes: good internal quality lowers the cost of future changes because a reader can find and understand what they need quickly. Over-extraction replaces one readable sequence with scattered single-use fragments, which can increase the cost of reading the code even though a metric like 'lines per method' improved."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Is High Quality Software Worth the Cost?",
+      "url": "https://martinfowler.com/articles/is-quality-worth-cost.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether a candidate uses tracing to localize a cross-service problem instead of reading each service's logs independently and guessing which one is at fault.",
+  "prompt": "Customers report that 'checkout is slow' sometimes, but the checkout service's own dashboards look healthy and its logs show no errors. The checkout service calls an inventory service and a tax service on every request. What is the most direct way to find which call is actually responsible for the slow requests?",
+  "explanation": "Because checkout's own metrics look healthy, the slowness most likely originates in one of the services it calls, and the only way to attribute latency to a specific downstream call without guessing is to follow a distributed trace for an affected request — using its correlation ID to pull the matching spans from inventory and tax and see which span actually accounts for the extra time.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Pick one of the slow requests, take its correlation ID, and look up the distributed trace to see which downstream span (inventory or tax) accounts for the extra latency.",
+      "correct": true,
+      "explanation": "A trace built from a shared correlation ID shows the time spent in each downstream call for that exact request, which directly identifies which dependency is slow instead of requiring an inference from each service's separate dashboards."
+    },
+    {
+      "key": "B",
+      "text": "Grep the inventory service's logs and the tax service's logs separately around the time customers reported the issue, scanning both for any errors, warnings, or unusually slow entries.",
+      "correct": false,
+      "explanation": "Without a shared correlation ID to tie a specific slow checkout request to specific log lines in each downstream service, this only shows what each service was doing around that time generally, not which call belonged to the affected request."
+    },
+    {
+      "key": "C",
+      "text": "Add more detailed logging to the checkout service and wait for the issue to happen again.",
+      "correct": false,
+      "explanation": "The checkout service's own dashboards and logs already look healthy; more logging there does not help if the actual latency is being spent inside inventory or tax, which this change does not touch."
+    },
+    {
+      "key": "D",
+      "text": "Assume the problem is the tax service, since it is the newer of the two dependencies, and start by optimizing it.",
+      "correct": false,
+      "explanation": "Picking a dependency by assumption rather than evidence risks spending effort on a service that was not actually slow for the affected requests, while the real cause goes unaddressed."
+    }
+  ],
+  "references": [
+    {
+      "title": "Monitoring Distributed Systems",
+      "url": "https://sre.google/sre-book/monitoring-distributed-systems/"
+    },
+    {
+      "title": "Effective Troubleshooting",
+      "url": "https://sre.google/sre-book/effective-troubleshooting/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

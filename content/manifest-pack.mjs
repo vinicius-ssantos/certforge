@@ -8,6 +8,7 @@ import { EVIDENCE_PROFILES, EVIDENCE_TYPES, loadPackManifest } from "./pack-mani
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const CHOICES = new Set(["SINGLE_CHOICE", "MULTIPLE_CHOICE"]);
 const DIFFICULTIES = new Set(["EASY", "MEDIUM", "HARD"]);
+const SENIORITIES = new Set(["PLENO", "SENIOR"]);
 
 function fail(name, reason) {
   throw new Error(`Invalid question ${name}: ${reason}`);
@@ -70,6 +71,14 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     }
   } else if (question.objectiveKeys !== undefined) {
     fail(name, "non-certification questions must not claim exam objectives");
+  }
+  // An interview question has no exam objective to be true against, but it does have a level it
+  // was written for (ADR 0016 decision 6): a certification or general question has no such level,
+  // since a fact is not more or less true at a greater seniority.
+  if (manifest.trackKind === "INTERVIEW") {
+    if (!SENIORITIES.has(question.seniority)) fail(name, "interview questions need a seniority of PLENO or SENIOR");
+  } else if (question.seniority !== undefined) {
+    fail(name, "non-interview questions must not claim a seniority level");
   }
   // Every question says what its answer stands on. There is no silent absence: a question nothing
   // mechanical checks declares `reference-backed`, which is #166's "questões sem evidência

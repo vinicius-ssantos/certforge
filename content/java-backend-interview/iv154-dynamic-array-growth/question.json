@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing amortized cost from the worst-case cost of a single operation, a common point of confusion in interviews.",
+  "prompt": "A backend service appends items one at a time to a dynamic array that starts empty and doubles its capacity whenever it becomes full. Across a long sequence of N appends, what is the amortized time complexity of a single append, and why?",
+  "explanation": "Doubling means the total work spent copying elements during all resizes across N appends sums to O(N) (a geometric series dominated by the last resize), so that total cost spread evenly across the N appends is O(1) per append on average, even though any single append that triggers a resize costs O(n) by itself.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O(1) amortized, because the total cost of all the periodic O(n) resizes across N appends sums to O(N), which averages to O(1) per append.",
+      "correct": true,
+      "explanation": "Correct: the geometric growth of capacity means the copying work across all resizes totals O(N), so dividing by N appends gives O(1) amortized per append."
+    },
+    {
+      "key": "B",
+      "text": "O(n) amortized, because every append must first check whether the array is full before deciding to resize.",
+      "correct": false,
+      "explanation": "Checking current size against capacity is itself an O(1) comparison; it does not make the amortized cost of append O(n). This confuses a cheap bookkeeping check with the cost of the rare resize itself."
+    },
+    {
+      "key": "C",
+      "text": "O(log n) amortized, because doubling the capacity creates a logarithmic number of resize events over the sequence.",
+      "correct": false,
+      "explanation": "There are indeed about log2(N) resize events, but their individual costs (1, 2, 4, 8, ... elements copied) sum to O(N) total, not O(log n) total — the amortized-per-append figure is O(1), not O(log n)."
+    },
+    {
+      "key": "D",
+      "text": "O(n), because any single append that triggers a resize costs O(n), and the amortized bound can never be better than the worst single operation.",
+      "correct": false,
+      "explanation": "This is the key misconception: amortized analysis spreads the occasional expensive operation's cost over the many cheap operations that preceded it, so the amortized bound is explicitly allowed to be better than the worst single-operation cost."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amortized analysis - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Amortized_analysis"
+    },
+    {
+      "title": "Dynamic array - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Dynamic_array"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

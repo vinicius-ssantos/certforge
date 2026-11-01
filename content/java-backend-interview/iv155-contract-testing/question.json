@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing contract testing from the end-to-end approach it is meant to replace, which is a conceptual rather than mechanical distinction.",
+  "prompt": "A REST API provider team and a consumer microservice team work independently. The consumer team wants confidence that the provider will not break the specific parts of the API the consumer depends on, without standing up the full provider in every consumer CI run. Which approach addresses this directly?",
+  "explanation": "Consumer-driven contract testing lets the consumer record the exact expectations it relies on from the provider as a contract; the provider then verifies its own implementation against that contract in its own pipeline. This catches incompatible changes at the point they are introduced, without requiring both services to be run together, which is the specific problem heavyweight end-to-end integration testing between independently deployed services is expensive at.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Consumer-driven contract testing: the consumer records the expectations it relies on as a contract, and the provider verifies against that contract in its own pipeline.",
+      "correct": true,
+      "explanation": "This is the defining mechanism of consumer-driven contract testing: it decouples verification of compatibility from needing both services deployed together, which is exactly the cost the team wants to avoid."
+    },
+    {
+      "key": "B",
+      "text": "A larger suite of end-to-end tests that spins up every dependent microservice together before each consumer deploy, since provisioning and coordinating the full dependency graph for every single consumer pipeline run is treated as the only reliable way to verify API compatibility.",
+      "correct": false,
+      "explanation": "This is the exact approach the team is trying to avoid because of its cost and fragility; it does not answer the stated constraint of avoiding the need to stand up the full provider in every consumer CI run."
+    },
+    {
+      "key": "C",
+      "text": "Increasing unit test coverage on the consumer's own code is sufficient, since unit tests on the consumer side can detect breaking changes made inside the provider's codebase.",
+      "correct": false,
+      "explanation": "A consumer's unit tests exercise only the consumer's own code and test doubles; they have no visibility into changes made inside the provider's codebase and cannot detect a provider-side breaking change by construction."
+    },
+    {
+      "key": "D",
+      "text": "Manual code review of the provider team's pull requests replaces the need for any automated verification of API compatibility.",
+      "correct": false,
+      "explanation": "Manual review does not scale reliably and provides no automated, repeatable signal in CI the way an executable contract verification step does, so it does not meet the stated need for ongoing automated confidence."
+    }
+  ],
+  "references": [
+    {
+      "title": "Contract Test",
+      "url": "https://martinfowler.com/bliki/ContractTest.html"
+    },
+    {
+      "title": "Consumer-Driven Contracts: A Service Evolution Pattern",
+      "url": "https://martinfowler.com/articles/consumerDrivenContracts.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

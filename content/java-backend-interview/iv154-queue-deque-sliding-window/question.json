@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires comparing the operational guarantees of a double-ended queue against a single-ended queue rather than reciting a definition.",
+  "prompt": "A backend service processes a real-time event stream and must keep a sliding window of the last N events: new events are added at one end, stale events are discarded from the other end, and the service also occasionally needs to inspect the most recently added event without removing it. Structurally, what is the main reason a deque (double-ended queue) fits this scenario better than a plain single-ended queue?",
+  "explanation": "A deque supports O(1) insertion and removal at both ends, so it can add new events at one end, evict stale events from the other end, and peek at either end, all in constant time. A plain single-ended queue is only built for efficient insertion at one end and removal at the other, so operating on the insertion end afterward is not its design target.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A deque automatically keeps its elements sorted by timestamp, which a plain queue cannot do.",
+      "correct": false,
+      "explanation": "Neither a deque nor a plain queue sorts its contents; both preserve insertion order along their ends. Sorting is not a property either structure provides on its own."
+    },
+    {
+      "key": "B",
+      "text": "A deque supports O(1) insertion and removal at both ends, whereas a plain queue is designed for efficient insertion at one end and removal only at the other.",
+      "correct": true,
+      "explanation": "Correct: the defining structural difference is that a deque exposes constant-time operations on both ends, which is exactly what a sliding window that reads and evicts from both sides needs."
+    },
+    {
+      "key": "C",
+      "text": "A deque guarantees O(1) random access to any element by index, which a plain queue does not provide.",
+      "correct": false,
+      "explanation": "A deque's defining guarantee is about operations at its two ends, not arbitrary indexed access; a linked-node-based deque, like a linked queue, still needs O(n) to reach an arbitrary middle element."
+    },
+    {
+      "key": "D",
+      "text": "A deque uses less memory per element than a queue because it never needs to store any pointers or bookkeeping, relying purely on contiguous storage the way a fixed-size primitive array does, with no per-element metadata overhead at all.",
+      "correct": false,
+      "explanation": "This is factually false: any deque implementation still needs per-node pointers (linked-based) or capacity bookkeeping (array-based) to support operations at both ends, so it does not use strictly less memory per element than a queue."
+    }
+  ],
+  "references": [
+    {
+      "title": "Double-ended queue - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Double-ended_queue"
+    },
+    {
+      "title": "Deque (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Deque.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

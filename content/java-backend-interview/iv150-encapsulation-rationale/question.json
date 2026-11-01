@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reasoning about why hiding state behind methods protects business invariants, rather than just reciting the rule 'make fields private'.",
+  "prompt": "Review this class:\n\n```java\npublic class BankAccount {\n    public double balance;\n}\n```\n\nElsewhere in the codebase, a withdrawal is performed directly on the field:\n```java\naccount.balance -= 500;\n```\n\nA reviewer flags this as an encapsulation problem. What is the most accurate explanation of the problem and its fix?",
+  "explanation": "A public, directly mutable field lets any caller change an object's state without going through logic that enforces invariants, such as rejecting a withdrawal that would make balance negative. Encapsulation fixes this by making balance private and routing every state change through methods (for example withdraw(double amount)) that validate the operation before applying it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "There is no real problem here; as long as the field's type (double) matches the values assigned to it, direct field access is just as safe as a method call.",
+      "correct": false,
+      "explanation": "Type-correctness says nothing about business-rule correctness. Direct field access bypasses any validation the class might need to perform, such as preventing the balance from going negative."
+    },
+    {
+      "key": "B",
+      "text": "Direct field mutation skips invariant checks like a negative-balance guard. Fix: make balance private with a validating withdraw(amount) method.",
+      "correct": true,
+      "explanation": "This is the core encapsulation argument: hiding the field forces every state change through a controlled API, so the class itself — not each caller — is responsible for keeping its own state valid."
+    },
+    {
+      "key": "C",
+      "text": "The fix is to declare the field final, which prevents it from ever being mutated incorrectly.",
+      "correct": false,
+      "explanation": "A final field can only be assigned once, in the constructor, and could never be withdrawn from or deposited into again afterward — that breaks the behavior a BankAccount actually needs to support."
+    },
+    {
+      "key": "D",
+      "text": "The fix is to rename the field to _balance; the leading underscore is a Java language convention that the compiler uses to enforce encapsulation.",
+      "correct": false,
+      "explanation": "Java attaches no special access-control meaning to a leading underscore in a field name — it remains a plain public field, freely mutable from anywhere, until the access modifier itself is changed."
+    }
+  ],
+  "references": [
+    {
+      "title": "What Is an Object? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/object.html"
+    },
+    {
+      "title": "Controlling Access to Members of a Class (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/accesscontrol.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

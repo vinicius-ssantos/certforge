@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires recognizing a familiar anti-pattern (a growing conditional) and mapping it to the design that removes the specific pain it causes, not just naming a pattern.",
+  "prompt": "A `PaymentProcessor.process(Payment payment)` method started with an `if/else` on `payment.getType()` for CREDIT_CARD and BOLETO. Over several releases, PIX, bank transfer and two installment variants were added, each with its own fee calculation and validation rules embedded in the same chain of `else if` blocks. Every new payment type now requires editing this method, and a bug in one branch risks breaking the others because they share local variables. Which change best addresses the actual problem?",
+  "explanation": "The method violates the open/closed principle because adding a payment type means editing existing, already-working branches. Extracting each branch's fee/validation logic into its own `PaymentStrategy` implementation, selected by type (e.g., from a `Map<PaymentType, PaymentStrategy>`), lets new payment types be added as new classes without touching the processor or the other strategies, and removes the shared-state coupling between branches.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Keep the single method but split the giant `if/else` into several smaller private methods, one per payment type, called from the same chain.",
+      "correct": false,
+      "explanation": "This only moves the problem: the dispatch is still one conditional that every new payment type must edit, and the private methods still live in the same class sharing its state, so the coupling and open/closed violation the scenario describes are unchanged."
+    },
+    {
+      "key": "B",
+      "text": "Extract each branch's logic into a `PaymentStrategy` implementation and have `PaymentProcessor` select and delegate to the right one at runtime, e.g. via a type-to-strategy map.",
+      "correct": true,
+      "explanation": "This is Strategy: each algorithm variant becomes an independently testable class implementing a common interface, selection is a lookup instead of a branch, and a new payment type is a new class rather than an edit to the existing conditional, which is exactly what removes the open/closed violation described."
+    },
+    {
+      "key": "C",
+      "text": "Introduce a `PaymentFactory` that returns a fully configured `Payment` object, and keep the fee/validation logic inside `PaymentProcessor` as it is today, leaving every new payment type to still require editing the same `if/else` chain and sharing its local variables.",
+      "correct": false,
+      "explanation": "A factory addresses object creation, not the algorithm selection problem in the scenario; it does not remove the growing conditional or the shared-state coupling between branches, which is where the actual defect is."
+    },
+    {
+      "key": "D",
+      "text": "Make `Payment` an abstract class with one subclass per payment type, and move `process()` itself into each subclass as an override.",
+      "correct": false,
+      "explanation": "Pushing a processing algorithm into the data class's inheritance hierarchy conflates what a payment *is* with how it is *processed*, forces every future processing concern into the same rigid hierarchy, and is harder to test in isolation than a composed strategy object."
+    }
+  ],
+  "references": [
+    {
+      "title": "Strategy — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/strategy"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

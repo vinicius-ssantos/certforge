@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests recognizing which abstract ordering discipline matches a backend validation scenario, without requiring any code.",
+  "prompt": "A backend service parses nested payloads (brackets, braces, and parentheses) and must verify that every opening symbol is closed in the correct nested order before further processing. Which data structure's ordering discipline is the natural fit for this validation, and why?",
+  "explanation": "Nested structures must be closed in the reverse order they were opened: the most recently opened symbol must be the next one closed. A stack's last-in-first-out (LIFO) discipline matches that exactly, so pushing on open and popping-and-comparing on close detects mismatches directly.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A queue, because its first-in-first-out (FIFO) discipline, where elements are enqueued at one end and dequeued from the other strictly in arrival order, ensures symbols are matched in the order they were opened.",
+      "correct": false,
+      "explanation": "Nesting requires closing the most recently opened symbol first, not the oldest one. A FIFO queue would try to match the earliest-opened symbol against the current closing symbol, which is backwards for nesting."
+    },
+    {
+      "key": "B",
+      "text": "A hash set, because it can check in O(1) whether a given bracket type has already appeared.",
+      "correct": false,
+      "explanation": "A set discards ordering information entirely and only tracks membership, not sequence. It cannot determine which symbol was opened most recently, so it cannot validate nesting order at all."
+    },
+    {
+      "key": "C",
+      "text": "A balanced binary search tree, because it keeps the open symbols sorted by value for fast lookup.",
+      "correct": false,
+      "explanation": "Validating nesting depends on the order symbols were opened in time, not on sorting them by value. Sorting brackets alphabetically or by code point has no bearing on whether nesting is well-formed."
+    },
+    {
+      "key": "D",
+      "text": "A stack, because its last-in-first-out (LIFO) discipline naturally matches the requirement that the most recently opened symbol must be the next one closed.",
+      "correct": true,
+      "explanation": "Correct: pushing each opening symbol and popping on each closing symbol directly encodes the required reverse-order closing rule."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stack (abstract data type) - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Stack_(abstract_data_type)"
+    },
+    {
+      "title": "Deque (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Deque.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires evaluating four structurally different refactors and tracing which one actually removes the need to modify PaymentService for a new payment type, including a Spring-specific wiring detail.",
+  "prompt": "```java\n@Service\npublic class PaymentService {\n\n    public void charge(PaymentRequest request) {\n        if (request.type() == PaymentType.CREDIT_CARD) {\n            creditCardGateway.charge(request.amount(), request.cardToken());\n        } else if (request.type() == PaymentType.PAYPAL) {\n            payPalClient.charge(request.amount(), request.payPalAccountId());\n        } else if (request.type() == PaymentType.BANK_TRANSFER) {\n            bankTransferService.initiate(request.amount(), request.iban());\n        } else {\n            throw new UnsupportedOperationException(\"unknown payment type\");\n        }\n    }\n}\n```\n\nWhich refactor of `PaymentService` best satisfies OCP for adding future payment types, without over-engineering for hypothetical needs the team hasn't been asked for?",
+  "explanation": "The strategy-pattern refactor turns 'which payment type' from a branch inside `PaymentService` into a registration of a new implementation, which is exactly the extension-without-modification OCP asks for; the other options either leave the branching in place or add structure that doesn't remove it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Replace the if/else chain with a `switch` expression over `PaymentType`, which is more concise and easier to read.",
+      "correct": false,
+      "explanation": "A `switch` expression is a readability improvement, but every new payment type still requires adding a case to this same method — it does not change the extension story at all, which is what OCP is actually asking about here."
+    },
+    {
+      "key": "B",
+      "text": "Define a `PaymentStrategy` interface with a `charge(PaymentRequest)` method, implement one Spring-managed `@Component` per payment type, and have `PaymentService` depend on a `Map<PaymentType, PaymentStrategy>` that Spring populates from all registered beans, dispatching by `request.type()`.",
+      "correct": true,
+      "explanation": "Correct. Adding `CRYPTO` now means adding one new `PaymentStrategy` bean; `PaymentService` and the existing strategies are never touched, and Spring's container does the wiring that would otherwise need manual registration code."
+    },
+    {
+      "key": "C",
+      "text": "Add a `boolean supportsCrypto` flag to `PaymentRequest` and branch on it at the top of `charge` before the existing if/else chain.",
+      "correct": false,
+      "explanation": "This adds a special case on top of the existing special cases rather than removing the need for them; every future payment type would need its own flag and its own branch, which is the opposite direction from OCP's goal."
+    },
+    {
+      "key": "D",
+      "text": "Make `creditCardGateway`, `payPalClient` and `bankTransferService` all implement a shared `Gateway` marker interface with no methods, purely so `PaymentService` can hold all three in a single `List<Gateway>` field and iterate over them, even though nothing about a `Gateway` reference lets `charge` determine which element in that list actually corresponds to `request.type()`.",
+      "correct": false,
+      "explanation": "A marker interface with no methods gives `PaymentService` nothing to call polymorphically, so the if/else chain (or an equivalent type check) would still be needed to decide which gateway handles the request; it adds a type without adding an extension point."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Container Overview",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/basics.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

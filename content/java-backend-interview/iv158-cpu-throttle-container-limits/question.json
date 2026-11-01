@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing a container-level resource constraint from an application-level performance problem using the right metric, instead of profiling the JVM first.",
+  "prompt": "A Java service runs in Kubernetes with a CPU limit of 500m per pod. Request latency shows periodic spikes correlated with traffic bursts, but average CPU usage reported for the pod stays below 40%. Profiling the JVM during a spike shows nothing unusual in application code. What metric should you check next to explain the latency, and why?",
+  "explanation": "A CPU limit is enforced over short scheduling windows, so a pod's usage can spike well past its average during a burst, get throttled for part of each window, and show that throttling as added wall-clock latency rather than as a high average-CPU reading. Average utilization hides exactly this, which is why checking the container's throttling metric is the step that explains what JVM-level profiling, by design, cannot see.",
+  "options": [
+    {
+      "key": "A",
+      "text": "JVM garbage collection pause duration, since GC is the usual cause of latency spikes under load.",
+      "correct": false,
+      "explanation": "The JVM profile during a spike already showed nothing unusual, and GC pause time is visible to that kind of profiling; it would not be hidden the way container-level throttling is."
+    },
+    {
+      "key": "B",
+      "text": "The pod's memory limit, since memory pressure is the most common cause of latency spikes in containers.",
+      "correct": false,
+      "explanation": "Nothing in the scenario points to memory; the symptom is specifically tied to CPU bursts during traffic spikes, and a memory-pressure event would typically show as GC pressure or an eviction, not as a mismatch between a low CPU average and periodic latency."
+    },
+    {
+      "key": "C",
+      "text": "The number of pod replicas, since horizontal pod autoscaling based on average CPU may not react fast enough to a short traffic burst, leaving too few instances to spread the load across.",
+      "correct": false,
+      "explanation": "Replica count affects how traffic is spread across pods, but it does not explain why a single pod's own CPU limit could be throttling it during a burst; adding replicas might reduce the burst size per pod without diagnosing the actual cause."
+    },
+    {
+      "key": "D",
+      "text": "The container runtime's CPU throttling metric (such as cgroup throttled time), to see if the pod is being throttled during bursts despite a low average.",
+      "correct": true,
+      "explanation": "CPU limits are enforced per scheduling period, so a burst can exceed the limit and get throttled even while the average over a longer window looks low; throttled time shows this directly, which average CPU and JVM profiling both miss."
+    }
+  ],
+  "references": [
+    {
+      "title": "Resource Management for Pods and Containers",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    },
+    {
+      "title": "Assign CPU Resources to Containers and Pods",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/assign-cpu-resource/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

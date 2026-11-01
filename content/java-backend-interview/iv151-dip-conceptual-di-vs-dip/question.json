@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Targets a widely held misconception the issue explicitly calls out, requiring the distinction between a wiring mechanism and a structural dependency-direction property.",
+  "prompt": "A team says: 'We use Spring, and Spring does dependency injection, so our code follows the Dependency Inversion Principle.' What is the most accurate assessment of that claim?",
+  "explanation": "Dependency Injection is a wiring mechanism — something decides what to pass in, and does the passing from outside the object. Dependency Inversion is about which direction the resulting source-code dependency points: whether the high-level module depends on an abstraction it defines, with low-level details depending on that abstraction instead of the other way around. A DI framework can wire concrete-to-concrete dependencies just as easily as abstraction-based ones, so using one is neither proof nor disproof of DIP.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The claim is accurate, because `@Autowired` by design only resolves dependencies declared through an interface type — never through a field, constructor parameter, or setter parameter typed to a concrete class — so every single injection point that Spring's container touches anywhere in the application is automatically restricted to depending on an abstraction, which is exactly what Dependency Inversion requires.",
+      "correct": false,
+      "explanation": "`@Autowired` works just as well on a field or constructor parameter typed to a concrete class as on one typed to an interface; Spring does not require or enforce an abstraction boundary, so it cannot be relied on to guarantee DIP by itself."
+    },
+    {
+      "key": "B",
+      "text": "The claim is false, because Dependency Inversion only applies to languages without a dependency injection framework, like plain C.",
+      "correct": false,
+      "explanation": "DIP is a design principle about the direction of source-code dependencies between modules and is language- and framework-agnostic; it applies equally to code with or without a DI framework, so framework availability isn't what makes the claim right or wrong."
+    },
+    {
+      "key": "C",
+      "text": "It conflates a mechanism with a design property: Spring's container can inject any type it's configured with, including a concrete low-level class, so using Spring only guarantees that dependencies arrive from outside the object — it says nothing about whether high-level code depends on an abstraction it owns rather than on a concrete implementation detail.",
+      "correct": true,
+      "explanation": "Correct. The injection mechanism and the direction of the resulting dependency are separate questions; a framework answers the first and is silent on the second."
+    },
+    {
+      "key": "D",
+      "text": "The claim is accurate, because `ApplicationContext` is itself an abstraction, so any object it manages automatically depends on an abstraction.",
+      "correct": false,
+      "explanation": "The managed object's own dependencies — what it directly references in its own fields and method signatures — are what DIP judges, not the fact that some external container happens to manage its lifecycle; a bean can still hold a direct reference to a concrete class regardless of who constructs or wires it."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler — Inversion of Control Containers and the Dependency Injection Pattern",
+      "url": "https://martinfowler.com/articles/injection.html"
+    },
+    {
+      "title": "Spring Framework Reference — Container Overview",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/basics.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

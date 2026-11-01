@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires weighing fidelity against speed rather than recalling a single documented fact.",
+  "prompt": "A team currently runs repository-layer tests against an embedded H2 database configured in PostgreSQL compatibility mode. They are considering switching those tests to Testcontainers, running a real PostgreSQL container instead. What is the most defensible reason to make that switch?",
+  "explanation": "H2's PostgreSQL mode emulates common syntax and behavior but does not implement the database engine itself, so dialect-specific functions, constraint behavior, and driver quirks can differ from real PostgreSQL. Testcontainers runs the actual production engine, so a test that passes against the container is evidence about behavior against the real database technology, not against an approximation of it. The cost is slower startup and a dependency on a Docker daemon being available.",
+  "options": [
+    {
+      "key": "A",
+      "text": "H2 and Testcontainers always produce identical results in every case, so the choice between them comes down only to which one the IDE highlights more clearly.",
+      "correct": false,
+      "explanation": "This denies the entire motivation for switching: emulation gaps between H2's compatibility mode and real PostgreSQL are the documented reason teams move to a real engine, so the two are not interchangeable in every case."
+    },
+    {
+      "key": "B",
+      "text": "Testcontainers runs the real PostgreSQL engine, so dialect quirks, constraints, and driver behavior match production, avoiding gaps in H2's emulation, at the cost of slower startup and a Docker dependency.",
+      "correct": true,
+      "explanation": "This states the actual trade-off accurately: higher fidelity to the production engine in exchange for slower test startup and an added infrastructure dependency."
+    },
+    {
+      "key": "C",
+      "text": "Testcontainers is preferred because it starts faster than an embedded H2 instance, making the overall test suite run more quickly.",
+      "correct": false,
+      "explanation": "This gets the speed comparison backwards: starting a containerized database typically takes noticeably longer than starting an embedded in-process database like H2, so speed is a cost of this switch, not the benefit."
+    },
+    {
+      "key": "D",
+      "text": "Switching to Testcontainers removes the need for schema migrations in tests, since the container always starts pre-loaded with the production schema automatically, the same way a cloud-hosted managed database instance would already come provisioned with the full production schema and seed data on first connection.",
+      "correct": false,
+      "explanation": "A Testcontainers-managed database starts as an empty, freshly provisioned instance like any new database server; the test suite still has to apply migrations or schema setup itself, the same as it would against any other blank database."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot — Testcontainers Support",
+      "url": "https://docs.spring.io/spring-boot/reference/testing/testcontainers.html"
+    },
+    {
+      "title": "Testcontainers for Java",
+      "url": "https://java.testcontainers.org/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

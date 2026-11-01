@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires connecting the abstract idea of an invariant to a concrete design choice about where validation logic and transaction boundaries live.",
+  "prompt": "A banking domain has an invariant: an `Account`'s balance must never go negative. The team is deciding how to implement withdrawals so this invariant always holds, including under concurrent requests. Which design best protects the invariant?",
+  "explanation": "Protecting an invariant means no code path can change the aggregate's state without going through a check of that invariant, and that the check-and-apply happens atomically within one transaction. Exposing a `withdraw` behavior on the `Account` aggregate root — which checks the balance and applies the debit together, inside one transaction — is the only option that closes off the invariant from being bypassed or raced.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Let callers set the balance field directly, relying on a database CHECK constraint to reject negative values",
+      "correct": false,
+      "explanation": "A database constraint can reject an invalid final value, but it does nothing to coordinate two concurrent withdrawals that each read a sufficient balance before either commits, so both could still be individually valid yet jointly overdraw the account."
+    },
+    {
+      "key": "B",
+      "text": "Expose a `withdraw(amount)` method on the `Account` aggregate root that checks sufficient balance and applies the debit atomically within a single transaction",
+      "correct": true,
+      "explanation": "Correct: funneling every balance change through one method on the root, with the check and the update as one atomic unit of work, is exactly what prevents the invariant from being violated, including under concurrency."
+    },
+    {
+      "key": "C",
+      "text": "Apply the withdrawal to the balance first, then call a separate validation service afterward, perhaps on a delay or in a different process, to check whether the balance went negative",
+      "correct": false,
+      "explanation": "Validating after the change has already been applied doesn't prevent the invariant from being violated — it only detects the violation after the fact, by which point the account may already be in an invalid state."
+    },
+    {
+      "key": "D",
+      "text": "Validate sufficient balance in the controller before calling a generic `setBalance` method on the entity",
+      "correct": false,
+      "explanation": "Placing the check in the controller means any other caller of `setBalance` — another controller, a batch job, a different service — can bypass the check entirely; the invariant is only as strong as its weakest, unchecked entry point."
+    }
+  ],
+  "references": [
+    {
+      "title": "DDD_Aggregate (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/DDD_Aggregate.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

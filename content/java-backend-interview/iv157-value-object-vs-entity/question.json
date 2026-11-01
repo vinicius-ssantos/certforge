@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "EASY",
+  "difficultyRationale": "Distinguishing a value object from an entity by its equality and identity behavior is a foundational DDD recognition task.",
+  "prompt": "In an order-management system, a `Money` type bundles an amount and a currency. Two `Money` instances with the same amount and currency are treated as interchangeable everywhere in the code: they are compared by their contents, never by tracking which specific instance was created first, and once created neither instance is ever mutated. Which classification best fits `Money`?",
+  "explanation": "`Money` has no identity that needs to be tracked across its lifetime; two instances with equal attributes are indistinguishable and interchangeable, and instances are immutable. That combination of attribute-based equality, interchangeability, and immutability is the defining signature of a value object, not an entity.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A value object",
+      "correct": true,
+      "explanation": "Correct: `Money` is defined entirely by its attributes (amount, currency), is compared by value rather than by identity, and is immutable — the hallmarks of a value object."
+    },
+    {
+      "key": "B",
+      "text": "An entity",
+      "correct": false,
+      "explanation": "Entities are distinguished by a persistent identity that survives attribute changes (e.g., a Customer keeps its identity even if its name changes). `Money` has no such identity to track; two equal instances are simply interchangeable."
+    },
+    {
+      "key": "C",
+      "text": "An aggregate root",
+      "correct": false,
+      "explanation": "Aggregate roots are entities that act as the consistency boundary and sole entry point for a cluster of objects. `Money` is not an entry point for other objects and has no invariants of its own to guard across a cluster."
+    },
+    {
+      "key": "D",
+      "text": "A domain service",
+      "correct": false,
+      "explanation": "A domain service encapsulates a stateless operation that doesn't belong to any single entity or value object. `Money` is a data-holding type compared by value, not an operation, so this classification doesn't fit."
+    }
+  ],
+  "references": [
+    {
+      "title": "ValueObject (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/ValueObject.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

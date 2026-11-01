@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The scenario is a standard cross-cutting-concern problem, but choosing Decorator over subclassing requires weighing composition against inheritance explicitly rather than reaching for the first working option.",
+  "prompt": "`ProductCatalogService` implements `CatalogService`. The team wants to add response caching in front of it, and separately wants the option to add request logging in front of either the cached or the uncached version, without duplicating catalog logic and without hard-wiring which combination is active. Which design best satisfies this?",
+  "explanation": "Decorator lets behavior be added by wrapping an object behind the same interface it already implements, so wrappers can be composed in any order the caller chooses: `new LoggingCatalogService(new CachingCatalogService(productCatalogService))` or the reverse, without either wrapper knowing about the other or about `ProductCatalogService`'s internals. Subclassing one combination (e.g., `CachingLoggingProductCatalogService`) would need a new subclass for every combination of concerns, which is the inheritance explosion Decorator avoids through composition.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Create `CachingProductCatalogService extends ProductCatalogService` and `LoggingCachingProductCatalogService extends CachingProductCatalogService`, overriding the relevant methods in each.",
+      "correct": false,
+      "explanation": "This hard-codes one specific combination and order into the class hierarchy; getting logging without caching, or caching without logging, would require yet more subclasses, which is the inheritance explosion the scenario asks to avoid."
+    },
+    {
+      "key": "B",
+      "text": "Add `boolean cachingEnabled` and `boolean loggingEnabled` fields to `ProductCatalogService` itself, and branch on them inside every method.",
+      "correct": false,
+      "explanation": "This mixes caching, logging and catalog concerns inside one class and its methods, which is harder to test and reason about in isolation than three separate classes, and does not let a caller compose or omit a concern without changing `ProductCatalogService` itself."
+    },
+    {
+      "key": "C",
+      "text": "Wrap `ProductCatalogService` in a dynamic proxy that intercepts every method call and inserts caching and logging logic based on reflection over the called method's name, keeping a per-method-name dispatch table in sync whenever `CatalogService`'s methods change.",
+      "correct": false,
+      "explanation": "Reflection-based interception driven by method names adds indirection and loses compile-time type safety for a problem that has a direct, statically typed solution; it also still conflates caching and logging into one interception point instead of two independently composable wrappers."
+    },
+    {
+      "key": "D",
+      "text": "Create `CachingCatalogService` and `LoggingCatalogService`, each implementing `CatalogService` and wrapping another `CatalogService`, and compose the two in whichever order is needed at assembly time.",
+      "correct": true,
+      "explanation": "This is Decorator: each wrapper implements the same interface as what it wraps, holds a reference to the wrapped instance, and delegates to it after adding its own behavior, so caching and logging can be combined in either order without a new class per combination."
+    }
+  ],
+  "references": [
+    {
+      "title": "Decorator — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/decorator"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

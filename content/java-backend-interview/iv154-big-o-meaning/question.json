@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Targets a frequent interview misconception about Big-O describing absolute runtime rather than asymptotic growth, which requires conceptual rather than factual recall.",
+  "prompt": "An engineer says: 'This algorithm is O(n log n), so for n = 1,000,000 it will always run faster in actual wall-clock time than an O(n^2) algorithm on the same input.' What is the most accurate assessment of this reasoning?",
+  "explanation": "Big-O describes how an algorithm's cost grows as n approaches infinity, abstracting away constant factors and hardware; it does not predict actual wall-clock time for any specific, finite n. A well-optimized O(n^2) algorithm with a very small constant factor (or favorable data patterns) can still run faster than an O(n log n) algorithm with a large constant factor for some finite inputs, even fairly large ones.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The reasoning is fully correct, because Big-O notation already accounts for hardware speed, compiler optimizations, and constant factors when comparing two algorithms, so the asymptotically better complexity class is guaranteed to win at any input size large enough to be practically relevant.",
+      "correct": false,
+      "explanation": "This is backwards: Big-O notation is explicitly defined to ignore constant factors and hardware-specific details, which is precisely why it cannot guarantee actual runtime ordering for a specific finite n."
+    },
+    {
+      "key": "B",
+      "text": "The reasoning is wrong because O(n log n) is actually a worse complexity class than O(n^2).",
+      "correct": false,
+      "explanation": "This is factually incorrect: n log n grows asymptotically slower than n^2, so O(n log n) is the better complexity class, not the worse one."
+    },
+    {
+      "key": "C",
+      "text": "The reasoning is flawed: Big-O describes asymptotic growth, not wall-clock time for a specific n, so a well-optimized O(n^2) algorithm with a small constant factor can still beat an O(n log n) one on some finite inputs.",
+      "correct": true,
+      "explanation": "Correct: Big-O notation discards constant factors and lower-order terms, so it cannot by itself predict which of two algorithms runs faster on a particular finite input size — only which one eventually wins as n grows large enough."
+    },
+    {
+      "key": "D",
+      "text": "The reasoning is wrong because Big-O notation only applies to recursive algorithms, not to iterative ones.",
+      "correct": false,
+      "explanation": "Big-O notation applies to any algorithm's growth rate regardless of whether it is implemented recursively or iteratively; recursion is not a prerequisite for asymptotic analysis."
+    }
+  ],
+  "references": [
+    {
+      "title": "Big O notation - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Big_O_notation"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

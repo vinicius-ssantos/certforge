@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests understanding of the underlying hash-based structural property behind set membership checks, independent of any specific language's collection library.",
+  "prompt": "A backend service must repeatedly check, 'have I already processed this order ID?' against a growing collection of millions of previously processed IDs. Considered purely as data structures (not as any particular language's library classes), what is the key structural reason a hash-based set outperforms an unsorted list for this membership-check workload?",
+  "explanation": "A hash-based set computes a hash of the key to locate the relevant bucket directly, giving average O(1) membership checks regardless of how many elements are stored. An unsorted list has no such shortcut: checking membership requires scanning elements one by one until a match is found or the list ends, which is O(n).",
+  "options": [
+    {
+      "key": "A",
+      "text": "A hash-based set keeps its elements in sorted order internally, which enables binary search that narrows the candidate range by half with each comparison, the same way it would on a sorted array, while a list cannot be sorted.",
+      "correct": false,
+      "explanation": "A hash-based set is not ordered by key value at all; its bucket placement depends on the hash, not on sort order. Sorted-order lookup with binary search describes a tree-based or sorted-array structure, not a hash-based set."
+    },
+    {
+      "key": "B",
+      "text": "A hash-based set stores elements contiguously like an array, so checking membership is just a direct index lookup by position.",
+      "correct": false,
+      "explanation": "A hash-based set does not know an element's bucket index without first computing its hash, and multiple elements can still collide into the same bucket, requiring a secondary comparison step rather than a single direct index lookup."
+    },
+    {
+      "key": "C",
+      "text": "A hash-based set computes a hash of the key to jump to the relevant bucket directly, giving average O(1) membership checks, while an unsorted list must scan from the start, giving O(n).",
+      "correct": true,
+      "explanation": "Correct: hashing lets the set locate a small candidate bucket without comparing against most other elements, which is structurally impossible for an unsorted list that has no index into its contents by value."
+    },
+    {
+      "key": "D",
+      "text": "A hash-based set and an unsorted list have the same average membership-check cost, but the set simply uses less memory.",
+      "correct": false,
+      "explanation": "This denies the actual performance difference: an unsorted list's average membership-check cost is O(n), not equal to a hash-based set's average O(1), regardless of memory usage."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hash table - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hash_table"
+    },
+    {
+      "title": "Set (abstract data type) - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Set_(abstract_data_type)"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

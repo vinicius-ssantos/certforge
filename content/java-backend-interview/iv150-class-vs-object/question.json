@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests whether candidates distinguish a class's shared blueprint from an object's independent per-instance state, a baseline OOP distinction rather than a trick question.",
+  "prompt": "A team lead reviews this code:\n\n```java\npublic class Counter {\n    private int value;\n    public void increment() { value++; }\n    public int get() { return value; }\n}\n\nCounter c1 = new Counter();\nCounter c2 = new Counter();\nc1.increment();\nc1.increment();\nc2.increment();\nSystem.out.println(c1.get() + \" \" + c2.get());\n```\n\nWhat does this print, and what does it reveal about the relationship between the `Counter` class and the `c1`/`c2` objects?",
+  "explanation": "Each `new Counter()` call allocates a distinct object with its own copy of the `value` field. The class is only the shared blueprint describing what fields and methods every Counter has; the field values themselves are per-object state, so c1 and c2 evolve independently.",
+  "options": [
+    {
+      "key": "A",
+      "text": "1 1 — because value is declared inside the class, Java treats it as shared state across every instance, similar to a static field.",
+      "correct": false,
+      "explanation": "This would only be true if value were declared static. As a plain instance field, each object gets its own copy, so increments on c1 cannot leak into c2."
+    },
+    {
+      "key": "B",
+      "text": "2 2 — once any Counter instance calls increment(), the change is reflected in every other instance of the same class, because the compiler treats every field declared inside a class body as implicitly shared across all objects created from that same blueprint unless a special per-instance keyword is used.",
+      "correct": false,
+      "explanation": "Instance fields are not automatically synchronized across objects; only a static field is shared at the class level. This answer describes static-field semantics, not the instance field actually declared here."
+    },
+    {
+      "key": "C",
+      "text": "2 1 — c1 and c2 are separate objects created from the same class blueprint, so each has its own independent copy of the value field; incrementing one does not affect the other.",
+      "correct": true,
+      "explanation": "Each `new Counter()` call allocates a distinct object with its own `value` field. The class only defines the shape shared by all instances; the state itself is per-object, so c1 ends at 2 and c2 ends at 1."
+    },
+    {
+      "key": "D",
+      "text": "A compile error occurs because Counter does not declare a constructor, so new Counter() is invalid.",
+      "correct": false,
+      "explanation": "Java automatically supplies a public no-argument default constructor when a class declares none, so new Counter() compiles and runs without any constructor being written explicitly."
+    }
+  ],
+  "references": [
+    {
+      "title": "What Is a Class? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/class.html"
+    },
+    {
+      "title": "Creating Objects (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/objectcreation.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

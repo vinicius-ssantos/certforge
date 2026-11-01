@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "EASY",
+  "difficultyRationale": "The canary comparison directly isolates the new revision from every other explanation, making the correct next step close to mechanical once the data is read correctly.",
+  "prompt": "A new revision is rolled out to 10% of pods as a canary. Within minutes, error rate on the canary pods climbs to 8% while the other 90% of pods, still on the previous revision and receiving similar traffic, stay at 0.1%. What should happen next?",
+  "explanation": "Because the canary and the baseline are serving similar traffic at the same time and only differ by which revision they run, a large error-rate gap between them points squarely at the new revision rather than at load, time of day, or an unrelated dependency. The appropriate next step is to stop sending traffic to the canary and roll it back, then diagnose the regression (most often a configuration mistake) from a safe state rather than under live customer traffic.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Increase the canary's traffic share to 50% to get a statistically clearer read on the error rate before deciding whether to roll back the new revision.",
+      "correct": false,
+      "explanation": "The gap between 8% and 0.1% is already large enough to act on; sending more traffic to a revision that is already failing at a much higher rate only increases customer impact while confirming something the data already shows."
+    },
+    {
+      "key": "B",
+      "text": "Roll the canary back immediately, then diagnose the new revision's change (most likely a configuration mistake) from a safe state.",
+      "correct": true,
+      "explanation": "The comparison already isolates the cause to the new revision, since both groups face similar traffic at the same time; rolling back removes customer impact first and leaves the full diagnosis to be done without further risk."
+    },
+    {
+      "key": "C",
+      "text": "Leave the canary running and wait to see if the error rate settles once the JVM warms up.",
+      "correct": false,
+      "explanation": "JVM warm-up typically affects latency, not a sustained 80-times difference in error rate between two groups receiving similar traffic; waiting extends customer-facing impact without a specific reason to expect it to resolve on its own."
+    },
+    {
+      "key": "D",
+      "text": "Roll the previous revision back on the 90% baseline group as well, to match the canary.",
+      "correct": false,
+      "explanation": "The baseline group is the one performing correctly at 0.1% errors; changing it would remove the healthy comparison point and spread the regression to the remaining 90% of traffic instead of containing it."
+    }
+  ],
+  "references": [
+    {
+      "title": "Release Engineering",
+      "url": "https://sre.google/sre-book/release-engineering/"
+    },
+    {
+      "title": "Reliable Product Launches at Scale",
+      "url": "https://sre.google/sre-book/reliable-product-launches/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

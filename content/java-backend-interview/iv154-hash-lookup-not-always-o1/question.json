@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing the commonly cited average-case O(1) hash table lookup from its actual worst-case behavior and the mechanisms that cause the gap.",
+  "prompt": "A hash table is often described as giving O(1) lookups, but this is not a universal guarantee. Which explanation correctly identifies why a hash table lookup is not always O(1)?",
+  "explanation": "Hash collisions place multiple keys into the same bucket, and in the worst case a bucket can hold many keys, forcing a lookup to scan through them, which degrades toward O(n). The table also periodically resizes (rehashes) as it grows to keep the average load factor low, which is why the O(1) figure is an average-case claim that assumes a well-dispersing hash function, not an absolute worst-case guarantee.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Hash tables must perform a binary search within each bucket, which always costs O(log n) regardless of collisions.",
+      "correct": false,
+      "explanation": "Most hash table implementations resolve collisions with simple chaining or linear probing within a bucket, not binary search; a bucket's contents are not generally kept sorted, so this doesn't describe why worst-case lookup degrades."
+    },
+    {
+      "key": "B",
+      "text": "Every lookup requires rehashing the entire table first, which makes each lookup proportional to the table's total size, since implementations like Java's HashMap resize and rehash all entries once the load factor threshold (commonly 0.75) is crossed.",
+      "correct": false,
+      "explanation": "Rehashing happens only when the table grows past its load factor threshold during an insertion-triggered resize, not on every lookup. A plain lookup does not rehash anything."
+    },
+    {
+      "key": "C",
+      "text": "Hash collisions can chain multiple keys into the same bucket, degrading a lookup toward O(n) in the worst case; the table must also be resized periodically to keep the average load factor low.",
+      "correct": true,
+      "explanation": "Correct: bucket collisions (especially many keys landing in the same bucket) create a worst case closer to a linear scan, and the structure's O(1) average depends on keeping load factor low through periodic resizing."
+    },
+    {
+      "key": "D",
+      "text": "Computing a key's hash code always takes time proportional to the number of entries already stored in the table.",
+      "correct": false,
+      "explanation": "Computing a hash code depends on the size and structure of the key itself (for example, a string's length), not on how many other entries exist in the table."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hash table - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hash_table"
+    },
+    {
+      "title": "HashMap (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

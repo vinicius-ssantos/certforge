@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether a candidate attributes duplicates to the scaling action that revealed them, or to the delivery guarantee that permitted them all along.",
+  "prompt": "A consumer group falls behind and lag on its topic grows for over an hour. On-call doubles the number of consumer instances to catch up. Afterward, several orders show duplicate charges for the same payment. What most likely explains the duplicates, and what should the fix target?",
+  "explanation": "At-least-once delivery guarantees that a message can be redelivered — for example after a consumer rebalance, or if an offset commits after processing but the consumer crashes in between — so a correctly operating messaging system can hand the same charge message to a consumer more than once. Scaling consumers triggered rebalances that made this window far more likely to be hit, but the defect is that the charge operation itself is not safe to run twice, which is what the fix needs to target.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Reduce the number of consumers to avoid duplicate reads of the same message.",
+      "correct": false,
+      "explanation": "Fewer consumers lowers how often a rebalance happens but does not remove the possibility of redelivery under at-least-once semantics; it would also slow down recovering from the lag that caused the original backlog."
+    },
+    {
+      "key": "B",
+      "text": "Change the broker's message retention policy to achieve exactly-once delivery.",
+      "correct": false,
+      "explanation": "Retention controls how long undelivered or unacknowledged messages are kept, not whether a message can be redelivered; exactly-once processing guarantees in most systems still depend on idempotent handling at the consumer."
+    },
+    {
+      "key": "C",
+      "text": "Make the charge operation idempotent, for example by checking and recording a unique payment key before applying its effect, so a redelivered message cannot charge twice.",
+      "correct": true,
+      "explanation": "At-least-once delivery already permits redelivery as a normal outcome, so the only reliable fix is making the operation safe to receive more than once; this removes the duplicate-charge risk regardless of how many consumers run or how often they rebalance."
+    },
+    {
+      "key": "D",
+      "text": "Roll back the consumer scale-up and consider the backlog incident fully resolved once lag returns to normal and the queue has completely drained, with no further monitoring needed.",
+      "correct": false,
+      "explanation": "The scale-up only made an existing redelivery window more visible; rolling it back leaves the non-idempotent charge logic in place for the next rebalance, backlog, or crash to trigger again."
+    }
+  ],
+  "references": [
+    {
+      "title": "Data Integrity: What You Read Is What You Wrote",
+      "url": "https://sre.google/sre-book/data-integrity/"
+    },
+    {
+      "title": "Data Processing Pipelines",
+      "url": "https://sre.google/sre-book/data-processing-pipelines/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

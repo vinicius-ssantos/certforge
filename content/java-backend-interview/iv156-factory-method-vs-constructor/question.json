@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The code compiles and looks idiomatic, so recognizing the abstraction as needless requires judging whether it earns its indirection rather than spotting an obvious flaw.",
+  "prompt": "A codebase has exactly one implementation of `NotificationSender`, called `EmailNotificationSender`, with no plans for another. A reviewer adds `NotificationSenderFactory` with a single method, `create()`, whose body is `return new EmailNotificationSender();`, and changes every call site from `new EmailNotificationSender()` to `notificationSenderFactory.create()`. What is the most accurate assessment of this change?",
+  "explanation": "A Factory Method earns its place when creating an object requires choosing among implementations, hiding nontrivial construction logic, or decoupling callers from a concrete type that is expected to vary. Here there is exactly one implementation and no decision being made: `create()` always returns the same concrete type, so the factory is a layer of indirection with no behavior behind it. It can be introduced later, when a second implementation actually appears, at the cost of changing call sites then.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It is a correct application of Factory Method: constructors should always be hidden behind a factory as a matter of good practice.",
+      "correct": false,
+      "explanation": "Treating 'always hide the constructor' as a blanket rule is the overengineering this scenario is testing for: a factory is justified by a creation decision or hidden complexity, neither of which exists here, so the rule does not apply just because a class is being instantiated."
+    },
+    {
+      "key": "B",
+      "text": "It is premature abstraction: the factory introduces a layer of indirection without a decision to make or complexity to hide, and it can be added later if a second implementation appears.",
+      "correct": true,
+      "explanation": "This matches the scenario precisely: `create()` has no branching and returns a single fixed type, so nothing is being decided or hidden, and deferring the factory until a real second implementation exists would cost only the mechanical call-site change, which is cheap compared to maintaining unused indirection now."
+    },
+    {
+      "key": "C",
+      "text": "It is a correct application of Factory Method because it allows `EmailNotificationSender` to later implement an interface.",
+      "correct": false,
+      "explanation": "Whether `EmailNotificationSender` implements an interface is independent of this change; the factory's `create()` method does not create or require that interface, so this does not justify the indirection added here."
+    },
+    {
+      "key": "D",
+      "text": "It is incorrect because Factory Method requires a `static` creation method, and `create()` is an instance method on `notificationSenderFactory`, so an instance method can never qualify regardless of what construction logic it contains.",
+      "correct": false,
+      "explanation": "Factory Method does not require a static method; it can be, and often is, an instance method overridden by subclasses or injected as a collaborator, so this is not why the design is questionable here."
+    }
+  ],
+  "references": [
+    {
+      "title": "Factory Method — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/factory-method"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

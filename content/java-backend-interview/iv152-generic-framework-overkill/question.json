@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "The two designs' relative complexity is easy to compare once the fixed, confirmed scope of the problem (two channels) is stated.",
+  "prompt": "The team needs to send a notification by email or SMS depending on the user's preference -- two fixed cases, with no roadmap item for a third channel. A developer proposes a classpath-scanning plugin framework:\n\n```java\npublic class NotificationPluginLoader {\n    public List<NotificationChannel> loadPlugins() {\n        // scans the classpath via reflection for classes annotated\n        // with @NotificationPlugin, instantiates them reflectively,\n        // and registers them in a dynamic rule engine\n    }\n}\n```\n\nso that \"new channels can be dropped in without touching existing code.\" A teammate instead proposes:\n\n```java\npublic void notify(User user, String message) {\n    switch (user.getPreferredChannel()) {\n        case EMAIL -> emailSender.send(user, message);\n        case SMS -> smsSender.send(user, message);\n    }\n}\n```\n\nWhich approach better fits the KISS principle for the problem as it actually stands today?",
+  "explanation": "KISS favors the simplest design that correctly solves the problem that actually exists; here that is a direct two-branch switch. The plugin framework trades away readability and debuggability -- reflection, dynamic classpath loading, and an implicit rule engine -- for extensibility that isn't needed yet, which is complexity added without a present payoff.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The switch-based approach, because it solves the two cases that actually exist with code a reader can understand in seconds, while the plugin framework adds complexity to solve a flexibility problem that doesn't exist yet.",
+      "correct": true,
+      "explanation": "KISS favors the simplest design that correctly solves the current problem; here that's a direct two-branch switch. The plugin framework trades away readability and debuggability for extensibility that isn't needed, which is complexity without a present payoff."
+    },
+    {
+      "key": "B",
+      "text": "The plugin framework, because any mechanism that avoids future if/switch edits is inherently simpler.",
+      "correct": false,
+      "explanation": "Simplicity is about how easy the current solution is to read, test, and change, not about minimizing a hypothetical future edit count; a reflection-based plugin loader is objectively harder to read and debug than a two-case switch for exactly the problem at hand."
+    },
+    {
+      "key": "C",
+      "text": "Both are equally simple, since KISS only concerns algorithmic complexity, not the amount of machinery involved.",
+      "correct": false,
+      "explanation": "KISS is about overall solution complexity, including the number of moving parts and how much a reader must hold in their head, not just algorithmic complexity; the plugin framework clearly introduces more moving parts for no current benefit."
+    },
+    {
+      "key": "D",
+      "text": "The plugin framework, because it follows the Open/Closed Principle and KISS always defers to Open/Closed whenever the two principles conflict, even for a problem with only two fixed channels and no roadmap item for a third.",
+      "correct": false,
+      "explanation": "KISS and Open/Closed can be in tension, and neither principle automatically overrides the other; applying Open/Closed to a currently fixed two-case problem is itself an instance of unnecessary complexity, which is what KISS warns against."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Beck Design Rules",
+      "url": "https://martinfowler.com/bliki/BeckDesignRules.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

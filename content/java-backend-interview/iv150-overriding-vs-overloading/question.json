@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Combines overload resolution (compile-time, based on declared argument types) with override resolution (runtime, based on the object's actual type) in a single snippet, which is a common source of confusion even for experienced Java developers.",
+  "prompt": "Given this code:\n\n```java\nclass Printer {\n    void print(Object o) { System.out.println(\"Object: \" + o); }\n    void print(String s) { System.out.println(\"String: \" + s); }\n}\nclass SpecialPrinter extends Printer {\n    @Override\n    void print(Object o) { System.out.println(\"Special: \" + o); }\n}\n\nPrinter p = new SpecialPrinter();\nObject value = \"hello\";\np.print(value);\n```\n\nWhat is printed, and why?",
+  "explanation": "Overload resolution between print(Object) and print(String) happens at compile time, based on the declared (static) type of the argument expression — here, value is declared as Object, so the compiler binds the call to the print(Object) signature regardless of what object value actually refers to at runtime. Once that signature is fixed, which method body runs is decided at runtime through dynamic dispatch on the object's actual class (SpecialPrinter), which overrides print(Object). The two mechanisms stack: overloading is resolved statically, overriding is resolved dynamically, and only overriding is 'runtime polymorphism'.",
+  "options": [
+    {
+      "key": "A",
+      "text": "\"Special: hello\" — the compiler selects print(Object) because value is declared as Object, and at runtime, dynamic dispatch on the actual object (a SpecialPrinter) picks the overridden version of that method.",
+      "correct": true,
+      "explanation": "This correctly separates the two steps: overload resolution happens at compile time against the declared type (Object), and once print(Object) is the chosen signature, override resolution at runtime picks SpecialPrinter's version because that is the method actually invoked on p."
+    },
+    {
+      "key": "B",
+      "text": "\"String: hello\" — because the object actually referenced at runtime is a String, overload resolution picks print(String).",
+      "correct": false,
+      "explanation": "Overload resolution is based on the compile-time declared type of the argument expression, not the runtime type of the object it refers to. Since value is declared as Object, print(String) is never a candidate for this call."
+    },
+    {
+      "key": "C",
+      "text": "\"Object: hello\" — overriding does not apply here because value is typed as Object rather than String.",
+      "correct": false,
+      "explanation": "Overriding is unrelated to the type of the argument passed in; it depends on the runtime type of the object the method is called on (p, a SpecialPrinter), so the overridden Special: version runs, not Printer's original Object: version."
+    },
+    {
+      "key": "D",
+      "text": "A compile error occurs due to an ambiguous overload between print(Object) and print(String), because the compiler cannot decide between two applicable method signatures when the argument's declared type matches more than one overload candidate at the call site.",
+      "correct": false,
+      "explanation": "There is no ambiguity: the compiler only considers the declared type of the argument (Object), which matches exactly one overload, print(Object), so the call resolves unambiguously at compile time."
+    }
+  ],
+  "references": [
+    {
+      "title": "Defining Methods (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/methods.html"
+    },
+    {
+      "title": "Overriding and Hiding Methods (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/override.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

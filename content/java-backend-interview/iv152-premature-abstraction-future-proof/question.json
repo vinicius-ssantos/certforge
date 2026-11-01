@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing YAGNI from superficially similar principles like DRY and Open/Closed when evaluating a speculative abstraction.",
+  "prompt": "A developer is asked to add payment processing backed by the company's internal ledger system -- the only payment method the product supports today, with no second provider planned or announced. The developer submits this design:\n\n```java\npublic interface PaymentGateway {\n    ChargeResult charge(ChargeRequest request);\n    RefundResult refund(RefundRequest request);\n    String tokenize(PaymentMethod method);\n    boolean supportsRecurring();\n    boolean supportsPartialCapture();\n}\n\npublic class InternalLedgerGateway implements PaymentGateway {\n    // the only implementation that exists or is planned\n}\n```\n\nThe justification given is: \"We might add Stripe or PayPal later, so building the interface now will save time.\" Which principle is most directly relevant to evaluating this decision, and what does it recommend here?",
+  "explanation": "YAGNI applies to capability built for an anticipated but unconfirmed future need. With only one real implementation and no confirmed second provider, the interface's shape -- including methods like supportsRecurring and supportsPartialCapture -- is a guess. YAGNI does not forbid later refactoring, so introducing the abstraction once a real second provider actually appears costs little, while guessing its shape now risks building the wrong abstraction that still has to be reworked.",
+  "options": [
+    {
+      "key": "A",
+      "text": "YAGNI -- since no second provider is planned or confirmed, the speculative interface and its unused methods should be deferred until a real second implementation forces the right shape of the abstraction.",
+      "correct": true,
+      "explanation": "YAGNI specifically targets capability built for an anticipated-but-unconfirmed future need; it does not forbid refactoring later, so waiting for a real second provider to appear before introducing the interface costs little, while guessing its shape now risks building an abstraction that has to be reworked anyway."
+    },
+    {
+      "key": "B",
+      "text": "KISS -- the interface should be kept, but simplified by removing the tokenize method only.",
+      "correct": false,
+      "explanation": "KISS is about avoiding unnecessary complexity in how an already-needed problem is solved; it doesn't speak to whether an abstraction for an unconfirmed future requirement should exist at all, which is the actual issue here."
+    },
+    {
+      "key": "C",
+      "text": "DRY -- the interface is justified because it prevents InternalLedgerGateway's logic from being duplicated later, even though there is only one implementation today and no duplicated code actually exists yet to eliminate.",
+      "correct": false,
+      "explanation": "There is no duplication today to remove; DRY addresses repeated existing knowledge, not an interface speculatively shaped for a second provider that doesn't exist yet."
+    },
+    {
+      "key": "D",
+      "text": "The Open/Closed Principle -- the interface correctly anticipates extension, so it should be kept exactly as designed.",
+      "correct": false,
+      "explanation": "Open/Closed is about not having to modify existing code to extend behavior, but it doesn't justify guessing an abstraction's exact method set before a second real implementation exists to validate that shape."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Yagni",
+      "url": "https://martinfowler.com/bliki/Yagni.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

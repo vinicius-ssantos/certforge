@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "EASY",
+  "difficultyRationale": "The three annotations have distinct, documented, well-known scopes with no ambiguity once the names are known.",
+  "prompt": "Which statement correctly characterizes Spring Boot's test-slice annotations @WebMvcTest, @DataJpaTest, and @SpringBootTest?",
+  "explanation": "Each slice loads only the beans relevant to the layer it targets, which keeps the test fast and focused. @WebMvcTest auto-configures MVC infrastructure and a MockMvc client, leaving services and repositories to be supplied as test doubles. @DataJpaTest auto-configures JPA-related infrastructure for repository tests, by default against an embedded test database. @SpringBootTest loads the full application context, for tests that need the whole wiring assembled.",
+  "options": [
+    {
+      "key": "A",
+      "text": "@SpringBootTest is a lighter-weight slice than @WebMvcTest because it loads fewer beans, making it the default choice for fast controller tests.",
+      "correct": false,
+      "explanation": "This reverses the relationship: @SpringBootTest loads the full application context and is therefore the heavier of the two, while @WebMvcTest is the narrow slice meant for fast controller-focused tests."
+    },
+    {
+      "key": "B",
+      "text": "@WebMvcTest loads only the web layer and auto-configures a MockMvc client, with collaborators supplied as mocks; @DataJpaTest loads only JPA infrastructure for repository tests against a test database; @SpringBootTest loads the full application context for broader tests.",
+      "correct": true,
+      "explanation": "This matches each annotation's documented scope: a narrow web slice, a narrow persistence slice, and the full context respectively, each sized to what the test actually needs."
+    },
+    {
+      "key": "C",
+      "text": "@DataJpaTest starts a full embedded web server and the security filter chain so repository tests can exercise HTTP semantics, letting a single @DataJpaTest class double as an integration test for both the web tier and the security configuration without any additional setup at all.",
+      "correct": false,
+      "explanation": "@DataJpaTest is scoped to JPA infrastructure only; it does not start a web server or configure the security filter chain, since repository tests have nothing to do with HTTP handling."
+    },
+    {
+      "key": "D",
+      "text": "@WebMvcTest and @DataJpaTest load the exact same set of beans, differing only in annotation name for readability.",
+      "correct": false,
+      "explanation": "The two annotations configure entirely different parts of the application context — MVC components for one, JPA and persistence components for the other — so their bean sets do not overlap in the way this option claims."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot — Testing Spring Boot Applications",
+      "url": "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

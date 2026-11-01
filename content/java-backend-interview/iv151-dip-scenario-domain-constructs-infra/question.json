@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires rejecting the DI-equals-DIP misconception the issue specifically calls out, in favor of a refactor that actually changes the direction of the source dependency.",
+  "prompt": "```java\n@Service\npublic class OrderService {\n\n    public void placeOrder(Order order) {\n        orderRepository.save(order);\n\n        SmtpEmailSender emailSender = new SmtpEmailSender(\"smtp.internal:587\");\n        emailSender.send(order.customerEmail(), \"Order confirmed\", renderReceipt(order));\n    }\n}\n```\n\n`OrderService.placeOrder` constructs `SmtpEmailSender` directly inside the method. The team wants to apply the Dependency Inversion Principle here — not just add Spring's `@Autowired`. Which refactor actually does that?",
+  "explanation": "DIP is satisfied when the high-level module's own dependency is on an abstraction it defines, and the low-level detail is what adapts to that abstraction — not merely when a concrete dependency arrives from outside via a framework. Injecting the concrete `SmtpEmailSender` fixes testability but not the dependency direction; the correct refactor introduces an `OrderNotifier` abstraction that `OrderService` owns and depends on, with the SMTP detail implementing it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Add a constructor parameter `SmtpEmailSender emailSender` to `OrderService` and let Spring `@Autowired`-inject it, removing the `new SmtpEmailSender(...)` call.",
+      "correct": false,
+      "explanation": "This is dependency injection without dependency inversion: `OrderService` now receives its `SmtpEmailSender` from outside instead of constructing it, which helps testability, but it still depends directly on the concrete SMTP class and its constructor shape — exactly the conflation the team wanted to avoid."
+    },
+    {
+      "key": "B",
+      "text": "Keep the direct `new SmtpEmailSender(...)` call, but move it into a `@PostConstruct` initializer method annotated on `OrderService` so the SMTP client is constructed once when the Spring bean is created and cached in a field, instead of being allocated fresh on every single `placeOrder` invocation, which also avoids repeatedly opening a new socket connection to `smtp.internal:587`.",
+      "correct": false,
+      "explanation": "This changes when the concrete class is constructed, not what `OrderService` depends on; `OrderService` still has a hard, compiled-in dependency on `SmtpEmailSender`, so the coupling DIP addresses is unchanged."
+    },
+    {
+      "key": "C",
+      "text": "Mark `SmtpEmailSender` with `@Primary` so Spring prefers it automatically if another email sender bean is ever added.",
+      "correct": false,
+      "explanation": "`@Primary` resolves ambiguity between multiple beans of the same type at injection time; it has no effect on whether `OrderService` depends on a concrete class or an abstraction, so it doesn't touch the DIP concern at all."
+    },
+    {
+      "key": "D",
+      "text": "Define an `OrderNotifier` abstraction (owned alongside `OrderService`, in the order/domain package) with a method like `notifyOrderConfirmed(Order order)`; have `OrderService` depend only on `OrderNotifier`, injected through its constructor, and move the SMTP-specific code into an `SmtpOrderNotifier implements OrderNotifier` class that lives in an infrastructure package.",
+      "correct": true,
+      "explanation": "Correct. `OrderService`, the high-level module, now depends only on an abstraction it owns the definition of; the low-level SMTP detail depends on that abstraction instead of `OrderService` depending on the SMTP detail, which is the inversion DIP describes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Dependency Injection",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

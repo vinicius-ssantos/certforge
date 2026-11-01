@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing a cohesion problem from superficially similar coupling or naming concerns.",
+  "prompt": "A reviewer flags this class during a pull request:\n\n```java\npublic class OrderProcessor {\n    public void placeOrder(Order order) { ... }\n    public BigDecimal calculateSalesTax(Order order) { ... }\n    public void sendConfirmationEmail(Order order) { ... }\n    public void logAnalyticsEvent(Order order) { ... }\n    public byte[] generateShippingLabel(Order order) { ... }\n    public byte[] renderInvoicePdf(Order order) { ... }\n}\n```\n\nWhich best explains why this class is problematic from a cohesion standpoint, and what is the most appropriate fix?",
+  "explanation": "Cohesion measures how closely a class's members work together toward one purpose. Tax calculation, email delivery, analytics, shipping-label generation, and PDF rendering each belong to a different concern with its own reason to change, so grouping all of them inside OrderProcessor is a textbook low-cohesion design. Extracting each responsibility into its own class, collaborating with OrderProcessor, is the standard fix.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The class is fine as long as every method is public and well-named, since cohesion is only about naming clarity.",
+      "correct": false,
+      "explanation": "Cohesion is about whether a class's responsibilities belong together conceptually, not about naming; even perfectly named methods for six unrelated concerns still make the class low-cohesion."
+    },
+    {
+      "key": "B",
+      "text": "The class has a coupling problem, not a cohesion problem, because it depends on an email sender and a PDF library, and that external coupling is what should be reduced through dependency injection rather than by regrouping its responsibilities.",
+      "correct": false,
+      "explanation": "Depending on external collaborators is a coupling concern, but the issue described here is that unrelated responsibilities are bundled inside the class's own methods -- that is a cohesion problem about the class's internal design, separate from how many external dependencies it has."
+    },
+    {
+      "key": "C",
+      "text": "The class has low cohesion because it bundles unrelated responsibilities that each change for a different reason; each responsibility should be extracted into its own class that OrderProcessor collaborates with.",
+      "correct": true,
+      "explanation": "Cohesion measures how closely a class's members work together toward one purpose. Tax calculation, email sending, analytics, and PDF rendering each belong to a different concern with its own reason to change, so grouping them in one class is a textbook low-cohesion design; splitting the class by responsibility is the standard remedy."
+    },
+    {
+      "key": "D",
+      "text": "The class should be fixed by making every method static so each can be called independently without an object.",
+      "correct": false,
+      "explanation": "Making methods static doesn't address why unrelated responsibilities are grouped together; it would keep the same mixed responsibilities in the same class, just accessed differently."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler's Refactoring Catalog: Extract Class",
+      "url": "https://refactoring.com/catalog/extractClass.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

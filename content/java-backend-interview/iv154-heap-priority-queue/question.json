@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires comparing the cost profile of a heap against a fully sorted array across both insertion and extraction, not just one operation in isolation.",
+  "prompt": "A backend task scheduler must always process the task with the highest priority next, while new tasks are continuously added. Compared to maintaining a fully sorted array of tasks, what is the main advantage of using a binary heap-backed priority queue?",
+  "explanation": "A binary heap keeps only a partial order (the heap property) rather than a full sort, which lets both inserting a new task and extracting the highest-priority task run in O(log n). Keeping a full array sorted after every insertion costs O(n) per insertion, because an element may need to be shifted into its correct sorted position among all existing elements.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A heap gives O(1) extraction and O(1) insertion, which is strictly better than any array-based approach in every case.",
+      "correct": false,
+      "explanation": "A binary heap's insert and extract-highest-priority operations are both O(log n), not O(1); claiming O(1) for both overstates the heap's actual complexity."
+    },
+    {
+      "key": "B",
+      "text": "A heap keeps all elements in fully sorted order at all times, just like a sorted array, but can update that order in O(log n) by storing the complete binary tree compactly in a single backing array and adjusting parent-child index relationships.",
+      "correct": false,
+      "explanation": "A heap only guarantees the heap property (each parent has higher priority than its children), not a full total order across all elements; reading elements in sorted order from a heap is not O(log n) per element overall."
+    },
+    {
+      "key": "C",
+      "text": "A heap avoids the need for comparisons between tasks entirely by using hashing to determine priority order.",
+      "correct": false,
+      "explanation": "Heaps are fundamentally comparison-based (or key-based) structures; they rely on comparing priorities to decide placement, and do not use hashing to determine ordering at all."
+    },
+    {
+      "key": "D",
+      "text": "A heap supports inserting a task and extracting the highest-priority task in O(log n) each, while keeping an array fully sorted after every insertion costs O(n) per insertion.",
+      "correct": true,
+      "explanation": "Correct: the heap only restores a weaker partial order after each change (sift-up/sift-down along one path of height log n), whereas keeping an array fully sorted after every insertion needs the new element shifted into place among all existing elements."
+    }
+  ],
+  "references": [
+    {
+      "title": "Heap (data structure) - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Heap_(data_structure)"
+    },
+    {
+      "title": "PriorityQueue (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/PriorityQueue.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

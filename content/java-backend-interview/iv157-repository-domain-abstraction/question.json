@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the distinction between a repository as a domain-oriented abstraction and a generic persistence/query-builder API, a frequent point of confusion in Java backends using Spring Data or JPA.",
+  "prompt": "A team defines their `OrderRepository` interface to expose a method that accepts a JPA `Specification<Order>` built by the caller, letting any part of the application construct arbitrary predicates against the `Order` table. What is lost by designing the repository this way?",
+  "explanation": "A repository's role in DDD is to present a domain-oriented, collection-like interface (e.g., `findUnshippedOrdersFor(CustomerId)`) that hides how persistence actually works. Exposing a JPA `Specification` builder to callers means callers must think and depend on persistence-layer constructs instead of domain vocabulary, which is exactly the abstraction a repository is meant to provide.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Query performance always gets worse because specifications are inherently slower than named finder methods",
+      "correct": false,
+      "explanation": "Specifications compile to the same kind of SQL a named query would, so there's no inherent performance penalty; the issue with this design is about abstraction leakage, not raw query speed."
+    },
+    {
+      "key": "B",
+      "text": "The application will no longer be able to cache query results",
+      "correct": false,
+      "explanation": "Caching is an orthogonal concern that can be applied (or not) regardless of whether a repository exposes named domain methods or a generic specification parameter; this design choice doesn't inherently block caching."
+    },
+    {
+      "key": "C",
+      "text": "The domain-facing abstraction is lost — callers now depend on persistence-layer concepts (JPA specifications) instead of a vocabulary expressed in domain terms",
+      "correct": true,
+      "explanation": "Correct: a repository is meant to let the domain express queries in its own language (e.g., named finder methods); exposing a generic Specification builder pushes persistence-layer knowledge into every caller instead of hiding it behind the repository."
+    },
+    {
+      "key": "D",
+      "text": "Nothing meaningful is lost, since Spring Data `Specification` support is the idiomatic, officially recommended way to implement any repository method, regardless of how complex the query logic becomes",
+      "correct": false,
+      "explanation": "While Specifications are a legitimate implementation detail inside a repository, exposing them directly in the repository's public interface still leaks persistence concerns to callers — it is a departure from the domain-facing abstraction a repository is supposed to provide."
+    }
+  ],
+  "references": [
+    {
+      "title": "Repository (PoEAA catalog, Martin Fowler)",
+      "url": "https://martinfowler.com/eaaCatalog/repository.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

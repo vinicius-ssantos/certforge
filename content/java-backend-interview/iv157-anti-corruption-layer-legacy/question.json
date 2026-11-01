@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing the practical purpose of an anti-corruption layer as a translation boundary, rather than just recognizing the term.",
+  "prompt": "A new order-management domain needs customer data from a legacy mainframe system whose records mix unrelated concerns, use cryptic field names from decades-old business rules, and don't map cleanly onto the new domain's concepts. How should the new domain integrate with the legacy system without letting its concepts leak in?",
+  "explanation": "An anti-corruption layer is a translation boundary placed between a domain and an external system whose model doesn't fit the domain's own language. It converts the legacy system's data and concepts into the new domain's own model at the boundary, so the new domain's entities and invariants stay defined entirely in its own terms, never in the legacy system's terms.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Change the new domain's entities to directly mirror the legacy system's field names, structure, and even its decades-old, unrelated business rules",
+      "correct": false,
+      "explanation": "This does the opposite of protecting the new domain — it imports the legacy system's dated and conflated structure directly into the new model, which is the \"corruption\" an anti-corruption layer exists to prevent."
+    },
+    {
+      "key": "B",
+      "text": "Introduce an anti-corruption layer that translates the legacy model into the new domain's own model at the integration boundary",
+      "correct": true,
+      "explanation": "Correct: an anti-corruption layer isolates the new domain from the legacy system's concepts by translating at the boundary, so legacy field names, structures, and quirks never appear inside the new domain's own entities and rules."
+    },
+    {
+      "key": "C",
+      "text": "Call the legacy system's API directly from inside the new domain's aggregate root methods",
+      "correct": false,
+      "explanation": "Embedding legacy calls inside aggregate methods couples the domain's core behavior to the legacy system's availability and data shape, and skips the translation step that keeps the domain model clean of legacy concepts."
+    },
+    {
+      "key": "D",
+      "text": "Replace the legacy system entirely before writing any new domain code",
+      "correct": false,
+      "explanation": "Replacing a legacy system is often impractical or out of scope in the short term; an anti-corruption layer is specifically the pattern that lets new domain development proceed safely while the legacy system still exists and is still integrated with."
+    }
+  ],
+  "references": [
+    {
+      "title": "Anti-corruption Layer pattern (Azure Architecture Center)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/anti-corruption-layer"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing a genuine behavioral-contract break from surface-level, unrelated code smells offered as distractors.",
+  "prompt": "```java\npublic interface Repository<T> {\n    T findById(long id);\n    void save(T entity);\n    void delete(long id);\n}\n\npublic class ReadOnlyReportRepository implements Repository<Report> {\n    public Report findById(long id) { /* ... */ }\n\n    public void save(Report entity) {\n        throw new UnsupportedOperationException(\"reports are read-only\");\n    }\n\n    public void delete(long id) {\n        throw new UnsupportedOperationException(\"reports are read-only\");\n    }\n}\n```\n\nClient code throughout the application calls `Repository<Report> repo` and occasionally calls `repo.save(...)`, trusting the interface's declared behavior. Why is `ReadOnlyReportRepository` a Liskov Substitution Principle problem specifically, rather than just 'inheritance/interfaces are risky'?",
+  "explanation": "LSP is about whether a subtype can stand in for its supertype without surprising callers that only know the supertype's declared contract. `ReadOnlyReportRepository` compiles fine against `Repository<Report>` — the type signatures line up — but silently breaks the behavioral promise that `save` and `delete` work, which is the actual substitutability failure, not a generic complaint about inheritance.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The problem is that `Repository<T>` is a generic interface, and generics should never be combined with inheritance.",
+      "correct": false,
+      "explanation": "Generics and inheritance are routinely and safely combined; the type parameter `T` has nothing to do with why this specific implementation breaks callers — the issue is the unmet save/delete contract, not the use of `<T>`."
+    },
+    {
+      "key": "B",
+      "text": "The problem is that `ReadOnlyReportRepository` is a class rather than a record, and read-only data holders should always be modeled as records.",
+      "correct": false,
+      "explanation": "Whether the class is declared as a `class` or a `record` has no bearing on whether it honors the `Repository` contract; the violation is in the behavior of `save`/`delete`, independent of that syntactic choice."
+    },
+    {
+      "key": "C",
+      "text": "There is no real problem, because throwing an exception for an unsupported operation is always an acceptable implementation choice for any interface method, the same way `UnsupportedOperationException` is thrown by the `add` method of an immutable `List` returned from `List.of(...)` or `Collections.unmodifiableList(...)`, so `Repository` callers should simply expect the same from any implementation.",
+      "correct": false,
+      "explanation": "It's acceptable only when the type's own contract documents the operation as optional and callers are expected to check or handle it, as `java.util.List`'s unmodifiable views do; `Repository` here declares no such optionality, so callers have no way to know `save` might fail."
+    },
+    {
+      "key": "D",
+      "text": "`ReadOnlyReportRepository` satisfies the `Repository<Report>` type signature but not its behavioral contract: any caller that was written against `Repository` and calls `save` will compile against this implementation and then fail at runtime, so the subtype cannot actually be substituted wherever the supertype is expected.",
+      "correct": true,
+      "explanation": "Correct. The failure is behavioral, not structural: the type checks out, but the documented-by-convention promise that `save` and `delete` succeed does not hold for this implementation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java SE 21 API — UnsupportedOperationException",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/UnsupportedOperationException.html"
+    },
+    {
+      "title": "Java SE 21 API — List<E>",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

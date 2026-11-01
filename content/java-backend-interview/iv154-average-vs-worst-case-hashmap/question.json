@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires reasoning about when a worse average case with a guaranteed bound should be chosen over a better average case with a poor worst-case bound, a genuine backend risk trade-off rather than a definitional recall question.",
+  "prompt": "A backend engineer is choosing a lookup structure for a cache: a hash map, which gives average O(1) get but can degrade to O(n) under pathological key collisions, versus a balanced search tree, which always guarantees O(log n) get regardless of key distribution. In which scenario does the balanced tree's guarantee matter more than the hash map's better average case?",
+  "explanation": "When the keys driving lookups can be chosen or influenced by an untrusted source (such as user-supplied request parameters), an attacker can deliberately craft keys that collide, pushing the hash map toward its O(n) worst case and causing a denial-of-service-style performance collapse. A balanced tree's guaranteed O(log n) protects against that scenario even though it is typically slower on average than the hash map under normal, non-adversarial key distributions.",
+  "options": [
+    {
+      "key": "A",
+      "text": "When input keys may be adversarially chosen or highly collision-prone, where the tree's worst-case guarantee protects against a collapse the hash map's average case doesn't rule out.",
+      "correct": true,
+      "explanation": "Correct: this is the classic hash-flooding concern — an attacker who controls key values can target the hash function's weaknesses, and only a structure with a guaranteed worst case protects against that risk."
+    },
+    {
+      "key": "B",
+      "text": "When the number of keys is small, fewer than ten, because hash maps only become efficient above a certain size threshold.",
+      "correct": false,
+      "explanation": "Hash maps are efficient even for very small numbers of keys; there is no size threshold below which hashing stops working. This invents a constraint that doesn't reflect how hash tables behave."
+    },
+    {
+      "key": "C",
+      "text": "When exact insertion order must be preserved, because balanced trees preserve insertion order while hash maps destroy it.",
+      "correct": false,
+      "explanation": "A balanced search tree orders elements by key value, not by insertion order; neither a hash map nor a balanced tree preserves insertion order by default, so this isn't a valid reason to prefer the tree."
+    },
+    {
+      "key": "D",
+      "text": "Never — a hash map's average case is mathematically proven to always be at least as fast as a balanced tree's worst case for any workload, since amortized analysis across repeated insertions, deletions, and lookups is said to guarantee this bound no matter how the hash function disperses keys or how the input key distribution is generated.",
+      "correct": false,
+      "explanation": "This overclaims: a hash map's average case assumes a well-dispersing hash function over the actual key distribution, and that assumption can be broken by adversarial or pathological inputs, which is exactly when the tree's guarantee becomes valuable."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hash table - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Hash_table"
+    },
+    {
+      "title": "Self-balancing binary search tree - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

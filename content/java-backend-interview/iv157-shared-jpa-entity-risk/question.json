@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires connecting a concrete persistence decision (sharing a JPA entity/table) to the longer-term data-ownership and coupling consequences across bounded contexts.",
+  "prompt": "The Catalog context (product descriptions, categories) and the Inventory context (stock levels, warehouse locations) both need data about products. To avoid duplicating a `Product` table, the team considers mapping a single shared `@Entity Product` class, backed by one table, and letting both contexts read and write it directly. What is the main risk of this approach?",
+  "explanation": "When two domains map to the same JPA entity and table, neither one actually owns that data in isolation — a schema change driven by one domain's needs (e.g., Inventory adding a warehouse-location column) can break the other domain's mapping or semantics, and it becomes unclear which team or context is responsible for the data's integrity. This is the classic shared-database coupling problem that bounded contexts are meant to prevent.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Shared tables always cause database deadlocks under concurrent load",
+      "correct": false,
+      "explanation": "Deadlocks are a concurrency/locking concern that can occur with any table under contention, shared or not; they are not the defining or main risk of coupling two different domains through one shared schema."
+    },
+    {
+      "key": "B",
+      "text": "JPA does not allow the same table to be mapped by entity classes in two different modules",
+      "correct": false,
+      "explanation": "This is technically false — JPA has no restriction preventing two modules from mapping classes to the same table; the problem with the shared-entity approach is architectural coupling, not a JPA limitation."
+    },
+    {
+      "key": "C",
+      "text": "There is no real risk, since sharing one entity is the officially recommended way to avoid data duplication across bounded contexts in any microservices or modular-monolith architecture",
+      "correct": false,
+      "explanation": "This is backwards: bounded-context practice favors each context owning its own model and data, integrating through explicit contracts rather than a shared table, precisely because shared schemas create the coupling and ownership ambiguity described above."
+    },
+    {
+      "key": "D",
+      "text": "Changes driven by one context's needs can silently affect or break the other context, since both are coupled through a schema neither fully owns",
+      "correct": true,
+      "explanation": "Correct: a shared entity/table means a migration or field change made for Inventory's purposes can alter data or constraints that Catalog depends on, and vice versa — exactly the hidden coupling that shared-database integration introduces."
+    }
+  ],
+  "references": [
+    {
+      "title": "Pattern: Database per service (microservices.io)",
+      "url": "https://microservices.io/patterns/data/database-per-service.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires resisting the urge to jump straight to the database and instead reasoning about what changed most recently, which is a habit rather than a fact to recall.",
+  "prompt": "Minutes after a routine rolling deploy finishes, p99 latency for the checkout service jumps from 120ms to 1.4s. The error rate is flat, and CPU and memory on the pods look normal. What should you check first, before touching the database, and why?",
+  "explanation": "The deploy is the most recent change to the system, so the fastest way to narrow the search is to confirm the timing lines up and diff what the new revision actually changed (config, timeouts, flags) against the previous one. That rules in or out the cheapest, most likely cause before spending time on a subsystem (the database) that has shown no independent sign of trouble.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Overlay the deploy's rollout timestamp on the latency graph, then diff the new revision's configuration (connection pool size, timeout values, feature flags) against the previous one.",
+      "correct": true,
+      "explanation": "A deploy is a known, timestamped change; confirming the latency jump aligns with it and then diffing config narrows the search to the one thing that definitely changed, before assuming an unrelated subsystem failed at the same moment by coincidence."
+    },
+    {
+      "key": "B",
+      "text": "Restart the database to clear any sessions that might be stuck.",
+      "correct": false,
+      "explanation": "There is no evidence yet that the database is involved; restarting it discards diagnostic state (active sessions, locks, slow queries) that could later explain the problem, and does nothing to address a config regression in the new revision."
+    },
+    {
+      "key": "C",
+      "text": "Add more pods to the deployment to increase capacity, in case the extra traffic generated right after the deploy needs more compute headroom than the current replica count can provide right now.",
+      "correct": false,
+      "explanation": "CPU and memory are already normal, so the service is not short on compute; scaling out does not fix a behavioral regression introduced by the new revision and may simply run the same broken config on more instances."
+    },
+    {
+      "key": "D",
+      "text": "Add more logging statements and ship a new deploy to capture more data.",
+      "correct": false,
+      "explanation": "Shipping another deploy introduces a second variable on top of the first, making it harder to attribute the latency jump to either change, and it is slower than reading what the existing deploy already changed."
+    }
+  ],
+  "references": [
+    {
+      "title": "Effective Troubleshooting",
+      "url": "https://sre.google/sre-book/effective-troubleshooting/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

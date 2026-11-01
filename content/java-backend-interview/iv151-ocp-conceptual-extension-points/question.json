@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the trade-off behind OCP is understood, not just the slogan, by presenting several plausible but mechanical misreadings.",
+  "prompt": "A junior engineer summarizes the Open/Closed Principle as 'never edit existing classes, always add new ones.' Which statement best corrects this understanding of OCP's actual trade-off?",
+  "explanation": "Applied well, OCP is a bet on which variations are worth an abstraction; made everywhere, that bet becomes speculative generality that costs more than the if-statement it replaced. The principle is about choosing extension points deliberately, not about a rule against ever modifying a class.",
+  "options": [
+    {
+      "key": "A",
+      "text": "OCP asks you to identify the axes of variation likely to recur and expose an extension point (an interface or abstract method) for exactly those; it does not forbid ever touching a class, and guessing extension points that never get used adds speculative complexity without benefit.",
+      "correct": true,
+      "explanation": "Correct. OCP is a design judgment about anticipated change, not an absolute rule — an extension point built for a variation that never materializes is pure cost with no benefit."
+    },
+    {
+      "key": "B",
+      "text": "OCP means every class must implement at least one interface, since interfaces are what make a class 'closed.'",
+      "correct": false,
+      "explanation": "Implementing an interface does not by itself make a class closed to modification in any meaningful sense, and plenty of classes with no interface at all are perfectly stable; OCP is about where change is anticipated, not about a blanket interface requirement."
+    },
+    {
+      "key": "C",
+      "text": "OCP means a class is correct once it compiles without being edited again, regardless of whether new requirements can be met by extension, so a class nobody has touched in years is automatically a better example of OCP than one that gained a single new extension point last month to support a genuinely new, recurring requirement.",
+      "correct": false,
+      "explanation": "Never being edited again could just as easily mean the code is dead or the requirement never changed, not that it was designed for extension; OCP is demonstrated by successfully adding new behavior through extension, not merely by an absence of edits."
+    },
+    {
+      "key": "D",
+      "text": "OCP requires every method to be `protected` instead of `private`, so subclasses can override any behavior.",
+      "correct": false,
+      "explanation": "Blanket `protected` access invites subclasses to depend on internal details that were never meant as an extension point, which tends to produce the opposite of OCP's goal: a brittle hierarchy where changing the base class risks breaking subclasses that reached into its internals."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Java Tutorials — Abstract Methods and Classes",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

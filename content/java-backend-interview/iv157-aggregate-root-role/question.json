@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "EASY",
+  "difficultyRationale": "Recognizing the defining responsibility of an aggregate root, rather than an incidental trait, is a basic but essential DDD distinction.",
+  "prompt": "Within a `ShoppingCart` aggregate made up of the `ShoppingCart` entity and several `CartItem` entities, which property makes `ShoppingCart` the aggregate root rather than just another entity in the cluster?",
+  "explanation": "An aggregate root is the single entry point through which external code must load and modify anything inside the aggregate; it enforces the aggregate's invariants on every change and is the only member of the aggregate held by reference from outside. `ShoppingCart` qualifies because all access to `CartItem`s is mediated through it, not because of attribute count, repository usage, or creation order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It is the only entity in the aggregate held by external references and used to enforce invariants on every change to the aggregate's internals",
+      "correct": true,
+      "explanation": "Correct: being the sole externally-referenced entry point that mediates and validates all changes to the aggregate's internal objects is exactly what defines an aggregate root."
+    },
+    {
+      "key": "B",
+      "text": "It is the entity with the most attributes or fields",
+      "correct": false,
+      "explanation": "Attribute count has no bearing on aggregate root status; a root could have very few fields while still being the sole gatekeeper for the aggregate's invariants."
+    },
+    {
+      "key": "C",
+      "text": "It is any entity that happens to be returned by a repository's find method",
+      "correct": false,
+      "explanation": "Repositories are conventionally built to return aggregate roots, but that's a consequence of the root's role, not what grants the role — a repository could in principle be (mis)written to return any entity."
+    },
+    {
+      "key": "D",
+      "text": "It is simply the first entity created when the aggregate's objects are instantiated, for example by whichever constructor or factory call happens to execute first during that object graph's assembly",
+      "correct": false,
+      "explanation": "Creation order is incidental; what matters is which entity controls access and enforces consistency for the whole cluster on an ongoing basis, not which object happened to be constructed first."
+    }
+  ],
+  "references": [
+    {
+      "title": "DDD_Aggregate (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/DDD_Aggregate.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

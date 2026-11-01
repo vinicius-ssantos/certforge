@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires combining two structural trade-offs to satisfy three simultaneous O(1) requirements, rather than reasoning about a single structure in isolation.",
+  "prompt": "A backend service needs an in-memory LRU (least-recently-used) cache where get, put, and evicting the least-recently-used entry when the cache is full must all run in O(1) average time. Which combination of underlying structures is the standard choice to meet all three requirements, and why?",
+  "explanation": "A hash map gives O(1) lookup from key to the node holding that entry, while a doubly linked list tracks recency order and allows O(1) removal and reinsertion of any node (since each node has direct pointers to its neighbors), including moving an accessed entry to the front and dropping the least-recently-used entry from the tail. Neither structure alone satisfies all three requirements at once.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A single sorted array, because binary search locates a key in O(log n) by repeatedly comparing against the middle element, and the array can then be reordered on each access to move that entry to the most-recently-used position.",
+      "correct": false,
+      "explanation": "Binary search gives O(log n), not O(1), for lookup, and reordering an array on every access requires shifting elements, which is O(n); neither matches the O(1) requirement for get, put, or eviction."
+    },
+    {
+      "key": "B",
+      "text": "A single hash map alone, because hash maps already track usage order internally.",
+      "correct": false,
+      "explanation": "A general hash map has no built-in notion of access or insertion recency; tracking which entry was least recently used requires an additional ordered structure alongside it, not the hash map by itself."
+    },
+    {
+      "key": "C",
+      "text": "A binary heap, because it can always extract the least-recently-used item in O(log n).",
+      "correct": false,
+      "explanation": "A heap's extraction is O(log n), not O(1), and more importantly a plain heap keyed by recency doesn't support the O(1) arbitrary-position update that get() needs every time an entry is accessed and must move to 'most recently used'."
+    },
+    {
+      "key": "D",
+      "text": "A hash map, for O(1) key lookup, combined with a doubly linked list, to track usage order and allow O(1) removal and reinsertion of any node, including the least-recently-used tail.",
+      "correct": true,
+      "explanation": "Correct: the hash map locates the node for a key in O(1), and because a doubly linked list node holds direct pointers to its neighbors, that node can be unlinked and relinked elsewhere in O(1) without scanning, satisfying get, put, and eviction together."
+    }
+  ],
+  "references": [
+    {
+      "title": "Cache replacement policies - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Cache_replacement_policies"
+    },
+    {
+      "title": "Doubly linked list - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Doubly_linked_list"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

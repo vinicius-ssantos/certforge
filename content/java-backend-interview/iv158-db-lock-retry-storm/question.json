@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires recognizing a self-reinforcing failure loop and choosing the step that stops it growing, rather than a step that only looks like it addresses the database.",
+  "prompt": "During a traffic spike, p99 latency to the payments service balloons and timeouts start firing. The payments database shows a growing number of sessions waiting on a row lock, and application logs show every timeout triggering an automatic retry 200ms later. What is most likely accelerating the outage, and what should the first corrective step target?",
+  "explanation": "Each timed-out request is being retried on top of a backlog that is already waiting behind a lock, so the retries add new lock waiters faster than the database can drain the existing ones — a self-reinforcing retry storm. Scaling the service or lengthening timeouts both increase how many requests are in flight against the same locked rows; the step that actually stops the growth is reducing or backing off the retries themselves.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Manually kill the session holding the row lock so it releases.",
+      "correct": false,
+      "explanation": "This is reactive and can corrupt in-flight work; even if it releases this lock, it does nothing to stop the retry behavior from generating the same pile-up again on the next contended row."
+    },
+    {
+      "key": "B",
+      "text": "Back off or pause the automatic retries (for example, exponential backoff with jitter, or a circuit breaker) before trying to speed up the database.",
+      "correct": true,
+      "explanation": "The retries are the mechanism actively adding new lock waiters on top of an already-backlogged queue; stopping that growth is the first step that lets the existing backlog drain instead of growing faster than the database can process it."
+    },
+    {
+      "key": "C",
+      "text": "Scale out additional payments service pods to handle more concurrent requests during the spike, so overall throughput keeps pace with the incoming traffic volume.",
+      "correct": false,
+      "explanation": "More pods means more concurrent requests retrying against the same contended rows, which increases the rate of new lock waiters rather than reducing it — a textbook way to amplify a cascading failure."
+    },
+    {
+      "key": "D",
+      "text": "Increase the request timeout so fewer calls fail outright.",
+      "correct": false,
+      "explanation": "A longer timeout hides the symptom by generating fewer explicit failures, but the requests still queue behind the lock for longer, and more of them accumulate in flight, which can add memory pressure on top of the existing contention."
+    }
+  ],
+  "references": [
+    {
+      "title": "Addressing Cascading Failures",
+      "url": "https://sre.google/sre-book/addressing-cascading-failures/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

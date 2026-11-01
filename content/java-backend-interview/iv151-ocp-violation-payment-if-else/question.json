@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "The violation is visible directly in a short, familiar if/else chain without requiring a multi-step refactor to reason about.",
+  "prompt": "```java\n@Service\npublic class PaymentService {\n\n    public void charge(PaymentRequest request) {\n        if (request.type() == PaymentType.CREDIT_CARD) {\n            creditCardGateway.charge(request.amount(), request.cardToken());\n        } else if (request.type() == PaymentType.PAYPAL) {\n            payPalClient.charge(request.amount(), request.payPalAccountId());\n        } else if (request.type() == PaymentType.BANK_TRANSFER) {\n            bankTransferService.initiate(request.amount(), request.iban());\n        } else {\n            throw new UnsupportedOperationException(\"unknown payment type\");\n        }\n    }\n}\n```\n\nThe team needs to add a fourth payment type, `CRYPTO`. Why does this `PaymentService` represent an Open/Closed Principle concern specifically, rather than just being 'ugly code'?",
+  "explanation": "OCP is violated here because a specific, foreseeable kind of change — a new payment type — cannot be accommodated without modifying `charge`, even though the existing branches are untouched by the new requirement. That is different from the code merely being long or using an exception; the test is whether a known future change requires edits to code that has nothing to do with it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The method is too long, and OCP is violated whenever a method exceeds roughly ten lines, regardless of whether that length comes from one cohesive block of logic that will never need another branch or from a chain of branches that keeps growing every time a new payment type is added.",
+      "correct": false,
+      "explanation": "Length alone isn't an OCP concern; a ten-line if/else chain that will never gain a new branch has no OCP problem, while a five-line method that must be edited for every new case does. The issue here is specifically that a known, recurring kind of change forces modification."
+    },
+    {
+      "key": "B",
+      "text": "Using `==` to compare `request.type()` is the violation, because enum comparisons should always use `.equals()`.",
+      "correct": false,
+      "explanation": "`==` is actually the idiomatic and safe way to compare Java enum constants, since each constant is a singleton; this is unrelated to OCP, which concerns how the class responds to new payment types, not which comparison operator is used."
+    },
+    {
+      "key": "C",
+      "text": "Supporting `CRYPTO` requires editing `charge` and recompiling/retesting the whole class, even though credit card, PayPal and bank transfer behavior are unchanged — the class is not closed against a kind of change (adding a payment type) that the team already knows will recur.",
+      "correct": true,
+      "explanation": "Correct. A kind of change that is known to recur (new payment types) forces modification of code unrelated to that specific change, which is exactly the situation OCP is meant to prevent."
+    },
+    {
+      "key": "D",
+      "text": "Throwing `UnsupportedOperationException` in the `else` branch is the violation, because that exception should never appear in application code.",
+      "correct": false,
+      "explanation": "The fallback exception is a reasonable guard against an unmapped type and is not itself an OCP problem; the violation is that adding a real, supported payment type still requires modifying this method, not that an exception type appears in one branch."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Java Tutorials — What Is an Interface?",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/interface.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

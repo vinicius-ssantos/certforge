@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires recognizing when behavior spans multiple aggregates and therefore does not fit naturally on any single entity or value object.",
+  "prompt": "Transferring money between two distinct `Account` aggregates requires debiting one account and crediting the other, applying a rule (e.g., sufficient funds, matching currency) that spans both accounts. Where should this behavior be placed?",
+  "explanation": "A domain service holds behavior that is a genuine domain concept but doesn't belong to any single entity or value object — typically because it coordinates across multiple aggregates. A transfer between two separate `Account` aggregates is exactly this case: putting the logic on either account alone would give one aggregate inappropriate knowledge of or control over the other.",
+  "options": [
+    {
+      "key": "A",
+      "text": "In a domain service (e.g., `MoneyTransferService`) that coordinates the two `Account` aggregates",
+      "correct": true,
+      "explanation": "Correct: since the transfer rule spans two independent aggregates rather than belonging to either one, a domain service is the appropriate home — it expresses the operation without forcing one aggregate to reach into or control the other."
+    },
+    {
+      "key": "B",
+      "text": "Inside the `Account` entity, since all business logic must live on entities",
+      "correct": false,
+      "explanation": "Putting the transfer on one `Account` would require that aggregate to directly manipulate another aggregate's internals, breaking the rule that each aggregate is only modified through its own root and blurring the transactional boundary between the two accounts."
+    },
+    {
+      "key": "C",
+      "text": "In a repository method, since repositories are responsible for persisting both accounts together",
+      "correct": false,
+      "explanation": "A repository's job is retrieving and persisting aggregates, not implementing business rules like funds sufficiency or currency matching; mixing that logic into a repository conflates persistence concerns with domain behavior."
+    },
+    {
+      "key": "D",
+      "text": "In the presentation layer controller, since it is only an orchestration concern",
+      "correct": false,
+      "explanation": "The transfer rule (sufficient funds, matching currency, atomic debit/credit) is domain logic, not UI orchestration; placing it in a controller would scatter business rules outside the domain model and duplicate them across every entry point that needs a transfer."
+    }
+  ],
+  "references": [
+    {
+      "title": "Domain-driven design — Working with models (Wikipedia)",
+      "url": "https://en.wikipedia.org/wiki/Domain-driven_design"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

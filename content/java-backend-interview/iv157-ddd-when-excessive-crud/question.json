@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires judging when tactical DDD patterns add unnecessary structure rather than assuming they are always beneficial, which is a practical judgment call interviewers probe for.",
+  "prompt": "An internal admin tool manages a single `Tag` resource: create, rename, list, and delete, with the only rule being that tag names must be unique, already enforced by a database unique constraint. A developer proposes introducing an aggregate root, a domain service, and a repository interface abstracted away from Spring Data JPA for this feature. When is this level of DDD structure excessive?",
+  "explanation": "DDD's tactical patterns earn their cost when a domain has real business complexity: invariants spanning multiple objects, behavior that doesn't fit a simple CRUD shape, or a need to isolate the domain model from persistence concerns. When a feature has no meaningful business logic beyond a uniqueness check already handled by the database, straightforward CRUD with thin validation achieves the same correctness with far less code and indirection to maintain.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Only when the application doesn't use a relational database",
+      "correct": false,
+      "explanation": "The choice of database technology has no bearing on whether DDD's tactical patterns are warranted; the deciding factor is the complexity of the domain's business rules, not the storage engine underneath."
+    },
+    {
+      "key": "B",
+      "text": "Whenever the team is small, regardless of the domain's complexity",
+      "correct": false,
+      "explanation": "Team size doesn't determine whether DDD patterns are excessive — a small team can still be working on a genuinely complex domain that benefits from aggregates and domain services; the relevant factor is the domain's inherent complexity, not headcount."
+    },
+    {
+      "key": "C",
+      "text": "DDD's tactical patterns — aggregate roots, domain services, and repository interfaces abstracted from the ORM — should always be applied, even to simple CRUD features, to future-proof the code",
+      "correct": false,
+      "explanation": "Applying aggregates, domain services, and abstracted repositories to a feature with no real business complexity adds maintenance overhead and indirection without a corresponding benefit; future complexity, if it ever arrives, can be addressed by refactoring then rather than over-engineering now."
+    },
+    {
+      "key": "D",
+      "text": "When the domain has little to no complex business logic or invariants to protect beyond what a simple CRUD operation with thin validation already handles",
+      "correct": true,
+      "explanation": "Correct: the `Tag` feature has a single, already-enforced invariant and no behavior beyond create/rename/list/delete, so the extra aggregate/service/repository-abstraction layers add indirection without protecting anything a direct CRUD approach wouldn't already handle."
+    }
+  ],
+  "references": [
+    {
+      "title": "AnemicDomainModel (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/AnemicDomainModel.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

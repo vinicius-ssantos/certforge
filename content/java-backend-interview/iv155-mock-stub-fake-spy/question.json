@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The four terms are often used interchangeably in casual speech, so distinguishing them precisely requires more than surface recall.",
+  "prompt": "In test-double terminology, which statement correctly distinguishes a stub, a mock, a fake, and a spy?",
+  "explanation": "A stub supplies canned answers to calls it receives during the test and is never itself the subject of an assertion. A mock is a double pre-programmed with expectations that the test later verifies were satisfied (its interactions are the assertion). A fake is a working, lighter-weight implementation with real behavior, such as an in-memory repository used instead of a database. A spy wraps a real object, recording what was called while still delegating to (or selectively overriding) the real implementation.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Mocks and stubs are the same construct, and the only meaningful distinction in test-double vocabulary is between fakes and spies.",
+      "correct": false,
+      "explanation": "Mocks and stubs differ in what the test checks: a stub's return value is used by the code under test and never itself asserted on, while a mock's calls are the thing the test verifies — collapsing that distinction loses exactly the point of the vocabulary."
+    },
+    {
+      "key": "B",
+      "text": "A fake is a mock with Mockito.verify() calls chained onto it, and a spy is a stub whose return values are loaded from an external fixture file, so neither a fake nor a spy ever runs any logic of its own beyond replaying pre-recorded data.",
+      "correct": false,
+      "explanation": "Neither definition matches: a fake's defining trait is having real, working logic of its own (not verification chaining), and a spy's defining trait is wrapping a real object (not sourcing data from a fixture)."
+    },
+    {
+      "key": "C",
+      "text": "A spy never exhibits real behavior, since every one of its methods must be explicitly stubbed before use, the same as a strict mock.",
+      "correct": false,
+      "explanation": "The opposite is true: a spy wraps a real instance and calls through to its genuine methods unless a specific call is explicitly stubbed, which is exactly what sets it apart from a mock built on an interface with no real implementation behind it."
+    },
+    {
+      "key": "D",
+      "text": "A stub returns canned answers and is not verified; a mock lets the test assert on the interactions that occurred; a fake has real working behavior; a spy wraps a real object and delegates to it.",
+      "correct": true,
+      "explanation": "This matches the classic distinction: stubs supply state, mocks are verified on behavior, fakes have genuine working logic, and spies observe a real object rather than replacing its behavior outright."
+    }
+  ],
+  "references": [
+    {
+      "title": "Mocks Aren't Stubs",
+      "url": "https://martinfowler.com/articles/mocksArentStubs.html"
+    },
+    {
+      "title": "Mockito.spy javadoc",
+      "url": "https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
