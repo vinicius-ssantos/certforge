@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reasoning about space scaling with graph density to choose between two basic graph representations, a common backend data-modeling decision.",
+  "prompt": "A backend system models a social graph where each of tens of millions of users is connected, on average, to only a few hundred other users. For storing these connections, what is the main reason an adjacency list is preferred over an adjacency matrix in this scenario?",
+  "explanation": "An adjacency list stores space proportional to the number of edges actually present, which fits a sparse graph where each user has only a few hundred connections out of tens of millions of possible ones. An adjacency matrix allocates space proportional to the square of the number of vertices, regardless of how many edges actually exist, which would be enormously wasteful here.",
+  "options": [
+    {
+      "key": "A",
+      "text": "An adjacency matrix cannot represent undirected graphs, so a sparse social graph like this one requires an adjacency list.",
+      "correct": false,
+      "explanation": "An adjacency matrix can represent undirected graphs perfectly well, typically as a symmetric matrix where entry (i, j) and (j, i) agree; this is not the reason to prefer a list here."
+    },
+    {
+      "key": "B",
+      "text": "An adjacency list uses space proportional to the number of edges, while an adjacency matrix uses space proportional to the square of the number of vertices, which is wasteful for a sparse graph like this one.",
+      "correct": true,
+      "explanation": "Correct: with tens of millions of vertices but only a few hundred edges per vertex, the graph is sparse, and a matrix's quadratic space cost would be vastly larger than the list's edge-proportional cost."
+    },
+    {
+      "key": "C",
+      "text": "An adjacency list always answers 'are these two users connected?' faster than an adjacency matrix, regardless of graph density.",
+      "correct": false,
+      "explanation": "The opposite is true for this specific check: an adjacency matrix gives O(1) direct-index lookup for whether an edge exists, while an adjacency list requires scanning a vertex's neighbor list, which is O(degree). The list's advantage here is space, not that particular lookup."
+    },
+    {
+      "key": "D",
+      "text": "An adjacency matrix cannot be updated once created, while an adjacency list supports adding new connections over time by appending to a vertex's neighbor list in amortized O(1) time, without needing to resize any fixed-size global structure.",
+      "correct": false,
+      "explanation": "An adjacency matrix can be updated by simply setting the relevant cell to indicate a new edge; it is not immutable. The real distinction in this scenario is space efficiency for a sparse graph, not mutability."
+    }
+  ],
+  "references": [
+    {
+      "title": "Adjacency list - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Adjacency_list"
+    },
+    {
+      "title": "Adjacency matrix - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Adjacency_matrix"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

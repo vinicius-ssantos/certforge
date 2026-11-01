@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reading a small multi-concern method and separating true reasons-to-change from surface details like annotations or construction style.",
+  "prompt": "```java\n@Service\npublic class UserRegistrationService {\n\n    public void register(UserForm form) {\n        if (form.email() == null || !form.email().contains(\"@\")) {\n            throw new IllegalArgumentException(\"invalid email\");\n        }\n        User user = new User(form.email(), form.name());\n\n        jdbcTemplate.update(\n            \"INSERT INTO users(email, name) VALUES (?, ?)\", user.email(), user.name());\n\n        SimpleMailMessage welcome = new SimpleMailMessage();\n        welcome.setTo(user.email());\n        welcome.setSubject(\"Welcome\");\n        mailSender.send(welcome);\n\n        auditLog.record(\"USER_REGISTERED\", user.email(), Instant.now());\n    }\n}\n```\n\nWhich combination of this class's responsibilities is the clearest Single Responsibility Principle concern, and why?",
+  "explanation": "The method interleaves validation, persistence, email delivery and audit logging — four concerns that change for different reasons and are owned by different stakeholders (product/validation rules, DBAs/schema, marketing/email copy, compliance/audit requirements). That mixture, not the method count or framework choice, is what SRP flags.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The class is annotated `@Service`, and Spring stereotypes should only ever be applied to classes with exactly one public method — `register` already satisfies that, so there is no SRP concern here.",
+      "correct": false,
+      "explanation": "A single public method says nothing about SRP; the question is how many unrelated reasons-to-change are folded inside that one method's body, and here there are at least four."
+    },
+    {
+      "key": "B",
+      "text": "Validation, persistence, notification and audit logging are four independently changeable concerns bundled into one method; a change to the welcome email's wording or the audit schema forces an edit to `register`, which has nothing to do with validating or storing a user.",
+      "correct": true,
+      "explanation": "Correct. Each of these four concerns can change for a reason unrelated to the other three, yet all four live inside one method that must be touched whenever any of them changes."
+    },
+    {
+      "key": "C",
+      "text": "The class constructs a `User` directly instead of using a factory, which violates SRP because object construction is always a separate responsibility from business logic.",
+      "correct": false,
+      "explanation": "Constructing a small value object inline is not an SRP violation by itself — object creation only becomes a separate concern when it is complex or reused enough to deserve its own class; the real issue here is persistence, email and auditing sharing one method, not the `new User(...)` call."
+    },
+    {
+      "key": "D",
+      "text": "Using `jdbcTemplate` ties the class to Spring, which violates SRP because a service class should never depend on a framework type, the same way depending on `SimpleMailMessage` or the `@Service` annotation itself would also count as a forbidden framework dependency under this reading of the principle.",
+      "correct": false,
+      "explanation": "Depending on a framework helper like `JdbcTemplate` is a dependency and testability concern, not an SRP violation; SRP is about how many unrelated reasons to change are mixed together, not which library supplies a collaborator."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler's Bliki — BeckDesignRules",
+      "url": "https://martinfowler.com/bliki/BeckDesignRules.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

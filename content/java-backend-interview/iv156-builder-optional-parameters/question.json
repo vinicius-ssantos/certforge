@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "The trade-off between Builder and a plain constructor is a direct comparison with a clear, well-documented criterion, requiring little inference.",
+  "prompt": "`HotelSearchQuery` has 9 fields: a required `city`, and 8 optional filters (price range, star rating, amenities, distance, pet-friendly, free cancellation, sort order, page size). `AuditEvent` has exactly 2 required fields, `actorId` and `action`, both always known at construction time and never optional. Which statement about applying the Builder pattern to each is correct?",
+  "explanation": "Builder earns its place when an object has several optional or combinable fields, because it avoids telescoping constructors (one overload per combination of present fields) or an all-args constructor that forces callers to pass nulls or defaults for everything they don't care about, while still letting every field be set by name. `AuditEvent` has no optional fields and only two of them total, so a two-argument constructor already says everything a builder would, without the extra class and the two-step construction.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Builder should be used for both classes, because immutable objects always require a Builder to be constructed safely.",
+      "correct": false,
+      "explanation": "Immutability does not require a Builder; a constructor that assigns final fields produces an equally immutable object, and for a two-field class like `AuditEvent` it does so with less code than a builder would."
+    },
+    {
+      "key": "B",
+      "text": "Builder is worth using for `HotelSearchQuery`, because it avoids a telescoping-constructor or long-parameter-list problem; it is not worth it for `AuditEvent`, whose two fields are already clear in a plain constructor.",
+      "correct": true,
+      "explanation": "This matches the deciding factor directly: `HotelSearchQuery` has the combinatorial optional-field problem Builder exists to solve, while `AuditEvent` has no optional fields and only two of them, so a constructor call already reads as clearly as a builder chain would, at a fraction of the code."
+    },
+    {
+      "key": "C",
+      "text": "Builder is unnecessary for `HotelSearchQuery` because Java records already solve the optional-field problem that Builder addresses.",
+      "correct": false,
+      "explanation": "A record still requires every component to be supplied positionally or via its canonical constructor, which does not solve the problem of combining a subset of 8 optional filters without either overloads or passing defaults for the rest; it does not substitute for Builder here."
+    },
+    {
+      "key": "D",
+      "text": "Neither class benefits from Builder, because Builder is only useful when an object's fields must be validated against each other after all of them are set, such as checking that a price range or date range stays internally consistent before the object is built.",
+      "correct": false,
+      "explanation": "Cross-field validation is one reason a builder's `build()` step can be useful, but it is not the defining criterion for adopting Builder; the dominant reason here is the number of independently optional fields on `HotelSearchQuery`, which this option ignores."
+    }
+  ],
+  "references": [
+    {
+      "title": "Builder — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/builder"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

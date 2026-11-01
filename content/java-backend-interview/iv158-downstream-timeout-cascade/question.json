@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires weighing a fix that protects the caller against one that happens to also protect the failing dependency, and recognizing why only one actually stops the spread.",
+  "prompt": "A recommendations service calls a third-party pricing API with a 2-second timeout and no retry limit configured beyond 'retry on timeout, forever'. The pricing API starts responding slowly under its own load. Within minutes, the recommendations service's own thread pool is exhausted and it starts failing unrelated requests that never call the pricing API at all. What should the fix address first?",
+  "explanation": "The pricing API's slowness alone would only slow down the requests that depend on it. What turned that into an outage for unrelated requests was the recommendations service holding threads open (via unbounded retries and a timeout long enough for threads to pile up) until its own pool was exhausted. The fix that stops the spread is isolating or bounding how much of the caller's own capacity one failing dependency can consume — a circuit breaker and a retry budget — not simply waiting for the pricing API to recover.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Lower the timeout to the pricing API so each failing call returns faster.",
+      "correct": false,
+      "explanation": "A shorter timeout reduces how long each thread is held, but with retries configured to continue forever, threads are still consumed again immediately by the next retry; it narrows the problem without removing the unbounded retry behavior that is exhausting the pool."
+    },
+    {
+      "key": "B",
+      "text": "Contact the pricing API's operator and wait for them to fix their service.",
+      "correct": false,
+      "explanation": "This may well be necessary, but it does not change how the recommendations service behaves while waiting, and does nothing to stop its own thread pool from being exhausted by the same dependency again in the future."
+    },
+    {
+      "key": "C",
+      "text": "Bound how much of the recommendations service's own capacity the pricing API call can consume, for example with a circuit breaker that stops calling it and a cap on total retries, so its slowness cannot exhaust the shared thread pool.",
+      "correct": true,
+      "explanation": "The outage spread to unrelated requests because one dependency was allowed to consume unbounded threads from a pool every request shares; capping that consumption is what keeps the pricing API's problem contained to the requests that actually depend on it."
+    },
+    {
+      "key": "D",
+      "text": "Increase the size of the recommendations service's thread pool so it can absorb more concurrent slow calls, since a larger pool gives every request, including ones that never call the pricing API, more capacity to wait before the same exhaustion happens again.",
+      "correct": false,
+      "explanation": "A bigger pool delays exhaustion but does not remove the unbounded retry loop consuming it; under sustained pricing API slowness, the larger pool fills just as surely, only after a longer delay."
+    }
+  ],
+  "references": [
+    {
+      "title": "Addressing Cascading Failures",
+      "url": "https://sre.google/sre-book/addressing-cascading-failures/"
+    },
+    {
+      "title": "Handling Overload",
+      "url": "https://sre.google/sre-book/handling-overload/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

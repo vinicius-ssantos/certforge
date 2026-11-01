@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reasoning about which specific refactor improves which property (cohesion vs. coupling) in a concrete class, rather than reciting the slogan 'high cohesion, low coupling'.",
+  "prompt": "A class `OrderProcessor` has one method that validates an order's line items, a second method that calculates shipping cost by calling three different external carrier APIs directly, and a third, unrelated method that formats order confirmation emails. A reviewer says the class has a cohesion problem, a coupling problem, or both, and asks what should change. What is the most accurate assessment?",
+  "explanation": "Cohesion is about how closely related a class's own responsibilities are to each other; bundling order validation, shipping cost calculation, and email formatting into one class is low cohesion, since those are three largely unrelated responsibilities. Coupling is about how tightly a class's implementation is bound to other components; having shipping logic call three carrier APIs directly embeds carrier-specific details inside OrderProcessor, making it tightly coupled to those external systems. Both problems exist here, and they call for different fixes: splitting OrderProcessor into focused classes improves cohesion, while introducing a shipping-carrier abstraction that OrderProcessor depends on (rather than three concrete API clients) reduces coupling.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Only a cohesion problem exists; coupling is unaffected because OrderProcessor still compiles and runs correctly regardless of which carrier APIs it calls.",
+      "correct": false,
+      "explanation": "Whether code compiles and runs says nothing about coupling. Calling three concrete carrier APIs directly from OrderProcessor still ties that class tightly to the details and stability of those external systems, which is a coupling concern independent of correctness."
+    },
+    {
+      "key": "B",
+      "text": "Only a coupling problem exists; having multiple unrelated methods in one class is a normal, cohesive design as long as each method is independently correct.",
+      "correct": false,
+      "explanation": "Correctness of individual methods does not make a class cohesive. Validation, shipping calculation, and email formatting serve different purposes and would normally belong to different classes, so grouping them together is itself a cohesion problem, separate from any coupling issue."
+    },
+    {
+      "key": "C",
+      "text": "Neither problem exists, since all three methods are public and can be called independently by any client that needs them.",
+      "correct": false,
+      "explanation": "Public visibility and independent callability describe the class's external API, not its internal design quality; a class can expose multiple independently callable public methods and still suffer from low cohesion and tight coupling internally."
+    },
+    {
+      "key": "D",
+      "text": "Both problems exist: mixing validation, shipping, and email logic is low cohesion; calling carrier APIs directly is tight coupling.",
+      "correct": true,
+      "explanation": "This correctly separates the two concerns and assigns each its own fix: cohesion is improved by giving the class a single, focused responsibility, while coupling is reduced by depending on an abstraction over the carriers instead of their concrete APIs."
+    }
+  ],
+  "references": [
+    {
+      "title": "Reducing Coupling (Martin Fowler, IEEE Software)",
+      "url": "https://martinfowler.com/ieeeSoftware/coupling.pdf"
+    },
+    {
+      "title": "What Is an Object? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/object.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

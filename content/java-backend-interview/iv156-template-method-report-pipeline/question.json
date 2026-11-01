@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires distinguishing a fixed-skeleton design from a swappable-behavior design, two patterns that are often confused because both vary one part of an algorithm.",
+  "prompt": "`InvoiceReportJob`, `UsageReportJob` and `AuditReportJob` all run the same sequence: load a date range of records, apply a report-specific transformation to produce rows, then write those rows through a shared CSV writer that handles headers, quoting and file naming. Only the transformation step differs between the three jobs; the load step and the write step are identical in all of them and must stay that way. Which design most directly matches this requirement?",
+  "explanation": "Template Method is for exactly this shape: a fixed sequence of steps where most steps are shared and one (or a few) varies, implemented by putting the shared steps in a base class and leaving the varying step as an abstract method (or hook) that subclasses override. It differs from Strategy, which swaps an entire algorithm at runtime through composition with no fixed surrounding sequence; here the sequence itself — load, transform, write, in that order — is the part that must not change, which is what a base class enforces and a composed, independently swappable object does not.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A `ReportTransformationStrategy` interface injected into a single `ReportJob` class, with one implementation per report type, and `ReportJob` free to call the steps in any order it chooses.",
+      "correct": false,
+      "explanation": "This solves swapping the transformation, but it does not enforce that load and write stay in a fixed shared sequence; a composed strategy object has no say over the order in which the surrounding class calls things, which is a requirement the scenario explicitly states."
+    },
+    {
+      "key": "B",
+      "text": "Three independent classes, `InvoiceReportJob`, `UsageReportJob` and `AuditReportJob`, each implementing load, transform and write from scratch with no shared base, so any future fix to the shared CSV writer's header, quoting or file-naming behavior would need to be copied into all three by hand.",
+      "correct": false,
+      "explanation": "Duplicating the load and write steps in three classes directly violates the stated requirement that those steps are identical and must stay that way, since any future change to the shared CSV writer logic would now need to be made in three places."
+    },
+    {
+      "key": "C",
+      "text": "An abstract `ReportJob` base class implementing `run()` as load → transform → write, with `transform` declared abstract and overridden by `InvoiceReportJob`, `UsageReportJob` and `AuditReportJob`.",
+      "correct": true,
+      "explanation": "This is Template Method: the base class owns the fixed sequence and the shared load/write steps, and only the step that actually varies is left to subclasses, which matches the requirement that load and write stay identical while transform differs."
+    },
+    {
+      "key": "D",
+      "text": "A `ReportJobFactory` that returns a different `ReportJob` implementation depending on report type, with load, transform and write all left to each implementation.",
+      "correct": false,
+      "explanation": "Choosing which class to instantiate is a creation concern and says nothing about whether the load and write steps are shared; this option still allows each implementation to diverge in exactly the steps the scenario requires to stay identical."
+    }
+  ],
+  "references": [
+    {
+      "title": "Template Method — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/template-method"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

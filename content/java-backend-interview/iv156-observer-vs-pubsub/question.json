@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "The two mechanisms look identical from the caller's perspective (both decouple a producer from a consumer), so the distinction rests on coupling and delivery guarantees that are easy to blur without close reading.",
+  "prompt": "A Spring application uses `ApplicationEventPublisher.publishEvent(new OrderPlacedEvent(order))`, handled synchronously, in the same process and the same thread by default, by one or more `@EventListener` methods registered on that same `ApplicationContext`; Spring's own reference documentation describes this mechanism as an implementation of the Observer pattern. Separately, the application also publishes an `order.placed` message to a Kafka topic, which any number of independently deployed services, unknown to the publisher and not necessarily running yet, may subscribe to later. Which statement correctly distinguishes the two?",
+  "explanation": "Observer, as Spring implements it, has the subject hold (or be able to discover) its observers and typically notify them directly and synchronously within the same process; the publisher and the Spring reference documentation itself describe the relationship as the subject knowing about the listener interface it calls. Publish/subscribe, as implemented with a broker like Kafka, removes that: the publisher knows only about a topic, not about any subscriber, subscribers can be added, removed or come online later with no change to the publisher, and delivery is decoupled from the moment of publication. The two share the goal of decoupling a producer from reacting to an event, but differ in whether the producer is coupled to the fact that specific listeners exist right now.",
+  "options": [
+    {
+      "key": "A",
+      "text": "They are the same mechanism under different names; both merely keep a list of interested parties and notify them, so calling one 'Observer' and the other 'pub/sub' is purely a vocabulary difference with no structural distinction worth drawing between the two implementations.",
+      "correct": false,
+      "explanation": "There is a real structural difference in where the subscriber list lives and when delivery happens: the event publisher's listeners are known within the same process at call time, while a broker's subscribers are decoupled from the publisher entirely, which is not merely a naming choice."
+    },
+    {
+      "key": "B",
+      "text": "`ApplicationEventPublisher` is pub/sub because it uses an interface, while Kafka is Observer because it persists messages to disk.",
+      "correct": false,
+      "explanation": "Using an interface or persisting messages is not what distinguishes the two patterns; the deciding factor is whether the publisher is coupled to specific listeners existing at publish time, which this option gets backwards relative to how each mechanism actually behaves."
+    },
+    {
+      "key": "C",
+      "text": "The `ApplicationEventPublisher` case couples the publishing code to the existence of listeners registered in the same context at publish time, while the Kafka case does not require any subscriber to exist, or be running, when the message is published.",
+      "correct": true,
+      "explanation": "This is the actual distinction: Spring's event publisher calls into listeners that are present in the same `ApplicationContext` at the moment `publishEvent` runs, while a Kafka topic has no such requirement, since a consumer group can start reading the topic at any later time with no change to the producer."
+    },
+    {
+      "key": "D",
+      "text": "The Kafka case is Observer because Kafka topics are themselves implemented internally using the Observer pattern, while `ApplicationEventPublisher` is pub/sub because Spring calls it 'publish'.",
+      "correct": false,
+      "explanation": "Kafka's internal implementation details are irrelevant to which pattern an application-level interaction resembles, and a method being named `publishEvent` does not make its coupling behavior match pub/sub; the labels have to follow the actual coupling, not the method name."
+    }
+  ],
+  "references": [
+    {
+      "title": "Observer — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/observer"
+    },
+    {
+      "title": "Additional Capabilities of the ApplicationContext (Spring Framework reference documentation)",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/context-introduction.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires judging a subtle design trade-off about test coupling rather than recognizing a clear-cut error.",
+  "prompt": "A unit test for a PricingService mocks its single collaborator and then calls Mockito.verify() to assert the exact sequence and number of internal calls the service makes to that collaborator while computing a discount, in addition to asserting the final returned price. After an unrelated refactor that changes the internal call sequence but not the computed price, the test fails. What does this most likely indicate about the test's design?",
+  "explanation": "Verifying the precise interaction sequence couples the test to the implementation's internal mechanics rather than its observable behavior (the returned price). When that internal mechanism changes without changing behavior, the test produces a false positive — it fails even though nothing a caller of the service cares about actually broke. This is a known failure mode of over-specified mock verification: it erodes trust in the suite because failures no longer reliably indicate a real regression.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Mocking is inherently harmful here, and the test should instead replace the mocked collaborator with a real dependency in every unit test, regardless of what the collaborator is or how slow it is, a conclusion that conflates the narrow problem of asserting on an internal call sequence with the broader, unrelated question of whether a test double should be used for the collaborator at all.",
+      "correct": false,
+      "explanation": "This overgeneralizes the lesson: the harm came from asserting on interaction sequence, not from using a test double at all; a well-scoped stub for this collaborator would have avoided the false positive without requiring a real dependency."
+    },
+    {
+      "key": "B",
+      "text": "Verifying interactions is strictly more rigorous than asserting on return values, so a test that checks both is always a better test than one that checks only the output.",
+      "correct": false,
+      "explanation": "This is backwards for this scenario: the interaction check is what broke the test despite correct output, demonstrating that more assertions on internal mechanics made the test worse, not more rigorous, at its actual job of catching real regressions."
+    },
+    {
+      "key": "C",
+      "text": "The failure is unrelated to how the test was written and only indicates that Mockito's internal call-matching algorithm is non-deterministic across refactors.",
+      "correct": false,
+      "explanation": "Mockito's verify() deterministically checks the calls actually made by the code under test; the failure traces to the test asserting on an implementation detail that changed, not to any non-determinism in the mocking framework itself."
+    },
+    {
+      "key": "D",
+      "text": "The test over-specifies behavior by verifying the internal call sequence, coupling it to implementation details; the refactor broke the test without breaking anything a caller observes, which is a false positive that reduces the suite's usefulness as a safety net.",
+      "correct": true,
+      "explanation": "This correctly identifies interaction over-specification as the root cause: the test's failure communicates nothing about an actual regression in observable behavior, which is the exact harm of verifying internals too closely."
+    }
+  ],
+  "references": [
+    {
+      "title": "Mocks Aren't Stubs",
+      "url": "https://martinfowler.com/articles/mocksArentStubs.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

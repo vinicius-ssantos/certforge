@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "HARD",
+  "difficultyRationale": "The defensible answer is a trade-off judgment rather than a rule that can be recalled, which is harder to reason through correctly.",
+  "prompt": "A DiscountService has one collaborator, a Spring Data JPA repository interface, and calls findById on it up to twice depending on a condition while computing a discount. The test under review mocks that repository with Mockito and asserts the computed discount for several input combinations. A reviewer comments: \"Never mock a repository — a service test should always run against a real database.\" How should this be evaluated?",
+  "explanation": "Whether to mock a repository collaborator is a design choice that depends on what the specific test is meant to prove, not an absolute rule. Here the test's purpose is to pin down the service's own branching logic across input combinations; mocking the repository keeps that test fast, focused, and independent of schema or query concerns. The repository's own query-generation behavior still deserves verification, but that belongs in a dedicated data-layer test (for example with Testcontainers or @DataJpaTest) rather than being re-verified inside every service-level test.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Mocking the repository is defensible, since the test's purpose is the service's own branching logic, not the repository's query behavior.",
+      "correct": true,
+      "explanation": "This correctly frames the decision as scope-dependent: a service test and a data-layer test prove different things, and mocking here avoids duplicating data-layer concerns without losing coverage of what actually matters to this test."
+    },
+    {
+      "key": "B",
+      "text": "The reviewer is right: every service test must run against a real database, because testing a service without exercising the actual SQL cannot be considered a valid test at all.",
+      "correct": false,
+      "explanation": "This treats a legitimate trade-off as an absolute rule; it would force every service test to pay database setup cost even when the test's only goal is checking the service's own conditional logic, which the repository's real SQL behavior has no bearing on."
+    },
+    {
+      "key": "C",
+      "text": "Repositories should always be mocked in every test in the codebase and never exercised against a real database anywhere, because database access is inherently unreliable for testing purposes.",
+      "correct": false,
+      "explanation": "This is the opposite absolute and is equally wrong: without any test exercising the repository against a real database, defects in the actual generated SQL or mapping would go completely uncaught by the suite."
+    },
+    {
+      "key": "D",
+      "text": "Whether the repository is mocked only matters if the method under test is annotated @Transactional; non-transactional methods carry no trade-off either way.",
+      "correct": false,
+      "explanation": "The presence of @Transactional affects rollback and persistence context behavior, not whether mocking a collaborator is appropriate for testing a service's own logic; this introduces an irrelevant condition rather than addressing the actual trade-off."
+    }
+  ],
+  "references": [
+    {
+      "title": "UnitTest (solitary vs. sociable tests)",
+      "url": "https://martinfowler.com/bliki/UnitTest.html"
+    },
+    {
+      "title": "Spring Boot — Testing Spring Boot Applications",
+      "url": "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

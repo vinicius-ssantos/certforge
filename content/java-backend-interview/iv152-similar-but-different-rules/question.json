@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires recognizing that identical-looking code can encode distinct business rules, a distinction many developers miss when applying DRY mechanically.",
+  "prompt": "A code reviewer looks at this pull request:\n\n```java\nclass DiscountPolicy {\n    boolean isEligible(Customer customer, Order order) {\n        return customer.getYearsActive() >= 2 && order.getTotal() >= 100;\n    }\n}\n\nclass FreeShippingPolicy {\n    boolean isEligible(Customer customer, Order order) {\n        return customer.getYearsActive() >= 2 && order.getTotal() >= 100;\n    }\n}\n```\n\nThe reviewer comments: \"These two methods are identical -- DRY says we must merge them into one shared `isEligible` method used by both policies.\" The team lead explains that `DiscountPolicy` encodes a marketing rule owned by the marketing team, and `FreeShippingPolicy` encodes a logistics rule owned by the fulfillment team; the thresholds only happen to match today and are expected to be tuned independently. What is the best response to the reviewer's comment?",
+  "explanation": "DRY is about eliminating duplicated knowledge -- a single decision expressed more than once -- not about eliminating text that merely looks the same. Here, two different teams independently own two different business rules that currently share the same numbers by coincidence. Merging the methods would couple those rules together, so that tuning one accidentally changes the other the next time either threshold is adjusted.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Merge them immediately into one shared method, since identical code is always a DRY violation that must be fixed.",
+      "correct": false,
+      "explanation": "DRY targets duplicated knowledge -- a single decision expressed twice -- not merely identical-looking text; this option mistakes coincidental similarity between two independent rules for duplication of the same rule."
+    },
+    {
+      "key": "B",
+      "text": "Keep the two methods separate: they represent two independent business decisions that currently share the same values by coincidence, and unifying them would couple unrelated rules so that tuning one accidentally changes the other.",
+      "correct": true,
+      "explanation": "This is the key distinction DRY is built on: duplication is about repeated knowledge, not repeated syntax. Since marketing and fulfillment can change these thresholds independently, merging the methods would force every future change to one rule to be re-litigated against the other."
+    },
+    {
+      "key": "C",
+      "text": "Delete FreeShippingPolicy.isEligible entirely and have it call DiscountPolicy.isEligible directly, since there is no reason to keep two methods with the same body.",
+      "correct": false,
+      "explanation": "This still merges two independently owned rules into one code path; the methods look the same only because their current threshold values coincide, not because they express the same rule."
+    },
+    {
+      "key": "D",
+      "text": "Rename both methods to `qualifies` for consistency, but leave the logic in both classes unchanged, which only addresses naming style and does nothing to settle whether the two independently owned rules should actually be merged in the first place.",
+      "correct": false,
+      "explanation": "Renaming addresses naming consistency, not the reviewer's DRY concern, and does not resolve the actual question of whether the duplication is real or merely coincidental."
+    }
+  ],
+  "references": [
+    {
+      "title": "Sandi Metz: The Wrong Abstraction",
+      "url": "https://sandimetz.com/blog/2016/1/20/the-wrong-abstraction"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

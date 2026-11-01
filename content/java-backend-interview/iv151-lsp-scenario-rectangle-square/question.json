@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires tracing a classic but subtle example to its actual behavioral contract violation and rejecting several plausible-sounding but tangential explanations.",
+  "prompt": "```java\npublic class Rectangle {\n    protected int width;\n    protected int height;\n\n    public void setWidth(int width) { this.width = width; }\n    public void setHeight(int height) { this.height = height; }\n    public int area() { return width * height; }\n}\n\npublic class Square extends Rectangle {\n    @Override\n    public void setWidth(int width) {\n        this.width = width;\n        this.height = width;\n    }\n\n    @Override\n    public void setHeight(int height) {\n        this.height = height;\n        this.width = height;\n    }\n}\n```\n\nElsewhere, a test does:\n\n```java\nvoid resize(Rectangle r) {\n    r.setWidth(5);\n    r.setHeight(10);\n    assertEquals(50, r.area());\n}\n```\n\n`resize` passes for every plain `Rectangle` the team has tested, but fails when called with a `Square`. Which statement best explains the Liskov Substitution Principle issue here, in terms of behavior rather than just 'Square shouldn't extend Rectangle'?",
+  "explanation": "The classic Square/Rectangle case shows LSP failing even when the is-a relationship is mathematically true: `Square` has to override `setWidth`/`setHeight` in a way that violates behavior `Rectangle`-based code is entitled to assume (independent dimensions), so the subtype cannot substitute safely. This is a behavioral-contract issue, not a verdict on inheritance or geometry in general.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The issue is that `Square` does not declare its own `area()` method, instead inheriting `Rectangle`'s `width * height` implementation unchanged, when a proper subclass should always override every inherited method rather than reuse any of the superclass's existing method bodies as-is, even ones like `area()` that already compute the right value for the narrower case.",
+      "correct": false,
+      "explanation": "Inheriting `area()` unchanged is fine here — `width * height` still correctly computes a square's area once both fields are equal; the broken assumption is in `setWidth`/`setHeight`'s side effects, not in `area()`."
+    },
+    {
+      "key": "B",
+      "text": "The issue is that `width` and `height` are `protected` instead of `private`, which lets `Square` modify them directly.",
+      "correct": false,
+      "explanation": "Field visibility isn't the source of the failure; `Square` would break the same `resize` contract even with private fields reached through protected setters, because the behavioral problem is the coupling `setWidth` introduces between the two dimensions, not which access modifier guards the fields."
+    },
+    {
+      "key": "C",
+      "text": "`Rectangle.setWidth` and `setHeight` behaviorally imply that the two dimensions can be set independently of each other; `Square` overrides both methods in a way that breaks that assumption, so code written against the `Rectangle` contract — like `resize` — cannot safely treat a `Square` as a `Rectangle`, even though every method signature matches.",
+      "correct": true,
+      "explanation": "Correct. The signatures substitute cleanly, but the implied behavior of independent width and height does not, which is exactly the kind of substitutability failure LSP targets."
+    },
+    {
+      "key": "D",
+      "text": "The issue is purely conceptual: in geometry a square is a rectangle, so Java's `extends` keyword is being used correctly, and `resize`'s test is simply wrong to assume independent dimensions.",
+      "correct": false,
+      "explanation": "This treats the mathematical is-a relationship as sufficient for subtyping, which is exactly the trap LSP warns against: substitutability is judged by whether existing client code's assumptions about behavior still hold, and `resize` is a legitimate, reasonable assumption about any `Rectangle` — the geometric relationship doesn't make the behavioral break acceptable."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Java Tutorials — What Is an Interface?",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/interface.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

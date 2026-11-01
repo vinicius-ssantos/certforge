@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires rejecting the intuitive but flawed fixed-delay approach in favor of a bounded, condition-based wait.",
+  "prompt": "A method under test submits work to an executor and returns immediately; the result only becomes visible on a shared object once an asynchronous callback finishes running on another thread. Which approach to testing this behavior is most robust against both flakiness and wasted build time?",
+  "explanation": "Guessing a fixed sleep duration either fails intermittently, when the async work occasionally takes longer than the guess, or wastes time on every run by sleeping longer than necessary. The robust approach is to wait for the actual condition to become true, bounded by a timeout, either by polling for the expected state or by blocking on whatever future or result handle the asynchronous code exposes with an explicit timeout. Frameworks that support asynchronous request testing, such as Spring's MVC Test support for async dispatch, exist specifically to provide this condition-based wait instead of a fixed delay.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Insert a fixed Thread.sleep(5000) before asserting, since choosing a long enough sleep guarantees the asynchronous work has always finished by the time the assertion runs.",
+      "correct": false,
+      "explanation": "No fixed duration is actually guaranteed under load or on a slower CI machine, so this remains intermittently flaky despite looking safe, and on every successful run it wastes exactly the difference between the guess and the real completion time."
+    },
+    {
+      "key": "B",
+      "text": "Catch and ignore InterruptedException inside the test method, which forces the asynchronous callback to run synchronously on the calling thread instead of the executor's thread.",
+      "correct": false,
+      "explanation": "Catching an exception in the test has no effect on which thread the executor runs the callback on; it does not change the method's asynchronous execution model at all."
+    },
+    {
+      "key": "C",
+      "text": "Wait for the expected condition to become true, bounded by a timeout — for example by polling for the expected state or by blocking on the future the code under test exposes with an explicit timeout — rather than guessing a fixed delay.",
+      "correct": true,
+      "explanation": "This replaces a guessed delay with a bounded wait tied to the actual condition, which fails fast when something is genuinely wrong and succeeds as soon as the real work finishes rather than after an arbitrary fixed interval."
+    },
+    {
+      "key": "D",
+      "text": "Skip testing the asynchronous path entirely, since asynchronous behavior cannot be meaningfully verified by an automated test and should only be checked manually in a running environment, even when the code under test exposes a Future, a CompletableFuture, or a callback hook that a test could otherwise wait on directly with a bounded timeout.",
+      "correct": false,
+      "explanation": "Asynchronous behavior is routinely and reliably tested by waiting on the actual completion signal with a bounded timeout, so treating it as untestable discards coverage that is achievable with the right waiting strategy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework — Spring MVC Test Framework (asynchronous request testing)",
+      "url": "https://docs.spring.io/spring-framework/reference/testing/spring-mvc-test-framework.html"
+    },
+    {
+      "title": "JUnit 5 User Guide — Timeouts",
+      "url": "https://junit.org/junit5/docs/current/user-guide/#writing-tests-assertions-timeouts"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires picking the fix that actually removes the compile-time dependency on a concrete class rather than one that only works around it.",
+  "prompt": "The team wants to write integration tests for InvoiceService without touching a real MySQL database, and may eventually swap storage backends. The class is implemented like this:\n\n```java\npublic class InvoiceService {\n    private final MySqlInvoiceRepository repository = new MySqlInvoiceRepository();\n\n    public Invoice findInvoice(String id) {\n        return repository.findById(id);\n    }\n}\n```\n\nWhat is the most appropriate fix for the coupling problem that is blocking both goals?",
+  "explanation": "Depending directly on a concrete implementation couples InvoiceService to every detail of MySqlInvoiceRepository, including its need for a real database connection. Depending on an interface instead, with the concrete implementation supplied from outside, lets any implementation -- a test double, an in-memory store, or a different database -- be substituted without changing InvoiceService.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Keep MySqlInvoiceRepository, but mark its methods protected so InvoiceService can override them in tests.",
+      "correct": false,
+      "explanation": "Overriding protected methods still requires subclassing the concrete MySQL-specific class, so tests and alternate backends remain tied to its implementation details; the coupling to the concrete class is not removed."
+    },
+    {
+      "key": "B",
+      "text": "Add a boolean flag to MySqlInvoiceRepository that switches its internal logic between 'test mode' and 'production mode', still requiring a live MySQL connection whenever the flag is accidentally left in production mode.",
+      "correct": false,
+      "explanation": "This keeps InvoiceService coupled to one concrete class and pushes the problem inside that class instead, mixing two unrelated behaviors behind a flag rather than separating them behind an interface."
+    },
+    {
+      "key": "C",
+      "text": "Have InvoiceService depend on an InvoiceRepository interface injected from outside (for example, via its constructor), and let MySqlInvoiceRepository be one implementation chosen at startup.",
+      "correct": true,
+      "explanation": "Depending on a concrete implementation couples InvoiceService to every detail of MySqlInvoiceRepository, including its need for a real database; depending on an interface instead lets any implementation -- a test double, an in-memory store, or a different database -- be substituted without changing InvoiceService."
+    },
+    {
+      "key": "D",
+      "text": "Duplicate InvoiceService into TestInvoiceService, which calls a hardcoded in-memory list instead of MySqlInvoiceRepository.",
+      "correct": false,
+      "explanation": "Duplicating the service class to swap one dependency means every future change to InvoiceService's real logic must be repeated in the test copy, trading tight coupling for duplicated business logic."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Reducing Coupling (IEEE Software, 2001)",
+      "url": "https://martinfowler.com/ieeeSoftware/coupling.pdf"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

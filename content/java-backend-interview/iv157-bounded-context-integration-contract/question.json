@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate can apply the bounded-context concept to a concrete integration decision, not just define the term.",
+  "prompt": "The Billing context models an `Order` as a billing record tied to invoices and payment terms. The Shipping context needs some order information to plan deliveries, but its notion of an \"order\" centers on packages, addresses, and delivery windows — concepts Billing doesn't model at all. How should Shipping obtain the data it needs from Billing?",
+  "explanation": "Each bounded context should keep its own model consistent with its own ubiquitous language. Integration should happen through an explicit, narrow contract — such as a published event or API DTO — that exposes only the fields the consumer needs, which the consumer then translates into its own model, rather than sharing internal types or storage across the boundary.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Shipping imports Billing's `Order` entity class directly and reuses it in its own code",
+      "correct": false,
+      "explanation": "Reusing Billing's internal entity couples Shipping's code to Billing's implementation details and language; any change Billing makes to its own Order model (driven purely by billing concerns) could now break Shipping."
+    },
+    {
+      "key": "B",
+      "text": "Both contexts read and write the same database table for `Order` so they automatically stay in sync",
+      "correct": false,
+      "explanation": "A shared table removes each context's ability to evolve its schema independently and makes it unclear which context owns the data, which is precisely the data-ownership problem bounded contexts are meant to avoid."
+    },
+    {
+      "key": "C",
+      "text": "Billing publishes an explicit contract (an event or API response) exposing only the fields Shipping needs, which Shipping translates into its own model",
+      "correct": true,
+      "explanation": "Correct: an explicit, minimal contract at the boundary keeps each context's internal model free to evolve independently while still letting Shipping get the data it needs, translated into its own vocabulary."
+    },
+    {
+      "key": "D",
+      "text": "Merge the Shipping context into the Billing context so no translation between models is ever required, combining invoices, payment terms, packages, addresses, and delivery windows into one model",
+      "correct": false,
+      "explanation": "Billing and Shipping have genuinely different concerns and vocabularies (invoices vs. delivery windows); merging them would produce a single bloated, conflated model instead of resolving the integration need cleanly."
+    }
+  ],
+  "references": [
+    {
+      "title": "BoundedContext (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/BoundedContext.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

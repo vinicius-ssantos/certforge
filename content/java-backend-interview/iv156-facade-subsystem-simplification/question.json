@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "The scenario is a direct match to Facade's textbook description, and the distractors describe clearly different concerns, so the comparison is mostly recognition.",
+  "prompt": "Placing an order requires calling, in sequence, `InventoryService.reserveStock(...)`, `PricingService.calculateTotal(...)`, `PaymentGateway.charge(...)` and `ShippingService.scheduleDispatch(...)`, each with its own request/response types and error handling. Three different controllers (web checkout, mobile checkout, admin reorder) currently each call all four services directly, in the same order, with nearly identical glue code. The team wants to place an order from one call, without exposing the four subsystem clients to every caller. Which pattern most directly addresses this, and why?",
+  "explanation": "Facade's purpose is to provide a single, simplified interface in front of a set of subsystem classes, so that client code depends on the facade instead of on every subsystem class and its details. An `OrderPlacementFacade.placeOrder(orderRequest)` that internally calls inventory, pricing, payment and shipping in the right order, and exposes one coherent result, is a direct application of this: the three controllers depend on one method instead of on four services each, which also removes the duplicated glue code.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Facade, because `OrderPlacementFacade.placeOrder(orderRequest)` can expose a single simplified operation over the four subsystem services, hiding their individual clients and call order from every caller.",
+      "correct": true,
+      "explanation": "This is precisely Facade's purpose: a simplified interface in front of several subsystem classes, so that the three controllers stop depending on `InventoryService`, `PricingService`, `PaymentGateway` and `ShippingService` directly and depend on one coherent operation instead."
+    },
+    {
+      "key": "B",
+      "text": "Adapter, because `OrderPlacementFacade` adapts the four services' interfaces into one the controllers expect, translating each service's distinct request and response types into a single shape the three controllers can call.",
+      "correct": false,
+      "explanation": "Adapter is for translating between an interface a client expects and a different, incompatible interface already provided by something else; here there is no incompatible interface to translate, only several real subsystem calls that need to be simplified into one, which is Facade's job, not Adapter's."
+    },
+    {
+      "key": "C",
+      "text": "Chain of Responsibility, because the four services are called one after another.",
+      "correct": false,
+      "explanation": "Calling services in sequence is not, by itself, Chain of Responsibility; that pattern specifically lets any handler in the sequence decide whether to handle a request and stop forwarding it, which is not the concern described here — the concern is giving callers one simplified entry point."
+    },
+    {
+      "key": "D",
+      "text": "Strategy, because `OrderPlacementFacade` could be swapped for a different implementation of order placement.",
+      "correct": false,
+      "explanation": "The scenario does not describe needing to swap the order-placement algorithm at runtime; it describes hiding four subsystem clients behind one simplified entry point for several callers, which is Facade's defining concern rather than Strategy's."
+    }
+  ],
+  "references": [
+    {
+      "title": "Facade — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/facade"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

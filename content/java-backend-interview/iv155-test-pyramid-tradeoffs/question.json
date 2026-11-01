@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "EASY",
+  "difficultyRationale": "The pyramid's shape and its rationale are a well-known concept with a single defensible reading.",
+  "prompt": "A team is deciding how to shape its automated test suite for a backend service. Which description best reflects the trade-off the test pyramid is meant to encode?",
+  "explanation": "The pyramid is a shape, not a quota: many fast, cheap, isolated unit tests at the base; fewer, slower integration tests in the middle that check how components cooperate; and a small number of expensive, brittle end-to-end tests at the top that check the system as a whole. The shape follows from cost and fragility rising, and speed and precision of failure localization falling, as test scope grows.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Favor many fast, cheap unit tests at the base, fewer integration tests in the middle, and few slow, expensive end-to-end tests at the top.",
+      "correct": true,
+      "explanation": "This states the pyramid's actual rationale: it is a cost/speed/fragility trade-off, not an arbitrary ratio, and it explains why the base should dominate in count."
+    },
+    {
+      "key": "B",
+      "text": "Invert the pyramid so most tests are end-to-end, since only end-to-end tests catch real bugs and unit tests are too narrow to be useful.",
+      "correct": false,
+      "explanation": "This describes the \"ice-cream cone\" anti-pattern the pyramid warns against: a suite dominated by slow, flaky end-to-end tests gives poor feedback speed and makes failures hard to localize, which is the opposite of what the pyramid recommends."
+    },
+    {
+      "key": "C",
+      "text": "The pyramid says every layer should contain roughly the same number of tests, balancing speed and confidence evenly across unit, integration, and end-to-end levels.",
+      "correct": false,
+      "explanation": "An even split is not the pyramid's shape; the defining feature is a decreasing count as scope increases, driven by each higher layer being slower and more expensive to maintain per test."
+    },
+    {
+      "key": "D",
+      "text": "The pyramid only concerns unit test line-coverage percentage, and integration or end-to-end tests fall outside the concept entirely.",
+      "correct": false,
+      "explanation": "The pyramid is explicitly about the relative proportion of tests across all three levels, not a coverage metric confined to one level."
+    }
+  ],
+  "references": [
+    {
+      "title": "TestPyramid",
+      "url": "https://martinfowler.com/bliki/TestPyramid.html"
+    },
+    {
+      "title": "The Practical Test Pyramid",
+      "url": "https://martinfowler.com/articles/practical-test-pyramid.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

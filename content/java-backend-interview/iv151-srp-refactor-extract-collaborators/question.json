@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires comparing four superficially similar refactors and recognizing which one actually changes the number of reasons each class has to change, not just its internal organization.",
+  "prompt": "```java\n@Service\npublic class UserRegistrationService {\n\n    public void register(UserForm form) {\n        if (form.email() == null || !form.email().contains(\"@\")) {\n            throw new IllegalArgumentException(\"invalid email\");\n        }\n        User user = new User(form.email(), form.name());\n\n        jdbcTemplate.update(\n            \"INSERT INTO users(email, name) VALUES (?, ?)\", user.email(), user.name());\n\n        SimpleMailMessage welcome = new SimpleMailMessage();\n        welcome.setTo(user.email());\n        welcome.setSubject(\"Welcome\");\n        mailSender.send(welcome);\n\n        auditLog.record(\"USER_REGISTERED\", user.email(), Instant.now());\n    }\n}\n```\n\nGiven the `UserRegistrationService` above, which refactor best applies the Single Responsibility Principle while avoiding needless indirection?",
+  "explanation": "Extracting one collaborator per concern and injecting them is the standard SRP refactor: it isolates each reason to change into its own class while keeping the orchestrating service's own responsibility — the registration workflow — intact and unaffected by edits to email wording or audit fields.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Extract `UserValidator`, `UserRepository`, `WelcomeMailer` and `RegistrationAuditLog` as separate collaborators, each owning one concern, and have `UserRegistrationService` take them as constructor parameters to coordinate the registration flow.",
+      "correct": true,
+      "explanation": "Correct. Each extracted class now has one reason to change, and `UserRegistrationService` keeps a single, clear responsibility of its own: sequencing the steps of registration. Constructor injection makes the dependencies explicit and the service easy to test with fakes."
+    },
+    {
+      "key": "B",
+      "text": "Keep all the logic in `register`, but split it into four private methods (`validate`, `persist`, `sendEmail`, `recordAudit`) called in sequence.",
+      "correct": false,
+      "explanation": "Private helper methods improve readability but do not change how many reasons the class has to change — a tweak to the email template or the audit schema still means editing `UserRegistrationService`; the responsibilities are still fused into one class, just renamed."
+    },
+    {
+      "key": "C",
+      "text": "Introduce a `UserRegistrationServiceBase` abstract class that declares `validate()`, `persist()`, `sendEmail()` and `recordAudit()` as abstract methods, and have `UserRegistrationService` extend it and implement all four, so the registration workflow is split across two classes connected by inheritance instead of being written in one method.",
+      "correct": false,
+      "explanation": "Inheritance here doesn't separate the responsibilities, it just relocates the same four method bodies one level up the class hierarchy; `UserRegistrationService` still has to change for all four reasons, and the base class adds an extra layer with no stakeholder of its own."
+    },
+    {
+      "key": "D",
+      "text": "Move `register` into the `User` entity itself as `User.registerNew(form)`, so the data and the registration behavior live together.",
+      "correct": false,
+      "explanation": "This collapses four unrelated concerns into the domain entity instead of the service, which usually makes things worse: `User` would now also need a JDBC template, a mail sender and an audit logger as dependencies, mixing a persistence-ignorant domain object with infrastructure concerns."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Dependency Injection",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

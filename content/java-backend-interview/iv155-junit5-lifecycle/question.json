@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing JUnit 5's default instance lifecycle precisely, not just that lifecycle annotations exist.",
+  "prompt": "A JUnit 5 test class declares a non-static instance field and does not use @TestInstance(Lifecycle.PER_CLASS). By default, what is true about that field's state across the class's @Test methods?",
+  "explanation": "JUnit 5's default lifecycle is PER_METHOD: a new instance of the test class is created for every @Test method. Instance fields therefore start fresh for each test and are never implicitly shared, which is also why @BeforeAll and @AfterAll must be static under the default lifecycle — they run once, before any instance exists for a specific test.",
+  "options": [
+    {
+      "key": "A",
+      "text": "JUnit 5 creates one shared instance per test class by default, so instance fields declared without static persist across all @Test methods unless reset in @BeforeEach.",
+      "correct": false,
+      "explanation": "That behavior describes Lifecycle.PER_CLASS, which must be explicitly requested via @TestInstance; it is not the default, so relying on it without the annotation would be incorrect."
+    },
+    {
+      "key": "B",
+      "text": "@BeforeAll and @AfterAll must be non-static because JUnit 5 instantiates the test class once per method regardless of which lifecycle method is involved.",
+      "correct": false,
+      "explanation": "Under the default per-method lifecycle it is the opposite: @BeforeAll and @AfterAll must be static precisely because they run once, before any per-test instance exists to invoke them on."
+    },
+    {
+      "key": "C",
+      "text": "JUnit 5 creates a new test instance for each @Test method by default, so instance fields are not shared across tests.",
+      "correct": true,
+      "explanation": "This matches JUnit 5's documented default (Lifecycle.PER_METHOD): instantiation happens once per test method, so each test sees fresh, non-shared instance state."
+    },
+    {
+      "key": "D",
+      "text": "@BeforeEach methods run once before all tests in the class, functioning the same as @BeforeAll.",
+      "correct": false,
+      "explanation": "@BeforeEach runs before every individual @Test method, not once for the whole class; conflating it with @BeforeAll describes a different annotation's behavior."
+    }
+  ],
+  "references": [
+    {
+      "title": "JUnit 5 User Guide — Test Instance Lifecycle",
+      "url": "https://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

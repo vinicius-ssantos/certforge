@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Diagnosing the cause requires connecting default lifecycle behavior to a concrete symptom, not just naming the annotation.",
+  "prompt": "A test class declares a mutable instance field holding a List, and one @Test method appends entries to it before asserting. When the test class is run with a different test-execution order, a different @Test method unexpectedly sees leftover entries that an earlier test added to that same field. What does this indicate, and what is a defensible fix?",
+  "explanation": "This is a test-isolation failure: the tests share mutable state through an instance field whose contents outlive a single test method's execution when the lifecycle or test data setup allows it to persist. The defensible fix is to give each test its own fresh, independently constructed data — for example, re-initializing the field in @BeforeEach or building fresh test data per test with a builder — so that no test's outcome depends on which other tests ran before it or in what order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "This is expected JUnit behavior, since JUnit guarantees @Test methods run in source-code declaration order, so the leftover data is an intentional continuation between tests rather than a defect.",
+      "correct": false,
+      "explanation": "JUnit does not guarantee declaration order as the execution order by default, and even where an order is configured, relying on one test's side effects to set up another test's starting state is itself the isolation problem, not a feature."
+    },
+    {
+      "key": "B",
+      "text": "The fix is to mark the test class @Disabled so the ordering-dependent failure no longer appears in CI runs, a change that silences the specific flaky-looking failure in the dashboard without touching the shared mutable field, the test ordering, or any of the underlying state that produced the inconsistent result.",
+      "correct": false,
+      "explanation": "Disabling the test removes the symptom without addressing the underlying shared-state defect, and it also discards whatever real coverage the test was providing."
+    },
+    {
+      "key": "C",
+      "text": "The tests are not isolated from each other because they share mutable state through the field across methods. Fix: re-initialize the field fresh in @BeforeEach, or construct independent test data per test, so each test starts from a known state regardless of execution order.",
+      "correct": true,
+      "explanation": "This correctly names the defect as a test-isolation failure and proposes the standard fix: make each test's starting state independent of any other test's side effects."
+    },
+    {
+      "key": "D",
+      "text": "The fix is to add a delay between test methods so the JVM has time to clear the field's contents before the next test runs.",
+      "correct": false,
+      "explanation": "A delay does not reset field state; the JVM does not clear or garbage-collect a still-referenced instance field just because time has passed, so this would not change the observed behavior at all."
+    }
+  ],
+  "references": [
+    {
+      "title": "JUnit 5 User Guide — Test Instance Lifecycle",
+      "url": "https://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle"
+    },
+    {
+      "title": "JUnit 5 User Guide — Test Execution Order",
+      "url": "https://junit.org/junit5/docs/current/user-guide/#writing-tests-test-execution-order"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

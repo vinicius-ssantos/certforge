@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "HARD",
+  "difficultyRationale": "Depends on a detail candidates often skip over when reading a thread dump: a thread in BLOCKED state is parked, not spinning, so it is not where the CPU is going.",
+  "prompt": "CPU usage on every instance of a Java service is pegged at 100% with no change in traffic or recent deploy. A thread dump taken during the spike shows 40 threads in BLOCKED state waiting to enter the same synchronized method, and 2 threads in RUNNABLE state. What is the most defensible conclusion from this evidence alone?",
+  "explanation": "A thread in BLOCKED state is waiting to acquire a monitor and is parked by the JVM; it does not spin on the CPU while it waits. With only two threads RUNNABLE, those two (or background threads such as GC workers, which a thread dump by itself does not show) are the more likely source of the 100% CPU, even though the 40 blocked threads are a separate, real latency problem worth fixing on their own.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The 40 blocked threads are spin-waiting on the lock and are directly responsible for the CPU spike.",
+      "correct": false,
+      "explanation": "BLOCKED in the JVM's thread-state model means the thread is parked waiting to acquire a monitor, not busy-spinning; a parked thread consumes negligible CPU, so it cannot be the source of a 100% CPU reading."
+    },
+    {
+      "key": "B",
+      "text": "Increasing the thread pool size will resolve both the contention and the CPU spike.",
+      "correct": false,
+      "explanation": "Adding threads that will also queue up BLOCKED on the same monitor does not reduce CPU usage and can add scheduling overhead, without identifying what is actually running on the CPU."
+    },
+    {
+      "key": "C",
+      "text": "The lock contention explains the slow requests, but the CPU draw has to come from the few RUNNABLE threads or from background activity the dump doesn't show (such as GC); that's where to look next.",
+      "correct": true,
+      "explanation": "This is the only reading consistent with how BLOCKED threads behave: they explain the queueing and latency, while the CPU itself is being spent somewhere that is actually executing, which the dump narrows down to the RUNNABLE threads or non-application threads."
+    },
+    {
+      "key": "D",
+      "text": "This thread dump proves the garbage collector is misconfigured, since sustained full CPU usage during lock contention is a textbook, well-documented sign of excessive garbage collection activity and pause overhead.",
+      "correct": false,
+      "explanation": "A thread dump shows thread states, not GC pause frequency or duration; concluding a GC misconfiguration needs GC log evidence, which this dump does not provide."
+    }
+  ],
+  "references": [
+    {
+      "title": "Thread.State (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Thread.State.html"
+    },
+    {
+      "title": "Introduction to Garbage Collection Tuning",
+      "url": "https://docs.oracle.com/en/java/javase/21/gctuning/introduction-garbage-collection-tuning.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

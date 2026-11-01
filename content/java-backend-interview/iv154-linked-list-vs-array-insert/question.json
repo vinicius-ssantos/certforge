@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests a foundational structural trade-off between contiguous and pointer-based storage, without requiring any implementation detail.",
+  "prompt": "A backend job scheduler repeatedly inserts new jobs at the front of a very large in-memory job list. Comparing a singly linked list to a dynamic array (contiguous storage) for this exact workload, what is the main structural reason the linked list performs the insertion faster?",
+  "explanation": "Inserting at the front of a linked list only requires allocating a new node and updating one pointer, which is O(1) regardless of list size. A dynamic array stores elements contiguously, so inserting at the front requires shifting every existing element one position to the right, which is O(n).",
+  "options": [
+    {
+      "key": "A",
+      "text": "The linked list's front insertion is O(1) because it only creates a new node and relinks a pointer, with no need to move any existing elements.",
+      "correct": true,
+      "explanation": "Correct: because nodes are connected by pointers rather than stored in contiguous slots, adding a new head node never requires relocating the other elements."
+    },
+    {
+      "key": "B",
+      "text": "The linked list's front insertion is O(1) because linked lists always keep a block of pre-allocated free slots at the beginning for future insertions.",
+      "correct": false,
+      "explanation": "This describes a mechanism linked lists don't use. Linked lists don't pre-reserve empty slots; each node is allocated individually when needed, which is exactly why no shifting is required."
+    },
+    {
+      "key": "C",
+      "text": "The linked list's front insertion is O(log n) because the list keeps itself balanced like a search tree to speed up traversal.",
+      "correct": false,
+      "explanation": "A plain singly linked list has no balancing concept at all — it is not a tree and has no notion of height or balance factor. Front insertion is O(1), not O(log n)."
+    },
+    {
+      "key": "D",
+      "text": "Both structures require O(n) time for front insertion, so there is no structural advantage either way.",
+      "correct": false,
+      "explanation": "This denies a real difference: the dynamic array does need O(n) to shift existing elements on front insertion, but the linked list does not, since it has no contiguous layout to preserve."
+    }
+  ],
+  "references": [
+    {
+      "title": "Linked list - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Linked_list"
+    },
+    {
+      "title": "Dynamic array - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Dynamic_array"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires recognizing a real JDK inheritance design smell and reasoning about why 'it compiles and extends a related class' is not the same as a behaviorally sound is-a relationship.",
+  "prompt": "`java.util.Stack<E>` extends `java.util.Vector<E>` in the JDK. A reviewer argues this inheritance relationship is a design smell, even though Stack compiles fine and reuses Vector's storage logic. What is the best justification for that criticism?",
+  "explanation": "Stack inherits the entire public API of Vector, including random-access and insertion methods like get(int), insertElementAt(), and removeElementAt(). Nothing stops calling code from using a Stack as if it were an arbitrary list, which breaks the LIFO discipline a stack is supposed to guarantee. The relationship compiles because Vector is a valid superclass, but it is not a sound is-a relationship behaviorally, which is why the JDK's own Stack javadoc recommends using Deque instead.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Stack cannot actually extend Vector, because Vector is declared final in the JDK.",
+      "correct": false,
+      "explanation": "java.util.Vector is not final; it is an ordinary extensible class, and Stack genuinely does extend it in the JDK source."
+    },
+    {
+      "key": "B",
+      "text": "Extending a concrete class instead of an interface always triggers a runtime ClassCastException when the subclass is used polymorphically, because the JVM treats any concrete superclass reference as incompatible with its subclass once virtual method dispatch resolves to an overridden implementation.",
+      "correct": false,
+      "explanation": "There is nothing about extending a concrete class that causes a ClassCastException; Stack objects are used as Vector or Stack references without any casting failure."
+    },
+    {
+      "key": "C",
+      "text": "Stack inherits Vector's full public API (e.g., insertElementAt, get(int), removeElementAt), allowing callers to violate the stack's LIFO discipline by manipulating it as a random-access list — the is-a relationship doesn't hold behaviorally even though it compiles.",
+      "correct": true,
+      "explanation": "This is exactly the criticism: inheriting a concrete class for implementation reuse exposes every inherited method, including ones that contradict the subtype's intended contract, which is why the JDK's own Deque-based alternative is now recommended over Stack."
+    },
+    {
+      "key": "D",
+      "text": "The problem is purely stylistic — Stack should have a different name, but the inheritance relationship itself causes no real issues.",
+      "correct": false,
+      "explanation": "The issue is behavioral, not naming: because Stack exposes Vector's full list API, code can bypass stack semantics entirely, which is a functional design smell rather than a cosmetic one."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stack (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Stack.html"
+    },
+    {
+      "title": "Inheritance (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

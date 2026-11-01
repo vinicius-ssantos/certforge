@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reading a heap graph's shape rather than just its height, and resisting the quick fix of simply resizing the heap.",
+  "prompt": "Over six hours, a service develops periodic multi-second freezes and gradually slower responses in between them. The heap graph shows old-generation occupancy climbing with each cycle and never returning to its previous floor after a full garbage collection. What does this pattern most likely indicate, and what should you check before resizing the heap?",
+  "explanation": "A full garbage collection should reclaim everything that is no longer reachable, so the occupancy floor after each collection should stay roughly flat if the live-object set is stable. A floor that keeps rising means objects are being retained that should have been freed — the signature of a memory leak — and the next step is to find which object type is accumulating, not to make the heap bigger.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Raise -Xmx so the collector has more room and the pauses get shorter.",
+      "correct": false,
+      "explanation": "A larger heap treats the symptom, not the growing live-object set; a genuine leak keeps growing into the larger heap and eventually produces an even longer full-GC pause, or an OutOfMemoryError, later."
+    },
+    {
+      "key": "B",
+      "text": "This is normal generational garbage collection behavior across multiple collection cycles under sustained load and heap pressure, and typically needs no action beyond routine collector monitoring.",
+      "correct": false,
+      "explanation": "Normal generational behavior has the post-collection floor settle near a stable level once garbage is reclaimed; a floor that rises collection after collection is specifically the pattern that is not normal."
+    },
+    {
+      "key": "C",
+      "text": "Switch to a different garbage collector algorithm to avoid the long pauses.",
+      "correct": false,
+      "explanation": "Changing collectors can change how pause time is distributed, but it does not reclaim objects that are still reachable; the underlying growth in live data is unaffected."
+    },
+    {
+      "key": "D",
+      "text": "The pattern indicates objects are being retained that are no longer needed; capture a heap histogram at intervals to find which object type keeps growing before changing any heap size.",
+      "correct": true,
+      "explanation": "A rising post-collection floor means live objects are accumulating; comparing histograms over time identifies the growing type, which a bigger heap does not fix — it only delays the same outcome with a longer pause when it finally happens."
+    }
+  ],
+  "references": [
+    {
+      "title": "Diagnose and Resolve OutOfMemoryError",
+      "url": "https://docs.oracle.com/en/java/javase/21/troubleshoot/diagnose-and-resolve-out-memory-errors.html"
+    },
+    {
+      "title": "Introduction to Garbage Collection Tuning",
+      "url": "https://docs.oracle.com/en/java/javase/21/gctuning/introduction-garbage-collection-tuning.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

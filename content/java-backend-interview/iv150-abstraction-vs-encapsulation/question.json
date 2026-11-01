@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "HARD",
+  "difficultyRationale": "Abstraction and encapsulation are frequently conflated in interview answers; telling them apart requires reasoning about design intent, not just recalling vocabulary.",
+  "prompt": "A senior engineer says: 'This PaymentProcessor interface defines process() and refund() without exposing how any implementation talks to a gateway. Separately, each concrete implementation keeps its gateway credentials and retry counters in private fields that nothing outside the class can touch.' Which statement best distinguishes the two OOP principles being described?",
+  "explanation": "The interface describes abstraction: it exposes only the essential operations a caller needs, while hiding every implementation detail of how those operations are carried out. The private fields describe encapsulation: restricting access to a class's internal state so it can only be read or changed through the class's own methods. The two are related but address different concerns — abstraction is about the level of detail a design exposes to its callers, encapsulation is about access control over an object's implementation data.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The interface describes abstraction: exposing only the essential operations (process, refund) and hiding how they're carried out. The private fields describe encapsulation: restricting access to a class's internal state so it can't be read or changed except through its own methods.",
+      "correct": true,
+      "explanation": "This matches how both principles are actually applied: abstraction shapes what a consumer of PaymentProcessor needs to know, while encapsulation protects how each implementation's internals can be touched."
+    },
+    {
+      "key": "B",
+      "text": "Both halves describe encapsulation; abstraction applies only to abstract classes, never to interfaces.",
+      "correct": false,
+      "explanation": "Interfaces are one of Java's primary abstraction mechanisms: declaring only method signatures while leaving every implementation detail to the implementing class is exactly what abstraction means, independent of whether an abstract class or an interface is used."
+    },
+    {
+      "key": "C",
+      "text": "The interface is encapsulation because its method bodies are hidden, and the private fields are abstraction because private state is an abstract concept.",
+      "correct": false,
+      "explanation": "This reverses the terms: presenting a simplified contract through an interface is abstraction, not encapsulation, and private fields are concrete internal state being protected, not an abstraction of anything."
+    },
+    {
+      "key": "D",
+      "text": "There is no meaningful distinction; abstraction and encapsulation are two names for the same OOP principle, since both ultimately involve hiding something from the rest of the program — an interface hides how an operation is carried out, and a private field hides a piece of state — so treating them as separate principles is just redundant terminology for one underlying idea.",
+      "correct": false,
+      "explanation": "They address different concerns: abstraction is a design-time simplification of what is exposed to callers, while encapsulation is a runtime access-control mechanism protecting state. An interface with no fields at all can still provide strong abstraction while encapsulating nothing itself, which shows the two are separable."
+    }
+  ],
+  "references": [
+    {
+      "title": "What Is an Interface? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/interface.html"
+    },
+    {
+      "title": "What Is an Object? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/object.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

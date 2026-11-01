@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires connecting a leaky-abstraction symptom to the structural fix, rather than recognizing a textbook Adapter example.",
+  "prompt": "A team integrates a third-party shipping SDK whose client, `CarrierSdkClient`, returns `CarrierSdkShipmentDto` objects with carrier-specific fields (`trackingRef`, `carrierStatusCode`, nested `originHub`/`destinationHub` structures). Application code that needs shipment status is spread across several services, and each one calls `CarrierSdkClient` directly and maps `carrierStatusCode` to its own notion of status using duplicated `switch` statements. The SDK vendor is expected to release a breaking v2 API within a year. What is the best way to apply the Adapter pattern here?",
+  "explanation": "Adapter's job is to translate an external interface into one the application already understands, concentrating the translation in one place. Defining an application-owned `ShipmentStatusPort` (or similar interface) in terms the domain actually needs, and writing a single `CarrierSdkShipmentAdapter` that implements it by calling `CarrierSdkClient` and mapping its DTOs, means the vendor's types and status codes stop leaking into every caller. When the v2 API ships, only the adapter changes; the rest of the application, which depends on the port, is unaffected.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Define an application-owned interface expressing the shipment status the domain needs, and write one adapter class that implements it by calling `CarrierSdkClient` and translating its DTOs; have every service depend on the interface instead of the SDK client.",
+      "correct": true,
+      "explanation": "This is the adapter boundary doing its job: the SDK's types and status codes are translated once, behind an interface the domain defines, so the duplicated mapping logic collapses into one place and the eventual v2 migration touches only the adapter."
+    },
+    {
+      "key": "B",
+      "text": "Add a static utility method, `CarrierStatusMapper.toDomainStatus(int carrierStatusCode)`, that each service calls after getting a `CarrierSdkShipmentDto` directly from `CarrierSdkClient`.",
+      "correct": false,
+      "explanation": "This centralizes only the status-code translation, but every service still depends on `CarrierSdkClient` and `CarrierSdkShipmentDto` directly, so the vendor's types still leak through the domain and a v2 migration still requires touching every call site."
+    },
+    {
+      "key": "C",
+      "text": "Subclass `CarrierSdkShipmentDto` in each service to add convenience methods that read `carrierStatusCode` and translate it inline.",
+      "correct": false,
+      "explanation": "Subclassing a vendor DTO still ties every service to the vendor's class and its v1 field names, duplicates the translation logic per subclass, and provides no single seam to change when the v2 API arrives."
+    },
+    {
+      "key": "D",
+      "text": "Replace `CarrierSdkClient` entirely with a hand-written HTTP client that talks to the carrier's REST API directly, bypassing the vendor SDK, and reimplement the authentication, retries, pagination, rate-limit backoff and error-code handling the SDK already provides out of the box.",
+      "correct": false,
+      "explanation": "This discards the vendor's SDK and reimplements its transport and serialization concerns in-house, which is a larger and riskier change than needed; it does not address the actual problem, which is that the SDK's shapes are not translated at a boundary."
+    }
+  ],
+  "references": [
+    {
+      "title": "Adapter — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/adapter"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

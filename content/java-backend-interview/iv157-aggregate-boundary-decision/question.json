@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000108",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reasoning about which objects share a transactional consistency boundary versus which are merely related by reference, a common source of real-world modeling mistakes.",
+  "prompt": "An e-commerce system models `Order`, `OrderLine`, and `Customer`. Business rule: an order's total must always equal the sum of its line items' subtotals, and an `OrderLine` never makes sense or is accessed outside the context of its owning order. `Customer` is a long-lived record referenced by many orders but changes independently of any single order. How should the aggregate boundaries be drawn?",
+  "explanation": "`Order` and `OrderLine` share a single invariant (total must equal the sum of lines) that must be kept consistent within one transaction, so they belong to one aggregate with `Order` as the root controlling access to its lines. `Customer` has its own independent lifecycle and no shared invariant with `Order`, so it stays a separate aggregate referenced by identifier rather than being nested inside `Order`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`Order`, `OrderLine`, and `Customer` should all belong to one aggregate so every change, including unrelated customer profile edits like a loyalty-tier update, is transactionally consistent",
+      "correct": false,
+      "explanation": "Lumping Customer into the Order aggregate would force every order modification to also lock or version the shared Customer record, even though Customer has no invariant in common with the order total — an unnecessarily wide and contention-prone boundary."
+    },
+    {
+      "key": "B",
+      "text": "`OrderLine` should be its own aggregate, separate from `Order`, so each line item can be updated independently",
+      "correct": false,
+      "explanation": "Making OrderLine its own aggregate would let line items be modified without going through Order, making it impossible for Order to reliably enforce that its total always matches the sum of its lines."
+    },
+    {
+      "key": "C",
+      "text": "`Customer` should be nested inside the `Order` aggregate because every order belongs to a customer",
+      "correct": false,
+      "explanation": "A reference between aggregates (Order pointing to a Customer id) does not require nesting; Customer is modified by entirely different use cases (profile updates) that have nothing to do with a specific order's lifecycle."
+    },
+    {
+      "key": "D",
+      "text": "`Order` and `OrderLine` form a single aggregate with `Order` as the root; `Customer` is a separate aggregate referenced by its identifier",
+      "correct": true,
+      "explanation": "Correct: the total/line-items invariant ties Order and OrderLine into one transactional consistency boundary, while Customer's independent lifecycle and lack of a shared invariant with Order make it a separate aggregate referenced by id."
+    }
+  ],
+  "references": [
+    {
+      "title": "DDD_Aggregate (Martin Fowler)",
+      "url": "https://martinfowler.com/bliki/DDD_Aggregate.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

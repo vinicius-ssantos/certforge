@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires connecting a real-world bug (drifted validation rules) to the correct DRY remedy rather than a superficial workaround.",
+  "prompt": "A codebase has the same email-format check copied into three classes:\n\n```java\n// UserRegistrationService\nif (!email.matches(\"^[\\\\w.+-]+@[\\\\w-]+\\\\.[a-zA-Z]{2,}$\")) { reject(); }\n\n// NewsletterSignupController\nif (!email.matches(\"^[\\\\w.+-]+@[\\\\w-]+\\\\.[a-zA-Z]{2,}$\")) { reject(); }\n\n// AdminUserController\nif (!email.matches(\"^[\\\\w.+-]+@[\\\\w-]+\\\\.[a-zA-Z]{2,}$\")) { reject(); }\n```\n\nA bug report shows that when the compliance team tightened the rule to reject `+` aliases, someone updated the regex only in `UserRegistrationService`. Newsletter signups still accept addresses that registration now rejects. What is the best way to apply DRY here?",
+  "explanation": "All three checks express the exact same knowledge: the product's single definition of a valid email address. Unlike code that merely looks similar but encodes different rules, this is genuine duplication of one rule, which is exactly the kind of drift DRY and a single source of truth are meant to prevent.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Leave the three copies as they are, but add a comment above each reminding future developers to update all three together.",
+      "correct": false,
+      "explanation": "Comments are not enforced by the compiler or by tests; this bug happened precisely because keeping three copies in sync relies on humans remembering, which a single source of truth is meant to eliminate by removing the duplication itself."
+    },
+    {
+      "key": "B",
+      "text": "Keep the regex duplicated, but write a shared unit test that asserts all three regex strings are equal to each other.",
+      "correct": false,
+      "explanation": "This still leaves three independent copies of the same rule to maintain and only catches drift after the fact in a test, rather than removing the duplicated knowledge at its source."
+    },
+    {
+      "key": "C",
+      "text": "Convert each regex to a named constant local to its own class, keeping three separate constants instead of three inline literals.",
+      "correct": false,
+      "explanation": "This improves local readability slightly but does not address the real problem: the same business rule is still implemented three times and can still drift, since the three constants are not guaranteed to stay equal."
+    },
+    {
+      "key": "D",
+      "text": "Extract one shared EmailValidator.isValid(String email) method used by all three call sites.",
+      "correct": true,
+      "explanation": "All three checks encode the exact same knowledge: the product's definition of a valid email. Because this is genuine duplication of one rule rather than coincidentally similar code, giving it one authoritative implementation removes the drift risk that caused the bug."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Avoiding Repetition (IEEE Software, 2001)",
+      "url": "https://martinfowler.com/ieeeSoftware/repetition.pdf"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

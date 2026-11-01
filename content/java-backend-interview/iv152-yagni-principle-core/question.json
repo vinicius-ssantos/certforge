@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests recall of YAGNI's precise scope, which is often mistakenly over-generalized to cover refactoring or testing.",
+  "prompt": "Which statement best describes what the YAGNI ('You Aren't Gonna Need It') principle actually recommends?",
+  "explanation": "YAGNI argues against building functional capability to support a presumed future requirement until that requirement is real and confirmed. It is explicitly scoped to speculative capability, and it does not argue against refactoring, testing, or other work that keeps the codebase easy to change.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Never write an interface or abstraction unless it already has at least two separate, independently maintained implementations running simultaneously in production right now, no matter how small or clearly speculative that abstraction's interface actually is.",
+      "correct": false,
+      "explanation": "This overstates YAGNI into a rigid rule; YAGNI is a judgment principle about avoiding speculative capability for unconfirmed needs, not a mechanical count-based gate applied identically to every abstraction."
+    },
+    {
+      "key": "B",
+      "text": "Avoid writing automated tests for code paths that aren't used yet.",
+      "correct": false,
+      "explanation": "YAGNI concerns adding functional capability for uncertain future requirements; it does not argue against testing code that already exists, which is a code-quality practice rather than speculative feature-building."
+    },
+    {
+      "key": "C",
+      "text": "Delay fixing known bugs until a customer explicitly requests the fix.",
+      "correct": false,
+      "explanation": "Fixing a known, existing defect addresses a real, present problem rather than a speculative future one, so it falls outside what YAGNI argues against."
+    },
+    {
+      "key": "D",
+      "text": "Don't build a capability to support a presumed future requirement until that requirement is real and confirmed; it does not discourage refactoring or other work that keeps the codebase easy to change.",
+      "correct": true,
+      "explanation": "YAGNI applies to speculative functional capability, not to the ongoing work of keeping code malleable; refactoring to make future changes easier is explicitly not what YAGNI argues against."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Yagni",
+      "url": "https://martinfowler.com/bliki/Yagni.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

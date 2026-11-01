@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes the structural coupling ISP is actually about from several surface-level, mechanical consequences that sound similar.",
+  "prompt": "A codebase has one `Worker` interface with `code()`, `writeDocs()`, `reviewPullRequest()` and `fileExpenseReport()`, implemented by every kind of employee class. Which statement best captures the actual cost of this design, as opposed to 'big interfaces are just messy'?",
+  "explanation": "The real cost of a fat interface is coupling: implementers that don't need a method are forced to deal with it one way or another, and every dependent is nominally coupled to methods it never calls, which widens the blast radius of any change to the interface. File length and functional-interface eligibility are surface symptoms, not the underlying problem ISP addresses.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Every implementer is forced to provide (or stub out) methods it has no real behavior for, and every caller that depends on `Worker` is coupled to the whole interface even if it only ever calls one method — so a change to any single method's signature risks breaking or recompiling implementers and callers that never use it.",
+      "correct": true,
+      "explanation": "Correct. The cost is structural coupling between unrelated capabilities: forced implementation on one side, and unnecessary dependency breadth on the other."
+    },
+    {
+      "key": "B",
+      "text": "The only cost is that the interface file becomes long and harder to scroll through.",
+      "correct": false,
+      "explanation": "File length is a minor readability nuisance; the structural cost of a fat interface is the forced coupling between unrelated methods — implementers stuck with irrelevant methods and callers depending on behavior they never invoke — which exists regardless of how the file is formatted."
+    },
+    {
+      "key": "C",
+      "text": "The only cost is that `Worker` can no longer be used as a functional interface with a lambda expression or method reference, since `@FunctionalInterface` requires exactly one abstract method and `Worker` now declares four — `code()`, `writeDocs()`, `reviewPullRequest()` and `fileExpenseReport()` — so any code that wanted to pass a bare lambda in place of a `Worker` implementation has to fall back to an anonymous class instead.",
+      "correct": false,
+      "explanation": "Losing single-method functional-interface status is a minor, mechanical side effect, not the core concern; ISP is about the coupling a broad interface forces between unrelated callers and implementers, which matters whether or not lambdas are involved."
+    },
+    {
+      "key": "D",
+      "text": "There is no real cost as long as every method has a default implementation in the interface, since then no implementer is forced to override anything.",
+      "correct": false,
+      "explanation": "Default methods remove the compile-time obligation to override, but they don't remove the conceptual coupling: a caller typed to `Worker` still nominally depends on every method in it, and a class that silently inherits a default `fileExpenseReport()` that makes no sense for it is still misrepresenting its actual capabilities."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Java Tutorials — Creating and Using Interfaces",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/createinterface.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires choosing among several refactors that superficially remove the thrown exceptions but only one of which addresses the underlying interface coupling.",
+  "prompt": "```java\npublic interface Worker {\n    void code();\n    void writeDocs();\n    void reviewPullRequest();\n    void attendStandup();\n}\n\npublic class ContractDocWriter implements Worker {\n    public void code() {\n        throw new UnsupportedOperationException(\"not part of this role\");\n    }\n    public void writeDocs() { /* real implementation */ }\n    public void reviewPullRequest() {\n        throw new UnsupportedOperationException(\"not part of this role\");\n    }\n    public void attendStandup() { /* real implementation */ }\n}\n```\n\n`ContractDocWriter` throws for two of the four `Worker` methods. Which refactor best applies the Interface Segregation Principle here, while keeping the design realistic for how these roles actually differ?",
+  "explanation": "ISP is applied by grouping methods that are actually used together into smaller interfaces, so each implementer only takes on the methods it can honestly perform and each caller only depends on the capability it needs. Hiding the mismatch with `Optional`, no-op overrides, or a runtime capability check all leave the real problem — one interface naming unrelated capabilities — in place.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Keep `Worker` as one interface, but change `code()` and `reviewPullRequest()` to return `Optional<Void>` instead of `void`, so `ContractDocWriter` can return `Optional.empty()` instead of throwing.",
+      "correct": false,
+      "explanation": "This hides the mismatch behind a different return type without removing it: `ContractDocWriter` still nominally implements methods it doesn't support, and every caller now has to unwrap an `Optional` to find out whether the operation happened, which pushes the same problem onto every call site."
+    },
+    {
+      "key": "B",
+      "text": "Split `Worker` into smaller, role-specific interfaces — for example `Coder` (`code`, `reviewPullRequest`) and `Documenter` (`writeDocs`, `attendStandup`) — and have each class implement only the interfaces that match the methods it can genuinely perform, such as `ContractDocWriter implements Documenter`.",
+      "correct": true,
+      "explanation": "Correct. Splitting by cohesive capability means `ContractDocWriter` only implements methods it actually supports, callers that only need documentation behavior depend on `Documenter` and are unaffected by changes to `Coder`, and no implementation needs to throw for a method it was never going to do."
+    },
+    {
+      "key": "C",
+      "text": "Have `ContractDocWriter` extend a new `NoOpWorker` abstract class that implements all four `Worker` methods as empty no-ops, and override only `writeDocs` and `attendStandup`.",
+      "correct": false,
+      "explanation": "This silently swallows calls to `code()` and `reviewPullRequest()` instead of making the mismatch visible, which is worse than the original throwing version for debugging, and it still leaves every class depending on the single, broad `Worker` interface rather than segregating it."
+    },
+    {
+      "key": "D",
+      "text": "Add a boolean `supports(String methodName)` method to `Worker` so callers can ask whether an implementation supports a given capability — such as `\"code\"` or `\"reviewPullRequest\"` — before calling it, letting `ContractDocWriter` return `false` for the two capabilities it doesn't have instead of throwing an `UnsupportedOperationException` when one of those methods is invoked.",
+      "correct": false,
+      "explanation": "This pushes a runtime capability check onto every caller instead of expressing the distinction in the type system, and it still leaves one bloated `Worker` interface naming four unrelated capabilities rather than separating them."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Java Tutorials — Default Methods",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

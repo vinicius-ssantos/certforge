@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "EASY",
+  "difficultyRationale": "The common causes of flakiness are a well-documented, recognizable list once the scenario is read carefully.",
+  "prompt": "A test intermittently fails with no code change, and passes again on rerun without modification. What is the most likely root cause of this kind of flakiness?",
+  "explanation": "A test that passes or fails unpredictably without any code change is, by definition, relying on something the test itself does not control: real wall-clock time, unseeded randomness, the actual order in which concurrent threads or asynchronous tasks run, or timing-sensitive I/O. Fixing flakiness generally means removing or controlling that non-deterministic input rather than hoping it resolves itself.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The test is flaky because JUnit 5 randomizes the order in which assertions inside a single @Test method are evaluated, by design.",
+      "correct": false,
+      "explanation": "Statements and assertions inside a single @Test method execute sequentially in the order they are written; JUnit 5 does not randomize assertion evaluation order within a method, so this cannot be the cause."
+    },
+    {
+      "key": "B",
+      "text": "The test depends on non-deterministic factors such as real wall-clock time, unseeded randomness, thread or task scheduling order, or network and filesystem timing.",
+      "correct": true,
+      "explanation": "This names the actual category of cause: anything left uncontrolled and time- or order-sensitive in the test or the code under test is exactly what produces results that differ between runs with no code change."
+    },
+    {
+      "key": "C",
+      "text": "Flakiness always indicates a bug in the test runner itself and can never be caused by the test code or the code under test.",
+      "correct": false,
+      "explanation": "This overgeneralizes; the overwhelming majority of flaky tests trace to non-determinism in the test or the production code (timing, ordering, shared state), not to a defect in the runner executing them."
+    },
+    {
+      "key": "D",
+      "text": "A test that uses Mockito mocks can never be flaky, since a mocked collaborator always returns the same deterministic canned value no matter how the test is written, regardless of what real threads, timers, clocks, or I/O the surrounding production code still touches.",
+      "correct": false,
+      "explanation": "A mock's stubbed return value is deterministic, but the surrounding code under test can still involve real threads, timeouts, or clock reads that are not mocked, so using mocks does not by itself rule out flakiness."
+    }
+  ],
+  "references": [
+    {
+      "title": "Eradicating Non-Determinism in Tests",
+      "url": "https://martinfowler.com/articles/nonDeterminism.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

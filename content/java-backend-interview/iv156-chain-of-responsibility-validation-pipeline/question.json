@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "The scenario maps closely to the textbook description of the pattern, so recognizing the fit requires only matching the structure, not resolving a trade-off.",
+  "prompt": "An incoming `LoanApplication` must pass through several independent checks before approval: identity verification, credit-score threshold, debt-to-income ratio and fraud screening. Any check may reject the application outright, and the set of checks (and their order) changes periodically as compliance rules evolve, without the rest of the checks needing to know about each other. Which design matches this requirement most directly?",
+  "explanation": "Chain of Responsibility passes a request along a sequence of handler objects, each deciding whether to handle it (here, reject it) or pass it to the next handler, with no handler needing to know what comes before or after it. That matches the requirement that checks be independent of each other and that the set and order of checks can be reconfigured without changing the checks themselves — the chain is simply reassembled with a different list.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A single `LoanApplicationValidator` class with one method that calls `checkIdentity()`, then `checkCreditScore()`, then `checkDebtToIncome()`, then `checkFraud()`, in that fixed order inside its body, so adding, removing or reordering any check means editing this method and retesting the other checks it already contains.",
+      "correct": false,
+      "explanation": "Hard-coding the sequence of calls inside one method means changing the order or set of checks requires editing that method directly, which is exactly the coupling the scenario says the checks must not have."
+    },
+    {
+      "key": "B",
+      "text": "A `LoanApplicationCheckFactory` that returns the correct single check to run based on the applicant's risk tier.",
+      "correct": false,
+      "explanation": "The scenario requires all applicable checks to run in sequence with any of them able to reject, not a single check selected by risk tier; a factory that picks one check does not express that requirement at all."
+    },
+    {
+      "key": "C",
+      "text": "A list of `LoanApplicationHandler` objects, each implementing a common interface with a `handle(application, next)` method that rejects the application or calls `next.handle(application)`, assembled into a reorderable chain.",
+      "correct": true,
+      "explanation": "This is Chain of Responsibility: each handler only knows how to perform its own check and how to forward to the next link, so handlers stay independent of each other and the chain's membership and order can change without editing any handler's code."
+    },
+    {
+      "key": "D",
+      "text": "A `LoanApplicationObserver` interface where each check registers itself and is notified in parallel when an application arrives, independently producing an approve/reject verdict that is combined afterward.",
+      "correct": false,
+      "explanation": "Notifying all checks in parallel and combining verdicts afterward does not give any check the ability to short-circuit the ones that would run after it, which is part of what the scenario describes and what a chain, rather than independent notification, provides."
+    }
+  ],
+  "references": [
+    {
+      "title": "Chain of Responsibility — Refactoring.Guru design pattern catalog",
+      "url": "https://refactoring.guru/design-patterns/chain-of-responsibility"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

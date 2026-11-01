@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests recall of what KISS actually recommends, distinguishing it from common but inaccurate shorthand like 'fewer lines' or 'no patterns'.",
+  "prompt": "In software design, what does the KISS principle ('Keep It Simple') primarily recommend?",
+  "explanation": "KISS is about choosing the least complex design that still correctly meets the requirements that actually exist. Unneeded generality, configurability, or indirection make a design harder to read, test, and change without a corresponding present benefit, which is exactly what KISS cautions against.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Avoiding the use of design patterns entirely, since patterns always add unnecessary complexity regardless of whether a given pattern actually reduces the complexity of the problem being solved.",
+      "correct": false,
+      "explanation": "Design patterns are tools, not violations of KISS by definition; a pattern that genuinely reduces complexity for the problem at hand is consistent with KISS, while even plain code without patterns can be needlessly complex."
+    },
+    {
+      "key": "B",
+      "text": "Preferring the simplest design that correctly and adequately solves the problem as it exists today, over a more complex design that anticipates needs the problem doesn't currently have.",
+      "correct": true,
+      "explanation": "KISS is about choosing the least complex solution that still meets the actual requirements; unneeded generality, configurability, or indirection make a design harder to read, test, and change without a corresponding present benefit."
+    },
+    {
+      "key": "C",
+      "text": "Minimizing the number of lines of code in a file, regardless of readability.",
+      "correct": false,
+      "explanation": "Fewer lines achieved by cramming logic together, such as deeply nested ternary expressions, can make code harder to understand, which works against the intent of KISS rather than fulfilling it."
+    },
+    {
+      "key": "D",
+      "text": "Writing code without comments, since comments are considered unnecessary complexity.",
+      "correct": false,
+      "explanation": "Comments are a separate concern from structural complexity; removing comments does not simplify the design and can make already-complex logic harder for others to follow."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Beck Design Rules",
+      "url": "https://martinfowler.com/bliki/BeckDesignRules.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

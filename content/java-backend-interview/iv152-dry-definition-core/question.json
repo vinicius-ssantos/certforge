@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests recall of the precise definition of DRY, which is a common point of confusion when distinguished from mere textual similarity.",
+  "prompt": "What does the DRY (Don't Repeat Yourself) principle most precisely refer to avoiding?",
+  "explanation": "DRY is about a single piece of knowledge or business decision having one authoritative representation in the system. The risk it guards against is that the knowledge changes in one place while a duplicate of it is left unchanged, not that two pieces of code happen to look alike.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Writing two pieces of code that happen to look similar, even if they represent unrelated decisions made by different parts of the business, such as a marketing rule and a shipping rule that currently use the same numeric thresholds by pure coincidence.",
+      "correct": false,
+      "explanation": "Surface-level textual similarity is not what DRY targets; two blocks of code can look identical while encoding different knowledge, in which case unifying them would be a mistake, not a DRY fix."
+    },
+    {
+      "key": "B",
+      "text": "Using a loop instead of writing out repeated statements by hand.",
+      "correct": false,
+      "explanation": "This describes a coding-style choice about iteration constructs, not the duplicated-knowledge concern that DRY addresses; DRY applies at the level of business or design decisions, not just syntactic repetition of statements."
+    },
+    {
+      "key": "C",
+      "text": "Repeating the same piece of knowledge or business decision in multiple places in the system, so that a single conceptual change requires finding and updating every copy.",
+      "correct": true,
+      "explanation": "DRY is about a single piece of knowledge having one authoritative representation; the risk being guarded against is that one decision changes while a duplicate of it is forgotten, which is exactly the failure mode Fowler's writing on repetition targets."
+    },
+    {
+      "key": "D",
+      "text": "Calling the same method more than once within a single function.",
+      "correct": false,
+      "explanation": "Calling a method multiple times is normal program behavior, not duplication of knowledge; DRY is not about limiting how often existing, correctly shared logic is invoked."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler: Avoiding Repetition (IEEE Software, 2001)",
+      "url": "https://martinfowler.com/ieeeSoftware/repetition.pdf"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

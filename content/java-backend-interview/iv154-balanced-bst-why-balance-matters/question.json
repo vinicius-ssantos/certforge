@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000104",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires reasoning about worst-case tree shape rather than reciting the average-case search behavior, which is the interview-level depth this distinguishes.",
+  "prompt": "A backend service stores millions of sorted keys in a binary search tree (BST) to support range queries. If keys are inserted in strictly increasing order with no rebalancing, what happens to the worst-case lookup time, and why does this matter for reasoning about self-balancing trees (such as red-black or AVL trees)?",
+  "explanation": "Inserting keys in strictly increasing order into a plain BST with no rebalancing produces a tree that is effectively a chain, equivalent in shape to a linked list, so lookup degrades to O(n) in the worst case. Self-balancing trees matter precisely because they maintain a height bound of O(log n) regardless of insertion order, guaranteeing worst-case lookup rather than depending on favorable input.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The tree always stays O(log n) because a BST is defined by its sorted (in-order) property, not by its shape.",
+      "correct": false,
+      "explanation": "The sorted in-order traversal property is maintained regardless of shape, but lookup time depends on the tree's height, which is a function of shape; a skewed shape can have height n even though the in-order property still holds."
+    },
+    {
+      "key": "B",
+      "text": "The tree degenerates into a chain equivalent to a linked list, making lookup O(n) in the worst case; self-balancing trees guarantee O(log n) height regardless of insertion order.",
+      "correct": true,
+      "explanation": "Correct: with no rebalancing, each new larger key becomes the right child of the previous maximum, producing a single chain of height n, so lookup is O(n); self-balancing trees restructure on insertion specifically to avoid this."
+    },
+    {
+      "key": "C",
+      "text": "Self-balancing trees improve average-case insertion to O(1) by caching the most recently inserted node for faster future access.",
+      "correct": false,
+      "explanation": "This describes no real mechanism used by self-balancing trees. Their insertion cost is O(log n), not O(1), and they don't cache a 'most recent' node for shortcutting future operations."
+    },
+    {
+      "key": "D",
+      "text": "The worst case for a strictly-increasing-order BST is still O(log n), because each key comparison halves the remaining search space just like binary search on a sorted array, where comparing against the middle element always discards half of the remaining candidates regardless of how the array was originally populated.",
+      "correct": false,
+      "explanation": "This is the exact misconception the scenario is testing: halving the search space only happens when the tree is reasonably balanced. A degenerate chain-shaped tree does not halve anything per comparison, since every node has only one child."
+    }
+  ],
+  "references": [
+    {
+      "title": "Binary search tree - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Binary_search_tree"
+    },
+    {
+      "title": "Self-balancing binary search tree - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

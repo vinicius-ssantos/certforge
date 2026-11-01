@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reading object-lifecycle ownership out of actual field and constructor code, rather than just naming the three relationship types from memory.",
+  "prompt": "Compare two designs:\n\n```java\n// Design 1\nclass Car {\n    private final Engine engine;\n    Car() { this.engine = new Engine(); }\n}\n\n// Design 2\nclass Car {\n    private Driver driver;\n    void assignDriver(Driver driver) { this.driver = driver; }\n}\n```\n\nIn Design 1, the Engine is created inside Car's constructor and never exposed; in Design 2, a Driver object is created elsewhere and merely handed to Car through a setter-like method. Which statement correctly classifies these two has-a relationships?",
+  "explanation": "Design 1 is composition: the Engine's lifecycle is entirely owned by the Car that created it — it is instantiated inside the constructor, never shared, and has no existence independent of that Car. Design 2 is aggregation (a weaker has-a relationship, sometimes just called association): the Driver is created and owned somewhere else, can be reassigned to a different Car, and continues to exist whether or not this particular Car references it. The distinguishing factor is lifecycle ownership, not merely whether one object holds a reference to another.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Both designs are composition, because in both cases Car holds a private field referencing another object, and merely declaring a field private is commonly treated as sufficient on its own to establish a strict ownership relationship regardless of where or when the referenced object was actually constructed.",
+      "correct": false,
+      "explanation": "Holding a private reference field is necessary but not sufficient for composition; what distinguishes composition from aggregation is whether the referenced object's lifecycle is created and controlled by the owner, which is true for Engine but not for Driver."
+    },
+    {
+      "key": "B",
+      "text": "Design 1 is composition because Engine is created and owned by Car — its lifecycle is tied to Car's; Design 2 is aggregation (or plain association) because Driver is created independently and can outlive or be reassigned away from this Car.",
+      "correct": true,
+      "explanation": "This matches the standard distinction: composition implies the contained object's lifecycle is bound to its owner, while aggregation/association implies the referenced object manages its own lifecycle independently of the object holding the reference."
+    },
+    {
+      "key": "C",
+      "text": "Both designs are aggregation, because Car never calls new directly inside any public method.",
+      "correct": false,
+      "explanation": "Car does call new Engine() directly, inside its own constructor in Design 1 — that is precisely the ownership signal that marks it as composition rather than aggregation."
+    },
+    {
+      "key": "D",
+      "text": "Design 1 is aggregation because engine is declared final, and Design 2 is composition because driver is reassignable through a method.",
+      "correct": false,
+      "explanation": "The final keyword only prevents the engine reference from being reassigned after construction; it says nothing about lifecycle ownership, and reassignability through a setter is actually a sign of a looser, independently-managed relationship (aggregation), the opposite of what this option claims."
+    }
+  ],
+  "references": [
+    {
+      "title": "Creating Objects (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/javaOO/objectcreation.html"
+    },
+    {
+      "title": "What Is an Object? (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/concepts/object.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

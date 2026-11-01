@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000107",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires reasoning about what a passing test actually guarantees rather than recalling a tool API.",
+  "prompt": "A backend service has fast unit tests, a smaller set of integration tests that hit a real database via Testcontainers, and a handful of end-to-end tests that drive the deployed API over HTTP. A code review comment claims: \"the unit tests all pass, so the service works end to end.\" Which statement best describes what each level of test actually proves?",
+  "explanation": "Unit tests prove that an isolated unit behaves correctly for the inputs exercised, under the assumption that its collaborators behave as the test doubles say they do. They cannot prove that the real wiring between components — serialization, the actual SQL a repository generates, network calls, configuration — behaves correctly, because none of that is exercised. Integration and end-to-end tests exist precisely to catch the class of bug that lives in the seams between correctly-behaving units.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Unit tests prove the whole request path works, because they cover the business logic that matters; integration and end-to-end tests mostly catch typos and become redundant once unit coverage is high.",
+      "correct": false,
+      "explanation": "This ignores the entire category of defect unit tests cannot see: a service that mocks its repository can have 100% passing unit tests while the real query throws a SQL exception against the actual schema — unit coverage says nothing about that."
+    },
+    {
+      "key": "B",
+      "text": "Integration tests alone are sufficient proof of correctness because they run against real infrastructure, so unit tests add no information once integration tests exist.",
+      "correct": false,
+      "explanation": "Integration tests are slower and typically cover fewer input combinations per unit than focused unit tests can; dropping unit tests loses the fine-grained, fast feedback on edge cases inside a single class's logic that integration tests are too coarse and too slow to provide at scale."
+    },
+    {
+      "key": "C",
+      "text": "End-to-end tests are the only tests that prove anything, since unit and integration tests exercise test doubles instead of the real system, which would mean an end-to-end suite alone can safely replace every unit and integration test the service currently has in its CI pipeline.",
+      "correct": false,
+      "explanation": "Integration tests in this scenario use a real Testcontainers database, not a double, so they are not reducible to \"using test doubles\"; and end-to-end tests have their own blind spots (e.g., rare error branches that are impractical to trigger through a full HTTP flow), so they are not a universal proof either."
+    },
+    {
+      "key": "D",
+      "text": "Unit tests prove an isolated unit behaves correctly given its collaborators' assumed behavior; only integration and end-to-end tests exercise the real wiring (serialization, database, network) that can still break even when every unit is individually correct.",
+      "correct": true,
+      "explanation": "This is the accurate scoping: a unit test's guarantee is bounded by the assumptions baked into its test doubles, and bugs in how real components are wired together are invisible to it by construction."
+    }
+  ],
+  "references": [
+    {
+      "title": "The Practical Test Pyramid",
+      "url": "https://martinfowler.com/articles/practical-test-pyramid.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

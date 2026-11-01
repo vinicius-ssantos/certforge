@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests recognition of SRP's actual criterion over plausible-sounding size metrics, with no code to trace through.",
+  "prompt": "A reviewer flags `InvoiceService` as 'doing too much' and recommends applying the Single Responsibility Principle. Which of the following best describes what SRP actually asks you to check, as opposed to a surface-level proxy for it?",
+  "explanation": "SRP is judged by reasons to change, not by superficial size metrics like method count, import count or line count; those metrics can all be high or low independently of whether the class actually mixes unrelated concerns.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Whether the class defines more than three public methods, since extra methods signal extra responsibilities.",
+      "correct": false,
+      "explanation": "Method count is not what SRP measures: a class can expose many methods that all serve one cohesive responsibility (e.g., a builder with many small setters), and a class with two methods can still mix unrelated concerns."
+    },
+    {
+      "key": "B",
+      "text": "Whether the class imports more than one package, since cross-package use implies mixed concerns, so a class that imports both `java.time` and `java.util` would already be flagged as mixing responsibilities under this rule, regardless of what it actually does with those imports.",
+      "correct": false,
+      "explanation": "Import count reflects a class's collaborators, not its responsibilities; a class with a single responsibility routinely depends on several packages to fulfill it, such as a repository that needs both a JDBC driver and a mapping library."
+    },
+    {
+      "key": "C",
+      "text": "Whether the class's source file exceeds a fixed number of lines, since large files are responsible for too much.",
+      "correct": false,
+      "explanation": "Line count is a weak, easily gamed proxy: splitting one responsibility across several short files does not satisfy SRP, and a single cohesive algorithm can legitimately run long."
+    },
+    {
+      "key": "D",
+      "text": "Whether the class has more than one axis of change — distinct stakeholders or business concerns that would each force an edit to the same code for unrelated reasons.",
+      "correct": true,
+      "explanation": "Correct. SRP is about coupling a class's reasons to change to a single concern or actor; a class can be long and still have one reason to change, while a short class can mix several."
+    }
+  ],
+  "references": [
+    {
+      "title": "Martin Fowler's Bliki — CodeSmell",
+      "url": "https://martinfowler.com/bliki/CodeSmell.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

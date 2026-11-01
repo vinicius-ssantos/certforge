@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000111",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate reads pool-exhaustion metrics alongside database load instead of treating 'pool exhausted' as a request to make the pool bigger.",
+  "prompt": "The order service's connection pool shows active connections pinned at the configured maximum (20/20) with queue time for a connection climbing, while the database's own CPU is only at 30%. A trace for a single request shows dozens of near-identical short SELECT statements against the orders table. What should you do before raising the pool size?",
+  "explanation": "Low database CPU alongside a maxed-out, queued connection pool means connections are tied up waiting on round trips, not on heavy database work. The trace explains why: each request is making far more queries than it needs. Raising the pool size would let more of that same wasteful pattern run concurrently, consuming more connections and network round trips without reducing the total amount of work being done.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Increase the pool's maximum size so more requests can get a connection at once during busy periods, since a higher ceiling lets more requests avoid waiting in the acquisition queue entirely.",
+      "correct": false,
+      "explanation": "The database is not CPU-bound, so capacity is not the constraint; a bigger pool just lets more copies of the same inefficient per-row query pattern run in parallel, until some other limit (network, DB connection cap) is hit instead."
+    },
+    {
+      "key": "B",
+      "text": "Batch or join the dozens of per-row SELECT statements the trace shows into a single query, since the connections are tied up waiting on round trips rather than on database work.",
+      "correct": true,
+      "explanation": "Low DB CPU plus many near-identical queries per request is the classic N+1 signature; reducing the number of round trips per request directly shortens how long each request holds a connection, which relieves the pool without adding capacity that would just be consumed the same way."
+    },
+    {
+      "key": "C",
+      "text": "Add a read replica and route all read traffic to it.",
+      "correct": false,
+      "explanation": "A replica changes where the queries run, not how many of them each request issues; the N+1 pattern and the connection hold time it causes are unchanged."
+    },
+    {
+      "key": "D",
+      "text": "Reduce the pool's connection acquisition timeout so requests fail faster instead of queuing.",
+      "correct": false,
+      "explanation": "Failing faster only changes queued requests into failed ones sooner; it does not reduce the number of queries per request or free up connections any faster."
+    }
+  ],
+  "references": [
+    {
+      "title": "Effective Troubleshooting",
+      "url": "https://sre.google/sre-book/effective-troubleshooting/"
+    },
+    {
+      "title": "Jakarta Persistence API, jakarta.persistence.criteria.Fetch",
+      "url": "https://jakarta.ee/specifications/platform/10/apidocs/jakarta/persistence/criteria/fetch"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

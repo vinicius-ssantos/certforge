@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000103",
+  "difficulty": "EASY",
+  "difficultyRationale": "Checks the basic mechanism behind runtime polymorphism (dynamic dispatch) using a direct, unambiguous snippet.",
+  "prompt": "Given this code:\n\n```java\nclass Animal {\n    String sound() { return \"...\"; }\n}\nclass Dog extends Animal {\n    @Override\n    String sound() { return \"Woof\"; }\n}\n\nAnimal a = new Dog();\nSystem.out.println(a.sound());\n```\n\nWhat gets printed, and why?",
+  "explanation": "Instance methods in Java are dispatched based on the actual runtime type of the object a reference points to, not the declared (static) type of the reference variable. Because a refers to an actual Dog object at runtime, the overridden sound() in Dog runs, printing \"Woof\". This dynamic (virtual) method dispatch is the mechanism that makes polymorphism work.",
+  "options": [
+    {
+      "key": "A",
+      "text": "\"...\" — method resolution uses the declared (static) type of the reference variable, which is Animal.",
+      "correct": false,
+      "explanation": "That rule applies to field access and to static/hidden methods, not to overridden instance methods. An overridden instance method is resolved against the object's runtime type, so Animal's version does not run here."
+    },
+    {
+      "key": "B",
+      "text": "\"Woof\" — instance methods are dispatched based on the actual runtime type of the object, not the declared type of the reference variable; this is dynamic (virtual) method dispatch, the mechanism behind polymorphism.",
+      "correct": true,
+      "explanation": "This is correct: the JVM calls the method defined by the object's actual class at runtime (Dog), regardless of the fact that the variable a is declared as the supertype Animal."
+    },
+    {
+      "key": "C",
+      "text": "A compile error occurs because the Animal reference type does not declare the overridden behavior.",
+      "correct": false,
+      "explanation": "The code compiles fine: a is declared as Animal, which does declare sound(), and Dog's version is a valid override with a compatible signature and return type."
+    },
+    {
+      "key": "D",
+      "text": "The output is undefined or non-deterministic, since Dog could override sound() in more than one way, and the compiler would then need to pick arbitrarily between multiple overriding candidates at class-loading time before any call is actually dispatched.",
+      "correct": false,
+      "explanation": "A class can only override a given method signature once; there is exactly one sound() implementation in Dog, so the output is fully deterministic."
+    }
+  ],
+  "references": [
+    {
+      "title": "Polymorphism (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
