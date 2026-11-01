@@ -16,6 +16,7 @@ export function toEditorialRequest(question) {
     // it prepares for, and publishing refuses a key the exam's verified objectives do not list. A
     // pack with no objectiveKeys sends none, which is every pack that is not about an exam.
     objectiveKeys: question.objectiveKeys ?? [],
+    seniority: question.seniority ?? null,
     difficulty: question.difficulty,
     difficultyRationale: question.difficultyRationale,
     prompt: question.prompt,

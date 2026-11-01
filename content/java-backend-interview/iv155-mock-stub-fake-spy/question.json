@@ -43,5 +43,6 @@
   ],
   "evidence": {
     "type": "reference-backed"
-  }
+  },
+  "seniority": "PLENO"
 }

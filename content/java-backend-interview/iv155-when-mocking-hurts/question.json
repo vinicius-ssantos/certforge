@@ -39,5 +39,6 @@
   ],
   "evidence": {
     "type": "reference-backed"
-  }
+  },
+  "seniority": "SENIOR"
 }
