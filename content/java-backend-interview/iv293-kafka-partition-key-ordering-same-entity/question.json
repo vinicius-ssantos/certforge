@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A very common real-world ordering bug: forgetting that Kafka's ordering guarantee is per-partition, not per-topic.",
+  "prompt": "An order-status service publishes `OrderCreated`, `OrderPaid`, and `OrderShipped` events for the same order to a Kafka topic with 6 partitions, using a random UUID as the message key for each event. A downstream consumer occasionally processes `OrderShipped` before `OrderPaid` for the same order, even though they were published in the correct order. Why?",
+  "explanation": "Kafka only guarantees ordering of records within a single partition, not across the partitions of a topic. Because each event uses a different random key, the default partitioner can route the three events for the same order to three different partitions, each consumed independently (possibly by different consumer instances in the group) with no ordering relationship between them. Using a stable key — the order ID — would route every event for that order to the same partition, where Kafka's within-partition ordering guarantee would then preserve their publish order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The producer's `acks` setting was below `all`, so some events reached the partition leader before being acknowledged by replicas, and replica lag reordered the replicated copies that the consumer eventually read from an out-of-sync follower.",
+      "correct": false,
+      "explanation": "The `acks` setting controls durability of a write (how many replicas confirm before the producer considers it successful), not the ordering of records within a partition's log, which is purely a function of append order; replica lag doesn't reorder records a consumer reads from the leader."
+    },
+    {
+      "key": "B",
+      "text": "Kafka topics have no ordering guarantee at all under any circumstances whatsoever, so interleaving across any set of related events is always possible regardless of how keys or partition counts are chosen, and no amount of producer or consumer configuration can ever change that underlying fact.",
+      "correct": false,
+      "explanation": "Kafka does guarantee ordering, just scoped to a single partition rather than the whole topic; choosing a consistent key for related events routes them to one partition and recovers a meaningful ordering guarantee for that related set."
+    },
+    {
+      "key": "C",
+      "text": "Consumer group rebalancing happened between the three events being published, moving partition assignments between consumer instances and causing the later event to be picked up and processed first by a faster, newly-assigned instance.",
+      "correct": false,
+      "explanation": "A rebalance changes which consumer instance is assigned which partition, but it does not reorder the records already written within a partition's log, and multiple partitions being processed independently is already enough to explain the interleaving without invoking a rebalance."
+    },
+    {
+      "key": "D",
+      "text": "Each event used a different random key, so the default partitioner could route the three events for the same order to three different partitions, which are consumed independently with no ordering relationship between them; Kafka only orders records within one partition, not across a topic.",
+      "correct": true,
+      "explanation": "Correct. Without a stable partition key (such as the order ID), related events for the same logical entity can land on different partitions and be consumed out of their original publish order; keying by order ID would fix this by keeping all of that order's events on one ordered partition."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Introduction to Kafka (\"Kafka guarantees that any consumer of a given topic partition will always read that partition's events\" in write order)",
+      "url": "https://docs.confluent.io/kafka/introduction.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

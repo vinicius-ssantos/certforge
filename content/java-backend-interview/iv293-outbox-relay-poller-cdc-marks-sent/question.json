@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks understanding of the second half of the outbox pattern — how the saved outbox row actually gets published — not just the idea of writing to a table.",
+  "prompt": "A team adopts the transactional outbox pattern: instead of publishing directly to the broker, the order service writes an `OrderCreated` row into an `outbox` table in the same database transaction as the `Order` row itself. What component is still needed to actually get that event onto the broker, and what does it need to guarantee?",
+  "explanation": "Writing to the outbox table only makes the intent to publish durable and transactionally consistent with the business data — it doesn't put the event on the broker by itself. A separate relay process (either a poller that periodically reads unsent outbox rows, or a change-data-capture process like Debezium reading the database's write-ahead log) is responsible for reading those rows, publishing each one to the broker, and then marking it as sent (or deleting it) so it isn't published again. That relay must guarantee it doesn't lose track of a row before confirming the publish succeeded — effectively giving the overall pipeline at-least-once delivery from the outbox to the broker, which is why the consumer on the other end still needs to tolerate occasional redelivery.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A separate relay process (a poller or a change-data-capture reader) must read unsent outbox rows, publish each to the broker, and only then mark the row as sent — effectively at-least-once delivery out of the outbox table.",
+      "correct": true,
+      "explanation": "Correct. The outbox table solves the dual-write problem for the write side (making the save-and-intend-to-publish atomic), but something still has to drain that table to the broker; a poller or CDC-based relay is that component, and it needs to avoid marking a row sent before the publish is actually confirmed."
+    },
+    {
+      "key": "B",
+      "text": "No additional component is needed: the database itself automatically pushes any row inserted into a table named `outbox` to a configured broker endpoint as part of committing the transaction, which is why the table must be named exactly `outbox` for this to work.",
+      "correct": false,
+      "explanation": "No mainstream relational database has a built-in, broker-aware feature that auto-publishes rows based on a table's name; this behavior always has to be implemented by an external process — a poller or a CDC tool — reading the table or its transaction log."
+    },
+    {
+      "key": "C",
+      "text": "The application's own HTTP request thread that handled the original order-creation request is responsible for synchronously publishing the outbox row to the broker right before returning its response to the caller, which is why this pattern doesn't change the request's latency profile.",
+      "correct": false,
+      "explanation": "Publishing synchronously on the request thread is exactly the dual-write pattern the outbox table was introduced to avoid; the whole point of the outbox is to let the request complete as soon as the local database transaction commits, with publishing happening asynchronously afterward via a separate relay."
+    },
+    {
+      "key": "D",
+      "text": "The broker's own consumer-side offset-commit mechanism is what reads the outbox table directly, bypassing the need for any publish call from the order service's side at all, since Kafka consumers can be pointed at an arbitrary database table as a source.",
+      "correct": false,
+      "explanation": "Kafka consumers read from Kafka topics/partitions, not arbitrary database tables; getting data out of a database table and onto a Kafka topic (or any broker) requires an explicit publishing component such as a poller or a CDC connector, which is the relay this question is asking about."
+    }
+  ],
+  "references": [
+    {
+      "title": "microservices.io — Transactional Outbox pattern (relay via polling publisher or transaction log tailing)",
+      "url": "https://microservices.io/patterns/data/transactional-outbox.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

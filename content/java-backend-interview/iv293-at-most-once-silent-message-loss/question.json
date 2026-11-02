@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate understands that auto-commit timing, not message deletion or rebalancing, is what causes at-most-once message loss.",
+  "prompt": "A Kafka consumer runs with `enable.auto.commit=true` and a short `auto.commit.interval.ms`. For one batch, processing (writing results to a downstream database) takes longer than that interval. The consumer crashes partway through processing that batch, after its offsets were auto-committed but before the database writes completed. On restart, the unprocessed records from that batch are never redelivered. Why?",
+  "explanation": "Auto-commit fires on a timer, independent of whether the fetched records have actually finished processing. Once the offset is committed, the broker considers everything up to it consumed; a crash after that commit but before the side effect completes leaves no record that those messages were never truly handled, so the consumer resumes strictly after the committed offset on restart. This is the defining risk of at-most-once delivery: silent loss, never duplication.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Kafka retains a message only until it is first fetched by any consumer, then deletes it from the partition immediately regardless of commit state, so the batch was already physically removed from the log before the crash happened, the same way a read receipt would irreversibly consume a one-time notification.",
+      "correct": false,
+      "explanation": "Kafka retention is governed by a configured retention period (or size), not by whether a message has been fetched; messages stay in the log and remain available for redelivery long after being read, which is exactly what makes at-least-once delivery possible at all."
+    },
+    {
+      "key": "B",
+      "text": "The offset was committed on a fixed timer, independent of whether the batch's side effects had finished; once committed, the broker treats those records as consumed and resumes strictly after that offset on restart, so the unfinished batch is never redelivered.",
+      "correct": true,
+      "explanation": "Correct. Time-based auto-commit decouples the commit from actual processing completion. A crash in that gap between commit and finished side effect is unrecoverable under at-most-once semantics: the broker has no way to know the records were never fully handled."
+    },
+    {
+      "key": "C",
+      "text": "The consumer group rebalanced after the crash and a different instance was assigned that partition, starting from the latest offset instead of the last committed one, which skipped over the unprocessed batch entirely — the same way a brand-new consumer joining the group for the first time would.",
+      "correct": false,
+      "explanation": "A rebalance reassigns a partition to a new consumer starting from the last *committed* offset (per the group's `auto.offset.reset` policy only applying when no committed offset exists), not from the log's latest offset — so a rebalance alone does not explain skipping already-committed-but-unprocessed records."
+    },
+    {
+      "key": "D",
+      "text": "Auto-commit here actually governs the producer's acknowledgement mode rather than the consumer's offsets, so the real cause is that the original messages were produced with `acks=0` and never durably written to the partition in the first place.",
+      "correct": false,
+      "explanation": "`enable.auto.commit` is a consumer-side setting controlling offset commits, unrelated to a producer's `acks` configuration; the scenario describes consumer-side offset commits, not a producer durability failure."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Kafka Delivery Semantics (at-most-once: \"messages may be lost and are not redelivered\")",
+      "url": "https://docs.confluent.io/kafka/design/delivery-semantics.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

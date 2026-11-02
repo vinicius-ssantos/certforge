@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes backpressure as a deliberate flow-control response from just letting a buffer grow.",
+  "prompt": "A fast producer is publishing messages faster than a downstream consumer can process them. What does it mean for the system to apply backpressure in this situation, as opposed to simply letting messages pile up wherever they're waiting?",
+  "explanation": "Backpressure means the system actively signals the imbalance back toward the producer — slowing it down, applying a bounded limit that causes it to block or be rejected once a threshold is hit, or otherwise constraining the rate — rather than silently absorbing the mismatch in an ever-growing, unbounded buffer. The difference matters because an unbounded buffer just delays the failure (and often makes it worse, e.g. exhausting memory) instead of controlling it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Backpressure means the consumer silently drops a fraction of incoming messages at random once it detects it's falling behind, trading some data loss for keeping its own processing rate roughly constant regardless of producer speed.",
+      "correct": false,
+      "explanation": "Backpressure is a signal communicated back toward the producer to limit its rate, not a policy of silently discarding messages at the consumer; random dropping would also violate most delivery-guarantee expectations."
+    },
+    {
+      "key": "B",
+      "text": "Backpressure means actively signaling the rate mismatch back toward the producer — via blocking, rejecting, or otherwise bounding how much more it can send — so the imbalance is controlled at the source instead of absorbed into an ever-growing buffer downstream.",
+      "correct": true,
+      "explanation": "Correct. This is the core idea of backpressure: push the constraint back to whoever is producing faster than the system can handle, rather than letting an unbounded buffer hide the problem until it fails in a worse way."
+    },
+    {
+      "key": "C",
+      "text": "Backpressure means the broker automatically spins up additional consumer instances the moment it detects a rate mismatch, scaling out processing capacity to match the producer's rate without any change in producer behavior at all.",
+      "correct": false,
+      "explanation": "Auto-scaling consumers is a separate capacity response that some systems add on top of backpressure, but backpressure itself is the signaling/throttling mechanism toward the producer, not a guarantee that more consumers will automatically appear."
+    },
+    {
+      "key": "D",
+      "text": "Backpressure means the producer and consumer swap roles temporarily, with the consumer pulling data at its own pace from a store the producer writes to independently, removing any notion of a rate relationship between the two sides entirely once that pull-based mode is active.",
+      "correct": false,
+      "explanation": "A consumer pulling at its own pace from storage (like Kafka's own pull model) doesn't by itself eliminate the rate relationship — a consumer that's too slow still falls behind in that model too, which is exactly why backpressure or bounded buffering is still needed."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Flow Control",
+      "url": "https://www.rabbitmq.com/docs/flow-control"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

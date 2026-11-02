@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires reasoning precisely about which failure window each commit-timing choice opens, not just naming 'at-most-once' and 'at-least-once' as labels.",
+  "prompt": "A team is deciding when a Kafka consumer should commit its offset relative to processing a record's side effect. Option 1: commit the offset, then process the record. Option 2: process the record, then commit the offset. Which statement correctly describes the failure each option risks if the consumer crashes mid-way?",
+  "explanation": "If the offset is committed before processing (Option 1) and the consumer crashes after the commit but before the side effect runs, the broker believes the record was consumed; on restart the consumer resumes after that offset, and the record's intended side effect never happens — a silent loss. If the offset is committed after processing (Option 2) and the consumer crashes after the side effect runs but before the commit, the broker still considers the record unconsumed; on restart the same record is redelivered and its side effect runs again — a duplicate. Option 2 is the safer default when paired with idempotent processing, because duplication can be defended against, while silent loss generally cannot be detected or recovered after the fact.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Option 1 (commit-then-process) risks a duplicate side effect on crash, because the broker will redeliver the already-committed record anyway; Option 2 (process-then-commit) risks silent loss, because a crash after the commit discards the record before it's processed.",
+      "correct": false,
+      "explanation": "This reverses the actual failure modes: a committed offset is what stops redelivery (so commit-then-process risks loss, not duplication), and Option 2 commits only after processing completes, so a crash before that commit causes redelivery (duplication), not loss."
+    },
+    {
+      "key": "B",
+      "text": "Option 1 risks silent loss if the crash happens after the commit but before processing finishes, since the broker won't redeliver an already-committed record; Option 2 risks a duplicate side effect if the crash happens after processing but before the commit.",
+      "correct": true,
+      "explanation": "Correct. This is the real trade-off: committing early can silently drop work, while committing late can silently repeat it — which is why process-then-commit paired with idempotent side effects is the generally preferred pattern, since duplication is recoverable and loss usually isn't."
+    },
+    {
+      "key": "C",
+      "text": "Neither option actually risks anything different in practice, because Kafka's internal `__consumer_offsets` topic is itself replicated and transactional, so a crash at any point during either ordering is automatically rolled back to a consistent state with no loss or duplication possible.",
+      "correct": false,
+      "explanation": "Replication of the `__consumer_offsets` topic protects the durability of a commit once it has been made; it does not retroactively undo a side effect that already ran, nor does it make an uncommitted, unprocessed record somehow still get processed — the timing trade-off described is real regardless of that replication."
+    },
+    {
+      "key": "D",
+      "text": "Option 1 (commit-then-process) is always safe because Kafka automatically delays making a commit visible to the broker's offset tracking until the consumer's processing thread explicitly signals completion, regardless of when `commitSync` or `commitAsync` is called in the code.",
+      "correct": false,
+      "explanation": "Kafka's offset commit takes effect as soon as the commit call is made and acknowledged by the broker's offset-tracking mechanism; there is no automatic deferral tied to a separate processing-completion signal, which is exactly why calling commit before processing finishes creates the loss window described."
+    }
+  ],
+  "references": [
+    {
+      "title": "Apache Kafka Javadoc — KafkaConsumer (at-most-once vs. at-least-once commit ordering)",
+      "url": "https://kafka.apache.org/39/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks understanding of acknowledgment as an explicit signal, not an implicit side effect of delivery.",
+  "prompt": "A RabbitMQ consumer is configured for manual acknowledgment (`autoAck = false`). After processing a message successfully, it calls `basic.ack`; if processing fails in a way it recognizes as retryable, it calls `basic.nack` with `requeue = true` instead of just letting the message time out. What does explicit acknowledgment give the consumer that relying on an implicit delivery timeout wouldn't?",
+  "explanation": "With manual acknowledgment, the consumer explicitly tells the broker the outcome of each message the moment it knows it — success (`ack`), or a recognized failure that should be retried (`nack` with `requeue = true`) — rather than making the broker wait for a delivery timeout to infer that something went wrong. That's faster (no wasted waiting) and more precise: the consumer can distinguish \"I failed and want this requeued immediately\" from \"I'm still working on it,\" which a bare timeout mechanism can't express.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It lets the consumer tell the broker the specific outcome of a message the moment it's known — success, or a recognized retryable failure — rather than the broker inferring failure only after waiting out a timeout, which is both slower and can't distinguish \"still working\" from \"failed.\"",
+      "correct": true,
+      "explanation": "Correct. Explicit ack/nack communicates outcome immediately and precisely; an implicit timeout can only guess that something is wrong after the fact, and can't tell a slow-but-successful attempt apart from a genuine failure."
+    },
+    {
+      "key": "B",
+      "text": "It lets the consumer process multiple messages concurrently on a single channel without any risk of duplicate delivery, a guarantee that's only available once acknowledgment mode is switched from automatic to manual.",
+      "correct": false,
+      "explanation": "Switching to manual acknowledgment doesn't by itself eliminate duplicate-delivery risk — redelivery can still happen (e.g., after a connection drop before an ack is received) regardless of ack mode; manual ack is about when and how outcome is signaled, not a concurrency or exactly-once guarantee."
+    },
+    {
+      "key": "C",
+      "text": "It removes the need for the consumer to handle exceptions at all, since the broker automatically detects a thrown exception inside the consumer's callback and converts it into an implicit `nack` without any code needing to call `basic.nack` itself, as part of the manual-ack contract's built-in exception bridge.",
+      "correct": false,
+      "explanation": "The broker has no visibility into exceptions thrown inside a consumer's own processing code; the whole point of manual acknowledgment is that the consumer's code has to explicitly call `ack` or `nack` to report the outcome — nothing does that automatically on its behalf."
+    },
+    {
+      "key": "D",
+      "text": "It guarantees the message will never be delivered to any other consumer in the group while this one is still deciding whether to ack or nack it, a mutual-exclusion property that automatic acknowledgment mode doesn't provide at all.",
+      "correct": false,
+      "explanation": "Mutual exclusion among competing consumers while unacknowledged is already governed by the broker's normal dispatch (an unacked message isn't redelivered to another consumer except after a connection loss) regardless of ack mode — this isn't a new guarantee manual ack specifically introduces."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Consumer Acknowledgements and Publisher Confirms",
+      "url": "https://www.rabbitmq.com/docs/confirms"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

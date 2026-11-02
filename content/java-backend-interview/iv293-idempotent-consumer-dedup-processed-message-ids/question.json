@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests understanding of the idempotent-consumer pattern as the practical way to live with at-least-once delivery.",
+  "prompt": "A consumer processes `PaymentCaptured` events by calling an external ledger API to record the payment, then commits its Kafka offset. Under at-least-once delivery, the same event can be redelivered after a crash, and calling the ledger API twice for the same payment would double-count it. What's the standard fix, without trying to make delivery itself exactly-once?",
+  "explanation": "The idempotent-consumer pattern accepts that redelivery will happen and instead makes the consumer's own processing safe to repeat: before acting on a message, the consumer checks a durable store (e.g., a dedup table keyed on the message's unique ID) for whether that ID has already been successfully processed. If it has, the consumer skips the side effect and just acknowledges the message; if not, it performs the side effect and records the ID as processed, ideally in the same transaction as the side effect itself. This moves the correctness guarantee from the broker's delivery semantics to the consumer's own processing logic.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Switch the topic's replication factor to 1, since a lower replication factor reduces the chance of the broker triggering a leader failover that causes redelivery in the first place, eliminating the root cause instead of merely handling the symptom downstream.",
+      "correct": false,
+      "explanation": "Replication factor affects durability and availability of the partition's data, not whether a consumer's already-committed-but-unacknowledged messages get redelivered after a crash; lowering it would make redelivery scenarios like this one more likely to cause actual data loss, not less likely to redeliver."
+    },
+    {
+      "key": "B",
+      "text": "Before acting on a message, check a durable store keyed on the message's unique ID for whether it was already successfully processed; skip the side effect if so, and otherwise perform it and record the ID as processed, ideally in the same transaction.",
+      "correct": true,
+      "explanation": "Correct. This is the idempotent-consumer pattern: it doesn't try to prevent redelivery, it makes redelivery harmless by tracking which message IDs already had their effect applied and refusing to apply it twice."
+    },
+    {
+      "key": "C",
+      "text": "Configure the consumer to use `isolation.level=read_committed`, which guarantees the broker will never redeliver a message whose offset was already committed by that same consumer group, regardless of when the crash happened.",
+      "correct": false,
+      "explanation": "`read_committed` isolation controls whether a consumer sees records from aborted producer transactions, not whether its own already-fetched-but-not-committed records get redelivered after a crash; it does not address the redelivery scenario described here at all."
+    },
+    {
+      "key": "D",
+      "text": "Increase the consumer's `session.timeout.ms` so the broker waits much longer before considering the consumer dead, which prevents the rebalance that would otherwise cause the same message to be handed to a different instance.",
+      "correct": false,
+      "explanation": "A longer session timeout changes how quickly a stalled consumer is detected and its partitions reassigned, but it does nothing about the scenario described: a crash and restart that redelivers a message whose offset was never committed, which happens regardless of this timeout value."
+    }
+  ],
+  "references": [
+    {
+      "title": "microservices.io — Idempotent Consumer pattern",
+      "url": "https://microservices.io/patterns/communication-style/idempotent-consumer.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
