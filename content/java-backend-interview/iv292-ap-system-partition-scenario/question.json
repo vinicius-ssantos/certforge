@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether a candidate can connect the abstract CAP trade-off to what an actual client observes against a real AP system.",
+  "prompt": "A multi-region key-value store (configured the way DynamoDB's default read path works) loses network connectivity between two of its regions. A client in the cut-off region issues a read for an item that was just updated in the other region, moments before the partition started. What does the client most likely experience, given this store favors availability over consistency during a partition?",
+  "explanation": "An AP system keeps serving reads and writes on both sides of the partition rather than refusing requests, which means the cut-off region answers from whatever replica data it locally has — in this case, the version from before the update, since the update never had a chance to replicate across the broken link. The read succeeds (availability is preserved) but returns stale data (consistency is sacrificed) until the partition heals and replication catches up.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The read fails outright with a timeout error, because once a partition is detected the store stops accepting any read or write traffic on either side until connectivity between the two regions is fully restored and both sides confirm it.",
+      "correct": false,
+      "explanation": "Refusing all traffic during a partition is the behavior CAP attributes to a consistency-favoring (CP) design, not to a system explicitly described as favoring availability; an AP system keeps answering requests instead of failing them."
+    },
+    {
+      "key": "B",
+      "text": "The read blocks until the partition heals and the update has fully replicated, because an AP system still refuses to answer with potentially stale data even though it's nominally classified as availability-favoring.",
+      "correct": false,
+      "explanation": "That's the behavior of a CP system, not an AP one. An AP system is defined by continuing to serve requests during a partition rather than blocking for consistency, which is the opposite of what this option describes."
+    },
+    {
+      "key": "C",
+      "text": "The read succeeds immediately but returns the pre-update value, because the cut-off region keeps serving requests from its own local replica rather than blocking, and that replica never received the update before the link broke.",
+      "correct": true,
+      "explanation": "Correct. This is exactly what favoring availability means during a partition: the system answers rather than refusing, and the answer reflects whatever state is locally available, which here is stale until replication resumes."
+    },
+    {
+      "key": "D",
+      "text": "The read succeeds and correctly returns the just-updated value, because the store silently falls back to synchronously querying the other region over a backup network path whenever its usual replication link is unavailable.",
+      "correct": false,
+      "explanation": "There's no such automatic cross-region fallback query implied by this store's configuration; during an actual partition, the cut-off region has no live path to the other region's current data at all, which is precisely why it can only answer from its own local, stale copy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon DynamoDB Developer Guide — Read Consistency",
+      "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadConsistency.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

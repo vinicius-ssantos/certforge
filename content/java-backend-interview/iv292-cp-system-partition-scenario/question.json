@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks the client-visible counterpart of the AP scenario, for a coordination service that favors consistency.",
+  "prompt": "A ZooKeeper ensemble loses network connectivity between its majority quorum side and a minority of followers. A client connected only to one of the minority-side followers issues a read. ZooKeeper is designed to favor consistency over availability during a partition — what does this client experience?",
+  "explanation": "ZooKeeper requires a quorum (majority) to keep operating. A follower that falls out of contact with the leader for longer than the configured syncLimit is dropped from the ensemble rather than left serving requests on its own — so a minority-side follower loses its membership and its client connections, and the client sees a disconnect or stall until it can reach a quorum-side server. That's the cost of favoring C over A: correctness is preserved by refusing to let an out-of-touch server keep answering, but some requests simply fail during the partition.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The read succeeds immediately with the local value, and ZooKeeper simply logs a warning afterward noting that the returned value might be stale, leaving it to the calling application to decide for itself whether or not to trust that value.",
+      "correct": false,
+      "explanation": "ZooKeeper doesn't serve a possibly-stale value with an after-the-fact warning; a follower that falls out of touch with the leader for too long is dropped from the ensemble, and the client connected to it loses its connection entirely rather than getting any answer, warned or not."
+    },
+    {
+      "key": "B",
+      "text": "The read succeeds and returns the follower's local value without complaint, because ZooKeeper always serves reads from whichever server a client happens to be connected to, regardless of whether that server currently has quorum at the moment of the request.",
+      "correct": false,
+      "explanation": "That describes availability-favoring behavior, which is the opposite of what a consistency-favoring system does during a partition; a minority-side ZooKeeper follower that can't reach the leader is dropped from the ensemble rather than left serving reads indefinitely on its own."
+    },
+    {
+      "key": "C",
+      "text": "The read is automatically rerouted over an internal backup channel to a quorum-side server, so the client transparently gets the fully up-to-date value, with the partition having no visible effect on this particular request at all for the caller.",
+      "correct": false,
+      "explanation": "No such automatic rerouting exists; the client remains connected to the server it's connected to, and that server — being on the minority side — has no live path to quorum-side state during the partition."
+    },
+    {
+      "key": "D",
+      "text": "The read fails or stalls: a follower out of touch with the leader too long is dropped from the ensemble rather than kept serving alone, so the connection breaks.",
+      "correct": true,
+      "explanation": "Correct. This is the defining cost of a CP design during a partition: ZooKeeper's syncLimit drops a follower that has fallen out of touch with the leader instead of leaving it to answer on its own, so the minority-side client is left disconnected rather than served stale data."
+    }
+  ],
+  "references": [
+    {
+      "title": "Apache ZooKeeper Administrator's Guide — Cluster Options (\"syncLimit\": \"If followers fall too far behind a leader, they will be dropped\")",
+      "url": "https://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_clusterOptions"
+    },
+    {
+      "title": "Apache ZooKeeper Programmer's Guide — Consistency Guarantees",
+      "url": "https://zookeeper.apache.org/doc/current/zookeeperProgrammers.html#ch_zkGuarantees"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

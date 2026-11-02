@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Grounds 'eventual consistency' in a concrete, surprising user-facing bug rather than leaving it as an abstract term.",
+  "prompt": "A user updates their profile photo through a service backed by an eventually-consistent data store replicated across regions. They immediately refresh the page and still see the old photo, even though the update request returned success. A teammate calls this \"clearly a bug in the write path.\" Is that the right diagnosis?",
+  "explanation": "Not necessarily a write-path bug: this is the textbook symptom of eventual consistency. The write succeeded and was durably accepted, but the read that followed moments later may have been served by a different replica that hasn't yet received the update — the store only promises that all replicas will converge *eventually*, not that a read immediately after a write will see it. The fix, if one is wanted, is usually a consistency-level choice (e.g., read-your-writes or routing the follow-up read to the same replica that accepted the write), not a bug fix in the write itself.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Yes — a successful write response should mean every subsequent read from any client, anywhere, sees that write immediately, so any delay here necessarily indicates a genuine defect somewhere in how the write was committed and acknowledged.",
+      "correct": false,
+      "explanation": "That's the guarantee a strongly-consistent store makes, not an eventually-consistent one; by definition, an eventually-consistent store explicitly does not promise that every read everywhere reflects the latest write right away."
+    },
+    {
+      "key": "B",
+      "text": "Not necessarily — this is the expected behavior of an eventually-consistent store: the write succeeded and will propagate, but a read served by a different, not-yet-updated replica can still return the old value for a while; it needs a stronger read guarantee, not a write-path fix.",
+      "correct": true,
+      "explanation": "Correct. Eventual consistency explicitly allows exactly this gap between a successful write and a read seeing it, because replicas converge over time rather than instantaneously; addressing it means choosing a stronger consistency guarantee for that read path, not debugging the write."
+    },
+    {
+      "key": "C",
+      "text": "Yes — because the update response returning success at all means the store is internally strongly consistent regardless of its advertised eventual-consistency model, so a stale read afterward can only be explained by some caching layer that was never properly invalidated anywhere in the stack.",
+      "correct": false,
+      "explanation": "A success response from an eventually-consistent store doesn't imply strong consistency; the store's advertised model governs what reads are allowed to return, and an uninvalidated cache isn't the only — or even the typical — explanation for this symptom."
+    },
+    {
+      "key": "D",
+      "text": "Not necessarily, but only because the user's own browser is serving a locally cached copy of the old page; if they cleared their browser cache entirely, the refreshed page would be guaranteed to show the new photo immediately regardless of the store's own underlying consistency model.",
+      "correct": false,
+      "explanation": "Clearing the browser cache wouldn't change anything here, since the stale response is coming from the backend replica actually serving the read, not from anything cached in the user's browser."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon S3 — Strong Consistency (contrasting with the eventual-consistency behavior S3 previously had)",
+      "url": "https://aws.amazon.com/s3/consistency/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

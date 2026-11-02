@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Clarifies the common conflation of 'exactly once' with what at-least-once delivery actually provides.",
+  "prompt": "A team builds a message consumer against a queue that provides at-least-once delivery, and assumes this means each message's handler will run exactly one time. In production, they see the same order-confirmation email sent twice for a single order. What's the most accurate explanation?",
+  "explanation": "At-least-once delivery guarantees a message won't be silently lost, but it explicitly does not guarantee it will be delivered only once — a consumer can receive (and process) the same message more than once, typically because an acknowledgment was lost or delayed after the handler already ran, causing the queue to redeliver it. \"Exactly once\" processing isn't something the queue provides for free; it has to be built on top, usually by making the handler idempotent (e.g., checking whether that order's confirmation was already sent before sending another).",
+  "options": [
+    {
+      "key": "A",
+      "text": "The duplicate email is unrelated to delivery semantics entirely and must be caused by the email provider's own retry logic independently resending the same message, regardless of how many times the consumer's handler actually ran for this order.",
+      "correct": false,
+      "explanation": "Nothing in the scenario points to the email provider retrying on its own; the far more direct and common explanation is that the consumer's handler itself ran twice because the queue redelivered the message, exactly as at-least-once semantics allow."
+    },
+    {
+      "key": "B",
+      "text": "The queue must be misconfigured, because an at-least-once queue is contractually required to deduplicate every message by its content before handing it to any consumer, so any duplicate delivery here indicates a bug in the queue's own deduplication layer.",
+      "correct": false,
+      "explanation": "At-least-once delivery carries no such deduplication guarantee by default; the whole point of the \"at-least\" qualifier is that duplicates are an accepted, expected possibility the consumer is responsible for handling, not a queue malfunction."
+    },
+    {
+      "key": "C",
+      "text": "This can only happen if the producer itself published the order-confirmation event twice, since an at-least-once queue delivers each individually published message exactly once to each consumer no matter what happens to the acknowledgments afterward.",
+      "correct": false,
+      "explanation": "A single published message absolutely can be delivered more than once under at-least-once semantics — that's the defining trade-off of the guarantee — so a duplicate producer publish isn't the only, or even the most common, explanation."
+    },
+    {
+      "key": "D",
+      "text": "At-least-once delivery means a message can be delivered to the consumer more than once (for example, if an acknowledgment is lost after the handler already ran), and the handler itself isn't idempotent, so it re-sent the email on the duplicate delivery.",
+      "correct": true,
+      "explanation": "Correct. At-least-once is a lower bound, not an exact count — the queue tolerates redelivering a message rather than risk losing it, so a non-idempotent handler will repeat its side effect whenever that redelivery happens."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation — Amazon SQS Standard Queues (at-least-once delivery)",
+      "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/standard-queues.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

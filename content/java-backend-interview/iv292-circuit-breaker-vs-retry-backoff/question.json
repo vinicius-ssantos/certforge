@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires understanding that retries and circuit breakers solve different problems and can actively conflict if combined naively.",
+  "prompt": "A service calls a downstream dependency that is currently overloaded and responding slowly to a fraction of requests. The caller already retries each failed call three times with exponential backoff. A teammate suggests adding a circuit breaker on top of the existing retries. What problem does the circuit breaker solve that the retry logic, by itself, actually makes worse?",
+  "explanation": "Retrying a failing call against an already-overloaded dependency multiplies the load it receives — three retries per failed request means roughly four times the request volume reaching a service that's already struggling, which can push a partial degradation into a full outage. A circuit breaker tracks the failure rate and, once it crosses a threshold, stops sending calls (and their retries) to the dependency entirely for a period, giving it room to recover instead of adding more load during the worst possible moment.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Retries are stateless per call, so a circuit breaker doesn't actually change total request volume at all — it exists only to produce a faster error message to the end user, with throughput to the downstream dependency staying exactly the same either way.",
+      "correct": false,
+      "explanation": "Once the breaker is OPEN it stops calls (and their retries) from reaching the dependency at all, which does reduce the volume the dependency receives — the claim that throughput is unchanged is exactly backwards."
+    },
+    {
+      "key": "B",
+      "text": "Retrying a failing call against an already-overloaded dependency multiplies the load it receives at the worst moment; a circuit breaker stops sending calls once a failure threshold is crossed, giving the dependency room to recover.",
+      "correct": true,
+      "explanation": "Correct. Retries alone assume failures are transient and isolated; against a genuinely overloaded dependency they amplify the problem, which is precisely what the circuit breaker's fail-fast behavior prevents."
+    },
+    {
+      "key": "C",
+      "text": "The retry logic is fine on its own; the only thing a circuit breaker adds is the ability to configure a custom error message shown to the caller, which exponential backoff alone has no mechanism to provide.",
+      "correct": false,
+      "explanation": "A custom error message is a minor cosmetic detail, not the actual reason circuit breakers are paired with retries; the real issue is retries amplifying load against an already-struggling dependency, which the breaker addresses."
+    },
+    {
+      "key": "D",
+      "text": "Exponential backoff already guarantees that total request volume to any dependency can never exceed its configured rate limit, so a circuit breaker is strictly redundant whenever backoff with retries is already correctly configured.",
+      "correct": false,
+      "explanation": "Backoff spaces out one caller's own retries over time, but it does not cap or coordinate the combined volume from many callers retrying simultaneously against the same struggling dependency, which is the load the circuit breaker is actually protecting against."
+    }
+  ],
+  "references": [
+    {
+      "title": "Microsoft Azure Architecture Center — Circuit Breaker pattern (why to combine it with retry, and what it protects against)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

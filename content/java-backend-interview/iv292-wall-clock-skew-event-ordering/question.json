@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires understanding clock skew as a fundamental limit, not just an operational inconvenience fixable by tighter NTP configuration.",
+  "prompt": "Two events happen on two different machines, each with its own local clock synchronized via NTP. Machine X logs its event at timestamp 10:00:00.015, and machine Y logs its event at timestamp 10:00:00.010 — five milliseconds earlier by the clocks' own readings. A developer concludes Y's event definitely happened first. Why is that conclusion not reliable, even with NTP running on both machines?",
+  "explanation": "NTP reduces clock drift between machines but does not eliminate it — typical NTP-synchronized clocks can still disagree by single-digit to tens of milliseconds, and that uncertainty can easily be larger than the five-millisecond gap between the two timestamps here. If the true clock skew between X and Y exceeds five milliseconds, X's event could actually have happened before Y's despite its timestamp reading later, so wall-clock timestamps alone can't reliably order events that are close together across machines.",
+  "options": [
+    {
+      "key": "A",
+      "text": "NTP is specified to guarantee sub-millisecond synchronization accuracy across any two machines on the same network, so a five-millisecond gap between two NTP-synchronized clocks is always large enough to trust as a true ordering.",
+      "correct": false,
+      "explanation": "NTP's achievable accuracy over a typical network is commonly in the single-digit-to-tens-of-milliseconds range, not a guaranteed sub-millisecond bound, so a five-millisecond gap can fall within the actual uncertainty rather than safely above it."
+    },
+    {
+      "key": "B",
+      "text": "The conclusion is actually completely reliable in this case; timestamps from two different machines can always be compared directly once both machines run NTP, regardless of how small the gap between them is.",
+      "correct": false,
+      "explanation": "This restates the developer's conclusion rather than questioning it; the actual issue is that residual clock skew after NTP synchronization can exceed a small gap like five milliseconds, making a direct comparison unreliable at that scale."
+    },
+    {
+      "key": "C",
+      "text": "Timestamps are unreliable here only because the two machines are physically far apart; if X and Y were in the same data center rack, the five-millisecond gap would become a fully trustworthy ordering with no clock-skew uncertainty left to consider at all.",
+      "correct": false,
+      "explanation": "Physical proximity reduces network latency, not the residual clock skew itself, which stems from each machine's own clock drift and synchronization quality rather than purely from distance between the machines."
+    },
+    {
+      "key": "D",
+      "text": "NTP reduces clock drift but doesn't eliminate it — residual skew between two NTP-synchronized clocks can exceed the five-millisecond gap here, so X's event could actually have happened before Y's despite its later-reading timestamp.",
+      "correct": true,
+      "explanation": "Correct. Because clock skew remaining after NTP synchronization is an uncertainty, not zero, a small enough gap between two timestamps from different machines isn't enough on its own to establish which event truly happened first."
+    }
+  ],
+  "references": [
+    {
+      "title": "IETF RFC 5905 — Network Time Protocol Version 4 (synchronization accuracy and residual clock offset/uncertainty)",
+      "url": "https://www.rfc-editor.org/rfc/rfc5905"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

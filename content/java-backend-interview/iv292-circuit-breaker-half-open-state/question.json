@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The half-open state is the part of the circuit breaker state machine candidates most often skip over.",
+  "prompt": "A circuit breaker protecting calls to a downstream service trips to OPEN after a burst of failures, so calls fail fast without hitting the downstream service at all. After a configured wait period, the breaker moves to HALF_OPEN rather than straight back to CLOSED. Why does HALF_OPEN exist as its own state, instead of the breaker just flipping back to CLOSED once the wait period elapses?",
+  "explanation": "Flipping straight back to CLOSED after a fixed wait would send the breaker's full, unrestricted traffic volume at a downstream service that may still be struggling — potentially re-triggering the same failure burst immediately. HALF_OPEN lets a small number of trial calls through first; if they succeed, the breaker closes because the dependency has actually recovered, and if they fail, it reopens, without ever exposing the dependency to a full traffic spike based on a timer alone.",
+  "options": [
+    {
+      "key": "A",
+      "text": "HALF_OPEN exists purely for metrics and logging purposes — it doesn't change how calls are actually routed; calls are already flowing normally again, it's just a label applied to the breaker's internal state for the operator's dashboard.",
+      "correct": false,
+      "explanation": "HALF_OPEN does change call routing: only a limited number of trial calls are permitted through, not the full unrestricted traffic that CLOSED allows, and that restriction is the entire point of the state."
+    },
+    {
+      "key": "B",
+      "text": "Going straight from OPEN to CLOSED after the wait period would send full traffic at a service that may still be struggling and could retrigger the same failure burst; HALF_OPEN permits a few trial calls first, closing only if they succeed.",
+      "correct": true,
+      "explanation": "Correct. HALF_OPEN is a controlled recovery test: a few calls probe whether the dependency has actually recovered before the breaker commits to sending it the full volume of traffic again."
+    },
+    {
+      "key": "C",
+      "text": "HALF_OPEN is required because most circuit breaker implementations cannot technically transition directly from OPEN to CLOSED due to how their internal failure-rate counters are reset; it's an implementation detail with no behavioral purpose for the caller.",
+      "correct": false,
+      "explanation": "The transition exists by design to protect the downstream dependency during recovery, not because of a counter-reset limitation; a breaker could reset counters and go straight to CLOSED, but that would be unsafe, which is exactly why HALF_OPEN is used instead."
+    },
+    {
+      "key": "D",
+      "text": "HALF_OPEN only applies when the breaker is configured with a fallback response; breakers configured without a fallback skip HALF_OPEN entirely and go directly from OPEN back to CLOSED once the wait period elapses.",
+      "correct": false,
+      "explanation": "Whether a fallback is configured for calls made while OPEN is unrelated to whether the breaker uses a HALF_OPEN recovery-testing step; the state machine's transition logic doesn't depend on fallback configuration."
+    }
+  ],
+  "references": [
+    {
+      "title": "resilience4j CircuitBreaker documentation — state machine (CLOSED, OPEN, HALF_OPEN)",
+      "url": "https://resilience4j.readme.io/docs/circuitbreaker"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests understanding of why per-service logs alone are insufficient once a request crosses several services.",
+  "prompt": "A single user-facing request passes through five different services before a response is returned. Each service logs its own activity with its own timestamps and request details, but nothing ties those five services' log entries together as belonging to the same logical request. When a customer reports a slow or failed request, engineers end up manually guessing which log lines across five services correspond to that one request. What's missing, and what's the standard fix?",
+  "explanation": "Without a shared identifier propagated across every hop, there is no reliable way to correlate one service's log entries with another's for the same logical request — timestamps alone can't do it when multiple requests are in flight concurrently. Distributed tracing fixes this by generating a trace ID when the request first enters the system and propagating it (along with a per-hop span ID) through every downstream call, so every service's logs and spans for that request can be joined back into one connected trace.",
+  "options": [
+    {
+      "key": "A",
+      "text": "What's missing is a shared trace ID (plus a per-hop span ID) propagated through every downstream call, so logs and spans across all five services for one request can be joined into a single connected trace.",
+      "correct": true,
+      "explanation": "Correct. A trace/span ID propagated end-to-end is exactly the mechanism that lets logs and timing data from unrelated services be reassembled into one coherent view of a single logical request."
+    },
+    {
+      "key": "B",
+      "text": "What's missing is simply synchronized clocks across all five services; once every service's system clock is set to the same precise time via NTP, their timestamps alone become sufficient to correlate log lines belonging to the same request.",
+      "correct": false,
+      "explanation": "Even perfectly synchronized clocks don't solve the correlation problem, because many requests can be in flight at the same moment across the same services; a shared identifier, not a shared clock, is what ties one specific request's entries together."
+    },
+    {
+      "key": "C",
+      "text": "What's missing is centralizing all five services' logs into one shared log file instead of five separate ones; once the log lines live in a single file, engineers can correlate entries for one request just by reading through it in order.",
+      "correct": false,
+      "explanation": "Merging logs into one file changes where the entries live, not whether they carry any identifier connecting them to the same request — without a shared ID, the lines are still just as hard to correlate, just now interleaved in one place."
+    },
+    {
+      "key": "D",
+      "text": "Nothing is actually missing here; this level of manual correlation across services is an unavoidable and expected cost of a distributed architecture, and no tooling exists that can make tracing a request across five services any easier than this.",
+      "correct": false,
+      "explanation": "Distributed tracing tooling exists precisely to make this correlation automatic rather than manual; describing the manual-guessing workflow as unavoidable ignores the standard fix the question is asking for."
+    }
+  ],
+  "references": [
+    {
+      "title": "W3C Trace Context specification — purpose of the trace-id and parent-id (span) fields propagated across a distributed request",
+      "url": "https://www.w3.org/TR/trace-context/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

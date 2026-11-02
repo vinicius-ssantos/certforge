@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Gets at why a timeout is an ambiguous signal, which directly determines whether a retry is actually safe.",
+  "prompt": "A client sends a request to create an order, waits 3 seconds, and times out with no response. The server, however, had actually finished creating the order at 2.9 seconds — the response just hadn't made it back over the network yet. Why does this ambiguity matter for whether the client should safely retry the request?",
+  "explanation": "A timeout only tells the client that it didn't receive a response in time — it says nothing about whether the server's operation actually ran, failed, or (as here) succeeded but the response was delayed or lost in transit. If the client blindly retries a non-idempotent operation like \"create an order,\" it risks creating a second order for the same request, because from the client's point of view a timeout and a genuine server-side failure look identical even though the underlying outcomes are completely different.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It doesn't actually matter — TCP guarantees that if the server sent a response, the client will eventually receive it even after a timeout fires, so the client's timeout and the server's actual completion will always agree once the connection catches up.",
+      "correct": false,
+      "explanation": "A client timeout typically abandons the operation (and often the connection) at the application level regardless of what TCP eventually delivers; the application has already decided to treat the request as failed, so TCP delivering the response later doesn't resolve the ambiguity for the client's logic."
+    },
+    {
+      "key": "B",
+      "text": "The ambiguity matters because the client can't tell a true failure apart from a success whose response was merely delayed; retrying a non-idempotent operation like order creation risks performing it twice, which is why safe retries need idempotency keys.",
+      "correct": true,
+      "explanation": "Correct. A timeout is an ambiguous signal about the server's actual outcome, and that ambiguity is exactly why blindly retrying a non-idempotent write is unsafe without something like an idempotency key to make a duplicate attempt harmless."
+    },
+    {
+      "key": "C",
+      "text": "This ambiguity only matters for read operations, not writes; since creating an order is a write, the timeout's cause is actually irrelevant, and the client should always retry writes immediately regardless of what might have happened server-side.",
+      "correct": false,
+      "explanation": "It's the opposite: ambiguity matters most for writes, precisely because a write like order creation has a side effect that can be duplicated, whereas a pure read being retried unnecessarily is comparatively harmless."
+    },
+    {
+      "key": "D",
+      "text": "The server could simply avoid the problem by never taking longer than the client's timeout to respond, which would guarantee the client always receives a response before giving up and eliminate the ambiguity entirely in practice.",
+      "correct": false,
+      "explanation": "Network delay in delivering the response, not just server processing time, is part of what can exceed the client's timeout, so bounding server processing time alone doesn't guarantee the client always gets the response before it gives up."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Builders' Library — Timeouts, retries, and backoff with jitter (what a timeout actually tells the caller, and why retry safety depends on idempotency)",
+      "url": "https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

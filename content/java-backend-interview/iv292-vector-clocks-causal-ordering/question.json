@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Conceptual understanding of logical/vector clocks as a response to the limits of wall-clock ordering, at the level a Pleno/Sênior interview actually probes.",
+  "prompt": "Having learned that wall-clock timestamps can't reliably order events across machines (clock skew), a developer asks: is there any way to establish which of two events on different machines genuinely happened first, without relying on physical clocks at all? What do logical clocks (such as Lamport timestamps) or vector clocks actually provide here, at a conceptual level?",
+  "explanation": "Logical and vector clocks don't measure physical time at all — they track causal relationships instead. A logical clock assigns each event a counter that increases with every local step and advances past whatever counter value is attached to any message it receives, so if event A causally influenced event B (for example, A's machine sent a message that B's machine then processed), the clock can guarantee A's counter is less than B's. What they cannot do is order two events that never causally influenced each other at all — those are \"concurrent,\" and no logical ordering between them exists to recover, which a vector clock can additionally detect and report as genuinely concurrent rather than guessing an order.",
+  "options": [
+    {
+      "key": "A",
+      "text": "They don't need physical time at all; they track causal relationships through counters that advance via local steps and incoming messages, so a real causal link between two events is reflected as an ordering, while unrelated events are identified as concurrent.",
+      "correct": true,
+      "explanation": "Correct. Logical/vector clocks substitute causal tracking for physical time: they can guarantee an ordering wherever a real causal link exists, and — unlike a forced total order — they can also recognize when two events are genuinely concurrent and have no such link."
+    },
+    {
+      "key": "B",
+      "text": "Logical and vector clocks are a more precise form of physical time synchronization than NTP, achieving sub-millisecond accuracy by exchanging timestamps between machines more frequently than a standard NTP polling interval would allow.",
+      "correct": false,
+      "explanation": "Logical and vector clocks don't measure or synchronize physical time at all — they're explicitly a substitute for relying on wall-clock time, tracking causal order through counters instead of timestamps."
+    },
+    {
+      "key": "C",
+      "text": "They work by having every machine in the system agree in advance on a single designated \"master clock\" machine, and all other machines simply copy that machine's counter value whenever they communicate with it, eliminating skew by having one authoritative source.",
+      "correct": false,
+      "explanation": "A single master-clock design describes a form of centralized time authority, not how logical or vector clocks actually work — those use per-process counters advanced independently, with no single designated authoritative machine."
+    },
+    {
+      "key": "D",
+      "text": "They can fully and totally order any two events in the system, including ones that never causally interacted, by combining each machine's local counter with its machine identifier to break every possible tie deterministically.",
+      "correct": false,
+      "explanation": "Lamport timestamps can be extended with a tiebreaker to produce a total order, but doing so assigns an arbitrary order to genuinely concurrent (causally unrelated) events rather than reflecting a real happened-before relationship — a vector clock instead correctly reports such pairs as concurrent."
+    }
+  ],
+  "references": [
+    {
+      "title": "Leslie Lamport — \"Time, Clocks, and the Ordering of Events in a Distributed System\" (1978) — logical clocks and the happened-before relation",
+      "url": "https://lamport.azurewebsites.net/pubs/time-clocks.pdf"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}
