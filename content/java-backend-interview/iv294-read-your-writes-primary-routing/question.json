@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The practical fix to the previous replication-lag scenario, testing whether the candidate knows a real mitigation rather than just the problem.",
+  "prompt": "After diagnosing the stale-profile-photo bug as replication lag, a team wants a fix that doesn't give up on read replicas entirely. One common approach is to route a user's own immediate follow-up reads to the primary for a short window after they write, then fall back to replicas afterward. What guarantee is this approach specifically providing?",
+  "explanation": "This is a 'read-your-writes' consistency guarantee: a user is guaranteed to see their own writes immediately, by reading from the primary (which is always up to date) for a short period right after writing, even while other users' reads continue to go to replicas that may lag slightly behind. It's a narrower, cheaper guarantee than making every read in the system strongly consistent.",
+  "options": [
+    {
+      "key": "D",
+      "text": "It guarantees read-your-writes consistency for that specific user — their own next read sees their own write immediately, by reading from the primary for a short window — without requiring every read in the system to be strongly consistent.",
+      "correct": true,
+      "explanation": "Correct. This targets the specific case that burned the user — seeing their own just-written data — rather than paying the cost of strong consistency for all reads, including other users' reads of data they didn't just write."
+    },
+    {
+      "key": "B",
+      "text": "It guarantees full strong consistency across the entire system for every user's every read, because routing any read to the primary at all forces all replicas to synchronously catch up before any other read is permitted to proceed.",
+      "correct": false,
+      "explanation": "Routing one user's reads to the primary for a short window doesn't force replicas to synchronously catch up for everyone else's reads — other users' reads continue hitting replicas on their normal (lagging) schedule, unaffected."
+    },
+    {
+      "key": "C",
+      "text": "It guarantees that the replica the user would have read from is immediately and permanently promoted to become the new primary, so future writes from any user are now also handled by what was previously just a plain read replica.",
+      "correct": false,
+      "explanation": "Routing a user's read to the primary is just a read-routing decision for that request; it doesn't trigger a replica promotion or change which node is the primary for anyone's future writes."
+    },
+    {
+      "key": "A",
+      "text": "It guarantees that the user's own write itself gets replicated much faster than normal, because detecting that a read-your-writes window is currently active causes the primary to push its replication stream to replicas at a much higher priority than usual.",
+      "correct": false,
+      "explanation": "This approach doesn't speed up replication at all — it works around the lag entirely by not reading from the lagging replica during the window, rather than trying to make replication itself complete any faster."
+    }
+  ],
+  "references": [
+    {
+      "title": "Werner Vogels — \"Eventually Consistent\" (defines read-your-writes consistency: \"process A, after it has updated a data item, always accesses the updated value and will never see an older value\" — narrower than strong consistency, which covers every process's reads)",
+      "url": "https://www.allthingsdistributed.com/2008/12/eventually_consistent.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

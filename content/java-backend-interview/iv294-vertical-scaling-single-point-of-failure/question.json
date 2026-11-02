@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate sees past the obvious 'bigger instance has a ceiling' point to the availability risk vertical scaling carries even before that ceiling is hit.",
+  "prompt": "A team handles rising traffic by repeatedly upgrading their single application server to larger instance types instead of adding more servers behind a load balancer. Besides eventually hitting the largest instance size a cloud provider offers, what's a structural risk this approach carries that horizontal scaling avoids?",
+  "explanation": "However large the single instance gets, it remains one instance: if it crashes, needs a restart, or is being patched, the whole application goes down with it. A horizontally-scaled fleet behind a load balancer can lose one instance and keep serving traffic from the rest, which is a resilience property vertical scaling alone can never provide no matter how much CPU or RAM is added.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Vertical scaling always costs strictly more per unit of CPU than horizontal scaling at every instance size on every cloud provider, so cost alone rules out the approach regardless of any availability question.",
+      "correct": false,
+      "explanation": "There's no such universal pricing law — relative cost-per-CPU between instance sizes and providers varies and isn't a fixed, strictly-worsening curve. The real structural problem with a single upgraded server is availability, not a guaranteed cost penalty."
+    },
+    {
+      "key": "B",
+      "text": "The single upgraded server stays a single point of failure — if it crashes, the entire application goes down, whereas a horizontally-scaled fleet can lose one instance and keep serving from the others.",
+      "correct": true,
+      "explanation": "Correct. This is the resilience gap vertical scaling can't close: one instance, however large, is still one instance, and its failure or maintenance window takes the whole application down with it."
+    },
+    {
+      "key": "C",
+      "text": "A single large instance physically cannot execute more than one request's worth of CPU work at a time, so it processes requests strictly sequentially no matter how much CPU or RAM is added to it over time.",
+      "correct": false,
+      "explanation": "Modern multi-core instances run many threads and requests concurrently; adding CPU and RAM to a single server does increase its concurrent request-handling capacity, it just doesn't add a second independent failure domain."
+    },
+    {
+      "key": "D",
+      "text": "Cloud providers deprecate large instance types on a fixed schedule of a few months, forcing a forced migration to a new instance family regardless of which scaling strategy a team chooses to follow each cycle.",
+      "correct": false,
+      "explanation": "There's no fixed few-month deprecation cycle for large instance families; instance types are typically supported for years. The real downside of the single-big-server approach is the single point of failure, not a forced short-interval migration."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure Architecture Center — Design to scale out (\"Scaling out can improve your application's reliability... provide resiliency if one zone experiences an outage\")",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/design-principles/scale-out"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

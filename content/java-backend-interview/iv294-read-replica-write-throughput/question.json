@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "EASY",
+  "difficultyRationale": "A foundational distinction, but one teams still get wrong when scaling under write-heavy load.",
+  "prompt": "A team is seeing their primary database struggle under load and adds several read replicas, routing all SELECT queries to them. A month later, the service is still slow — but now it's specifically because writes are backing up, not reads. What does this reveal about what read replicas actually scale?",
+  "explanation": "Read replicas scale read capacity by letting multiple replicas each independently serve SELECT queries. They do nothing for write capacity: every write still has to go through the single primary (replicas only receive already-committed changes from it), so a write-heavy bottleneck is completely unaffected by adding more replicas.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Read replicas only add capacity for read queries; every write still has to be processed by the one primary database and then propagated outward, so a write-throughput bottleneck is untouched no matter how many replicas are added.",
+      "correct": true,
+      "explanation": "Correct. Replicas are read-only copies kept in sync from the primary — adding more of them increases how many SELECT queries the system can serve concurrently, but does nothing to increase how many writes the primary itself can accept."
+    },
+    {
+      "key": "B",
+      "text": "Read replicas do scale write throughput too, but only after a configurable delay during which writes are buffered locally — the team's problem is simply that this buffering window hasn't been tuned long enough yet for their workload.",
+      "correct": false,
+      "explanation": "Read replicas don't accept or buffer writes at all in a standard replica setup; they are read-only by design, so there is no write-buffering delay to tune — the write bottleneck is at the primary itself, not a configuration gap on the replicas."
+    },
+    {
+      "key": "C",
+      "text": "The write slowdown is actually caused by the replicas themselves competing with the primary for the same underlying disk I/O bandwidth, so removing replicas (not adding more) would be the correct fix for this write bottleneck.",
+      "correct": false,
+      "explanation": "Replicas typically run on separate instances/storage from the primary specifically to avoid this kind of resource contention; the write slowdown is explained simply by write volume exceeding what the single primary can process, independent of replica count."
+    },
+    {
+      "key": "D",
+      "text": "This is expected: adding read replicas always temporarily increases write latency for the first few weeks while the replication topology stabilizes, and the slowdown will resolve itself once that stabilization period fully completes.",
+      "correct": false,
+      "explanation": "There's no such self-resolving 'stabilization period' effect on write latency from adding read replicas; a sustained write bottleneck reflects the primary's actual write capacity limit, not a temporary topology-settling artifact."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon RDS User Guide — Working with Read Replicas (read scaling; replicas do not accept writes)",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate knows what least-connections actually tracks, not just that it exists.",
+  "prompt": "A team switches their load balancer from round-robin to a least-connections algorithm, specifically to fix the uneven overload problem caused by requests of wildly different processing cost. What does least-connections actually do differently that addresses this?",
+  "explanation": "Least-connections routes each new request to whichever backend currently has the fewest active (in-flight) connections, rather than just the next one in a fixed sequence. Because a slow, expensive request keeps its connection open for longer, the instance handling it naturally accumulates a higher active-connection count and stops receiving new traffic until it finishes — which is exactly the load-aware signal plain round-robin lacks.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It inspects the CPU and memory utilization reported by each backend's health-check endpoint every few seconds, and routes new requests away from any instance currently above a configured utilization threshold set by the operator.",
+      "correct": false,
+      "explanation": "Least-connections doesn't read CPU/memory metrics at all; it only tracks the count of active connections the load balancer itself currently has open to each backend, independent of any health-check payload."
+    },
+    {
+      "key": "B",
+      "text": "It sends each new request to the backend with the fewest currently active connections, so an instance stuck handling a slow request — and therefore holding an open connection longer — naturally receives fewer new requests until it finishes.",
+      "correct": true,
+      "explanation": "Correct. Active-connection count is a live proxy for how busy an instance currently is, regardless of why — a slow request keeps its connection open, which this algorithm sees and routes around, unlike plain round-robin's fixed sequence."
+    },
+    {
+      "key": "C",
+      "text": "It pre-classifies every incoming request by its URL path into 'cheap' and 'expensive' buckets using a lookup table, then spreads expensive requests round-robin style across instances separately from the cheap ones.",
+      "correct": false,
+      "explanation": "Least-connections has no concept of a request-cost classification table; it makes its routing decision purely from the current active-connection count per backend, not from inspecting or categorizing the request itself."
+    },
+    {
+      "key": "D",
+      "text": "It measures the average response time of each backend's last several requests and routes new traffic toward whichever instance has recently responded fastest, on the assumption that a consistently fast instance currently has spare capacity.",
+      "correct": false,
+      "explanation": "That describes a response-time-based or weighted algorithm, not least-connections — least-connections never looks at historical response times, only the backend's current count of open connections."
+    }
+  ],
+  "references": [
+    {
+      "title": "NGINX Documentation — HTTP Load Balancing (the least_conn method, routing by active connection count)",
+      "url": "https://nginx.org/en/docs/http/load_balancing.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

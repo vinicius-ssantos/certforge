@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A very common real-world sharding mistake, not just abstract theory.",
+  "prompt": "A multi-tenant SaaS product shards its orders table by `tenant_id`. One enterprise customer generates 40% of all order volume across the whole platform; every other tenant is small. After rollout, the shard holding that one tenant is constantly at high CPU and I/O while the other shards sit mostly idle. What's the actual problem with the sharding key choice here?",
+  "explanation": "Sharding by `tenant_id` assumes tenants are roughly similar in size, so that each shard — which may hold several tenants, or one tenant per shard — ends up with comparable load. When one tenant is disproportionately large, every shard holding that tenant inherits a disproportionate share of the traffic, creating a 'hot shard' that can't be relieved just by adding more shards, since the large tenant's data (and load) is concentrated wherever it happens to live.",
+  "options": [
+    {
+      "key": "C",
+      "text": "`tenant_id` ties each tenant's entire workload to whichever shard(s) hold its data, so one disproportionately large tenant creates a hot shard that adding more shards doesn't relieve — the fix needs splitting that one tenant's own data further, not just rebalancing tenants.",
+      "correct": true,
+      "explanation": "Correct. The sharding key determines data locality per tenant; a key that groups by tenant inherits whatever size skew exists between tenants, and a single oversized tenant concentrates load on its shard(s) regardless of total shard count."
+    },
+    {
+      "key": "B",
+      "text": "The database engine's internal B-tree index on `tenant_id` becomes unbalanced once one tenant has far more rows than others, which slows down lookups platform-wide, including on shards holding only small tenants, because the query planner caches that skewed index shape globally.",
+      "correct": false,
+      "explanation": "An unbalanced index on one shard doesn't slow down lookups on other, unrelated shards — the symptom described (other shards sitting idle) is inconsistent with a platform-wide index-balance problem, which this isn't."
+    },
+    {
+      "key": "A",
+      "text": "Sharding by `tenant_id` is fundamentally incompatible with multi-tenant systems, and the fix is always to shard by a surrogate row-level key like an auto-incrementing order ID instead, regardless of the tenant size distribution or query patterns involved.",
+      "correct": false,
+      "explanation": "Sharding by tenant is a common and often correct choice for multi-tenant systems (it keeps a tenant's data together for queries); the problem here is specifically the size skew between tenants, not that tenant-based sharding is inherently wrong."
+    },
+    {
+      "key": "D",
+      "text": "The hot shard is actually a symptom of insufficient connection-pool size on that one database node, and increasing the pool's max connections would resolve the CPU and I/O pressure without any change to the sharding key or data layout.",
+      "correct": false,
+      "explanation": "Connection-pool sizing controls how many concurrent connections an application can hold open; it doesn't change how much actual query/CPU/I/O work that one tenant's traffic generates on the shard physically holding its data."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon DynamoDB Developer Guide — Designing Partition Keys to Distribute Your Workload (a single disproportionately popular key value creates a hot partition, by example)",
+      "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-uniform-load.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

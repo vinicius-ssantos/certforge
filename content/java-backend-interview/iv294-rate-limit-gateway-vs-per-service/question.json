@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Where to put a rate limiter is a practical architecture decision with a real trade-off, not a pure matter of preference.",
+  "prompt": "A company is adding rate limiting to an architecture where an API gateway sits in front of a dozen backend microservices. One engineer proposes enforcing rate limits once at the gateway; another proposes enforcing them independently inside each microservice. What's a genuine trade-off between the two approaches?",
+  "explanation": "Enforcing at the gateway gives one consistent policy and a single place to configure and observe limits for every client, but it only sees traffic entering the system from the outside — it can't account for one overloaded internal service being hit indirectly through a chain of other services' internal calls. Enforcing inside each service gives each one fine-grained control tailored to its own capacity, but means duplicating (and keeping consistent) rate-limiting logic and configuration across every service, and still doesn't stop a client from exhausting a shared downstream resource via multiple different gateway-fronted entry points.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Gateway-level and per-service rate limiting are functionally interchangeable in every real deployment, so the choice between them comes down purely to which team happens to own the relevant configuration file and deployment pipeline.",
+      "correct": false,
+      "explanation": "They aren't interchangeable — the gateway only sees external entry traffic while per-service limiting sees a service's actual internal load including calls from other internal services, which is a real functional difference, not just an ownership question."
+    },
+    {
+      "key": "B",
+      "text": "Per-service rate limiting is strictly obsolete once a gateway is introduced, because every possible request path into any service must pass through the gateway first in literally every architecture that uses one.",
+      "correct": false,
+      "explanation": "In many real architectures, services call each other directly (service-to-service traffic) without going back out through the gateway, so gateway-only limiting can miss load generated entirely inside the system — per-service limiting isn't made obsolete by having a gateway."
+    },
+    {
+      "key": "C",
+      "text": "Gateway-level limiting gives one consistent policy but can't see internal service-to-service load, while per-service limiting is tailored to each service's capacity at the cost of duplicating rate-limiting logic across every service.",
+      "correct": true,
+      "explanation": "Correct. This is the real trade-off: centralized visibility and simplicity at the gateway versus fine-grained, capacity-aware control that has to be replicated and kept in sync across every service."
+    },
+    {
+      "key": "D",
+      "text": "Rate limiting enforced inside a microservice always executes faster than rate limiting enforced at a gateway, because an in-process check has zero network latency, making per-service limiting the objectively higher-performance choice in every scenario.",
+      "correct": false,
+      "explanation": "Raw per-check latency isn't the deciding trade-off being discussed here, and a gateway check is typically a negligible fraction of total request time anyway — the real difference between the two approaches is visibility and operational overhead, not a meaningful per-request speed difference."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure API Management documentation — Rate limit policies (gateway-level throttling configuration and scope)",
+      "url": "https://learn.microsoft.com/en-us/azure/api-management/rate-limit-policy"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

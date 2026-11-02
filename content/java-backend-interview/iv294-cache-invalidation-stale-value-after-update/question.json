@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Cache invalidation is famously one of the hardest practical problems in caching; a candidate should connect the famous phrase to a concrete, specific bug, not just quote it.",
+  "prompt": "A pricing service caches a product's price under the key `price:<productId>` with a one-hour TTL. A support team updates the price directly in the admin panel, which writes straight to the database. For up to an hour afterward, the storefront keeps showing the old price to some customers. What makes this a genuinely hard problem to solve in general, not just a matter of picking a shorter TTL?",
+  "explanation": "Shortening the TTL only shrinks the staleness window; it doesn't close it, and shortening it too far defeats the point of caching by forcing far more database reads. Solving it properly requires the write path (the admin panel update) to actively invalidate or refresh the specific cache key it affected the moment the write happens — which means every code path that can change a cached value must know about, and reliably trigger, that cache's invalidation. Missing even one such path (a bulk import, a different admin tool, a background correction job) reintroduces the same staleness bug, which is why correct, complete invalidation is hard in practice, not just a TTL tuning problem.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A shorter TTL only shrinks the window; the real fix is every write path invalidating that exact key, which is easy to get right in one place and easy to miss in a less obvious one.",
+      "correct": true,
+      "explanation": "Correct. The hard part isn't choosing a number for the TTL; it's making sure every single write path that can affect a cached value reliably triggers invalidation for it, and missing even one path reopens the exact same bug."
+    },
+    {
+      "key": "B",
+      "text": "TTL-based expiry is a legacy mechanism that modern caches like Redis have fully replaced with built-in, zero-configuration write-notification invalidation that fires automatically for any value changed anywhere in the database.",
+      "correct": false,
+      "explanation": "Caches like Redis don't have built-in awareness of arbitrary database writes elsewhere in the system; TTL-based expiry is still a standard, actively-used mechanism, and automatic cross-system invalidation isn't something caches provide out of the box."
+    },
+    {
+      "key": "C",
+      "text": "The problem only exists because the admin panel and the storefront are different applications; if they were merged into a single codebase sharing one in-process cache, the staleness window would disappear entirely with no further changes needed.",
+      "correct": false,
+      "explanation": "Merging the two into one process wouldn't eliminate the staleness window by itself — the cache would still need to be explicitly invalidated or updated at the moment of the write; being in the same process doesn't make that happen automatically."
+    },
+    {
+      "key": "D",
+      "text": "Database writes are always slower than cache reads, so the storefront is actually reading a value that hasn't finished being written yet, which is a timing race between the two storage layers rather than a caching invalidation problem at all.",
+      "correct": false,
+      "explanation": "This isn't a race over an in-flight write — the admin panel's write to the database completes fully; the storefront is reading a previously-cached value that the completed write never touched, which is exactly the cache-invalidation problem, not a write-timing race."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure Architecture Center — Cache-Aside pattern (issues and considerations: cache coherency between data store and cache)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

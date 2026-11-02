@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A very common early mistake when a team first scales an app horizontally after it was built assuming a single server.",
+  "prompt": "A web application stores each logged-in user's session data (cart contents, login state) in the memory of the server process that first handled their login. The team then puts the app behind a load balancer and runs three instances to handle more traffic. Users start getting logged out at random, or seeing an empty cart, mid-session. What's the root cause, and what does fixing it require?",
+  "explanation": "The load balancer has no reason to send every request from the same user to the same instance, so a later request can land on an instance that never saw that user's login and has no session data for them in memory. Fixing it means making the application servers stateless with respect to session data — moving session storage to a shared store (a database, or a distributed cache like Redis) that every instance can read, so which instance handles a given request no longer matters.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The load balancer is dropping requests under load, so the user's browser silently retries and lands on the login page again; the fix is increasing the load balancer's request queue size so fewer requests are dropped.",
+      "correct": false,
+      "explanation": "Nothing in the scenario points to dropped requests — the symptom is specifically session data being missing on some instances, not failed requests. Queue size wouldn't address the in-memory session problem at all."
+    },
+    {
+      "key": "B",
+      "text": "The three instances have slightly different clock settings, so session expiry timestamps computed on one instance don't match what another instance expects, causing sessions to appear to expire early on some servers.",
+      "correct": false,
+      "explanation": "Clock skew between instances is a real general distributed-systems issue, but it isn't what's described here — the problem is session data existing on only one instance's memory at all, not a timing disagreement about when a session should expire."
+    },
+    {
+      "key": "C",
+      "text": "Each instance keeps session data only in its own memory, so a request landing on a different instance finds no session for that user; fixing this means moving session data to a shared store all instances can read.",
+      "correct": true,
+      "explanation": "Correct. In-memory, per-instance session state is exactly the kind of state that breaks once requests are no longer guaranteed to land on the same server — the standard fix is externalizing that state so any instance can serve any request."
+    },
+    {
+      "key": "D",
+      "text": "The load balancer is configured with the wrong health-check interval, so it occasionally routes traffic to an instance that's mid-restart and hasn't finished loading its configuration, which looks like a missing session.",
+      "correct": false,
+      "explanation": "A health-check misconfiguration could cause routing to an unhealthy instance, but that's a different failure mode than what's described — the sessions are missing specifically because they were never stored anywhere but the originating instance's memory, not because of a restart timing issue."
+    }
+  ],
+  "references": [
+    {
+      "title": "The Twelve-Factor App — VI. Processes (\"Twelve-factor processes are stateless and share-nothing\")",
+      "url": "https://12factor.net/processes"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

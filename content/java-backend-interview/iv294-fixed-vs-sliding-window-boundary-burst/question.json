@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "HARD",
+  "difficultyRationale": "The fixed-window boundary edge case is a well-known but easy-to-miss gap that distinguishes candidates who've actually implemented rate limiting from those who've only heard the terms.",
+  "prompt": "A rate limiter allows 100 requests per client per 60-second fixed window (e.g. 12:00:00–12:01:00, then 12:01:00–12:02:00, and so on, with the counter resetting to zero at each boundary). A client sends 100 requests at 12:00:59 and another 100 requests at 12:01:01, two seconds apart. What does fixed-window counting allow here, and how would a sliding window behave differently?",
+  "explanation": "Because the counter resets at 12:01:00, the 100 requests just before the boundary and the 100 just after both fit entirely within their own window and are all allowed — 200 requests inside a two-second span, far above the intended 100-per-60-seconds rate. A sliding window instead looks at a continuously moving 60-second lookback from the current moment, so it would see all 200 requests inside that same recent 60-second span and start rejecting once the 100 limit for that rolling interval was reached, rather than resetting to a clean slate at a fixed clock boundary.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Fixed-window counting is mathematically incapable of ever allowing more than 100 requests in any 60-second span; the scenario as described would actually have the second batch rejected starting from its very first request, by design of the algorithm's reset logic.",
+      "correct": false,
+      "explanation": "This is exactly backwards — the fixed-window algorithm's boundary-reset behavior is precisely what allows both full 100-request batches through, since each lands in its own freshly-reset window and the algorithm has no visibility into the adjacent window's count."
+    },
+    {
+      "key": "B",
+      "text": "Fixed-window counting lets both batches through since each falls in its own freshly-reset window, allowing 200 requests in just over two seconds; a sliding window instead uses a rolling lookback and rejects once that count hits 100.",
+      "correct": true,
+      "explanation": "Correct. This is the classic fixed-window boundary problem: a burst straddling a window edge can briefly double the effective allowed rate, and a sliding window closes that gap by never resetting to zero at a fixed clock instant."
+    },
+    {
+      "key": "C",
+      "text": "A sliding window and a fixed window produce identical results in every case including this one, because both ultimately just count requests against a 100-per-60-seconds limit; the only difference between them is implementation complexity, not observable behavior.",
+      "correct": false,
+      "explanation": "They diverge exactly at window boundaries like this one — a fixed window's hard reset is what permits the 200-requests-in-two-seconds burst, while a sliding window's continuously-moving lookback would not permit it, so their observable behavior differs, not just their implementation."
+    },
+    {
+      "key": "D",
+      "text": "The two-second gap between batches means the rate limiter treats them as a single combined request burst and merges their counts into one 60-second window regardless of which algorithm is used, so both algorithms would reject the second batch identically.",
+      "correct": false,
+      "explanation": "Neither algorithm merges requests into one window based on a short gap between them — a fixed window resets strictly at its clock boundary regardless of recent activity, and a sliding window continuously evaluates a rolling interval; the two produce different outcomes here, not an identical merged one."
+    }
+  ],
+  "references": [
+    {
+      "title": "IETF Draft — RateLimit header fields for HTTP, §7.5 (\"a user agent by chance or on purpose might consume most of its quota units in a significantly shorter interval\" than the configured window)",
+      "url": "https://www.ietf.org/archive/id/draft-ietf-httpapi-ratelimit-headers-08.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Token bucket is the most commonly used rate-limiting algorithm in real API gateways; a candidate should know what it actually bounds, not just its name.",
+  "prompt": "An API gateway rate-limits a client using a token bucket configured to refill 10 tokens per second, with a bucket capacity of 50 tokens, where each request consumes one token. A client that has been idle for several seconds can suddenly send 50 requests almost instantly and have all of them accepted. What does this behavior tell you about what a token bucket actually bounds?",
+  "explanation": "A token bucket bounds the long-run average rate (here, 10 requests/second) but explicitly allows a burst up to the bucket's capacity (50 requests) whenever unused tokens have accumulated from a quiet period. That's a deliberate design property, not a bug: it lets a client use saved-up capacity all at once for a legitimate burst, while still capping how fast new capacity refills afterward.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The bucket capacity of 50 is a configuration mistake; a correctly configured token bucket would always reject any request beyond the per-second refill rate, with zero tolerance for any burst under any circumstances whatsoever.",
+      "correct": false,
+      "explanation": "Allowing a burst up to the bucket capacity is the token bucket algorithm's intended behavior, not a misconfiguration — a bucket capacity equal to the refill rate would eliminate bursts entirely, which is a valid but different configuration choice, not the 'correct' default."
+    },
+    {
+      "key": "B",
+      "text": "Once a burst of 50 requests drains the bucket, the client is fully blocked from sending any further requests until an entire new bucket's worth of 50 tokens has refilled, which at 10/second takes exactly five seconds of total silence.",
+      "correct": false,
+      "explanation": "Tokens refill continuously at the configured rate (10 per second), so the client isn't fully blocked for five seconds — after draining the bucket, it can send roughly one more request per 100ms as new tokens trickle in, it just can't burst again until tokens re-accumulate."
+    },
+    {
+      "key": "C",
+      "text": "This reveals a flaw specific to this gateway's implementation; token bucket algorithms as specified elsewhere strictly enforce the average rate request-by-request with no possibility of a burst, regardless of bucket capacity.",
+      "correct": false,
+      "explanation": "Allowing a burst up to bucket capacity is part of the token bucket algorithm's own definition wherever it's used (e.g. in network traffic shaping), not a deviation introduced by this particular gateway's implementation."
+    },
+    {
+      "key": "D",
+      "text": "A token bucket bounds the long-run average rate while explicitly allowing a burst up to the bucket's capacity when unused tokens have accumulated during idle time — this is the algorithm's intended trade-off, not a bug.",
+      "correct": true,
+      "explanation": "Correct. The bucket capacity is exactly the knob that controls how large a burst is tolerated above the steady-state refill rate; this is a deliberate design choice of the algorithm, used precisely because real clients are often bursty rather than perfectly steady."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS API Gateway Developer Guide — Throttle API requests for better throughput (token bucket algorithm)",
+      "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-request-throttling.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "HARD",
+  "difficultyRationale": "Write-behind is less commonly used than cache-aside/write-through, and its durability risk is the kind of thing that only shows up when something goes wrong — a good senior-level distinction.",
+  "prompt": "A service adopts write-behind (write-back) caching: a write is accepted once it lands in the cache, and the cache asynchronously flushes it to the database some time later, batched with other writes. What's the durability risk this introduces that write-through does not have?",
+  "explanation": "Because the write is considered successful the moment it hits the cache — before the database write has actually happened — there's a window where the only copy of that data lives in the cache. If the cache process crashes, loses power, or is evicted before the deferred flush runs, that write is lost even though the client was already told it succeeded. Write-through doesn't have this gap because it only reports success after the database write itself has completed.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A write can be acknowledged to the client before it's actually durable in the database, so a cache crash before the deferred flush runs permanently loses that write even though the client was told it succeeded.",
+      "correct": true,
+      "explanation": "Correct. Write-behind's whole performance benefit comes from acknowledging early and deferring the database write, which is exactly the window where a cache failure turns an acknowledged write into a silently lost one."
+    },
+    {
+      "key": "B",
+      "text": "Write-behind caches always use a replication factor of exactly one by design, so unlike every other caching strategy they cannot be configured with any redundant copies to survive a single node failure.",
+      "correct": false,
+      "explanation": "Replication factor is a deployment choice for the caching layer, not something inherent to the write-behind pattern itself — write-behind caches can be deployed with replicas just like any other cache; the actual risk is the acknowledge-before-durable timing gap."
+    },
+    {
+      "key": "C",
+      "text": "The batched flush to the database always writes rows in a random order unrelated to when they were originally written, so write-behind can silently reorder updates to the same row and apply an older value over a newer one.",
+      "correct": false,
+      "explanation": "A reasonable write-behind implementation preserves per-key write order when flushing (e.g. keeping the latest value per key, or flushing in sequence); random reordering of updates to the same row isn't the defining risk here — the real risk is losing an acknowledged write outright before it's flushed."
+    },
+    {
+      "key": "D",
+      "text": "Because the flush is asynchronous, every read against a write-behind cache must wait for the next scheduled flush cycle to complete before returning any value, adding the flush interval directly to read latency.",
+      "correct": false,
+      "explanation": "Reads against a write-behind cache are served straight from the cache and don't need to wait for a flush cycle — the pattern's actual cost is a durability gap on writes, not added latency on reads."
+    }
+  ],
+  "references": [
+    {
+      "title": "Oracle Coherence Documentation — Implementing Storage and Backing Maps (write-behind queue entries and asynchronous-persistence data-loss risk on failure before the deferred write completes)",
+      "url": "https://docs.oracle.com/en/middleware/standalone/coherence/14.1.1.2206/develop-applications/implementing-storage-and-backing-maps.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

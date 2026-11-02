@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Cache-aside is the most common caching strategy in practice; a candidate should know exactly what happens on a miss and what window of staleness that leaves open.",
+  "prompt": "A service uses the cache-aside (lazy-loading) pattern: on a read, it checks the cache first; on a miss, it reads the database, returns the result, and writes it into the cache for next time. The underlying row is updated directly in the database by a separate batch job that does not touch the cache. What's the direct consequence of this combination?",
+  "explanation": "Cache-aside only ever refreshes a cache entry in reaction to a read miss — it has no mechanism to notice a write that happened somewhere else. So once a row is cached, any out-of-band update to that row in the database (like the batch job here) leaves the cached copy stale until that specific entry is evicted or expires and a later read misses and reloads it; there is no automatic invalidation built into the pattern itself.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Reads that hit the cache will keep returning the pre-update value until that cache entry expires or is evicted and a subsequent miss reloads it from the database — the pattern has no built-in way to notice the batch job's write.",
+      "correct": true,
+      "explanation": "Correct. Cache-aside's refresh trigger is a read miss, not a write notification, so an out-of-band write like this batch job creates exactly this staleness window until the entry naturally falls out of the cache."
+    },
+    {
+      "key": "B",
+      "text": "The cache library automatically detects that the underlying database row's version column changed and invalidates the matching entry on its own, so reads will see the new value on their very next request regardless of expiry settings.",
+      "correct": false,
+      "explanation": "A generic cache (an in-memory cache or Redis) has no awareness of database row versions unless the application explicitly wires up that detection itself — cache-aside as a pattern doesn't do this, which is precisely the staleness problem it leaves open."
+    },
+    {
+      "key": "C",
+      "text": "The next read after the batch job's update will always be a guaranteed cache miss, because any write anywhere in the system resets every entry's TTL countdown back to zero as a side effect of the cache-aside pattern.",
+      "correct": false,
+      "explanation": "Cache-aside doesn't reset TTLs on unrelated writes — a cached entry's expiry is governed only by its own configured TTL or eviction policy, independent of writes happening elsewhere in the database."
+    },
+    {
+      "key": "D",
+      "text": "Because the batch job writes directly to the database, the database itself pushes a notification to the cache layer over the same connection pool, which is how most relational databases keep an external cache synchronized by default.",
+      "correct": false,
+      "explanation": "Relational databases don't push change notifications to an external cache over the connection pool by default — that kind of synchronization (e.g. change-data-capture) has to be built deliberately, and cache-aside specifically doesn't include it."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure Architecture Center — Cache-Aside pattern",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

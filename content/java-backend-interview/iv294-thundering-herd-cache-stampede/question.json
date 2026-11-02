@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "HARD",
+  "difficultyRationale": "The thundering herd problem is a classic senior-level caching failure mode that only appears under real concurrent load, not in a single-request test.",
+  "prompt": "A heavily-read cache key (a homepage banner config) has a 60-second TTL and is read thousands of times per second. The moment it expires, nginx's `proxy_cache_lock` directive — which, when enabled, makes only one such request actually go to the backend while others wait for that response and reuse it — is turned off. What happens at the moment of expiry, and why does the setting matter?",
+  "explanation": "Without that lock, every one of the thousands of concurrent requests that arrive in the instant after expiry sees a cache miss at the same time, and every single one of them independently goes to the backend to regenerate the value — a sudden spike of duplicate work hitting the backend all at once, commonly called a thundering herd or cache stampede. With the lock directive enabled, only the first request actually reaches the backend; the rest wait briefly and are served the result it fetches, so the backend only sees one request instead of thousands.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Without the lock, exactly one of the thousands of waiting requests is chosen at random by the cache to regenerate the value, and the rest receive a cached error response until the chosen one finishes, by design of most cache implementations.",
+      "correct": false,
+      "explanation": "There's no such built-in random-selection-plus-error-response mechanism without the lock; without it, every concurrent request independently treats the miss as its own and goes to the backend — that uncoordinated flood of duplicate requests is the actual problem."
+    },
+    {
+      "key": "B",
+      "text": "Every request after expiry independently misses the cache and hits the backend at once, producing a sudden spike of duplicate load; the lock exists to let only one request regenerate the value while others wait and reuse it.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the thundering herd / cache stampede failure mode, and the lock directive's job is to collapse that flood of duplicate requests into a single backend request that everyone else piggybacks on."
+    },
+    {
+      "key": "C",
+      "text": "The TTL expiry event causes nginx to automatically extend the cache entry's lifetime by another 60 seconds as a safety fallback mechanism, so in practice no request ever actually sees a true cache miss under normal steady-state operation.",
+      "correct": false,
+      "explanation": "TTL expiry does not auto-extend by default — once the TTL elapses, the entry is treated as expired and subsequent requests see a miss unless a specific mechanism (like serving stale content, or the lock directive) is configured to handle it differently."
+    },
+    {
+      "key": "D",
+      "text": "Disabling the lock only affects whether nginx logs a warning about concurrent cache misses; the actual number of requests reaching the backend at the moment of expiry is identical whether the setting is on or off.",
+      "correct": false,
+      "explanation": "The setting materially changes backend load, not just logging — with it enabled, concurrent requests are serialized down to effectively one backend request; with it disabled, every concurrent request reaches the backend independently."
+    }
+  ],
+  "references": [
+    {
+      "title": "nginx documentation — ngx_http_proxy_module: proxy_cache_lock",
+      "url": "https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_lock"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires understanding why consistent hashing is preferred over simple modulo hashing, not just that it exists.",
+  "prompt": "A cache cluster assigns keys to nodes with `hash(key) % N`, where N is the node count. When a node is added or removed, almost every key maps to a different node than before, causing a massive simultaneous cache-miss storm against the backing database. Consistent hashing is proposed as a fix. What property of consistent hashing actually solves this, specifically?",
+  "explanation": "Consistent hashing places both nodes and keys on a hash ring, and a key is owned by the next node clockwise from it. Adding or removing one node only moves the keys that fall in the small arc now owned by (or vacated by) that node — the other nodes' ownership is untouched. Plain modulo hashing has no such locality: changing N changes the divisor for every key's position calculation, so nearly every key's assigned node changes at once.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Consistent hashing stores a full replicated copy of every key on every node, so removing or adding one node never requires moving anything — every other node already independently holds the same data and can serve any request on its own.",
+      "correct": false,
+      "explanation": "Consistent hashing does not require full replication across every node; each node still owns a distinct portion of the keyspace. Full replication would solve this differently and at a much higher storage cost."
+    },
+    {
+      "key": "C",
+      "text": "On a hash ring, a key is owned by the next node reached going clockwise, so adding or removing a node only reassigns the keys in the small arc affected by that node — leaving every other node's keys untouched, unlike modulo hashing where changing N reshuffles almost everything.",
+      "correct": true,
+      "explanation": "Correct. The ring structure localizes the effect of a membership change to one arc instead of propagating a global reshuffle, which is exactly the property plain modulo hashing lacks."
+    },
+    {
+      "key": "B",
+      "text": "Consistent hashing uses a cryptographically stronger hash function than `%`, which distributes keys more uniformly across nodes and therefore produces fewer total keys needing to move whenever the node count changes up or down.",
+      "correct": false,
+      "explanation": "The fix isn't a stronger or more uniform hash function — a perfectly uniform modulo hash still reshuffles nearly everything when N changes, because the structural property (ring locality) is what's missing, not distribution quality."
+    },
+    {
+      "key": "D",
+      "text": "Consistent hashing caches the previous node assignment for every single key in a lookup table maintained by a central coordinator, which it always consults first before recomputing any hash, avoiding movement by reusing the old mapping whenever that cached entry is still considered valid.",
+      "correct": false,
+      "explanation": "Consistent hashing is computed from the ring structure itself, not from a central coordinator's cached lookup table — there's no such table being consulted; the minimal-movement property comes from the ring's geometry, not from caching old answers."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon Dynamo: A Highly Available Key-value Store (Section 4.2, Partitioning Algorithm — consistent hashing on a ring)",
+      "url": "https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}
