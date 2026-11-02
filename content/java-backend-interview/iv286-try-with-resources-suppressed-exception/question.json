@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Knowing which exception a try-with-resources statement propagates when both the body and the resource's close() fail is a specific, easily-misremembered rule.",
+  "prompt": "Inside a try-with-resources statement, the `try` block throws `IOException A` while writing data, and then the resource's automatically-invoked `close()` method throws `IOException B` while releasing it. What does the method containing this statement end up throwing, and what happens to the other exception?",
+  "explanation": "When the body of a try-with-resources statement throws and the automatic `close()` call also throws, the exception from the `try` block (`A`) is the one that propagates out of the method; the exception from `close()` (`B`) is suppressed rather than discarded or thrown on its own. \"Suppressed\" specifically means `B` is attached to `A` and can be retrieved later by calling `A.getSuppressed()` — it is not lost, just not the one that propagates.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`B` propagates, because it was thrown later during cleanup, and `A` is discarded entirely.",
+      "correct": false,
+      "explanation": "The exception thrown by the resource's `close()` is the one that gets suppressed, not the one that propagates; and the earlier exception is never simply discarded — it is exactly the one the method ends up throwing."
+    },
+    {
+      "key": "B",
+      "text": "Both `A` and `B` propagate together, wrapped in a new `MultiException` the JVM constructs automatically.",
+      "correct": false,
+      "explanation": "There is no `MultiException` type the JVM constructs for this case; the mechanism is suppression — one exception propagates, and the other is attached to it as retrievable metadata, not combined into a new exception type."
+    },
+    {
+      "key": "C",
+      "text": "The method throws nothing, because the `close()` failure during cleanup silently absorbs the earlier exception from the `try` block.",
+      "correct": false,
+      "explanation": "Nothing is silently absorbed; the method still throws the exception from the `try` block, and the `close()` failure is retained as a suppressed exception on it rather than vanishing."
+    },
+    {
+      "key": "D",
+      "text": "The method throws `A`, and `B` is attached to it as a suppressed exception, retrievable later by calling `A.getSuppressed()`.",
+      "correct": true,
+      "explanation": "Correct: the exception thrown from the `try` block is the one the method throws; the exception thrown from the implicit `close()` call is suppressed and can be retrieved from the propagating exception via `Throwable.getSuppressed()`."
+    }
+  ],
+  "references": [
+    {
+      "title": "The try-with-resources Statement (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

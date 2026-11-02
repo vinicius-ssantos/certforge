@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "EASY",
+  "difficultyRationale": "Choosing between the two common List implementations by access pattern is a foundational Java collections recognition task.",
+  "prompt": "A service builds a report by appending rows one at a time, then repeatedly looks up rows by numeric index (`get(i)`) to render a table, with no insertions or removals in the middle of the list. Which `List` implementation fits this access pattern best, and why?",
+  "explanation": "`ArrayList` backs its elements with a resizable array, so `get(i)` is a direct, constant-time index into that array. `LinkedList` has to walk node-to-node from one end to reach index `i`, which costs time proportional to `i`'s distance from the nearer end. Since this workload appends at the end and then does many indexed reads, with no middle insertions or removals, `ArrayList` is the better fit.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`LinkedList`, because it never needs to resize an internal array the way `ArrayList` does when it grows.",
+      "correct": false,
+      "explanation": "True but irrelevant here: occasional array growth is amortized and cheap, while `LinkedList`'s per-access traversal cost for repeated indexed reads is the larger cost in this workload."
+    },
+    {
+      "key": "B",
+      "text": "`ArrayList`, because indexed `get` is a constant-time array access, while `LinkedList` must traverse nodes from one end to reach the index.",
+      "correct": true,
+      "explanation": "Correct: `ArrayList.get(i)` reads the backing array directly, independent of list size, while `LinkedList.get(i)` walks the node chain, which is linear in the distance to the index — exactly the cost this read-heavy, index-based workload would pay repeatedly."
+    },
+    {
+      "key": "C",
+      "text": "`LinkedList`, because appending to the end of an `ArrayList` is not supported without first converting it to an array.",
+      "correct": false,
+      "explanation": "Incorrect premise: `ArrayList.add` appends in amortized constant time with no conversion step; nothing about appending favors `LinkedList` here."
+    },
+    {
+      "key": "D",
+      "text": "Either works identically, since both implement the same `List` interface and therefore offer the same performance characteristics for any operation.",
+      "correct": false,
+      "explanation": "Implementing the same interface guarantees the same operations are available, not the same cost; `List`'s contract says nothing about the time complexity each implementation must deliver."
+    }
+  ],
+  "references": [
+    {
+      "title": "ArrayList (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html"
+    },
+    {
+      "title": "LinkedList (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedList.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

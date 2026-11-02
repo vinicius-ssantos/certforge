@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests understanding of how an exception propagates through a CompletableFuture chain, a common source of silently-swallowed failures.",
+  "prompt": "```java\nCompletableFuture.supplyAsync(() -> riskyCall())\n    .thenApply(r -> transform(r))\n    .thenAccept(r -> save(r));\n```\n`riskyCall()` throws inside `supplyAsync`. What happens to the `thenApply` and `thenAccept` stages chained after it?",
+  "explanation": "A `CompletableFuture` stage that completes exceptionally propagates that exception forward: every subsequent `then*` stage in the chain is skipped (its computation never runs), and the resulting future at the end of the chain also completes exceptionally, carrying the original exception (wrapped in a `CompletionException` where applicable). Nothing runs `transform` or `save` here unless something recovers the exception first, for example with `exceptionally` or `handle`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`thenApply` still runs with a `null` input, and `thenAccept` then runs normally afterward using whatever `thenApply` returned.",
+      "correct": false,
+      "explanation": "A `then*` stage does not run with a null substitute when its upstream failed; it is skipped entirely. There is no silent null-input execution path in `CompletableFuture`'s design."
+    },
+    {
+      "key": "B",
+      "text": "The whole chain blocks forever at `.thenAccept`, waiting indefinitely, because `CompletableFuture` provides no mechanism whatsoever to represent a stage that completed with a failure instead of a normal result, so nothing downstream ever learns the computation is finished.",
+      "correct": false,
+      "explanation": "`CompletableFuture` is explicitly designed to represent failure as a first-class outcome; `completeExceptionally` and exceptional completion are core to its API, not a gap that causes blocking."
+    },
+    {
+      "key": "C",
+      "text": "The exception propagates: both `thenApply` and `thenAccept` are skipped, and the resulting future completes exceptionally with that exception (wrapped as needed) unless something upstream calls `exceptionally`/`handle` to recover it.",
+      "correct": true,
+      "explanation": "Correct: this is exactly how the `CompletionStage` interface `CompletableFuture` implements documents exceptional completion propagating through dependent stages — each stage downstream of a failure is skipped, and the final future carries the failure forward (wrapped in a `CompletionException`) until something explicitly handles it."
+    },
+    {
+      "key": "D",
+      "text": "Only `thenApply` is skipped; `thenAccept` still runs on its own because it was registered as a logically separate stage.",
+      "correct": false,
+      "explanation": "`thenAccept` is chained onto the result of `thenApply`, not registered independently of it — if the upstream stage it depends on is skipped due to a failure, `thenAccept` is skipped too, not run on its own."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.concurrent.CompletionStage (Java SE 21 API) — exceptional completion rules",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletionStage.html"
+    },
+    {
+      "title": "java.util.concurrent.CompletableFuture (Java SE 21 API)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

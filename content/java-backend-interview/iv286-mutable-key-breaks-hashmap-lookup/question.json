@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tracing why a HashMap lookup silently fails after a key's fields change requires connecting hashCode/equals to bucket placement, a step beyond just reciting the contract.",
+  "prompt": "A `CacheKey` class has mutable fields and overrides `equals`/`hashCode` based on those fields. Code does: build a `CacheKey k`, put it in a `HashMap` as a key, then later mutate one of `k`'s fields, then call `map.get(k)` with the same (now-mutated) reference. The lookup returns `null` even though the key object was never removed. What is happening?",
+  "explanation": "A `HashMap` places an entry into a bucket chosen by the key's `hashCode()` at insertion time. Mutating the key afterward changes what `hashCode()` now returns, so a lookup with the mutated key searches the bucket for the *new* hash — a different bucket from where the entry actually lives — and finds nothing there. The entry is not lost, just unreachable from that hash value; this is exactly the hazard the `Map` interface's documentation warns about when a mutable object is used as a key.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The `HashMap` has a capacity limit and silently evicts entries once a threshold is reached.",
+      "correct": false,
+      "explanation": "`HashMap` has no eviction policy at all; it resizes its internal table as needed but never drops entries on its own. Nothing here involves capacity."
+    },
+    {
+      "key": "B",
+      "text": "`equals` and `hashCode` are out of sync because only one of them was overridden.",
+      "correct": false,
+      "explanation": "The scenario states both are overridden consistently, based on the same fields; the problem isn't an equals/hashCode mismatch at the class-design level, it's that the key's hash changed after insertion."
+    },
+    {
+      "key": "C",
+      "text": "The mutation changed the key's `hashCode()`, so the lookup searches a different bucket than the one the entry was originally stored in, and the entry becomes unreachable by that key.",
+      "correct": true,
+      "explanation": "Correct: the entry still physically exists in the map's table, in the bucket selected by the key's hash *at insertion time*; `get` with the mutated key computes a new hash and looks in the wrong bucket, so it finds nothing."
+    },
+    {
+      "key": "D",
+      "text": "`HashMap.get` always returns `null` for any key object that has been mutated in any way since it was inserted, regardless of whether the mutation changed the fields that `hashCode` and `equals` actually use.",
+      "correct": false,
+      "explanation": "The failure is specifically tied to the hash value changing and landing the lookup in the wrong bucket; mutating a field that the key's `hashCode`/`equals` don't actually use would not break the lookup at all."
+    }
+  ],
+  "references": [
+    {
+      "title": "Map (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html"
+    },
+    {
+      "title": "Object#hashCode (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

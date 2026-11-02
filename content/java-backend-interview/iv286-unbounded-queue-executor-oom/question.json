@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests understanding of ThreadPoolExecutor's queueing strategy trade-offs, not just that thread pools exist.",
+  "prompt": "A service builds its worker pool as `new ThreadPoolExecutor(4, 4, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>())` — the queue has no capacity bound. Under a sustained burst where producers submit work faster than the 4 workers can drain it, what actually happens?",
+  "explanation": "`ThreadPoolExecutor`'s own documentation describes this trade-off directly: with an unbounded queue, tasks wait in the queue once `corePoolSize` threads are busy, so the pool never grows past `corePoolSize` (making `maximumPoolSize` irrelevant here) and never rejects work. That is fine for smoothing transient bursts, but it 'admits the possibility of unbounded work queue growth when commands continue to arrive on average faster than they can be processed' — meaning the backlog of queued task objects grows without limit, consuming heap until the JVM runs out of memory.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Submitted tasks queue up without limit, so the executor never rejects work and never grows past 4 threads — instead, the memory held by the backlog of queued tasks grows until the JVM runs out of heap.",
+      "correct": true,
+      "explanation": "Correct, and stated by `ThreadPoolExecutor`'s own Javadoc on queueing strategies: an unbounded queue admits unbounded work-queue growth when arrivals outpace processing, trading an `OutOfMemoryError` risk for never rejecting a submission."
+    },
+    {
+      "key": "B",
+      "text": "`ThreadPoolExecutor` ignores the specific queue implementation and its capacity entirely in every configuration, and instead behaves exactly as if `Executors.newCachedThreadPool()` had been used, spawning an unbounded number of new worker threads instead of ever queueing work.",
+      "correct": false,
+      "explanation": "The thread count is governed by `corePoolSize`/`maximumPoolSize`, not by the queue; with an unbounded queue, extra threads beyond `corePoolSize` are never even created, because tasks always find room in the queue instead of triggering new-thread creation."
+    },
+    {
+      "key": "C",
+      "text": "The ninth submitted task onward is silently dropped once the queue reaches a default capacity of 128.",
+      "correct": false,
+      "explanation": "`new LinkedBlockingQueue<>()` with no capacity argument is unbounded (effectively `Integer.MAX_VALUE`), not capped at 128; nothing is silently dropped, which is precisely why the hazard here is unbounded growth rather than lost work."
+    },
+    {
+      "key": "D",
+      "text": "`RejectedExecutionException` is thrown as soon as the 5th task is submitted, because the pool's core and maximum size are both 4.",
+      "correct": false,
+      "explanation": "Rejection only happens when a bounded queue is also full and no rejection-handling policy absorbs the overflow. An unbounded queue has no such limit, so tasks keep queueing instead of being rejected — that is the whole problem being tested here."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.concurrent.ThreadPoolExecutor (Java SE 21 API, Queuing)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ThreadPoolExecutor.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

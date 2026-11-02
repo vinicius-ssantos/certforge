@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires reasoning about reordering and partially-constructed objects, not just naming the pattern — the classic double-checked-locking bug that the JSR-133 expert group had to formally document.",
+  "prompt": "```java\nprivate static Helper helper; // NOT volatile\npublic static Helper getHelper() {\n    if (helper == null) {\n        synchronized (Helper.class) {\n            if (helper == null) {\n                helper = new Helper();\n            }\n        }\n    }\n    return helper;\n}\n```\nThe `helper` field above is a plain (non-volatile) reference. Under the Java Memory Model, what is the concrete risk with this double-checked locking pattern as written?",
+  "explanation": "The inner synchronized block only protects the write to `helper` and the check inside it; the first, outer check at `if (helper == null)` happens outside any lock. Without `volatile`, the write to `helper` inside the constructing thread can become visible to another thread before that other thread also sees the writes the `Helper` constructor performed — the JMM does not forbid this reordering for a plain field. A thread hitting the fast outer path can therefore read a non-null `helper` that points at a `Helper` object still mid-construction.",
+  "options": [
+    {
+      "key": "A",
+      "text": "There is no risk at all: the inner `synchronized` block fully synchronizes every read and write of `helper`, including the very first, unsynchronized check performed outside it by any thread, because the JVM extends every monitor's mutual-exclusion guarantee automatically to cover any field access anywhere in the enclosing class.",
+      "correct": false,
+      "explanation": "The outer `if (helper == null)` check is deliberately outside the synchronized block — that is the whole point of the \"double-checked\" optimization, to skip locking once `helper` is set. Because that check is unsynchronized, it is not covered by the monitor's happens-before guarantee at all."
+    },
+    {
+      "key": "B",
+      "text": "A thread may call `getHelper()` concurrently and allocate two separate `Helper` instances, silently leaking one.",
+      "correct": false,
+      "explanation": "The inner check and assignment are inside the `synchronized (Helper.class)` block, so only one thread at a time can pass the inner `if` and construct a `Helper`; double allocation is exactly what the inner check prevents. The real risk here is about visibility, not duplicate construction."
+    },
+    {
+      "key": "C",
+      "text": "A thread reading `helper` outside the lock, in the outer check, may see a reference to a `Helper` object whose constructor has not finished running, because the write to `helper` can become visible before the writes performed inside the constructor.",
+      "correct": true,
+      "explanation": "Correct, and this is exactly what the JSR-133 expert group's declaration on double-checked locking documents: without `volatile` (or an equivalent happens-before edge), a thread that takes the fast outer path can observe a non-null, partially constructed `Helper`."
+    },
+    {
+      "key": "D",
+      "text": "The pattern throws `IllegalMonitorStateException` under high contention on JVMs that do not support biased locking.",
+      "correct": false,
+      "explanation": "`IllegalMonitorStateException` is thrown when code tries to unlock a monitor it doesn't hold, which has nothing to do with this pattern or with biased locking, an unrelated JIT optimization for uncontended locks."
+    }
+  ],
+  "references": [
+    {
+      "title": "\"Double-Checked Locking is Broken\" Declaration (JSR-133 expert group)",
+      "url": "https://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html"
+    },
+    {
+      "title": "Java Language Specification, SE 21 — Chapter 17: Threads and Locks (§17.4, Memory Model)",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

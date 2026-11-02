@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes the non-async and *Async variants of CompletableFuture's composition methods, which is easy to get wrong when reading real production code.",
+  "prompt": "Given `CompletableFuture.supplyAsync(this::fetch, executorA).thenApply(this::parse)` versus the same call with `.thenApplyAsync(this::parse, executorB)` instead of `thenApply` — what is the concrete difference in where `parse` runs?",
+  "explanation": "The plain `thenApply` is not asynchronous on its own: it runs its function on whatever thread completed the stage it is attached to, which in practice is often a worker from the upstream executor (`executorA`), or the calling thread itself if the upstream stage had already completed by the time `thenApply` was registered. The `*Async` variant with an explicit executor argument, `thenApplyAsync(fn, executorB)`, instead always submits the function as a new task to run on `executorB`, regardless of which thread completed the previous stage.",
+  "options": [
+    {
+      "key": "A",
+      "text": "No difference at all in either case: `thenApply` and `thenApplyAsync` always run their function on precisely the same thread pool that `supplyAsync` originally used to produce the value they are chained onto, regardless of which executor argument is passed to either method call.",
+      "correct": false,
+      "explanation": "This is the whole point of the `*Async`-with-executor overloads existing: they let a different executor run the function, which would be meaningless if the outcome were always the same as the non-async version."
+    },
+    {
+      "key": "B",
+      "text": "`thenApply` always runs on the thread that originally called `supplyAsync`, never on a thread from `executorA`.",
+      "correct": false,
+      "explanation": "`thenApply` runs on whichever thread completes the stage it's chained to — if that stage completes asynchronously on an `executorA` worker thread, `thenApply`'s function runs there, not on the original calling thread."
+    },
+    {
+      "key": "C",
+      "text": "`thenApplyAsync` runs `parse` synchronously on the calling thread, bypassing any executor entirely.",
+      "correct": false,
+      "explanation": "This is backwards: it is the plain, non-async `then*` methods that may run synchronously on an already-completing thread. `thenApplyAsync` with an explicit executor argument submits the work to that executor instead."
+    },
+    {
+      "key": "D",
+      "text": "Plain `thenApply` runs `parse` on whichever thread completed the previous stage (often a thread from `executorA`, or the calling thread if already complete); `thenApplyAsync(fn, executorB)` instead submits `parse` to run on `executorB`.",
+      "correct": true,
+      "explanation": "Correct: this is exactly the distinction `CompletableFuture`'s API documents between its non-async and `*Async` method variants — the `*Async` suffix with an explicit `Executor` argument guarantees which executor runs the function, while the plain variant does not control it."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.concurrent.CompletableFuture (Java SE 21 API)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

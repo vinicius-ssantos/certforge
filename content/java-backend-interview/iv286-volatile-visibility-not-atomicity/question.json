@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the common misconception that volatile makes compound operations atomic, not just visible.",
+  "prompt": "A shared field is declared `volatile int counter = 0;`. Ten threads each execute `counter++;` one hundred times with no other synchronization. After all threads finish, the final value is reliably less than 1000. Why doesn't `volatile` prevent these lost updates?",
+  "explanation": "`volatile` guarantees that a write to the field is visible to subsequent reads by other threads (a happens-before edge per the Java Language Specification), but `counter++` is really a read, an increment, and a write performed as three separate steps. Two threads can both read the same value, both compute the same incremented result, and both write it back, silently losing one of the increments. Visibility alone does not make that three-step sequence atomic.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It does prevent lost updates; a bug elsewhere in the program must be the real cause.",
+      "correct": false,
+      "explanation": "The scenario as described has no other bug: ten threads incrementing a volatile int one hundred times each is a textbook lost-update race, not an edge case requiring another explanation."
+    },
+    {
+      "key": "B",
+      "text": "`volatile` only makes reads and writes of the field visible across threads; it does not make the read-modify-write sequence behind `counter++` a single atomic step.",
+      "correct": true,
+      "explanation": "Correct: visibility and atomicity are different guarantees. `counter++` compiles to a read, an add, and a write; without additional synchronization (a lock, or `AtomicInteger.incrementAndGet()`), two threads can interleave those three steps and overwrite each other's result."
+    },
+    {
+      "key": "C",
+      "text": "`volatile` fields are compiled incorrectly on multi-core JVMs.",
+      "correct": false,
+      "explanation": "There is no such defect; `volatile` is correctly implemented on every conformant JVM. The field behaves exactly as the Java Memory Model specifies — it just specifies visibility, not atomicity of compound operations."
+    },
+    {
+      "key": "D",
+      "text": "`counter++` is a single bytecode instruction, so it is already atomic regardless of any modifier, and the loss must come from the JIT compiler reordering unrelated statements around it.",
+      "correct": false,
+      "explanation": "`counter++` is not one instruction: it compiles to separate `getfield`, `iadd`, and `putfield` bytecodes (or their equivalents), which is exactly why it is not atomic. No reordering of unrelated statements is needed to explain the lost updates."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java Language Specification, SE 21 — Chapter 17: Threads and Locks (§17.4, Memory Model)",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
