@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the actual precedence rule between local and global exception handlers, which candidates frequently get backwards or assume is configurable only by ordering annotations.",
+  "prompt": "A controller has its own `@ExceptionHandler(IllegalArgumentException.class)` method. A separate `@ControllerAdvice`-annotated class also declares an `@ExceptionHandler(IllegalArgumentException.class)` method intended to apply globally. When a handler method in that controller throws an `IllegalArgumentException`, which handler runs, and why?",
+  "explanation": "Spring MVC resolves `@ExceptionHandler` methods by searching the controller that threw the exception first, and only falls back to `@ControllerAdvice` beans if no matching handler is found locally. An exception handler declared directly in the controller is therefore always preferred over one declared in a `@ControllerAdvice`, regardless of the advice's own ordering (`@Order` or `Ordered`) relative to other advice beans — ordering only decides precedence among multiple applicable `@ControllerAdvice` beans, not between a local handler and any advice.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Whichever handler carries the lower `@Order` value runs, since Spring MVC's `@ExceptionHandler` resolution always ranks candidates by `@Order` across both local controller handlers and global `@ControllerAdvice` handlers alike.",
+      "correct": false,
+      "explanation": "`@Order` governs precedence among multiple `@ControllerAdvice` beans when more than one could apply; it does not come into play between a controller's own local handler and any advice, since the local handler is checked first and wins outright."
+    },
+    {
+      "key": "B",
+      "text": "Both the local handler and the `@ControllerAdvice` handler run, one after the other in an unspecified order, because Spring MVC does not deduplicate multiple applicable handlers for the same exception type.",
+      "correct": false,
+      "explanation": "Spring MVC resolves exactly one `@ExceptionHandler` method for a given thrown exception per request — it does not invoke multiple matching handlers for the same exception."
+    },
+    {
+      "key": "C",
+      "text": "Neither handler runs at all; declaring both a local `@ExceptionHandler` and a global `@ControllerAdvice` handler for the same exception type is rejected as an ambiguous configuration error at application startup.",
+      "correct": false,
+      "explanation": "Declaring the same exception type in both a local `@ExceptionHandler` and a `@ControllerAdvice` is valid and does not fail at startup; Spring MVC simply has a precedence rule for which one applies at request time."
+    },
+    {
+      "key": "D",
+      "text": "The controller's own local `@ExceptionHandler` method runs, because Spring MVC looks for a matching handler in the controller that threw the exception before considering any `@ControllerAdvice`.",
+      "correct": true,
+      "explanation": "Correct. Local exception handling takes precedence: an applicable `@ExceptionHandler` method defined on the controller itself is selected before Spring MVC looks at any globally-scoped `@ControllerAdvice` handlers."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Web MVC, Controller Advice (global @ExceptionHandler methods are applied after local ones)",
+      "url": "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-advice.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

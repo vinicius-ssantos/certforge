@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether the candidate understands a starter as a dependency-aggregation mechanism rather than code that itself does auto-configuration, and knows how to actually diagnose why a bean wasn't auto-configured.",
+  "prompt": "A developer adds `spring-boot-starter-data-jpa` to the build and is surprised that a `JpaRepository` they wrote still isn't being picked up. A colleague says 'the starter itself doesn't scan or configure anything — it just pulls in the right dependencies.' Is that accurate, and how would you actually find out why the repository isn't being auto-configured?",
+  "explanation": "`spring-boot-starter-*` artifacts are, by design, dependency descriptors with no code of their own: `spring-boot-starter-data-jpa` simply brings in Spring Data JPA, a JDBC driver-agnostic layer, Hibernate, and related libraries at compatible versions, plus (transitively) `spring-boot-autoconfigure`, which is where the actual `@Conditional*`-guarded auto-configuration classes (e.g. `JpaRepositoriesAutoConfiguration`) live. So the colleague's claim is accurate. To diagnose why a particular auto-configuration didn't activate, Spring Boot exposes a conditions evaluation report — run the application with `--debug` (or `debug=true`) to print it to the console, or inspect the `/actuator/conditions` endpoint if Actuator is on the classpath — which lists every auto-configuration class and the specific condition that caused it to be excluded or included.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The claim is inaccurate — starters contain the actual `@Conditional*`-guarded auto-configuration classes themselves, so the fastest way to debug this is to decompile the starter jar directly and read its bytecode.",
+      "correct": false,
+      "explanation": "Starter artifacts are intentionally code-free; the auto-configuration classes live in `spring-boot-autoconfigure` (or the relevant library's own auto-configure module), pulled in transitively — there is nothing to decompile inside the starter itself, and doing so wouldn't be the way to diagnose a missing auto-configuration."
+    },
+    {
+      "key": "B",
+      "text": "The claim is accurate: starters only aggregate dependencies. Run with `--debug` (or check `/actuator/conditions`) to see the conditions evaluation report, showing why a class was or wasn't applied.",
+      "correct": true,
+      "explanation": "Correct on both counts: starters are dependency aggregators with no code, and the conditions evaluation report (enabled via `--debug`/`debug=true`, or exposed at `/actuator/conditions` with Actuator present) is the documented tool for seeing why a specific auto-configuration class did or didn't activate."
+    },
+    {
+      "key": "C",
+      "text": "The claim is accurate, but the only reliable way to debug this is to set a breakpoint inside `SpringApplication.run()` and step through the entire bean registration process manually in a debugger.",
+      "correct": false,
+      "explanation": "While manual debugging is always possible, Spring Boot provides a purpose-built diagnostic (the auto-configuration conditions evaluation report via `--debug` or `/actuator/conditions`) specifically so this kind of investigation doesn't require stepping through the framework's internals."
+    },
+    {
+      "key": "D",
+      "text": "The claim is inaccurate — the starter itself performs the component scanning for `@Repository` interfaces at build time, using a bundled annotation processor that runs during compilation.",
+      "correct": false,
+      "explanation": "There is no build-time annotation processor in `spring-boot-starter-data-jpa` that scans repositories; repository scanning happens at runtime, driven by auto-configuration classes (from `spring-boot-autoconfigure`/`spring-data-jpa`) that the starter merely brings onto the classpath."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference Documentation — Build Systems, Starters",
+      "url": "https://docs.spring.io/spring-boot/reference/using/build-systems.html"
+    },
+    {
+      "title": "Spring Boot Reference Documentation — Auto-configuration (conditions evaluation report via --debug)",
+      "url": "https://docs.spring.io/spring-boot/reference/using/auto-configuration.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

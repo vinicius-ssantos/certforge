@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires separating the dirty-read guarantee that READ_COMMITTED actually gives from the check-then-act race it does not prevent — a common source of overconfidence about default isolation.",
+  "prompt": "A `@Transactional` method reads a product's `stock` column, checks that it is greater than zero, and then decrements it. The method runs under whatever isolation level the underlying connection pool reports — typically `READ_COMMITTED` on PostgreSQL or MySQL/InnoDB — because no `isolation` attribute was set. Two concurrent requests both read `stock = 1`, both see it is greater than zero, and both decrement it, leaving `stock = -1`. What is correct about fixing this through the `isolation` attribute?",
+  "explanation": "`READ_COMMITTED` only guarantees that a transaction never sees another transaction's uncommitted (dirty) writes; it says nothing about another transaction committing a write in between this transaction's own read and write. That gap is exactly what lets both requests read the same pre-decrement value. Raising isolation to `SERIALIZABLE` (or using row-level locking, or an atomic `UPDATE ... WHERE stock > 0`) closes that gap, but the default level does not.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`READ_COMMITTED` already prevents this, since it rules out one transaction seeing another transaction's uncommitted, in-flight writes; whatever causes both decrements to succeed must be a separate bug elsewhere in the application code, not the isolation level.",
+      "correct": false,
+      "explanation": "Dirty reads and this check-then-act race are different problems. `READ_COMMITTED` blocks reading uncommitted data, but does not stop another transaction's committed write from landing between this transaction's read and its own later write."
+    },
+    {
+      "key": "B",
+      "text": "Setting `@Transactional(isolation = Isolation.SERIALIZABLE)` (or equivalent row-level locking) is needed, because `READ_COMMITTED` permits another transaction's write to commit between this transaction's read and write.",
+      "correct": true,
+      "explanation": "Correct. `SERIALIZABLE` (or explicit locking such as `SELECT ... FOR UPDATE`) prevents the interleaving that causes the lost decrement; `READ_COMMITTED` does not."
+    },
+    {
+      "key": "C",
+      "text": "No isolation setting matters here, because Spring always wraps the entire body of a `@Transactional` method — every statement from the first read to the final write — in one atomic, uninterruptible database operation that other transactions cannot interleave with.",
+      "correct": false,
+      "explanation": "A `@Transactional` method can contain multiple separate statements against the database; Spring manages the transaction boundary, not atomicity of the Java code inside it. Concurrent transactions can still interleave between those statements."
+    },
+    {
+      "key": "D",
+      "text": "Raising isolation to `REPEATABLE_READ` is guaranteed to prevent the stock going negative, on every relational database, since that level locks in a consistent view of every row read for the rest of the transaction.",
+      "correct": false,
+      "explanation": "`REPEATABLE_READ` guarantees are not identical across databases — some engines still permit phantom rows or write skew at that level, so it is not a portable guarantee the way the question implies. `SERIALIZABLE` or explicit locking is the dependable fix."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Javadoc — @Transactional (isolation attribute)",
+      "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

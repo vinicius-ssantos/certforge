@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "EASY",
+  "difficultyRationale": "A common, very practical early-career bug — knowing where @SpringBootApplication's implicit component scan actually looks.",
+  "prompt": "A Spring Boot application has its main class, annotated `@SpringBootApplication`, at `com.example.orders.OrdersApplication`. A `@Service` class is defined at `com.example.billing.InvoiceService` — a sibling package, not a sub-package of `com.example.orders`. At startup, autowiring a dependency of type `InvoiceService` elsewhere fails with `NoSuchBeanDefinitionException`. Why isn't `InvoiceService` being found?",
+  "explanation": "`@SpringBootApplication` includes `@ComponentScan` with no explicit `basePackages`, which defaults to scanning the package of the annotated class and all of its sub-packages. `com.example.billing` is not a sub-package of `com.example.orders` (they are siblings under `com.example`), so it falls outside the default scan and `InvoiceService` is never registered as a bean, regardless of it being correctly annotated `@Service`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`@Service` only registers a bean when the annotated class sits in the exact same package as the main `@SpringBootApplication` class, and never when it's placed in any sub-package beneath it.",
+      "correct": false,
+      "explanation": "The default component scan does cover sub-packages of the main class's package, not just the exact same package; the problem here is that `com.example.billing` isn't a sub-package of `com.example.orders` at all."
+    },
+    {
+      "key": "B",
+      "text": "The default component scan from `@SpringBootApplication` covers the main class's package and sub-packages; `com.example.billing` is a sibling, not a sub-package, so it falls outside that scan.",
+      "correct": true,
+      "explanation": "Correct. This is the classic package-structure pitfall: the implicit `@ComponentScan` only reaches down from the main class's package, never sideways to sibling packages, no matter how correctly the class elsewhere is annotated."
+    },
+    {
+      "key": "C",
+      "text": "`@Service` beans always require an explicit `@Bean` method declared in some `@Configuration` class in addition to the stereotype annotation; the annotation alone never actually registers a bean by itself.",
+      "correct": false,
+      "explanation": "`@Service` (like `@Component`, `@Repository`, `@Controller`) is a stereotype annotation that component scanning picks up directly — no separate `@Bean` method is required, as long as the class is within a scanned package."
+    },
+    {
+      "key": "D",
+      "text": "Spring Boot only scans the packages explicitly listed in `application.properties` under a `spring.main.sources` property, and this project simply hasn't configured that property with the right package names.",
+      "correct": false,
+      "explanation": "There is no such property governing component scan base packages; the scan base is determined by the location of the `@SpringBootApplication`-annotated class (or an explicit `@ComponentScan(basePackages = ...)`), not by an `application.properties` entry."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Javadoc — @ComponentScan (\"If specific packages are not defined, scanning will occur recursively beginning with the package of the class that declares this annotation\")",
+      "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/ComponentScan.html"
+    },
+    {
+      "title": "Spring Boot Reference Documentation — Structuring Your Code (locating the main application class as the root of the implicit scan)",
+      "url": "https://docs.spring.io/spring-boot/reference/using/structuring-your-code.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

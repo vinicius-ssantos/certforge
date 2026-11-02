@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "EASY",
+  "difficultyRationale": "A frequent early-career mistake: assuming a profile-qualified bean has some implicit fallback when no profile is active.",
+  "prompt": "A bean is defined as:\n\n```java\n@Component\n@Profile(\"prod\")\npublic class S3FileStorage implements FileStorage { ... }\n```\n\nNo other `FileStorage` implementation exists in the application. It is started with no `spring.profiles.active` property set at all — no profile, including `default`, is explicitly activated. What happens?",
+  "explanation": "A bean annotated `@Profile(\"prod\")` is registered only when `\"prod\"` is among the active profiles. There is no implicit rule that makes `\"prod\"` (or any other named profile) active just because nothing was configured; the only profile Spring treats as implicitly active with no configuration is the one literally named `default`, and this bean was never annotated for that. So the bean is never registered, and startup fails wherever `FileStorage` is injected, with an unsatisfied-dependency error.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring creates the bean anyway, because `\"prod\"` is treated as the implicit default profile whenever no profile is explicitly set — the framework assumes a production environment is the safest fallback when configuration is incomplete.",
+      "correct": false,
+      "explanation": "The implicit profile that applies when none is configured is literally named `default`, not `\"prod\"`. `@Profile(\"prod\")` only activates under a profile named `prod`."
+    },
+    {
+      "key": "B",
+      "text": "The application fails to start wherever `FileStorage` is injected, because the bean is registered only when `\"prod\"` is active, and no profile — including `default` — makes it active here.",
+      "correct": true,
+      "explanation": "Correct. With no explicit profile and no `@Profile(\"default\")` bean to cover the gap, there is simply no `FileStorage` candidate for Spring to inject."
+    },
+    {
+      "key": "C",
+      "text": "Spring activates every profile-qualified bean whose profile name doesn't start with `\"!\"` whenever no profiles are explicitly configured, treating a bare `@Profile(\"prod\")` the same as an unconditional `@Component` in that situation.",
+      "correct": false,
+      "explanation": "There is no such rule. A bean restricted to a named profile stays inactive unless that specific profile (or, for a negated expression, the absence of it) is actually active."
+    },
+    {
+      "key": "D",
+      "text": "The bean is automatically registered under the special `default` profile, since no profiles were configured at all.",
+      "correct": false,
+      "explanation": "A bean only activates under `default` if it is itself annotated `@Profile(\"default\")`. `@Profile(\"prod\")` does not fall back to `default`; it is scoped strictly to the profile named `prod`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference — Profiles",
+      "url": "https://docs.spring.io/spring-boot/reference/features/profiles.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate understands that bean scope, not just class design, decides whether mutable instance state is safe to use.",
+  "prompt": "A bean is defined with the default scope and has a mutable, non-thread-safe instance field that accumulates per-request data (e.g. `private final List<String> items = new ArrayList<>();`, appended to on every call). Under load from many concurrent requests, this causes data from one request to leak into another's results. What is the most direct fix that addresses the actual cause?",
+  "explanation": "The default Spring bean scope is `singleton`: exactly one instance is created per Spring container and shared by every caller, including concurrent HTTP request threads. A mutable instance field on a singleton is therefore shared, unsynchronized, mutable state across threads — exactly the bug described. Declaring the bean `@Scope(\"prototype\")` (or restructuring it to hold no mutable per-call state) gives each injection point, or in practice each use, its own instance, so per-request data no longer crosses threads. Synchronizing access to the shared list would fix the race but not the leakage of one request's data into another's result, since the list itself is still shared.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Add `synchronized` to the methods that read and write `items`, which serializes concurrent access to the list so no two threads ever mutate it at the same instant.",
+      "correct": false,
+      "explanation": "Synchronizing prevents a torn/corrupted list under concurrent writes, but every request still shares the same `items` list, so one request's accumulated data still shows up in another's results — the leakage, not just the race, is the reported bug."
+    },
+    {
+      "key": "B",
+      "text": "Mark the field `volatile` so each thread sees the latest write to it instead of a stale, thread-local cached copy left over from an earlier read.",
+      "correct": false,
+      "explanation": "`volatile` only affects visibility of the field reference itself, not the fact that a single shared `ArrayList` instance is being mutated by every request; it does nothing to stop the cross-request leakage."
+    },
+    {
+      "key": "C",
+      "text": "Give the bean prototype scope (or otherwise stop holding per-call state on a singleton instance), so each use gets its own instance of the mutable state.",
+      "correct": true,
+      "explanation": "Correct. The root cause is scope: a singleton bean is shared, so instance fields on it are effectively global mutable state. Prototype scope (a new instance per request for the bean) — or, more commonly in practice, moving the per-call accumulator into a local variable or method parameter instead of an instance field — removes the sharing instead of just guarding access to it."
+    },
+    {
+      "key": "D",
+      "text": "Switch the field's type from `ArrayList` to `CopyOnWriteArrayList`, which snapshots the backing array on every write so readers never observe a partially-updated list.",
+      "correct": false,
+      "explanation": "A thread-safe collection type prevents concurrent-modification corruption of the list itself, but all requests would still read and write the same shared list, so data still leaks between unrelated requests."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Bean Scopes (singleton is the default; prototype creates a new instance per request for the bean)",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

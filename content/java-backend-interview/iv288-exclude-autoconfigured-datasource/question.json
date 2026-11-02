@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Distinguishes the two legitimate ways to turn off an auto-configuration class from the one that doesn't actually work.",
+  "prompt": "A Spring Boot application needs to completely disable `DataSourceAutoConfiguration` because it provides its own, fully manual `DataSource` setup and wants no auto-configured datasource logic involved at all, not even as a fallback. Simply defining a custom `DataSource` `@Bean` does not fully achieve this, because the auto-configuration class still runs its own conditional checks. What is the correct way to disable it outright?",
+  "explanation": "Defining a custom `DataSource` bean relies on auto-configuration classes backing off via `@ConditionalOnMissingBean`, which usually works but still means the auto-configuration class is evaluated and only conditionally skipped. To exclude it outright regardless of what beans exist, Spring Boot provides `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)` (or the equivalent `@EnableAutoConfiguration(exclude = ...)`), and the property-based equivalent `spring.autoconfigure.exclude=org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration`. Either tells Spring Boot's auto-configuration import selector to never even consider that class.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Remove the JDBC starter dependency from the build file entirely; auto-configuration classes are tied directly to the presence of their starter artifact on the classpath and cannot be disabled by annotation or property alone.",
+      "correct": false,
+      "explanation": "Removing the dependency would also remove classes the application may still need, and it's unnecessary — Spring Boot does provide an annotation- and property-based way to exclude a specific auto-configuration class without touching dependencies."
+    },
+    {
+      "key": "B",
+      "text": "Annotate the custom `DataSource` bean method with `@Primary`; this tells Spring Boot's entire auto-configuration mechanism to skip evaluating `DataSourceAutoConfiguration` entirely during startup.",
+      "correct": false,
+      "explanation": "`@Primary` only affects which bean is chosen when multiple candidates of the same type exist at injection time; it does not stop an auto-configuration class from being evaluated or its other conditional beans from being considered."
+    },
+    {
+      "key": "C",
+      "text": "Use `@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)` (or `spring.autoconfigure.exclude`), which tells auto-configuration to never evaluate that class, rather than relying on it backing off conditionally.",
+      "correct": true,
+      "explanation": "Correct. The `exclude` attribute (or its property equivalent) removes the named auto-configuration class from consideration entirely, which is the documented way to disable one outright instead of depending on `@ConditionalOnMissingBean` back-off behavior."
+    },
+    {
+      "key": "D",
+      "text": "Set `spring.datasource.url` to an empty string in `application.properties`; Spring Boot interprets a blank datasource URL as an explicit signal to skip `DataSourceAutoConfiguration` entirely.",
+      "correct": false,
+      "explanation": "There is no such interpretation of an empty datasource URL; the documented mechanism for disabling a specific auto-configuration class is the `exclude` attribute or the `spring.autoconfigure.exclude` property, not a sentinel property value."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference Documentation — Auto-configuration, Disabling Specific Auto-configuration Classes",
+      "url": "https://docs.spring.io/spring-boot/reference/using/auto-configuration.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

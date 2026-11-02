@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether the candidate reaches for the real fix (breaking the cycle) rather than papering over it with @Lazy as a first instinct.",
+  "prompt": "`OrderService` takes a `PaymentService` in its constructor, and `PaymentService` takes an `OrderService` in its constructor. The application fails to start with a circular-dependency error. A teammate suggests adding `@Lazy` to one of the constructor parameters to make it start. What is the most accurate thing to tell them about that fix?",
+  "explanation": "`@Lazy` on one side of the cycle makes Spring inject a lazy-initialization proxy instead of resolving the real bean immediately, which does make the context start — but it does not remove the underlying design problem: the two services still depend on each other, meaning neither can be understood, tested, or reasoned about independently, and the cycle can still produce confusing runtime behavior (e.g. infinite recursion if a call chain crosses the boundary twice before anything terminates). The more durable fix is to break the cycle structurally — typically by extracting the shared responsibility both services need into a third component or domain object that both depend on, so the dependency graph becomes a tree again.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`@Lazy` is the officially recommended fix for any circular dependency, and the Spring team advises reaching for it instead of restructuring the classes whenever a cycle like this one appears in practice.",
+      "correct": false,
+      "explanation": "`@Lazy` is documented as a way to make a cycle startable, not as a recommended design fix; the circular dependency between the two services remains after adding it."
+    },
+    {
+      "key": "B",
+      "text": "`@Lazy` is only valid on field and setter injection points, not on constructor parameters, so this particular suggestion would actually fail to compile exactly as the teammate wrote it.",
+      "correct": false,
+      "explanation": "`@Lazy` is valid on constructor parameters and injection points generally; it causes Spring to inject a lazy proxy that defers resolving the real bean until first use, which is exactly how it unblocks the cycle."
+    },
+    {
+      "key": "C",
+      "text": "There is no way to resolve this cycle except by merging `OrderService` and `PaymentService` into a single class, since any two mutually dependent beans must ultimately become one.",
+      "correct": false,
+      "explanation": "Merging the classes is one way to remove a cycle but far from the only or the best one; extracting the shared responsibility into a separate collaborator both services depend on resolves the cycle while keeping them as distinct, focused classes."
+    },
+    {
+      "key": "D",
+      "text": "`@Lazy` will make the application start, but the two services still depend on each other; it's better fixed by breaking the cycle, e.g. extracting shared responsibility into a third component.",
+      "correct": true,
+      "explanation": "Correct. `@Lazy` defers resolution of one side of the cycle until it is actually used, which is enough to let the container finish starting, but the bidirectional coupling between `OrderService` and `PaymentService` is a design smell `@Lazy` masks rather than removes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Dependency Injection: Circular Dependencies",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

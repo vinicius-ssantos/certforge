@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether the candidate can match a test's actual scope to the right annotation, rather than defaulting to the heaviest option out of habit.",
+  "prompt": "A test for a single `@RestController` needs to verify request validation and the shape of the JSON response, without touching a real database and without starting the full application context. Which annotation fits this best, and why?",
+  "explanation": "`@WebMvcTest(MyController.class)` loads only the web layer: the targeted controller, its `@ControllerAdvice`s, Jackson's message-converter configuration, and `MockMvc`, while repository and service beans are provided as mocks rather than real implementations. That matches exactly what the test needs — request/response behavior, not persistence — and starts far less of the context than a full `@SpringBootTest`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`@SpringBootTest`, because it is the most complete test configuration and therefore the safest default choice for any controller test, regardless of how narrow the behavior actually under test happens to be.",
+      "correct": false,
+      "explanation": "`@SpringBootTest` loads the entire application context by default, which is slower and pulls in the database and service layers this test does not need — it is not the better fit just because it is the most complete option."
+    },
+    {
+      "key": "B",
+      "text": "`@SpringBootTest(webEnvironment = WebEnvironment.NONE)`, because disabling the embedded web environment removes the need for a database while still exercising the controller's JSON behavior.",
+      "correct": false,
+      "explanation": "`WebEnvironment.NONE` disables the web server (and the request-handling infrastructure a controller test needs, such as `MockMvc`'s usual auto-configuration) — it does not, by itself, avoid loading the database layer either."
+    },
+    {
+      "key": "C",
+      "text": "`@DataJpaTest`, because it auto-configures an in-memory repository layer that any controller test implicitly depends on, and that embedded database also quietly backs the `MockMvc` dispatch a controller slice test ultimately needs underneath.",
+      "correct": false,
+      "explanation": "`@DataJpaTest` is the slice for the persistence layer, not the web layer — it does not load a `DispatcherServlet`, `MockMvc`, or the controller itself, which is exactly what this test needs to exercise."
+    },
+    {
+      "key": "D",
+      "text": "`@WebMvcTest(MyController.class)`, because it loads only the web layer — the controller, its `@ControllerAdvice`s, and `MockMvc` — with service and repository beans mocked in rather than real, so no database is involved.",
+      "correct": true,
+      "explanation": "Correct. This is the documented purpose of the `@WebMvcTest` slice: a narrow, fast test of the web layer in isolation from persistence."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference — Testing Spring Boot Applications (auto-configured tests)",
+      "url": "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "HARD",
+  "difficultyRationale": "Catches the common mistake of assuming @Valid alone validates simple request parameters, when Spring's method-level validation actually requires @Validated at the class level.",
+  "prompt": "A `@RestController` has a handler method `getOrder(@RequestParam @Min(1) long orderId)`. Sending a request with `orderId=0` does not produce a 400 response with a validation error — the method body runs with `orderId` equal to 0. The team expected the `@Min(1)` constraint to be enforced automatically, the way it is for a `@Valid`-annotated `@RequestBody` parameter. What is missing?",
+  "explanation": "Constraint annotations directly on simple method parameters (like `@RequestParam`, `@PathVariable`) are not validated by the same mechanism as a `@Valid @RequestBody` object. The body case is handled by Spring MVC's argument resolver recognizing `@Valid`/`@Validated` on the parameter and invoking the validator directly. Validating annotated simple parameters, by contrast, requires Spring's method-level validation support, which is activated by annotating the controller class itself with `@Validated` — this causes Spring to wrap the bean in a proxy (via `MethodValidationPostProcessor`) that validates annotated parameters on every method call and throws a `ConstraintViolationException` on failure. Without `@Validated` on the class, the `@Min(1)` annotation on the parameter is inert.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The dependency for Bean Validation (e.g. `spring-boot-starter-validation`) must be missing from the project's build file, which would explain why no constraint of any kind is being enforced anywhere.",
+      "correct": false,
+      "explanation": "If the validation starter were entirely missing, `@Valid @RequestBody` validation would also fail to run, but the scenario doesn't say that's broken — the specific gap described (method parameter constraints being ignored) points to missing class-level `@Validated`, not an absent dependency."
+    },
+    {
+      "key": "B",
+      "text": "The controller class needs to be annotated `@Validated`, which activates Spring's method-level validation (via a validating proxy) for constraint annotations on simple method parameters like `@RequestParam`.",
+      "correct": true,
+      "explanation": "Correct. `@Valid`/`@Validated` on a `@RequestBody` parameter triggers object validation through the HTTP message argument resolver directly, but constraints on simple parameters are only enforced through method-level validation, which requires the class itself to be annotated `@Validated` so Spring wraps it in a validating proxy."
+    },
+    {
+      "key": "C",
+      "text": "`@Min` cannot be applied to a primitive `long` parameter at all; Bean Validation only supports constraining boxed `Long` values, so the constraint on this primitive is silently ignored by the validator.",
+      "correct": false,
+      "explanation": "Bean Validation's numeric constraint annotations, including `@Min`, support primitive numeric types as well as their boxed equivalents; the primitive type is not the reason the constraint goes unenforced here."
+    },
+    {
+      "key": "D",
+      "text": "`@RequestParam` values are always treated as raw, unconverted strings at the point any constraint is checked, so numeric constraints like `@Min` can never meaningfully apply to a parameter bound this way at all.",
+      "correct": false,
+      "explanation": "Spring converts the raw request parameter to the declared parameter type (here `long`) before the method is invoked, and method-level validation (once enabled via class-level `@Validated`) validates the converted value, not the raw string — the type conversion itself is not what's blocking the constraint."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Validation, Method Validation (@Validated at the class level activates method parameter validation)",
+      "url": "https://docs.spring.io/spring-framework/reference/core/validation/beanvalidation.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

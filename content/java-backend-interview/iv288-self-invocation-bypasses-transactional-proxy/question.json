@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "HARD",
+  "difficultyRationale": "The self-invocation pitfall is one of the most frequently misdiagnosed Spring bugs in production code, and testing it requires understanding proxy-based AOP, not just the annotation's intent.",
+  "prompt": "Inside `OrderService`, the non-transactional method `placeOrder()` calls `this.saveOrder(order)` directly, where `saveOrder()` is annotated `@Transactional`. Both methods live in the same class, and the project uses Spring's default proxy-based AOP (no AspectJ compile-time or load-time weaving is configured). When `placeOrder()` invokes `saveOrder()` this way, what actually happens?",
+  "explanation": "Spring's default AOP implementation works by wrapping the bean in a proxy; advice such as the transaction interceptor only runs when a call arrives *through that proxy*. A call made as `this.saveOrder(...)` from inside the same object goes directly to the real method, never passing through the proxy, so `@Transactional` has no effect on it — the method runs with whatever transaction (if any) was already active on the caller's thread.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring transparently routes the self-invocation through the proxy anyway, exactly as it would if an external caller invoked `saveOrder()` on the injected bean reference, because the container rewrites `this` references inside managed beans.",
+      "correct": false,
+      "explanation": "This is the common misconception. A self-invocation via `this` never reaches the proxy; only calls that come in from outside the bean (through the reference other beans were injected with) go through it."
+    },
+    {
+      "key": "B",
+      "text": "`saveOrder()` runs with no transaction managed by this annotation at all, because `this.saveOrder(...)` bypasses the proxy entirely — the advice only applies when an external caller invokes the method through the bean's proxy reference.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the self-invocation pitfall: the annotation is silently ignored for internal calls under default proxy-based AOP."
+    },
+    {
+      "key": "C",
+      "text": "Spring Boot fails application startup with a `BeanCreationException`, since the container's bean-validation pass detects the self-invocation pattern statically and explicitly rejects it as invalid `@Transactional` configuration before the context finishes loading.",
+      "correct": false,
+      "explanation": "There is no such startup check. The code compiles and runs fine; it just silently does not get the transactional behavior the developer expected, which is what makes this bug hard to notice."
+    },
+    {
+      "key": "D",
+      "text": "Spring detects the self-invocation through bytecode analysis at class-loading time and weaves the transaction advice directly into the compiled method body, making a proxy unnecessary.",
+      "correct": false,
+      "explanation": "That describes AspectJ compile-time or load-time weaving, which the question explicitly rules out. Without it, Spring's default mechanism is proxy-based, and a proxy cannot intercept a call that never passes through it."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Understanding AOP Proxies",
+      "url": "https://docs.spring.io/spring-framework/reference/core/aop/proxying.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

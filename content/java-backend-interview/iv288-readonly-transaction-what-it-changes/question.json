@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "readOnly is widely used as a performance hint but widely misunderstood as an enforcement mechanism; the question separates the two.",
+  "prompt": "A service method is annotated `@Transactional(readOnly = true)`. Which statement about what this attribute actually does is correct?",
+  "explanation": "`readOnly = true` is a hint passed down to the underlying transaction infrastructure and persistence provider, not a Java-level enforcement mechanism. For example, Hibernate can use it to skip dirty checking and flushing for entities loaded in that session, and some JDBC drivers or databases apply their own read-only optimizations. Spring itself does not inspect the SQL executed inside the method and does not throw if a write statement runs there.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring throws an exception at runtime if any INSERT, UPDATE, or DELETE statement is executed inside a `readOnly = true` transaction, because the transaction interceptor inspects each statement's SQL keyword before letting it reach the underlying connection.",
+      "correct": false,
+      "explanation": "Spring performs no such statement-level inspection or enforcement. Whether a write is blocked depends entirely on the underlying driver or database, not on Spring's transaction management itself."
+    },
+    {
+      "key": "B",
+      "text": "`readOnly = true` has no real effect at all on any layer of the stack; it exists purely as documentation for other developers reading the code, the same as a code comment would, and nothing underneath ever reads the flag.",
+      "correct": false,
+      "explanation": "It is not purely cosmetic — persistence providers like Hibernate and some JDBC drivers do act on this flag, for example by skipping dirty-checking and flush processing."
+    },
+    {
+      "key": "C",
+      "text": "`readOnly = true` automatically routes the query to a read replica in a primary-replica database setup, with no further configuration needed.",
+      "correct": false,
+      "explanation": "Automatic read/write routing requires separate infrastructure, such as a routing `DataSource` that inspects the current transaction's `readOnly` flag. The attribute alone does not perform that routing."
+    },
+    {
+      "key": "D",
+      "text": "It is a hint to the transaction infrastructure — for example, letting an ORM skip dirty-checking and flushing, or letting a driver apply read-only optimizations — but Spring itself does not block a write statement from running inside such a transaction.",
+      "correct": true,
+      "explanation": "Correct. It changes what the persistence layer does for performance, not what SQL is permitted to run."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Javadoc — @Transactional (readOnly attribute)",
+      "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

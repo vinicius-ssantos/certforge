@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Precedence ordering across property sources is one of the most operationally relevant pieces of Spring Boot trivia — misunderstanding it causes real \"why didn't my override take effect\" incidents.",
+  "prompt": "`application.yml` (packaged inside the jar) sets `server.port: 8080`. The application is started with the OS environment variable `SERVER_PORT=9090` set, and also with the command-line argument `--server.port=7070`. Which port does the application actually bind to, and why?",
+  "explanation": "Spring Boot resolves properties from an ordered list of sources, and the highest-precedence source that defines a given key wins. Command-line arguments sit above both OS environment variables and the packaged `application.yml` in that documented order, so `--server.port=7070` overrides both of the others.",
+  "options": [
+    {
+      "key": "A",
+      "text": "8080, because the packaged `application.yml` is read first and nothing overrides a value already set in the application's own configuration file.",
+      "correct": false,
+      "explanation": "The packaged configuration file sits near the bottom of Spring Boot's precedence order, specifically so that both environment variables and command-line arguments can override it."
+    },
+    {
+      "key": "B",
+      "text": "9090, because OS environment variables outrank both the packaged configuration file and command-line arguments, since the operating system's own settings are treated as the most trustworthy source available at startup.",
+      "correct": false,
+      "explanation": "Environment variables do outrank the packaged configuration file, but they are documented as ranking below command-line arguments, not above them."
+    },
+    {
+      "key": "C",
+      "text": "7070, because Spring Boot's documented property source order places command-line arguments above both OS environment variables and `application.yml`; the highest-precedence source defining the key wins.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the documented ordering, and it is why a command-line override always wins over both of the other two in this scenario."
+    },
+    {
+      "key": "D",
+      "text": "The application fails to start with a conflicting-property error, since the same key is set by three different sources simultaneously.",
+      "correct": false,
+      "explanation": "Spring Boot does not treat multiple sources defining the same key as an error; resolving the conflict by precedence order is the normal, documented behavior, not a failure condition."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference — Externalized Configuration (property source ordering)",
+      "url": "https://docs.spring.io/spring-boot/reference/features/external-config.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}
