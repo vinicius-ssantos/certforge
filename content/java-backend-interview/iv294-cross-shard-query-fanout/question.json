@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Common follow-up once a candidate knows sharding exists, but hasn't had to design around its query limits.",
+  "prompt": "A product catalog is sharded by `product_id` across 8 databases. A new requirement asks for 'all orders placed by any customer for products in category X, sorted by order date' — a query that, on a single unsharded database, would be a straightforward join. Why is this significantly harder now?",
+  "explanation": "Sharding by `product_id` scatters related rows (orders for products in category X) across whichever shards happen to hold those product IDs. A single SQL join across shard boundaries isn't possible — the database engine on shard 1 has no access to data on shard 2. The application has to query every relevant shard separately, merge the partial results, and re-sort them itself — fan-out work the single-database version never needed.",
+  "options": [
+    {
+      "key": "D",
+      "text": "No single database engine instance can see rows that live on a different shard, so the join can't be pushed down to the database at all — the application must query every relevant shard separately and merge and re-sort the partial results itself.",
+      "correct": true,
+      "explanation": "Correct. Sharding splits the data across independent database instances; the application layer has to do the fan-out, result-merging, and re-sorting that a single database's join would otherwise have handled in one place."
+    },
+    {
+      "key": "B",
+      "text": "Category X's products are automatically replicated to every shard once this kind of cross-cutting query is detected, which doubles the storage footprint of category X's data but otherwise makes the join work exactly as before.",
+      "correct": false,
+      "explanation": "There's no such automatic query-triggered replication mechanism; sharded databases don't detect query patterns and reshuffle data in response — the data stays wherever its shard key placed it."
+    },
+    {
+      "key": "C",
+      "text": "The `ORDER BY order date` clause is what breaks, specifically because sorting requires a single coordinating transaction across all shards, which most sharded setups disable entirely for performance reasons, making any sort impossible.",
+      "correct": false,
+      "explanation": "Sorting doesn't require a cross-shard transaction; the application can fetch each shard's matching rows (already sorted locally, or not) and merge-sort the partial result sets itself without any distributed transaction being involved."
+    },
+    {
+      "key": "A",
+      "text": "Sharding by `product_id` secretly also shards the `orders` and `customers` tables along the same key automatically, so the real issue is that customer and order data for category X is now permanently and irrecoverably lost from the other 7 shards.",
+      "correct": false,
+      "explanation": "Sharding one table by a key doesn't automatically shard unrelated tables the same way, and no data is lost — orders for category X's products simply live wherever the application's sharding logic placed them, retrievable with the right fan-out query."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure Architecture Center — Sharding pattern (querying across multiple shards)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/sharding"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

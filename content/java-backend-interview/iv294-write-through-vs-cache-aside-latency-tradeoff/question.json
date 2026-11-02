@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Write-through is often confused with cache-aside; a candidate should articulate the actual latency/staleness trade-off between them, not just name both.",
+  "prompt": "A team is deciding between cache-aside and write-through caching for a product catalog service. With write-through, every write goes to the cache first, which then writes through to the database before the write is considered complete. Compared to cache-aside, what does this actually trade off?",
+  "explanation": "Write-through keeps the cache always consistent with the database immediately after a write, because the write path itself updates both — there's no staleness window on writes the way there is with cache-aside (which only refreshes on a later read miss). The cost is that every write now pays the latency of writing to both the cache and the database before it can return, and if a given key is never read again, that cache write was wasted effort — cache-aside only populates the cache for keys that are actually read.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Write-through makes every write faster than cache-aside because it skips the database entirely and only commits data to the cache, deferring the database write to a background process at an unspecified later time.",
+      "correct": false,
+      "explanation": "That describes write-behind (write-back), not write-through. Write-through writes to the database synchronously as part of the write path, so it does not skip or defer the database write."
+    },
+    {
+      "key": "B",
+      "text": "Write-through keeps the cache consistent right after every write, at the cost of added write latency and possibly caching keys never read again, where cache-aside only pays the read-miss cost for keys actually requested.",
+      "correct": true,
+      "explanation": "Correct. The write path pays more (it writes to both stores before returning) in exchange for no post-write staleness window — a direct trade of write latency against staleness that cache-aside doesn't make the same way."
+    },
+    {
+      "key": "C",
+      "text": "Write-through and cache-aside produce byte-for-byte identical read and write latency profiles in every single case; the only real difference between them is which team happens to be responsible for writing the caching code.",
+      "correct": false,
+      "explanation": "They have materially different latency profiles: write-through adds latency to every write by writing to the cache synchronously, while cache-aside's writes go straight to the database and only the cache reads carry extra cost on a miss."
+    },
+    {
+      "key": "D",
+      "text": "Write-through requires the cache to be larger than the full dataset size, since it must permanently retain every value ever written, whereas cache-aside can safely use a cache smaller than the dataset.",
+      "correct": false,
+      "explanation": "Write-through doesn't require unbounded retention — entries written through can still be evicted under normal eviction policy (LRU, TTL, etc.) just like in cache-aside; cache sizing isn't the distinguishing factor between the two patterns."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon ElastiCache Documentation — Caching Strategies (Lazy Loading and Write-Through trade-offs)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/database-caching-strategies-using-redis/caching-patterns.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

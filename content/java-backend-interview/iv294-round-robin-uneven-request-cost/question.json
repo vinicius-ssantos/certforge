@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Requires knowing round-robin's assumption, not just its mechanics.",
+  "prompt": "A service sits behind a load balancer using plain round-robin across 4 identical instances. Some requests are a cheap cache lookup; others trigger a slow report generation that ties up an instance for seconds. Under load, a few instances become consistently overloaded while others sit idle, even though round-robin sends each instance the same share of requests. Why?",
+  "explanation": "Round-robin distributes request *count* evenly, not request *cost*. It has no notion of how long a request will occupy an instance, so an instance that happens to receive several of the expensive report-generation requests in a row stays busy long after its round-robin peers have moved on to new, cheap requests — the even count hides a very uneven workload.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Round-robin assigns an equal number of requests to each instance over time, but it has no awareness of how expensive each request is, so an instance that lands several slow requests in a row stays busy while peers that got cheap requests sit idle.",
+      "correct": true,
+      "explanation": "Correct. Round-robin balances request count, not request cost or current load — exactly the gap that lets a handful of expensive requests pile onto one instance while others go idle."
+    },
+    {
+      "key": "B",
+      "text": "The load balancer's round-robin counter resets whenever an instance takes longer than a configured threshold to respond, which skips that instance for several subsequent cycles and concentrates load unevenly onto the remaining ones instead.",
+      "correct": false,
+      "explanation": "Plain round-robin has no such threshold-based counter reset; it cycles through instances in a fixed sequence regardless of how long any individual instance's previous request took to complete."
+    },
+    {
+      "key": "C",
+      "text": "Round-robin load balancers maintain a persistent session affinity by default, routing a given client's repeated requests back to the same instance, so a client doing several expensive reports in a row naturally overloads just that one instance.",
+      "correct": false,
+      "explanation": "Plain round-robin has no built-in session affinity; each new request is sent to the next instance in sequence regardless of which client sent it or which instance served that client's last request."
+    },
+    {
+      "key": "D",
+      "text": "The 4 instances are not actually identical at the hardware level, and the imbalance is really a symptom of silently uneven CPU allocation between them, which round-robin cannot be blamed for since it only controls request routing, not compute capacity.",
+      "correct": false,
+      "explanation": "The question states the instances are identical, and the imbalance appears purely from request-cost variance under an even-count distribution — no hardware asymmetry needs to be assumed to explain it."
+    }
+  ],
+  "references": [
+    {
+      "title": "NGINX Documentation — HTTP Load Balancing (round-robin as the default, cost-unaware method)",
+      "url": "https://nginx.org/en/docs/http/load_balancing.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

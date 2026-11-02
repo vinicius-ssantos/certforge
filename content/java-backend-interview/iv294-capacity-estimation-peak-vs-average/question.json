@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A common back-of-the-envelope mistake that surfaces specifically under real load, not in a smoke test.",
+  "prompt": "A team is asked to estimate how many application server instances they need for a new feature expecting 10 million requests per day. They divide 10,000,000 by the number of seconds in a day (~86,400) to get roughly 116 requests per second, and size their fleet to comfortably handle that. In production, the service falls over during the first morning traffic spike. What did the estimate get wrong?",
+  "explanation": "Dividing total daily volume evenly across all 86,400 seconds assumes traffic is perfectly uniform throughout the day, which almost no real traffic pattern is. Real usage concentrates into peak hours — a morning spike can easily be several times the 24-hour average rate. Capacity needs to be sized for the expected peak requests-per-second, not the average, or the system will be overwhelmed exactly when it matters most: during the busy periods the average silently smooths over.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Dividing total daily requests evenly across all seconds in a day assumes uniform traffic, but real usage concentrates into peak hours — capacity must be sized for the expected peak requests-per-second, which can be several times the 24-hour average.",
+      "correct": true,
+      "explanation": "Correct. The average-rate figure hides the shape of the traffic curve; a system sized only to the average has no headroom for the peak, which is exactly when load actually threatens to overwhelm it."
+    },
+    {
+      "key": "B",
+      "text": "116 requests per second was calculated correctly as an average, but the team used the wrong unit conversion — seconds per day is actually closer to 43,200, not 86,400 — so the true average request rate is roughly double what they originally estimated.",
+      "correct": false,
+      "explanation": "A day has 24 hours × 60 minutes × 60 seconds = 86,400 seconds; this is the correct figure, and the estimate's arithmetic for the average rate was not the source of the problem — the issue is using an average at all, not a unit-conversion error."
+    },
+    {
+      "key": "C",
+      "text": "10 million requests per day was itself an underestimate of total traffic, and the real fix is simply to re-measure actual production traffic volume much more accurately before doing any further capacity math, regardless of peak-vs-average concerns.",
+      "correct": false,
+      "explanation": "Even a perfectly accurate total daily volume figure doesn't fix the underlying error, since the problem is specifically about how that total is translated into a sizing number — dividing by a full day's worth of seconds — not about whether the total itself was measured correctly."
+    },
+    {
+      "key": "D",
+      "text": "The server fleet fell over purely because of a memory leak completely unrelated to traffic volume, which happened to manifest during the morning spike coincidentally, and the capacity estimate itself was already adequate for the real average load.",
+      "correct": false,
+      "explanation": "The scenario attributes the outage directly to the morning traffic spike overwhelming capacity sized to an average rate, which is a capacity-estimation problem, not an unrelated coincidental memory leak introduced without any basis in the scenario."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Well-Architected Framework — PERF05-BP04 Load test your workload (flags \"only conduct load testing to your expected load and not beyond\" as a common anti-pattern)",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/performance-efficiency-pillar/perf_performing_architecture_load_test.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

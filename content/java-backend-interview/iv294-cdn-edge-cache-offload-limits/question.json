@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "EASY",
+  "difficultyRationale": "Tests understanding the boundary of what a CDN helps with, which is often overstated by candidates as a universal performance fix.",
+  "prompt": "A team puts a CDN in front of their web app, hoping it will fix slowness across the whole product. It meaningfully speeds up the marketing site and static assets, but does nothing for the authenticated dashboard, which still feels just as slow as before, with every dashboard request still hitting the origin servers. Why doesn't the CDN help there?",
+  "explanation": "A CDN works by caching content at edge locations close to users and serving repeat requests for that same content from the edge instead of the origin. That only helps for content that's cacheable and shared across requests — static assets, public pages. A personalized, per-user authenticated dashboard response generally can't be cached and reused for a different request (it's unique to that user's session/data), so every request for it still has to reach the origin, unchanged by the CDN's presence.",
+  "options": [
+    {
+      "key": "B",
+      "text": "A CDN caches content at the edge and serves repeat requests for it from there, which only helps for content that's shared and cacheable across requests; a personalized per-user dashboard response generally isn't, so it still has to reach the origin every time.",
+      "correct": true,
+      "explanation": "Correct. The CDN's benefit comes specifically from reusing a cached response across multiple requests — personalized, non-cacheable content has no 'reuse' to exploit, so the origin still does the same work it always did."
+    },
+    {
+      "key": "A",
+      "text": "The CDN is misconfigured to only cache requests under a specific path prefix, and simply extending that path-prefix configuration to also include the dashboard's routes would make the CDN cache and accelerate it the same way it does the marketing site.",
+      "correct": false,
+      "explanation": "Even with the broadest path configuration, a CDN still can't usefully cache a personalized, authenticated response the same way it caches a shared static page — the content itself differs per request, so caching it wouldn't help subsequent different users."
+    },
+    {
+      "key": "C",
+      "text": "CDNs only accelerate HTTPS traffic for domains verified through a specific certificate authority partnership, and the dashboard's subdomain simply hasn't completed that verification process yet, unlike the marketing site's domain.",
+      "correct": false,
+      "explanation": "There's no such certificate-authority-partnership gating on which domains a CDN can accelerate; any domain properly configured to use the CDN benefits from edge delivery for cacheable content, regardless of which CA issued its certificate."
+    },
+    {
+      "key": "D",
+      "text": "The dashboard is slow for a completely unrelated reason — a missing database index — and the team should expect the CDN rollout itself to have no effect either way, since CDNs exclusively handle network transport layer issues, not application-level content delivery.",
+      "correct": false,
+      "explanation": "CDNs do handle application-level content delivery (caching and serving actual response content from the edge), not just network transport — the real reason the CDN specifically doesn't help here is the content's lack of cacheability, not a general transport-only scope."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon CloudFront Developer Guide — What Is Amazon CloudFront? (caching content at edge locations)",
+      "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

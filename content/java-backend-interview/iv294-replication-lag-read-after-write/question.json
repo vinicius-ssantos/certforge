@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000112",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The classic bug caused by replication lag, framed as a concrete user-facing complaint.",
+  "prompt": "A user updates their profile photo. The PUT request returns 200 OK, but when the user immediately refreshes the page, their old photo is still showing — it only updates correctly a second or two later. Writes go to the primary database; the page's GET request reads from a read replica. What's happening?",
+  "explanation": "The write committed successfully on the primary, but replication to the read replica is asynchronous and takes a small, variable amount of time (replication lag). The GET request that follows immediately can land on a replica that hasn't yet received the update, so it serves the stale (pre-write) row — a textbook read-after-write consistency violation caused entirely by that lag window.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The browser's own HTTP cache is serving a cached response for the GET request from before the update, which is unrelated to the database at all, and clearing the browser cache would fix it immediately without any backend change.",
+      "correct": false,
+      "explanation": "The scenario describes the photo eventually updating correctly a second or two later with no cache-clearing action taken, which is consistent with replication catching up — not with a browser cache that would otherwise keep serving the old response indefinitely."
+    },
+    {
+      "key": "B",
+      "text": "The write committed on the primary, but asynchronous replication to the read replica takes a short, variable amount of time, so the GET request right after can land on a replica that hasn't received the update yet and serves the stale row.",
+      "correct": true,
+      "explanation": "Correct. This is replication lag causing a read-after-write consistency violation: the write is durable on the primary immediately, but the replica the next read happens to hit is briefly behind."
+    },
+    {
+      "key": "C",
+      "text": "The PUT request's 200 OK response was actually returned before the database write was truly durable, meaning the primary itself hadn't yet finished committing the photo change at all when that response was already sent back to the client's browser.",
+      "correct": false,
+      "explanation": "A 200 OK from a well-behaved API implies the write is durably committed on the primary already; the staleness here is explained by the replica lagging behind an already-committed primary, not by the primary itself returning early."
+    },
+    {
+      "key": "D",
+      "text": "Profile photo updates specifically require a full CDN cache purge to propagate, and the one-to-two-second delay is simply the normal CDN invalidation latency across all edge locations, unrelated to how the database read is routed.",
+      "correct": false,
+      "explanation": "The scenario attributes the GET request to a read replica, not a CDN — the delay described matches typical database replication lag timing, and no CDN or edge caching layer was introduced into this scenario at all."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon RDS User Guide — Working with Read Replicas (replica lag and asynchronous replication)",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
