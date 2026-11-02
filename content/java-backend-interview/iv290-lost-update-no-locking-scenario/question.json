@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The classic lost-update bug, stated as a concrete scenario rather than a definition, which is closer to how it actually gets found in production.",
+  "prompt": "An `Account` entity has a `balance` column with no `@Version` field and no explicit locking anywhere. Two concurrent requests both call `withdraw(50)` on the same account, each doing: read balance, subtract 50 in Java, save the new balance. The account started at 100, both requests report success, and the final balance in the database is 50 — not 0. What went wrong?",
+  "explanation": "Both transactions read `balance = 100` before either one had committed its own write, so each independently computed `100 - 50 = 50` using its own stale snapshot and saved that same result. With no `@Version` field to detect the conflict and no row lock to prevent it, the second UPDATE simply overwrote the first transaction's row with the same computed value, silently losing one of the two withdrawals — the classic lost-update problem that optimistic or pessimistic locking exists specifically to prevent.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Both transactions read balance=100 before either had committed its own write, so each independently computed 100-50=50 and saved that value; with no @Version field and no row lock, the second UPDATE simply overwrote the first with the same result, silently losing one of the two withdrawals.",
+      "correct": true,
+      "explanation": "Correct. This is the textbook lost update: two transactions based their write on the same stale read, and nothing detected or prevented the second write from clobbering the first."
+    },
+    {
+      "key": "B",
+      "text": "The database's default transaction isolation level (READ UNCOMMITTED on virtually every production configuration) is what allowed this, so switching to SERIALIZABLE isolation alone, with no other code changes, would have been both necessary and sufficient to prevent it.",
+      "correct": false,
+      "explanation": "Most production databases default to READ COMMITTED, not READ UNCOMMITTED, and READ COMMITTED alone does not prevent this lost-update pattern either — the fix is an explicit optimistic (@Version) or pessimistic lock on the read-modify-write sequence, not simply a higher default isolation level."
+    },
+    {
+      "key": "C",
+      "text": "JPA entities are cached at the class level by default, so both requests actually shared the exact same in-memory Account object, and one request's subtraction overwrote the other's directly in Java heap memory before either request ever reached the database.",
+      "correct": false,
+      "explanation": "Entities loaded in separate transactions get separate persistence-context instances; there's no class-level sharing of the same Java object across unrelated requests, so the conflict happens at the database write, not in shared heap memory."
+    },
+    {
+      "key": "D",
+      "text": "Hibernate's dirty-checking mechanism detected that both transactions changed the same balance field and automatically merged the two withdrawals into a single combined -100 adjustment behind the scenes, which is why the final balance of 50 only reflects one withdrawal's worth of change rather than reflecting both operations separately.",
+      "correct": false,
+      "explanation": "Dirty checking only detects that a managed entity's field changed within its own persistence context, to decide whether to issue an UPDATE; it has no cross-transaction awareness and performs no merging of concurrent changes from different transactions."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Javadoc — LockModeType (optimistic and pessimistic lock modes exist specifically to prevent dirty and non-repeatable reads across concurrent transactions — the class of problem a lost update falls into)",
+      "url": "https://jakarta.ee/specifications/platform/10/apidocs/jakarta/persistence/LockModeType.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

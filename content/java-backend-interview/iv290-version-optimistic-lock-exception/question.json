@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests the precise mechanism and timing of @Version-based optimistic locking, not just that it exists.",
+  "prompt": "An `Order` entity has `@Version private Long version;`. Two users load the same Order in separate transactions, each modifies a different field, and both call save() moments apart, with their transactions overlapping. What actually happens, and why?",
+  "explanation": "Hibernate adds `WHERE version = ?` (the version value that transaction originally read) to the UPDATE statement it generates for a versioned entity. Whichever transaction's UPDATE reaches the database second finds that the row's version column has already been advanced by the first transaction's commit, so its own `WHERE version = ?` matches zero rows; Hibernate detects that zero-row result and raises an `OptimisticLockException` (wrapped by Spring as `ObjectOptimisticLockingFailureException`) right there, at that flush or commit — not earlier, when the entity was merely loaded or modified in memory.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The database itself blocks the second transaction's UPDATE until the first transaction's row-level lock is released, so the second request simply waits and then applies its own change on top of the first, with no exception ever thrown.",
+      "correct": false,
+      "explanation": "That's how pessimistic locking (a row lock held for the transaction's duration) behaves, not optimistic locking. @Version doesn't take or wait on a lock; it detects the conflict after the fact, via a version-mismatch UPDATE, and throws."
+    },
+    {
+      "key": "B",
+      "text": "Both transactions succeed and the second commit silently overwrites the first transaction's change, because @Version only logs a warning to the application log without ever actually blocking either UPDATE statement from completing normally.",
+      "correct": false,
+      "explanation": "This describes what would happen with no version field at all; @Version specifically exists to make the second conflicting UPDATE fail loudly (as an exception) instead of silently overwriting the first transaction's change."
+    },
+    {
+      "key": "C",
+      "text": "Whichever transaction commits or flushes second fails: its generated UPDATE includes a WHERE version = <value it originally read>, and the first transaction's commit already advanced that column, so the second UPDATE matches zero rows and Hibernate raises an OptimisticLockException at that flush, not earlier.",
+      "correct": true,
+      "explanation": "Correct. The conflict is detected by the database-level UPDATE affecting zero rows, which Hibernate interprets as a version mismatch and reports back as an exception at flush/commit time."
+    },
+    {
+      "key": "D",
+      "text": "Hibernate detects the version conflict as soon as the second transaction loads the Order entity into its persistence context, throwing the OptimisticLockException immediately from that find() call rather than waiting for a later flush or commit — which means the exception would surface well before either user even attempts to modify or save their changes.",
+      "correct": false,
+      "explanation": "Loading an entity doesn't compare versions against anything; the conflict can only be detected when Hibernate actually issues the versioned UPDATE and checks how many rows it affected, which happens at flush or commit time, not at load time."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Javadoc — OptimisticLockException (\"This exception may be thrown as part of an API call, a flush or at commit time\")",
+      "url": "https://jakarta.ee/specifications/platform/10/apidocs/jakarta/persistence/OptimisticLockException.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

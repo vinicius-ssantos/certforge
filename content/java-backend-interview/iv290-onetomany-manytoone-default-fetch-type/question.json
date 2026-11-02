@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate knows the JPA-specified default fetch types differ by association cardinality, rather than assuming one default applies everywhere.",
+  "prompt": "An `Order` entity has `@ManyToOne private Customer customer;` and `@OneToMany(mappedBy = \"order\") private List<OrderLine> lines;`, neither annotation specifying a `fetch` attribute. A service loads a list of 50 `Order` rows and only reads `order.getCustomer().getName()` for each, never touching `lines`. What does the JPA specification say the default fetch behavior is here, and what does it imply for this query?",
+  "explanation": "The JPA specification gives single-valued associations (`@ManyToOne`, `@OneToOne`) a default `FetchType.EAGER` and collection-valued associations (`@OneToMany`, `@ManyToMany`) a default `FetchType.LAZY`. So each `Order` row eagerly loads its `customer` (one join or one extra select per row, depending on the provider), while `lines` stays an uninitialized proxy collection that is never touched in this code path and therefore never queried.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Both `@ManyToOne` and `@OneToMany` default to `FetchType.LAZY`, so neither `customer` nor `lines` is loaded until a getter on either is actually called by the service code.",
+      "correct": false,
+      "explanation": "Only collection-valued associations default to LAZY. `@ManyToOne` defaults to EAGER by specification, so `customer` is loaded eagerly here regardless of whether the code reads it."
+    },
+    {
+      "key": "B",
+      "text": "`@ManyToOne` defaults to `FetchType.EAGER` and `@OneToMany` defaults to `FetchType.LAZY`; `customer` loads with (or alongside) each `Order` row, while `lines` stays an unfetched proxy until accessed.",
+      "correct": true,
+      "explanation": "Correct per the JPA specification's default fetch types for `@ManyToOne`/`@OneToOne` (EAGER) versus `@OneToMany`/`@ManyToMany` (LAZY). This asymmetry is exactly why eagerly-defaulted single-valued associations are a common, easy-to-miss source of extra queries."
+    },
+    {
+      "key": "C",
+      "text": "Both `@ManyToOne` and `@OneToMany` default to `FetchType.EAGER`, so this code already eagerly loads all 50 customers and the full `lines` collection for every order in one combined join.",
+      "correct": false,
+      "explanation": "Collection-valued associations default to LAZY, not EAGER. `lines` is not loaded here; only `customer` is, because `@ManyToOne` alone defaults to EAGER."
+    },
+    {
+      "key": "D",
+      "text": "The JPA specification leaves the default fetch type for every association unspecified and provider-defined, so Hibernate, EclipseLink, and OpenJPA are each free to pick a different default for the same unannotated `@ManyToOne` field.",
+      "correct": false,
+      "explanation": "The specification does mandate default fetch types per association type (EAGER for single-valued, LAZY for collection-valued); this is not left to provider discretion, and every compliant provider follows it."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Specification 3.1 — Javadoc, ManyToOne annotation (default FetchType.EAGER)",
+      "url": "https://jakarta.ee/specifications/persistence/3.1/apidocs/jakarta.persistence/jakarta/persistence/ManyToOne.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

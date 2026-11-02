@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Goes beyond \"it's not best practice\" to the specific mechanism of what can go wrong, which is what separates a memorized rule from understanding the risk.",
+  "prompt": "A team sets `spring.jpa.hibernate.ddl-auto=update` in their production `application.yml`, so that new columns added to entity classes get created automatically on each deploy without anyone writing a migration script. What's the actual risk of relying on this in production, beyond it simply not being considered best practice?",
+  "explanation": "`ddl-auto=update` infers the schema change it needs purely from the current entity mappings and applies it directly to the live production schema, with no review step, no transactional rollback safety net around the DDL change, and no durable record of what changed or when. It is also known not to safely express every kind of change — for example, it won't drop or rename a column to match a field that was removed or renamed on the entity — so the live schema can silently drift out of sync with what the running application's entities actually expect.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring Boot automatically disables `ddl-auto=update` outside of a `dev` profile, so setting this property in `application.yml` has no actual effect once the application is deployed with a `prod` profile active.",
+      "correct": false,
+      "explanation": "Spring Boot applies no such automatic profile-based override; whatever value is configured for `ddl-auto` takes effect in whichever profile is active, which is exactly why teams have to disable or avoid it themselves in production rather than relying on a built-in safeguard."
+    },
+    {
+      "key": "B",
+      "text": "`ddl-auto=update` is safe for ordinary columns but is specifically documented as unsafe only for index creation, because Hibernate requires an explicit `@Index` acknowledgment annotation before it will write any index-altering DDL automatically.",
+      "correct": false,
+      "explanation": "There's no such index-specific carve-out or required acknowledgment annotation; the risk applies to schema changes generally, including ordinary column additions, not to a narrowly scoped index-only exception."
+    },
+    {
+      "key": "C",
+      "text": "`ddl-auto=update` infers the schema change directly from the current entity mappings and applies it straight to the live production schema with no review, no transactional safety net, and no record of the change; it also can't safely express some changes (like a renamed or removed field), so the schema can silently drift out of sync with what the entities expect.",
+      "correct": true,
+      "explanation": "Correct. The danger isn't just \"no code review\" — it's that the mechanism itself has known blind spots (renames and removals aren't handled) and no way to roll back or audit what it actually did to the schema."
+    },
+    {
+      "key": "D",
+      "text": "`ddl-auto=update` only ever adds brand-new tables for entirely new entity classes; it is physically incapable of altering an existing table's columns, dropping a column, or renaming a field-backed column in any way, so the only production risk it introduces across any deployment is an unexpected new table silently appearing in the schema over time as new entity classes get added to the codebase.",
+      "correct": false,
+      "explanation": "`update` does alter existing tables — adding new columns to match new entity fields is its main advertised use case — so the risk is broader than just new tables appearing; it extends to live, uncontrolled changes on tables that already hold production data."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Performance Tuning and Best Practices (\"this feature is not suitable for a production environment\"; recommends an automatic schema migration tool with every script stored in version control)",
+      "url": "https://docs.hibernate.org/orm/5.2/userguide/html_single/appendices/BestPractices.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

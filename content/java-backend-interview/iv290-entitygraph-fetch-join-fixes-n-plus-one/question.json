@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Knowing the N+1 problem exists is table stakes; knowing what a fetch join actually changes about the generated SQL is the follow-up that separates candidates who've fixed it from candidates who've only read about it.",
+  "prompt": "To fix an N+1 problem where loading `Order` rows and then reading each `order.getLines()` triggers one extra `SELECT` per order, a developer changes the repository query to `SELECT o FROM Order o JOIN FETCH o.lines WHERE ...`. What does adding `JOIN FETCH` actually change about the SQL Hibernate generates and the objects it returns, compared to a plain `JOIN` or no join at all?",
+  "explanation": "A plain `JOIN` (or no join) in JPQL only affects the `WHERE`/filtering semantics and does not populate the `lines` collection in the returned entities — it stays an uninitialized lazy proxy. `JOIN FETCH` tells the provider to eagerly populate that association as part of the *same* SQL statement, via a SQL join that returns the parent and child columns together in one result set, so the collection is already initialized by the time the query returns and no further per-row `SELECT` is needed.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`JOIN FETCH` only changes query planning hints for the database optimizer; it produces the exact same SQL join as a plain `JOIN` and the same proxy-based lazy `lines` collection, just evaluated with a different execution plan.",
+      "correct": false,
+      "explanation": "`JOIN FETCH` is a JPQL-level instruction to the persistence provider, not a database optimizer hint, and it does change what's returned: it eagerly populates the association in the result, rather than just changing how the database plans an equivalent join."
+    },
+    {
+      "key": "B",
+      "text": "`JOIN FETCH` replaces the N+1 selects with exactly one additional batched `SELECT ... WHERE order_id IN (...)` issued right after the main query finishes, rather than folding the child rows into the very same SQL statement as the parent rows.",
+      "correct": false,
+      "explanation": "That batched-second-query behavior describes `@BatchSize` or `hibernate.default_batch_fetch_size`, not `JOIN FETCH`. A fetch join returns parent and child data from one combined SQL statement, not two."
+    },
+    {
+      "key": "C",
+      "text": "`JOIN FETCH` eagerly populates `lines` within the single SQL statement the JPQL compiles to, so the collection arrives already initialized, avoiding the later per-order `SELECT`.",
+      "correct": true,
+      "explanation": "Correct. `JOIN FETCH` changes the association's loading from lazy-on-access to eager-within-this-query, fetched via a SQL join in the same statement — eliminating the N+1 pattern for this specific query path."
+    },
+    {
+      "key": "D",
+      "text": "`JOIN FETCH` has no effect unless the association is also marked `fetch = FetchType.EAGER` in the entity mapping; without that mapping change, the query-level `JOIN FETCH` keyword is silently ignored by the provider at runtime.",
+      "correct": false,
+      "explanation": "A query-level `JOIN FETCH` overrides the mapping's fetch type for that query regardless of whether the association is mapped LAZY or EAGER; it is not conditional on, or ignored without, a matching mapping annotation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Specification 3.1 — §4.4.5.3 Fetch Joins",
+      "url": "https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html#a4931"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

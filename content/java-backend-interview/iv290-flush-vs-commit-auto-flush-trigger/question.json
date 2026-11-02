@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "Distinguishing flush from commit, and knowing what silently triggers an implicit flush, is a common source of confusing bugs (reads that unexpectedly see uncommitted writes within the same transaction) that only shows up at the senior level.",
+  "prompt": "Within a single `@Transactional` method, code updates a managed `Product`'s `price` field, then immediately runs a JPQL query `SELECT p FROM Product p WHERE p.price > :min` against the same `EntityManager`, and the just-updated row's new price is correctly reflected in that query's result — even though the transaction has not committed yet. What mechanism makes the query see the change, and is that the same thing as a commit?",
+  "explanation": "By default, Hibernate's `FlushModeType.AUTO` flushes pending changes to the database before executing a query whose result could be affected by those changes, so the updated `price` is written to the database (but not committed) before the `SELECT` runs, and the query sees it. A flush is not a commit: it pushes SQL to the database within the current transaction, but the transaction can still roll back afterward, undoing everything the flush wrote, which a commit can never do.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The `EntityManager` serves JPQL query results directly from its in-memory persistence context when possible, bypassing the database entirely for entities it already has loaded, which is why the updated price shows up without any database write happening at all.",
+      "correct": false,
+      "explanation": "JPQL queries are translated to SQL and executed against the database, not served purely from in-memory cache; the in-memory persistence context is consulted afterward to reconcile returned rows with already-managed instances, but the query itself does hit the database."
+    },
+    {
+      "key": "B",
+      "text": "Every `EntityManager` method call, including a setter on a managed entity, immediately issues its own `UPDATE` statement to the database synchronously, so by the time the query runs the price change was already committed as its own independent unit of work.",
+      "correct": false,
+      "explanation": "A setter call on a managed entity does not issue SQL immediately or commit anything by itself; it just marks the entity dirty in memory. The actual `UPDATE` is deferred until a flush occurs, and no implicit per-setter commit happens."
+    },
+    {
+      "key": "C",
+      "text": "`FlushModeType.AUTO` flushes pending changes before running a query that could be affected by them, so the new price is written (not committed) before the `SELECT` executes; the transaction can still roll back afterward.",
+      "correct": true,
+      "explanation": "Correct. Auto-flush before a potentially-affected query is exactly what makes write-then-read-in-the-same-transaction work correctly. Flush and commit are different operations: flush pushes SQL now, commit makes it permanent and unrollbackable."
+    },
+    {
+      "key": "D",
+      "text": "`FlushModeType.AUTO` flushes changes only at the very end of the transaction, at the same moment as commit, so technically the query above would not see the new price unless the flush mode were manually changed to `COMMIT` for this specific method's `EntityManager`.",
+      "correct": false,
+      "explanation": "This inverts the actual default behavior: `AUTO` is the mode that flushes *before* potentially-affected queries, during the transaction. `FlushModeType.COMMIT` is the one that defers flushing until commit time, which would be the mode that makes this query miss the change."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM Javadoc — FlushModeType (AUTO: \"The Session is sometimes flushed before query execution\")",
+      "url": "https://docs.hibernate.org/orm/6.4/javadocs/org/hibernate/FlushMode.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

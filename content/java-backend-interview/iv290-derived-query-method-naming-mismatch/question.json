@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate knows query derivation is validated eagerly, not lazily, which changes where a naming mistake actually surfaces.",
+  "prompt": "`Employee` has a `lastName` field and a `department` field of type `Department`, which itself has a `name` field (not `title`). A repository declares:\n```java\npublic interface EmployeeRepository extends JpaRepository<Employee, Long> {\n    List<Employee> findByLastNameAndDepartmentTitle(String lastName, String departmentTitle);\n}\n```\nWhat happens when the application starts up?",
+  "explanation": "Spring Data's query-derivation algorithm tries to resolve `DepartmentTitle` first as a direct property, then by progressively splitting it into a nested path (`department` + `Title`). Neither resolves: `Employee` has no `departmentTitle` property, and `Department` has no `title` property. Because Spring Data validates every declared repository query method against the entity's metamodel while building the repository proxy bean — not on first invocation — this throws a `PropertyReferenceException` during application context startup, before any request ever reaches the method.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring Data silently falls back to a native SQL query using the raw, unparsed method name as both the table name and the column names it searches, so the application starts without error and the first invocation simply runs whatever SQL that literal translation happens to produce.",
+      "correct": false,
+      "explanation": "There is no such fallback. Query derivation either resolves a method name against the entity's properties or fails with a PropertyReferenceException; it never improvises a native query from an unparsed method name."
+    },
+    {
+      "key": "B",
+      "text": "Spring Data cannot resolve `DepartmentTitle` against any direct or nested property path reachable from `Employee`, so it throws a `PropertyReferenceException` while validating the repository during application context startup, before any method is ever invoked.",
+      "correct": true,
+      "explanation": "Correct. Repository proxies validate their declared query methods against the entity metamodel eagerly, at bean-creation time, so a naming mistake like this one is caught at startup rather than waiting for the first call."
+    },
+    {
+      "key": "C",
+      "text": "The method compiles and the application starts cleanly, but every call to `findByLastNameAndDepartmentTitle` throws a runtime exception the first time it's actually invoked, because Spring Data defers query validation until first use to keep startup fast.",
+      "correct": false,
+      "explanation": "Spring Data does the opposite: it validates query methods eagerly while building the repository proxy, specifically so that a naming mistake fails fast at startup rather than surfacing unpredictably on whichever request happens to hit it first."
+    },
+    {
+      "key": "D",
+      "text": "Spring Data interprets `DepartmentTitle` as a single property literally named `departmentTitle`, generates a query referencing a column that doesn't exist, and the database silently returns an empty result set instead of raising an error.",
+      "correct": false,
+      "explanation": "Query derivation happens against the JPA entity metamodel before any SQL is generated at all; there's no SQL-level \"nonexistent column returns empty results\" step here, because the method never gets far enough to produce SQL in the first place."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Data JPA Reference Documentation — Query Methods (derived query method resolution against the entity's properties)",
+      "url": "https://docs.spring.io/spring-data/jpa/reference/repositories/query-methods-details.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

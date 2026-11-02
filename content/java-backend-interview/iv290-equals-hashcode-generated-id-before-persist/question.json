@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "A classic, hard-to-debug JPA footgun: the entity's identity contract silently breaks only before the database assigns an id, which is exactly when the entity is most often placed into a Set.",
+  "prompt": "An entity overrides `equals()` and `hashCode()` based solely on its database-generated `id` field (`@GeneratedValue`). A test does: `Product p = new Product(); products.add(p);` (a `HashSet<Product>`), then calls `em.persist(p)`, which assigns `p.setId(42L)` during the flush. After the flush, `products.contains(p)` returns `false` even though `p` is still the same object reference held in the set. Why?",
+  "explanation": "Before `persist()` assigns an id, `p.getId()` is `null`, so `p.hashCode()` is computed from a null id (typically some fixed or class-based value). `HashSet` placed `p` into a bucket based on that pre-persist hash code. After `persist()` sets the id to 42, `p.hashCode()` now returns a different value computed from `42` — but the `HashSet` never re-buckets an existing element when its hash code changes after insertion. `contains()` recomputes the hash code for the lookup, looks in the bucket matching the *new* hash, and doesn't find `p` there, because `p` is still sitting in the bucket matching its *old* (pre-persist) hash.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`persist()` internally removes the entity from any `Collection` it detects the entity sitting in, as part of attaching it to the persistence context, so `products` no longer contains `p` as an element at all after the flush.",
+      "correct": false,
+      "explanation": "`persist()` has no awareness of, and does not reach into, unrelated Java collections like a standalone `HashSet` the application created; it only manages the entity's own persistence lifecycle, not arbitrary references to it held elsewhere."
+    },
+    {
+      "key": "B",
+      "text": "`equals()` based on `id` throws a `NullPointerException` internally whenever one of the two ids being compared is still null, and `HashSet` silently swallows that exception from `contains()`, reporting `false` as if the element weren't found.",
+      "correct": false,
+      "explanation": "A correctly-written id-based `equals()` handles a null id without throwing (typically by returning `false` when either id is null, or falling back to reference equality), and `HashSet` does not swallow exceptions from `equals()`/`hashCode()` silently."
+    },
+    {
+      "key": "C",
+      "text": "`HashSet.add()` always stores a defensive copy of the object's hash code computed at insertion time, and `contains()` compares against that stored copy; since the copy was made while the id was still null, the copy becomes permanently stale and no sequence of events could make `contains()` return true again.",
+      "correct": false,
+      "explanation": "`HashSet` does not store a cached hash code per element; `hashCode()` is recomputed from the live object on each lookup. The mismatch comes from bucket placement happening once at insertion time, not from a stale cached value."
+    },
+    {
+      "key": "D",
+      "text": "Because `hashCode()` is id-based and the id changes from null to 42 during the flush, `p`'s hash code changes after it was already placed in a bucket; `HashSet` doesn't re-bucket on hash-code change, so a post-persist `contains()` look-up misses it in its new, different bucket.",
+      "correct": true,
+      "explanation": "Correct. This is the standard explanation for why basing `equals`/`hashCode` on a mutable, database-assigned id breaks `HashSet`/`HashMap` semantics for entities added before they're persisted."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Entity Identifier (equals/hashCode pitfalls with generated identifiers)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#entity-pojo-identifier"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}
