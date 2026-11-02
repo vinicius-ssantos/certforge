@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "HARD",
+  "difficultyRationale": "A concrete failure scenario that requires connecting backpressure to a real production incident shape.",
+  "prompt": "A service places an in-memory `BlockingQueue` with no capacity limit between a fast network listener thread (producing tasks) and a slow worker pool (consuming them). Under sustained load where production outpaces consumption, what's the eventual failure mode, and what's the direct fix?",
+  "explanation": "An unbounded queue has no mechanism to push back on the producer — it will keep accepting tasks no matter how far behind the consumers fall, so the queue (and the heap it lives in) grows without limit until the JVM runs out of heap and throws `OutOfMemoryError`. The direct fix is giving the queue a bounded capacity and a policy for what happens when it's full (the listener thread blocks, or the task is rejected), which is exactly what backpressure means in this context — the limit forces the mismatch to be dealt with at the point of excess, rather than deferred into unbounded memory growth.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The worker pool automatically grows additional threads once it detects the queue size exceeding a default internal limit, so the mismatch self-corrects through increased consumption capacity without any configuration change needed.",
+      "correct": false,
+      "explanation": "A plain `BlockingQueue` paired with a fixed-size worker pool has no built-in auto-scaling behavior; the thread pool size stays whatever was configured, and an unbounded queue specifically has no internal limit to trigger any such response."
+    },
+    {
+      "key": "B",
+      "text": "The listener thread eventually blocks on its own once the queue reaches a few thousand entries, acting as an automatic, if undocumented, form of backpressure that most teams don't even need to configure explicitly for an unbounded queue in typical production deployments running on default JVM settings.",
+      "correct": false,
+      "explanation": "An unbounded queue by definition has no implicit entry-count limit that would make the listener block — it keeps accepting work with no built-in ceiling until memory itself, not a queue-size check, is what finally fails."
+    },
+    {
+      "key": "C",
+      "text": "The queue eventually grows to consume all available heap, causing an `OutOfMemoryError`; the fix is a bounded queue capacity with an explicit full-queue policy (blocking the producer or rejecting the task), which forces the rate mismatch to be handled instead of deferred into unbounded memory growth.",
+      "correct": true,
+      "explanation": "Correct. An unbounded queue has no mechanism to push back on the producer, so it keeps absorbing work until the heap itself runs out; bounding the queue's capacity and deciding what happens when it's full is the direct fix."
+    },
+    {
+      "key": "D",
+      "text": "The JVM's garbage collector detects the growing queue and automatically begins evicting its oldest, least-recently-accessed entries once heap pressure crosses an internal threshold, so the system degrades gracefully without an explicit capacity limit being configured.",
+      "correct": false,
+      "explanation": "The garbage collector does not evict live, referenced objects like queue entries just because heap pressure is rising — it can only reclaim objects that are no longer reachable. A referenced, unbounded queue keeps growing until the JVM genuinely runs out of heap."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java SE 21 API — LinkedBlockingQueue (\"The capacity, if unspecified, is equal to Integer.MAX_VALUE\")",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/LinkedBlockingQueue.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

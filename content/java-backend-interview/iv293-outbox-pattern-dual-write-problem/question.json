@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "HARD",
+  "difficultyRationale": "A real, high-stakes microservices bug class (the dual-write problem) that's easy to miss without having hit it in production.",
+  "prompt": "An order service, inside one `@Transactional` method, saves a new `Order` row to its database and then calls the message broker's client library to publish an `OrderCreated` event — as two separate operations, not inside any single atomic unit spanning both systems. What concrete failure can this design produce, and why?",
+  "explanation": "The database commit and the broker publish are two independent operations against two different systems with no shared transaction between them — this is the dual-write problem. If the process crashes (or the broker call simply fails) after the database transaction commits but before the publish call succeeds, the order exists in the database but the event is never published, and nothing else in the system is notified. Conversely, if the publish happens first and the database transaction then rolls back, a now-nonexistent order's event has already gone out. Either direction of this gap is possible with no built-in recovery, because success or failure of one operation carries no information to the other.",
+  "options": [
+    {
+      "key": "A",
+      "text": "If the process crashes after the database commit but before the broker publish succeeds, the order exists in the database but its `OrderCreated` event is never published, silently desynchronizing the rest of the system; the two operations have no shared transaction.",
+      "correct": true,
+      "explanation": "Correct. This is the dual-write problem: committing to the database and publishing to the broker are two independent operations with an unprotected gap between them, and a failure in that gap leaves the two systems permanently out of sync with no automatic recovery."
+    },
+    {
+      "key": "B",
+      "text": "The broker's client library automatically retries a failed publish indefinitely in the background, so in practice this design always eventually succeeds in publishing the event even after a crash, making the ordering of the two calls irrelevant to correctness.",
+      "correct": false,
+      "explanation": "A broker client's in-process retry logic cannot survive the process itself crashing — once the process is gone, so is any retry loop it was running, which is exactly why a crash between the two independent operations is unrecoverable without an external mechanism like an outbox table."
+    },
+    {
+      "key": "C",
+      "text": "Because the database save happens inside `@Transactional`, Spring automatically enlists the broker publish call in the same transaction via a two-phase commit coordinator, so both operations always succeed or fail together without any extra configuration.",
+      "correct": false,
+      "explanation": "`@Transactional` by itself only manages the local database transaction; it does not automatically extend to an arbitrary external broker client call unless that client is specifically integrated as an XA resource in a distributed transaction, which most message broker clients are not set up to do by default."
+    },
+    {
+      "key": "D",
+      "text": "This design is actually safe because Kafka's idempotent producer setting deduplicates any event that gets published more than once, so the only risk here is a harmless duplicate publish, never a missing one, regardless of exactly where in the method the crash occurs.",
+      "correct": false,
+      "explanation": "Idempotent producer settings deduplicate retries of the exact same produce request from the same producer session; they do nothing to protect against the event never being sent at all, which is the actual failure mode in this scenario when the crash happens before the publish call runs."
+    }
+  ],
+  "references": [
+    {
+      "title": "microservices.io — Transactional Outbox pattern",
+      "url": "https://microservices.io/patterns/data/transactional-outbox.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether the candidate understands the trade-off a DLQ resolves, not just that it exists.",
+  "prompt": "A team debates skipping a dead-letter queue entirely in favor of a simpler design: either (1) just drop any message that fails processing, or (2) just keep retrying it forever. What real problem does a DLQ avoid that both of those simpler alternatives share?",
+  "explanation": "Dropping a failed message loses it — and any record of why it failed — with no way to investigate or replay it later. Retrying forever avoids losing the message but can starve throughput: depending on the queue's design, a permanently-failing message can block everything queued behind it, or a consumer can spend all its capacity looping on a failure that will never resolve. A DLQ isolates the failure into its own destination, so it's neither lost nor blocking anything else.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Both alternatives already recover on their own in practice: a dropped message gets re-sent automatically by the original producer's own retry logic, and an infinitely-retried message eventually succeeds once the consumer's JVM garbage collector frees up enough heap for the retry loop to complete, so neither failure mode ever reaches an operator's attention in a well-tuned system.",
+      "correct": false,
+      "explanation": "Producers don't automatically detect and resend a message a broker or consumer dropped — the producer has no idea it happened. And a permanently-failing message (like one referencing data that no longer exists) isn't a memory problem; no amount of GC headroom makes it succeed."
+    },
+    {
+      "key": "B",
+      "text": "Dropping loses the message and any record of why it failed, while retrying forever risks blocking everything behind it or exhausting consumer capacity on an unresolvable failure — a dead-letter queue avoids both by isolating the failure for later inspection without losing data or stalling the rest of the queue.",
+      "correct": true,
+      "explanation": "Correct. A DLQ's whole value is sitting between those two bad extremes: it keeps the message (unlike dropping) without letting it block or consume unbounded retry effort (unlike infinite retrying)."
+    },
+    {
+      "key": "C",
+      "text": "Both alternatives are actually safe for data integrity, since most brokers replicate every message to multiple nodes regardless of outcome — the real downside of either approach is just slightly higher log noise, which a DLQ doesn't meaningfully improve either.",
+      "correct": false,
+      "explanation": "Replication protects against broker node failure, not against a message being deliberately dropped by application logic or looping forever in a way that still never gets resolved — neither is a storage-durability problem."
+    },
+    {
+      "key": "D",
+      "text": "The main reason teams adopt a DLQ is organizational rather than technical: having a dedicated, named destination makes it easier to assign an on-call ticket to a specific team, not because either simpler alternative causes a real operational failure mode.",
+      "correct": false,
+      "explanation": "There is a real technical failure mode behind the DLQ pattern — silent data loss on one side, unbounded blocking or wasted retry effort on the other — not just a ticket-routing convenience."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Dead Letter Exchanges",
+      "url": "https://www.rabbitmq.com/docs/dlx"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

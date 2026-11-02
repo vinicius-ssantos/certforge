@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "HARD",
+  "difficultyRationale": "Probes whether a candidate understands that 'exactly-once' is a property of carefully-combined mechanisms, not a single transport-level switch.",
+  "prompt": "A developer sets Kafka's idempotent producer (`enable.idempotence=true`) and transactional APIs, and tells the team \"we now have exactly-once delivery end to end.\" A reviewer pushes back, saying that claim is too broad as stated. What is the reviewer's objection?",
+  "explanation": "Kafka's idempotent producer and transactions give exactly-once semantics for writes *within Kafka itself* — a producer won't create duplicate records on retry, and a consume-process-produce chain can be made atomic via transactions. But \"exactly-once\" for the whole pipeline also depends on what happens outside Kafka: if the consumer's processing has an external side effect (a database write, an email, a call to another service) that isn't itself transactionally tied to the offset commit, that external effect can still happen more than once on redelivery. End-to-end exactly-once requires either making that external effect idempotent or wrapping it and the offset commit in the same atomic unit (e.g., a transactional outbox) — Kafka's own guarantee alone doesn't cover it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Kafka's idempotent producer and transactions only guarantee exactly-once semantics for writes inside Kafka; an external side effect outside that boundary can still be duplicated on redelivery unless it's made idempotent or tied into the same atomic unit.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the scope Kafka documents for its exactly-once semantics: it covers producer retries and Kafka-to-Kafka transactional pipelines, not arbitrary external effects a consumer triggers as part of processing a message."
+    },
+    {
+      "key": "B",
+      "text": "The reviewer is objecting that `enable.idempotence=true` by itself does nothing without also setting `acks=all`, so the producer is still at risk of silently dropping records on a leader failure regardless of any transactional configuration.",
+      "correct": false,
+      "explanation": "Kafka's idempotent producer actually requires `acks=all` as a precondition and enforces it (overriding a lower setting), so this isn't the gap in the developer's claim — the real gap is about effects outside Kafka's own transactional boundary, not about `acks`."
+    },
+    {
+      "key": "C",
+      "text": "The reviewer is pointing out that transactions in Kafka only apply to the producer side, so a consumer reading from a transactional topic will still see uncommitted, in-flight records mixed in with committed ones unless it polls with a special flag.",
+      "correct": false,
+      "explanation": "Kafka's read-committed isolation level (the consumer-side counterpart to producer transactions) exists precisely to filter out uncommitted records for a consumer that opts into it; this isn't the gap being raised about end-to-end external side effects."
+    },
+    {
+      "key": "D",
+      "text": "The reviewer means that idempotent producers only protect against network-level retries of the exact same request, but a completely separate retry triggered manually by an operator would still produce a duplicate record regardless of any producer configuration.",
+      "correct": false,
+      "explanation": "Kafka's idempotent producer de-duplicates based on a sequence number per producer session tied to the broker, which also covers a fresh retry attempt sent by the same producer instance, not only an automatic low-level network retry; this isn't the specific gap the reviewer is raising about effects outside Kafka."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Kafka Delivery Semantics (exactly-once's external-system caveat: systems claiming it \"may not account for cases where a consumer or producer outside of the system has failed\")",
+      "url": "https://docs.confluent.io/kafka/design/delivery-semantics.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

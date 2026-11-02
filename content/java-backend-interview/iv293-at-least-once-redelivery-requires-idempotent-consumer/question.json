@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate knows at-least-once shifts the burden of correctness onto the consumer, not the broker.",
+  "prompt": "A payment-notification consumer processes a message (sends an email) and only commits its Kafka offset after that side effect succeeds. The consumer crashes right after sending the email but before committing the offset. On restart, the same message is redelivered and the email is sent a second time. The team configured the broker for at-least-once delivery on purpose. What does this scenario demonstrate about that choice?",
+  "explanation": "Committing after the side effect, rather than before, avoids the at-most-once failure mode (losing a message if the crash happens mid-processing) at the cost of occasionally reprocessing a message whose side effect already happened. At-least-once delivery guarantees no message is dropped, but it does not guarantee each message is handled exactly once — the consumer itself must be written to tolerate, or actively de-duplicate, redelivered messages whose effects may have already occurred.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It shows the team misconfigured the broker: at-least-once was meant to prevent exactly this kind of duplicate side effect, so the correct fix is switching the acknowledgement mode back to exactly-once instead of touching the consumer's own processing logic at all.",
+      "correct": false,
+      "explanation": "At-least-once explicitly permits redelivery and duplicate processing by design, in exchange for never silently losing a message; this is expected behavior under that guarantee, not a misconfiguration, and the fix belongs in the consumer, not in the broker's acknowledgement setting alone."
+    },
+    {
+      "key": "B",
+      "text": "It shows that committing the offset after the side effect instead of before is strictly worse than committing before, since committing before would have avoided this duplicate email being sent to the customer in the first place.",
+      "correct": false,
+      "explanation": "Committing before the side effect trades this failure for the opposite one: a crash after the commit but before the side effect finishes would lose the message entirely rather than merely duplicate it, which is a worse outcome for a payment notification than an extra email."
+    },
+    {
+      "key": "C",
+      "text": "It demonstrates that at-least-once delivery guarantees no message is ever lost, but does not guarantee a message is handled only once; the consumer's own processing logic is responsible for tolerating or de-duplicating a redelivered message whose side effect may have already run.",
+      "correct": true,
+      "explanation": "Correct. This is the core trade-off of at-least-once delivery: durability of delivery is the broker's job, but exactly-once *effects* are the consumer's job, typically via idempotent processing (e.g., a dedup table keyed on a message ID) layered on top of at-least-once redelivery."
+    },
+    {
+      "key": "D",
+      "text": "It shows the consumer group had more consumer instances than partitions, so two separate consumer instances both received and independently processed a copy of the same message at the same time, each sending its own email without either one knowing about the other's delivery at all.",
+      "correct": false,
+      "explanation": "Within a Kafka consumer group, each partition is assigned to exactly one consumer at a time, so two consumers in the same group do not concurrently process the same message; the duplicate here came from redelivery after a crash, not from concurrent double-assignment."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Kafka Delivery Semantics (at-least-once: messages \"delivered one or more times\")",
+      "url": "https://docs.confluent.io/kafka/design/delivery-semantics.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

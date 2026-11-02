@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "HARD",
+  "difficultyRationale": "Connects a poison message to a concrete ordering/throughput consequence, not just 'it fails.'",
+  "prompt": "A Kafka consumer processes a partition strictly in offset order and has no dead-letter handling or retry limit configured. One message partway through the partition is a poison message that always fails. What happens to every message after it in that same partition, and why?",
+  "explanation": "Because the consumer must process a partition's messages in offset order and commits its position sequentially, it can't skip past the poison message to reach the ones behind it without either dead-lettering it or otherwise explicitly advancing past it. With no retry limit and no dead-letter path, the consumer keeps retrying the same failing message forever, and every message queued behind it in that partition sits unprocessed the entire time — a form of head-of-line blocking, where one bad item stalls everything ordered after it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Every message behind it in that partition sits unprocessed indefinitely, because the consumer keeps retrying the poison message forever and can't advance its committed offset past it without an explicit dead-letter or skip mechanism — one bad message stalls the whole ordered line behind it.",
+      "correct": true,
+      "explanation": "Correct. This is head-of-line blocking: strict in-order processing plus an unbounded retry on an unrecoverable message means nothing after it in the same partition gets processed until something explicitly routes the poison message out of the way."
+    },
+    {
+      "key": "B",
+      "text": "Kafka automatically reassigns every message after the poison message to a different partition within the same topic, preserving overall throughput for the rest of the data even though the original partition stalls on that one message.",
+      "correct": false,
+      "explanation": "Kafka does not reassign already-written messages to a different partition at read time; a message's partition is fixed at write time, and the consumer reading that partition in order has no such automatic reroute available."
+    },
+    {
+      "key": "C",
+      "text": "The consumer automatically skips any message that throws an exception three times in a row and advances its committed offset past it, treating three consecutive identical failures as sufficient evidence the message should be abandoned without further configuration or operator involvement in the default setup.",
+      "correct": false,
+      "explanation": "There's no such built-in three-strikes automatic skip behavior in a bare consumer with no retry limit or dead-letter handling configured — the scenario explicitly states neither is set up, so nothing advances the offset past the failing message."
+    },
+    {
+      "key": "D",
+      "text": "Only messages produced after the poison message was first attempted are affected; any message that was already in the partition before the poison message continues to be processed normally and in parallel on separate threads.",
+      "correct": false,
+      "explanation": "Offset order within a partition isn't about when a message was produced relative to the failure being discovered — every message at an offset after the poison message's offset is blocked, regardless of timing, because the consumer can't move its committed position past the stuck one."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Consumer Design (partitions are read sequentially in offset order; a reassigned partition resumes from the last committed offset)",
+      "url": "https://docs.confluent.io/kafka/design/consumer-design.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests the basic purpose of a dead-letter queue against two tempting but wrong simplifications.",
+  "prompt": "A consumer processing order-confirmation messages from a queue repeatedly throws an exception on one specific message — its payload references a customer ID that no longer exists, so no amount of retrying will ever let it succeed. After the configured retry limit is exhausted, what should happen to that message?",
+  "explanation": "This is exactly the case a dead-letter queue (or, in Kafka, a dead-letter topic) exists for: once retries are exhausted, the message is moved out of the main processing path into a separate, inspectable destination, rather than being silently dropped (losing the data and any audit trail) or retried forever (blocking the messages queued behind it, or wasting resources looping on a failure that can never resolve).",
+  "options": [
+    {
+      "key": "A",
+      "text": "The broker should delete the message once retries are exhausted, since a message that can never be processed carries no further operational value and keeping it around would only waste storage for no benefit.",
+      "correct": false,
+      "explanation": "Dropping the message loses it (and any audit trail of the failure) silently. Teams need to see what failed and why — that's exactly what a dead-letter queue preserves instead of discarding."
+    },
+    {
+      "key": "B",
+      "text": "The consumer should keep retrying it indefinitely, since a message that was successfully published must eventually become processable once whatever upstream data it depends on catches up.",
+      "correct": false,
+      "explanation": "The scenario here is permanent, not transient — the referenced customer ID is gone, not merely delayed. Infinite retries on a permanently-failing message waste resources and, depending on ordering, can block everything behind it."
+    },
+    {
+      "key": "C",
+      "text": "The message is requeued at the back of the same queue each time it fails, so messages behind it get processed first while it effectively waits its turn repeatedly without being specially marked as failing, cycling this way indefinitely since nothing ever removes it from circulation.",
+      "correct": false,
+      "explanation": "Silently cycling a failing message back into the same queue hides the failure entirely — nothing marks it as problematic, so it keeps consuming processing attempts indefinitely with no path to resolution or visibility."
+    },
+    {
+      "key": "D",
+      "text": "It is moved to a configured dead-letter queue or topic, preserving the message for inspection and possible later reprocessing while removing it from the head of the original queue so other messages can proceed.",
+      "correct": true,
+      "explanation": "Correct. This is the defining purpose of a dead-letter queue: isolate the unprocessable message for visibility and possible manual handling, without losing it or blocking the queue behind it."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Dead Letter Exchanges",
+      "url": "https://www.rabbitmq.com/docs/dlx"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

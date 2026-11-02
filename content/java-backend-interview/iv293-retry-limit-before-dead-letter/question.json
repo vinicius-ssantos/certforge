@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A practical configuration detail: what a missing retry limit actually causes.",
+  "prompt": "A consumer is configured to retry a failed message before giving up and dead-lettering it, but the team forgot to set a maximum retry count — it defaults to unlimited. The service that the consumer calls to process each message starts returning errors for every message during a partial outage. What's the practical consequence of the missing retry limit during that outage?",
+  "explanation": "Without a bounded retry count, every message that fails during the outage gets retried indefinitely rather than being dead-lettered after a reasonable number of attempts. Each retry is itself a request to the already-struggling downstream service, so the consumer keeps hammering it with repeated attempts for every failing message — a retry storm that adds load to a service that's already failing, instead of backing off and letting the DLQ absorb the failures for later reprocessing.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nothing changes in practice: Kafka and RabbitMQ consumers both cap retries internally at a hard-coded broker-level maximum regardless of application configuration, so an unlimited application setting is effectively overridden and ignored.",
+      "correct": false,
+      "explanation": "There's no such universal hard-coded broker-level cap that silently overrides an application's own retry configuration; the application's setting is what actually governs retry behavior here."
+    },
+    {
+      "key": "B",
+      "text": "Every message that fails during the outage gets retried indefinitely, repeatedly hitting the already-struggling downstream service with new attempts instead of giving up after a bounded number of tries — a retry storm that adds load to a service that's already failing.",
+      "correct": true,
+      "explanation": "Correct. An unbounded retry count means the consumer keeps re-attempting every failing message against a service that's already struggling, amplifying load during the exact window when the service needs less load, not more."
+    },
+    {
+      "key": "C",
+      "text": "The consumer automatically pauses all retries and switches to dead-lettering every message the moment it detects three consecutive failures, regardless of the configured maximum, as a built-in safety fallback most messaging frameworks include by default to protect downstream services from this exact scenario.",
+      "correct": false,
+      "explanation": "There's no universal automatic three-strikes fallback built into messaging frameworks that overrides a missing retry-limit configuration; without an explicit limit, retries proceed as configured (here, unlimited)."
+    },
+    {
+      "key": "D",
+      "text": "Messages simply pile up unprocessed in the queue without any retry attempts at all, since the consumer treats an unset retry limit as an instruction to stop attempting delivery entirely until an operator manually intervenes.",
+      "correct": false,
+      "explanation": "An unlimited retry setting means retries keep happening, not that the consumer stops attempting delivery; the problem is too many retry attempts against a failing dependency, not zero."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Dead Letter Exchanges (retry count and dead-lettering a message)",
+      "url": "https://www.rabbitmq.com/docs/dlx"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

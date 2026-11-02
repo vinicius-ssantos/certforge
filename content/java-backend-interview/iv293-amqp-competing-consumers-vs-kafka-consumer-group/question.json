@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks whether a candidate can articulate the structural difference between a partitioned log and a queue, not just name both buzzwords.",
+  "prompt": "A RabbitMQ queue has 3 competing consumers attached to it, each receiving a round-robin share of the messages. A team migrating to Kafka expects a consumer group with 3 instances on a single-partition topic to behave the same way. What's the actual difference?",
+  "explanation": "On a RabbitMQ queue, multiple competing consumers can all read from the same queue concurrently, with the broker dispatching each message to exactly one of them — true parallel consumption of one queue. In Kafka, a partition is the unit of parallelism within a consumer group: at most one consumer instance in the group may be assigned a given partition at a time. With only 1 partition, only 1 of the 3 consumer instances will ever be actively assigned and reading; the other 2 sit idle, however many instances are added, until the partition count itself is increased.",
+  "options": [
+    {
+      "key": "A",
+      "text": "On the RabbitMQ queue, all 3 consumers read concurrently since the broker dispatches each message to whichever is free; on the single-partition Kafka topic, only 1 of the 3 instances is ever assigned that partition, so the other 2 stay idle.",
+      "correct": true,
+      "explanation": "Correct. This is the core structural difference: RabbitMQ's competing-consumers model parallelizes over consumers attached to one queue, while Kafka's consumer-group model parallelizes over partitions, with the partition count being the hard ceiling regardless of consumer instance count."
+    },
+    {
+      "key": "B",
+      "text": "Both systems behave identically here because a RabbitMQ queue is internally partitioned the same way a Kafka topic is, so 3 competing consumers and a 3-instance Kafka consumer group on one partition both end up sharing load evenly across all 3 instances.",
+      "correct": false,
+      "explanation": "A RabbitMQ queue has no internal partition concept comparable to Kafka's; this is exactly the assumption that breaks in the migration, since Kafka's parallelism unit (the partition) and RabbitMQ's (the consumer attached to the queue) are structurally different things."
+    },
+    {
+      "key": "C",
+      "text": "The difference is only about message ordering: RabbitMQ preserves strict global order across all 3 consumers while Kafka's consumer group does not preserve any order at all once more than one consumer instance joins the group.",
+      "correct": false,
+      "explanation": "RabbitMQ's round-robin dispatch across competing consumers does not preserve a strict global processing order either, since messages are handed to whichever consumer is free next; the actual difference raised in this scenario is about parallelism capacity, not ordering guarantees."
+    },
+    {
+      "key": "D",
+      "text": "Kafka consumer groups require every instance to be running the exact same application version, so the real issue is a rolling deployment mismatch between the 3 instances rather than anything related to partition count or parallelism at all.",
+      "correct": false,
+      "explanation": "Kafka consumer groups place no such version-matching requirement on their member instances; the behavior difference described has nothing to do with deployment versions and everything to do with partition count as the parallelism ceiling."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Tutorials — Work Queues (competing consumers, round-robin dispatch)",
+      "url": "https://www.rabbitmq.com/tutorials/tutorial-two-python.html"
+    },
+    {
+      "title": "Confluent Documentation — Kafka Consumer Design (\"Each partition is consumed by exactly one consumer within each consumer group at any given time\")",
+      "url": "https://docs.confluent.io/kafka/design/consumer-design.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

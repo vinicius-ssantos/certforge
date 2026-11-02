@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether 'lag' is understood as a concrete, measurable gap rather than a vague sense of slowness.",
+  "prompt": "A dashboard shows a Kafka consumer group's \"lag\" climbing steadily on one topic over the last hour, even though the consumer process hasn't crashed and is still actively polling. What does that growing lag number actually measure?",
+  "explanation": "Consumer lag is the difference between the latest offset the producer has written to a partition (the log-end offset) and the offset the consumer group has committed as processed. A growing lag means the consumer is falling behind the rate at which messages are being produced — it's still working, just not keeping pace — which matters even without a crash, because it means the data the consumer reflects (and anything downstream depending on it, like a search index or a cache) is increasingly stale.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It measures the average network round-trip time between the consumer and the broker over the last polling interval, so a rising number indicates degrading network conditions between the two rather than anything about processing throughput.",
+      "correct": false,
+      "explanation": "Lag is defined in terms of offsets (how many messages are unprocessed), not network latency between consumer and broker; a slow network could contribute to lag growing, but it isn't what the metric itself measures."
+    },
+    {
+      "key": "B",
+      "text": "It measures how many times the consumer process has restarted during the measurement window, since each restart briefly resets its position and the dashboard accumulates those resets into a single rising count over time.",
+      "correct": false,
+      "explanation": "Lag isn't a restart counter; a consumer that hasn't crashed at all (as in this scenario) can still show growing lag purely from processing slower than the production rate."
+    },
+    {
+      "key": "C",
+      "text": "It measures the total disk space the broker has allocated for retaining unconsumed messages on that partition, so a growing number mainly signals the broker is approaching its configured retention limit rather than reflecting consumer behavior.",
+      "correct": false,
+      "explanation": "Lag tracks unprocessed message count via offsets, not disk allocation; a broker's retention sizing is a separate, independent concern from how far behind a particular consumer group is."
+    },
+    {
+      "key": "D",
+      "text": "It measures the gap between the latest offset written to the partition and the offset the consumer group has committed, meaning the consumer is actively running but falling behind the production rate rather than having failed outright.",
+      "correct": true,
+      "explanation": "Correct. Lag is exactly this offset gap, and a non-crashed consumer with growing lag means it's processing slower than messages arrive — not stopped, just behind, with downstream consumers of its output becoming increasingly stale."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Consumer Design (log-end offset vs. the committed offset the consumer intends to read next)",
+      "url": "https://docs.confluent.io/kafka/design/consumer-design.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

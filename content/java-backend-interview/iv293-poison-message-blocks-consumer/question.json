@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Defines the term concretely rather than letting it stay a vague label for 'a bad message.'",
+  "prompt": "A consumer throws an uncaught `NullPointerException` every single time it attempts to deserialize one specific message — the message's JSON is malformed in a way the deserializer never recovers from, no matter how many times it's retried. What's the standard term for this kind of message, and what makes it different from an ordinary transient processing failure?",
+  "explanation": "This is a \"poison message\": one that is structurally or semantically broken in a way that guarantees every processing attempt fails identically, as opposed to a transient failure (a timeout, a momentarily-unavailable dependency) that might succeed on a later retry. The distinction matters operationally because retrying a poison message is pure waste — it will never succeed — and if nothing recognizes that and routes it elsewhere, it can consume retry attempts indefinitely or block whatever's queued behind it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It's called a \"transient fault,\" the same term used for a timeout or a momentarily-unavailable dependency, because from the consumer's point of view the two look identical — an exception on an attempt to process the message, regardless of what ultimately caused it or how many times it's retried.",
+      "correct": false,
+      "explanation": "Transient fault specifically describes a failure that's expected to clear on its own (a timeout, a brief outage); a malformed message that fails identically every single attempt is the opposite case, which is why it has its own distinct term."
+    },
+    {
+      "key": "B",
+      "text": "It's called a \"stale message,\" the standard term for any message whose underlying data has changed since it was originally produced, making the specific exception thrown here a side effect of acting on outdated information.",
+      "correct": false,
+      "explanation": "\"Stale\" describes data that was once valid but is now outdated — it doesn't describe a message that's permanently malformed and was never processable in the first place, which is the actual cause of the repeated NullPointerException here."
+    },
+    {
+      "key": "C",
+      "text": "It's called a \"poison message\": one that is permanently malformed or unprocessable, so every attempt fails identically — unlike a transient failure, which might succeed on a later retry once the underlying condition clears, retrying a poison message is pure wasted effort.",
+      "correct": true,
+      "explanation": "Correct. The defining feature of a poison message is that the failure is deterministic and permanent given the message's content — no amount of retrying changes the outcome, which is exactly why it needs a different handling path (like a DLQ) than a transient failure does."
+    },
+    {
+      "key": "D",
+      "text": "It's called a \"zombie message,\" the term for a message that's been acknowledged by the consumer but somehow remains visible in the queue, continuing to be redelivered despite having already been marked as successfully processed.",
+      "correct": false,
+      "explanation": "The scenario describes a message that was never successfully processed at all (every attempt throws), not one that was acknowledged yet keeps reappearing — those are two different failure shapes entirely."
+    }
+  ],
+  "references": [
+    {
+      "title": "RabbitMQ Documentation — Dead Letter Exchanges",
+      "url": "https://www.rabbitmq.com/docs/dlx"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

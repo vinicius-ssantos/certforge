@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks understanding of why lag monitoring is an operational practice, not just a nice-to-have graph.",
+  "prompt": "A team sets up alerting on consumer lag per topic/partition, paging on-call when lag crosses a threshold for more than a few minutes. Why is alerting on lag operationally useful, given that the consumer process itself reports as healthy (it hasn't crashed and its liveness probe passes)?",
+  "explanation": "A consumer can be \"alive\" by every process-health signal — not crashed, responding to liveness probes — while still silently falling behind, for reasons a crash-only health check would never catch: a slow downstream dependency, a bug that makes processing slower than before, or a sudden spike in production rate. Lag alerting catches that class of failure specifically because it measures actual processing progress against what's been produced, not just whether the process is still running.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Because lag only ever grows due to network packet loss between consumer and broker, and alerting on it exists purely to tell network operations when to investigate the link, not to say anything about the consumer's own processing behavior.",
+      "correct": false,
+      "explanation": "Lag growth is far more often caused by the consumer's own processing being slower than the production rate (a slow dependency, a bug, a traffic spike) than by network packet loss, which isn't the primary thing this alert is meant to surface."
+    },
+    {
+      "key": "B",
+      "text": "Because lag alerting is really just a proxy for CPU usage: once lag crosses the threshold, it's a reliable sign the consumer's host is CPU-saturated, so the alert exists mainly to trigger auto-scaling rather than to reveal anything about processing correctness or dependency health.",
+      "correct": false,
+      "explanation": "Lag can grow for reasons unrelated to CPU saturation — a slow external dependency, a downstream lock, or a logic bug that doesn't consume extra CPU at all — so treating it purely as a CPU proxy misses most of what the metric is actually for."
+    },
+    {
+      "key": "C",
+      "text": "Because a liveness probe only confirms the process hasn't crashed, not that it's keeping pace with production — a consumer can be fully alive and responsive while silently falling behind from a slow dependency or a processing bug, and lag alerting catches exactly that gap.",
+      "correct": true,
+      "explanation": "Correct. Liveness and \"doing useful work at an adequate rate\" are different properties; lag is the metric that tracks the second one, which is exactly why alerting on it catches failures a crash-only check would miss."
+    },
+    {
+      "key": "D",
+      "text": "Because the broker itself cannot continue accepting new messages once any single consumer group's lag crosses a configured threshold, so the alert exists to prevent the broker from refusing all further writes to the topic.",
+      "correct": false,
+      "explanation": "A broker does not stop accepting writes to a topic because one consumer group is lagging; producers and other consumer groups are unaffected by one group falling behind, so this isn't the operational risk lag alerting addresses."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Monitor Consumer Lag (tracking processing delay, distinct from process health monitoring)",
+      "url": "https://docs.confluent.io/platform/current/kafka/monitor/monitor-consumer-lag.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

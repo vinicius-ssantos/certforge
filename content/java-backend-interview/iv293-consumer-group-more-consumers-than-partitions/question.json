@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000110",
+  "difficulty": "EASY",
+  "difficultyRationale": "A basic but commonly-misunderstood mechanic of consumer-group scaling in Kafka.",
+  "prompt": "A topic has 4 partitions. A team scales its consumer group from 4 instances up to 6, expecting higher throughput. What actually happens to the 2 extra consumer instances?",
+  "explanation": "Within one Kafka consumer group, each partition is assigned to at most one consumer instance at a time, and a topic with 4 partitions can therefore keep at most 4 consumer instances in that group actively reading. The 2 extra instances receive no partition assignment at all and sit idle — they consume nothing — until either the partition count is increased or some of the other 4 instances leave the group.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The 2 extra instances are assigned the same partitions as 2 of the original 4, so each of those partitions ends up being read redundantly by two consumers at once, doubling throughput on those two partitions specifically without affecting the other two.",
+      "correct": false,
+      "explanation": "A partition is assigned to at most one consumer within a given group at a time; Kafka does not let two consumers in the same group read the same partition concurrently, so there is no redundant doubled reading."
+    },
+    {
+      "key": "B",
+      "text": "A topic with 4 partitions can have at most 4 actively-consuming instances in one consumer group; the 2 extra instances receive no partition assignment and sit idle until the partition count increases or other instances leave.",
+      "correct": true,
+      "explanation": "Correct. Partition count is the hard ceiling on parallelism within a single consumer group — adding consumers beyond that count doesn't increase throughput, it just leaves the excess instances unassigned and idle."
+    },
+    {
+      "key": "C",
+      "text": "Kafka automatically splits each of the 4 existing partitions into 2 sub-partitions internally, so the new instance count of 6 maps cleanly onto 8 effective partitions without any manual repartitioning needed.",
+      "correct": false,
+      "explanation": "Kafka partitions are not automatically split at runtime to accommodate more consumers; the partition count of a topic is fixed unless an administrator explicitly increases it, and doing so does not retroactively reorganize existing data into new partitions cleanly."
+    },
+    {
+      "key": "D",
+      "text": "The group coordinator rejects the 2 extra instances' join requests outright, so they fail to start up and the application reports a consumer group join error rather than silently running idle in the background.",
+      "correct": false,
+      "explanation": "The extra instances successfully join the consumer group and participate in its protocol; they are simply left without any partitions assigned by the rebalance, which is a silent idle state, not a join failure or rejected connection."
+    }
+  ],
+  "references": [
+    {
+      "title": "Confluent Documentation — Kafka Consumer Design (\"Each partition is consumed by exactly one consumer within each consumer group at any given time\")",
+      "url": "https://docs.confluent.io/kafka/design/consumer-design.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
