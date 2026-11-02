@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The two caching layers are easy to confuse by name alone; this checks whether the candidate knows the actual scope and lifetime difference, which is what determines whether a given bug is even possible.",
+  "prompt": "Two separate HTTP requests, handled by two separate threads and two separate `@Transactional` methods (each opening its own `EntityManager`/session), both call `em.find(Product.class, 7L)` for the same row. The first request's session has already loaded and cached that `Product`. Does the second request's session reuse that cached instance without hitting the database — and which cache layer, if any, would make that possible?",
+  "explanation": "The first-level cache (the persistence context / `EntityManager` session) is scoped to a single `EntityManager` and its lifetime; it cannot be shared across two independently-opened sessions, so the second request's session cannot see anything the first request's session cached. Only the second-level cache — a `SessionFactory`-wide (application-wide) cache, which is disabled by default and must be explicitly configured with a provider such as Ehcache or Infinispan — is scoped broadly enough to let a second, independent session skip the database for a row a different session already loaded.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The first-level cache cannot help here since it's scoped to one session; only an explicitly-configured second-level cache, which is `SessionFactory`-wide and disabled by default, could let the second request's session avoid hitting the database for that row.",
+      "correct": true,
+      "explanation": "Correct. First-level cache lifetime is bound to its owning `EntityManager`; the second-level cache is the one layer broad enough in scope (and lifetime) to be visible across independently-opened sessions, and it requires deliberate opt-in configuration."
+    },
+    {
+      "key": "B",
+      "text": "The first-level cache already covers this, because Hibernate's `SessionFactory` maintains one shared first-level cache across all open sessions by default, so the second request's `find()` call would reuse the same cached instance without any extra configuration.",
+      "correct": false,
+      "explanation": "The first-level cache is strictly per-`EntityManager`/session, never shared across sessions regardless of `SessionFactory` configuration; there is no such thing as a `SessionFactory`-wide first-level cache."
+    },
+    {
+      "key": "C",
+      "text": "Neither cache layer could ever make this possible: Hibernate's caching is purely request-scoped by design, tied to the HTTP request lifecycle via Spring's `OpenEntityManagerInViewFilter`, so cross-request reuse of a loaded entity is architecturally impossible regardless of configuration.",
+      "correct": false,
+      "explanation": "Hibernate's caching layers have no inherent tie to the HTTP request lifecycle or to Spring's view filter; a properly configured second-level cache is explicitly designed to persist and be reused across many separate sessions and requests."
+    },
+    {
+      "key": "D",
+      "text": "The second-level cache is enabled by default for every entity in a standard Spring Boot + Hibernate setup, so the second request would transparently reuse the first request's cached `Product` without any extra dependency or annotation being added to the project.",
+      "correct": false,
+      "explanation": "The second-level cache is disabled by default; using it requires adding a cache provider dependency, enabling it in configuration, and typically annotating the entity (e.g. `@Cacheable`/`@org.hibernate.annotations.Cache`) — it is not on out of the box."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Caching (first-level and second-level cache scope and lifetime)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#caching"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

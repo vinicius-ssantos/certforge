@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Explains the mechanism behind a behavior most Spring Data developers rely on daily (no explicit save needed inside a transaction) without ever having been asked how it actually works.",
+  "prompt": "A `@Transactional` service method loads a `Product` via `repository.findById(id)`, calls `product.setPrice(newPrice)`, and returns — never calling `repository.save(product)`. The price change is still persisted when the transaction commits. What mechanism makes that happen, and what would change if the method were not `@Transactional`?",
+  "explanation": "`findById` returns a *managed* entity (loaded within an open persistence context). Hibernate's dirty checking compares each managed entity's current field values against the snapshot taken when it was loaded, at flush time; any difference is translated into an `UPDATE` statement, with no explicit `save()` call required. If the method were not transactional, the persistence context would typically close at the end of the repository call, the entity would become detached, and the later setter call on a detached instance would not be tracked or persisted at all.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring Data JPA repositories automatically call `save()` internally on every entity returned by any finder method as soon as the surrounding method returns, regardless of whether a transaction is active, which is why the change persists either way.",
+      "correct": false,
+      "explanation": "Repositories do not auto-save every entity a finder returns; persistence here depends on the entity remaining managed within an active transaction and being caught by dirty checking, not on an implicit save call tied to the finder."
+    },
+    {
+      "key": "B",
+      "text": "Dirty checking only applies to entities fetched by a native SQL query, not by Spring Data's generated `findById`; since this uses `findById`, the change would actually be lost with or without `@Transactional`, and the scenario as described could not occur.",
+      "correct": false,
+      "explanation": "Dirty checking applies uniformly to managed entities regardless of whether they were loaded via `findById`, a derived query method, JPQL, or native SQL — the loading mechanism does not determine whether the resulting entity participates in dirty checking."
+    },
+    {
+      "key": "C",
+      "text": "`findById` registers a database-level trigger on the loaded row the first time it is fetched, so any in-memory field change on that Java object is propagated to the database row directly by that trigger, independent of Hibernate's own session state.",
+      "correct": false,
+      "explanation": "No database trigger is involved; nothing about calling a Java setter on an object can be observed by the database. Persistence happens entirely through Hibernate's own dirty-checking and flush mechanism within the application, not via a database-side trigger."
+    },
+    {
+      "key": "D",
+      "text": "Hibernate's dirty checking compares the managed entity's current state against its loaded snapshot at flush time and generates the `UPDATE` automatically; without `@Transactional`, the entity would become detached and the setter change would be lost.",
+      "correct": true,
+      "explanation": "Correct. Dirty checking is exactly the mechanism, and it depends on the entity staying managed inside an open persistence context — which `@Transactional` provides and its absence would typically remove."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Flushing (automatic dirty checking generates the UPDATE statements)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#flushing"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

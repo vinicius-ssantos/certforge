@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The N+1 problem is one of the most common real-world Hibernate performance bugs; testing whether the candidate can name the actual query count, not just the buzzword.",
+  "prompt": "A service runs `List<Order> orders = orderRepository.findAll();` (one query, returning 200 rows) and then, in a loop over `orders`, calls `order.getLines().size()` to compute a line count for each order, where `lines` is a default-lazy `@OneToMany`. Monitoring shows 201 SQL statements executed for this method. Why 201, and not 1 or 2?",
+  "explanation": "`findAll()` issues one `SELECT` for the 200 `Order` rows. Because `lines` is lazy and not fetched by that query, each call to `order.getLines()` inside the loop triggers Hibernate to issue a separate `SELECT ... WHERE order_id = ?` to initialize that one order's collection proxy the first time it's accessed. 200 orders means 200 additional per-order selects, plus the original 1, for 201 total — the classic N+1 select problem.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`findAll()` itself already issues one query per order internally to populate the session cache, so the 200 extra statements happen before the loop even starts, and the loop itself adds only 1 more.",
+      "correct": false,
+      "explanation": "`findAll()` issues a single `SELECT` for all 200 rows; it does not pre-issue per-row queries. The 200 extra statements come from the loop touching each order's lazy collection, not from `findAll()`'s own execution."
+    },
+    {
+      "key": "B",
+      "text": "Each call to `order.getLines()` on a lazily-mapped collection that hasn't been initialized triggers its own `SELECT`; with 200 orders in the loop, that's 200 additional statements on top of the original query for the orders themselves.",
+      "correct": true,
+      "explanation": "Correct. This is the N+1 select problem by definition: 1 query to load the parent rows, plus N queries (one per row) to lazily initialize an association accessed inside a loop over those rows."
+    },
+    {
+      "key": "C",
+      "text": "Hibernate batches all 200 lazy-collection initializations into a single extra `SELECT ... WHERE order_id IN (...)` behind the scenes by default, so the 201st statement is that one batched query, not 200 separate ones.",
+      "correct": false,
+      "explanation": "Hibernate does not batch lazy-collection fetches into one `IN` query by default; that behavior requires explicit configuration (such as `@BatchSize`) or a different fetch strategy. Without it, each access is its own separate statement."
+    },
+    {
+      "key": "D",
+      "text": "The repeated calls to `.size()` are each counted as a separate statement by the monitoring tool even though only one real query runs, because `.size()` on a Hibernate-backed `PersistentBag` is logged once per invocation regardless of whether data was actually fetched.",
+      "correct": false,
+      "explanation": "`.size()` on an uninitialized lazy collection does force Hibernate to execute a real database query to initialize it, not merely log a no-op; the 201 count reflects real SQL executed, not a monitoring artifact."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Fetching (lazy collection initialization and the N+1 select problem)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#fetching"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

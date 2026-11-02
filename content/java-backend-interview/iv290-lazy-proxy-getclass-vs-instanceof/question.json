@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires understanding that a lazily-loaded Hibernate association is a runtime-generated proxy subclass, not an instance of the entity class itself — a detail that silently breaks naive equals() implementations.",
+  "prompt": "An entity's `equals()` method starts with `if (this.getClass() != o.getClass()) return false;` before comparing ids. In a test, `Product realProduct = em.find(Product.class, 1L);` (loaded directly, a real `Product` instance) is compared against `order.getProduct()` where `product` is a lazy `@ManyToOne` that Hibernate has returned as an uninitialized proxy — and `realProduct.equals(order.getProduct())` returns `false` even though both represent the same row with id 1. Why does the `getClass()` check cause this?",
+  "explanation": "A lazy `@ManyToOne`/`@OneToOne` association that hasn't been initialized is represented by a Hibernate-generated runtime proxy class (something like `Product$HibernateProxy$...`), which extends `Product` but is not literally the `Product` class. `getClass()` on that proxy returns the proxy's own subclass, not `Product.class`, so `this.getClass() != o.getClass()` is true for a real `Product` versus a `Product` proxy — even though both logically represent the same entity. Using `instanceof` (or comparing against the proxy's un-proxied class via Hibernate's own helper) avoids this, because `instanceof` succeeds for a subclass.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Hibernate proxies override `getClass()` to always return `null` until the proxy is initialized, so the comparison `this.getClass() != o.getClass()` is really comparing a real class object against `null`, which is always unequal.",
+      "correct": false,
+      "explanation": "`getClass()` on an uninitialized proxy does not return null; it returns the actual runtime class of the proxy object (the generated subclass), which is a real, non-null `Class` object — just not the same `Class` object as the entity's own class."
+    },
+    {
+      "key": "B",
+      "text": "`this.getClass() != o.getClass()` is comparing the calling object's declared compile-time type against the argument's declared compile-time type, and since both are declared as `Product` in the surrounding code, the comparison always evaluates to equal regardless of what Hibernate returns at runtime.",
+      "correct": false,
+      "explanation": "`getClass()` returns the object's actual runtime class, not its compile-time declared type; that's precisely why it differs between a real `Product` and a `Product` proxy even when both variables are declared with the same compile-time type."
+    },
+    {
+      "key": "C",
+      "text": "The proxy object is never actually compared at all: calling any method, including `equals()`, on an uninitialized lazy proxy automatically triggers full initialization first, after which `getClass()` returns `Product.class` as expected, so the real cause must be a stale id rather than `getClass()`.",
+      "correct": false,
+      "explanation": "Calling `equals()` on a proxy does trigger initialization in many cases, but `getClass()` specifically is defined to still return the proxy's own class even after initialization, since the runtime type of the object never changes — only the data it wraps becomes populated."
+    },
+    {
+      "key": "D",
+      "text": "The lazy proxy's `getClass()` returns the dynamically-generated proxy subclass, not `Product.class` itself, so comparing it against a real `Product`'s class with `!=` reports unequal even though the proxy logically represents the same entity; `instanceof` would succeed where `getClass()` fails.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the standard explanation for why `getClass()`-based equality checks are considered unsafe with lazy proxies, and why many JPA style guides recommend `instanceof` (or an un-proxying helper) instead."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM Javadoc — HibernateProxy (the runtime proxy interface/contract for lazy associations)",
+      "url": "https://docs.hibernate.org/orm/6.4/javadocs/org/hibernate/proxy/HibernateProxy.html"
+    },
+    {
+      "title": "Hibernate ORM User Guide — Lazy Loading via Proxies (proxy subclass identity and equals/hashCode)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#associations-lazy"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

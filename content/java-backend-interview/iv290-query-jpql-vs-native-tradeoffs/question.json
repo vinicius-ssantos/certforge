@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A common real trade-off once a team reaches for nativeQuery=true to express something JPQL can't.",
+  "prompt": "A reporting endpoint needs a window function (`ROW_NUMBER() OVER (...)`) that JPQL has no syntax for, so a developer adds:\n```java\n@Query(value = \"SELECT ... ROW_NUMBER() OVER (...) ...\", nativeQuery = true)\n```\nWhat's a real trade-off of choosing `nativeQuery = true` here compared to a JPQL `@Query`?",
+  "explanation": "A native query is handed to the database exactly as written, so Hibernate skips its JPQL-to-dialect translation step entirely. That buys access to database-specific SQL features, but it ties the query to that database's syntax. It's also only automatically mapped onto a managed entity when the result shape matches that entity's columns exactly — a window-function reporting query like this one produces extra ranking columns no entity has, so getting a structured result back requires an explicit `@SqlResultSetMapping` or a DTO constructor mapping, work JPQL's entity mapping does for free whenever the shapes already line up.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Native queries are actually converted back into equivalent JPQL by Hibernate at startup for validation purposes, so dialect portability is preserved either way, and the only real downside is a small amount of extra query-parsing overhead the first time the query runs, comparable to the one-time cost of preparing any other statement.",
+      "correct": false,
+      "explanation": "There's no such reverse translation. A native query is sent to the database as literal SQL; Hibernate never rewrites it back into JPQL, which is exactly why its dialect-portability guarantee doesn't apply to it."
+    },
+    {
+      "key": "B",
+      "text": "Native SQL ties the query to the specific database's dialect, and here the result shape doesn't match any entity's mapped columns, so getting a structured result back needs an explicit `@SqlResultSetMapping` or DTO constructor mapping — a JPQL query wouldn't have either cost.",
+      "correct": true,
+      "explanation": "Correct. This is the real cost of nativeQuery=true: you gain direct access to database-specific SQL, but you give up dialect portability, and — for a result shape like this one that doesn't match an entity — JPQL's automatic entity mapping too."
+    },
+    {
+      "key": "C",
+      "text": "`nativeQuery = true` only changes how Spring Data parses the method signature, but Hibernate still returns fully managed, dirty-checked `Employee` entities identical to a JPQL result in every case, with zero extra mapping configuration needed, because it falls back to matching result columns against the entity's mapped fields by name.",
+      "correct": false,
+      "explanation": "A native query that selects columns beyond an entity's exact mapped shape does not automatically become managed entities; without a result-set mapping or an exact entity-column match, you get plain scalar/tuple results, not transparently managed objects."
+    },
+    {
+      "key": "D",
+      "text": "JPQL queries actually compile down to the exact same native SQL text internally with no real translation step at all, so in practice there's no portability difference between JPQL and native queries at all — only a cosmetic syntax difference for the developer writing them, with identical performance and identical dialect-handling behavior underneath in every supported database.",
+      "correct": false,
+      "explanation": "JPQL is translated per-dialect by Hibernate specifically so the same JPQL text produces correct SQL across different configured databases; that per-dialect translation is the mechanism that gives JPQL its portability, which a hand-written native query does not have."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Data JPA Reference Documentation — Query Methods (@Query, native queries)",
+      "url": "https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

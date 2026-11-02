@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The transient/managed/detached state model is foundational to JPA but rarely tested precisely — most candidates can name the states without knowing which operations actually move an entity between them.",
+  "prompt": "A transactional method does: `Order o = new Order();` then `em.persist(o);` then, inside the same transaction, modifies `o.setStatus(\"SHIPPED\")` without calling any further `EntityManager` method, and the transaction commits. At which point does `o` become a *managed* entity, and what happens to the status change made after `persist()`?",
+  "explanation": "`new Order()` creates a *transient* entity, known to no persistence context. Calling `em.persist(o)` makes it *managed*: the entity is now tracked by the persistence context and scheduled for insertion. Because it stays managed for the rest of the transaction, any field mutation on it afterward (`setStatus(...)`) is picked up automatically by dirty checking at flush/commit time — no further `save()` or `merge()` call is needed for that change to be written.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`o` becomes managed only when the transaction commits, not when `persist()` is called; the status change made right after `persist()` is therefore made to a still-transient object and is silently lost unless `merge()` is called before commit.",
+      "correct": false,
+      "explanation": "`persist()` itself is what transitions the entity to managed, immediately, within the call — not the later commit. The status change is made to an already-managed entity and is not lost."
+    },
+    {
+      "key": "B",
+      "text": "`o` becomes managed when `persist()` is called, but field mutations made after that point are only picked up if the entity is explicitly re-attached with `em.merge(o)` before the transaction commits, since `persist()` only takes a snapshot at call time.",
+      "correct": false,
+      "explanation": "There is no snapshot-at-call-time limitation and no need to call `merge()` on an already-managed entity; `merge()` is for re-attaching a *detached* entity, which `o` never becomes here. Dirty checking tracks ongoing changes automatically."
+    },
+    {
+      "key": "C",
+      "text": "`o` becomes managed the moment `em.persist(o)` returns; the later status change is applied to that managed entity and is automatically detected by dirty checking and written out at flush/commit time, with no extra save call required.",
+      "correct": true,
+      "explanation": "Correct. `persist()` is exactly the operation that moves an entity from transient to managed. Once managed, in-memory field changes are tracked by the persistence context's dirty checking and flushed automatically."
+    },
+    {
+      "key": "D",
+      "text": "`persist()` only reserves a database identifier for `o` without changing its lifecycle state; `o` remains transient until the surrounding transaction commits, at which point it transitions directly from transient to detached.",
+      "correct": false,
+      "explanation": "`persist()` changes the entity's lifecycle state immediately, to managed, not merely reserving an identifier. There is also no direct transient-to-detached transition; an entity becomes detached only after being managed first (typically when its persistence context closes)."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Specification 3.1 — §3.2.2 Persisting an Entity Instance (persist() makes an entity managed; §3.2.4 synchronization at flush/commit)",
+      "url": "https://jakarta.ee/specifications/persistence/3.1/jakarta-persistence-spec-3.1.html#persisting-an-entity-instance"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

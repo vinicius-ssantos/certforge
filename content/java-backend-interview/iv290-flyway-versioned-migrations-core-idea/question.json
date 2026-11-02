@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "EASY",
+  "difficultyRationale": "A foundational fact about how migration tools differ from schema inference, expected of any candidate who's shipped a real production database change.",
+  "prompt": "A team replaces `ddl-auto=update` with Flyway, adding versioned files like `V1__create_orders_table.sql` and `V2__add_status_column.sql` under `src/main/resources/db/migration`. What's the core guarantee Flyway gives that `ddl-auto` never did?",
+  "explanation": "Flyway applies an explicit, developer-authored, strictly ordered sequence of migration scripts, and it records in its own schema history table exactly which versions have already been applied to a given database. That means every environment — a developer's laptop, staging, production — ends up at the same known schema state by running the same reviewed steps in the same order, rather than having the schema inferred (and potentially changed in ways no one explicitly wrote down) from whatever the current entity mappings happen to look like.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Flyway and ddl-auto=update produce functionally identical schemas in every single case, across every version of both tools; the only practical difference is that Flyway's SQL files are written by hand instead of being generated automatically from the entity mappings, with no actual difference in safety, auditability, rollback behavior, or how changes like column renames or removals are ultimately handled by either approach.",
+      "correct": false,
+      "explanation": "The two are not functionally identical: Flyway's hand-written, versioned scripts can express any schema change precisely (including renames, which ddl-auto can't infer correctly) and leave an auditable history, which is the whole point of adopting it over schema inference."
+    },
+    {
+      "key": "B",
+      "text": "Flyway generates its migration scripts automatically by diffing the entity classes against the live database schema at application startup, essentially functioning as an automated, changelog-tracked version of ddl-auto rather than something fundamentally different from it.",
+      "correct": false,
+      "explanation": "Flyway does not diff entities against the database or generate scripts automatically; its migrations are plain SQL (or Java) files that a developer writes and commits, which is precisely what makes them explicit and reviewable instead of inferred."
+    },
+    {
+      "key": "C",
+      "text": "Flyway's migrations only run safely against an in-memory test database by default; applying the same migrations to a real production database requires purchasing a separate enterprise license, regardless of how many migrations are involved.",
+      "correct": false,
+      "explanation": "Flyway's core migration-running capability, including against production databases, is part of its freely available Community edition; there's no license requirement tied to running migrations against a real production database."
+    },
+    {
+      "key": "D",
+      "text": "Flyway applies an explicit, developer-authored, strictly ordered sequence of migration scripts and records in its own schema history table exactly which versions have already been applied to a given database, so every environment reaches the same known schema through the same reviewed, repeatable steps — instead of inferring the schema from whatever the entities currently look like.",
+      "correct": true,
+      "explanation": "Correct. The core difference is explicit, ordered, recorded migrations versus schema inference: every environment runs the exact same reviewed SQL, in the same order, and Flyway tracks exactly what has and hasn't been applied."
+    }
+  ],
+  "references": [
+    {
+      "title": "Flyway Documentation — Migrations (versioned, ordered migration scripts tracked in a schema history table)",
+      "url": "https://documentation.red-gate.com/flyway/flyway-concepts/migrations"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

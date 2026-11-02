@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "Tests whether the candidate understands that the second-level cache is invalidated by Hibernate-mediated writes, not by any change to the underlying row — a real production staleness bug if another process writes directly to the database.",
+  "prompt": "An application enables the second-level cache and marks `Product` `@Cacheable`. A separate, unrelated batch job connects to the same database directly (not through this application's Hibernate session) and runs `UPDATE product SET price = 50 WHERE id = 7`. Minutes later, the application calls `em.find(Product.class, 7L)` for that row. Does it see the new price of 50, or the stale cached value — and why?",
+  "explanation": "Hibernate's second-level cache is only invalidated by writes that go *through* that same Hibernate `SessionFactory` — an `UPDATE`/`DELETE` issued by Hibernate itself removes or refreshes the corresponding cache entry as part of that operation. A direct SQL `UPDATE` executed by something outside Hibernate's knowledge (a separate batch job's own JDBC connection) has no way to signal the cache to invalidate, so the cached entity continues to report the old price until it's evicted by TTL, capacity eviction, or an explicit manual eviction — `find()` returns the stale cached value.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`find()` returns the stale cached price of the old value, because the second-level cache is only invalidated by writes that pass through the same Hibernate `SessionFactory`; a direct SQL update from an unrelated connection has no mechanism to signal that invalidation.",
+      "correct": true,
+      "explanation": "Correct. The second-level cache has no visibility into writes made outside the Hibernate session that owns it; only Hibernate-mediated writes trigger its invalidation logic, so an external direct SQL update leaves the cache holding stale data indefinitely."
+    },
+    {
+      "key": "B",
+      "text": "`find()` returns the fresh price of 50, because every `SELECT` issued by `find()` always goes to the database first to validate the cached entry's version/timestamp before deciding whether to serve the cached copy or the fresh row.",
+      "correct": false,
+      "explanation": "A second-level cache hit for a simple `find()` by id typically returns the cached data directly without first issuing a validating `SELECT` against the database; there's no per-call freshness check against the live row unless the cache is explicitly bypassed or evicted."
+    },
+    {
+      "key": "C",
+      "text": "`find()` returns the fresh price of 50, because every database's own row-level locking mechanism notifies all connected clients, Hibernate's cache included, whenever a row they have cached is modified by any other connection, regardless of how that connection was opened.",
+      "correct": false,
+      "explanation": "No mainstream relational database pushes row-change notifications to arbitrary connected application caches; that kind of cross-process cache invalidation does not happen automatically and would require a dedicated mechanism Hibernate's second-level cache doesn't implement by default."
+    },
+    {
+      "key": "D",
+      "text": "The second-level cache automatically disables itself for any entity type the moment a non-Hibernate-mediated write to that entity's table is detected, falling back permanently to direct database reads for that entity for the rest of the application's runtime.",
+      "correct": false,
+      "explanation": "The second-level cache has no mechanism to detect an external write happened at all, let alone disable itself in response; it simply continues serving whatever it already has cached, unaware that the underlying row changed."
+    }
+  ],
+  "references": [
+    {
+      "title": "Hibernate ORM User Guide — Caching, Second-level Cache (cache invalidation scope and limitations)",
+      "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#caching-l2"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

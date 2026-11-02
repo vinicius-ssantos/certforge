@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires weighing the actual trade-off between the two locking strategies under a specific contention profile, not just naming them.",
+  "prompt": "A ticket-booking service must guarantee that once a seat is read as \"available\" inside a transaction, no other concurrent transaction can also book it before the first one commits or rolls back — and the seat is under heavy concurrent demand, where retrying failed optimistic-lock conflicts over and over would itself become too costly. What's the appropriate tool here, and why does it fit better than `@Version` in this specific situation?",
+  "explanation": "`LockModeType.PESSIMISTIC_WRITE` issues a `SELECT ... FOR UPDATE` that takes a database row lock at the moment the seat is read, blocking any other transaction from reading or writing that same row until the first transaction ends. That avoids the retry storm a high-contention `@Version` approach would cause under this exact load pattern (many transactions racing for the same row), at the cost of holding a lock for the full duration of the transaction instead of only detecting a conflict after the fact.",
+  "options": [
+    {
+      "key": "A",
+      "text": "PESSIMISTIC_WRITE behaves identically to @Version-based optimistic locking except that it additionally writes an audit log row for every lock acquired; the underlying concurrency guarantee — blocking versus retrying — is the same under both approaches.",
+      "correct": false,
+      "explanation": "The two mechanisms differ in exactly the thing this scenario cares about: one blocks concurrent access upfront (pessimistic), the other allows concurrent access and only detects a conflict afterward (optimistic). Neither involves an audit log by default."
+    },
+    {
+      "key": "B",
+      "text": "@Version should still be used here, because Hibernate automatically converts repeated OptimisticLockException retries into an internal serialization queue that resolves conflicting transactions in order, without the application writing any retry logic itself.",
+      "correct": false,
+      "explanation": "Hibernate does no such automatic queuing; a caller using @Version is responsible for catching the OptimisticLockException and deciding whether and how to retry, which is precisely the retry-storm cost this high-contention scenario is trying to avoid."
+    },
+    {
+      "key": "C",
+      "text": "Pessimistic locking only applies to native SQL queries and can never be used with JPQL or Spring Data repository methods directly, so introducing PESSIMISTIC_WRITE here would require rewriting the entire seat-booking query and its surrounding repository method as hand-written native SQL executed outside of the JPA abstraction entirely, including its own separate connection handling.",
+      "correct": false,
+      "explanation": "Pessimistic lock modes are a standard JPA concept usable directly on JPQL queries and on Spring Data repository methods (for example, via @Lock(LockModeType.PESSIMISTIC_WRITE)); no native SQL rewrite is required."
+    },
+    {
+      "key": "D",
+      "text": "LockModeType.PESSIMISTIC_WRITE issues a SELECT ... FOR UPDATE that takes a database row lock the moment the seat is read, blocking other transactions from reading or writing that row until the first transaction ends — avoiding the repeated-retry pattern high-contention optimistic locking would cause here, in exchange for holding a lock for the transaction's full duration.",
+      "correct": true,
+      "explanation": "Correct. Under heavy contention for the same row, blocking upfront with a pessimistic lock avoids the wasted work of repeatedly retrying failed optimistic updates, which is exactly the trade-off that makes pessimistic locking the better fit here."
+    }
+  ],
+  "references": [
+    {
+      "title": "Jakarta Persistence Javadoc — LockModeType (\"A lock with LockModeType.PESSIMISTIC_WRITE can be obtained on an entity instance to force serialization among transactions\")",
+      "url": "https://jakarta.ee/specifications/platform/10/apidocs/jakarta/persistence/LockModeType.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

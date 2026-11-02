@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A practical performance decision candidates should recognize even without memorizing the exact Spring Data projection mechanics.",
+  "prompt": "A `GET /employees/summary` endpoint only needs `id`, `fullName`, and `departmentName` for a list of 10,000 employees, but the `Employee` entity has 30 columns including a large `resume` TEXT field and a `photo` BLOB field. A repository method is declared as `List<EmployeeSummary> findAllProjectedBy()`, where `EmployeeSummary` is an interface exposing only those three accessor methods. Why does using this projection matter here?",
+  "explanation": "An interface-based (or DTO) projection lets Spring Data build a query that selects only the columns the projection actually needs, so the heavy `resume` and `photo` columns are never read off the database or materialized into Java objects for any of the 10,000 rows — unlike returning `List<Employee>`, which hydrates every mapped column of every row whether the caller needs it or not.",
+  "options": [
+    {
+      "key": "A",
+      "text": "An interface-based (or DTO) projection can be backed by a query selecting only id, fullName, and departmentName, avoiding the cost of reading and materializing the BLOB/TEXT columns and the rest of the entity for all 10,000 rows, instead of hydrating a full Employee object for each one.",
+      "correct": true,
+      "explanation": "Correct. The projection narrows what the database actually has to return and what the JVM has to materialize, which matters a lot at 10,000 rows when the skipped columns are large."
+    },
+    {
+      "key": "B",
+      "text": "Projections are purely a compile-time convenience on the repository interface; at runtime Spring Data still loads the complete Employee entity for every matching row and simply hides the unused getters from the object it hands back to the caller.",
+      "correct": false,
+      "explanation": "Spring Data generates a query shaped around the projection's declared properties rather than always loading the full entity first; if that were true, projections would offer no actual performance benefit over returning entities, which defeats their main purpose."
+    },
+    {
+      "key": "C",
+      "text": "Interface-based projections only work when the projection interface is declared in the exact same Java package as the entity class; EmployeeSummary would have to live alongside Employee for Spring Data to recognize it as a valid projection at all.",
+      "correct": false,
+      "explanation": "There's no such same-package requirement; Spring Data recognizes a projection interface by its method signatures matching the source properties, and it can live in any package, such as a dedicated DTO or projection package."
+    },
+    {
+      "key": "D",
+      "text": "Using a projection requires Hibernate's second-level cache to already be enabled and properly configured for the Employee entity ahead of time; without an active second-level cache region defined for it, calling findAllProjectedBy() throws a configuration exception during repository initialization at application startup.",
+      "correct": false,
+      "explanation": "Projections have nothing to do with second-level caching; they work against a plain query result set and don't require, or even interact directly with, the entity's cache configuration."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Data JPA Reference Documentation — Projections (interface-based and DTO projections)",
+      "url": "https://docs.spring.io/spring-data/jpa/reference/repositories/projections.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "HARD",
+  "difficultyRationale": "A real operational pitfall of running migrations on startup in a horizontally scaled deployment, which goes beyond knowing migration tools exist to knowing how they behave under real deployment topology.",
+  "prompt": "A service is deployed with 3 replicas starting up simultaneously, each configured to run Flyway migrations on startup against the same shared database. What does Flyway do to stop two replicas from both trying to apply the same pending migration at the same time, and what's a mistake teams sometimes make here?",
+  "explanation": "Flyway takes a database-level lock around its migrate step (implemented via its own schema history table) so that only one replica actually applies pending migrations at a time; the other replicas wait for that lock, and once it's released they find the migrations already recorded as applied and simply skip them. A mistake teams sometimes make is disabling that locking behavior to shave time off startup, or writing a migration that isn't actually safe to interrupt partway through — both of which turn this exact concurrent-replica scenario into a real risk of a corrupted or partially applied schema.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Each replica independently decides which migrations to run based solely on the files present in its own deployed image, with no coordination through the database at all, so running 3 replicas simultaneously against shared migration files is always safe by construction and needs no locking.",
+      "correct": false,
+      "explanation": "Without any database-level coordination, two replicas starting at the same instant could both see the same migration as pending and both attempt to apply it concurrently — which is precisely the race Flyway's locking mechanism exists to prevent, so \"no coordination needed\" is not an accurate description of how it actually works."
+    },
+    {
+      "key": "B",
+      "text": "Flyway takes a database-level lock around its migration-apply step (for example, via its own schema history table) so only one replica applies pending migrations at a time; the others wait and then see those migrations already marked as applied. A mistake teams make is disabling that locking, or writing a migration that isn't safe if interrupted partway, which this exact concurrent-replica scenario can expose.",
+      "correct": true,
+      "explanation": "Correct. The locking is what makes running migrations from every replica on startup safe at all; removing it, or writing non-idempotent migrations, reintroduces exactly the race this mechanism exists to prevent."
+    },
+    {
+      "key": "C",
+      "text": "Flyway requires exactly one replica to be designated a \"migration leader\" through a manual Kubernetes annotation set by the team during deployment configuration, chosen deliberately before the rollout ever begins; without that annotation explicitly configured and present on exactly one running pod ahead of time, Flyway refuses to start migrations on any replica at all and the entire deployment fails immediately on startup.",
+      "correct": false,
+      "explanation": "Flyway has no concept of a manually annotated leader replica and no Kubernetes-specific requirement; its coordination is a plain database lock any replica can acquire, with no orchestrator-level configuration needed."
+    },
+    {
+      "key": "D",
+      "text": "Only the replica with the lowest pod IP address is permitted to run migrations, a convention Flyway enforces automatically by inspecting the container runtime's network interfaces during startup.",
+      "correct": false,
+      "explanation": "Flyway has no awareness of network interfaces, pod IPs, or container runtime details; its locking is implemented purely at the database level, independent of whatever infrastructure is running the replicas."
+    }
+  ],
+  "references": [
+    {
+      "title": "Flyway FAQ — \"Can multiple nodes migrate in parallel?\" (\"Flyway uses the locking technology of your database to coordinate multiple nodes\", ensuring concurrent migrate attempts still work)",
+      "url": "https://documentation.red-gate.com/fd/frequently-asked-questions-277579363.html"
+    },
+    {
+      "title": "Flyway Documentation — Concepts: Migrations (the schema history table tracking which versions have already been applied)",
+      "url": "https://documentation.red-gate.com/flyway/flyway-concepts/migrations"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

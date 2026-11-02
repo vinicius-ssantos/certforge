@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000106",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A pagination cost that's invisible in the code and only shows up as an extra query in the SQL log, which is exactly the kind of thing a senior candidate should flag before it becomes a production surprise.",
+  "prompt": "A repository method `Page<Order> findByStatus(String status, Pageable pageable)` backs a paginated API endpoint. Besides returning the requested page of content, what else does Spring Data JPA do by default to produce that `Page<Order>`?",
+  "explanation": "A `Page<T>` carries `totalElements` and `totalPages` in addition to the page's content, and Spring Data computes those by issuing a second query — a `COUNT` query built from the same conditions as the content query — rather than deriving the total from the page it just fetched. So a single call to a `Page`-returning method executes at least two SQL statements, which matters when the underlying table is large and the COUNT itself becomes expensive.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A Page object never carries a total count unless the caller explicitly calls repository.count() afterward as a separate, manually written statement; by itself, findByStatus(..., pageable) issues only the one paged SELECT and leaves totalElements at zero.",
+      "correct": false,
+      "explanation": "Populating totalElements/totalPages is exactly what distinguishes Page from the lighter Slice return type, and Spring Data issues the COUNT query itself, automatically, as part of fulfilling a Page-returning method — the caller doesn't have to request it separately."
+    },
+    {
+      "key": "B",
+      "text": "Spring Data computes the total element count purely in the JVM: it loads every row matching the condition into memory once, counts the resulting list's size, and then discards everything outside the requested page before returning the Page object.",
+      "correct": false,
+      "explanation": "That would defeat the entire purpose of pagination (avoiding loading the full result set) and isn't how it works; Spring Data counts at the database with a COUNT query instead of ever materializing the full result set in application memory."
+    },
+    {
+      "key": "C",
+      "text": "Spring Data issues a separate COUNT query derived from the same WHERE conditions to populate totalElements and totalPages on the returned Page, so a single findByStatus(..., pageable) call executes at least two SQL statements, not one.",
+      "correct": true,
+      "explanation": "Correct. The content query and the count query are two separate round trips to the database, and the count query can be the more expensive of the two on a large, unindexed table."
+    },
+    {
+      "key": "D",
+      "text": "Pageable queries always execute as a single SQL statement that uses a database-specific window function to compute the page content and the total count together, regardless of which database is configured for the application.",
+      "correct": false,
+      "explanation": "Spring Data's standard Page support issues two separate, portable statements (a content query and a COUNT query) rather than relying on a database-specific window-function trick that would tie pagination to one vendor's SQL dialect."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Data JPA Reference Documentation — Query Methods (\"A Page knows about the total number of elements and pages available. It does so by the infrastructure triggering a count query to calculate the overall number.\")",
+      "url": "https://docs.spring.io/spring-data/jpa/reference/repositories/query-methods-details.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
