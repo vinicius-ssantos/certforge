@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Many developers assume any exception rolls back a Spring transaction; the default rule is narrower and trips people up specifically with checked exceptions.",
+  "prompt": "A `@Transactional` method (no `rollbackFor` configured) calls a library method that throws a checked `IOException`, and the exception propagates out of the transactional method unhandled. Under Spring's default rollback rules, what happens to the transaction?",
+  "explanation": "Spring's default rollback policy marks a transaction for rollback only for unchecked exceptions — `RuntimeException` and its subclasses, plus `Error` — not for checked exceptions. A checked exception like `IOException` propagating out of the method does not trigger rollback unless `rollbackFor` is explicitly configured to include it.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The transaction commits, because Spring's default rollback rule only applies to unchecked exceptions (`RuntimeException`/`Error`); a checked exception like `IOException` is not covered unless `rollbackFor` names it.",
+      "correct": true,
+      "explanation": "Correct, and a common source of a quietly-committed transaction next to data a developer assumed had been discarded."
+    },
+    {
+      "key": "B",
+      "text": "The transaction always rolls back, because any `Throwable` at all — checked, unchecked, or an `Error` — propagating out of a `@Transactional` method unconditionally triggers Spring's default rollback behavior, regardless of its type.",
+      "correct": false,
+      "explanation": "This overstates the default: Spring's default rule is specifically scoped to unchecked exceptions and errors, not every `Throwable`."
+    },
+    {
+      "key": "C",
+      "text": "Rollback happens only if the checked exception is explicitly declared in the transactional method's own `throws` clause, since Spring inspects the method signature to decide which checked types it is allowed to roll back for.",
+      "correct": false,
+      "explanation": "Whether a method declares `throws IOException` affects only compile-time checking in Java; it has no bearing on Spring's rollback decision, which is based on the exception's runtime type."
+    },
+    {
+      "key": "D",
+      "text": "The outcome is undefined and depends entirely on the JDBC driver's own exception-translation layer, which decides case by case whether a given `SQLException` subtype warrants rolling back the enclosing transaction.",
+      "correct": false,
+      "explanation": "Rollback is decided by Spring's transaction interceptor based on the exception type and the configured rollback rules, not left to the JDBC driver."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Javadoc — @Transactional (rollbackFor / default rollback rule)",
+      "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate understands that rollback is driven by what the proxy observes (the exception leaving the method), not by what happened logically inside it.",
+  "prompt": "`processPayment()` is `@Transactional`. It calls `chargeCard()`, which throws an unchecked `PaymentFailedException`. `processPayment()` wraps that call in a `try/catch`, logs the failure, and returns normally without rethrowing or calling `setRollbackOnly()`. What happens to the transaction?",
+  "explanation": "Spring's transaction interceptor decides whether to roll back based on what it observes at the proxy boundary: whether an exception actually propagates out of the advised method. Catching `PaymentFailedException` inside `processPayment()` and returning normally means the proxy sees a normal, non-exceptional return — so it commits, even though the business operation actually failed.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The transaction always rolls back, because Spring tracks every exception thrown anywhere in the call tree beneath a `@Transactional` method, even ones caught internally.",
+      "correct": false,
+      "explanation": "Spring has no such call-tree-wide tracking. The rollback decision is made only from what reaches the proxy around the transactional method itself."
+    },
+    {
+      "key": "B",
+      "text": "Whether it rolls back depends on the logging level used to record the caught exception — for example logging it at `ERROR` flags the transaction for rollback, while a lower level such as `WARN` or `INFO` lets the commit proceed normally.",
+      "correct": false,
+      "explanation": "Logging is unrelated to transaction management; the transaction's fate has nothing to do with how or whether the exception was logged."
+    },
+    {
+      "key": "C",
+      "text": "The transaction commits, because the interceptor only inspects the exception that actually propagates out of the advised method; catching it inside `processPayment()` hides it, so the proxy sees a normal return and commits.",
+      "correct": true,
+      "explanation": "Correct. To force a rollback here, the method would need to rethrow, or call `TransactionAspectSupport.currentTransactionStatus().setRollbackOnly()` explicitly before returning."
+    },
+    {
+      "key": "D",
+      "text": "The transaction commits, but only because `@Transactional(dontRollbackOn = PaymentFailedException.class)` must have been set explicitly; otherwise it would still roll back.",
+      "correct": false,
+      "explanation": "No such attribute (`dontRollbackOn`) exists on `@Transactional` — the real attribute for exclusions is `noRollbackFor`. More importantly, no such configuration is needed here at all: the commit happens simply because the exception never reaches the proxy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Rolling Back a Declarative Transaction",
+      "url": "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/rolling-back.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

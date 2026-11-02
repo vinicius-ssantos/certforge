@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks understanding of the mechanism auto-configuration classes actually use to stay out of the way of user-defined beans, not just the fact that they do.",
+  "prompt": "A Spring Boot starter's auto-configuration class declares a `JavaMailSender` bean annotated `@ConditionalOnMissingBean(JavaMailSender.class)`. A developer defines their own `@Bean` of type `JavaMailSender` in their application's configuration. Why does the application end up using the developer's bean rather than the starter's?",
+  "explanation": "`@ConditionalOnMissingBean` makes the annotated bean definition's registration conditional on no bean of the given type already existing in the application context at the point the condition is evaluated. Auto-configuration classes are processed after the user's own `@Configuration` classes in the ordering Spring Boot uses, so by the time the starter's `JavaMailSender` definition is evaluated, the developer's own bean is already registered — the condition is false, the starter's bean is skipped, and only the developer's bean exists.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Spring always prefers a `@Bean` method defined in the application's own package over one originating from a dependency's auto-configuration class, regardless of any `@Conditional*` annotations attached to either bean definition.",
+      "correct": false,
+      "explanation": "There is no package-based precedence rule in Spring's bean resolution; the actual mechanism here is the `@ConditionalOnMissingBean` condition evaluating false because a bean of that type already exists."
+    },
+    {
+      "key": "B",
+      "text": "`@ConditionalOnMissingBean` skips the starter's registration once a bean of that type exists; user config runs before auto-configuration, so the developer's bean is already there when checked.",
+      "correct": true,
+      "explanation": "Correct — this is exactly the back-off mechanism auto-configuration classes use: they are ordered to run after the user's own configuration, and `@ConditionalOnMissingBean` lets them defer to whatever the user already defined."
+    },
+    {
+      "key": "C",
+      "text": "Both the starter's bean and the developer's bean are registered in the context, and Spring resolves the ambiguity at injection time by applying `@Primary` semantics automatically to whichever bean the developer defined.",
+      "correct": false,
+      "explanation": "No second `JavaMailSender` bean is registered at all in this case — `@ConditionalOnMissingBean` prevents the starter's bean definition from being created in the first place, so there is no `@Primary`-style disambiguation happening between two beans."
+    },
+    {
+      "key": "D",
+      "text": "This only works because the developer also added `@Primary` to their bean definition; without that annotation, both beans would be registered side by side and startup would fail outright with an ambiguous-bean resolution error.",
+      "correct": false,
+      "explanation": "`@Primary` is unnecessary here because the starter's bean is never registered in the first place; the described outcome follows directly from `@ConditionalOnMissingBean`'s ordering, with no ambiguity to resolve."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference Documentation — Creating Your Own Auto-configuration (condition annotations, back off behavior)",
+      "url": "https://docs.spring.io/spring-boot/reference/features/developing-auto-configuration.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

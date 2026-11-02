@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate distinguishes propagation (how a method joins or starts a transaction) from the physical independence REQUIRES_NEW actually buys.",
+  "prompt": "`OrderService.placeOrder()` is `@Transactional` (default propagation, `REQUIRED`). Partway through, it calls `AuditService.logAttempt()`, which is `@Transactional(propagation = Propagation.REQUIRES_NEW)`. `logAttempt()` completes and its transaction commits. Later, `placeOrder()` throws an unchecked exception and its own transaction rolls back. What happens to the audit row written by `logAttempt()`?",
+  "explanation": "`REQUIRES_NEW` suspends whatever transaction is in progress on the calling thread and starts a brand-new, physically separate transaction for the duration of the called method. That new transaction commits (or rolls back) on its own terms when the method returns, before control even returns to the caller. The caller's later rollback has no effect on a transaction that already completed.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It is rolled back along with `placeOrder()`'s transaction, because propagation only governs how a method joins a transaction, not whether the two stay independent afterward.",
+      "correct": false,
+      "explanation": "This describes `REQUIRED` or `NESTED`, not `REQUIRES_NEW`. `REQUIRES_NEW` specifically creates a separate physical transaction, so it is not tied to the caller's outcome."
+    },
+    {
+      "key": "B",
+      "text": "It stays committed, because `REQUIRES_NEW` suspends the caller's transaction and runs in its own independent one that already committed before `placeOrder()` decided to roll back.",
+      "correct": true,
+      "explanation": "Correct. The audit transaction is a separate unit of work; once it commits, nothing that happens later in the suspended outer transaction can undo it."
+    },
+    {
+      "key": "C",
+      "text": "It stays committed only because `placeOrder()` catches and logs the exception before returning instead of letting it propagate out uncaught; otherwise `REQUIRES_NEW`'s physical independence would not protect the audit row from being undone.",
+      "correct": false,
+      "explanation": "Whether the outer method catches the exception is irrelevant to the already-committed inner transaction — `REQUIRES_NEW`'s independence does not depend on how the caller later handles errors."
+    },
+    {
+      "key": "D",
+      "text": "The outcome depends on the isolation level configured on `placeOrder()` — for instance `READ_COMMITTED` versus `SERIALIZABLE` — rather than on the propagation setting configured on `logAttempt()`.",
+      "correct": false,
+      "explanation": "Isolation level controls visibility between concurrent transactions, not whether a completed, committed transaction can be rolled back retroactively by an unrelated one. That is governed by propagation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Transaction Propagation",
+      "url": "https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/tx-propagation.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

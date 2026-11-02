@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires knowing why a request-scoped bean needs a scoped proxy to be injected into a singleton at all, not just what the scope annotation does.",
+  "prompt": "A `@Component` is declared `@Scope(value = \"request\", proxyMode = ScopedProxyMode.TARGET_CLASS)` and injected as a constructor dependency into a singleton `@Service`. If `proxyMode` were left at its default (`ScopedProxyMode.DEFAULT`, i.e. no proxy) instead, what would happen when the application starts?",
+  "explanation": "A singleton bean is created once, at container startup (or on first use), and holds a single reference to each of its dependencies for its entire lifetime. A `request`-scoped bean, by contrast, only exists for the duration of one HTTP request — there may be zero or many instances of it over the application's lifetime, and none of them exist outside a request. Without a scoped proxy, Spring cannot inject a single real instance of the request-scoped bean into the singleton's constructor, because there usually is no request-scoped instance (and no request) at the moment the singleton is created. `TARGET_CLASS` (or `INTERFACES`) makes Spring inject a proxy that looks up the current request's actual bean instance on every method call, which is what makes the combination work at all.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The application context fails to start, typically with an error that no request-scoped bean can be resolved outside an active HTTP request.",
+      "correct": true,
+      "explanation": "Correct. Without a scoped proxy, Spring tries to inject a concrete instance of the request-scoped bean directly, which requires an active request to resolve against. At startup there is no request in progress, so context initialization fails (commonly surfaced as a `BeanCreationException` wrapping a scope-not-active error)."
+    },
+    {
+      "key": "B",
+      "text": "Spring falls back to creating one request-scoped instance eagerly at startup, outside of any request, and silently reuses that same instance for every later request as if it were a singleton.",
+      "correct": false,
+      "explanation": "Spring does not silently downgrade a declared scope to singleton behavior; the scope mismatch between a singleton's one-time dependency resolution and a scope that requires an active request is an error condition, not something papered over automatically."
+    },
+    {
+      "key": "C",
+      "text": "Nothing changes; `proxyMode` only selects between CGLIB class proxies and JDK interface-based dynamic proxies as an implementation detail, and has no bearing on whether the application context can start.",
+      "correct": false,
+      "explanation": "`proxyMode` is not a cosmetic choice between proxy implementations here — a scoped proxy is what makes injecting a narrower-scoped bean into a wider-scoped one possible at all. Without one, the startup-time injection has nothing valid to resolve to."
+    },
+    {
+      "key": "D",
+      "text": "The singleton bean is created successfully, but the request-scoped dependency field stays `null` until the first HTTP request arrives and Spring lazily resolves it on demand.",
+      "correct": false,
+      "explanation": "Spring does not defer constructor-dependency resolution and leave it null; a constructor argument must be resolvable at the time the singleton is instantiated, and failing to resolve it fails bean creation rather than leaving the field null."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Bean Scopes, Scoped Beans as Dependencies (request/session scope and the scoped-proxy mechanism)",
+      "url": "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html"
+    },
+    {
+      "title": "Spring Framework Javadoc — @Scope (proxyMode attribute and ScopedProxyMode)",
+      "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/annotation/Scope.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

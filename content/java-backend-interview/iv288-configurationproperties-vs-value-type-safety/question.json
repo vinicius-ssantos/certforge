@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A practical design-choice question rather than a trivia question: it checks whether the candidate can map a real requirement (nested, validated, testable config) to the tool built for it.",
+  "prompt": "A team needs to bind a block of related configuration — `app.mail.host`, `app.mail.port`, `app.mail.retries` — into a single Java object, validate that `port` is within 1-65535, and unit-test that binding without starting a full Spring context. Which approach fits best, and why?",
+  "explanation": "`@ConfigurationProperties` is designed exactly for this: it binds a whole related block of properties onto one type-safe class in a single step, supports JSR-303/`@Validated` constraints on its fields, and the resulting POJO can be constructed and validated in a plain unit test by binding a `Map` or `Properties` source, with no Spring context required. `@Value` injects one property expression at a time into one field and has no comparable support for nested structures or constraint validation.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`@ConfigurationProperties`, because it binds a whole nested structure onto a type-safe class in one step, works with `@Validated`/JSR-303 constraints on the fields, and the class can be tested by binding a `Map`/`Properties` source without a full Spring context.",
+      "correct": true,
+      "explanation": "Correct — this is precisely the use case `@ConfigurationProperties` targets, as distinct from `@Value`'s one-property-at-a-time injection."
+    },
+    {
+      "key": "B",
+      "text": "`@Value`, because it is a single annotation and is therefore always the simplest choice, regardless of how many related properties are involved or whether the values need any structure or validation applied to them.",
+      "correct": false,
+      "explanation": "`@Value` injects one expression into one field; binding three related properties into a validated, nested object with it means hand-wiring three separate `@Value` fields and writing validation logic yourself — simpler in appearance, not in practice, for this case."
+    },
+    {
+      "key": "C",
+      "text": "`@ConfigurationProperties` and `@Value` are interchangeable here; the choice between them is purely stylistic, since both ultimately resolve property keys against the same `Environment` and `PropertySource` chain underneath, with no real difference in capability.",
+      "correct": false,
+      "explanation": "They are not interchangeable for this requirement: only `@ConfigurationProperties` supports binding a nested block as one object with validation, which `@Value` does not provide at all."
+    },
+    {
+      "key": "D",
+      "text": "Neither is appropriate; configuration like this has to be read manually from `Environment` at startup, by calling `getProperty()` for each key and wiring the validation logic by hand in a `@PostConstruct` method.",
+      "correct": false,
+      "explanation": "Manual `Environment` lookups are exactly what `@ConfigurationProperties` is meant to replace — it is the supported, documented mechanism for structured configuration binding."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Boot Reference — Externalized Configuration (Type-safe Configuration Properties)",
+      "url": "https://docs.spring.io/spring-boot/reference/features/external-config.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

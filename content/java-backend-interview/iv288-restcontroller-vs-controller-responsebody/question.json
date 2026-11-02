@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000105",
+  "difficulty": "EASY",
+  "difficultyRationale": "A fundamental distinction every Spring MVC developer needs, but still worth checking candidates can state precisely rather than by vague association.",
+  "prompt": "A controller class is annotated `@Controller`, and one of its handler methods returns a `UserDto` object directly (no `ResponseEntity`, no explicit view name). At runtime, the request fails with a 500 error whose message says Spring could not resolve a view, instead of the browser receiving `UserDto` serialized as JSON. What is going on, and what is the simplest fix?",
+  "explanation": "`@Controller` marks a class as a Spring MVC controller whose handler methods are, by default, expected to contribute to view resolution, not write the response body directly. Without `@ResponseBody` on the method (or the class), a return value that isn't a recognized type such as `String`, `View`, or `ModelAndView` is treated as a model attribute, and Spring MVC asks its configured `RequestToViewNameTranslator` to derive a view name from the request path, then tries to resolve and render that view — which fails with an unresolved-view error when no matching template exists, rather than ever serializing `UserDto`. Annotating the class `@RestController` (shorthand for `@Controller` plus `@ResponseBody` on every handler method) or adding `@ResponseBody` to the specific method tells Spring MVC to pass the return value to an `HttpMessageConverter` (e.g. a JSON converter) and write it directly as the response body instead of treating it as part of a view.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The handler method's return value is being treated as a model attribute for view resolution rather than a response body; adding `@ResponseBody` to the method fixes it.",
+      "correct": true,
+      "explanation": "Correct. `@Controller` alone does not imply that return values are the response body — `@ResponseBody` (directly, or via `@RestController`) is what tells the framework to pass the object to a message converter instead of folding it into view resolution."
+    },
+    {
+      "key": "B",
+      "text": "`UserDto` must be missing a `@JsonProperty` annotation on one or more of its fields, which prevents Jackson's `ObjectMapper` from being able to serialize the object into JSON at all.",
+      "correct": false,
+      "explanation": "`@JsonProperty` only customizes field names during JSON serialization and has no bearing on whether serialization happens at all; the actual issue is that the response-body mechanism (`@ResponseBody`) was never engaged for this handler method, so no message converter is ever invoked."
+    },
+    {
+      "key": "C",
+      "text": "This happens because `UserDto` is declared as a plain class rather than a Java record; Spring MVC serializes records to JSON automatically but requires explicit configuration for ordinary classes.",
+      "correct": false,
+      "explanation": "Whether a type is a class or a record has no effect on this behavior; the determining factor is whether the handler method's return value is treated as part of view resolution (`@Controller`) or a response body (`@ResponseBody`/`@RestController`)."
+    },
+    {
+      "key": "D",
+      "text": "The application is missing the Jackson JSON library on its classpath entirely, so Spring Boot has no converter available to serialize the object with, which is why view resolution is attempted as a fallback instead.",
+      "correct": false,
+      "explanation": "Whether a JSON library is on the classpath has no bearing on this: the return value is routed to view resolution because `@ResponseBody` was never applied, not because a converter was unavailable — the same failure happens even with Jackson present."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Framework Reference — Web MVC, Annotated Controllers: @ResponseBody",
+      "url": "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-methods/responsebody.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
