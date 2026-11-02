@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "HARD",
+  "difficultyRationale": "Diagnosing nondeterminism from a stateful lambda under parallel execution, and choosing a fix that doesn't just trade the bug for a performance regression, is a senior-level reasoning task.",
+  "prompt": "A pipeline does `ids.parallelStream().map(e -> { if (seen.add(e)) return 0; else return e; }).collect(toList())`, where `seen` is a shared, unsynchronized `HashSet`. Runs over the same input occasionally return different results, and sometimes throw a `ConcurrentModificationException`. The team's first proposed fix is to wrap `seen` in `Collections.synchronizedSet(...)` and keep `parallelStream()`. What is the best assessment of that fix?",
+  "explanation": "Synchronizing `seen` removes the unsafe concurrent access and the nondeterminism it causes, so correctness is restored. But the mapping lambda's result still depends on mutable shared state (`seen`), which the Streams documentation calls out as a stateful behavioral parameter — and synchronizing access to that state serializes exactly the work the parallel pipeline was trying to parallelize, so contention can undermine or erase the benefit of using `parallelStream()` at all. The deeper fix is to restructure the pipeline to avoid a stateful lambda in the first place (e.g., deduplicate with a stateless, order-independent operation before or after the parallel stage), not merely to make the existing stateful lambda thread-safe.",
+  "options": [
+    {
+      "key": "A",
+      "text": "It fully resolves the issue with no remaining downside, since synchronization is the documented way to make shared mutable state safe for any concurrent access pattern.",
+      "correct": false,
+      "explanation": "Synchronization does restore correctness, but the Streams documentation specifically warns that synchronizing access to state shared by a behavioral parameter risks contention that undermines the parallelism being sought — that is a real downside, not a resolved non-issue."
+    },
+    {
+      "key": "B",
+      "text": "It fixes the correctness bug but trades it for a performance risk: the lambda is still stateful, and synchronizing access to `seen` can serialize the parallel pipeline's threads against each other, eroding the benefit of `parallelStream()`.",
+      "correct": true,
+      "explanation": "Correct: this matches the Streams documentation's own framing of the trade-off — an unsynchronized stateful lambda is a data race, while a synchronized one avoids the race but risks contention that cancels out the parallelism; neither option is free, and the better fix removes the shared mutable state from the lambda entirely."
+    },
+    {
+      "key": "C",
+      "text": "It does not fix anything at all, because `Collections.synchronizedSet` only synchronizes individual method calls on the wrapped set internally and therefore still permits exactly the same race condition the team originally observed in production.",
+      "correct": false,
+      "explanation": "A synchronized wrapper does make each individual call to `add` thread-safe, which is enough to remove the specific race causing `ConcurrentModificationException` and the resulting nondeterminism in this scenario; the remaining concern is performance, not a surviving correctness bug."
+    },
+    {
+      "key": "D",
+      "text": "It is unnecessary, because `parallelStream()` already synchronizes access to any object captured by a lambda passed to `map`.",
+      "correct": false,
+      "explanation": "`parallelStream()` parallelizes traversal of the pipeline; it provides no automatic synchronization for state a lambda happens to capture and mutate, which is exactly why an unsynchronized shared `seen` set was unsafe here."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.stream (Java SE 21 & JDK 21) — Stateless behaviors",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

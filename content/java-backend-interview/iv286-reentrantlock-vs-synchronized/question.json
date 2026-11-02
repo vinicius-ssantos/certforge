@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "EASY",
+  "difficultyRationale": "A direct feature comparison between synchronized and ReentrantLock, testing recall of what the explicit lock adds.",
+  "prompt": "A service needs a lock that lets a thread give up waiting after a timeout, and lets a monitoring thread check whether the lock is currently held without blocking. Which capability does plain `synchronized` NOT provide, making `java.util.concurrent.locks.ReentrantLock` the better fit here?",
+  "explanation": "`synchronized` offers mutual exclusion, reentrancy, and the standard visibility guarantees, but it is strictly block-structured and unconditional: a thread attempting to enter a synchronized block either acquires it or blocks indefinitely, with no way to time out, no way to be interrupted while waiting, and no way for another thread to inspect its lock state. `ReentrantLock`'s API (`tryLock(timeout, unit)`, `lockInterruptibly()`, `isLocked()`) exists specifically to add those capabilities.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Reentrancy — a thread that already holds the lock being able to acquire it again without deadlocking itself.",
+      "correct": false,
+      "explanation": "`synchronized` is already reentrant: a thread holding a monitor can enter another synchronized block or method guarded by the same monitor without blocking on itself. This is not a gap `ReentrantLock` needs to fill."
+    },
+    {
+      "key": "B",
+      "text": "Timed and interruptible acquisition (`tryLock(timeout, unit)`, `lockInterruptibly()`) and inspectable lock state (`isLocked()`) — `synchronized` offers none of these.",
+      "correct": true,
+      "explanation": "Correct: `synchronized` has no API surface at all for timing out, being interrupted while waiting, or querying lock state from outside. `ReentrantLock` exposes exactly these as explicit methods, which is why it is reached for when those specific needs show up."
+    },
+    {
+      "key": "C",
+      "text": "Mutual exclusion between threads — ensuring only one thread executes the guarded block at a time.",
+      "correct": false,
+      "explanation": "Mutual exclusion is the one guarantee both `synchronized` and `ReentrantLock` provide equally; it is not a differentiator between them."
+    },
+    {
+      "key": "D",
+      "text": "Visibility of the shared state guarded by the lock to other threads after the lock is released, since only an explicit `Lock` implementation participates in the Java Memory Model's happens-before ordering at all.",
+      "correct": false,
+      "explanation": "Both constructs establish the same happens-before edge on release/acquire (an unlock happens-before a subsequent lock on the same lock), so visibility is equivalent between them; it is not what distinguishes `ReentrantLock`."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.concurrent.locks.ReentrantLock (Java SE 21 API)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/locks/ReentrantLock.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

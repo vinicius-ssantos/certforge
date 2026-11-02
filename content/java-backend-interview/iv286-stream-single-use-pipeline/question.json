@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "EASY",
+  "difficultyRationale": "Knowing that a Stream pipeline is consumed exactly once is a basic but commonly-violated rule for anyone new to the Streams API.",
+  "prompt": "Code builds a `Stream<Order> stream = orders.stream().filter(Order::isPaid)`, then calls `stream.count()` to log how many orders qualify, and afterward calls `stream.forEach(...)` on the same `stream` variable to process them. What happens on the second call?",
+  "explanation": "A stream pipeline can only be traversed once: the terminal operation `count()` already consumed this pipeline, so by the time `forEach` runs on the same `stream` reference, it is attempting to reuse an already-consumed pipeline. The Streams documentation is explicit that after a terminal operation runs, the pipeline is considered consumed and cannot be used again — traversing the same data again requires going back to the source for a new stream, not reusing the old reference.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`forEach` silently does nothing, since there are no elements left to visit.",
+      "correct": false,
+      "explanation": "The failure here isn't a quiet no-op; reusing an already-consumed stream pipeline is a programming error the Streams API is documented to disallow, not a case of an empty-but-valid stream."
+    },
+    {
+      "key": "B",
+      "text": "`forEach` transparently re-runs the whole pipeline from scratch, re-evaluating `filter(Order::isPaid)` against `orders` all over again, since the original backing list underneath is still reachable and unmodified.",
+      "correct": false,
+      "explanation": "A stream does not hold a replayable reference back to re-derive itself from the source; once its pipeline is consumed, it does not fall back to rebuilding itself automatically."
+    },
+    {
+      "key": "C",
+      "text": "`forEach` processes only the paid orders that `count()` had not yet reached, since streams are evaluated lazily.",
+      "correct": false,
+      "explanation": "Laziness governs when intermediate operations run before a terminal operation executes, not partial progress resumed across two separate terminal operations on the same pipeline."
+    },
+    {
+      "key": "D",
+      "text": "Using `stream` again after `count()` already ran a terminal operation on it is invalid, because a stream pipeline is consumed by its terminal operation and cannot be traversed a second time.",
+      "correct": true,
+      "explanation": "Correct: the Streams documentation states that once a terminal operation is performed, the pipeline is considered consumed and can no longer be used; traversing the same elements again requires returning to the data source (e.g. calling `orders.stream()` again) to obtain a fresh stream."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.stream (Java SE 21 & JDK 21) — Stream operations and pipelines",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

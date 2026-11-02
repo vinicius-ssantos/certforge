@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Applying the checked-vs-unchecked guideline to a concrete repository-layer decision, rather than reciting the rule in the abstract, is the realistic interview bar.",
+  "prompt": "A repository method catches a low-level `SQLException` (checked) raised by the JDBC driver. The team debates whether the repository's own method signature should also declare a checked exception for callers to handle, or whether it should wrap the `SQLException` and rethrow it as an unchecked exception instead. Most callers (web controllers, service methods) cannot do anything meaningful about a database connectivity failure beyond failing the request. Which choice best follows the standard guidance for choosing between checked and unchecked exceptions?",
+  "explanation": "The standard guideline is: if a client can reasonably be expected to recover from a condition, make it checked so the compiler forces that client to confront it; if a client cannot do anything to recover, make it unchecked instead of forcing every caller to handle (or mechanically rethrow) something they have no real response to. A typical web controller or service method has no meaningful recovery for a database connectivity failure beyond surfacing an error, so wrapping the checked `SQLException` into an unchecked exception at the repository boundary fits that guidance better than propagating a checked exception that most callers can only catch and immediately fail on anyway.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Keep it checked, because any exception that originates from a checked exception further down the call stack must itself stay checked all the way up.",
+      "correct": false,
+      "explanation": "There is no such propagation rule in Java; a method is free to catch a checked exception and throw a different, unchecked one instead. The choice is a design decision about recoverability, not something the language forces based on the cause's type."
+    },
+    {
+      "key": "B",
+      "text": "Keep it checked, because checked exceptions are always more informative to callers than unchecked ones.",
+      "correct": false,
+      "explanation": "Checked exceptions are visible in the method signature, which is a form of documentation, but that is a different property from whether a caller can actually act on the exception — the guidance is about recoverability, not about which kind carries more information."
+    },
+    {
+      "key": "C",
+      "text": "Wrap it as unchecked, because most callers here cannot meaningfully recover from a database connectivity failure, matching the guidance that unrecoverable conditions are better represented as unchecked.",
+      "correct": true,
+      "explanation": "Correct: this directly applies the standard rule — a client that cannot reasonably recover from a condition is better served by an unchecked exception than by being forced to handle (or reflexively rethrow) a checked one it has no real response to."
+    },
+    {
+      "key": "D",
+      "text": "Wrap it as unchecked purely so that the repository method's public signature looks simpler to callers, since fewer declared exceptions on a method is always considered a sign of better, cleaner API design.",
+      "correct": false,
+      "explanation": "Choosing unchecked for signature brevity alone, without regard to whether callers can recover, is exactly the shortcut the guidance warns against — it explicitly cautions against using `RuntimeException` just to avoid declaring exceptions, rather than because recovery genuinely isn't possible."
+    }
+  ],
+  "references": [
+    {
+      "title": "Unchecked Exceptions — The Controversy (The Java Tutorials)",
+      "url": "https://docs.oracle.com/javase/tutorial/essential/exceptions/runtime.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

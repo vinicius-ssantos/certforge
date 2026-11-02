@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "EASY",
+  "difficultyRationale": "Distinguishing what the heap, a thread's JVM stack, and the method area each hold is foundational JVM knowledge for a backend screen.",
+  "prompt": "A thread calls a method that creates a `new Order()` object and also declares a local `int total` variable. Which statement correctly describes where each of these lives, per the Java Virtual Machine Specification's run-time data areas?",
+  "explanation": "The specification describes the heap as the run-time data area, shared among all JVM threads, from which memory for all class instances and arrays is allocated — that is where the `Order` object lives. Each thread has its own private JVM stack, which stores frames holding that thread's local variables and partial results — that is where the local `int total` lives. These are deliberately different areas: one is shared across threads and holds objects, the other is per-thread and holds a method invocation's local state.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The `Order` object is allocated on the heap, which is shared among threads; `total` lives in the calling thread's own JVM stack, which holds that thread's local variables.",
+      "correct": true,
+      "explanation": "Correct: the specification defines the heap as the shared area from which class instances and arrays are allocated, and each thread's private JVM stack as what stores frames holding that thread's local variables and partial results."
+    },
+    {
+      "key": "B",
+      "text": "Both the `Order` object and `total` are allocated on the calling thread's private JVM stack, since they were both created within the same method call.",
+      "correct": false,
+      "explanation": "Object instances are specifically allocated on the shared heap, not on a thread's private stack; only primitive locals and references (not the objects a reference points to) live in the stack frame."
+    },
+    {
+      "key": "C",
+      "text": "The `Order` object and `total` are both stored in the method area, since that is where a method's entire execution state lives.",
+      "correct": false,
+      "explanation": "The method area holds per-class structures such as the run-time constant pool, field and method data, and code — not a running method's local variables or the objects it allocates during execution."
+    },
+    {
+      "key": "D",
+      "text": "The `Order` object is allocated on the thread's private JVM stack, since it was created locally, while `total` lives on the shared heap because primitives are always heap-allocated.",
+      "correct": false,
+      "explanation": "This reverses both assignments: object instances go on the shared heap regardless of where they were created, and a local primitive variable lives in the thread's own stack frame, not the heap."
+    }
+  ],
+  "references": [
+    {
+      "title": "The Java Virtual Machine Specification, SE 21 — Chapter 2.5, Run-Time Data Areas",
+      "url": "https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-2.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Explaining why a pipeline over an infinite stream terminates requires connecting laziness and short-circuiting rather than treating them as separate trivia.",
+  "prompt": "`Stream.iterate(1, x -> x * 2).filter(x -> x > 1000).findFirst()` returns a result in finite time, even though `Stream.iterate(1, x -> x * 2)` produces an infinite stream of ever-doubling values. Why does this terminate instead of running forever?",
+  "explanation": "`filter` is an intermediate operation: it is lazy and performs no work on its own, so building the pipeline does not start generating or filtering values yet. `findFirst` is a terminal, short-circuiting operation: it pulls just enough elements through the lazy pipeline to find one match and then stops, instead of demanding the whole (infinite) source first. Laziness means nothing runs ahead of demand, and short-circuiting means demand itself stops as soon as an answer is found — together they let a short-circuiting terminal operation finish over an infinite source.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`filter` is lazy and contributes no eager work, and `findFirst` is short-circuiting, so it pulls only as many elements through the pipeline as needed to find the first match before stopping.",
+      "correct": true,
+      "explanation": "Correct: an intermediate operation like `filter` is always lazy and only describes what traversal will do later; `findFirst` is documented as a short-circuiting terminal operation, which is what lets it finish in finite time even over a source that could run forever."
+    },
+    {
+      "key": "B",
+      "text": "`Stream.iterate` automatically caps itself at a reasonable number of elements to avoid infinite loops.",
+      "correct": false,
+      "explanation": "`Stream.iterate(seed, next)` with no `hasNext` predicate is documented to produce an infinite ordered stream; it has no built-in cap, so nothing about the source itself is what stops the computation."
+    },
+    {
+      "key": "C",
+      "text": "`filter` is a short-circuiting operation, so it stops generating values once it sees the first one greater than 1000.",
+      "correct": false,
+      "explanation": "`filter` is not a short-circuiting operation — it must inspect every element it is handed to decide whether it passes, however many that turns out to be; the short-circuiting behavior in this pipeline comes from `findFirst`, the terminal operation."
+    },
+    {
+      "key": "D",
+      "text": "The pipeline silently runs to completion on a hidden background thread, and `findFirst` simply blocks and returns as soon as the whole, otherwise-infinite stream eventually finishes evaluating entirely on its own.",
+      "correct": false,
+      "explanation": "There is no background evaluation of the whole stream; laziness means traversal does not begin until the terminal operation runs, and `findFirst`'s short-circuiting means traversal itself stops early rather than ever completing over an infinite source."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.stream (Java SE 21 & JDK 21) — Laziness and short-circuiting",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/package-summary.html"
+    },
+    {
+      "title": "Stream#iterate(Object, UnaryOperator) (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/stream/Stream.html#iterate(T,java.util.function.UnaryOperator)"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

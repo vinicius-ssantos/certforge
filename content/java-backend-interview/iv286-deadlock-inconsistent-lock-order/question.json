@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires recognizing the circular-wait condition from a code scenario and knowing the standard structural fix, not just defining 'deadlock'.",
+  "prompt": "```java\n// Thread 1\nsynchronized (accountA) {\n    synchronized (accountB) { transfer(accountA, accountB); }\n}\n// Thread 2\nsynchronized (accountB) {\n    synchronized (accountA) { transfer(accountB, accountA); }\n}\n```\nThread 1 transfers from `accountA` to `accountB` while Thread 2 simultaneously transfers the other way, as shown. Under what condition can this deadlock, and what is the standard fix?",
+  "explanation": "Both threads acquire the same two locks but in opposite order. If Thread 1 manages to lock `accountA` at roughly the same moment Thread 2 locks `accountB`, each thread then blocks forever waiting for the lock the other one already holds — a circular wait with no timeout to break it. The Java Tutorials' deadlock lesson demonstrates exactly this circular-wait pattern (via its Alphonse/Gaston example of two threads each holding one lock and waiting on the other), and Brian Goetz's account-transfer analysis documents the standard fix: always acquire the two locks in one consistent, agreed-upon order regardless of transfer direction (for example, by comparing account IDs and locking the lower one first).",
+  "options": [
+    {
+      "key": "A",
+      "text": "It deadlocks only if the two accounts belong to different customers; the fix is to add a timeout to every transfer.",
+      "correct": false,
+      "explanation": "Which customers own the accounts has no bearing on whether a deadlock can occur — the hazard comes purely from the inconsistent lock acquisition order. A timeout can turn a deadlock into a recoverable failure, but it treats the symptom rather than removing the circular-wait condition itself."
+    },
+    {
+      "key": "B",
+      "text": "It can deadlock if Thread 1 locks `accountA` while Thread 2 locks `accountB` at the same moment, each then blocking forever on the other's lock; the fix is to always acquire the two locks in one consistent order (e.g., by account ID), regardless of transfer direction.",
+      "correct": true,
+      "explanation": "Correct — this is the textbook circular-wait deadlock, and consistent lock ordering is the standard structural fix documented for exactly this pattern, removing the possibility of two threads holding the two locks in opposite order."
+    },
+    {
+      "key": "C",
+      "text": "It cannot deadlock, because `synchronized` blocks are always reentrant for the same thread.",
+      "correct": false,
+      "explanation": "Reentrancy means a thread can re-acquire a lock it already holds; it says nothing about two different threads each waiting on a lock the other one holds. Reentrancy does not prevent this kind of cross-thread circular wait at all."
+    },
+    {
+      "key": "D",
+      "text": "It deadlocks only on specific older JVMs that lack a biased-locking optimization for uncontended monitors, and simply upgrading to any newer JDK version that implements biased locking resolves the deadlock completely and permanently, with no change ever needed to the transfer code shown above.",
+      "correct": false,
+      "explanation": "Biased locking is a JIT optimization for uncontended locks and has no bearing on whether a circular-wait deadlock can occur between two genuinely contending threads; no JDK version removes the need for consistent lock ordering here."
+    }
+  ],
+  "references": [
+    {
+      "title": "The Java Tutorials — Lesson: Concurrency, Deadlock",
+      "url": "https://docs.oracle.com/javase/tutorial/essential/concurrency/deadlock.html"
+    },
+    {
+      "title": "Brian Goetz, \"Avoid synchronization deadlocks\" (Java Theory and Practice, InfoWorld)",
+      "url": "https://www.infoworld.com/article/2160986/avoid-synchronization-deadlocks.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

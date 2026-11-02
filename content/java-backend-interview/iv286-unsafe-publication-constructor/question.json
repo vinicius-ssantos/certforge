@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires connecting 'this' escaping a constructor to the absence of a happens-before edge, rather than just recognizing the pattern as 'bad practice'.",
+  "prompt": "```java\npublic class Cache {\n    public Map<String, String> data = new HashMap<>();\n    public Cache() {\n        data.put(\"init\", \"value\");\n        registry.add(this); // 'this' escapes before the constructor returns\n    }\n}\n```\nThe constructor above adds `this` to a shared `registry` before it finishes running. Another thread, iterating `registry` concurrently, finds the `Cache` instance and calls a method on it. What is the specific hazard this creates?",
+  "explanation": "Because `this` is published to `registry` from inside the constructor, another thread can observe the reference before the constructing thread has established any happens-before edge for the writes the constructor performs afterward (or, depending on instruction ordering, even some writes performed before the escape). The Java Language Specification's final-field guarantee (§17.5) only protects fields declared `final`; ordinary fields like `data` here are not covered, so a thread that sees the escaped `this` has no guarantee it sees a fully initialized object.",
+  "options": [
+    {
+      "key": "A",
+      "text": "None at all: the Java Language Specification guarantees that every constructor fully completes — including every field assignment and every nested object allocation it performs — strictly before the resulting reference can be read, stored, or published anywhere, by any thread, under any circumstance.",
+      "correct": false,
+      "explanation": "No such blanket guarantee exists for ordinary fields; the JLS's construction-safety guarantee (§17.5) applies specifically to `final` fields. Here the constructor itself publishes `this` early via `registry.add(this)`, which is exactly the scenario that guarantee does not cover."
+    },
+    {
+      "key": "B",
+      "text": "The `data` field will always appear as `null` to the other thread, because instance fields are only initialized after the constructor body finishes running.",
+      "correct": false,
+      "explanation": "Field initializers and the constructor body run together, in source order, as part of construction — `data` is assigned a `HashMap` before `registry.add(this)` executes in this example. The risk is that the other thread *might* still see a stale or inconsistent view, not that it is guaranteed to see `null`."
+    },
+    {
+      "key": "C",
+      "text": "The JVM throws a `ConcurrentModificationException` the moment two threads access the same instance without external synchronization.",
+      "correct": false,
+      "explanation": "`ConcurrentModificationException` is thrown by certain collection iterators when they detect structural modification during iteration — it has nothing to do with two threads sharing a reference to an ordinary object, and the JVM provides no such automatic exception for this scenario."
+    },
+    {
+      "key": "D",
+      "text": "The other thread may observe the `Cache` instance in a partially constructed state — for example, see `data` as `null` or missing the `\"init\"` entry — because `this` escaped before construction finished and no happens-before edge connects the constructor's writes to that thread's reads.",
+      "correct": true,
+      "explanation": "Correct: this is the textbook \"unsafe publication\" hazard. Letting `this` escape during construction removes the ordering guarantee that would otherwise exist if the reference were published only after the constructor returned, so the observing thread's view of the object's fields is undefined by the memory model."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java Language Specification, SE 21 — Chapter 17: Threads and Locks (§17.5, Final Field Semantics)",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

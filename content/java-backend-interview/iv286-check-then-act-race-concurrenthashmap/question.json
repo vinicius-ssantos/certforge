@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests recognizing a check-then-act race even on a thread-safe collection, and knowing the atomic-compound-operation fix.",
+  "prompt": "```java\nif (!cache.containsKey(key)) {\n    cache.put(key, computeExpensiveValue(key));\n}\n```\n`cache` is a `ConcurrentHashMap`. Two threads run this exact code for the same `key` at roughly the same time. What can go wrong, and what single-method change removes the hazard?",
+  "explanation": "`ConcurrentHashMap` makes each individual call (`containsKey`, `put`) thread-safe on its own, but it does not make a *sequence* of two separate calls atomic as a unit. Both threads can observe `containsKey(key)` return `false` before either one calls `put`, so `computeExpensiveValue` runs twice and one result simply overwrites the other. `ConcurrentHashMap.computeIfAbsent(key, k -> computeExpensiveValue(k))` performs the check-and-insert as one atomic operation, closing the window entirely.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Both threads can pass the `containsKey` check before either calls `put`, so `computeExpensiveValue` can run twice for the same key and one result overwrites the other; `cache.computeIfAbsent(key, k -> computeExpensiveValue(k))` performs the check and insert as one atomic operation.",
+      "correct": true,
+      "explanation": "Correct: this is the classic check-then-act race, and `computeIfAbsent` is exactly the atomic compound operation `ConcurrentHashMap` provides to replace it."
+    },
+    {
+      "key": "B",
+      "text": "Nothing can go wrong in this or any similar sequence: `ConcurrentHashMap` guarantees that every sequence of separate method calls a caller happens to write one after another — not merely each individual call in isolation — executes as a single atomic, indivisible unit from the perspective of every other thread.",
+      "correct": false,
+      "explanation": "This overstates the guarantee: `ConcurrentHashMap` documents thread safety for its individual operations, not for an arbitrary sequence of separate method calls a caller happens to write one after another."
+    },
+    {
+      "key": "C",
+      "text": "The second thread's `put` call throws `ConcurrentModificationException` because the map was already modified by the first thread.",
+      "correct": false,
+      "explanation": "`ConcurrentModificationException` is thrown by fail-fast iterators detecting structural modification during iteration; it is not thrown by concurrent `put` calls on a `ConcurrentHashMap`, which is specifically designed to support concurrent modification without that exception."
+    },
+    {
+      "key": "D",
+      "text": "`containsKey` itself is not thread-safe on a `ConcurrentHashMap` and can return an incorrect result even with no race on `put` at all.",
+      "correct": false,
+      "explanation": "`containsKey` on its own is thread-safe and returns an accurate snapshot result; the hazard here is specifically about the gap between two separate, individually-safe calls, not about either call being unsafe in isolation."
+    }
+  ],
+  "references": [
+    {
+      "title": "java.util.concurrent.ConcurrentHashMap (Java SE 21 API)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

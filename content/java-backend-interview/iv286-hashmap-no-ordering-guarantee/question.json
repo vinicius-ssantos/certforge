@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "EASY",
+  "difficultyRationale": "Knowing which Map implementation to reach for when iteration order matters is a basic but frequently-missed distinction.",
+  "prompt": "A `HashMap<String, Integer>` is populated by inserting keys in this order: \"c\", \"a\", \"b\". A developer then iterates the map with `entrySet()` and expects to see \"c\", \"a\", \"b\" — the insertion order. What is true about `HashMap` here?",
+  "explanation": "`HashMap` makes no guarantee about iteration order at all: the order it happens to produce depends on hash codes and internal bucket layout, and that layout can change across JVM versions, resizes, or even between runs. Expecting insertion order from a plain `HashMap` is relying on an accident of implementation, not a documented contract.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The expectation is wrong: `HashMap` makes no ordering guarantee, so the iteration order can differ from insertion order and should not be relied upon.",
+      "correct": true,
+      "explanation": "Correct: `HashMap`'s own documentation is explicit that it makes no guarantees about iteration order, and that this order may even change over time as entries are added or removed."
+    },
+    {
+      "key": "B",
+      "text": "The expectation is right: `HashMap` always preserves insertion order internally, the same way `LinkedHashMap` does.",
+      "correct": false,
+      "explanation": "Insertion-order preservation is `LinkedHashMap`'s specific, documented behavior — achieved with an extra linked list through the entries — not something plain `HashMap` provides."
+    },
+    {
+      "key": "C",
+      "text": "The expectation is right as long as the keys are all `String`s, because `String` has a well-defined `hashCode`.",
+      "correct": false,
+      "explanation": "A well-defined `hashCode` only means the same string always hashes the same way; it says nothing about which bucket order the map exposes during iteration, which also depends on table size and collision placement."
+    },
+    {
+      "key": "D",
+      "text": "The expectation is wrong, but only because exactly three entries were inserted here; `HashMap` reliably starts preserving insertion order once it holds more than a small handful of keys.",
+      "correct": false,
+      "explanation": "Entry count has no bearing on whether `HashMap` preserves order — it never documents an order guarantee, regardless of how many entries it holds."
+    }
+  ],
+  "references": [
+    {
+      "title": "HashMap (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
+    },
+    {
+      "title": "LinkedHashMap (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

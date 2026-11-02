@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000101",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Recognizing that System.gc() is only a suggestion, and designing resource cleanup that doesn't depend on it, is a practical production-readiness distinction.",
+  "prompt": "A service holds a native file handle wrapped in a Java object and relies on an override of `finalize()` to close that handle, reasoning that calling `System.gc()` periodically will trigger finalization and release the handle promptly. Under heavy load, file handles are exhausted well before any `OutOfMemoryError` occurs. What is the most accurate assessment of this design?",
+  "explanation": "`System.gc()`'s own documentation describes it as only a suggestion: the JVM makes a best effort to reclaim unused objects when it is called, but explicitly gives no guarantee about how many objects will be reclaimed, how much space will be freed, or when — or even whether — that effort completes at all. A design that relies on calling it to promptly trigger finalization and release a native resource is relying on a guarantee the API never makes, which is exactly how file handles can be exhausted long before heap pressure ever becomes visible as an `OutOfMemoryError`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The design is sound: calling `System.gc()` always forces a full, complete garbage collection cycle across the entire heap, which is guaranteed to run every pending finalizer before the call returns to the caller.",
+      "correct": false,
+      "explanation": "`System.gc()`'s documentation is explicit that it offers no guarantee the effort will reclaim any particular number of objects or complete at any particular time, if at all — \"forces\" and \"guaranteed\" both overstate what the call actually promises."
+    },
+    {
+      "key": "B",
+      "text": "The design is unsound: `System.gc()` is only a suggestion with no guarantee of timing or completeness, so relying on it to promptly release a native resource can leave handles open far longer than expected.",
+      "correct": true,
+      "explanation": "Correct: this matches the documented behavior of `System.gc()` directly — it is a best-effort suggestion with no guarantee about timing, extent, or even whether the collection happens before the method returns, which is consistent with handles being exhausted well before memory pressure appears."
+    },
+    {
+      "key": "C",
+      "text": "The design is unsound, but only because `finalize()` was removed from the Java language entirely in recent JDK releases, making this code fail to compile.",
+      "correct": false,
+      "explanation": "`finalize()` has been deprecated for removal, but the practical problem described here is about when it runs relative to resource exhaustion under load — a timing and design issue, not a compilation failure."
+    },
+    {
+      "key": "D",
+      "text": "The design is sound for file handles specifically, since native resources are always finalized eagerly even though regular Java objects are not.",
+      "correct": false,
+      "explanation": "Nothing in `System.gc()`'s documented behavior treats native-resource-holding objects as a special case that gets eager, guaranteed finalization; the same best-effort, no-timing-guarantee behavior applies regardless of what the object wraps."
+    }
+  ],
+  "references": [
+    {
+      "title": "System#gc() (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/System.html#gc()"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000102",
+  "difficulty": "EASY",
+  "difficultyRationale": "A direct application of the happens-before rule for monitor lock/unlock, stated plainly in the JLS.",
+  "prompt": "Thread A writes to several plain (non-volatile) fields inside a `synchronized(lock) { ... }` block, then exits the block, releasing `lock`. Thread B later enters its own `synchronized(lock) { ... }` block on the same `lock` object and reads those fields. Per the Java Language Specification, what guarantees Thread B sees Thread A's writes?",
+  "explanation": "The JLS happens-before order includes a specific rule for monitors: an unlock action on a monitor happens-before every subsequent lock action on that same monitor. Because Thread A's writes occur before it unlocks, and Thread B's reads occur after it locks the same object, the happens-before relation chains the writes to the reads — no `volatile` or other modifier is needed on the individual fields.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The unlock of `lock` by Thread A happens-before the subsequent lock of the same `lock` by Thread B, so everything Thread A wrote before unlocking is visible to Thread B after it locks.",
+      "correct": true,
+      "explanation": "Correct: this is the JLS's monitor happens-before rule (§17.4.5) — unlock happens-before every subsequent lock on the same monitor, which transitively orders Thread A's writes before Thread B's reads."
+    },
+    {
+      "key": "B",
+      "text": "Nothing extra is guaranteed; the fields would also need to be declared `volatile` for Thread B to reliably see the writes.",
+      "correct": false,
+      "explanation": "This gets the rule backwards: the monitor's own lock/unlock happens-before edge already supplies the ordering, which is exactly why synchronized blocks are a complete alternative to volatile for this purpose, not a supplement to it."
+    },
+    {
+      "key": "C",
+      "text": "The guarantee only holds if both threads happen to run on the same CPU core.",
+      "correct": false,
+      "explanation": "The happens-before guarantee is a property of the Java Memory Model's synchronization actions, independent of which core or core affinity a thread is scheduled on; the JVM's lock implementation is responsible for making it hold across cores."
+    },
+    {
+      "key": "D",
+      "text": "The JVM only guarantees visibility for fields declared `final` that are set during construction and never mutated afterward; ordinary mutable fields modified inside a synchronized block are not covered by this rule.",
+      "correct": false,
+      "explanation": "Final-field semantics (§17.5) are a separate, narrower guarantee for safe construction. The monitor happens-before rule in §17.4.5 is general-purpose and applies to any field written before an unlock and read after the matching lock, mutable or not."
+    }
+  ],
+  "references": [
+    {
+      "title": "Java Language Specification, SE 21 — Chapter 17: Threads and Locks (§17.4.5, Happens-before Order)",
+      "url": "https://docs.oracle.com/javase/specs/jls/se21/html/jls-17.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}
