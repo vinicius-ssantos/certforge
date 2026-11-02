@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Checks understanding of the orchestration variant of Saga as the practical alternative to 2PC.",
+  "prompt": "An order-placement flow spans an Order service, a Payment service, and an Inventory service — no shared database, no 2PC. The team implements it as an orchestrated Saga: a dedicated orchestrator calls each service's step in sequence and, if a later step fails, calls compensating operations on the earlier ones. If the Inventory step fails after Payment already succeeded, what does the orchestrator do?",
+  "explanation": "An orchestrated Saga doesn't roll back a distributed transaction atomically the way 2PC would — there's no such primitive available. Instead, the orchestrator explicitly invokes a compensating action on each already-completed step, in reverse order, to semantically undo its effect (here, telling Payment to issue a refund). The overall operation ends up logically consistent, but only after a window where Payment had actually succeeded and the refund hadn't happened yet — unlike 2PC, nothing was ever atomically all-or-nothing.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The orchestrator issues a single atomic rollback command that reverts all three services' databases to their exact pre-transaction state simultaneously, the same guarantee 2PC would have provided had the team chosen that protocol instead of Saga.",
+      "correct": false,
+      "explanation": "Saga specifically does not provide an atomic, simultaneous rollback across services — that's precisely the capability 2PC offers and Saga trades away; recovery in a Saga always happens through separate, sequential compensating calls instead."
+    },
+    {
+      "key": "B",
+      "text": "The orchestrator calls a defined compensating action on Payment (such as issuing a refund) to semantically undo the earlier success, since there's no atomic rollback primitive across the three services — the system becomes consistent again only after that compensation runs.",
+      "correct": true,
+      "explanation": "Correct. This is the defining mechanism of Saga: forward steps are undone by explicit, service-specific compensating actions invoked by the orchestrator, not by an atomic cross-service rollback like 2PC would provide."
+    },
+    {
+      "key": "C",
+      "text": "Nothing happens automatically at all — Saga only ever coordinates the forward path, so Payment's charge permanently stands as-is, and a human operator must always be paged manually to process a refund outside of any part of the Saga implementation itself, by hand, every time.",
+      "correct": false,
+      "explanation": "A properly implemented Saga defines and automatically invokes compensating actions for failure cases — manual, human-triggered refunds aren't the mechanism; that would defeat the purpose of implementing Saga in the first place."
+    },
+    {
+      "key": "D",
+      "text": "The orchestrator simply retries the failed Inventory step indefinitely in the background until it eventually succeeds, leaving Payment's charge sitting in place the whole time without ever considering any kind of compensating action against it.",
+      "correct": false,
+      "explanation": "Indefinite retry-only handling isn't how a Saga is defined to behave on a step failure; the orchestrator pattern specifically includes compensating actions for already-completed steps, rather than leaving an earlier success unaddressed while retrying forever."
+    }
+  ],
+  "references": [
+    {
+      "title": "Microsoft Azure Architecture Center — Saga Design Pattern",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate connects the bulkhead pattern to a concrete resource-exhaustion failure mode, not just the shipping-container metaphor.",
+  "prompt": "A service calls three downstream dependencies — A, B, and C — all using one shared thread pool for outbound calls. Dependency A starts responding very slowly. Soon, calls to B and C start failing too, even though B and C themselves are healthy. What pattern addresses this, and how does it actually prevent the failure from spreading?",
+  "explanation": "With one shared thread pool, slow calls to A hold their threads for a long time, and eventually every thread in the pool is stuck waiting on A — leaving none available to make calls to B or C, even though those dependencies are fine. The bulkhead pattern fixes this by giving each dependency its own isolated pool of resources (threads, or a connection pool), so A exhausting its own pool can't consume capacity reserved for B or C.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The fix is simply to increase the shared thread pool's total size; once there are enough threads for all three dependencies combined, a slow dependency A can no longer starve calls to B and C, no matter how long A's calls take.",
+      "correct": false,
+      "explanation": "A larger shared pool only delays the exhaustion, since a sufficiently slow A can still eventually consume however many threads exist; the problem is sharing one resource pool across dependencies, not the pool's absolute size."
+    },
+    {
+      "key": "B",
+      "text": "This is actually a circuit breaker problem, not a resource problem — adding a circuit breaker on calls to A alone, with no change to the thread pool structure, is the complete and sufficient fix for B and C's failures.",
+      "correct": false,
+      "explanation": "A circuit breaker on A would help A specifically, but by itself it doesn't change the fact that one shared pool lets any one dependency's calls consume capacity the others need — isolating the pools is still required."
+    },
+    {
+      "key": "C",
+      "text": "The failure is unrelated to pooling at all; B and C are failing because A's slow responses are consuming all available network bandwidth on the host, and the fix is to apply per-dependency bandwidth throttling instead of touching thread pools.",
+      "correct": false,
+      "explanation": "The described failure (one slow dependency exhausting shared capacity that unrelated dependencies then can't get) is the classic shared-thread-pool exhaustion scenario the bulkhead pattern targets, not a bandwidth-limiting problem."
+    },
+    {
+      "key": "D",
+      "text": "Slow calls to A hold shared threads until none are left for B or C; the bulkhead pattern gives each dependency its own isolated pool of resources, so A exhausting its own pool can't consume capacity reserved for calls to B and C.",
+      "correct": true,
+      "explanation": "Correct. Isolating resources per dependency is exactly what contains the failure: A can still degrade on its own, but it can no longer take down unrelated, healthy dependencies by starving a shared resource."
+    }
+  ],
+  "references": [
+    {
+      "title": "Microsoft Azure Architecture Center — Bulkhead pattern (isolating resources per dependency to contain cascading failure)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

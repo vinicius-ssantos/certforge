@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "A very common real-world failure once a team adopts dynamic orchestration without updating how callers find instances.",
+  "prompt": "A team moves a backend service onto a container orchestrator that can start, stop, and reschedule instances across a changing set of hosts at any time. Another service still calls it through a config file with three hardcoded `host:port` entries written down on first deploy. Within a week, requests start failing intermittently. What's the most likely cause, and what's the standard fix?",
+  "explanation": "Hardcoded addresses assume instances are stable and long-lived, but the orchestrator is free to kill, restart, and reschedule instances onto new hosts and ports at any time, so some of the three addresses eventually point at nothing (or a dead process) while newly started instances never receive any traffic at all. A service registry, consulted through a service-discovery client, tracks the current, healthy set of instances so callers never depend on a fixed address.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The config file's three entries are fine; the real problem is a firewall rule intermittently blocking exactly one of the three ports, something unrelated to how the instances are deployed or addressed by the caller.",
+      "correct": false,
+      "explanation": "A firewall explains a single flaky port, not the systemic pattern of hardcoded addresses going stale as the orchestrator reschedules instances onto different hosts over time — the deployment model itself is the actual cause here."
+    },
+    {
+      "key": "B",
+      "text": "The hardcoded addresses assume instances are stable and long-lived, but the orchestrator can kill, reschedule, or relocate instances at any time — a service registry is the standard fix so callers never depend on one fixed address.",
+      "correct": true,
+      "explanation": "Correct. Dynamic orchestration breaks the assumption behind a static address list; service discovery replaces \"call this fixed address\" with \"ask the registry for the current healthy instances,\" which stays correct as instances come and go."
+    },
+    {
+      "key": "C",
+      "text": "This is purely a DNS caching issue — the three addresses are still correct, but the caller's resolver is caching stale records, and lowering the DNS TTL on just those three records would fully resolve the failures without any other change.",
+      "correct": false,
+      "explanation": "Lowering a TTL only helps if the addresses themselves are still valid destinations; here the underlying instances behind those addresses are actually gone or relocated, which a shorter TTL does not fix."
+    },
+    {
+      "key": "D",
+      "text": "The orchestrator caps this service at exactly three running instances at a time, so three hardcoded addresses should always stay valid; the failures are more likely the service itself crashing under load than any addressing problem.",
+      "correct": false,
+      "explanation": "Instance count staying at three doesn't mean those three instances keep the same host and port over time — rescheduling changes where an instance runs, which is exactly what a static address list can't track."
+    }
+  ],
+  "references": [
+    {
+      "title": "Consul by HashiCorp — Service Discovery concepts (why statically configured endpoints break under dynamic scheduling)",
+      "url": "https://developer.hashicorp.com/consul/docs/concepts/service-discovery"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

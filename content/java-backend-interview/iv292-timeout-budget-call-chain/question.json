@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "A subtle but common production pitfall: coordinating timeouts across hops, not just setting one on each call in isolation.",
+  "prompt": "Service A calls service B with a 5-second timeout. B, to handle that request, calls service C — and B's own timeout on that call to C is also set to 5 seconds. Under load, requests to A sometimes take close to 10 seconds to fail even though every individual timeout is 5 seconds. What's going wrong, and how should timeouts across a call chain actually be set?",
+  "explanation": "If B's call to C can take up to 5 seconds to time out, and only then does B respond to A (possibly after its own processing), the total time A can wait is the sum of C's timeout plus whatever B still has to do — which can approach or exceed A's own 5-second budget without any single timeout technically being wrong. Each hop's timeout needs to fit inside the remaining budget of the hop that called it, so a later timeout can never by itself exceed the time its caller is still willing to wait.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Each hop's own timeout needs to fit inside the remaining time budget of whichever call invoked it; here B's timeout on C (5s) leaves no room within A's 5s budget, so the total chain can approach double, which is exactly the delay being observed.",
+      "correct": true,
+      "explanation": "Correct. Timeouts must be coordinated down the call chain, not set identically and independently at each hop — B's call to C has to time out well before A's own patience runs out, or A ends up waiting on the sum of both."
+    },
+    {
+      "key": "B",
+      "text": "Since both timeouts are individually set to exactly 5 seconds, this is actually impossible under normal network conditions — the 10-second delays described must be caused by retry logic at B, not by how the two timeouts relate to each other.",
+      "correct": false,
+      "explanation": "Two independent 5-second timeouts stacked in sequence (A waiting on B, B waiting on C) genuinely can add up to roughly 10 seconds with no retries involved at all; dismissing it as impossible ignores how sequential timeouts compose."
+    },
+    {
+      "key": "C",
+      "text": "Timeouts only apply to the network transport layer, not to how long a service spends processing after a call returns, so B's 5-second timeout on C has no bearing on how long A ultimately waits — the delay must come from A's own processing instead.",
+      "correct": false,
+      "explanation": "A service waiting for its downstream call to either return or time out is waiting on exactly that duration before it can respond to its own caller; the downstream timeout absolutely does factor into the upstream caller's total wait."
+    },
+    {
+      "key": "D",
+      "text": "The fix is to remove B's timeout on its call to C entirely, since B should always wait as long as it takes for C to answer rather than fail early — removing the inner timeout eliminates the compounding delay seen at A.",
+      "correct": false,
+      "explanation": "Removing B's timeout on C doesn't bound anything — it just lets B wait indefinitely on C, which makes A's eventual failure take even longer rather than shorter; the fix is a shorter, coordinated inner timeout, not none at all."
+    }
+  ],
+  "references": [
+    {
+      "title": "Google Site Reliability Engineering book — Addressing Cascading Failures (deadline/timeout propagation across a call chain)",
+      "url": "https://sre.google/sre-book/addressing-cascading-failures/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

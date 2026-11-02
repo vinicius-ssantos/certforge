@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Explains why a textbook transaction protocol becomes impractical once it crosses service/team boundaries.",
+  "prompt": "A team wants a single transaction spanning three microservices (each with its own database) to either fully commit or fully roll back, so they consider implementing two-phase commit (2PC) with a central coordinator across all three. What's the core practical problem with this approach in a microservices architecture?",
+  "explanation": "2PC requires every participant to hold its locks (and keep resources blocked) from the moment it votes \"yes\" in the prepare phase until the coordinator's final commit/abort decision arrives — across network calls to independently-deployed, independently-available services. If any one participant or the coordinator is slow, crashes, or is mid-deployment, every other participant sits blocked holding locks, which couples the availability of all three services together and can stall unrelated requests that need those same locked rows. This tight coupling and the resulting blocking under partial failure is exactly the failure mode Sagas (compensating transactions) were designed to avoid.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Each participant must hold its locks from its prepare-phase vote until the coordinator's final decision arrives over the network; if any participant or the coordinator stalls or crashes, the others stay blocked holding those locks, coupling the services' availability together.",
+      "correct": true,
+      "explanation": "Correct. This blocking-under-partial-failure problem is the central reason 2PC is considered impractical across independently deployed/scaled microservices — it reintroduces tight coupling that the service boundaries were meant to remove."
+    },
+    {
+      "key": "B",
+      "text": "2PC is fundamentally incompatible with relational databases and can only coordinate NoSQL stores, so the real problem here is simply that the three services are each backed by a traditional relational database rather than a document or key-value store.",
+      "correct": false,
+      "explanation": "2PC works across relational databases just fine in principle (that's the classic textbook setting it was designed for); the practical problem in microservices isn't the database type, it's the cross-network blocking and coupling the protocol imposes."
+    },
+    {
+      "key": "C",
+      "text": "2PC requires all three services to share a single physical database instance under the hood, so attempting it across genuinely separate databases is a category error that simply isn't possible to implement at all, regardless of network, deployment, or hardware conditions involved.",
+      "correct": false,
+      "explanation": "2PC is specifically designed to coordinate separate, independent resource managers (including separate databases) — that's the protocol's whole purpose; it's possible to implement across separate databases, it's just operationally fragile at microservice scale."
+    },
+    {
+      "key": "D",
+      "text": "The only real downside is a small, constant latency overhead from the extra prepare-phase network round trip, which is negligible for most workloads and disappears entirely once all three services are deployed within the same data center and region.",
+      "correct": false,
+      "explanation": "The core problem isn't a fixed, small latency cost — it's that resources stay locked for an unbounded time whenever any participant or the coordinator is unavailable, which doesn't go away just by co-locating the services in one data center."
+    }
+  ],
+  "references": [
+    {
+      "title": "Azure Architecture Center — Saga design pattern (\"architectures that rely on interprocess communication, or traditional transaction models like two-phase commit protocol, are often better suited for the Saga pattern\")",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

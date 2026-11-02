@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Distinguishes a specific, narrower session guarantee from the full strong-consistency guarantee, a distinction mid-level engineers often flatten.",
+  "prompt": "A system advertises \"read-your-writes consistency.\" A developer assumes this means the system is fully strongly consistent, so they skip adding any extra care around reads from other users. What's wrong with that assumption?",
+  "explanation": "Read-your-writes is a session-scoped guarantee: a client is guaranteed to see its own prior writes on subsequent reads, typically by pinning that client to the replica (or a replica guaranteed to be caught up) that accepted the write. It says nothing about what a *different* client reads — another user reading the same data moments later can still see a stale value if their request lands on a replica that hasn't caught up yet. Full strong consistency would guarantee that every reader, not just the writer, sees the latest value immediately; read-your-writes is a deliberately weaker, cheaper guarantee than that.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Read-your-writes only guarantees that the writing client sees its own write on a later read; it says nothing about what a different client reads, so another user can still observe stale data even while the guarantee holds for the original writer.",
+      "correct": true,
+      "explanation": "Correct. This is exactly the scope of read-your-writes: it's a per-client (session) guarantee, not a system-wide one, so it coexists with other readers still seeing stale data from a lagging replica."
+    },
+    {
+      "key": "B",
+      "text": "Read-your-writes consistency and strong consistency are simply two different marketing names the industry uses for the exact same technical guarantee, so the developer's assumption is actually correct and nothing further needs to change.",
+      "correct": false,
+      "explanation": "They are not the same guarantee: strong consistency promises every reader sees the latest write immediately, while read-your-writes only promises that to the specific client who performed the write — a materially weaker and cheaper-to-implement promise."
+    },
+    {
+      "key": "C",
+      "text": "The assumption is wrong, but only because read-your-writes consistency applies exclusively to write operations and never actually covers any read operation at all, so it provides no guarantee whatsoever for subsequent reads of any kind.",
+      "correct": false,
+      "explanation": "Read-your-writes specifically does cover reads — it's defined as a guarantee about what a later read returns to the same client; the problem with the assumption is its scope (own client only), not that it says nothing about reads at all."
+    },
+    {
+      "key": "D",
+      "text": "The assumption is wrong because read-your-writes consistency is actually a stricter guarantee than full strong consistency, requiring every replica in the system to synchronously confirm the write before the original write call is even allowed to return success.",
+      "correct": false,
+      "explanation": "Read-your-writes is weaker, not stricter, than strong consistency, and it's usually implemented cheaply (e.g., sticky routing to one replica) rather than by requiring every replica to synchronously confirm anything before the write returns."
+    }
+  ],
+  "references": [
+    {
+      "title": "MongoDB Manual — Causal Consistency and Read and Write Concerns",
+      "url": "https://www.mongodb.com/docs/manual/core/causal-consistency-read-write-concerns/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

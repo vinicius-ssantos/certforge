@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "HARD",
+  "difficultyRationale": "Requires distinguishing choreography from orchestration structurally, and naming a real trade-off rather than just a definition.",
+  "prompt": "The same order-placement Saga is reimplemented as choreography instead: Order publishes an \"OrderCreated\" event, Payment listens and reacts by publishing \"PaymentCompleted\" (or \"PaymentFailed\"), Inventory listens to that and reacts in turn — no central orchestrator coordinates the steps. What's a genuine trade-off of this choreography style compared to the orchestrator version?",
+  "explanation": "Choreography removes the single coordinating component (and its potential bottleneck/single point of control), but it pays for that by scattering the overall business process across every participating service's event handlers — there is no one place that shows the full sequence of steps and compensations. As the number of steps grows, understanding \"what happens, in what order, and what undoes what\" requires tracing event flows across all the services involved, which gets harder to reason about and debug than reading a single orchestrator's sequential logic.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Choreography requires every participating service to share one single physical message broker cluster with every other participant, whereas orchestration allows each service to use a completely independent, unrelated messaging technology with zero coordination needed between them.",
+      "correct": false,
+      "explanation": "Neither style imposes that particular infrastructure constraint; both choreography and orchestration can be built on a shared broker or on point-to-point calls, so this isn't a real distinguishing trade-off between the two styles."
+    },
+    {
+      "key": "B",
+      "text": "Choreography cannot support compensating actions at all, since without a central orchestrator there's no component capable of invoking a compensation, so any failure after Payment succeeds necessarily leaves the charge permanently unaddressed forever.",
+      "correct": false,
+      "explanation": "Choreography absolutely can support compensations — a service's own event handler can just as well react to a failure event by triggering its own compensating action (e.g., Payment reacting to an InventoryFailed event by issuing a refund); it's a structural difference in who coordinates, not a loss of the compensation capability."
+    },
+    {
+      "key": "C",
+      "text": "Choreography scatters the process logic across every service's event handlers instead of one place, so as steps grow, understanding the full sequence and compensations means tracing events across services rather than reading one orchestrator's logic.",
+      "correct": true,
+      "explanation": "Correct. This loss of a single, readable place to see the whole process is the standard trade-off cited against choreography — it avoids a central coordinator at the cost of distributing (and thereby obscuring) the overall flow."
+    },
+    {
+      "key": "D",
+      "text": "Choreography is strictly faster in every single case, since removing the orchestrator eliminates all network latency from the overall flow entirely, meaning the total time to complete the Saga is always shorter than with an orchestrator regardless of how many steps are involved.",
+      "correct": false,
+      "explanation": "Choreography still involves the same network hops between services reacting to each other's events — removing a central orchestrator doesn't eliminate those hops, so there's no guarantee it's always faster, and that isn't the trade-off usually cited for this style."
+    }
+  ],
+  "references": [
+    {
+      "title": "Microsoft Azure Architecture Center — Saga Design Pattern (Choreography)",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/saga"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

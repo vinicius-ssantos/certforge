@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "The classic duplicate-charge scenario that motivates idempotency keys in any payment-adjacent API.",
+  "prompt": "A client calls a `POST /charges` endpoint to charge a customer's card. The network times out before the client receives a response, so the client's retry logic calls the exact same `POST /charges` again with the same parameters. The first request had actually succeeded server-side before the timeout. Without an idempotency key, what's the most likely outcome?",
+  "explanation": "From the server's point of view, the retried request looks like a brand-new charge request — nothing in a plain POST ties it back to the first attempt. If the server has no way to recognize \"this is the same logical operation as an earlier request,\" it processes the retry as a second, independent charge, and the customer is billed twice. An idempotency key (a client-generated token sent with the request) lets the server recognize the retry and return the original result instead of repeating the side effect.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The retry fails outright with a connection-refused error, because once a client has already successfully charged a card once, the payment gateway permanently blocks that same client from submitting any further charge requests at all.",
+      "correct": false,
+      "explanation": "There's no such permanent per-client block; a payment gateway processes each incoming request on its own merits unless something (like an idempotency key) specifically ties it back to a prior request."
+    },
+    {
+      "key": "B",
+      "text": "The server automatically detects that an identical charge request was processed moments earlier and silently discards the retry without creating a second charge, because HTTP POST requests are inherently idempotent by specification.",
+      "correct": false,
+      "explanation": "POST is specifically not defined as idempotent by the HTTP specification (unlike GET, PUT, or DELETE), and no automatic duplicate-detection happens just because the parameters match; that protection only exists if the server is explicitly built to check an idempotency key."
+    },
+    {
+      "key": "C",
+      "text": "The customer is charged twice: the server has no way to recognize the retried POST as the same logical operation as the first one, so it processes it as an independent new charge and creates a second charge record.",
+      "correct": true,
+      "explanation": "Correct. Without an idempotency key, nothing distinguishes a legitimate retry from a genuinely new charge request with identical parameters, so the server dutifully processes it again — this is exactly the failure mode idempotency keys exist to prevent."
+    },
+    {
+      "key": "D",
+      "text": "The retry is queued and held until the original request's result can be confirmed, so the customer sees a short delay but is ultimately charged exactly once, because most payment APIs reconcile duplicate-looking requests automatically before committing either one.",
+      "correct": false,
+      "explanation": "Without an idempotency key, there's no mechanism prompting the server to pause and reconcile anything — it has no signal that this request might be a duplicate, so it proceeds to process it immediately rather than holding it for reconciliation."
+    }
+  ],
+  "references": [
+    {
+      "title": "Stripe API Reference — Idempotent Requests",
+      "url": "https://docs.stripe.com/api/idempotent_requests"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "PLENO"
+}

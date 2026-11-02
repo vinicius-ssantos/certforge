@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether a candidate understands CAP as a conditional trade-off rather than a permanent architectural tax.",
+  "prompt": "A system is fully consistent and fully available while its network links are healthy — every node agrees on every read, and every client request succeeds. A teammate says: \"this system must be secretly violating CAP, because CAP says you can only ever have two of the three properties at once.\" What's wrong with that claim?",
+  "explanation": "CAP's trade-off only bites when a network partition P is actually occurring: during a partition, a system has to choose between serving a request with possibly-stale data (favoring A) or refusing to serve it until it can guarantee correctness (favoring C). Outside of a partition, nothing in the theorem prevents a system from being both consistent and available — the \"pick two\" framing describes behavior under partition, not a permanent design ceiling that applies at all times.",
+  "options": [
+    {
+      "key": "A",
+      "text": "The system can't actually be both consistent and available even right now; the teammate is just measuring it wrong, since Brewer's theorem means a system permanently forfeits either strict consistency or full availability as a baked-in structural property, independent of whether any partition is currently in progress.",
+      "correct": false,
+      "explanation": "CAP does not impose a permanent, always-active forfeiture. The trade-off is specifically triggered by a partition; a healthy, fully-connected system can genuinely deliver both consistency and availability at the same time, which is exactly the normal case CAP says nothing restrictive about."
+    },
+    {
+      "key": "B",
+      "text": "CAP only forces a choice when a partition is actually happening; a healthy, fully-connected network has no partition to force the trade-off, so the system can legitimately be both consistent and available right now without violating anything.",
+      "correct": true,
+      "explanation": "Correct. The letter P in CAP is a condition, not a constant background fact — the theorem describes what a system must sacrifice while communication between nodes is actually disrupted, and says nothing that forbids both C and A simultaneously when no partition exists."
+    },
+    {
+      "key": "C",
+      "text": "CAP theorem technically only applies to systems that are formally classified as databases, so unless this system is specifically a database product, CAP doesn't constrain it at all, which is the real reason both properties can hold here without contradiction.",
+      "correct": false,
+      "explanation": "CAP is a general result about any system that replicates state across nodes connected by an unreliable network, not a database-specific rule; the scope limitation this option describes doesn't exist, and it isn't why consistency and availability can coexist here."
+    },
+    {
+      "key": "D",
+      "text": "CAP theorem was formally superseded by the PACELC theorem, which fully replaced the original trade-off, so a modern system is no longer bound by any consistency-versus-availability constraint that CAP used to describe during a network partition.",
+      "correct": false,
+      "explanation": "PACELC extends CAP by also describing a latency/consistency trade-off during normal operation (when there's no partition); it does not void or supersede CAP's partition-time trade-off, which still applies exactly as described."
+    }
+  ],
+  "references": [
+    {
+      "title": "Eric Brewer — \"CAP Twelve Years Later: How the \\\"Rules\\\" Have Changed\" (IEEE Computer, 2012)",
+      "url": "https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}

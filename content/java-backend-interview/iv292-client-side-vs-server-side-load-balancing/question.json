@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000109",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Tests whether the candidate understands the actual trade-off rather than just naming both patterns.",
+  "prompt": "A team is deciding whether to put a load balancer in front of a backend service (server-side load balancing) or have each calling service resolve the registry and pick an instance itself (client-side load balancing, e.g. via a library like Spring Cloud LoadBalancer). What is a genuine trade-off between the two, rather than just a naming difference?",
+  "explanation": "Server-side load balancing adds a network hop — every call passes through the balancer — but keeps callers simple, since they just call one stable address and know nothing about the pool. Client-side load balancing removes that extra hop and lets each caller pick instances directly, but it means every calling service now needs its own registry client and balancing logic, and the balancer itself can no longer serve as one place to enforce cross-cutting policy for all callers.",
+  "options": [
+    {
+      "key": "A",
+      "text": "There's no real trade-off; client-side and server-side load balancing produce identical latency and operational complexity, so the choice between them is only a matter of team preference and has no measurable downstream consequence.",
+      "correct": false,
+      "explanation": "The extra network hop through a server-side balancer, and the extra registry-client dependency every caller needs for client-side balancing, are both measurable costs — the two approaches are not operationally equivalent."
+    },
+    {
+      "key": "B",
+      "text": "Server-side load balancing can only distribute traffic round-robin, while client-side load balancing is the only approach that supports weighted or latency-aware routing, so client-side is strictly more capable in every case.",
+      "correct": false,
+      "explanation": "Server-side load balancers (hardware or software, e.g. an L7 proxy) routinely support weighted and latency-aware algorithms too; the capability difference claimed here isn't an inherent limitation of server-side balancing."
+    },
+    {
+      "key": "C",
+      "text": "Server-side balancing adds a network hop but keeps callers simple with one address; client-side balancing removes that hop but requires every caller to carry its own registry client and balancing logic instead.",
+      "correct": true,
+      "explanation": "Correct. This is the real trade-off: one extra hop and centralized policy versus lower latency and simpler infrastructure at the cost of pushing discovery/balancing logic into every single caller."
+    },
+    {
+      "key": "D",
+      "text": "Client-side load balancing requires every backend instance to be manually registered by an operator before it can receive traffic, while server-side balancing discovers new instances automatically with no registration step at all.",
+      "correct": false,
+      "explanation": "Both approaches typically rely on the same underlying service registry and the same automatic registration mechanism; which side performs the balancing doesn't change how instances get registered in the first place."
+    }
+  ],
+  "references": [
+    {
+      "title": "Spring Cloud Commons Reference Documentation — Spring Cloud LoadBalancer (client-side load balancing)",
+      "url": "https://docs.spring.io/spring-cloud-commons/reference/spring-cloud-commons/loadbalancer.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  },
+  "seniority": "SENIOR"
+}
