@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000001",
+  "objectiveKeys": ["KCNA-1.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige apenas reconhecer a definição oficial da unidade de computação mais básica do Kubernetes, sem envolver operação ou configuração.",
+  "prompt": "No Kubernetes, qual é a menor unidade de computação que pode ser criada e gerenciada diretamente pela API, podendo agrupar um ou mais containers que compartilham rede e armazenamento?",
+  "explanation": "A documentação oficial do Kubernetes define Pod como a menor unidade de computação implantável que se pode criar e gerenciar no Kubernetes: um grupo de um ou mais containers com recursos de armazenamento e rede compartilhados, mais uma especificação de como executá-los. Deployment, ReplicaSet e Node são conceitos de nível diferente: eles gerenciam ou hospedam Pods, mas não são, eles mesmos, a unidade mínima que a API cria.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Node — a máquina (física ou virtual) que fornece CPU, memória e executa o runtime de containers para os Pods agendados nela.",
+      "correct": false,
+      "explanation": "Incorreto: um Node é a infraestrutura de execução sobre a qual Pods são agendados; ele representa capacidade de máquina, não uma unidade de computação implantável pela API."
+    },
+    {
+      "key": "B",
+      "text": "Container — o processo isolado em si, criado e versionado diretamente pela API do Kubernetes sem qualquer camada intermediária de agrupamento.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes não gerencia containers isoladamente pela API; ele sempre os agrupa dentro de um Pod, que é a unidade que a API efetivamente cria."
+    },
+    {
+      "key": "C",
+      "text": "Deployment — o objeto que declara quantas réplicas de uma mesma carga de trabalho devem existir e como atualizá-las de forma controlada.",
+      "correct": false,
+      "explanation": "Incorreto: um Deployment é um controlador de nível mais alto que gerencia ReplicaSets e, por meio deles, Pods — ele não é, em si, a unidade mínima de computação."
+    },
+    {
+      "key": "D",
+      "text": "Pod — um grupo de um ou mais containers com armazenamento e rede compartilhados, tratado pela API como uma única unidade de computação.",
+      "correct": true,
+      "explanation": "Correto: a documentação oficial descreve exatamente essa definição para Pod, a menor unidade implantável do Kubernetes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Pods",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

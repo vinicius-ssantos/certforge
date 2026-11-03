@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000001",
+  "objectiveKeys": ["KCNA-1.4"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia a compreensão conceitual básica da diferença entre containers e máquinas virtuais, fundamento do objetivo de Containerization do KCNA.",
+  "prompt": "Por que containers conseguem rodar mais aplicações na mesma infraestrutura com menos overhead do que máquinas virtuais (VMs) tradicionais?",
+  "explanation": "Containers compartilham o kernel do sistema operacional do host — 'they all share the same kernel, allowing you to run more applications on less infrastructure' — enquanto cada VM tradicional empacota um sistema operacional completo, com seu próprio kernel, drivers e aplicações ('a VM is an entire operating system with its own kernel, hardware drivers, programs, and applications'). Subir uma VM só para isolar uma única aplicação é descrito como 'a lot of overhead' justamente por essa duplicação de todo um SO; o container evita essa duplicação ao reaproveitar o kernel do host.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque a diferença de overhead vem exclusivamente do tipo de disco usado para armazenar as imagens, e não tem relação alguma com kernel ou sistema operacional.",
+      "correct": false,
+      "explanation": "Incorreto: a diferença de overhead descrita na documentação está ligada a duplicar ou não um sistema operacional completo (incluindo seu kernel), não ao tipo de armazenamento em disco."
+    },
+    {
+      "key": "B",
+      "text": "Porque containers não utilizam nenhum recurso do kernel do host, rodando de forma totalmente isolada em um ambiente próprio e independente do sistema operacional.",
+      "correct": false,
+      "explanation": "Incorreto: é o contrário — containers dependem diretamente do kernel do host; a independência total de kernel é característica da VM, não do container."
+    },
+    {
+      "key": "C",
+      "text": "Porque toda VM, por definição, executa sempre múltiplos kernels simultâneos para cada aplicação hospedada, enquanto um container nunca precisa de kernel algum.",
+      "correct": false,
+      "explanation": "Incorreto: uma VM executa um único kernel (o do seu sistema operacional convidado), não múltiplos; e um container sempre depende de um kernel, apenas não do seu próprio, e sim do host."
+    },
+    {
+      "key": "D",
+      "text": "Porque containers compartilham o kernel do sistema operacional do host, enquanto cada VM precisa empacotar seu próprio kernel completo, drivers e aplicações.",
+      "correct": true,
+      "explanation": "Correto: essa é a diferença estrutural documentada entre os dois modelos — o compartilhamento de kernel é o que reduz a duplicação de recursos do container em relação à VM."
+    }
+  ],
+  "references": [
+    {
+      "title": "Docker Docs — What is a container?",
+      "url": "https://docs.docker.com/get-started/docker-concepts/the-basics/what-is-a-container/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

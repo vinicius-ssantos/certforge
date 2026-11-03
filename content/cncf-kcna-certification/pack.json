@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "cncf-kcna-certification",
+  "trackSlug": "cncf-kcna-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "KCNA 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "CNCF",
+    "examCode": "KCNA",
+    "providerVersion": "cncf/curriculum@c2df915 (KCNA_Curriculum.pdf, commit 2026-03-22)",
+    "snapshotDigest": "sha256:2141ce75db8c67a72588775345d3b8448e4a6d3f3b46c37f86f4b388c153b8ff",
+    "verifiedOn": "2026-11-03"
+  }
+}

@@ -53,12 +53,14 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // #177: the allowlist grows one official host at a time, one per source a topic family
     // actually has. Docker/Kubernetes ship their own docs; Linux cites the canonical man-pages
     // mirror and kernel docs; networking has no vendor to defer to, so it cites the RFCs
-    // themselves; CI/CD here means GitHub Actions, so it cites GitHub's own docs.
+    // themselves; CI/CD here means GitHub Actions, so it cites GitHub's own docs; #171's CNCF
+    // certification profiles cite cncf.io for facts kubernetes.io does not own (project
+    // governance, maturity levels, the cloud native ecosystem) alongside kubernetes.io itself.
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
       "datatracker.ietf.org", "www.rfc-editor.org",
-      "docs.github.com",
+      "docs.github.com", "cncf.io",
     ]);
     for (const reference of question.references) {
       let parsed;

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000003",
+  "objectiveKeys": ["KCNA-3.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato distingue a abordagem declarativa de `kubectl apply` da abordagem imperativa de `kubectl create`/`kubectl replace`, um ponto central de entrega de aplicações no Kubernetes.",
+  "prompt": "Uma equipe mantém um diretório de manifestos e usa `kubectl apply -f configs/` para aplicar mudanças ao cluster. O que caracteriza essa abordagem como declarativa, e como ela se diferencia de `kubectl replace`?",
+  "explanation": "Na configuração declarativa de objetos, quem opera os manifestos não define as operações a serem executadas: o `kubectl` detecta automaticamente, por objeto, se é necessário criar, atualizar ou remover algo ao comparar os arquivos com o estado atual do cluster. Isso contrasta com `kubectl replace`, que substitui inteiramente a especificação existente pela fornecida no arquivo, descartando qualquer mudança feita no objeto que não esteja presente nesse arquivo de configuração.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`kubectl apply` exige que o usuário informe explicitamente se a operação é de criação, atualização ou remoção para cada objeto do diretório antes de aplicá-lo.",
+      "correct": false,
+      "explanation": "O ponto central da abordagem declarativa é justamente o oposto: o usuário não define a operação; o `kubectl` detecta automaticamente, por objeto, se deve criar, atualizar ou remover."
+    },
+    {
+      "key": "B",
+      "text": "`kubectl apply` detecta automaticamente, por objeto, se deve criar, atualizar ou remover algo, comparando os manifestos com o estado do cluster — diferente de `kubectl replace`, que substitui a especificação inteira e descarta o que não está no arquivo.",
+      "correct": true,
+      "explanation": "Essa é a definição oficial da configuração declarativa: operações são detectadas automaticamente por objeto, e esse comportamento é o que distingue `apply` de `replace`, que sobrescreve tudo e descarta campos ausentes do arquivo fornecido."
+    },
+    {
+      "key": "C",
+      "text": "`kubectl apply` só pode processar um único arquivo de manifesto por execução, enquanto `kubectl replace` é o único comando capaz de processar diretórios inteiros de configuração de uma só vez.",
+      "correct": false,
+      "explanation": "É o contrário do que a documentação descreve: a configuração declarativa com `apply` é justamente a recomendada para operar sobre diretórios inteiros de arquivos em ambientes de produção."
+    },
+    {
+      "key": "D",
+      "text": "`kubectl apply` e `kubectl replace` têm exatamente o mesmo comportamento sobre o objeto já existente no cluster, diferindo apenas na sintaxe usada para invocar cada um dos dois comandos — por isso qualquer um dos dois pode ser escolhido livremente em um pipeline de entrega contínua sem qualquer efeito prático diferente.",
+      "correct": false,
+      "explanation": "Os comportamentos são diferentes: `replace` substitui a especificação inteira, descartando o que falta no arquivo, enquanto `apply` aplica apenas as mudanças detectadas e preserva o restante."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Managing Kubernetes Objects Using Object Configuration (Declarative)",
+      "url": "https://kubernetes.io/docs/concepts/overview/working-with-objects/object-management/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

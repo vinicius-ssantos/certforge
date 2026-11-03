@@ -22,9 +22,13 @@ final class RevisionRules {
    *
    * <p>{@code kind} is the kind of preparation the content's topic belongs to, or null when it
    * cannot be determined -- a revision with no topic yet, or one naming a topic that does not
-   * exist. It decides one rule: a certification question states the Java release its answer is true
-   * for, and an interview question has no release to state (ADR 0016 decision 6). Unknown is
-   * treated as certification, so a draft without a topic reports exactly what it reported before.
+   * exist. It decides one rule directly: an interview question has no Java release to state (ADR
+   * 0016 decision 6), so one is refused outright rather than ignored. A certification question may
+   * or may not need one -- Java SE 21 does, a non-Java exam such as KCNA must not (ADR 0017) -- and
+   * that depends on which exam the topic eventually binds to, which this rule does not know. It is
+   * therefore left unchecked here and caught where exam context is actually known: {@code
+   * publish()}'s {@code java_release_mismatch}, the same way an exam objective claim is left
+   * unchecked here and caught at publish rather than at this completeness check.
    */
   static List<String> violations(RevisionContent content, TrackKind kind) {
     Set<String> found = new TreeSet<>();
@@ -51,7 +55,9 @@ final class RevisionRules {
         found.add("seniority_missing");
       }
     } else {
-      if (content.javaRelease() == null || content.javaRelease() < 1) {
+      // A present release still has to be a real one; whether it is required at all is exam
+      // context, checked at publish time instead (see the javadoc above).
+      if (content.javaRelease() != null && content.javaRelease() < 1) {
         found.add("java_release_missing");
       }
       // The mirror of the rule above: an exam objective is true or it is not, and there is no level
