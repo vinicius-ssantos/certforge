@@ -245,9 +245,9 @@ class ContentPackImportIT {
       String editor = account("EDITOR", admin, "10.8.0.2");
 
       String first = runImporter(editor, staged);
-      assertThat(first).contains("created=70 skipped=0 total=70");
+      assertThat(first).contains("created=85 skipped=0 total=85");
       String second = runImporter(editor, staged);
-      assertThat(second).contains("created=0 skipped=70 total=70");
+      assertThat(second).contains("created=0 skipped=85 total=85");
 
       Integer revisions =
           jdbc.queryForObject(

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000304",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige conectar um erro de aplicação observado em produção a um limite de recurso do kernel por processo, em vez de um bug de código.",
+  "prompt": "Um serviço Java em produção começa a falhar sob carga com a exceção `Too many open files`, sem que o processo tenha sido reiniciado. Qual mecanismo do kernel Linux está diretamente envolvido nesse limite, por processo?",
+  "explanation": "Cada processo tem um limite de descritores de arquivo simultaneamente abertos, controlado pelo recurso `RLIMIT_NOFILE` (consultável e ajustável via `ulimit -n` ou `getrlimit`/`setrlimit`). Sockets de rede também consomem descritores de arquivo, então um serviço com muitas conexões simultâneas pode atingir esse limite sem qualquer vazamento de memória.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kernel limita o número total de processos que podem existir no sistema simultaneamente (`pid_max`), e esse erro indica que esse limite foi atingido.",
+      "correct": false,
+      "explanation": "`pid_max` limita quantos processos podem existir no sistema, não quantos descritores de arquivo um único processo pode manter abertos; os dois limites são independentes."
+    },
+    {
+      "key": "B",
+      "text": "O limite de descritores de arquivo por processo, `RLIMIT_NOFILE`, foi atingido — cada socket ou arquivo aberto consome um desses descritores.",
+      "correct": true,
+      "explanation": "Esse é exatamente o recurso identificado pelo erro: o processo tentou abrir um descritor além do limite configurado para ele, seja de arquivos, seja de sockets de rede abertos simultaneamente."
+    },
+    {
+      "key": "C",
+      "text": "O disco do servidor está com o sistema de arquivos cheio, o que impede a abertura de novos arquivos.",
+      "correct": false,
+      "explanation": "Um disco cheio normalmente produz um erro de `No space left on device` ao escrever, não `Too many open files`; o segundo é sobre contagem de descritores abertos, não sobre espaço em disco."
+    },
+    {
+      "key": "D",
+      "text": "O limite de threads por processo (`pthread_create` máximo) foi excedido pela JVM.",
+      "correct": false,
+      "explanation": "Limite de threads e limite de descritores de arquivo são recursos distintos no kernel; exceder o número de threads produz uma falha ao criar thread, não a mensagem `Too many open files`."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — getrlimit(2): RLIMIT_NOFILE (limite de descritores de arquivo por processo)",
+      "url": "https://man7.org/linux/man-pages/man2/getrlimit.2.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

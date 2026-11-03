@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diferenciar controles de nível de repositório/job de controles escopados a um Environment específico.",
+  "prompt": "Uma equipe quer que deploys de produção só comecem depois que uma pessoa específica aprovar manualmente, e também quer uma espera mínima obrigatória mesmo após a aprovação, antes que o job de deploy comece — tudo isso restrito ao ambiente de produção, sem afetar outros ambientes usados pelo mesmo workflow. Qual recurso do GitHub Actions fornece as duas coisas, escopado a um ambiente específico?",
+  "explanation": "Regras de proteção de um Environment (`environment:` no job) suportam revisores obrigatórios (required reviewers), que pausam o job até uma aprovação manual, e um wait timer, que impõe uma espera mínima mesmo após a aprovação — ambas escopadas ao environment configurado no job, sem afetar outros jobs ou environments do mesmo workflow.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Regras de proteção de branch no repositório, como exigir revisão de pull request e checks de status obrigatórios antes do merge, já que esses mesmos controles também se aplicam para decidir quando um job de deploy do workflow pode começar a ser executado.",
+      "correct": false,
+      "explanation": "Regras de proteção de branch controlam o que pode ser mesclado em um branch (revisões de PR, checks obrigatórios antes do merge); elas não pausam nem aprovam a execução de um job de workflow já disparado."
+    },
+    {
+      "key": "B",
+      "text": "Usar `needs` apontando para um job fictício de aprovação, já que `needs` pausa a execução do job até que uma pessoa intervenha manualmente.",
+      "correct": false,
+      "explanation": "`needs` apenas expressa que um job depende da conclusão de outro job da mesma execução; não introduz por si só nenhum mecanismo de aprovação humana, só ordenação de execução entre jobs."
+    },
+    {
+      "key": "C",
+      "text": "Definir um `timeout-minutes` alto no job de deploy, o que dá tempo para alguém revisar antes do job ser cancelado por exceder o tempo limite.",
+      "correct": false,
+      "explanation": "`timeout-minutes` é um limite máximo de execução que cancela o job se ultrapassado; não é um mecanismo de aprovação nem impõe uma espera mínima antes do início do job."
+    },
+    {
+      "key": "D",
+      "text": "Regras de proteção do Environment usado pelo job (revisores obrigatórios e wait timer), configuradas no próprio Environment e referenciadas pelo campo `environment:` do job.",
+      "correct": true,
+      "explanation": "Required reviewers e wait timer são configurados diretamente nas regras de proteção do Environment, e só se aplicam aos jobs que declaram aquele environment especificamente, deixando outros environments do mesmo workflow intactos."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — Using environments for deployment",
+      "url": "https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

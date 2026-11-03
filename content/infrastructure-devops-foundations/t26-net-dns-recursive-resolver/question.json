@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000305",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender o papel do resolvedor recursivo na cadeia de resolução DNS, não apenas o resultado final de um `nslookup`.",
+  "prompt": "Ao resolver o nome `api.exemplo.com`, qual é a função de um resolvedor recursivo (recursive resolver) em relação aos servidores autoritativos envolvidos?",
+  "explanation": "O resolvedor recursivo consulta, em nome do cliente, a cadeia de servidores autoritativos necessária — começando pelos servidores raiz, seguindo para os servidores do TLD (`.com`) e por fim para os servidores autoritativos do domínio `exemplo.com` — até obter a resposta final, e então a retorna ao cliente, respeitando o TTL de cada registro para decidir por quanto tempo pode reutilizá-la em cache.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Ele armazena todos os registros obtidos permanentemente em seu cache local, sem nunca descartá-los, independentemente do TTL anunciado pelo servidor autoritativo que originou a resposta original.",
+      "correct": false,
+      "explanation": "O TTL de cada registro diz exatamente por quanto tempo um resolvedor pode mantê-lo em cache antes de precisar consultar novamente; ignorar o TTL permanentemente serviria respostas obsoletas após alterações no domínio."
+    },
+    {
+      "key": "B",
+      "text": "Ele é, por definição, um dos servidores autoritativos da zona raiz do DNS.",
+      "correct": false,
+      "explanation": "Um resolvedor recursivo é tipicamente um servidor separado, operado por um provedor de acesso ou serviço de DNS público, que consulta os servidores autoritativos — ele não é, por si só, um servidor autoritativo da raiz."
+    },
+    {
+      "key": "C",
+      "text": "Ele apenas repassa a consulta original do cliente para um único servidor fixo, sem armazenar nada em cache.",
+      "correct": false,
+      "explanation": "Resolução recursiva envolve, quando necessário, consultar múltiplos servidores em sequência (raiz, TLD, domínio) e normalmente envolve cache das respostas; um simples repasse sem cache não caracteriza a resolução recursiva."
+    },
+    {
+      "key": "D",
+      "text": "Ele consulta sucessivamente os servidores autoritativos da raiz, do TLD e do domínio em nome do cliente, e retorna a resposta final, respeitando o TTL de cada registro para fins de cache.",
+      "correct": true,
+      "explanation": "Essa é a função central de um resolvedor recursivo: percorrer a hierarquia de servidores autoritativos necessária para obter a resposta final e devolvê-la ao cliente, usando o TTL de cada resposta para decidir por quanto tempo reutilizá-la."
+    }
+  ],
+  "references": [
+    {
+      "title": "RFC 1034 — Domain Names: Concepts and Facilities, §5.3.3 Algorithm (resolução iterando do root até os servidores autoritativos)",
+      "url": "https://datatracker.ietf.org/doc/html/rfc1034#section-5.3.3"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

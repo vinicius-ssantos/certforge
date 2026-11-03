@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000304",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender o critério real usado pelo OOM killer do kernel, em vez de suposições comuns sobre ordem de criação ou consumo de CPU.",
+  "prompt": "Em um servidor sob pressão de memória, um processo Java é encerrado abruptamente e `dmesg` registra `Out of memory: Killed process`. Com base em qual critério o kernel Linux escolhe qual processo encerrar nessa situação?",
+  "explanation": "O OOM killer do kernel calcula uma pontuação de \"badness\" (exposta em `/proc/[pid]/oom_score`) para cada processo, baseada principalmente na quantidade de memória que ele está usando, e encerra o de maior pontuação. Essa pontuação pode ser ajustada manualmente por processo através de `/proc/[pid]/oom_score_adj`, para proteger ou expor processos específicos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kernel sempre encerra o processo com o PID numericamente mais alto no sistema no momento da pressão de memória, por considerar esse processo o mais recente e portanto o mais descartável.",
+      "correct": false,
+      "explanation": "O valor do PID não entra no cálculo do OOM killer; dois processos recém-criados podem ter PIDs altos e consumir pouca memória, e não seriam escolhidos por esse critério."
+    },
+    {
+      "key": "B",
+      "text": "O kernel encerra o processo que acumulou mais tempo de CPU desde que foi iniciado.",
+      "correct": false,
+      "explanation": "Tempo de CPU consumido é usado para escalonamento, não para a decisão do OOM killer, que avalia uso de memória, não uso de CPU."
+    },
+    {
+      "key": "C",
+      "text": "O kernel mantém uma lista fixa definida pelo administrador do sistema, e sempre encerra o primeiro processo dessa lista sob pressão de memória.",
+      "correct": false,
+      "explanation": "Não existe essa lista fixa por padrão; o que existe é `oom_score_adj`, um ajuste por processo que desloca a pontuação calculada dinamicamente, não uma ordem fixa predefinida."
+    },
+    {
+      "key": "D",
+      "text": "O kernel calcula uma pontuação de uso de memória (`oom_score`) por processo e encerra o de maior pontuação, pontuação essa ajustável via `oom_score_adj`.",
+      "correct": true,
+      "explanation": "Esse é o mecanismo real: a pontuação é recalculada dinamicamente com base no consumo de memória de cada processo, e o kernel elimina o processo com a maior pontuação para liberar memória rapidamente."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — proc_pid_oom_score(5): OOM-killer score (quanto maior, mais provável ser escolhido)",
+      "url": "https://man7.org/linux/man-pages/man5/proc_pid_oom_score.5.html"
+    },
+    {
+      "title": "man7.org — proc_pid_oom_score_adj(5): ajuste por processo da pontuação do OOM-killer",
+      "url": "https://man7.org/linux/man-pages/man5/proc_pid_oom_score_adj.5.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

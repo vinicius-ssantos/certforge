@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000305",
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico da sequência de estabelecimento de uma conexão TCP, fundamento para entender timeouts e conexões half-open.",
+  "prompt": "Qual sequência de segmentos descreve corretamente o three-way handshake usado para estabelecer uma conexão TCP entre cliente e servidor?",
+  "explanation": "O cliente envia um segmento `SYN` para iniciar a conexão; o servidor responde com `SYN-ACK`, confirmando o `SYN` do cliente e enviando o seu próprio; o cliente finaliza com um `ACK`, confirmando o `SYN` do servidor. Somente após essas três trocas a conexão é considerada estabelecida.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O cliente envia `ACK`, o servidor responde `SYN`, e o cliente finaliza com `SYN-ACK`.",
+      "correct": false,
+      "explanation": "Essa ordem inverte o papel dos segmentos: uma conexão TCP nunca começa com um `ACK` isolado, porque não há nada ainda a confirmar nesse ponto."
+    },
+    {
+      "key": "B",
+      "text": "O cliente envia `SYN`, o servidor responde `ACK`, e o cliente finaliza enviando `FIN`.",
+      "correct": false,
+      "explanation": "`FIN` é o segmento usado para encerrar uma conexão já estabelecida, não para completar o handshake inicial; um `ACK` isolado também não confirmaria o `SYN` do cliente da forma exigida pelo protocolo."
+    },
+    {
+      "key": "C",
+      "text": "O cliente envia `SYN`, o servidor responde `SYN-ACK`, e o cliente finaliza com `ACK`.",
+      "correct": true,
+      "explanation": "Essa é a sequência definida pelo protocolo: `SYN` do cliente, `SYN-ACK` do servidor (que confirma o `SYN` recebido e propõe o seu próprio número de sequência) e o `ACK` final do cliente confirmando o `SYN` do servidor."
+    },
+    {
+      "key": "D",
+      "text": "Cliente e servidor enviam `SYN` simultaneamente e depois trocam dois `ACK-ACK` para confirmar.",
+      "correct": false,
+      "explanation": "Não existe um segmento `ACK-ACK` no protocolo TCP; o handshake padrão envolve exatamente três segmentos distintos (`SYN`, `SYN-ACK`, `ACK`), não uma troca simultânea seguida de confirmações duplas."
+    }
+  ],
+  "references": [
+    {
+      "title": "RFC 9293 — Transmission Control Protocol (TCP), §3.4 Establishing a Connection",
+      "url": "https://datatracker.ietf.org/doc/html/rfc9293#section-3.4"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

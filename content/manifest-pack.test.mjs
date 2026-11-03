@@ -34,24 +34,28 @@ test("rejects malformed questions and accidental Java metadata", () => {
     ...sample(), references: [{ title: "Docs", url: "http://example.org" }],
   }, manifest), /HTTPS/);
 });
-test("infrastructure evidence only accepts official Docker and Kubernetes hosts", () => {
+test("infrastructure evidence only accepts each topic family's own official hosts", () => {
   const official = { ...manifest, sourcePolicy: "infrastructure-official-v1" };
   const withRef = (url) => ({
     ...sample(), references: [{ title: "Reference", url }],
   });
-  assert.equal(
-    validateGeneralQuestion(withRef("https://docs.docker.com/build/"), official).type,
-    "SINGLE_CHOICE",
-  );
-  assert.equal(
-    validateGeneralQuestion(withRef("https://kubernetes.io/docs/"), official).type,
-    "SINGLE_CHOICE",
-  );
+  for (const url of [
+    "https://docs.docker.com/build/",
+    "https://kubernetes.io/docs/",
+    "https://man7.org/linux/man-pages/man1/ss.1.html",
+    "https://docs.kernel.org/admin-guide/cgroup-v2.html",
+    "https://datatracker.ietf.org/doc/html/rfc9110",
+    "https://www.rfc-editor.org/rfc/rfc1035",
+    "https://docs.github.com/en/actions",
+  ]) {
+    assert.equal(validateGeneralQuestion(withRef(url), official).type, "SINGLE_CHOICE");
+  }
   for (const url of [
     "https://docker.com.evil.example/docs",
     "https://example.com/docs",
     "https://docs.docker.com.evil.example/docs",
     "https://user@kubernetes.io/docs",
+    "https://man7.org.evil.example/linux",
   ]) {
     assert.throws(() => validateGeneralQuestion(withRef(url), official), /official source policy/);
   }
@@ -108,7 +112,7 @@ test("the seeded infrastructure pack is a valid unpublished draft", () => {
   const pack = readManifestPack("content/infrastructure-devops-foundations");
   assert.equal(pack.manifest.editorialStatus, "DRAFT");
   assert.equal(pack.manifest.trackKind, "GENERAL");
-  assert.equal(pack.questions.length, 70);
+  assert.equal(pack.questions.length, 85);
   assert.equal(pack.questions.find((q) => q.name === "t01-image-vs-container").topicId, "a3000000-0000-4000-8000-000000000301");
 });
 

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000304",
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia a diferença fundamental entre dois sinais POSIX usados no encerramento de processos, essencial para desligamento gracioso de serviços.",
+  "prompt": "Um orquestrador precisa parar um processo Java em execução. Qual é a diferença fundamental entre enviar `SIGTERM` e enviar `SIGKILL` a esse processo?",
+  "explanation": "`SIGTERM` é um pedido de encerramento que o processo pode capturar (via um handler de sinal) para liberar recursos e sair de forma graciosa, ou pode ignorar. `SIGKILL` não pode ser capturado, bloqueado nem ignorado: o kernel encerra o processo imediatamente, sem chance de executar qualquer rotina de finalização.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Ambos podem ser capturados e ignorados pelo processo da mesma forma; a diferença é apenas o número do sinal.",
+      "correct": false,
+      "explanation": "Isso é falso para `SIGKILL`: ele não pode ser capturado, bloqueado ou ignorado por nenhum processo, justamente para garantir que o processo sempre termine."
+    },
+    {
+      "key": "B",
+      "text": "`SIGKILL` permite que o processo execute rotinas de limpeza antes de sair; `SIGTERM` interrompe a execução imediatamente.",
+      "correct": false,
+      "explanation": "É o inverso: `SIGTERM` é o sinal que permite ao processo reagir e limpar recursos antes de sair; `SIGKILL` encerra sem qualquer chance de limpeza."
+    },
+    {
+      "key": "C",
+      "text": "`SIGTERM` pode ser interceptado pelo processo para um encerramento gracioso; `SIGKILL` encerra o processo de forma imediata e incondicional, sem poder ser capturado.",
+      "correct": true,
+      "explanation": "Essa é a distinção central definida no mecanismo de sinais do Linux: `SIGTERM` é passível de handler customizado, `SIGKILL` sempre força a terminação no kernel."
+    },
+    {
+      "key": "D",
+      "text": "`SIGTERM` só tem efeito sobre processos que foram iniciados diretamente por um daemon do systemd, nunca sobre processos lançados por um shell interativo ou por outro processo pai qualquer.",
+      "correct": false,
+      "explanation": "`SIGTERM` é um sinal POSIX padrão que qualquer processo pode receber e tratar, independentemente de ter sido iniciado por systemd, por um shell interativo ou por outro processo."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — signal(7): Overview of Signals (lista de sinais não capturáveis, incluindo SIGKILL)",
+      "url": "https://man7.org/linux/man-pages/man7/signal.7.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

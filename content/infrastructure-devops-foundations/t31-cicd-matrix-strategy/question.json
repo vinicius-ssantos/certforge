@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender como o produto cartesiano de uma matrix é formado e qual recurso permite escapar dele para um caso pontual.",
+  "prompt": "Uma equipe quer executar os testes em duas versões de Java (17 e 21) cruzadas com dois sistemas operacionais (ubuntu-latest e windows-latest) — quatro combinações no total — e também incluir uma combinação extra, Java 25 somente em ubuntu-latest, sem rodar Java 25 em windows-latest. Qual recurso de `strategy.matrix` permite adicionar essa combinação extra sem transformar Java 25 em um terceiro valor do eixo `java`, o que geraria também Java 25 com windows-latest?",
+  "explanation": "`strategy.matrix.include` adiciona combinações extras ao produto cartesiano calculado a partir dos eixos declarados, sem fazer parte de nenhum eixo; assim Java 25 aparece só junto de ubuntu-latest, e nunca é cruzado com windows-latest.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Usar `strategy.matrix.include` para adicionar explicitamente a combinação `{java: 25, os: ubuntu-latest}`, mantendo os eixos `java: [17, 21]` e `os: [ubuntu-latest, windows-latest]` inalterados.",
+      "correct": true,
+      "explanation": "`include` soma combinações pontuais ao produto cartesiano original sem alterar os valores dos eixos existentes, o que evita gerar Java 25 em windows-latest."
+    },
+    {
+      "key": "B",
+      "text": "Declarar `java: [17, 21, 25]` no mesmo eixo que `os`, já que o GitHub Actions ignora automaticamente combinações que a equipe não queira executar.",
+      "correct": false,
+      "explanation": "Um valor incluído em um eixo participa do produto cartesiano completo com todos os valores dos demais eixos; nada no mecanismo de matrix omite combinações só porque não são desejadas pela equipe."
+    },
+    {
+      "key": "C",
+      "text": "Configurar `fail-fast: true` no nível da estratégia, pois essa opção restringe quais combinações do produto cartesiano chegam a ser geradas e executadas.",
+      "correct": false,
+      "explanation": "`fail-fast` controla se as demais combinações em execução são canceladas quando uma delas falha; não tem nenhum efeito sobre quais combinações a matrix gera."
+    },
+    {
+      "key": "D",
+      "text": "Duplicar o job inteiro em um segundo bloco `jobs` separado só para a execução de Java 25 em ubuntu-latest, já que `strategy.matrix` não tem suporte para combinações fora do produto cartesiano dos eixos declarados.",
+      "correct": false,
+      "explanation": "A matrix tem suporte nativo a combinações extras fora do produto cartesiano via `include`; duplicar o job inteiro é retrabalho desnecessário para algo que a sintaxe já resolve dentro do mesmo job."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — Using a matrix for your jobs",
+      "url": "https://docs.github.com/en/actions/using-jobs/using-a-matrix-for-your-jobs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
