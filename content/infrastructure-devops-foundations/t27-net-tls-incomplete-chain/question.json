@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000305",
+  "difficulty": "HARD",
+  "difficultyRationale": "Combina DNS e TLS num único cenário de diagnóstico e exige distinguir causas de falha de cadeia de confiança de outras causas comuns de erro TLS, como expiração.",
+  "prompt": "O DNS resolve corretamente o hostname de um serviço e a conexão TCP é estabelecida sem problemas, mas o handshake TLS falha no cliente com um erro de cadeia de certificado não confiável — mesmo que o certificado do servidor tenha sido emitido por uma autoridade certificadora (CA) pública reconhecida e ainda esteja dentro da validade. Qual é a causa mais provável desse erro específico?",
+  "explanation": "Um certificado de servidor emitido por uma CA pública normalmente depende de um ou mais certificados intermediários para formar a cadeia até uma âncora de confiança (trust anchor) raiz presente no armazém de confiança do cliente. Se o servidor não enviar esses certificados intermediários durante o handshake, o cliente não consegue reconstruir essa cadeia sozinho e rejeita o certificado como não confiável, mesmo sendo genuíno e válido.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O cliente acessou o serviço por um endereço IP em vez do hostname, o que invalida qualquer certificado TLS automaticamente.",
+      "correct": false,
+      "explanation": "O cenário descrito já informa que o DNS resolveu o hostname corretamente e que o acesso foi feito por ele; além disso, um certificado pode incluir o IP como Subject Alternative Name e continuar válido para esse caso específico."
+    },
+    {
+      "key": "B",
+      "text": "O servidor não enviou ao cliente os certificados intermediários necessários para construir o caminho até uma âncora de confiança raiz.",
+      "correct": true,
+      "explanation": "Esse é o motivo mais comum para esse sintoma exato: a cadeia de confiança fica incompleta porque faltam os certificados intermediários que ligam o certificado do servidor à raiz confiável, e o cliente não tem como adivinhar quais intermediários usar."
+    },
+    {
+      "key": "C",
+      "text": "O algoritmo de hash SHA-1 ainda é aceito por padrão em todas as implementações TLS modernas, o que causaria esse erro.",
+      "correct": false,
+      "explanation": "Implementações TLS modernas descontinuaram a aceitação de assinaturas SHA-1 por razões de segurança; e mesmo quando relevante, esse problema produziria um erro de algoritmo de assinatura não suportado, não especificamente um erro de cadeia não confiável."
+    },
+    {
+      "key": "D",
+      "text": "O certificado expirou exatamente no instante do handshake, algo que só pode ser detectado pelo servidor que o emitiu originalmente, nunca pelo próprio cliente que recebeu o certificado.",
+      "correct": false,
+      "explanation": "O cenário já afirma que o certificado está dentro da validade; além disso, a verificação de validade (datas `notBefore`/`notAfter`) é feita pelo próprio cliente ao inspecionar o certificado recebido, produzindo um erro de expiração diferente do erro de cadeia não confiável descrito."
+    }
+  ],
+  "references": [
+    {
+      "title": "RFC 8446 — The Transport Layer Security (TLS) Protocol Version 1.3, §4.4.2 Certificate",
+      "url": "https://datatracker.ietf.org/doc/html/rfc8446#section-4.4.2"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

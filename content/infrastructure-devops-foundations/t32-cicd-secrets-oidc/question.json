@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige diferenciar mitigação de eliminação de risco e entender o papel da federação de identidade no lugar de uma credencial estática.",
+  "prompt": "Um workflow de deploy para a AWS guarda uma access key de longa duração como secret do repositório. O time de segurança aponta que essa chave, se exposta, continua válida indefinidamente. Qual mecanismo do GitHub Actions elimina a necessidade de armazenar essa credencial de longa duração?",
+  "explanation": "OpenID Connect (OIDC) permite que o workflow solicite, em tempo de execução, um token de curta duração diretamente ao provedor de nuvem, com base em uma relação de confiança federada configurada entre o GitHub e o provedor — eliminando a necessidade de guardar qualquer credencial de longa duração como secret.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Configurar um workflow agendado para rotacionar a access key a cada 24 horas por meio de uma chamada à API do provedor de nuvem, reduzindo a janela de validade da credencial caso ela seja exposta em algum momento entre duas rotações consecutivas.",
+      "correct": false,
+      "explanation": "Rotação periódica reduz o tempo de exposição, mas a credencial de longa duração continua existindo e sendo armazenada entre as rotações — mitiga o risco, não o elimina como pedido no cenário."
+    },
+    {
+      "key": "B",
+      "text": "Configurar OpenID Connect (OIDC) para que o workflow obtenha um token de curta duração do provedor de nuvem em tempo de execução, a partir de uma relação de confiança federada, sem precisar armazenar nenhuma credencial de longa duração.",
+      "correct": true,
+      "explanation": "Com OIDC, nenhuma chave de longa duração chega a existir como secret: o token é emitido pelo provedor de nuvem especificamente para aquela execução e expira junto com ela."
+    },
+    {
+      "key": "C",
+      "text": "Mover a chave de Secrets para Variables do repositório, já que Variables usam uma criptografia mais forte e reduzem o risco de exposição em log.",
+      "correct": false,
+      "explanation": "Variables do repositório não são criptografadas como secrets; ficam em texto simples e visíveis para quem tem acesso às configurações do repositório, o que piora a exposição em vez de reduzi-la."
+    },
+    {
+      "key": "D",
+      "text": "Restringir o secret a um Environment protegido com aprovação manual obrigatória, mantendo a mesma access key de longa duração.",
+      "correct": false,
+      "explanation": "Um gate de aprovação manual controla quando o deploy pode iniciar, mas não remove a credencial de longa duração armazenada; ela continua existindo e sendo usada normalmente após a aprovação."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — About security hardening with OpenID Connect",
+      "url": "https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

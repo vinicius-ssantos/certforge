@@ -1,0 +1,47 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige diagnosticar uma falha intermitente até a causa raiz na chave de cache e distinguir corretamente os propósitos de cache e artifact.",
+  "prompt": "Uma pipeline de build usa `actions/cache` para acelerar a instalação de dependências. Depois de uma atualização no arquivo de lock de dependências, alguns jobs passam a falhar de forma intermitente, usando pacotes que não correspondem mais ao lock file atual. A causa raiz está na chave de cache usada. Qual prática resolve o problema e descreve corretamente a diferença entre cache e artifact nesse contexto?",
+  "explanation": "A chave do cache deve derivar de um hash do próprio lock file (por exemplo, com `hashFiles('**/package-lock.json')`), para que qualquer mudança nas dependências gere uma chave nova e force a reconstrução do cache em vez de reaproveitar dados obsoletos. Cache serve para acelerar reexecuções restaurando dados já vistos a partir de uma chave; artifact serve para transportar arquivos de saída de um job para outro ou para fora do workflow — não são a mesma coisa, e um não substitui o outro.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Cache e artifact são mecanismos equivalentes para esse caso; bastaria substituir `actions/cache` por `actions/upload-artifact`/`actions/download-artifact`, já que um artifact também fica disponível para os jobs seguintes do mesmo workflow, só que de forma explícita em vez de restaurado automaticamente por uma chave.",
+      "correct": false,
+      "explanation": "Artifact transporta arquivos entre jobs ou para fora do workflow e não é indexado por uma chave derivada do conteúdo das dependências; trocar o mecanismo de armazenamento não corrige uma chave de cache que não reflete o lock file atual."
+    },
+    {
+      "key": "B",
+      "text": "A solução correta é desativar completamente o cache de dependências no workflow, já que qualquer cache é incompatível com lock files que mudam com frequência.",
+      "correct": false,
+      "explanation": "Desativar o cache descarta o ganho de performance que ele existe para fornecer; o problema está na chave usada para identificar o conteúdo armazenado, não no uso de cache em si."
+    },
+    {
+      "key": "C",
+      "text": "A chave do cache precisa derivar de um hash do lock file (ex.: `hashFiles('**/package-lock.json')`), para que uma mudança nas dependências gere uma chave diferente e invalide o cache antigo automaticamente; cache acelera reexecuções e artifact transporta arquivos entre jobs — são propósitos diferentes.",
+      "correct": true,
+      "explanation": "Uma chave sensível ao conteúdo do lock file garante que o cache restaurado sempre corresponda às dependências declaradas na execução atual, eliminando a janela em que um cache antigo é reaproveitado por engano."
+    },
+    {
+      "key": "D",
+      "text": "O GitHub Actions versiona os caches automaticamente pelo número da execução do workflow, então bastaria aumentar o retention period do cache para a inconsistência parar de ocorrer.",
+      "correct": false,
+      "explanation": "Não existe versionamento automático por número de execução: o cache é identificado inteiramente pela chave (`key`) declarada no step, que o autor do workflow controla, e aumentar a retenção não altera essa chave."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — Caching dependencies to speed up workflows",
+      "url": "https://docs.github.com/en/actions/using-workflows/caching-dependencies-to-speed-up-workflows"
+    },
+    {
+      "title": "GitHub Actions — Storing workflow data as artifacts",
+      "url": "https://docs.github.com/en/actions/using-workflows/storing-workflow-data-as-artifacts"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

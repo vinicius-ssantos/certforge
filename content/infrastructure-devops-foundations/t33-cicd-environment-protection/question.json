@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender que o wait timer de um Environment conta a partir do disparo do job, não a partir da aprovação de um revisor obrigatório — os dois controles correm de forma independente.",
+  "prompt": "Uma equipe configura o Environment de produção com revisores obrigatórios e um wait timer de 10 minutos. Um job de deploy que declara esse Environment é disparado e, apenas 2 minutos depois, um revisor obrigatório já aprova a execução. Quando esse job de deploy pode de fato começar a rodar?",
+  "explanation": "Required reviewers e wait timer são dois controles independentes de proteção do Environment: a aprovação do revisor libera uma condição, e o wait timer conta a partir do momento em que o job foi inicialmente disparado — não a partir da aprovação. O job só começa quando as duas condições estiverem satisfeitas, então, mesmo aprovado aos 2 minutos, ele continua bloqueado até os 10 minutos completos desde o disparo original.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Imediatamente aos 2 minutos, no momento exato da aprovação, porque a aprovação de um revisor obrigatório sempre encerra o wait timer antecipadamente, qualquer que seja o tempo restante.",
+      "correct": false,
+      "explanation": "O wait timer não é encerrado pela aprovação; os dois controles são independentes, e a aprovação sozinha não dá por satisfeita a condição de tempo mínimo decorrido desde o disparo do job."
+    },
+    {
+      "key": "B",
+      "text": "Somente aos 10 minutos completos contados a partir do disparo original do job — a aprovação não acelera nem reinicia essa contagem, porque o wait timer conta a partir do disparo do job, não da aprovação.",
+      "correct": true,
+      "explanation": "Essa é a semântica documentada: o wait timer é relativo ao instante em que o job foi disparado; aprovar mais rápido não adianta o relógio, e o job permanece bloqueado até o timer se esgotar, ainda que o revisor já tenha liberado sua parte."
+    },
+    {
+      "key": "C",
+      "text": "Aos 12 minutos — 2 minutos até a aprovação mais os 10 minutos completos do wait timer reiniciado a partir do instante em que o revisor aprovou.",
+      "correct": false,
+      "explanation": "O wait timer não reinicia a contagem a partir da aprovação; ele é medido a partir do disparo original do job, então não se soma ao tempo até a aprovação dessa forma."
+    },
+    {
+      "key": "D",
+      "text": "Esse job nunca poderá rodar, porque um Environment do GitHub Actions só aceita configurar uma regra de proteção por vez, de modo que ativar revisores obrigatórios desativa automaticamente qualquer wait timer já configurado no mesmo Environment, e vice-versa.",
+      "correct": false,
+      "explanation": "As regras de proteção de um Environment podem combinar revisores obrigatórios e wait timer livremente; não há essa restrição de exclusividade mútua entre os dois controles."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — Using environments for deployment",
+      "url": "https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000306",
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia a compreensão básica de que eventos distintos em `on` disparam execuções independentes, sem exigir conhecimento de sintaxe avançada.",
+  "prompt": "Um repositório tem um workflow configurado com `on: [push, pull_request]`. Um desenvolvedor abre um pull request a partir de um branch do mesmo repositório (não um fork) e, em seguida, dá push de um novo commit nesse branch. A equipe nota que o workflow dispara duas vezes para o que parece ser o mesmo commit. Por que isso acontece, e qual é a forma recomendada de evitar as duas execuções simultâneas?",
+  "explanation": "push e pull_request são eventos independentes: o push dispara uma execução para a ref do branch (`refs/heads/<branch>`), e o próprio pull_request dispara outra execução para uma ref de merge diferente (`refs/pull/<número>/merge`). Como as refs dos dois eventos não coincidem, uma chave de concorrência baseada simplesmente em `github.ref` não agruparia as duas execuções. A forma recomendada é normalizar a chave para a mesma identidade de branch nos dois casos, com `github.head_ref || github.ref_name` (`head_ref` só existe em eventos `pull_request` e já é o nome curto do branch; `ref_name` cobre o `push` com esse mesmo nome curto), combinada com `cancel-in-progress: true`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O GitHub Actions detecta internamente que as duas execuções apontam para o mesmo SHA de commit e cancela automaticamente uma delas assim que percebe a duplicidade, de modo que a duplicidade aparente observada nos logs e na aba Actions é apenas um atraso temporário na atualização da interface do navegador, sem qualquer efeito real sobre o consumo de runners da pipeline.",
+      "correct": false,
+      "explanation": "Não existe deduplicação automática por SHA: cada evento configurado em `on` dispara sua própria execução independente, mesmo quando os commits envolvidos coincidem, e as duas execuções seguem em paralelo de fato, não só na interface."
+    },
+    {
+      "key": "B",
+      "text": "push e pull_request são eventos distintos, com refs diferentes (`refs/heads/<branch>` contra `refs/pull/<número>/merge`); a forma recomendada é configurar `concurrency` com uma chave normalizada para o mesmo branch nos dois casos (`github.head_ref || github.ref_name`) e `cancel-in-progress: true`.",
+      "correct": true,
+      "explanation": "Cada evento listado em `on` é avaliado de forma independente; sem uma chave de concorrência que normalize as duas refs diferentes para o mesmo valor, as duas execuções seguem em paralelo até o fim, consumindo runners e reportando status duas vezes para o mesmo trabalho."
+    },
+    {
+      "key": "C",
+      "text": "O problema só se resolve removendo `pull_request` da lista de eventos, abandonando qualquer verificação específica de pull request, já que push por si só já cobre o conteúdo da PR.",
+      "correct": false,
+      "explanation": "Remover `pull_request` elimina informações só disponíveis nesse evento, como o número da PR e o diff contra o branch-base, e não é a solução documentada para controlar concorrência entre execuções relacionadas."
+    },
+    {
+      "key": "D",
+      "text": "Isso é um comportamento instável do agendador de runners do GitHub, e a prática recomendada é simplesmente reexecutar o workflow manualmente quando a duplicidade aparecer.",
+      "correct": false,
+      "explanation": "O disparo duplicado é um comportamento determinístico e documentado da combinação de eventos configurada em `on`, não uma falha aleatória do agendador de runners."
+    }
+  ],
+  "references": [
+    {
+      "title": "GitHub Actions — Events that trigger workflows (push, pull_request)",
+      "url": "https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows"
+    },
+    {
+      "title": "GitHub Actions — Control the concurrency of workflow runs",
+      "url": "https://docs.github.com/en/actions/using-jobs/using-concurrency"
+    },
+    {
+      "title": "GitHub Actions — Contexts: the github context (ref, head_ref, ref_name per event)",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

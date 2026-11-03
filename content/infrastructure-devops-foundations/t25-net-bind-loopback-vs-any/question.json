@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000305",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Cenário aplicado clássico de 'funciona local mas não é alcançável de fora', que exige diferenciar o endereço de bind da aplicação do conceito de porta aberta.",
+  "prompt": "Uma aplicação Spring Boot é iniciada dentro de um contêiner e responde normalmente a `curl localhost:8080` executado dentro do próprio contêiner, mas nenhuma máquina fora dele consegue alcançá-la, mesmo com a porta publicada corretamente. A aplicação está configurada para escutar em `127.0.0.1:8080`. Qual é a causa mais provável?",
+  "explanation": "Um processo vinculado (bind) apenas ao endereço de loopback (`127.0.0.1`) só aceita conexões originadas do próprio host/namespace de rede — por definição, o endereço de loopback não é alcançável de fora. Para aceitar conexões externas, o processo precisa escutar em todas as interfaces (`0.0.0.0`) ou na interface específica que recebe o tráfego externo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O processo está vinculado apenas à interface de loopback (`127.0.0.1`), que não aceita conexões originadas fora do próprio namespace de rede.",
+      "correct": true,
+      "explanation": "Esse é o motivo real: `127.0.0.1` é o endereço de loopback, reservado para tráfego que se origina e termina na própria máquina/namespace; nenhum pacote chegando de outra interface de rede alcança um processo vinculado só a ele."
+    },
+    {
+      "key": "B",
+      "text": "A máquina que tenta acessar precisa instalar exatamente a mesma versão de runtime Java usada dentro do contêiner.",
+      "correct": false,
+      "explanation": "A versão do runtime Java no cliente que faz a requisição não influencia se um pacote TCP consegue alcançar o processo; o acesso é feito por rede, não por compatibilidade de runtime entre máquinas."
+    },
+    {
+      "key": "C",
+      "text": "O firewall do host bloqueia por padrão toda porta de número acima de 1024, exigindo liberação manual mesmo para tráfego interno.",
+      "correct": false,
+      "explanation": "Não existe essa regra padrão genérica em firewalls Linux; portas acima de 1024 (não-privilegiadas) não são bloqueadas por convenção alguma do kernel, e o cenário descrito já teria outro sintoma se fosse um bloqueio de firewall."
+    },
+    {
+      "key": "D",
+      "text": "Contêineres sempre compartilham automaticamente a pilha de rede do host, então o endereço em que a aplicação escuta dentro dele nunca tem efeito algum sobre quem consegue alcançá-la de fora, independentemente do driver de rede configurado.",
+      "correct": false,
+      "explanation": "No modo de rede padrão (bridge) de um contêiner, ele recebe seu próprio namespace de rede, isolado do host; o endereço em que a aplicação escuta dentro desse namespace continua determinando quem consegue alcançá-la."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — ip(7): IPv4 protocol implementation (endereço de loopback e INADDR_ANY)",
+      "url": "https://man7.org/linux/man-pages/man7/ip.7.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

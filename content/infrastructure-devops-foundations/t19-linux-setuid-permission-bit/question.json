@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000304",
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o reconhecimento de um bit de permissão especial do Linux, além da leitura comum de rwx.",
+  "prompt": "Um programa executável binário (compilado, não um script com `#!`) precisa sempre executar com os privilégios do usuário que é seu proprietário (`owner`), independentemente de qual outro usuário o execute. Qual mecanismo de permissão do Linux produz esse comportamento?",
+  "explanation": "O bit `setuid`, quando aplicado a um arquivo executável binário, faz o processo assumir o UID efetivo do proprietário do arquivo durante a execução, em vez do UID de quem o invocou. Isso é diferente do `sticky bit` (que afeta exclusão em diretórios compartilhados) e do `umask` (que só define permissões no momento da criação de novos arquivos). A ressalva do binário é deliberada: o Linux ignora os bits `setuid`/`setgid` em scripts com shebang (`#!`), então o mesmo cenário descrito para um script não teria uma resposta correta.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O `sticky bit` aplicado ao arquivo, que preserva o proprietário original e impede o kernel de trocar o UID efetivo durante qualquer execução realizada por outro usuário do sistema.",
+      "correct": false,
+      "explanation": "O `sticky bit` tem efeito em diretórios (restringe quem pode remover ou renomear arquivos de outros usuários, como em `/tmp`) e não altera o UID efetivo de um processo em execução."
+    },
+    {
+      "key": "B",
+      "text": "O bit `setuid` aplicado ao executável, que faz o processo herdar o UID efetivo do proprietário do arquivo durante a execução.",
+      "correct": true,
+      "explanation": "É exatamente esse o papel do `setuid`: o kernel define o UID efetivo do processo como o do proprietário do arquivo no momento do `exec`, não o UID de quem o chamou."
+    },
+    {
+      "key": "C",
+      "text": "O `umask` padrão configurado na sessão do usuário que executa o programa.",
+      "correct": false,
+      "explanation": "O `umask` só determina quais bits de permissão são subtraídos ao criar novos arquivos ou diretórios; ele não interfere na identidade efetiva de um processo já em execução."
+    },
+    {
+      "key": "D",
+      "text": "O bit `setgid` aplicado ao diretório pai que contém o executável.",
+      "correct": false,
+      "explanation": "O `setgid` em um diretório faz novos arquivos criados ali herdarem o grupo do diretório; ele não afeta o UID do processo que executa um programa já existente."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — execve(2): Execute Program (mudança do UID efetivo em programas set-user-ID)",
+      "url": "https://man7.org/linux/man-pages/man2/execve.2.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

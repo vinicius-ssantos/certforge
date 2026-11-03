@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000305",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige entender a independência entre o timeout do proxy e o processamento do backend para interpretar corretamente um 504 que não corresponde a uma falha da aplicação.",
+  "prompt": "Uma API Spring Boot leva, em média, 45 segundos para concluir uma consulta pesada específica. Um proxy reverso na frente dela está configurado com um timeout de leitura (read timeout) de 30 segundos para o backend. Os clientes dessa rota recebem erro `504 Gateway Timeout`, mesmo nos casos em que a API, internamente, termina de processar a consulta e retornaria sucesso. Qual é a explicação correta para esse comportamento?",
+  "explanation": "O timeout de leitura do proxy e o tempo de processamento do backend são medidos de forma independente. Quando o proxy atinge seu próprio limite de tempo de espera por uma resposta do backend, ele encerra a conexão com o backend e responde ao cliente com `504 Gateway Timeout` imediatamente — sem saber, e sem esperar para saber, se a aplicação acabaria respondendo com sucesso alguns segundos depois.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um erro `504` sempre significa que a própria aplicação retornou uma falha de autenticação ou autorização para aquela requisição específica, da mesma forma que ocorreria com os códigos `401` ou `403`.",
+      "correct": false,
+      "explanation": "`504 Gateway Timeout` é gerado pelo componente intermediário (o proxy) quando ele não recebe resposta do backend a tempo; não é um código que a aplicação de backend costuma emitir para falhas de autenticação, que normalmente usam `401` ou `403`."
+    },
+    {
+      "key": "B",
+      "text": "O cliente encerrou a conexão antes do proxy processar a requisição, o que o servidor reporta como `504`.",
+      "correct": false,
+      "explanation": "Quando o cliente encerra a conexão primeiro, o servidor normalmente nem gera uma resposta de erro específica para entregar a ninguém; `504` é a resposta que o próprio proxy fabrica para o cliente após o proxy, e não o cliente, atingir seu limite de espera pelo backend."
+    },
+    {
+      "key": "C",
+      "text": "O proxy encerra a conexão com o backend ao atingir seu próprio timeout de leitura, antes da aplicação terminar de processar, e responde ao cliente com `504` sem esperar o resultado real da API.",
+      "correct": true,
+      "explanation": "Essa é a causa real do sintoma: o relógio do proxy (30s) é mais curto que o tempo real de processamento da API (45s), então o proxy desiste e retorna `504` antes de saber que a API, por conta própria, concluiria a consulta com sucesso."
+    },
+    {
+      "key": "D",
+      "text": "O erro `504` ocorre porque a aplicação excedeu o limite de memória heap configurado para a JVM durante a consulta.",
+      "correct": false,
+      "explanation": "Um limite de heap excedido tipicamente produz um `OutOfMemoryError` dentro da JVM, o que levaria a uma resposta de erro do próprio backend (como `500`) ou à queda do processo — não ao `504` gerado pelo proxy por falta de resposta a tempo."
+    }
+  ],
+  "references": [
+    {
+      "title": "RFC 9110 — HTTP Semantics, §15.6.5 504 Gateway Timeout",
+      "url": "https://datatracker.ietf.org/doc/html/rfc9110#name-504-gateway-timeout"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

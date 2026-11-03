@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000304",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige escolher a ferramenta de diagnóstico de rede correta para um sintoma específico, em vez de ferramentas genéricas de monitoramento de processos.",
+  "prompt": "Uma aplicação falha ao iniciar com o erro `Address already in use` ao tentar escutar na porta 8080. Qual comando permite identificar diretamente qual processo já está vinculado (bind) a essa porta no host?",
+  "explanation": "Ferramentas como `ss -ltnp` (ou, em sistemas que a possuam, `lsof -i :8080`) consultam as tabelas de sockets do kernel e mostram, para cada socket em estado de escuta, o endereço, a porta e o processo (PID) proprietário daquele socket — exatamente a informação necessária para resolver um conflito de porta.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`ps aux | grep java`, para listar todos os processos Java em execução no host e inferir qual deles ocupa a porta a partir da ordem em que aparecem na lista.",
+      "correct": false,
+      "explanation": "Esse comando lista processos Java em execução, mas não mostra quais portas cada um tem vinculadas; com múltiplas JVMs ativas, não identifica qual delas detém a porta 8080 especificamente."
+    },
+    {
+      "key": "B",
+      "text": "`ss -ltnp | grep :8080`, que lista sockets em escuta junto com o processo proprietário de cada um.",
+      "correct": true,
+      "explanation": "Esse comando consulta diretamente a tabela de sockets TCP em estado de escuta (`LISTEN`) mantida pelo kernel e inclui o PID do processo que detém cada socket, apontando exatamente quem já ocupa a porta 8080."
+    },
+    {
+      "key": "C",
+      "text": "`top`, ordenado por uso de CPU, para encontrar o processo mais pesado do sistema.",
+      "correct": false,
+      "explanation": "Uso de CPU não tem relação com qual processo está vinculado a uma porta de rede; o processo que ocupa a porta 8080 pode estar praticamente ocioso em termos de CPU."
+    },
+    {
+      "key": "D",
+      "text": "`renice` aplicado ao processo mais antigo em execução, para liberar a porta.",
+      "correct": false,
+      "explanation": "`renice` altera apenas a prioridade de escalonamento de CPU de um processo; não libera, fecha nem identifica sockets de rede vinculados a uma porta."
+    }
+  ],
+  "references": [
+    {
+      "title": "man7.org — bind(2): ERRORS (EADDRINUSE — the given address is already in use)",
+      "url": "https://man7.org/linux/man-pages/man2/bind.2.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
