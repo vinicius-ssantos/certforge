@@ -4,19 +4,19 @@
   "difficulty": "EASY",
   "difficultyRationale": "Avalia a compreensão básica de que eventos distintos em `on` disparam execuções independentes, sem exigir conhecimento de sintaxe avançada.",
   "prompt": "Um repositório tem um workflow configurado com `on: [push, pull_request]`. Um desenvolvedor abre um pull request a partir de um branch do mesmo repositório (não um fork) e, em seguida, dá push de um novo commit nesse branch. A equipe nota que o workflow dispara duas vezes para o que parece ser o mesmo commit. Por que isso acontece, e qual é a forma recomendada de evitar as duas execuções simultâneas?",
-  "explanation": "push e pull_request são eventos independentes: o push dispara uma execução para a ref do branch, e o próprio pull_request dispara outra execução para a ref de merge da PR. Como os dois eventos são distintos, o GitHub não os deduplica automaticamente; a forma recomendada é declarar um grupo de concorrência (`concurrency`) com uma chave que inclua a ref, combinado com `cancel-in-progress: true`, para que uma nova execução cancele a anterior do mesmo grupo.",
+  "explanation": "push e pull_request são eventos independentes: o push dispara uma execução para a ref do branch (`refs/heads/<branch>`), e o próprio pull_request dispara outra execução para uma ref de merge diferente (`refs/pull/<número>/merge`). Como as refs dos dois eventos não coincidem, uma chave de concorrência baseada simplesmente em `github.ref` não agruparia as duas execuções. A forma recomendada é normalizar a chave para a mesma identidade de branch nos dois casos, com `github.head_ref || github.ref_name` (`head_ref` só existe em eventos `pull_request` e já é o nome curto do branch; `ref_name` cobre o `push` com esse mesmo nome curto), combinada com `cancel-in-progress: true`.",
   "options": [
     {
       "key": "A",
-      "text": "O GitHub Actions detecta que as duas execuções apontam para o mesmo SHA de commit e cancela automaticamente uma delas assim que percebe a duplicidade, de modo que a duplicidade aparente observada nos logs é apenas um atraso temporário na atualização da interface, sem efeito real na pipeline.",
+      "text": "O GitHub Actions detecta internamente que as duas execuções apontam para o mesmo SHA de commit e cancela automaticamente uma delas assim que percebe a duplicidade, de modo que a duplicidade aparente observada nos logs e na aba Actions é apenas um atraso temporário na atualização da interface do navegador, sem qualquer efeito real sobre o consumo de runners da pipeline.",
       "correct": false,
       "explanation": "Não existe deduplicação automática por SHA: cada evento configurado em `on` dispara sua própria execução independente, mesmo quando os commits envolvidos coincidem, e as duas execuções seguem em paralelo de fato, não só na interface."
     },
     {
       "key": "B",
-      "text": "push e pull_request são eventos distintos — o push dispara uma execução para a ref do branch e o pull_request dispara outra para a ref de merge da PR; a forma recomendada de evitar a concorrência é configurar `concurrency` com uma chave que inclua a ref e `cancel-in-progress: true`.",
+      "text": "push e pull_request são eventos distintos, com refs diferentes (`refs/heads/<branch>` contra `refs/pull/<número>/merge`); a forma recomendada é configurar `concurrency` com uma chave normalizada para o mesmo branch nos dois casos (`github.head_ref || github.ref_name`) e `cancel-in-progress: true`.",
       "correct": true,
-      "explanation": "Cada evento listado em `on` é avaliado de forma independente; sem um grupo de concorrência explícito, as duas execuções seguem em paralelo até o fim, consumindo runners e reportando status duas vezes para o mesmo trabalho."
+      "explanation": "Cada evento listado em `on` é avaliado de forma independente; sem uma chave de concorrência que normalize as duas refs diferentes para o mesmo valor, as duas execuções seguem em paralelo até o fim, consumindo runners e reportando status duas vezes para o mesmo trabalho."
     },
     {
       "key": "C",
@@ -39,6 +39,10 @@
     {
       "title": "GitHub Actions — Control the concurrency of workflow runs",
       "url": "https://docs.github.com/en/actions/using-jobs/using-concurrency"
+    },
+    {
+      "title": "GitHub Actions — Contexts: the github context (ref, head_ref, ref_name per event)",
+      "url": "https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#github-context"
     }
   ],
   "evidence": {
