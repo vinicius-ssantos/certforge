@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000011",
+  "objectiveKeys": ["KCSA-1.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender que a documentação trata 'hard' e 'soft' multi-tenancy como um espectro de técnicas, não como uma dicotomia com definição única, o que é um erro comum de quem simplifica demais o conceito.",
+  "prompt": "Uma equipe de plataforma discute se deve adotar 'hard multi-tenancy' ou 'soft multi-tenancy' no cluster Kubernetes. Como a documentação oficial descreve esses dois termos?",
+  "explanation": "A documentação afirma que os termos 'hard' e 'soft' multi-tenancy podem ser confusos, pois não há uma definição única que se aplique a todos os usuários: 'hardness' ou 'softness' é melhor entendida como um espectro amplo, com muitas técnicas diferentes para manter isolamento, dependendo dos requisitos. 'Hard' multi-tenancy costuma descrever casos em que os tenants não confiam uns nos outros (do ponto de vista de segurança e compartilhamento de recursos); o caso extremo é atribuir um cluster dedicado a cada tenant. Não é uma dicotomia binária com uma única implementação correta para cada lado.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Como termos binários e precisos: 'hard' significa sempre um cluster físico dedicado por tenant, e 'soft' significa sempre um único namespace compartilhado sem nenhum controle adicional de RBAC ou NetworkPolicy, independentemente do nível de confiança real entre os tenants envolvidos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação explicitamente evita tratar os termos como binários ou com definição única; cluster dedicado é apenas o extremo de um espectro, e 'soft' não implica ausência de RBAC ou NetworkPolicy."
+    },
+    {
+      "key": "B",
+      "text": "Como pontos em um espectro amplo de técnicas de isolamento, sem uma definição única aplicável a todos os casos — 'hard' tende a descrever tenants que não confiam entre si, mas a forma exata de isolamento varia conforme os requisitos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a ressalva que a documentação faz, descrevendo 'hardness' e 'softness' como um espectro, não como categorias binárias com uma única implementação."
+    },
+    {
+      "key": "C",
+      "text": "Como sinônimos de 'namespace' e 'cluster' respectivamente, sem qualquer relação com o nível de confiança entre os tenants que compartilham a infraestrutura.",
+      "correct": false,
+      "explanation": "Incorreto: os termos se relacionam ao nível de isolamento e confiança entre tenants, não são simplesmente sinônimos técnicos de 'namespace' ou 'cluster' sem relação com confiança."
+    },
+    {
+      "key": "D",
+      "text": "Como uma classificação obrigatória que o Kubernetes impõe automaticamente a cada namespace criado, com base em anotações padronizadas que o cluster já vem configurado para aplicar.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes não classifica namespaces automaticamente como 'hard' ou 'soft'; essa é uma decisão arquitetural de quem opera o cluster, não um comportamento imposto pela plataforma."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Multi-tenancy (Isolation)",
+      "url": "https://kubernetes.io/docs/concepts/security/multi-tenancy/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

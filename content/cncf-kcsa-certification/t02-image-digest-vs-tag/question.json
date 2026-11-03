@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000011",
+  "objectiveKeys": ["KCSA-1.5"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia a compreensão básica de por que a documentação recomenda digest em vez de tag mutável em produção, sem exigir conhecimento de ferramentas de assinatura de imagem.",
+  "prompt": "Por que a documentação do Kubernetes recomenda especificar uma imagem de container por digest (ex.: `@sha256:...`) em vez de apenas uma tag como `:latest` em produção?",
+  "explanation": "A documentação recomenda evitar a tag `:latest` em produção porque dificulta rastrear qual versão da imagem está em execução e torna o rollback mais difícil. Tags podem ser movidas para apontar a imagens diferentes no registro, então usar apenas a tag pode resultar numa mistura de Pods rodando código antigo e novo quando o registro muda o que a tag referencia. Especificar a imagem por digest fixa exatamente o código que será executado, porque, diferente da tag, o digest não pode ser movido para apontar a outra imagem.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque, diferente de uma tag — que pode ser movida para apontar a outra imagem no registro —, o digest fixa exatamente qual código será executado, evitando a mistura de versões quando o registro muda o conteúdo associado a uma tag.",
+      "correct": true,
+      "explanation": "Correto: essa é a razão documentada — tags são móveis e podem apontar para conteúdo diferente ao longo do tempo, enquanto o digest é fixo."
+    },
+    {
+      "key": "B",
+      "text": "Porque tags como `:latest` são, por definição, proibidas pelo Docker e pelo Kubernetes, e qualquer tentativa de usá-las é automaticamente rejeitada pelo admission controller padrão do cluster, sem a necessidade de qualquer configuração adicional por parte do operador.",
+      "correct": false,
+      "explanation": "Incorreto: a tag `:latest` não é proibida nem rejeitada automaticamente por nenhum admission controller padrão; ela apenas não é recomendada como boa prática em produção."
+    },
+    {
+      "key": "C",
+      "text": "Porque um digest é sempre mais curto de digitar do que uma tag, o que reduz erros de configuração manual em arquivos YAML extensos.",
+      "correct": false,
+      "explanation": "Incorreto: um digest (um hash sha256 completo) é tipicamente mais longo de escrever do que uma tag simples; o motivo documentado não tem relação com o comprimento do texto."
+    },
+    {
+      "key": "D",
+      "text": "Porque o uso de digest é o único mecanismo que o Kubernetes aceita para validar a assinatura criptográfica da imagem antes de executá-la no cluster.",
+      "correct": false,
+      "explanation": "Incorreto: a página de referência não trata de verificação de assinatura criptográfica de imagens; o ponto documentado é sobre fixar o conteúdo referenciado, não sobre assinaturas."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Images (tags and digests)",
+      "url": "https://kubernetes.io/docs/concepts/containers/images/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

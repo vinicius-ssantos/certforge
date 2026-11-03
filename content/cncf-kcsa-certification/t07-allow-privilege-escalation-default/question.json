@@ -1,0 +1,46 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": [
+    "KCSA-4.7"
+  ],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que `allowPrivilegeEscalation` não é restritivo por padrão, um detalhe frequentemente assumido ao contrário por quem supõe que a plataforma já é segura 'de fábrica'.",
+  "prompt": "Um container é definido sem o campo `allowPrivilegeEscalation` no seu `securityContext`. Qual é o valor efetivo desse campo, e o que ele controla?",
+  "explanation": "Quando `allowPrivilegeEscalation` não é definido no `securityContext` de um container, o valor padrão é `true`. Esse campo controla se um processo pode ganhar mais privilégios do que seu processo pai — por exemplo, ao executar um binário setuid — e controla diretamente se a flag `no_new_privs` do kernel é ou não aplicada ao processo do container (o valor é invertido: `allowPrivilegeEscalation: true` corresponde a `no_new_privs` como `false`).",
+  "options": [
+    {
+      "key": "A",
+      "text": "O valor padrão é `false`, pois o Kubernetes aplica automaticamente a flag `no_new_privs` do kernel a todo container que não declara esse campo explicitamente.",
+      "correct": false,
+      "explanation": "Incorreto: é o contrário — se o campo não é definido, o valor padrão é `true`, permitindo que o processo ganhe mais privilégios do que seu pai."
+    },
+    {
+      "key": "B",
+      "text": "O comportamento depende do runtime de containers configurado no nó: alguns runtimes aplicam `false` por padrão e outros aplicam `true`, sem um padrão único definido pelo Kubernetes nem documentado em nenhuma página oficial.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define um único comportamento padrão (`true`) no nível da API do Kubernetes, independente do runtime de containers usado no nó."
+    },
+    {
+      "key": "C",
+      "text": "O campo não tem valor padrão algum; sua ausência faz o kubelet rejeitar a criação do Pod até que o campo seja declarado explicitamente como `true` ou `false`.",
+      "correct": false,
+      "explanation": "Incorreto: o campo tem um valor padrão definido (`true`) quando ausente; a ausência não causa rejeição da criação do Pod pelo kubelet."
+    },
+    {
+      "key": "D",
+      "text": "Quando ausente, o valor padrão é `true`: o processo do container pode ganhar mais privilégios do que seu processo pai (por exemplo, via um binário setuid), e a flag `no_new_privs` do kernel não é aplicada.",
+      "correct": true,
+      "explanation": "Correto: essa é a descrição oficial — a ausência do campo resulta em `true`, permitindo escalonamento de privilégio via mecanismos como setuid, já que `no_new_privs` não é definido."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Configure a Security Context for a Pod or Container (allowPrivilegeEscalation)",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/security-context/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

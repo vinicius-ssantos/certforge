@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "cncf-kcsa-certification",
+  "trackSlug": "cncf-kcsa-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "KCSA 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "CNCF",
+    "examCode": "KCSA",
+    "providerVersion": "cncf/curriculum@007442f (KCSA Curriculum.pdf, commit 2024-06-24)",
+    "snapshotDigest": "sha256:2855eb7db729ab9ad0136b87d002560f82297e66e811026159df946227d5114a",
+    "verifiedOn": "2026-11-03"
+  }
+}
