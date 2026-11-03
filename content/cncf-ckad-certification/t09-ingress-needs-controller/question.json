@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000024",
+  "objectiveKeys": ["CKAD-4.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia um erro comum de quem assume que criar um recurso Ingress já é suficiente para expor a aplicação, sem precisar de nenhum componente adicional.",
+  "prompt": "Uma equipe cria um recurso Ingress com regras de roteamento para expor uma aplicação, mas o cluster não tem nenhum Ingress controller instalado. O que acontece com o tráfego externo direcionado a essa aplicação?",
+  "explanation": "Um Ingress expõe rotas HTTP e HTTPS de fora do cluster para Services dentro dele, com o roteamento controlado pelas regras definidas no recurso Ingress. Porém, é necessário ter um Ingress controller para satisfazer um Ingress — apenas criar o recurso Ingress não tem efeito algum. O controller é o componente responsável por de fato cumprir o que o Ingress declara, normalmente configurando um load balancer ou um roteador de borda.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O tráfego é roteado corretamente de qualquer forma, porque o próprio kube-apiserver interpreta as regras do recurso Ingress e as aplica diretamente, sem depender de nenhum componente adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que apenas criar um recurso Ingress não tem efeito algum sem um Ingress controller; o kube-apiserver não cumpre as regras de roteamento por conta própria."
+    },
+    {
+      "key": "B",
+      "text": "Nada acontece de fato: apenas criar o recurso Ingress não tem efeito algum, pois é necessário um Ingress controller para satisfazer as regras declaradas nele.",
+      "correct": true,
+      "explanation": "Correto: é exatamente isso que a documentação afirma — um Ingress controller é necessário, e a ausência dele faz com que o recurso Ingress, por si só, não tenha efeito."
+    },
+    {
+      "key": "C",
+      "text": "O cluster recusa a criação do recurso Ingress com um erro de validação, já que a API do Kubernetes verifica a presença de um Ingress controller antes de aceitar qualquer objeto Ingress.",
+      "correct": false,
+      "explanation": "Incorreto: a API do Kubernetes aceita a criação do recurso Ingress mesmo sem nenhum Ingress controller presente; o problema é que ele simplesmente não produz efeito nenhum, não que a criação seja rejeitada."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes provisiona automaticamente um Ingress controller padrão na primeira vez que qualquer recurso Ingress é criado em um cluster que ainda não tem um instalado.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse provisionamento automático; instalar um Ingress controller é uma ação explícita do operador do cluster, independente da criação de recursos Ingress."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Ingress (necessidade de um Ingress controller)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/ingress/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

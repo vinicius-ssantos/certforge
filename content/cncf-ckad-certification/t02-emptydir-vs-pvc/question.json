@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000021",
+  "objectiveKeys": ["CKAD-1.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender o ciclo de vida de um volume efêmero (`emptyDir`) em contraste com um volume persistente, não apenas a sintaxe de declaração de cada um.",
+  "prompt": "Uma aplicação grava arquivos temporários de cache em um volume `emptyDir` montado no Pod. O que acontece com o conteúdo desse volume quando um container dentro do Pod falha e é reiniciado, e o que acontece quando o Pod inteiro é removido do nó?",
+  "explanation": "O conteúdo de um `emptyDir` sobrevive a falhas de container: a documentação afirma que uma falha de container não remove um Pod de um nó, e que os dados em um `emptyDir` ficam a salvo através de falhas de container. Porém, o volume é criado quando o Pod é atribuído a um nó, e quando o Pod é removido desse nó por qualquer motivo, os dados do `emptyDir` são apagados permanentemente. Isso é diferente de um volume baseado em PersistentVolumeClaim, cujo armazenamento sobrevive independentemente do ciclo de vida do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O conteúdo é apagado em ambos os casos: tanto a reinicialização do container quanto a remoção do Pod do nó eliminam imediatamente os dados do `emptyDir`.",
+      "correct": false,
+      "explanation": "Incorreto: a reinicialização de um container não remove o Pod do nó, e a documentação afirma explicitamente que os dados do `emptyDir` ficam a salvo através de falhas de container."
+    },
+    {
+      "key": "B",
+      "text": "O conteúdo é preservado em ambos os casos, porque um `emptyDir` sempre persiste além do ciclo de vida do Pod, de forma equivalente a um volume baseado em PersistentVolumeClaim.",
+      "correct": false,
+      "explanation": "Incorreto: quando o Pod é removido do nó, os dados do `emptyDir` são apagados permanentemente — ele não tem a mesma garantia de persistência de um PersistentVolumeClaim."
+    },
+    {
+      "key": "C",
+      "text": "O conteúdo sobrevive à reinicialização do container, mas é apagado permanentemente quando o Pod é removido do nó por qualquer motivo.",
+      "correct": true,
+      "explanation": "Correto: a documentação afirma que os dados do `emptyDir` ficam a salvo através de falhas de container, mas são apagados permanentemente quando o Pod é removido do nó."
+    },
+    {
+      "key": "D",
+      "text": "O conteúdo é movido automaticamente para um PersistentVolume de backup assim que o container falha, garantindo que nada seja perdido mesmo após a remoção do Pod.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse comportamento automático de migração para um PersistentVolume; um `emptyDir` é, por definição, um volume efêmero, não respaldado por armazenamento persistente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Volumes (emptyDir)",
+      "url": "https://kubernetes.io/docs/concepts/storage/volumes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

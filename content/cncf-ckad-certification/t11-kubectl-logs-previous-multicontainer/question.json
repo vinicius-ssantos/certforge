@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000025",
+  "objectiveKeys": ["CKAD-5.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o conhecimento de duas flags específicas de `kubectl logs` necessárias para depurar um Pod multi-container que já reiniciou, cenário comum em troubleshooting.",
+  "prompt": "Um Pod tem dois containers, `app` e `sidecar`. O container `app` travou e foi reiniciado pelo kubelet. Como obter os logs da instância anterior (antes da reinicialização) especificamente do container `app`?",
+  "explanation": "`kubectl logs` captura os logs de cada container em um Pod em execução, e o kubelet os disponibiliza por meio de uma funcionalidade especial da API do Kubernetes, geralmente acessada rodando `kubectl logs`. Quando um Pod tem múltiplos containers, é preciso especificar de qual container se quer os logs anexando um nome de container ao comando com a flag `-c`. Para obter logs de uma instanciação anterior de um container, usa-se `kubectl logs --previous`. Combinando as duas flags, o comando correto é `kubectl logs --previous -c app <nome-do-pod>`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`kubectl logs --previous -c app <nome-do-pod>` — a flag `-c` seleciona o container `app` dentro do Pod multi-container, e `--previous` pede os logs da instanciação anterior dele.",
+      "correct": true,
+      "explanation": "Correto: `-c` seleciona o container correto em um Pod com múltiplos containers, e `--previous` recupera os logs de uma instanciação anterior daquele container."
+    },
+    {
+      "key": "B",
+      "text": "`kubectl logs <nome-do-pod>` sem nenhuma flag adicional, já que o comando sempre retorna automaticamente os logs mais recentes de cada container do Pod, incluindo instâncias anteriores.",
+      "correct": false,
+      "explanation": "Incorreto: sem `-c`, o comportamento para um Pod com múltiplos containers não é simplesmente agregar tudo automaticamente da forma esperada, e sem `--previous` só os logs da instância atual (pós-reinício) seriam mostrados, não os da instância anterior."
+    },
+    {
+      "key": "C",
+      "text": "`kubectl logs --restart -c app <nome-do-pod>`, usando uma flag `--restart` dedicada a listar exclusivamente logs de containers que já reiniciaram alguma vez.",
+      "correct": false,
+      "explanation": "Incorreto: não existe uma flag `--restart` em `kubectl logs` com essa finalidade; a flag documentada para obter logs de uma instanciação anterior é `--previous`."
+    },
+    {
+      "key": "D",
+      "text": "`kubectl logs --previous <nome-do-pod>` sem a flag `-c`, já que `--previous` já identifica automaticamente qual dos dois containers reiniciou e retorna apenas os logs dele.",
+      "correct": false,
+      "explanation": "Incorreto: `--previous` não identifica automaticamente qual container reiniciou em um Pod multi-container; a documentação indica a flag `-c` especificamente para selecionar o container quando há mais de um no Pod."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Logging Architecture (kubectl logs --previous, -c)",
+      "url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

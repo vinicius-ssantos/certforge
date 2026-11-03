@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.6"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico das formas documentadas de um Pod consumir um Secret, sem exigir detalhes de segurança mais avançados.",
+  "prompt": "De quais formas um Pod pode consumir os dados de um Secret já criado no cluster?",
+  "explanation": "A documentação lista, entre os usos de um Secret, defini-lo como variáveis de ambiente para um container e montá-lo como um volume: quando um Secret é montado em um volume, cada chave do Secret se torna um arquivo dentro do caminho de montagem. Um exemplo oficial mostra um Secret montado como volume resultando em um arquivo `.secret-file` disponível no container no caminho `/etc/secret-volume/.secret-file`. Não existe um terceiro mecanismo embutido de injeção automática sem referência explícita no manifesto do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Apenas como variáveis de ambiente — montar um Secret como arquivos em um volume não é uma forma suportada de consumi-lo em um Pod.",
+      "correct": false,
+      "explanation": "Incorreto: montar um Secret como volume é uma forma documentada e suportada, com um exemplo oficial mostrando o Secret aparecendo como arquivo dentro do container."
+    },
+    {
+      "key": "B",
+      "text": "Apenas montando-o como volume — definir variáveis de ambiente a partir de um Secret não está entre os usos documentados para esse recurso.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista explicitamente 'definir variáveis de ambiente para um container' entre os usos de um Secret, então essa forma também é suportada."
+    },
+    {
+      "key": "C",
+      "text": "Como variáveis de ambiente do container ou como arquivos montados em um volume, com cada chave do Secret se tornando um arquivo separado no caminho de montagem.",
+      "correct": true,
+      "explanation": "Correto: essas são as duas formas documentadas, e o exemplo oficial de Secret montado como volume mostra exatamente esse comportamento, com cada chave do Secret aparecendo como um arquivo."
+    },
+    {
+      "key": "D",
+      "text": "Qualquer Pod no mesmo namespace consegue ler automaticamente todos os Secrets existentes nele, sem precisar referenciá-los explicitamente no seu próprio manifesto.",
+      "correct": false,
+      "explanation": "Incorreto: um Pod só consome um Secret se o referenciar explicitamente, seja como variável de ambiente, seja como volume montado — não há leitura automática e implícita de todos os Secrets do namespace."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Secrets (usos e montagem como volume)",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

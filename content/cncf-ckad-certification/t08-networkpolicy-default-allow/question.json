@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000024",
+  "objectiveKeys": ["CKAD-4.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o entendimento do comportamento padrão de rede antes de qualquer NetworkPolicy existir, base para entender por que criar uma policy muda o comportamento de isolamento.",
+  "prompt": "Em um namespace onde nenhuma NetworkPolicy foi criada ainda, qual é o comportamento padrão de tráfego de entrada (ingress) e saída (egress) para os Pods desse namespace?",
+  "explanation": "Por padrão, um Pod é não isolado para egress, ou seja, todas as conexões de saída são permitidas; e por padrão, um Pod é não isolado para ingress, ou seja, todas as conexões de entrada são permitidas. Um Pod só passa a ser isolado para ingress ou egress quando existe pelo menos uma NetworkPolicy que o seleciona e lista esse tipo (`Ingress` ou `Egress`) em seu `policyTypes` — a partir daí, somente as conexões explicitamente permitidas por essa policy são aceitas naquela direção.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Todo tráfego de entrada e saída é bloqueado por padrão, e permanece bloqueado até que pelo menos uma NetworkPolicy seja criada permitindo explicitamente cada conexão necessária em cada direção do namespace.",
+      "correct": false,
+      "explanation": "Incorreto: o comportamento padrão é o oposto — sem nenhuma NetworkPolicy, tanto ingress quanto egress são permitidos livremente; o bloqueio só começa quando uma policy seleciona o Pod."
+    },
+    {
+      "key": "B",
+      "text": "O tráfego de entrada é bloqueado por padrão, mas o tráfego de saída é sempre permitido livremente, independentemente da existência de qualquer NetworkPolicy no namespace.",
+      "correct": false,
+      "explanation": "Incorreto: sem nenhuma NetworkPolicy, tanto ingress quanto egress são permitidos por padrão; não existe essa assimetria padrão entre as duas direções."
+    },
+    {
+      "key": "C",
+      "text": "O comportamento padrão depende do runtime de containers usado pelo cluster, podendo variar livremente entre bloquear tudo ou permitir tudo conforme a implementação escolhida.",
+      "correct": false,
+      "explanation": "Incorreto: o comportamento padrão de ingress/egress é definido pela semântica do Kubernetes em relação a NetworkPolicies, não pelo runtime de containers; ele não varia dessa forma entre implementações."
+    },
+    {
+      "key": "D",
+      "text": "Tanto o tráfego de entrada quanto o de saída são permitidos livremente por padrão, já que um Pod só passa a ser isolado em alguma direção quando uma NetworkPolicy o seleciona para essa direção.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento padrão documentado — um Pod é não isolado para ingress e para egress até que uma NetworkPolicy o selecione e liste essa direção em seu policyTypes."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Network Policies (isolamento padrão)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

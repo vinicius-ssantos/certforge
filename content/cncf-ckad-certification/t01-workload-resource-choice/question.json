@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000021",
+  "objectiveKeys": ["CKAD-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir o propósito de três recursos de workload diferentes (Deployment, DaemonSet, CronJob), não apenas memorizar os nomes.",
+  "prompt": "Uma equipe precisa garantir que um agente de coleta de logs rode em todo nó do cluster (ou em um subconjunto deles), independentemente de quantas réplicas de aplicação existam. Qual recurso de workload do Kubernetes é o mais apropriado para isso?",
+  "explanation": "Um DaemonSet define Pods que fornecem uma facilidade local a um nó específico, e pode ser executado em todo nó do cluster ou em um subconjunto deles — exatamente o caso de um agente de coleta de logs, que precisa de uma instância por nó. Um Deployment é adequado para workloads sem estado em que qualquer Pod é intercambiável e substituível, o que não corresponde à necessidade de 'uma instância por nó'. Um CronJob, por sua vez, repete a execução de um Job de acordo com uma agenda — um Job representa uma tarefa pontual, enquanto o CronJob a repete periodicamente —, o que não serve para um processo contínuo rodando em cada nó.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Deployment, porque ele gerencia réplicas intercambiáveis de uma aplicação sem estado e pode ser escalado para cobrir qualquer quantidade de nós do cluster automaticamente.",
+      "correct": false,
+      "explanation": "Incorreto: um Deployment é indicado para Pods intercambiáveis de uma aplicação sem estado; ele não garante uma instância por nó, apenas um número de réplicas definido, que o scheduler pode colocar em qualquer subconjunto de nós."
+    },
+    {
+      "key": "B",
+      "text": "DaemonSet, porque ele define Pods que fornecem uma facilidade local a um nó específico, podendo ser executado em todo nó do cluster ou em um subconjunto deles.",
+      "correct": true,
+      "explanation": "Correto: essa é a definição oficial de DaemonSet, e corresponde exatamente à necessidade de um agente rodando localmente em cada nó, cobrindo todos eles ou apenas um subconjunto."
+    },
+    {
+      "key": "C",
+      "text": "CronJob, porque ele repete a execução de um Job de acordo com uma agenda, criando automaticamente uma instância do agente em cada nó a cada execução programada.",
+      "correct": false,
+      "explanation": "Incorreto: um CronJob repete um Job segundo uma agenda de tempo, mas não tem relação com 'uma instância por nó' — essa não é a semântica de um CronJob."
+    },
+    {
+      "key": "D",
+      "text": "Job, porque ele representa uma tarefa pontual que, uma vez concluída, é automaticamente redistribuída para rodar de novo em todos os nós do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: um Job representa uma tarefa que roda até a conclusão e então para; ele não é redistribuído automaticamente para rodar em todos os nós."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Workload Management (Deployment, DaemonSet, Job, CronJob)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
