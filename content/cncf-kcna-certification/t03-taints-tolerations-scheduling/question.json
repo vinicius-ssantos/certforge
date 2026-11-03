@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000001",
+  "objectiveKeys": ["KCNA-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender a relação entre dois mecanismos complementares de agendamento (taint no Node, toleration no Pod), não apenas a definição isolada de cada um.",
+  "prompt": "Um Node recebe um taint. Um Pod comum, sem nenhuma toleration configurada, é então criado no cluster. O que acontece com esse Pod em relação a esse Node especificamente?",
+  "explanation": "Taints e tolerations trabalham em conjunto, mas em direções opostas: um taint permite que um Node repila um conjunto de Pods ('Taints are the opposite -- they allow a node to repel a set of pods'), e uma toleration é aplicada ao Pod para permitir — mas não garantir — que o agendador o coloque num Node com taint correspondente ('Tolerations allow scheduling but don't guarantee scheduling'). Um Pod sem toleration correspondente ao taint do Node não é agendado nesse Node; isso não bane o Pod do cluster inteiro, apenas evita esse Node específico, e não há garantia automática de agendamento mesmo quando existe uma toleration compatível, porque o scheduler ainda avalia outros critérios.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Pod não é agendado nesse Node específico, pois o taint o repele; ele ainda pode ser agendado normalmente em outros Nodes do cluster que não tenham esse taint.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada — o taint repele o Pod daquele Node, mas não afeta o agendamento dele em outros Nodes sem o taint."
+    },
+    {
+      "key": "B",
+      "text": "O Pod é agendado normalmente nesse Node, porque taints só afetam Pods criados por um DaemonSet, nunca Pods criados diretamente ou por um Deployment comum.",
+      "correct": false,
+      "explanation": "Incorreto: taints repelem qualquer Pod sem toleration compatível, independentemente de como o Pod foi criado; não há essa exceção para Pods não gerenciados por DaemonSet."
+    },
+    {
+      "key": "C",
+      "text": "O Pod fica banido de todo o cluster e é terminado, pois um taint em qualquer Node bloqueia a criação de Pods sem toleration em qualquer lugar do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o efeito do taint é local a esse Node — ele impede o agendamento especificamente ali, não em todo o cluster, e um Pod sem toleration segue elegível para os demais Nodes."
+    },
+    {
+      "key": "D",
+      "text": "O Pod é agendado nesse Node automaticamente assim que o administrador adicionar qualquer toleration ao Pod, pois uma toleration garante o agendamento no Node correspondente.",
+      "correct": false,
+      "explanation": "Incorreto: tolerations permitem o agendamento, mas não o garantem — o scheduler ainda avalia outros parâmetros antes de decidir colocar o Pod naquele Node."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Taints and Tolerations",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

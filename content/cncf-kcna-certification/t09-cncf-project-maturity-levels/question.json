@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000004",
+  "objectiveKeys": ["KCNA-4.2"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico dos estágios de maturidade usados pela CNCF para classificar projetos hospedados, parte do ecossistema cloud native que o KCNA cobre.",
+  "prompt": "A CNCF (Cloud Native Computing Foundation) classifica os projetos que hospeda em estágios de maturidade. Quais são esses estágios, do menos ao mais maduro?",
+  "explanation": "A CNCF descreve três estágios de maturidade para projetos hospedados, do menos ao mais maduro: `Sandbox` (projetos experimentais, ainda não amplamente testados em produção), `Incubating` (usados com sucesso em produção por um número pequeno de usuários, com um conjunto saudável de contribuidores) e `Graduated` (considerados estáveis, amplamente adotados e prontos para produção, atraindo milhares de contribuidores). Um projeto que se torna inativo é movido para o status `Archived`, que não é um estágio de maturidade, e sim o fim do ciclo de vida do projeto.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`Sandbox`, `Incubating` e `Graduated`, nessa ordem crescente de maturidade; projetos inativos passam a `Archived`, que não é um estágio de maturidade.",
+      "correct": true,
+      "explanation": "Essa é a classificação oficial da CNCF: Sandbox para projetos experimentais, Incubating para adoção crescente em produção, e Graduated para projetos estáveis e amplamente adotados; Archived marca o fim do ciclo de vida, não um nível de maturidade."
+    },
+    {
+      "key": "B",
+      "text": "`Beta`, `Stable` e `Enterprise`, nessa ordem, refletindo o modelo de versionamento semântico adotado por todos os projetos da CNCF.",
+      "correct": false,
+      "explanation": "Esses não são os nomes usados pela CNCF para estágios de maturidade de projeto; a classificação oficial usa Sandbox, Incubating e Graduated."
+    },
+    {
+      "key": "C",
+      "text": "`Graduated`, `Incubating` e `Sandbox`, nessa ordem crescente de maturidade — ou seja, `Graduated` é o estágio inicial de todo projeto submetido à CNCF.",
+      "correct": false,
+      "explanation": "A ordem está invertida: `Sandbox` é o estágio inicial e `Graduated` é o mais maduro, não o contrário."
+    },
+    {
+      "key": "D",
+      "text": "Apenas dois estágios existem oficialmente, `Incubating` e `Graduated`; `Sandbox` é um termo informal usado pela comunidade, sem reconhecimento oficial da CNCF.",
+      "correct": false,
+      "explanation": "`Sandbox` é um estágio oficial de maturidade reconhecido pela CNCF, documentado junto com Incubating e Graduated como parte dos três estágios formais."
+    }
+  ],
+  "references": [
+    {
+      "title": "CNCF — Graduated and Incubating Projects (maturity levels: Sandbox, Incubating, Graduated)",
+      "url": "https://cncf.io/projects/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -47,6 +47,7 @@ test("infrastructure evidence only accepts each topic family's own official host
     "https://datatracker.ietf.org/doc/html/rfc9110",
     "https://www.rfc-editor.org/rfc/rfc1035",
     "https://docs.github.com/en/actions",
+    "https://cncf.io/projects/",
   ]) {
     assert.equal(validateGeneralQuestion(withRef(url), official).type, "SINGLE_CHOICE");
   }
@@ -56,6 +57,7 @@ test("infrastructure evidence only accepts each topic family's own official host
     "https://docs.docker.com.evil.example/docs",
     "https://user@kubernetes.io/docs",
     "https://man7.org.evil.example/linux",
+    "https://cncf.io.evil.example/projects",
   ]) {
     assert.throws(() => validateGeneralQuestion(withRef(url), official), /official source policy/);
   }

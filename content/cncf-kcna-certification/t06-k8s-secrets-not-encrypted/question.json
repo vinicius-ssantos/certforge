@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000002",
+  "objectiveKeys": ["KCNA-2.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender a diferença entre codificação e criptografia, um erro comum de quem assume que um Secret do Kubernetes já é seguro por natureza.",
+  "prompt": "Por padrão, como o Kubernetes armazena o valor de um Secret no etcd, e o que isso implica sobre a segurança desse dado sem medidas adicionais?",
+  "explanation": "Por padrão, o Kubernetes armazena Secrets sem criptografia no etcd: o campo `data` contém o valor apenas codificado em base64, o que não é uma forma de criptografia. A documentação oficial afirma explicitamente que qualquer pessoa com acesso à API do cluster ou ao etcd pode ler ou modificar um Secret, e que qualquer um autorizado a criar um Pod no namespace também consegue ler os Secrets desse namespace. Por isso, usar Secrets com segurança exige, no mínimo, habilitar encryption at rest e configurar RBAC com acesso de menor privilégio.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O valor é criptografado automaticamente com uma chave gerenciada pelo cluster antes de ser persistido no etcd, tornando o Secret seguro contra qualquer acesso não autorizado ao banco de dados do cluster por padrão, sem necessidade de configuração adicional.",
+      "correct": false,
+      "explanation": "A documentação oficial afirma o contrário: por padrão, Secrets são armazenados sem criptografia no etcd, e habilitar encryption at rest é um passo adicional, não automático."
+    },
+    {
+      "key": "B",
+      "text": "O valor é apenas codificado em base64 e, por padrão, fica sem criptografia no etcd; qualquer um com acesso à API ou ao etcd pode lê-lo, exigindo medidas adicionais como encryption at rest e RBAC para um uso seguro.",
+      "correct": true,
+      "explanation": "Essa é a descrição oficial: base64 é codificação, não criptografia, e a documentação recomenda explicitamente habilitar encryption at rest e configurar RBAC com acesso de menor privilégio para usar Secrets com segurança."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes exige que todo Secret seja assinado digitalmente no momento da criação, e o API server rejeita qualquer Secret sem essa assinatura.",
+      "correct": false,
+      "explanation": "Não existe exigência de assinatura digital para a criação de Secrets; esse mecanismo não faz parte do comportamento padrão do recurso."
+    },
+    {
+      "key": "D",
+      "text": "O conteúdo de um Secret só pode ser lido por processos em execução dentro do mesmo Pod que o referencia, e nunca por meio da API do cluster.",
+      "correct": false,
+      "explanation": "A documentação afirma o contrário: qualquer um com acesso à API do cluster ou ao etcd pode recuperar ou modificar um Secret, não apenas processos dentro do Pod que o consome."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Secrets, aviso sobre armazenamento sem criptografia por padrão",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

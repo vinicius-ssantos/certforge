@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000001",
+  "objectiveKeys": ["KCNA-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir o papel de cada componente do control plane, não apenas memorizar um nome isolado.",
+  "prompt": "Entre os componentes do control plane do Kubernetes, qual deles funciona como um key-value store consistente e altamente disponível, usado como armazenamento para os dados do kube-apiserver?",
+  "explanation": "A documentação oficial lista etcd, entre os componentes do control plane, como o 'consistent and highly-available key value store for all API server data' — ou seja, o armazenamento consistente e de alta disponibilidade usado pelo kube-apiserver. kube-scheduler decide em qual Node cada Pod roda, kube-controller-manager executa os loops de controle (como o de Node e o de Job), e kubelet não é nem componente do control plane: ele roda em cada Node, fora do control plane, garantindo que os containers descritos em um PodSpec estejam em execução.",
+  "options": [
+    {
+      "key": "A",
+      "text": "kube-scheduler — observa Pods recém-criados sem Node atribuído e seleciona um Node para executá-los, a partir de requisitos de recursos e outras restrições.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-scheduler decide onde os Pods rodam; ele não armazena o estado do cluster, apenas consulta e atualiza esse estado através do kube-apiserver."
+    },
+    {
+      "key": "B",
+      "text": "etcd — armazenado como um key-value store consistente e altamente disponível para todos os dados do kube-apiserver.",
+      "correct": true,
+      "explanation": "Correto: é exatamente assim que a documentação oficial descreve o etcd entre os componentes do control plane."
+    },
+    {
+      "key": "C",
+      "text": "kube-controller-manager — executa os processos de controlador, como o Node Controller e o Job Controller, reagindo a mudanças de estado do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-controller-manager reage a mudanças de estado executando loops de controle; ele lê e escreve esse estado, mas o key-value store em si é o etcd."
+    },
+    {
+      "key": "D",
+      "text": "kubelet — agente que roda em cada Node e garante que os containers descritos em um PodSpec estejam em execução e saudáveis.",
+      "correct": false,
+      "explanation": "Incorreto: kubelet nem é um componente do control plane — ele roda em cada Node individualmente, e sua função é operacional, não de armazenamento do estado do cluster."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Components of Kubernetes (Control Plane Components)",
+      "url": "https://kubernetes.io/docs/concepts/overview/components/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000002",
+  "objectiveKeys": ["KCNA-2.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o papel de uma StorageClass na provisão de armazenamento, e não apenas a existência de PersistentVolume e PersistentVolumeClaim.",
+  "prompt": "Qual é o papel de uma `StorageClass` no gerenciamento de armazenamento do Kubernetes?",
+  "explanation": "Uma `StorageClass` descreve uma \"classe\" de armazenamento oferecida pelo cluster, carregando campos como `provisioner`, `parameters` e `reclaimPolicy`. Quando uma PersistentVolumeClaim referencia essa classe pelo nome, o `provisioner` da classe é usado para criar dinamicamente um PersistentVolume que satisfaça a PVC, em vez de o administrador precisar pré-criar PersistentVolumes manualmente para cada necessidade de armazenamento.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Ela substitui completamente a necessidade de PersistentVolumeClaims, permitindo que Pods consumam armazenamento diretamente a partir do nome da StorageClass.",
+      "correct": false,
+      "explanation": "Uma StorageClass não substitui a PersistentVolumeClaim; é a PVC que referencia a StorageClass pelo nome para solicitar o provisionamento, e o Pod continua consumindo o armazenamento por meio da PVC."
+    },
+    {
+      "key": "B",
+      "text": "Ela define obrigatoriamente a afinidade de nó de cada Pod que utiliza armazenamento, controlando em qual nó o Pod pode ser agendado.",
+      "correct": false,
+      "explanation": "Afinidade de nó é um conceito de agendamento de Pods, não um campo central de uma StorageClass; os campos definidores de uma StorageClass são `provisioner`, `parameters` e `reclaimPolicy`."
+    },
+    {
+      "key": "C",
+      "text": "Ela permite que PersistentVolumes sejam provisionados dinamicamente a partir de seu `provisioner` quando uma PersistentVolumeClaim a referencia, evitando que o administrador precise pré-criar PVs manualmente.",
+      "correct": true,
+      "explanation": "Essa é a descrição oficial: o campo `provisioner` da StorageClass é usado quando um PersistentVolume precisa ser dinamicamente provisionado para satisfazer uma PVC que referencia essa classe."
+    },
+    {
+      "key": "D",
+      "text": "Ela é um recurso obrigatório que todo cluster Kubernetes precisa declarar antes de aceitar qualquer PersistentVolumeClaim, mesmo para volumes provisionados manualmente, já que sem uma StorageClass nenhum PersistentVolume, dinâmico ou manual, poderia ser vinculado a uma PVC.",
+      "correct": false,
+      "explanation": "PersistentVolumes podem ser criados manualmente e consumidos por PVCs sem referenciar nenhuma StorageClass; a StorageClass não é um pré-requisito obrigatório para toda PVC."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Storage Classes",
+      "url": "https://kubernetes.io/docs/concepts/storage/storage-classes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

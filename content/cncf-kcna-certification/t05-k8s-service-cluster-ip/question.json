@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000002",
+  "objectiveKeys": ["KCNA-2.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico do tipo de Service atribuído por padrão e do seu alcance, sem exigir conhecimento de implementação de rede.",
+  "prompt": "Uma equipe cria um Service do Kubernetes sem especificar o campo `type` no manifesto. Qual tipo é atribuído por padrão, e o que esse tipo permite?",
+  "explanation": "Quando `type` não é especificado, o Kubernetes atribui `ClusterIP`: o Service recebe um IP interno ao cluster, e fica acessível apenas de dentro do cluster. Para expor esse Service ao tráfego externo, é necessário usar um Ingress ou um Gateway adicional, já que o `ClusterIP` por si só não publica o Service na internet.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`ClusterIP`, que expõe o Service em um IP interno ao cluster, acessível apenas de dentro dele; para alcançá-lo de fora é preciso um Ingress ou Gateway.",
+      "correct": true,
+      "explanation": "Essa é a definição oficial: `ClusterIP` é o tipo padrão quando nenhum é declarado, e ele só é alcançável a partir de dentro do cluster."
+    },
+    {
+      "key": "B",
+      "text": "`NodePort`, que abre a mesma porta em todos os nós do cluster e torna o Service acessível externamente através do IP de qualquer nó.",
+      "correct": false,
+      "explanation": "`NodePort` existe e expõe o Service externamente, mas não é o tipo atribuído quando `type` é omitido; ele precisa ser pedido explicitamente."
+    },
+    {
+      "key": "C",
+      "text": "`LoadBalancer`, que provisiona automaticamente um balanceador de carga externo do provedor de nuvem configurado no cluster.",
+      "correct": false,
+      "explanation": "`LoadBalancer` também depende de ser declarado explicitamente e, além disso, depende de integração com um provedor de nuvem; não é o padrão."
+    },
+    {
+      "key": "D",
+      "text": "`ExternalName`, que mapeia o Service para um nome DNS externo ao cluster sem criar um IP interno de proxy, sendo útil para referenciar serviços fora do cluster por um nome estável.",
+      "correct": false,
+      "explanation": "`ExternalName` é um tipo específico para apontar a um endereço externo via DNS, usado apenas quando explicitamente declarado; não é o comportamento padrão de um Service."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service, tipo ClusterIP (padrão)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

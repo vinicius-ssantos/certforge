@@ -146,7 +146,6 @@ class RevisionRulesTest {
         .contains(
             "prompt_missing",
             "topic_missing",
-            "java_release_missing",
             "difficulty_missing",
             "difficulty_rationale_missing",
             "explanation_missing",
@@ -173,10 +172,11 @@ class RevisionRulesTest {
     RevisionContent interview = interview(Seniority.SENIOR);
 
     assertThat(RevisionRules.violations(interview, INTERVIEW)).isEmpty();
-    // The same content for a certification track is incomplete and carries a field it may not,
-    // which is the point of the rules being conditional rather than simply relaxed.
+    // The same content for a certification track carries a field it may not (seniority); it is not
+    // short a Java release too, because whether one is required is exam context this rule does not
+    // have -- that is checked at publish time instead (see RevisionRules' javadoc).
     assertThat(RevisionRules.violations(interview, CERTIFICATION))
-        .containsExactlyInAnyOrder("java_release_missing", "seniority_not_applicable");
+        .containsExactly("seniority_not_applicable");
   }
 
   @Test
@@ -244,10 +244,7 @@ class RevisionRulesTest {
 
     assertThat(RevisionRules.violations(guided, INTERVIEW)).isEmpty();
     assertThat(RevisionRules.violations(guided, CERTIFICATION))
-        .contains(
-            "java_release_missing",
-            "seniority_not_applicable",
-            "guided_response_requires_interview_track");
+        .contains("seniority_not_applicable", "guided_response_requires_interview_track");
   }
 
   @Test
@@ -346,7 +343,22 @@ class RevisionRulesTest {
     // A draft with no topic yet, or one naming a topic that does not exist, reports exactly what
     // it reported before this rule existed. Nothing silently becomes acceptable.
     assertThat(RevisionRules.violations(complete, null)).isEmpty();
-    assertThat(RevisionRules.violations(withoutRelease(), null))
+    // An absent release is not itself a violation here (ADR 0017: which exams need one is exam
+    // context, checked at publish), but a present, non-positive one is never a real release.
+    assertThat(RevisionRules.violations(withoutRelease(), null)).isEmpty();
+    var invalidRelease =
+        new RevisionContent(
+            QuestionType.SINGLE_CHOICE,
+            UUID.randomUUID(),
+            0,
+            null,
+            Difficulty.MEDIUM,
+            "Requires knowing switch patterns",
+            "What is printed?",
+            "Explanation",
+            List.of(option("A", true), option("B", false)),
+            List.of(REFERENCE));
+    assertThat(RevisionRules.violations(invalidRelease, null))
         .containsExactly("java_release_missing");
   }
 
