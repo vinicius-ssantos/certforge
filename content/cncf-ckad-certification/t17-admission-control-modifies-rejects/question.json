@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que Admission Control pode modificar o objeto, não apenas aceitar ou rejeitar, uma capacidade que nem Authentication nem Authorization têm.",
+  "prompt": "Uma requisição de criação de Pod já passou pela Authentication e foi liberada pela Authorization (RBAC). Ainda assim, o objeto Pod que acaba gravado no cluster tem campos diferentes do manifesto original enviado pelo cliente, e uma segunda requisição semelhante é totalmente rejeitada nesse mesmo estágio seguinte. O que esse estágio pode fazer que Authentication e Authorization não podem?",
+  "explanation": "Módulos de Admission Control, diferente dos módulos de Authentication e Authorization, podem acessar o conteúdo do objeto sendo criado ou modificado, e podem tanto modificar quanto rejeitar a requisição. Além de rejeitar objetos, admission controllers também podem definir valores padrão complexos para campos — o que explica o objeto gravado ter campos diferentes do manifesto original. Diferente de Authentication e Authorization, se qualquer módulo de admissão rejeitar, a requisição é imediatamente rejeitada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nada além de aceitar ou rejeitar a requisição de forma binária, exatamente como Authentication e Authorization — a diferença observada no objeto final só poderia vir de uma edição manual feita depois, totalmente fora do fluxo de processamento da própria requisição original.",
+      "correct": false,
+      "explanation": "Incorreto: Admission Control pode acessar e modificar o conteúdo do objeto sendo criado, incluindo definir valores padrão complexos para campos — não se limita a um aceite ou rejeição binária como Authentication e Authorization."
+    },
+    {
+      "key": "B",
+      "text": "Acessar o conteúdo do objeto sendo criado ou modificado e, com base nisso, tanto modificar o objeto (por exemplo, definindo valores padrão) quanto rejeitar a requisição — uma capacidade que Authentication e Authorization não têm.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a capacidade documentada de Admission Control — acesso ao conteúdo do objeto, com poder de modificá-lo ou rejeitá-lo, diferente de Authentication e Authorization."
+    },
+    {
+      "key": "C",
+      "text": "Apenas reautenticar a identidade do usuário uma segunda vez, usando um provedor de identidade diferente do usado na etapa de Authentication original, para confirmar a requisição antes de aplicá-la.",
+      "correct": false,
+      "explanation": "Incorreto: Admission Control não realiza uma segunda autenticação de identidade; sua capacidade documentada é acessar e modificar o conteúdo do objeto, não reautenticar o usuário."
+    },
+    {
+      "key": "D",
+      "text": "Apenas registrar a requisição em um log de auditoria, sem nenhuma capacidade de alterar o conteúdo do objeto ou de rejeitar a requisição nesse estágio.",
+      "correct": false,
+      "explanation": "Incorreto: Admission Control tem poder real de modificar ou rejeitar a requisição, não apenas registrá-la; auditoria é uma funcionalidade documentada separadamente, não a capacidade central desse estágio."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Controlling Access to the Kubernetes API (Admission control)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/controlling-access/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
