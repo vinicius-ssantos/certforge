@@ -1,0 +1,46 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": [
+    "KCSA-2.8"
+  ],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que a confidencialidade dos dados no etcd não é garantida por padrão, um ponto frequentemente assumido erroneamente como já resolvido pela plataforma.",
+  "prompt": "Por padrão, como o kube-apiserver armazena os recursos do cluster (incluindo Secrets) no etcd, em termos de criptografia?",
+  "explanation": "Por padrão, o kube-apiserver armazena representações em texto plano dos recursos no etcd, sem nenhuma criptografia em repouso (at-rest). O provedor padrão usado, chamado `identity`, não oferece nenhuma proteção de confidencialidade. Para proteger dados sensíveis como Secrets, é necessário habilitar e configurar explicitamente a criptografia em repouso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Todos os recursos, incluindo Secrets, são armazenados já criptografados em repouso por padrão, usando o provedor `identity` como mecanismo automático de criptografia do etcd, sem nenhuma etapa de configuração manual necessária.",
+      "correct": false,
+      "explanation": "Incorreto: o provedor `identity`, que é o padrão, não fornece nenhuma proteção de confidencialidade — é o contrário do que a documentação descreve."
+    },
+    {
+      "key": "B",
+      "text": "O etcd nunca armazena o conteúdo de Secrets em disco; eles ficam retidos apenas na memória do kube-apiserver enquanto o cluster está em execução.",
+      "correct": false,
+      "explanation": "Incorreto: o etcd é o armazenamento persistente dos dados da API, incluindo Secrets; a documentação trata justamente de como esses dados ficam gravados nele, não de retenção apenas em memória."
+    },
+    {
+      "key": "C",
+      "text": "Apenas os objetos do tipo Secret são criptografados automaticamente por padrão; os demais recursos do cluster são armazenados em texto plano no etcd.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não distingue Secrets dos demais recursos quanto ao comportamento padrão — por padrão, nenhum deles é criptografado em repouso sem configuração explícita."
+    },
+    {
+      "key": "D",
+      "text": "O kube-apiserver armazena representações em texto plano dos recursos no etcd por padrão, sem nenhuma criptografia em repouso, até que a criptografia seja explicitamente habilitada e configurada.",
+      "correct": true,
+      "explanation": "Correto: essa é a descrição oficial do comportamento padrão — texto plano no etcd, sem criptografia em repouso, até configuração explícita."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Encrypting Confidential Data at Rest",
+      "url": "https://kubernetes.io/docs/tasks/administer-cluster/encrypt-data/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

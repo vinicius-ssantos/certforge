@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.1"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige entender uma fronteira de confiança concreta e contraintuitiva do cluster — o endpoint HTTPS do kubelet não é protegido por padrão — em vez de assumir que todo componente do control plane já é seguro de fábrica.",
+  "prompt": "O kubelet expõe endpoints HTTPS que concedem controle poderoso sobre o nó e seus containers. Por padrão, esse endpoint exige autenticação de quem o acessa?",
+  "explanation": "A documentação afirma que, por padrão, o kubelet permite acesso não autenticado à sua API HTTPS, mesmo essa API concedendo controle poderoso sobre o nó e os containers nele. Por isso, a própria documentação recomenda que clusters de produção habilitem autenticação e autorização do kubelet — esse não é um comportamento que já vem seguro sem configuração adicional.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim, por padrão o kubelet exige um token de ServiceAccount válido para qualquer chamada à sua API HTTPS, sem exceções mesmo em clusters de desenvolvimento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário — por padrão, o kubelet permite acesso não autenticado à sua API."
+    },
+    {
+      "key": "B",
+      "text": "Não: por padrão, o kubelet permite acesso não autenticado à sua API HTTPS, apesar de ela conceder controle poderoso sobre o nó; a documentação recomenda habilitar autenticação e autorização em clusters de produção.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a fronteira de confiança descrita na documentação — acesso não autenticado por padrão, com a recomendação explícita de proteger esse endpoint em produção."
+    },
+    {
+      "key": "C",
+      "text": "O endpoint do kubelet exige autenticação por padrão, mas apenas em clusters criados com kubeadm; outras ferramentas de bootstrap desabilitam essa exigência automaticamente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não condiciona esse comportamento padrão à ferramenta de bootstrap usada; o acesso não autenticado por padrão é descrito como característica do próprio kubelet."
+    },
+    {
+      "key": "D",
+      "text": "O kubelet não expõe nenhuma API HTTPS diretamente; todo acesso a ele passa obrigatoriamente pelo kube-apiserver, que já aplica suas próprias regras de autenticação antes de encaminhar qualquer requisição ao nó correspondente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente que o próprio kubelet expõe endpoints HTTPS com controle poderoso sobre o nó, independentemente do caminho usado pelo kube-apiserver para alcançá-lo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Securing a Cluster (kubelet access)",
+      "url": "https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

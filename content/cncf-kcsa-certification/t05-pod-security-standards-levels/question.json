@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": ["KCSA-3.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico dos três níveis cumulativos dos Pod Security Standards e sua ordem de permissividade.",
+  "prompt": "Os Pod Security Standards do Kubernetes definem três políticas cumulativas, de altamente permissiva a altamente restritiva. Quais são esses três níveis, nessa ordem?",
+  "explanation": "Os três níveis, do mais permissivo ao mais restritivo, são: `Privileged` (política irrestrita, com o mais amplo nível possível de permissões, permitindo escalonamentos de privilégio conhecidos), `Baseline` (política minimamente restritiva, que previne escalonamentos de privilégio conhecidos e permite a configuração padrão/minimamente especificada de um Pod) e `Restricted` (política fortemente restrita, seguindo as práticas atuais de hardening de Pods).",
+  "options": [
+    {
+      "key": "A",
+      "text": "`Privileged`, `Baseline` e `Restricted`, nessa ordem do mais permissivo ao mais restritivo — `Privileged` permite escalonamentos conhecidos, `Baseline` já os previne, e `Restricted` segue as práticas atuais de hardening.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a definição oficial dos três níveis cumulativos, na ordem do mais permissivo ao mais restritivo."
+    },
+    {
+      "key": "B",
+      "text": "`Restricted`, `Baseline` e `Privileged`, nessa ordem — ou seja, `Restricted` é o nível padrão aplicado a todo novo Pod até que um administrador o afrouxe explicitamente, sem exigir qualquer rótulo adicional no namespace.",
+      "correct": false,
+      "explanation": "Incorreto: a ordem apresentada está invertida, e nenhum desses níveis é aplicado automaticamente como padrão de todo novo Pod; a política vigente depende de como o namespace é rotulado."
+    },
+    {
+      "key": "C",
+      "text": "`Basic`, `Advanced` e `Enterprise`, refletindo um esquema de licenciamento em camadas para recursos de segurança do Kubernetes.",
+      "correct": false,
+      "explanation": "Incorreto: esses não são os nomes dos Pod Security Standards; não existe um esquema de licenciamento em camadas associado a esse recurso do Kubernetes."
+    },
+    {
+      "key": "D",
+      "text": "Apenas dois níveis existem oficialmente, `Permissive` e `Strict`; um terceiro nível intermediário não está definido pela documentação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define exatamente três níveis cumulativos — Privileged, Baseline e Restricted — não dois."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Pod Security Standards",
+      "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

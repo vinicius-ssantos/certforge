@@ -1,0 +1,46 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": [
+    "KCSA-3.7"
+  ],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a compreensão do estado padrão de isolamento de rede de um Pod antes de qualquer NetworkPolicy existir, um ponto frequentemente assumido de forma invertida.",
+  "prompt": "Num namespace onde nenhuma NetworkPolicy foi criada ainda, qual é o estado de isolamento de rede padrão de um Pod em relação a conexões de entrada (ingress)?",
+  "explanation": "Por padrão, um Pod é não-isolado para ingress: todas as conexões de entrada são permitidas. Um Pod só passa a ser isolado para ingress quando existe alguma NetworkPolicy que o seleciona e que lista 'Ingress' em seu `policyTypes`; a partir daí, só são permitidas as conexões do próprio nó do Pod e as explicitamente permitidas pela lista de ingress dessa política. A mesma lógica vale para egress.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Pod já nasce totalmente isolado para ingress, rejeitando qualquer conexão de entrada, até que uma NetworkPolicy explicitamente permita algum tráfego.",
+      "correct": false,
+      "explanation": "Incorreto: é o contrário — por padrão, um Pod é não-isolado para ingress, aceitando todas as conexões de entrada, até que alguma NetworkPolicy o selecione para esse propósito."
+    },
+    {
+      "key": "B",
+      "text": "O estado de isolamento depende exclusivamente do Service associado ao Pod, e NetworkPolicy não tem nenhuma influência sobre conexões de ingress, apenas sobre egress.",
+      "correct": false,
+      "explanation": "Incorreto: NetworkPolicy controla tanto ingress quanto egress, e o estado de isolamento de ingress de um Pod depende diretamente de haver ou não uma NetworkPolicy que o selecione para ingress — não do Service."
+    },
+    {
+      "key": "C",
+      "text": "O Pod é não-isolado para ingress por padrão — todas as conexões de entrada são permitidas — até que exista uma NetworkPolicy que o selecione e inclua 'Ingress' em seu `policyTypes`.",
+      "correct": true,
+      "explanation": "Correto: essa é a definição oficial do comportamento padrão de ingress antes de qualquer NetworkPolicy se aplicar ao Pod."
+    },
+    {
+      "key": "D",
+      "text": "O isolamento de ingress só existe em clusters que utilizam um provedor de nuvem com LoadBalancer integrado; em clusters sem esse recurso, o conceito de NetworkPolicy simplesmente não se aplica.",
+      "correct": false,
+      "explanation": "Incorreto: NetworkPolicy e o comportamento de isolamento de ingress são conceitos do Kubernetes em si, independentes de o cluster ter ou não um provedor de LoadBalancer de nuvem."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Network Policies",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

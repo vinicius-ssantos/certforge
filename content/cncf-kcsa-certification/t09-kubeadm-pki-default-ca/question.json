@@ -1,0 +1,46 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": [
+    "KCSA-5.5"
+  ],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o conhecimento básico de como a PKI de um cluster criado com kubeadm é estabelecida por padrão, e de que isso pode ser substituído por uma CA fornecida externamente.",
+  "prompt": "Ao inicializar um cluster com `kubeadm`, de onde vêm os certificados usados pelos componentes do cluster, por padrão?",
+  "explanation": "Por padrão, o `kubeadm` gera todos os certificados necessários para o cluster funcionar, sem que o operador precise fornecê-los manualmente. Esse comportamento pode ser substituído: é possível copiar uma CA existente para `/etc/kubernetes/pki/ca.crt` e `/etc/kubernetes/pki/ca.key`, e o `kubeadm` usará essa CA para assinar os demais certificados em vez de gerar uma CA própria.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O `kubeadm` nunca gera certificados: é sempre necessário fornecer manualmente uma CA e todos os certificados de cada componente antes de rodar `kubeadm init`.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto — por padrão, o `kubeadm` gera todos os certificados necessários automaticamente, sem exigir que o operador os forneça manualmente."
+    },
+    {
+      "key": "B",
+      "text": "Os certificados são obtidos automaticamente de uma autoridade certificadora pública na internet, da mesma forma que um certificado TLS comum de um site é emitido por uma CA pública reconhecida pelos navegadores mais usados.",
+      "correct": false,
+      "explanation": "Incorreto: os certificados do cluster não vêm de uma CA pública da internet; o `kubeadm` gera sua própria CA interna por padrão, ou usa uma CA fornecida localmente pelo operador."
+    },
+    {
+      "key": "C",
+      "text": "Por padrão, o `kubeadm` gera automaticamente todos os certificados necessários para o cluster, podendo esse comportamento ser substituído ao fornecer uma CA já existente em `/etc/kubernetes/pki/ca.crt` e `ca.key`.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a descrição oficial do comportamento padrão do `kubeadm` e de como ele pode ser substituído por uma CA externa."
+    },
+    {
+      "key": "D",
+      "text": "O `kubeadm` exige que o arquivo `ca.key` da CA raiz seja sempre fornecido junto com `ca.crt`; não é possível operar apenas com o certificado público da CA.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente que é possível fornecer apenas o arquivo `ca.crt` (sem o `ca.key`) para o modo de CA externa, no caso da CA raiz."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Certificate Management with kubeadm",
+      "url": "https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-certs/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
