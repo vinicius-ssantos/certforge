@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000022",
+  "objectiveKeys": ["CKAD-2.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a compreensão dos conceitos de base e overlay do Kustomize, centrais para usar a ferramenta em múltiplos ambientes.",
+  "prompt": "Uma equipe quer manter um único conjunto de manifestos Kubernetes e aplicar pequenas variações para os ambientes `dev` e `prod` (como um `namePrefix` diferente), sem duplicar os arquivos originais. Como o Kustomize modela essa relação entre o conjunto original de manifestos e as variações por ambiente?",
+  "explanation": "O Kustomize tem os conceitos de base e overlay: uma base é um diretório com um `kustomization.yaml` contendo um conjunto de recursos e suas customizações associadas, e uma base não tem conhecimento de nenhum overlay, podendo ser usada em múltiplos overlays. Um overlay é um diretório com um `kustomization.yaml` que referencia outros diretórios de kustomization como suas bases, combinando os recursos definidos nessas bases em uma configuração unificada e podendo aplicar customizações adicionais sobre eles, como um `namePrefix` diferente por overlay.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Cada ambiente precisa de uma cópia completa e independente dos manifestos originais, já que o Kustomize não oferece nenhum mecanismo de reutilização entre diretórios.",
+      "correct": false,
+      "explanation": "Incorreto: o Kustomize existe justamente para evitar essa duplicação, por meio do mecanismo de bases e overlays, que reutiliza o mesmo conjunto de recursos entre ambientes."
+    },
+    {
+      "key": "B",
+      "text": "Os manifestos originais são escritos como um template com variáveis, e cada ambiente fornece um arquivo de valores que preenche essas variáveis no momento da renderização.",
+      "correct": false,
+      "explanation": "Incorreto: essa é a abordagem de uma ferramenta de templating; o Kustomize customiza arquivos YAML já concretos através de bases e overlays, sem expor uma linguagem de template com variáveis a preencher."
+    },
+    {
+      "key": "C",
+      "text": "As variações por ambiente são aplicadas diretamente nos arquivos originais em cada execução, sobrescrevendo o conteúdo do diretório base de forma destrutiva antes de cada deploy, exigindo que a equipe restaure manualmente os arquivos originais depois de cada execução.",
+      "correct": false,
+      "explanation": "Incorreto: uma base não é modificada por um overlay; o overlay apenas referencia a base e compõe customizações sobre ela, sem sobrescrever destrutivamente os arquivos originais."
+    },
+    {
+      "key": "D",
+      "text": "Os manifestos originais formam uma base reutilizável, e cada ambiente é um overlay que referencia essa base em seu próprio `kustomization.yaml`, combinando os recursos dela e aplicando customizações como um `namePrefix` próprio.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a relação base/overlay documentada — a base é reutilizada por múltiplos overlays, e cada overlay compõe os recursos da base com suas próprias customizações."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Declarative Management of Kubernetes Objects Using Kustomize (Bases and Overlays)",
+      "url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

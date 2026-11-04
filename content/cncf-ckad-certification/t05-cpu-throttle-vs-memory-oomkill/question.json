@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.3"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que CPU e memória são aplicados como limites de formas fundamentalmente diferentes, um erro comum de quem assume que ambos resultam em terminação do container.",
+  "prompt": "Um container declara `limits.cpu: \"500m\"` e `limits.memory: \"256Mi\"`. O que acontece, respectivamente, quando esse container tenta usar mais CPU do que o limite e quando tenta usar mais memória do que o limite?",
+  "explanation": "Limites de CPU são aplicados por meio de CPU throttling: quando um container se aproxima do seu limite de CPU, o kernel restringe o acesso à CPU correspondente a esse limite, e o container não consegue usar mais CPU do que foi especificado — mas não é terminado por isso. Limites de memória, por outro lado, são aplicados pelo kernel com OOM kills (out of memory): quando um container usa mais memória do que seu limite, o kernel pode terminá-lo, embora isso só aconteça quando o kernel detecta pressão de memória, de forma reativa, não instantânea.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Em ambos os casos o container é imediatamente terminado pelo kernel, pois tanto CPU quanto memória são impostos como limites rígidos que não toleram excesso algum.",
+      "correct": false,
+      "explanation": "Incorreto: apenas o excesso de memória pode levar à terminação (via OOM kill); o excesso de CPU resulta em throttling, não em terminação do container."
+    },
+    {
+      "key": "B",
+      "text": "O excesso de CPU é contido por throttling (o kernel restringe o acesso à CPU sem terminar o container), enquanto o excesso de memória pode levar a uma terminação pelo kernel via OOM kill.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção documentada entre como cada tipo de limite é aplicado pelo kernel — CPU por throttling, memória por possível OOM kill."
+    },
+    {
+      "key": "C",
+      "text": "Nenhum dos dois limites tem qualquer efeito prático em tempo de execução; eles servem apenas como metadados informativos para ferramentas externas de monitoramento consultarem.",
+      "correct": false,
+      "explanation": "Incorreto: tanto o limite de CPU quanto o de memória são de fato aplicados em tempo de execução pelo kernel — CPU por throttling e memória por possível OOM kill — não são apenas metadados passivos."
+    },
+    {
+      "key": "D",
+      "text": "O excesso de memória é contido por throttling silencioso, reduzindo gradualmente a velocidade de alocação, enquanto o excesso de CPU é o que pode levar o kernel a terminar o container imediatamente.",
+      "correct": false,
+      "explanation": "Incorreto: a relação está invertida — é o excesso de CPU que resulta em throttling, e é o excesso de memória que pode levar a uma terminação via OOM kill, não o contrário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Resource Management for Pods and Containers",
+      "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "cncf-ckad-certification",
+  "trackSlug": "cncf-ckad-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "CKAD 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "CNCF",
+    "examCode": "CKAD",
+    "providerVersion": "cncf/curriculum@f423fa4 (CKAD_Curriculum_v1.37.pdf, commit 2026-10-01)",
+    "snapshotDigest": "sha256:7736d2f0291239d62e9fc618304413ee9b6e53fc4580aac70bf4328203c1c210",
+    "verifiedOn": "2026-11-03"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.8"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a compreensão de capabilities Linux como mecanismo de privilégio granular, e de como elas são declaradas no manifesto do Pod.",
+  "prompt": "Um container precisa apenas da capability `NET_ADMIN` para configurar interfaces de rede, sem precisar de nenhum outro privilégio de root. Como isso é declarado no manifesto do Pod, e por que essa abordagem é preferível a rodar o container como `privileged: true`?",
+  "explanation": "Para adicionar ou remover capabilities Linux de um Container, inclui-se o campo `capabilities` na seção `securityContext` do manifesto do Container, com uma lista `add` (e, quando necessário, `drop`), omitindo o prefixo `CAP_` do nome — por exemplo, `add: [\"NET_ADMIN\"]`. Capabilities Linux dão a um processo alguns privilégios específicos, mas não todos os privilégios do usuário root, o que é mais restrito do que conceder privilégio total ao container.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Declarando `securityContext.capabilities.add: [\"NET_ADMIN\"]` no container, já que capabilities Linux concedem privilégios específicos a um processo sem conceder todos os privilégios do usuário root, diferente de `privileged: true`.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a sintaxe documentada para adicionar uma capability, e a diferença central entre ela e `privileged: true` é a concessão de um privilégio específico em vez de todos os privilégios de root."
+    },
+    {
+      "key": "B",
+      "text": "Declarando `securityContext.privileged: true` com um comentário indicando qual capability é necessária, já que `privileged: true` é a única forma documentada de conceder qualquer capability individual a um container de modo seletivo.",
+      "correct": false,
+      "explanation": "Incorreto: `privileged: true` concede todos os privilégios de root ao container, não apenas uma capability específica; o campo correto para uma capability isolada é `capabilities.add` dentro de `securityContext`."
+    },
+    {
+      "key": "C",
+      "text": "Capabilities não podem ser declaradas por container individualmente; elas só podem ser habilitadas globalmente para todos os Pods de um nó, por meio de configuração do kubelet.",
+      "correct": false,
+      "explanation": "Incorreto: capabilities são declaradas por container, no campo `capabilities` da `securityContext` daquele container específico, e não exigem nenhuma configuração global do kubelet."
+    },
+    {
+      "key": "D",
+      "text": "Listando a capability desejada diretamente no campo `image` do container, prefixada com `CAP_`, para que o runtime de containers a conceda automaticamente ao iniciar.",
+      "correct": false,
+      "explanation": "Incorreto: capabilities não são declaradas no campo `image`; elas são declaradas em `securityContext.capabilities`, e o nome usado nessa lista omite o prefixo `CAP_`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Configure a Security Context for a Pod or Container (Set capabilities)",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/security-context/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

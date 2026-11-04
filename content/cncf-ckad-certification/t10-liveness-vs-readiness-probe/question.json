@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000025",
+  "objectiveKeys": ["CKAD-5.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir a consequência de uma liveness probe falhar da consequência de uma readiness probe falhar, um ponto central de troubleshooting de Pods.",
+  "prompt": "Um container tem tanto uma liveness probe quanto uma readiness probe configuradas. Em um certo momento, apenas a readiness probe passa a falhar repetidamente, enquanto a liveness probe continua passando. O que acontece com esse container e com o Pod que o contém?",
+  "explanation": "Liveness probes determinam quando reiniciar um container: se um container falha sua liveness probe mais vezes do que a tolerância configurada, o kubelet o reinicia. Readiness probes determinam quando um container está pronto para receber tráfego: se a readiness probe retorna um estado de falha, o controlador de EndpointSlice remove o endereço IP do Pod dos EndpointSlices de todos os Services que correspondem a ele. No cenário descrito, como só a readiness probe falha, o container não é reiniciado — ele continua em execução, apenas deixa de receber tráfego roteado pelos Services.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O container é imediatamente reiniciado pelo kubelet, já que qualquer probe configurada que comece a falhar aciona o mesmo mecanismo de reinicialização, independentemente de ser liveness ou readiness.",
+      "correct": false,
+      "explanation": "Incorreto: apenas a falha da liveness probe aciona a reinicialização do container pelo kubelet; a readiness probe tem uma consequência diferente, que não envolve reiniciar nada."
+    },
+    {
+      "key": "B",
+      "text": "O Pod inteiro é removido do cluster automaticamente, já que uma readiness probe falhando é tratada como uma falha irrecuperável do Pod como um todo.",
+      "correct": false,
+      "explanation": "Incorreto: uma readiness probe falhando não remove o Pod do cluster; ela apenas tira o Pod da lista de endpoints dos Services correspondentes, mantendo o Pod e o container em execução."
+    },
+    {
+      "key": "C",
+      "text": "O container continua em execução sem ser reiniciado, mas o endereço IP do Pod é removido dos EndpointSlices dos Services que correspondem a ele, deixando de receber tráfego roteado por eles.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a consequência documentada de uma readiness probe falhando — remoção dos EndpointSlices dos Services correspondentes, sem reinicialização do container."
+    },
+    {
+      "key": "D",
+      "text": "O cluster inteiro entra em um estado de readiness degradada, impedindo que qualquer outro Pod de qualquer outro Deployment receba tráfego até que essa readiness probe específica volte a passar.",
+      "correct": false,
+      "explanation": "Incorreto: o efeito de uma readiness probe falhando é local ao Pod correspondente e aos Services que o selecionam; ele não afeta o roteamento de tráfego para Pods de outros Deployments no cluster."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Pod Lifecycle (Container probes: liveness and readiness)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
