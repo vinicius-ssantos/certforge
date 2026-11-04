@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que a autorização do kubelet não é restritiva por padrão, distinto de autenticação, um detalhe frequentemente confundido.",
+  "prompt": "Um cluster usa o modo de autorização padrão do kubelet, sem nenhuma configuração adicional de `--authorization-mode`. Depois que uma requisição é autenticada com sucesso (incluindo uma requisição anônima), o que o kubelet faz ao decidir se autoriza essa requisição?",
+  "explanation": "O modo de autorização padrão do kubelet é `AlwaysAllow`, que permite todas as requisições — ou seja, qualquer requisição autenticada com sucesso (incluindo uma anônima) é então autorizada sem nenhuma verificação adicional de permissão. Para subdividir o acesso à API do kubelet, é preciso delegar a autorização ao kube-apiserver explicitamente, iniciando o kubelet com `--authorization-mode=Webhook` e usando a API `SubjectAccessReview` para decidir se cada requisição é autorizada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kubelet consulta um arquivo local de política RBAC específico do nó para decidir se autoriza cada requisição, independentemente de qualquer flag `--authorization-mode` configurada.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse arquivo local de política RBAC específico do nó consultado por padrão; o comportamento padrão documentado é `AlwaysAllow`, sem consulta a nenhuma política local desse tipo."
+    },
+    {
+      "key": "B",
+      "text": "O kubelet consulta a API `SubjectAccessReview` no kube-apiserver para toda requisição, mesmo sem nenhuma flag `--authorization-mode=Webhook` ter sido configurada, delegando assim a decisão de autorização ao kube-apiserver por padrão.",
+      "correct": false,
+      "explanation": "Incorreto: consultar `SubjectAccessReview` é o comportamento do modo `Webhook`, que precisa ser configurado explicitamente com `--authorization-mode=Webhook`; não é o comportamento padrão sem essa configuração."
+    },
+    {
+      "key": "C",
+      "text": "Qualquer requisição autenticada com sucesso, incluindo uma anônima, é automaticamente autorizada, pois o modo padrão de autorização do kubelet é `AlwaysAllow`, que permite todas as requisições sem verificação adicional.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição documentada do comportamento padrão — `AlwaysAllow` permite todas as requisições já autenticadas, sem nenhuma verificação de permissão adicional."
+    },
+    {
+      "key": "D",
+      "text": "O kubelet rejeita automaticamente toda requisição anônima nessa configuração padrão, independentemente de ela ter sido autenticada com sucesso ou não.",
+      "correct": false,
+      "explanation": "Incorreto: o modo padrão `AlwaysAllow` autoriza qualquer requisição autenticada com sucesso, incluindo uma anônima; ele não rejeita requisições anônimas automaticamente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Kubelet authentication/authorization (default authorization mode: AlwaysAllow)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/kubelet-authn-authz/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

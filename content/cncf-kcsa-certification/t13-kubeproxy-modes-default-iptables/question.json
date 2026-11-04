@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.6"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico do papel do kube-proxy e de quais modos de encaminhamento de pacotes ele pode usar em nós Linux.",
+  "prompt": "Qual é o papel do kube-proxy num nó Linux, e por meio de quais mecanismos ele pode implementar esse papel?",
+  "explanation": "O kube-proxy é responsável por implementar um mecanismo de IP virtual para Services, configurando o nó para capturar o tráfego destinado ao `clusterIP` e à porta do Service, e redirecionar esse tráfego para um dos endpoints do Service. Em nós Linux, os modos disponíveis para o kube-proxy são `iptables`, `ipvs` e `nftables` — cada um configura as regras de encaminhamento de pacotes usando o subsistema correspondente do kernel. Se nenhum modo for escolhido explicitamente, o kube-proxy usa a versão recomendada por padrão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Implementar um mecanismo de IP virtual para Services, capturando o tráfego destinado ao `clusterIP` e redirecionando-o a um endpoint — usando, em nós Linux, um dos modos `iptables`, `ipvs` ou `nftables`.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a definição documentada do papel do kube-proxy e dos modos disponíveis em nós Linux."
+    },
+    {
+      "key": "B",
+      "text": "Gerenciar diretamente o ciclo de vida dos containers em cada Pod, incluindo iniciar, parar e reiniciar containers conforme o estado desejado declarado no manifesto do Pod correspondente, sempre no mesmo nó.",
+      "correct": false,
+      "explanation": "Incorreto: essa é a responsabilidade do kubelet e do runtime de containers, não do kube-proxy, que trata exclusivamente do encaminhamento de tráfego de rede para Services."
+    },
+    {
+      "key": "C",
+      "text": "Criptografar todo o tráfego de rede entre Pods automaticamente, funcionando como uma implementação nativa de mTLS entre todos os Services do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-proxy não implementa criptografia de tráfego nem mTLS; seu papel documentado é o encaminhamento de pacotes para Services, não a criptografia de conexões."
+    },
+    {
+      "key": "D",
+      "text": "Rodar como um único processo centralizado no control plane, em vez de uma instância por nó, consolidando as regras de encaminhamento de todo o cluster num só lugar.",
+      "correct": false,
+      "explanation": "Incorreto: cada instância de kube-proxy roda localmente em cada nó, observando o control plane para adições e remoções de Services e EndpointSlices — não é um processo único centralizado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service Virtual IPs (kube-proxy modes: iptables, ipvs, nftables)",
+      "url": "https://kubernetes.io/docs/reference/networking/virtual-ips/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

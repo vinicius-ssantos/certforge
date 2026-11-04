@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato reconhece a NetworkPolicy padrão de negação total de ingress como mitigação contra um atacante na rede, incluindo o papel do `podSelector: {}` vazio.",
+  "prompt": "Uma equipe quer reduzir a superfície de ataque de rede dentro de um namespace, isolando todos os Pods de conexões de entrada por padrão, exceto onde explicitamente permitido por outras NetworkPolicies. Qual manifesto cria essa política de isolamento padrão?",
+  "explanation": "A documentação descreve a criação de uma política de isolamento de ingress 'padrão' para um namespace através de uma NetworkPolicy que seleciona todos os Pods (`podSelector: {}`), mas não permite nenhum tráfego de entrada, porque não declara nenhuma regra de `ingress`. Isso garante que até Pods não selecionados por nenhuma outra NetworkPolicy fiquem isolados para ingress; a política não afeta o isolamento de egress de nenhum Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Não existe um manifesto padrão documentado para isso; o único jeito de isolar todos os Pods para ingress é criar uma NetworkPolicy individual para cada Pod do namespace, uma a uma.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente um único manifesto, com `podSelector: {}`, que isola todos os Pods do namespace de uma só vez, sem precisar de uma política por Pod."
+    },
+    {
+      "key": "B",
+      "text": "Uma NetworkPolicy com `podSelector: {}` e `policyTypes: [Egress]`, sem nenhuma regra de `egress` declarada, já que isolar o tráfego de saída é documentado como totalmente equivalente a isolar o de entrada para todo esse namespace.",
+      "correct": false,
+      "explanation": "Incorreto: `policyTypes: [Egress]` isola tráfego de saída (egress), não de entrada (ingress); a documentação trata os dois isolamentos como independentes, não equivalentes."
+    },
+    {
+      "key": "C",
+      "text": "Uma NetworkPolicy com `podSelector: {}` e `policyTypes: [Ingress]`, mas com uma única regra de ingress sem restrições (`ingress: [{}]`, sem `from` nem `ports`), já que uma regra assim também teria o efeito de isolar todos os Pods do namespace para conexões de entrada.",
+      "correct": false,
+      "explanation": "Incorreto: uma regra de ingress sem `from` e sem `ports` casa com todas as origens e portas — ou seja, `ingress: [{}]` permite todo o tráfego de entrada, exatamente o oposto do isolamento desejado. É a ausência completa de regras (`ingress: []`), não uma regra vazia dentro da lista, que bloqueia todo o tráfego."
+    },
+    {
+      "key": "D",
+      "text": "Uma NetworkPolicy com `podSelector: {}` e `policyTypes: [Ingress]`, sem nenhuma regra de `ingress` declarada — isso isola todos os Pods do namespace para ingress por padrão, mesmo os não selecionados por nenhuma outra política.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o manifesto documentado para isolamento de ingress padrão de um namespace — seleção de todos os Pods, sem regras de entrada permitidas."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Network Policies (Default deny all ingress traffic)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/#default-deny-all-ingress-traffic"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

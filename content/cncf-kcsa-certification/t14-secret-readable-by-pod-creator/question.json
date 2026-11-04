@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": ["KCSA-3.4"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige entender uma via indireta de exposição de Secrets — criar um Pod que o consome — distinta e mais ampla do que apenas restringir `get`/`list` diretamente sobre o recurso Secret.",
+  "prompt": "Uma política de RBAC nega a um usuário qualquer permissão direta de `get` ou `list` sobre o recurso Secret. Esse mesmo usuário, porém, tem permissão para criar Pods no namespace, incluindo Pods que referenciam Secrets existentes. Esse usuário consegue, de fato, obter o valor de um Secret mesmo sem a permissão direta sobre o recurso?",
+  "explanation": "A documentação alerta explicitamente que um usuário que pode criar um Pod que usa um Secret também pode ver o valor desse Secret: mesmo que as políticas do cluster não permitam que um usuário leia o Secret diretamente, esse mesmo usuário pode ter acesso para rodar um Pod que então expõe o Secret. A documentação também afirma que conceder permissão de `list` sobre Secrets já permite implicitamente buscar o conteúdo deles. Por isso, restringir apenas `get`/`list` direto sobre o Secret não é suficiente; a permissão de criar Pods que o consomem é uma via indireta real de exposição.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Não: sem a permissão direta de `get` ou `list` sobre o Secret, não existe nenhuma forma de um usuário acessar seu valor, mesmo podendo criar Pods que o referenciam.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário — um usuário que pode criar um Pod usando um Secret também pode ver o valor desse Secret, independentemente de ter a permissão direta sobre o recurso Secret."
+    },
+    {
+      "key": "B",
+      "text": "Sim: um usuário que pode criar um Pod que usa um Secret também pode ver o valor desse Secret, mesmo que as políticas do cluster não permitam ler o Secret diretamente — a criação de Pods é uma via indireta real de exposição.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o alerta documentado — a permissão de criar Pods que consomem um Secret expõe seu valor, independentemente de restrições diretas de `get`/`list` sobre o recurso Secret."
+    },
+    {
+      "key": "C",
+      "text": "Apenas se o usuário também tiver acesso de leitura direto ao etcd do cluster; sem esse acesso ao etcd, criar Pods que consomem Secrets nunca expõe o valor deles.",
+      "correct": false,
+      "explanation": "Incorreto: a exposição via criação de Pod não depende de acesso ao etcd; ela ocorre simplesmente porque o Pod em execução tem o Secret disponível (como variável de ambiente ou volume), independente de qualquer acesso direto ao etcd."
+    },
+    {
+      "key": "D",
+      "text": "Apenas em clusters configurados com criptografia em repouso desabilitada; em clusters com criptografia em repouso habilitada no etcd, criar Pods que consomem Secrets nunca expõe o valor deles a esse usuário autorizado a criar Pods.",
+      "correct": false,
+      "explanation": "Incorreto: criptografia em repouso protege os dados armazenados no etcd, não o acesso que o próprio Pod em execução tem ao valor do Secret que ele consome; essa exposição via criação de Pod independe de criptografia em repouso."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Good practices for Kubernetes Secrets (Pod creation exposes Secret values)",
+      "url": "https://kubernetes.io/docs/concepts/security/secrets-good-practices/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
