@@ -4,14 +4,14 @@
   "objectiveKeys": ["CKAD-2.2"],
   "difficulty": "MEDIUM",
   "difficultyRationale": "Avalia se o candidato entende o mecanismo por trás de uma atualização de Deployment, não apenas o comando usado para dispará-la.",
-  "prompt": "Uma equipe atualiza a imagem de container declarada no `PodTemplateSpec` de um Deployment já em produção. O que o Kubernetes faz internamente para aplicar essa mudança aos Pods em execução?",
-  "explanation": "Ao declarar o novo estado dos Pods atualizando o `PodTemplateSpec` do Deployment, um novo ReplicaSet é criado, e o Deployment o escala gradualmente para cima enquanto escala o ReplicaSet antigo para baixo, garantindo que os Pods sejam substituídos a uma taxa controlada. Cada novo ReplicaSet atualiza a revisão do Deployment. Não há edição dos Pods existentes nem substituição instantânea de todos eles de uma vez.",
+  "prompt": "Uma equipe atualiza a imagem de container declarada no `PodTemplateSpec` de um Deployment já em produção, sem declarar nenhuma customização em `spec.strategy` (portanto, mantendo a estratégia padrão). O que o Kubernetes faz internamente para aplicar essa mudança aos Pods em execução?",
+  "explanation": "`RollingUpdate` é o valor padrão de `spec.strategy.type` quando nenhuma estratégia é declarada explicitamente. Sob essa estratégia, ao declarar o novo estado dos Pods atualizando o `PodTemplateSpec` do Deployment, um novo ReplicaSet é criado, e o Deployment o escala gradualmente para cima enquanto escala o ReplicaSet antigo para baixo, garantindo que os Pods sejam substituídos a uma taxa controlada. Cada novo ReplicaSet atualiza a revisão do Deployment. Não há edição dos Pods existentes nem substituição instantânea de todos eles de uma vez — essa substituição simultânea só ocorreria se a equipe tivesse declarado explicitamente a estratégia alternativa `Recreate`, o que não é o caso aqui.",
   "options": [
     {
       "key": "A",
-      "text": "Um novo ReplicaSet é criado e escalado gradualmente para cima enquanto o ReplicaSet antigo é escalado para baixo, substituindo os Pods a uma taxa controlada em vez de todos de uma vez.",
+      "text": "Um novo ReplicaSet é criado e escalado gradualmente para cima enquanto o ReplicaSet antigo é escalado para baixo, substituindo os Pods a uma taxa controlada em vez de todos de uma vez — o comportamento da estratégia `RollingUpdate`, padrão quando `spec.strategy` não é customizado.",
       "correct": true,
-      "explanation": "Correto: é exatamente esse o mecanismo documentado — um novo ReplicaSet assume gradualmente o lugar do antigo, com a revisão do Deployment atualizada a cada novo ReplicaSet."
+      "explanation": "Correto: é exatamente esse o mecanismo documentado para a estratégia padrão `RollingUpdate` — um novo ReplicaSet assume gradualmente o lugar do antigo, com a revisão do Deployment atualizada a cada novo ReplicaSet."
     },
     {
       "key": "B",
@@ -21,9 +21,9 @@
     },
     {
       "key": "C",
-      "text": "Todos os Pods antigos são terminados simultaneamente antes que qualquer Pod novo com a imagem atualizada seja criado, causando uma janela garantida de indisponibilidade total até que o primeiro Pod novo termine de inicializar.",
+      "text": "Todos os Pods antigos são terminados simultaneamente antes que qualquer Pod novo com a imagem atualizada seja criado, causando uma janela garantida de indisponibilidade total até que o primeiro Pod novo termine de inicializar — isso é o que a estratégia `RollingUpdate` padrão faz nesse cenário.",
       "correct": false,
-      "explanation": "Incorreto: o Deployment escala o novo ReplicaSet gradualmente enquanto reduz o antigo, uma taxa controlada que não corresponde a terminar tudo de uma vez antes de criar qualquer réplica nova."
+      "explanation": "Incorreto: esse é o comportamento da estratégia `Recreate`, não de `RollingUpdate`. Como a equipe não customizou `spec.strategy` nesse cenário, a estratégia em vigor é a padrão (`RollingUpdate`), que escala o novo ReplicaSet gradualmente enquanto reduz o antigo, em vez de terminar tudo de uma vez."
     },
     {
       "key": "D",
@@ -36,6 +36,10 @@
     {
       "title": "Kubernetes Documentation — Deployments (Updating a Deployment)",
       "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"
+    },
+    {
+      "title": "Kubernetes Documentation — Deployments (Strategy: RollingUpdate vs. Recreate)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy"
     }
   ],
   "evidence": {
