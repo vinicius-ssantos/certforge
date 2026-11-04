@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000025",
+  "objectiveKeys": ["CKAD-5.1"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que a garantia documentada para APIs GA é diferente (e mais forte) da garantia de prazo fixo que vale para APIs Beta — um erro comum é aplicar a mesma regra de prazo às duas.",
+  "prompt": "Uma aplicação usa uma API do Kubernetes num nível de estabilidade GA (estável). Essa versão da API é marcada como deprecated. Segundo a política de depreciação documentada, quando essa versão de API pode ser removida?",
+  "explanation": "A política de depreciação documenta que versões de API GA podem ser marcadas como deprecated, mas não podem ser removidas dentro de uma mesma versão principal (major version) do Kubernetes. Isso é diferente da regra para APIs Beta, que são descontinuadas (deixam de ser servidas) no mínimo 9 meses ou 3 releases menores após a depreciação (o que for mais longo) — um prazo fixo que não se aplica a APIs GA. A documentação ainda acrescenta que não há planos atuais para uma versão principal do Kubernetes que remova APIs GA.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Em até 12 meses ou 3 releases após ser marcada como deprecated, o que for mais longo — o mesmo prazo fixo documentado para APIs no nível Beta.",
+      "correct": false,
+      "explanation": "Incorreto: esse prazo fixo (ainda que com números um pouco diferentes: 9 meses ou 3 releases) é a regra documentada para APIs Beta, não para APIs GA; APIs GA têm uma garantia diferente, não baseada num prazo fixo em meses."
+    },
+    {
+      "key": "B",
+      "text": "Imediatamente, assim que marcada como deprecated — para APIs GA, 'deprecated' e 'removida' são tratados pela documentação como sinônimos, sem nenhum período de transição.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue claramente 'deprecated' de 'removida'; uma API GA depreciada continua servida, e a garantia documentada é que ela não seja removida dentro de uma mesma versão principal do Kubernetes."
+    },
+    {
+      "key": "C",
+      "text": "Ela não pode ser removida dentro da mesma versão principal (major version) do Kubernetes em que foi lançada, podendo apenas ser marcada como deprecated enquanto isso.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a garantia documentada para o nível GA — deprecated é permitido, mas a remoção não pode ocorrer dentro da mesma versão principal do Kubernetes."
+    },
+    {
+      "key": "D",
+      "text": "Apenas quando o número de usuários ativos dessa versão de API, medido automaticamente pelo kube-apiserver, cair abaixo de um limite documentado de 1% do total de requisições do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa métrica automática de uso documentada como critério de remoção; a garantia documentada para APIs GA é baseada em versão principal do Kubernetes, não em contagem de uso."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Kubernetes Deprecation Policy (Rule #4a: API lifetime)",
+      "url": "https://kubernetes.io/docs/reference/using-api/deprecation-policy/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

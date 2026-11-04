@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000021",
+  "objectiveKeys": ["CKAD-1.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o padrão de `imagePullPolicy` depende da tag declarada na imagem, não é um único valor fixo para todo container.",
+  "prompt": "Um container declara `image: myapp:latest` sem especificar o campo `imagePullPolicy`. Qual política de pull é aplicada por padrão, e por quê?",
+  "explanation": "Quando o campo `imagePullPolicy` é omitido e a tag da imagem do container é `:latest`, o `imagePullPolicy` é automaticamente definido como `Always`. Esse padrão é específico da tag `:latest` (e do caso de nenhuma tag ser especificada, que é tratado como `:latest`); se uma tag diferente fosse usada, o padrão passaria a ser `IfNotPresent` em vez disso. Uma imagem referenciada por digest também tem como padrão `IfNotPresent`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`Always`, porque, quando `imagePullPolicy` é omitido e a tag da imagem é `:latest`, esse é o padrão aplicado automaticamente pelo Kubernetes.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a regra documentada — tag `:latest` sem `imagePullPolicy` explícito resulta em `Always` por padrão."
+    },
+    {
+      "key": "B",
+      "text": "`IfNotPresent`, porque esse é o único valor padrão documentado para `imagePullPolicy`, independentemente de qual tag a imagem declara.",
+      "correct": false,
+      "explanation": "Incorreto: `IfNotPresent` é o padrão para tags diferentes de `:latest` (e para referências por digest), não para `:latest`; o padrão depende da tag declarada."
+    },
+    {
+      "key": "C",
+      "text": "`Never`, já que a tag `:latest` é tratada pelo Kubernetes como um sinal explícito de que a imagem nunca deve ser buscada novamente de um registro remoto.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa regra documentada; `Never` não é o padrão associado à tag `:latest`, e `:latest` não sinaliza para nunca buscar a imagem remotamente."
+    },
+    {
+      "key": "D",
+      "text": "Nenhuma política é aplicada até que `imagePullPolicy` seja declarado explicitamente; sem esse campo, o kubelet rejeita a criação do Pod.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes sempre aplica um valor padrão para `imagePullPolicy` quando o campo é omitido, dependendo da tag da imagem; não há rejeição da criação do Pod por esse motivo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Images (Default image pull policy)",
+      "url": "https://kubernetes.io/docs/concepts/containers/images/#default-image-pull-policy"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

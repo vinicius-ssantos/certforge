@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000022",
+  "objectiveKeys": ["CKAD-2.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende como um canary release é montado a partir de primitivas comuns (Deployment, Service, labels), em vez de buscar um recurso dedicado de canary que o Kubernetes não tem.",
+  "prompt": "Uma equipe quer liberar uma nova versão de uma aplicação para apenas uma fração do tráfego de produção (um canary release), usando somente Deployments e Services comuns do Kubernetes, sem nenhum recurso de service mesh. Como essa abordagem é documentada?",
+  "explanation": "A documentação descreve essa prática como comum: implantar um canary de uma nova versão (especificada via tag de imagem no Pod template) lado a lado com a versão anterior, usando um label (como `track: canary` e `track: stable`) para diferenciar os dois releases. O Service de frontend abrange os dois conjuntos de réplicas ao selecionar o subconjunto comum de labels (omitindo o label `track`), de forma que o tráfego é distribuído para as duas aplicações. Ajustando o número de réplicas de cada Deployment (por exemplo, 3 réplicas `stable` para 1 réplica `canary`), a proporção de tráfego recebida por cada versão é controlada pela proporção de réplicas.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Declarando um campo `canaryPercentage` na especificação do Service, que distribui o tráfego entre duas versões apontadas por dois campos de imagem diferentes dentro do mesmo recurso Service.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse campo `canaryPercentage` na API de Service; o mecanismo documentado usa dois Deployments comuns e um Service com selector compartilhado, não um campo dedicado no Service."
+    },
+    {
+      "key": "B",
+      "text": "Usando um único Deployment com dois containers no mesmo Pod, um rodando a versão estável e outro a versão canary, cada um recebendo exatamente metade de cada requisição recebida pelo Pod.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve dois Deployments separados, não dois containers dividindo requisições dentro do mesmo Pod; essa divisão por requisição dentro de um Pod não é o mecanismo descrito."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes aloca automaticamente uma fração fixa e não configurável de 10% do tráfego para qualquer Deployment cujo nome contenha a palavra `canary`, sem necessidade de nenhuma configuração de label, selector ou réplica adicional por parte da equipe responsável.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse comportamento automático baseado no nome do Deployment; a proporção de tráfego é controlada manualmente pela proporção de réplicas entre os dois Deployments, via labels compartilhados."
+    },
+    {
+      "key": "D",
+      "text": "Criando dois Deployments com um label distintivo (como `track: stable` e `track: canary`) cujo Service seleciona apenas o subconjunto de labels comum aos dois, controlando a proporção de tráfego pela proporção de réplicas entre eles.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o padrão documentado — dois Deployments diferenciados por um label extra, um Service que seleciona o subconjunto comum, e o split de tráfego aproximado pela proporção de réplicas."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Managing Resources (Canary deployments)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/management/#canary-deployments"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
