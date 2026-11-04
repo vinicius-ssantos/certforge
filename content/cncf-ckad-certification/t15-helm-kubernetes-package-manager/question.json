@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000022",
+  "objectiveKeys": ["CKAD-2.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o reconhecimento básico do que o Helm é no ecossistema Kubernetes, sem exigir conhecimento detalhado da estrutura interna de um chart.",
+  "prompt": "O que é o Helm no ecossistema do Kubernetes?",
+  "explanation": "O Helm é descrito pela CNCF como 'The Kubernetes Package Manager' (o gerenciador de pacotes do Kubernetes). O projeto foi aceito pela CNCF em 1º de junho de 2018 no nível de maturidade Incubating, e passou para o nível Graduated em 1º de maio de 2020 — o nível mais alto de maturidade de um projeto hospedado pela CNCF.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O gerenciador de pacotes do Kubernetes, um projeto CNCF que já atingiu o nível de maturidade Graduated.",
+      "correct": true,
+      "explanation": "Correto: é exatamente assim que a CNCF descreve o Helm — 'The Kubernetes Package Manager' — e ele está no nível de maturidade Graduated desde 2020."
+    },
+    {
+      "key": "B",
+      "text": "Um plugin CNI (Container Network Interface) usado para configurar a rede de Pods em clusters que não têm um provedor de rede padrão instalado.",
+      "correct": false,
+      "explanation": "Incorreto: Helm não é um plugin CNI; ele é descrito pela CNCF como o gerenciador de pacotes do Kubernetes, sem relação com a interface de rede de containers."
+    },
+    {
+      "key": "C",
+      "text": "Um runtime de containers alternativo ao containerd, usado especificamente para rodar workloads de curta duração como Jobs e CronJobs.",
+      "correct": false,
+      "explanation": "Incorreto: Helm não é um runtime de containers; ele não substitui containerd nem tem relação documentada com a execução de Jobs ou CronJobs especificamente."
+    },
+    {
+      "key": "D",
+      "text": "Um controlador de admissão (admission controller) nativo do kube-apiserver, habilitado por padrão em todo cluster Kubernetes desde a versão 1.18.",
+      "correct": false,
+      "explanation": "Incorreto: Helm não é um admission controller nativo do kube-apiserver; a descrição documentada pela CNCF é de gerenciador de pacotes, uma ferramenta externa ao controle de admissão do cluster."
+    }
+  ],
+  "references": [
+    {
+      "title": "CNCF — Helm (The Kubernetes Package Manager)",
+      "url": "https://cncf.io/projects/helm/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

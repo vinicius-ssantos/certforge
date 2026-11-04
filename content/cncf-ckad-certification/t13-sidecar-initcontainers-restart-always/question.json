@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000021",
+  "objectiveKeys": ["CKAD-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe onde e como um sidecar é declarado no manifesto do Pod, em vez de apenas reconhecer o conceito de forma abstrata.",
+  "prompt": "Uma equipe quer adicionar um container `logshipper` que roda durante toda a vida do Pod, ao lado do container principal da aplicação, seguindo o padrão de sidecar nativo do Kubernetes. Em qual campo do manifesto do Pod esse container deve ser declarado, e o que o diferencia de um init container comum?",
+  "explanation": "O Kubernetes implementa sidecar containers como um caso especial de init containers: eles são declarados dentro do campo `initContainers` do Pod, mas com `restartPolicy: Always`. Um init container com `restartPolicy: Always` inicia e permanece em execução durante toda a vida do Pod, em vez de rodar até completar e então parar como um init container comum. Esses containers continuam se beneficiando das mesmas garantias de ordem sequencial dos demais init containers entre si, mas são independentes dos containers principais da aplicação.",
+  "options": [
+    {
+      "key": "A",
+      "text": "No campo `containers`, junto com o container principal da aplicação, sem nenhuma diferença de configuração entre os dois — qualquer container nesse campo já roda durante toda a vida do Pod.",
+      "correct": false,
+      "explanation": "Incorreto: o padrão sidecar nativo do Kubernetes é declarado em `initContainers`, não em `containers`; a documentação descreve sidecars como um caso especial de init container."
+    },
+    {
+      "key": "B",
+      "text": "No campo `initContainers`, com `restartPolicy: Always` — essa flag é o que faz esse init container continuar em execução durante toda a vida do Pod, em vez de rodar até completar e parar.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada do padrão sidecar — declarado em `initContainers`, diferenciado pela flag `restartPolicy: Always`."
+    },
+    {
+      "key": "C",
+      "text": "No campo `initContainers`, sem nenhuma flag adicional — todo init container, por padrão, já continua em execução durante toda a vida do Pod junto com os containers principais.",
+      "correct": false,
+      "explanation": "Incorreto: um init container comum roda até completar e então para; é a flag `restartPolicy: Always` que faz esse init container específico continuar em execução, não o comportamento padrão da seção."
+    },
+    {
+      "key": "D",
+      "text": "Num Pod separado, vinculado ao Pod principal por um Service dedicado, já que o Kubernetes não permite declarar mais de um container de longa duração dentro do mesmo Pod.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes permite múltiplos containers de longa duração no mesmo Pod; o padrão sidecar documentado é declarado dentro do mesmo manifesto de Pod, não em um Pod separado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Sidecar Containers",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/sidecar-containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

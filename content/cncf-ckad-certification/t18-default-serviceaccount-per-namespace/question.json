@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.7"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico de que todo Pod tem uma ServiceAccount, mesmo quando nenhuma é declarada explicitamente.",
+  "prompt": "Um Pod é criado num namespace sem que o campo `serviceAccountName` seja declarado no seu manifesto. Qual ServiceAccount esse Pod usa?",
+  "explanation": "Toda namespace recebe automaticamente uma ServiceAccount chamada `default` no momento em que é criada: o Kubernetes cria automaticamente um objeto ServiceAccount chamado `default` para cada namespace do cluster. Se um Pod é implantado num namespace sem que uma ServiceAccount seja atribuída manualmente a ele, o Kubernetes atribui a ServiceAccount `default` daquele namespace ao Pod. Para impedir que o Kubernetes injete automaticamente credenciais da ServiceAccount atribuída (seja ela a `default` ou uma especificada), o campo `automountServiceAccountToken` pode ser definido como `false` na especificação do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nenhuma: o Pod fica sem qualquer ServiceAccount, e qualquer chamada à API do cluster feita a partir dele é automaticamente anônima.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o Kubernetes sempre atribui a ServiceAccount `default` do namespace quando nenhuma é especificada manualmente; o Pod não fica sem ServiceAccount alguma."
+    },
+    {
+      "key": "B",
+      "text": "A ServiceAccount `default` daquele namespace, criada automaticamente pelo Kubernetes no momento em que o namespace foi criado.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento documentado — toda namespace já tem uma ServiceAccount `default` automática, atribuída a qualquer Pod que não especifique outra."
+    },
+    {
+      "key": "C",
+      "text": "A ServiceAccount usada pelo administrador que executou o comando `kubectl apply` para criar o Pod, herdada automaticamente da sessão desse operador.",
+      "correct": false,
+      "explanation": "Incorreto: a ServiceAccount atribuída ao Pod não vem da sessão de quem o criou; ela é a ServiceAccount `default` do namespace, independentemente de quem executou o comando de criação."
+    },
+    {
+      "key": "D",
+      "text": "A criação do Pod é rejeitada pela API até que uma ServiceAccount seja declarada explicitamente no campo `serviceAccountName`.",
+      "correct": false,
+      "explanation": "Incorreto: a API não rejeita a criação do Pod por esse motivo; a documentação descreve a atribuição automática da ServiceAccount `default` exatamente para esse caso."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service Accounts (default ServiceAccount, automountServiceAccountToken)",
+      "url": "https://kubernetes.io/docs/concepts/security/service-accounts/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

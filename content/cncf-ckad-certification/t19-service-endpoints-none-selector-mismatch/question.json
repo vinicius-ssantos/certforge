@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000024",
+  "objectiveKeys": ["CKAD-4.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe diagnosticar a causa mais comum de um Service sem endpoints: divergência entre o selector do Service e os labels reais dos Pods.",
+  "prompt": "Ao rodar `kubectl get endpointslices -l kubernetes.io/service-name=hostnames`, a coluna `ENDPOINTS` aparece como `<none>` para um Service chamado `hostnames`. Segundo a documentação de troubleshooting, o que deve ser verificado primeiro?",
+  "explanation": "A documentação de troubleshooting de Services afirma explicitamente: se a coluna `ENDPOINTS` aparecer como `<none>`, deve-se verificar se o campo `spec.selector` do Service realmente seleciona os valores de `metadata.labels` presentes nos Pods. Internamente, existe um loop de controle que avalia o selector de cada Service e grava o resultado em um ou mais objetos EndpointSlice; um erro comum é um selector do Service não corresponder exatamente aos labels declarados nos Pods (por exemplo, um typo), fazendo esse loop não encontrar nenhum Pod correspondente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Se o `spec.selector` do Service realmente seleciona os valores de `metadata.labels` presentes nos Pods, já que um erro comum é esse selector não corresponder aos labels reais dos Pods.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a orientação documentada para esse sintoma — verificar a correspondência entre o selector do Service e os labels reais dos Pods."
+    },
+    {
+      "key": "B",
+      "text": "Se o firewall do provedor de nuvem está bloqueando todo o tráfego de entrada para o cluster, já que `ENDPOINTS` vazio é sempre um sintoma de bloqueio de rede externo ao cluster.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não associa `ENDPOINTS` vazio a bloqueio de firewall externo; a orientação específica para esse sintoma é verificar a correspondência entre o selector do Service e os labels dos Pods."
+    },
+    {
+      "key": "C",
+      "text": "Se a versão do Kubernetes do cluster é recente o suficiente para suportar EndpointSlices, já que clusters com versões antigas sempre mostram `ENDPOINTS` como `<none>` por limitação da API.",
+      "correct": false,
+      "explanation": "Incorreto: a causa documentada para esse sintoma não é a versão do cluster ser antiga; é a divergência entre o selector do Service e os labels reais dos Pods."
+    },
+    {
+      "key": "D",
+      "text": "Se o Service foi declarado com `type: LoadBalancer`, já que apenas Services desse tipo específico podem ter EndpointSlices populados.",
+      "correct": false,
+      "explanation": "Incorreto: EndpointSlices são populados para Services de qualquer tipo com base no selector, não apenas para o tipo `LoadBalancer`; o tipo do Service não é a causa documentada desse sintoma."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Debug Services (Does the Service have any EndpointSlices?)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-service/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

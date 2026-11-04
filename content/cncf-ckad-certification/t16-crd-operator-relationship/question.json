@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que uma CustomResourceDefinition sozinha só guarda dados declarativos, e que o padrão Operator é o que combina isso com lógica de reconciliação.",
+  "prompt": "Uma equipe cria uma CustomResourceDefinition (CRD) para armazenar configurações customizadas de banco de dados, mas não implementa nenhum controlador customizado para ela. O que essa CRD, por si só, oferece, e o que falta para ela se tornar um Operator completo?",
+  "explanation": "A CustomResourceDefinition permite definir recursos customizados: ao criar o objeto CRD, um novo recurso customizado é criado com um nome e esquema especificados, e a API do Kubernetes passa a servir e armazenar esse recurso — isso libera a equipe de escrever seu próprio API server para lidar com ele. Por conta própria, recursos customizados permitem armazenar e recuperar dados estruturados. Quando um recurso customizado é combinado com um controlador customizado, ele passa a oferecer uma verdadeira API declarativa: o padrão Operator combina recursos customizados com controladores customizados, codificando conhecimento de domínio de uma aplicação específica como uma extensão da API do Kubernetes.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A CRD não tem nenhuma utilidade sem um controlador customizado; a API do Kubernetes rejeita a criação de objetos desse recurso customizado até que um Operator seja instalado para ele.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que recursos customizados, por conta própria, já permitem armazenar e recuperar dados estruturados; a API não rejeita a criação de objetos do recurso só por não haver um Operator ainda."
+    },
+    {
+      "key": "B",
+      "text": "A CRD já inclui automaticamente um controlador customizado completo; não falta nada, e toda CustomResourceDefinition criada no cluster já se comporta como um Operator funcional desde o instante em que o objeto é criado.",
+      "correct": false,
+      "explanation": "Incorreto: criar uma CRD não cria automaticamente um controlador customizado; sem ele, o recurso customizado só armazena e recupera dados, sem a lógica de reconciliação que caracteriza um Operator."
+    },
+    {
+      "key": "C",
+      "text": "A CRD oferece armazenamento e recuperação de dados estruturados via API do Kubernetes; falta um controlador customizado que reconcilie o estado real com o estado declarado — essa combinação é o padrão Operator.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada — recursos customizados por si só armazenam/recuperam dados estruturados, e a API declarativa verdadeira só surge ao combiná-los com um controlador customizado, o que caracteriza o padrão Operator."
+    },
+    {
+      "key": "D",
+      "text": "Falta apenas registrar a CRD num ConfigMap especial chamado `operators.config`, que o kube-apiserver lê automaticamente para promover qualquer CRD a um Operator completo.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse mecanismo de promoção via ConfigMap; o que falta, segundo a documentação, é um controlador customizado implementado e executado, não um registro declarativo adicional."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Extending the Kubernetes API (Custom resources, CustomResourceDefinitions, Operator pattern)",
+      "url": "https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
