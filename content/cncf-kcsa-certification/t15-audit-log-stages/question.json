@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": ["KCSA-3.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o conhecimento das quatro etapas documentadas de um evento de auditoria do kube-apiserver, além do seu simples nome.",
+  "prompt": "O audit logging do kube-apiserver registra cada requisição associada a um 'stage' (etapa). Quais são as quatro etapas documentadas, e o que cada uma representa?",
+  "explanation": "As quatro etapas documentadas são: `RequestReceived` (gerada assim que o handler de auditoria recebe a requisição, antes de ela ser delegada à cadeia de handlers), `ResponseStarted` (gerada quando os cabeçalhos da resposta são enviados, mas antes do corpo da resposta — só ocorre para requisições de longa duração, como um `watch`), `ResponseComplete` (o corpo da resposta foi completado e nenhum byte adicional será enviado) e `Panic` (gerada quando ocorre um panic). Uma política de auditoria pode usar `omitStages` para suprimir eventos de etapas específicas.",
+  "options": [
+    {
+      "key": "A",
+      "text": "As etapas correspondem aos papéis RBAC do usuário que fez a requisição (`Admin`, `Editor`, `Viewer`, `Anonymous`), não a momentos do processamento da requisição em si, e por isso não têm relação alguma com o ciclo de vida completo da chamada no kube-apiserver.",
+      "correct": false,
+      "explanation": "Incorreto: as etapas do audit log descrevem momentos do processamento técnico da requisição pelo kube-apiserver, não papéis RBAC do usuário que a fez."
+    },
+    {
+      "key": "B",
+      "text": "`Created`, `Updated`, `Deleted` e `Failed`, refletindo o tipo de operação CRUD realizada pela requisição, não um estágio de processamento dela.",
+      "correct": false,
+      "explanation": "Incorreto: esses nomes não correspondem às etapas documentadas do audit logging; as etapas reais descrevem momentos do processamento da requisição (recebimento, início/fim da resposta, panic), não o tipo de operação CRUD."
+    },
+    {
+      "key": "C",
+      "text": "Apenas duas etapas existem oficialmente, `Started` e `Finished`, cobrindo todo o ciclo de vida de qualquer requisição de forma simplificada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define exatamente quatro etapas (`RequestReceived`, `ResponseStarted`, `ResponseComplete`, `Panic`), não duas."
+    },
+    {
+      "key": "D",
+      "text": "`RequestReceived` (ao receber a requisição, antes da cadeia de handlers), `ResponseStarted` (cabeçalhos enviados, sem o corpo, só para requisições de longa duração), `ResponseComplete` (corpo da resposta completo) e `Panic` (quando ocorre um panic).",
+      "correct": true,
+      "explanation": "Correto: são exatamente essas as quatro etapas documentadas e suas respectivas definições."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Auditing (audit event stages)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/audit/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

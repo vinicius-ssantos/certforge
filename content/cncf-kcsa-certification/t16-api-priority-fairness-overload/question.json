@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que a API Priority and Fairness isola requisições por prioridade para evitar que um cliente mal comportado sobrecarregue o kube-apiserver, em vez de apenas aumentar limites fixos de requisições simultâneas.",
+  "prompt": "Um Pod mal comportado começa a inundar o kube-apiserver com requisições. Qual funcionalidade documentada ajuda a impedir que esse fluxo de requisições de um único Pod derrube ou sobrecarregue o kube-apiserver a ponto de impedir ações críticas, como eleição de líder ou controllers nativos?",
+  "explanation": "A funcionalidade API Priority and Fairness (APF) classifica e isola requisições de forma granular, introduzindo filas limitadas para que nenhuma requisição seja rejeitada em rajadas breves. A configuração padrão inclui níveis de prioridade separados para requisições de eleição de líder, requisições de controllers nativos e requisições de Pods — de forma que um Pod mal comportado que inunda o kube-apiserver com requisições não consiga impedir que a eleição de líder ou as ações dos controllers nativos sejam concluídas com sucesso. Isso é uma melhoria sobre apenas usar `--max-requests-inflight`, que limita o volume aceito mas não garante que as requisições mais importantes passem durante picos de tráfego.",
+  "options": [
+    {
+      "key": "A",
+      "text": "API Priority and Fairness (APF), que classifica e isola requisições em níveis de prioridade separados, de forma que um Pod mal comportado não consiga impedir a eleição de líder ou as ações de controllers nativos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a garantia documentada da API Priority and Fairness — isolamento por nível de prioridade protege ações críticas mesmo sob um fluxo excessivo de requisições de um Pod."
+    },
+    {
+      "key": "B",
+      "text": "Aumentar manualmente, sem limite algum, o valor de `--max-requests-inflight`, já que a documentação recomenda remover completamente qualquer limite de requisições simultâneas aceitas pelo kube-apiserver em qualquer cenário de carga.",
+      "correct": false,
+      "explanation": "Incorreto: `--max-requests-inflight` é um limite simples de volume, não uma solução de isolamento por prioridade, e a documentação não recomenda removê-lo sem limite algum; ela aponta APF como a melhoria sobre essa abordagem."
+    },
+    {
+      "key": "C",
+      "text": "O NetworkPolicy padrão do cluster, que automaticamente detecta e bloqueia qualquer Pod que exceda uma taxa de requisições por segundo configurada previamente.",
+      "correct": false,
+      "explanation": "Incorreto: NetworkPolicy controla conectividade de rede entre Pods, não o volume ou a prioridade de requisições à API do kube-apiserver; a proteção documentada para esse cenário é a API Priority and Fairness."
+    },
+    {
+      "key": "D",
+      "text": "O kube-scheduler, que automaticamente remove (evicts) qualquer Pod detectado enviando um volume anormal de requisições à API do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-scheduler decide onde Pods são agendados, não qual Pod é removido por excesso de requisições à API; essa não é uma função documentada do kube-scheduler."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — API Priority and Fairness (isolation from misbehaving clients)",
+      "url": "https://kubernetes.io/docs/concepts/cluster-administration/flow-control/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.2"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico de como um Pod se autentica contra um registry de imagens privado, incluindo o nome do campo e o tipo de Secret envolvido.",
+  "prompt": "Um Pod precisa puxar uma imagem de um registry de containers privado, que exige autenticação. Como o manifesto do Pod declara as credenciais necessárias para essa autenticação?",
+  "explanation": "A documentação descreve que o Kubernetes usa um Secret do tipo `kubernetes.io/dockerconfigjson` para autenticar com um registry de containers e puxar uma imagem privada. No manifesto do Pod, o campo `imagePullSecrets` especifica que o Kubernetes deve obter essas credenciais de um Secret com um nome específico (por exemplo, `regcred`), que precisa existir no mesmo namespace do Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Através do campo `imagePullSecrets` no manifesto do Pod, referenciando pelo nome um Secret do tipo `kubernetes.io/dockerconfigjson` que precisa existir no mesmo namespace do Pod.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a mecânica documentada — `imagePullSecrets` referencia, pelo nome, um Secret `dockerconfigjson` no mesmo namespace."
+    },
+    {
+      "key": "B",
+      "text": "Através de uma variável de ambiente `DOCKER_PASSWORD` definida diretamente no container, sem nenhuma referência a um Secret do Kubernetes.",
+      "correct": false,
+      "explanation": "Incorreto: a mecânica documentada usa o campo `imagePullSecrets` referenciando um Secret do Kubernetes, não uma variável de ambiente com a senha em texto plano."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes não tem nenhum mecanismo nativo para isso; é necessário embutir as credenciais do registry diretamente no Dockerfile usado para construir cada nova imagem publicada.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes tem um mecanismo nativo documentado para isso (`imagePullSecrets` com um Secret `dockerconfigjson`); não é necessário embutir credenciais no Dockerfile da imagem."
+    },
+    {
+      "key": "D",
+      "text": "O campo `image` do container já inclui a senha do registry embutida diretamente na URL da imagem, no formato `usuario:senha@registry/imagem`.",
+      "correct": false,
+      "explanation": "Incorreto: o campo `image` referencia apenas o caminho da imagem; a documentação não descreve embutir credenciais na URL da imagem — a autenticação é feita via `imagePullSecrets`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Pull an Image from a Private Registry (imagePullSecrets)",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

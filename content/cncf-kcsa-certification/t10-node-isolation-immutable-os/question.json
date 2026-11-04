@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000011",
+  "objectiveKeys": ["KCSA-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia duas recomendações documentadas de segurança de infraestrutura — SO imutável e particionamento de nós por contexto de confiança — não apenas o conceito genérico de 'proteger o host'.",
+  "prompt": "Entre as recomendações documentadas para proteger a camada de infraestrutura (hosts/nós) de um cluster Kubernetes, quais envolvem o tipo de sistema operacional usado nos nós e a forma como as cargas de trabalho são distribuídas entre eles?",
+  "explanation": "A documentação recomenda rodar nos nós um sistema operacional especializado, desenhado especificamente para executar cargas de trabalho em containers — tipicamente baseado numa imagem imutável e somente leitura, que fornece apenas os serviços essenciais para rodar containers. Ela também recomenda particionar as cargas de trabalho entre nós diferentes para melhorar o isolamento, usando mecanismos de isolamento de nó (do próprio Kubernetes ou do ecossistema) para garantir que Pods com contextos de confiança diferentes rodem em conjuntos separados de nós.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Usar um sistema operacional especializado e imutável (somente leitura) nos nós, e particionar cargas de trabalho com contextos de confiança diferentes em conjuntos separados de nós.",
+      "correct": true,
+      "explanation": "Correto: essas são exatamente as duas recomendações documentadas — SO imutável especializado para containers, e isolamento de nó por contexto de confiança."
+    },
+    {
+      "key": "B",
+      "text": "Usar sempre a mesma distribuição Linux de propósito geral usada nas estações de trabalho da equipe, e concentrar o máximo possível de cargas de trabalho diferentes no menor número de nós para reduzir custo.",
+      "correct": false,
+      "explanation": "Incorreto: a recomendação documentada é o oposto — um SO especializado e imutável para containers, e particionamento (não concentração) de cargas de trabalho com contextos de confiança diferentes."
+    },
+    {
+      "key": "C",
+      "text": "Desabilitar completamente qualquer sistema operacional nos nós, rodando os containers diretamente sobre o hardware sem nenhuma camada intermediária de SO.",
+      "correct": false,
+      "explanation": "Incorreto: os nós continuam executando um sistema operacional; a recomendação é que ele seja especializado e imutável, não que seja eliminado."
+    },
+    {
+      "key": "D",
+      "text": "Permitir que qualquer Pod seja agendado em qualquer nó do cluster automaticamente, já que isolamento de nó por contexto de confiança não é uma prática documentada para proteger a infraestrutura.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação recomenda explicitamente mecanismos de isolamento de nó para separar Pods com contextos de confiança diferentes, não um agendamento livre e indiferenciado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Cloud Native Security and Kubernetes (infrastructure: node OS, node isolation)",
+      "url": "https://kubernetes.io/docs/concepts/security/cloud-native-security/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

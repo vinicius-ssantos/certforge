@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000011",
+  "objectiveKeys": ["KCSA-1.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que o Kubernetes em si não faz revisão de código-fonte nem aprovação de imagem, delegando esse controle ao ecossistema — um erro comum é assumir que a plataforma já faz essa verificação de fábrica.",
+  "prompt": "Uma equipe quer impor revisão de código-fonte e aprovação de imagens de container antes que uma aplicação rode no cluster. O Kubernetes, por si só, já realiza esse tipo de verificação de workload e código de aplicação?",
+  "explanation": "A documentação afirma que o Kubernetes fornece mecanismos de extensão para que projetos do ecossistema implementem seus próprios controles de política sobre revisão de código-fonte, aprovação de imagem de container, controles de acesso à API, rede e mais. Ou seja, o Kubernetes em si não realiza essa revisão de código ou aprovação de imagem — ele expõe pontos de extensão (como admission webhooks) para que ferramentas do ecossistema implementem esses controles.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim, o kube-apiserver já inclui, por padrão, um scanner de vulnerabilidades de código-fonte e um verificador de assinatura de imagem, sem precisar de nenhuma ferramenta adicional do ecossistema.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhum scanner de código-fonte nem verificador de assinatura de imagem embutido no kube-apiserver por padrão."
+    },
+    {
+      "key": "B",
+      "text": "Não: o Kubernetes fornece mecanismos de extensão para que projetos do ecossistema implementem seus próprios controles de política sobre revisão de código-fonte e aprovação de imagem — ele próprio não realiza essa verificação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição documentada — revisão de código-fonte e aprovação de imagem são controles de política implementados por projetos do ecossistema através dos mecanismos de extensão do Kubernetes, não pelo Kubernetes em si."
+    },
+    {
+      "key": "C",
+      "text": "Sim, mas apenas para imagens hospedadas no Docker Hub; imagens de outros registries nunca passam por nenhuma verificação, mesmo com ferramentas do ecossistema instaladas.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa distinção documentada por registry; o Kubernetes não realiza essa verificação nativamente para nenhum registry, e ferramentas do ecossistema podem cobrir qualquer registry, não apenas o Docker Hub."
+    },
+    {
+      "key": "D",
+      "text": "A pergunta não se aplica: Kubernetes não tem nenhum mecanismo de extensão para controles de política sobre revisão de código ou aprovação de imagem, e essas verificações são tecnicamente impossíveis de implementar num cluster Kubernetes.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que o Kubernetes fornece mecanismos de extensão para exatamente esse tipo de controle; a implementação é possível e delegada ao ecossistema, não impossível."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Security Checklist and Guides (extension mechanisms for ecosystem policy controls)",
+      "url": "https://kubernetes.io/docs/concepts/security/overview/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

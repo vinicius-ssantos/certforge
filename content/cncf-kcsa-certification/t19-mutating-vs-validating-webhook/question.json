@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.7"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe a ordem de invocação entre os dois tipos de admission webhook e o que cada um pode fazer, não apenas seus nomes.",
+  "prompt": "Um cluster tem configurados tanto um `MutatingWebhookConfiguration` quanto um `ValidatingWebhookConfiguration` para o mesmo tipo de objeto. Em que ordem esses dois admission webhooks são invocados, e o que cada tipo pode fazer com a requisição?",
+  "explanation": "Admission webhooks mutantes são invocados primeiro, e podem modificar os objetos enviados ao kube-apiserver para impor valores padrão customizados. Depois que todas as modificações de objeto são concluídas, e depois que o objeto recebido é validado pelo próprio kube-apiserver, os admission webhooks de validação são invocados, e podem rejeitar requisições para impor políticas customizadas. Um webhook que precisa garantir que está vendo o estado final do objeto para impor uma política deve usar um webhook de validação, já que objetos podem ser modificados depois de passarem por um webhook mutante.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Apenas um dos dois tipos de webhook pode estar configurado por vez no cluster; configurar `MutatingWebhookConfiguration` e `ValidatingWebhookConfiguration` simultaneamente para o mesmo tipo de objeto não é suportado.",
+      "correct": false,
+      "explanation": "Incorreto: os dois tipos de configuração podem coexistir normalmente para o mesmo tipo de objeto; a documentação não impõe essa exclusividade mútua entre eles."
+    },
+    {
+      "key": "B",
+      "text": "Webhooks de validação são invocados primeiro e podem modificar o objeto; webhooks mutantes são invocados depois, apenas para decidir se rejeitam a requisição.",
+      "correct": false,
+      "explanation": "Incorreto: a ordem e as capacidades estão invertidas — são os webhooks mutantes que modificam o objeto e são invocados primeiro, e os webhooks de validação que decidem rejeitar, invocados depois."
+    },
+    {
+      "key": "C",
+      "text": "Os dois tipos de webhook são sempre invocados simultaneamente, em paralelo, sem nenhuma ordem garantida entre eles, podendo ambos modificar e ambos rejeitar a mesma requisição.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve uma ordem sequencial definida — mutantes primeiro, validação depois —, não uma invocação simultânea e sem ordem entre os dois tipos."
+    },
+    {
+      "key": "D",
+      "text": "Webhooks mutantes são invocados primeiro e podem modificar o objeto; webhooks de validação são invocados depois, após toda modificação e a validação do kube-apiserver, e podem rejeitar a requisição.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a ordem e a divisão de capacidades documentada — mutação primeiro, validação por último, sobre o estado já final do objeto."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Dynamic Admission Control (mutating vs. validating webhooks, invocation order)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
