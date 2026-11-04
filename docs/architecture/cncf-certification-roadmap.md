@@ -146,10 +146,15 @@ unblock the whole domain:
 - **Phase 1 — static diagnosis (no execution, buildable now).** Give the learner a realistic,
   already-captured symptom — a `kubectl describe pod` dump, a chunk of `kubectl get events`
   output, a log excerpt — and ask for the root cause or the next diagnostic command. This is
-  reading comprehension over real output, not hands-on skill, so it fits the existing schema with
-  no new infrastructure: `GUIDED_RESPONSE` (already used for interview questions) or ordinary
-  multiple choice both work. This is exactly the order #175 itself specifies: *"Começar com
-  leitura/debug de Dockerfile/YAML e testes estáticos; só depois laboratórios em sandbox."*
+  reading comprehension over real output, not hands-on skill, so it needs no new infrastructure:
+  ordinary multiple choice, exactly like KCNA/KCSA/CKAD, works today with no schema change.
+  `GUIDED_RESPONSE` does **not** work for this without further changes first — `RevisionRules`
+  hard-rejects it outside `TrackKind.INTERVIEW` (`guided_response_requires_interview_track`), and
+  `QuestionBankReadService.eligibleForTopic()` filters guided responses out of non-interview study
+  flows, so a CERTIFICATION-track question of that type would fail validation today, not just
+  need a UI update (caught by a Codex PR review on #302; confirmed by reading both call sites
+  directly). This is exactly the order #175 itself specifies: *"Começar com leitura/debug de
+  Dockerfile/YAML e testes estáticos; só depois laboratórios em sandbox."*
 - **Phase 2 — live sandboxed labs (#175, real infrastructure, not started).** An ephemeral
   `kind`/`k3d` cluster per session, a browser terminal bridged to it, deterministic evaluation
   against the cluster's actual end state, and strict resource/network/time limits — #175
