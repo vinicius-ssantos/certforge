@@ -245,6 +245,12 @@ review-packet:
 mock-shortlist:
     node content/build-mock-shortlist.mjs
 
+# Every certification question's claimed objective beside the verified source for its exam, and
+# which objectives no question claims yet. It juxtaposes; it verifies nothing (#177).
+[group('content')]
+certification-source-packet:
+    node content/build-certification-source-packet.mjs
+
 # Import the real question pack as drafts awaiting review. It publishes nothing.
 [group('content')]
 import-content email password:
