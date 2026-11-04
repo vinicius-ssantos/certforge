@@ -21,9 +21,9 @@
     },
     {
       "key": "C",
-      "text": "Uma NetworkPolicy que define explicitamente um `ingress` vazio (`ingress: []`) mas omite completamente o campo `podSelector`, deixando-o totalmente ausente do manifesto.",
+      "text": "Uma NetworkPolicy com `podSelector: {}` e `policyTypes: [Ingress]`, mas com uma única regra de ingress sem restrições (`ingress: [{}]`, sem `from` nem `ports`), já que uma regra assim também teria o efeito de isolar todos os Pods do namespace para conexões de entrada.",
       "correct": false,
-      "explanation": "Incorreto: o manifesto documentado inclui `podSelector: {}` explicitamente (selecionando todos os Pods), e não declara o campo `ingress` para a política de negação padrão."
+      "explanation": "Incorreto: uma regra de ingress sem `from` e sem `ports` casa com todas as origens e portas — ou seja, `ingress: [{}]` permite todo o tráfego de entrada, exatamente o oposto do isolamento desejado. É a ausência completa de regras (`ingress: []`), não uma regra vazia dentro da lista, que bloqueia todo o tráfego."
     },
     {
       "key": "D",
