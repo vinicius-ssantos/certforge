@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que os tipos de Service são camadas que se somam (ClusterIP dentro de NodePort dentro de LoadBalancer), não três mecanismos independentes.",
+  "prompt": "Uma equipe cria um Service do tipo `LoadBalancer` em um cluster rodando num provedor de nuvem compatível, sem definir `spec.allocateLoadBalancerNodePorts: false`. Por que esse Service também acaba tendo, por padrão, as características de um Service `NodePort`?",
+  "explanation": "O campo `type` na API de Service é desenhado como funcionalidade em camadas, onde cada nível soma-se ao anterior. Para implementar um Service do tipo `LoadBalancer`, o Kubernetes começa fazendo as mudanças equivalentes a uma requisição de Service do tipo `NodePort`, e o cloud-controller-manager configura o balanceador de carga externo para direcionar tráfego para essa porta de nó já alocada. Por padrão, `spec.allocateLoadBalancerNodePorts` é `true`, então Services do tipo `LoadBalancer` continuam alocando portas de nó, a menos que esse campo seja explicitamente definido como `false`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque `LoadBalancer` é implementado fazendo, por padrão, as mesmas mudanças equivalentes a uma requisição de Service `NodePort`, e o balanceador externo é configurado para apontar para essa porta de nó já alocada.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada — o Kubernetes aplica por padrão o equivalente a um NodePort antes de configurar o balanceador de carga externo apontando para ele."
+    },
+    {
+      "key": "B",
+      "text": "Porque isso é uma coincidência de implementação específica desse provedor de nuvem em particular, sem relação com nenhum comportamento padrão documentado pela API do Kubernetes.",
+      "correct": false,
+      "explanation": "Incorreto: esse comportamento é parte do design documentado da própria API de Service do Kubernetes — o campo `type` soma camadas por padrão —, não uma particularidade isolada de um provedor específico."
+    },
+    {
+      "key": "C",
+      "text": "Porque todo Service `LoadBalancer` precisa ser criado manualmente em duas etapas separadas: primeiro como `NodePort`, depois convertido para `LoadBalancer` por um comando administrativo adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a criação é feita em uma única declaração de `type: LoadBalancer`; o Kubernetes aplica o equivalente a um NodePort internamente, sem exigir duas etapas manuais separadas do operador."
+    },
+    {
+      "key": "D",
+      "text": "Porque `spec.allocateLoadBalancerNodePorts` é `false` por padrão, e isso obriga o Kubernetes a alocar uma porta de nó como alternativa, já que o balanceador externo não pode ser configurado sem ela em nenhum provedor de nuvem suportado.",
+      "correct": false,
+      "explanation": "Incorreto: o valor padrão de `spec.allocateLoadBalancerNodePorts` é `true`, não `false` — é precisamente esse padrão `true` que leva à alocação da porta de nó, e não uma suposta obrigatoriedade alternativa."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service (type: LoadBalancer, allocateLoadBalancerNodePorts)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/#loadbalancer"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

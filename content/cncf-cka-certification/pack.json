@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "cncf-cka-certification",
+  "trackSlug": "cncf-cka-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "CKA 2026.1",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "CNCF",
+    "examCode": "CKA",
+    "providerVersion": "cncf/curriculum@b3c8508 (CKA_Curriculum_v1.37.pdf, commit 2026-10-15)",
+    "snapshotDigest": "sha256:634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c",
+    "verifiedOn": "2026-11-04"
+  }
+}

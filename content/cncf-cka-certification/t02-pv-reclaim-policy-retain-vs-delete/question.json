@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000031",
+  "objectiveKeys": ["CKA-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a diferença prática entre as políticas de reclamação Retain e Delete sobre o PersistentVolume e o storage subjacente, não apenas seus nomes.",
+  "prompt": "Uma PersistentVolumeClaim dinamicamente provisionada é deletada. O PersistentVolume associado tem a política de reclamação `Retain`. O que acontece com o PersistentVolume e com os dados nele?",
+  "explanation": "Com a política `Retain`, quando a PersistentVolumeClaim é deletada, o PersistentVolume ainda existe e é considerado 'released' (liberado) — mas não fica disponível para outra claim imediatamente, porque os dados do reclamante anterior permanecem no volume. Um administrador precisa reclamar manualmente o volume: deletar o PersistentVolume, limpar os dados no storage associado e então deletar o storage. Isso contrasta com `Delete`, cujos volumes provisionados dinamicamente herdam por padrão da StorageClass e que remove tanto o objeto PersistentVolume quanto o storage externo associado.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O PersistentVolume é automaticamente deletado junto com a PVC, e o storage subjacente é imediatamente liberado para reuso por qualquer outra claim no cluster.",
+      "correct": false,
+      "explanation": "Incorreto: essa é a descrição de `Delete`, não de `Retain`. Com `Retain`, o PersistentVolume não é deletado automaticamente nem fica disponível de imediato para outra claim."
+    },
+    {
+      "key": "B",
+      "text": "O PersistentVolume e seus dados são apagados de forma assíncrona em segundo plano, num prazo de até 24 horas, sem necessidade de qualquer ação do administrador, independentemente da política de reclamação configurada.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse apagamento assíncrono automático documentado para `Retain`; o PV permanece existindo até que um administrador execute a reclamação manual."
+    },
+    {
+      "key": "C",
+      "text": "A PVC não pode de fato ser deletada enquanto a política for `Retain`; a API bloqueia a operação até que a política seja trocada para `Delete`.",
+      "correct": false,
+      "explanation": "Incorreto: a PVC pode ser deletada normalmente com a política `Retain`; o que muda é o que acontece com o PV depois, não se a PVC pode ser removida."
+    },
+    {
+      "key": "D",
+      "text": "O PersistentVolume continua existindo, no estado 'released', com os dados do reclamante anterior preservados; a reclamação do volume para reuso exige passos manuais de um administrador.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento documentado de `Retain` — o PV permanece, 'released', com os dados preservados, aguardando reclamação manual pelo administrador."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Persistent Volumes (Reclaiming: Retain, Delete)",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/#reclaiming"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

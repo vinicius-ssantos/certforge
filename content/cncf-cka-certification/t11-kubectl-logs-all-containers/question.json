@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000035",
+  "objectiveKeys": ["CKA-5.4"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento de uma flag documentada de `kubectl logs` para inspecionar Pods multi-container já em execução, sem exigir operação interativa de um cluster.",
+  "prompt": "Uma pessoa está revisando um Pod com vários containers e quer obter rapidamente um snapshot dos logs de todos eles de uma vez, sem precisar executar `kubectl logs` separadamente para cada nome de container. Qual flag de `kubectl logs` documentada serve exatamente para isso?",
+  "explanation": "A referência de `kubectl logs` documenta `--all-containers` com a descrição 'Get all containers' logs in the pod(s)' (obter os logs de todos os containers do(s) pod(s)), com o exemplo `kubectl logs nginx --all-containers=true` para retornar um snapshot dos logs de um pod `nginx` com múltiplos containers. A flag `-c`/`--container` serve para imprimir os logs de um único container específico — o oposto do que a pergunta pede.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`-c` (ou `--container`), repetida uma vez para cada nome de container do Pod na mesma chamada de `kubectl logs`.",
+      "correct": false,
+      "explanation": "Incorreto: `-c`/`--container` imprime os logs de apenas um container por chamada, e a documentação não descreve repeti-la múltiplas vezes numa mesma chamada para agregar vários containers."
+    },
+    {
+      "key": "B",
+      "text": "`--previous`, que retorna de uma só vez os logs atuais de todos os containers do Pod, mesmo que nenhum deles tenha reiniciado.",
+      "correct": false,
+      "explanation": "Incorreto: `--previous` serve para obter logs de uma instanciação anterior de um container que já reiniciou, não para agregar os logs de todos os containers atuais de um Pod."
+    },
+    {
+      "key": "C",
+      "text": "`--all-containers`, documentada para obter os logs de todos os containers do(s) pod(s), com o exemplo `kubectl logs nginx --all-containers=true`.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a flag documentada para esse propósito, com esse exemplo oficial de uso."
+    },
+    {
+      "key": "D",
+      "text": "Nenhuma flag faz isso; a documentação exige uma chamada separada de `kubectl logs` por container, sem exceção, mesmo para inspeção rápida de um Pod com muitos containers.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista explicitamente `--all-containers` como forma de obter os logs de todos os containers de um Pod em uma única chamada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — kubectl logs (--all-containers)",
+      "url": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_logs/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
