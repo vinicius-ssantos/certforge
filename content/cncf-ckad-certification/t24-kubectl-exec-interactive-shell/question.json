@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000025",
+  "objectiveKeys": ["CKAD-5.5"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico da flag que seleciona qual container de um Pod multi-container recebe o shell interativo de `kubectl exec`.",
+  "prompt": "Um Pod tem dois containers, `main-app` e `sidecar`. Uma pessoa quer abrir um shell interativo dentro do container `main-app` especificamente, usando `kubectl exec`. Além de `--stdin`/`-i` e `--tty`/`-t`, qual flag adicional é necessária, e por quê?",
+  "explanation": "`kubectl exec` abre um shell interativo num container já em execução, usando as flags `--stdin`/`-i` e `--tty`/`-t` (ou suas formas curtas combinadas, `-it`). Quando o Pod tem mais de um container, é preciso usar `--container` ou `-c` para especificar qual container da requisição `kubectl exec` deve atingir — sem essa flag em um Pod multi-container, não haveria como indicar qual dos containers deve receber o shell.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`--container` (ou `-c`), para indicar qual dos containers do Pod deve receber o shell interativo, já que o Pod tem mais de um container.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a flag documentada para selecionar o container de destino em um Pod com mais de um container."
+    },
+    {
+      "key": "B",
+      "text": "`--namespace` (ou `-n`), já que é essa flag que determina para qual dos dois containers do Pod o shell interativo será direcionado.",
+      "correct": false,
+      "explanation": "Incorreto: `--namespace`/`-n` seleciona o namespace do cluster onde o Pod está, não qual container dentro do Pod recebe o shell; a flag documentada para isso é `--container`/`-c`."
+    },
+    {
+      "key": "C",
+      "text": "Nenhuma flag adicional é necessária; `kubectl exec` sempre abre o shell simultaneamente em todos os containers do Pod, exibindo a saída de cada um lado a lado no mesmo terminal.",
+      "correct": false,
+      "explanation": "Incorreto: `kubectl exec` não abre um shell simultâneo em todos os containers de uma vez; para selecionar um container específico num Pod multi-container, é preciso usar `--container`/`-c`."
+    },
+    {
+      "key": "D",
+      "text": "`--all-containers`, que direciona o shell interativo apenas para o primeiro container declarado no manifesto do Pod, ignorando qualquer outro container presente.",
+      "correct": false,
+      "explanation": "Incorreto: `--all-containers` não é uma flag documentada de `kubectl exec` com esse propósito; a flag real para selecionar um container específico é `--container`/`-c`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Get a Shell to a Running Container (kubectl exec, --container/-c)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-application/get-shell-running-container/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

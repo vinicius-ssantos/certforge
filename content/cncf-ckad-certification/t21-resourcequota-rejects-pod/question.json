@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que um ResourceQuota de namespace pode bloquear a criação de um Pod inteiro, não apenas limitar o consumo depois que ele já está rodando.",
+  "prompt": "Um namespace tem um ResourceQuota que limita o total de `cpu` solicitado por todos os Pods nele. Uma equipe tenta criar um novo Pod cuja soma de `requests.cpu` com o que já está alocado no namespace excederia esse limite. O que acontece com a criação desse Pod?",
+  "explanation": "Se criar ou atualizar um recurso violar uma restrição de quota, o control plane rejeita essa requisição com o código de status HTTP `403 Forbidden`, e o erro inclui uma mensagem explicando qual restrição seria violada. Além disso, quando uma quota está habilitada num namespace para `cpu` ou `memory`, todo novo Pod enviado precisa declarar `requests` ou `limits` para esse recurso; sem isso, o control plane pode rejeitar a admissão desse Pod mesmo sem a soma exceder o limite.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O control plane rejeita a requisição de criação do Pod com o código HTTP `403 Forbidden`, incluindo uma mensagem explicando qual restrição de quota seria violada.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a resposta documentada quando uma requisição violaria uma restrição de ResourceQuota — rejeição com 403 e mensagem explicativa, não uma aceitação parcial ou um aviso."
+    },
+    {
+      "key": "B",
+      "text": "O Pod é criado normalmente, mas o kube-scheduler automaticamente reduz o valor de `requests.cpu` declarado no manifesto até que a soma volte a caber dentro do limite da quota.",
+      "correct": false,
+      "explanation": "Incorreto: o control plane não ajusta automaticamente os valores de `requests` declarados para caber na quota; ele rejeita a requisição com 403, sem alterar silenciosamente o manifesto do Pod."
+    },
+    {
+      "key": "C",
+      "text": "O Pod é criado e agendado normalmente, e o excesso sobre a quota apenas gera um evento de aviso (`Warning`) visível em `kubectl describe`, sem bloquear a criação.",
+      "correct": false,
+      "explanation": "Incorreto: a violação de uma restrição de quota bloqueia a criação com uma rejeição HTTP 403; não é apenas um aviso registrado depois que o Pod já foi criado."
+    },
+    {
+      "key": "D",
+      "text": "O Pod entra em uma fila de espera (`Pending`) até que outro Pod do namespace seja removido, sendo criado automaticamente depois, sem nenhuma rejeição imediata da requisição original.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa fila de espera automática para requisições que violam quota; a requisição original é rejeitada imediatamente com 403, não colocada em espera para criação futura."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Resource Quotas (enforcement, 403 Forbidden)",
+      "url": "https://kubernetes.io/docs/concepts/policy/resource-quotas/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000025",
+  "objectiveKeys": ["CKAD-5.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que `kubectl top` depende de um componente adicional do cluster, não é uma funcionalidade embutida no kube-apiserver por padrão.",
+  "prompt": "Um candidato executa `kubectl top pods` em um cluster recém-criado e recebe um erro dizendo que a API de métricas não está disponível. Qual componente adicional precisa estar implantado no cluster para que esse comando funcione?",
+  "explanation": "`kubectl top` consome a Metrics API, servida pelo kube-apiserver 'para uso pelo HPA, VPA, e pelo comando kubectl top'. Mas a documentação afirma que é preciso implantar o metrics-server (ou um adaptador alternativo que sirva a Metrics API) para conseguir acessá-la — a Metrics API não vem pronta para uso só por existir um kube-apiserver rodando. Sem o metrics-server implantado, a Metrics API não está disponível, e `kubectl top` falha com o erro observado.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O metrics-server (ou um adaptador alternativo que sirva a Metrics API), já que a documentação afirma que é preciso implantá-lo para conseguir acessar essa API usada pelo `kubectl top`.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o componente documentado — sem o metrics-server implantado, a Metrics API que `kubectl top` consome não está disponível."
+    },
+    {
+      "key": "B",
+      "text": "Nenhum componente adicional é necessário; a Metrics API já vem habilitada por padrão em todo kube-apiserver desde a instalação inicial do cluster, então o erro indicaria apenas um problema de rede.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que é preciso implantar o metrics-server para acessar a Metrics API; ela não vem disponível por padrão só pela existência do kube-apiserver."
+    },
+    {
+      "key": "C",
+      "text": "O kube-scheduler, já que ele é o componente documentado como responsável por expor as métricas de uso de CPU e memória usadas pelo comando `kubectl top`.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-scheduler decide onde Pods são agendados; o componente documentado responsável por servir a Metrics API consumida pelo `kubectl top` é o metrics-server."
+    },
+    {
+      "key": "D",
+      "text": "O etcd, configurado para armazenar um histórico contínuo de métricas de uso de CPU e memória que o `kubectl top` consulta diretamente.",
+      "correct": false,
+      "explanation": "Incorreto: o etcd armazena o estado dos objetos da API, não um histórico de métricas de uso consultado pelo `kubectl top`; o componente documentado para isso é o metrics-server."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Resource Metrics Pipeline (Metrics API, metrics-server)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
