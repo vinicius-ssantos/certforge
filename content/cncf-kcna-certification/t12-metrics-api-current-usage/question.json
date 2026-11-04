@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000004",
+  "objectiveKeys": ["KCNA-4.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico do papel da Metrics API no pipeline de métricas do Kubernetes, sem exigir detalhes de implementação do metrics-server.",
+  "prompt": "Qual é o papel principal da Metrics API do Kubernetes (servida pelo metrics-server) no cluster?",
+  "explanation": "A Metrics API permite acessar o uso de CPU e memória dos nós e Pods do cluster, e seu papel principal é alimentar componentes de autoscaling do Kubernetes com métricas de uso de recursos. O kube-apiserver expõe a Metrics API para uso pelo HorizontalPodAutoscaler (HPA), pelo VerticalPodAutoscaler (VPA) e pelo comando `kubectl top`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Armazenar permanentemente o histórico de uso de CPU e memória de todos os Pods, servindo como banco de dados de séries temporais de longo prazo para dashboards de observabilidade.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a Metrics API em termos de uso corrente de CPU e memória alimentando autoscalers e `kubectl top`, não como um armazenamento histórico de longo prazo."
+    },
+    {
+      "key": "B",
+      "text": "Definir as regras de rede que controlam quais Pods podem se comunicar entre si dentro do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: isso descreve o papel de uma NetworkPolicy, não da Metrics API, que trata de uso de recursos (CPU/memória), não de regras de conectividade."
+    },
+    {
+      "key": "C",
+      "text": "Fornecer o uso corrente de CPU e memória de nós e Pods, alimentando o HorizontalPodAutoscaler, o VerticalPodAutoscaler e o comando `kubectl top`.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o papel principal documentado da Metrics API — uso corrente de recursos, servido para autoscalers e para `kubectl top`."
+    },
+    {
+      "key": "D",
+      "text": "Validar e rejeitar manifestos de Pod que excedam limites de CPU ou memória antes mesmo de serem aceitos pelo kube-apiserver, como uma etapa de admission control.",
+      "correct": false,
+      "explanation": "Incorreto: validação e rejeição de manifestos é papel dos módulos de Admission Control, não da Metrics API, que apenas expõe dados de uso de recursos já em execução."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Resource Metrics Pipeline (Metrics API)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
