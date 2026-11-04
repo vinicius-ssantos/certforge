@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000003",
+  "objectiveKeys": ["KCNA-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece uma ferramenta de depuração além de `kubectl exec`, útil justamente quando `exec` não é suficiente.",
+  "prompt": "Uma aplicação roda numa imagem distroless, sem shell nem utilitários de depuração, e o container já travou. `kubectl exec` não ajuda nesse caso. Qual mecanismo do Kubernetes permite investigar esse Pod mesmo assim?",
+  "explanation": "Ephemeral containers (via `kubectl debug`) são úteis para troubleshooting interativo quando `kubectl exec` é insuficiente porque um container travou ou a imagem do container não inclui utilitários de depuração, como no caso de imagens distroless. O comando adiciona um novo container de depuração ao Pod já em execução, por exemplo `kubectl debug -it ephemeral-demo --image=busybox:1.28 --target=ephemeral-demo`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Reconstruir a imagem da aplicação do zero incluindo um shell e utilitários de depuração, publicá-la num registro de containers e atualizar o Deployment para usá-la, já que não existe outra forma de inspecionar um container distroless.",
+      "correct": false,
+      "explanation": "Incorreto: existe um mecanismo do Kubernetes feito exatamente para esse caso, sem precisar reconstruir e republicar a imagem da aplicação."
+    },
+    {
+      "key": "B",
+      "text": "Um ephemeral container, adicionado via `kubectl debug`, criado justamente para troubleshooting interativo quando `kubectl exec` é insuficiente — como num container travado ou numa imagem sem utilitários de depuração.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o uso documentado de ephemeral containers — cobrir os casos em que `kubectl exec` não é suficiente, incluindo imagens distroless sem ferramentas de depuração."
+    },
+    {
+      "key": "C",
+      "text": "`kubectl logs --previous`, que recupera os logs da instância anterior do container e substitui completamente a necessidade de qualquer sessão interativa de depuração.",
+      "correct": false,
+      "explanation": "Incorreto: `kubectl logs --previous` só mostra logs já emitidos; não oferece uma sessão interativa dentro do Pod, que é o que o cenário descreve precisar."
+    },
+    {
+      "key": "D",
+      "text": "Desabilitar temporariamente o isolamento de rede do Pod para que ferramentas externas de depuração acessem o processo diretamente pela rede do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse mecanismo de depuração via desabilitação de isolamento de rede; o caminho documentado para esse cenário é o ephemeral container via `kubectl debug`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Debugging Running Pods (ephemeral debug containers)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

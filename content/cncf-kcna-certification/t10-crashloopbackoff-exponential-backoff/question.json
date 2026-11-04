@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000002",
+  "objectiveKeys": ["KCNA-2.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico do que o status `CrashLoopBackOff` significa e de como o kubelet espaça as tentativas de reinício, um primeiro passo comum de troubleshooting.",
+  "prompt": "Um Pod aparece com o status `CrashLoopBackOff` ao rodar `kubectl get pods`. O que esse status indica sobre o comportamento do kubelet em relação ao container?",
+  "explanation": "`CrashLoopBackOff` indica que o mecanismo de atraso (backoff) está em vigor para um container que está em um ciclo de falhas, reiniciando repetidamente. Depois que os containers de um Pod saem, o kubelet os reinicia com um atraso exponencial (10s, 20s, 40s, ...), limitado a 300 segundos (5 minutos). Esse mecanismo evita que um container com falha sobrecarregue o sistema com tentativas de início contínuas e sem espaçamento.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kubelet está reiniciando o container repetidamente, aplicando um atraso exponencial entre as tentativas (10s, 20s, 40s, ...) até um limite de 300 segundos, para não sobrecarregar o sistema com reinícios contínuos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o mecanismo documentado — o kubelet espaça as tentativas de reinício com atraso exponencial crescente, limitado a 5 minutos, enquanto o container continua falhando."
+    },
+    {
+      "key": "B",
+      "text": "O kubelet já desistiu permanentemente de reiniciar esse container, e uma intervenção manual do operador, como excluir e recriar o Pod, é a única forma documentada de o container voltar a rodar novamente a partir desse ponto em diante.",
+      "correct": false,
+      "explanation": "Incorreto: `CrashLoopBackOff` não significa desistência permanente; o kubelet continua tentando reiniciar o container, apenas com atrasos crescentes entre as tentativas, sem exigir intervenção manual para continuar tentando."
+    },
+    {
+      "key": "C",
+      "text": "O kubelet reinicia o container imediatamente após cada falha, sem nenhum atraso entre as tentativas, e `CrashLoopBackOff` é apenas um rótulo informativo sem efeito algum sobre o tempo entre reinícios.",
+      "correct": false,
+      "explanation": "Incorreto: existe sim um atraso crescente entre as tentativas (o próprio mecanismo de backoff); reinícios não ocorrem imediatamente um atrás do outro sem espaçamento."
+    },
+    {
+      "key": "D",
+      "text": "O kubelet está migrando o container para outro nó do cluster a cada tentativa de reinício, na esperança de que o problema seja específico do hardware do nó original.",
+      "correct": false,
+      "explanation": "Incorreto: um reinício de container não migra o Pod para outro nó; o kubelet reinicia o container no mesmo Pod, no mesmo nó em que o Pod já está agendado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Pod Lifecycle (Container restarts, CrashLoopBackOff)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

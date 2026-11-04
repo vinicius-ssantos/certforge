@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000004",
+  "objectiveKeys": ["KCNA-4.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a distinção entre os dois órgãos de governança da CNCF — o Governing Board, de negócios, e o TOC, técnico — um ponto comum de confusão sobre como a comunidade CNCF se organiza.",
+  "prompt": "Na estrutura de governança da CNCF, qual é a divisão de responsabilidades entre o Governing Board (GB) e o Technical Oversight Committee (TOC)?",
+  "explanation": "O Governing Board é responsável por marketing e outras decisões de supervisão de negócios e orçamento para a CNCF. O GB não toma decisões técnicas pela CNCF, a não ser trabalhando com o TOC para definir o escopo geral da fundação; o TOC é quem define a visão técnica da CNCF e oferece liderança técnica experiente para a comunidade cloud native.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Governing Board decide isoladamente tanto as questões de negócio quanto as técnicas da CNCF, enquanto o TOC atua apenas como um órgão consultivo informal, sem nenhuma autoridade de fato sobre o escopo técnico da fundação.",
+      "correct": false,
+      "explanation": "Incorreto: o GB explicitamente não toma decisões técnicas por conta própria; a definição de visão e liderança técnica cabe ao TOC, que não é meramente consultivo quanto ao escopo técnico."
+    },
+    {
+      "key": "B",
+      "text": "O Governing Board cuida de marketing, supervisão de negócios e decisões de orçamento, e só participa de decisões técnicas ao trabalhar com o TOC para definir o escopo geral da CNCF; o TOC define a visão técnica da fundação.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a divisão documentada — GB para negócios/orçamento/marketing, com envolvimento técnico limitado a definir escopo junto ao TOC, e o TOC como responsável pela visão técnica."
+    },
+    {
+      "key": "C",
+      "text": "O TOC é responsável pelo orçamento e pelas decisões de marketing da CNCF, enquanto o Governing Board define a visão técnica da fundação e a liderança técnica da comunidade.",
+      "correct": false,
+      "explanation": "Incorreto: essa é a divisão invertida — orçamento e marketing são responsabilidade do Governing Board, e visão técnica é responsabilidade do TOC, não o contrário."
+    },
+    {
+      "key": "D",
+      "text": "Governing Board e TOC são, na prática, o mesmo grupo de pessoas com dois nomes diferentes, criados apenas por exigência formal de registro da fundação sem nenhuma distinção real de função.",
+      "correct": false,
+      "explanation": "Incorreto: são dois órgãos distintos, com responsabilidades documentadas e diferentes entre si (negócios para o GB, visão técnica para o TOC), não apenas nomes alternativos para o mesmo grupo."
+    }
+  ],
+  "references": [
+    {
+      "title": "CNCF — Governing Board (responsibilities and relationship to the TOC)",
+      "url": "https://cncf.io/about/governing-board/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
