@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.7"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o reconhecimento básico de qual tipo de plugin implementa o modelo de rede do Kubernetes, distinguindo-o de outras interfaces de extensão por nome.",
+  "prompt": "Qual tipo de plugin o Kubernetes exige para implementar o seu modelo de rede (o 'Kubernetes network model'), responsável por configurar a rede de cada Pod?",
+  "explanation": "Um plugin CNI (Container Network Interface) é exigido para implementar o modelo de rede do Kubernetes. O runtime de containers de um nó precisa estar configurado para carregar os plugins CNI necessários para implementar esse modelo. CSI (Container Storage Interface) é uma interface para plugins de armazenamento, e CRI (Container Runtime Interface) é a interface entre o kubelet e o runtime de containers — nenhuma das duas é a interface usada para configurar a rede de um Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um plugin CSI (Container Storage Interface), já que a configuração de rede do Pod é tratada como um tipo específico de armazenamento conectado ao container.",
+      "correct": false,
+      "explanation": "Incorreto: CSI é a interface para plugins de armazenamento, não de rede; ela não é a interface documentada para implementar o modelo de rede do Kubernetes."
+    },
+    {
+      "key": "B",
+      "text": "Um plugin CNI (Container Network Interface), exigido para implementar o modelo de rede do Kubernetes e usado pelo runtime de containers do nó para configurar a rede de cada Pod.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a interface documentada — um plugin CNI é exigido para implementar o modelo de rede do Kubernetes."
+    },
+    {
+      "key": "C",
+      "text": "Um plugin CRI (Container Runtime Interface), já que essa é a interface responsável tanto por criar containers quanto por configurar toda a rede de cada Pod.",
+      "correct": false,
+      "explanation": "Incorreto: CRI é a interface entre o kubelet e o runtime de containers, usada para operações do runtime; ela não é, por si só, a interface que implementa o modelo de rede — essa é o CNI."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum plugin específico é exigido: a partir da versão 1.24, o próprio kubelet passou a implementar diretamente toda a configuração de rede dos Pods, sem depender de nenhuma interface externa.",
+      "correct": false,
+      "explanation": "Incorreto: a partir da 1.24 o kubelet deixou de gerenciar diretamente os plugins CNI via flags de linha de comando, mas isso não elimina a exigência de um plugin CNI — apenas muda quem o gerencia."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Network Plugins (CNI)",
+      "url": "https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/network-plugins/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

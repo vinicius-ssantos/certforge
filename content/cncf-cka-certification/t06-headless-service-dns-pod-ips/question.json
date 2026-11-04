@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que um Service headless com selector muda o que o CoreDNS retorna, não apenas remove o IP do Service.",
+  "prompt": "Um Service é criado com `clusterIP: None` (headless) e com um selector apontando para um conjunto de Pods. O que o CoreDNS passa a retornar para consultas de nome desse Service?",
+  "explanation": "Para Services headless que definem selectors, o controller de endpoints cria EndpointSlices na API do Kubernetes, e modifica a configuração de DNS para retornar registros A ou AAAA (endereços IPv4 ou IPv6) que apontam diretamente para os Pods que estão por trás do Service. Isso é diferente de um Service comum com ClusterIP, cuja resolução DNS retorna o único IP virtual do Service.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O CoreDNS passa a recusar qualquer consulta para esse nome, já que um Service sem ClusterIP não é resolvível por DNS.",
+      "correct": false,
+      "explanation": "Incorreto: um Service headless com selector é resolvível por DNS normalmente; o CoreDNS apenas retorna um conjunto diferente de registros, não recusa a consulta."
+    },
+    {
+      "key": "B",
+      "text": "O CoreDNS continua retornando um único IP virtual do Service, exatamente como faria para um Service comum do tipo ClusterIP, ignorando o valor `None`.",
+      "correct": false,
+      "explanation": "Incorreto: é exatamente esse comportamento que muda — não há IP virtual de Service nenhum para um headless Service, então o CoreDNS não pode retornar isso."
+    },
+    {
+      "key": "C",
+      "text": "O CoreDNS retorna apenas o endereço IP de um único Pod escolhido aleatoriamente a cada consulta, nunca revelando os demais Pods por trás do Service, de forma equivalente a um balanceamento round-robin oculto do cliente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve que a configuração de DNS passa a retornar registros A ou AAAA apontando para os Pods por trás do Service — não um único Pod oculto escolhido ao acaso, mas o conjunto de endereços."
+    },
+    {
+      "key": "D",
+      "text": "O controller de endpoints cria EndpointSlices, e o CoreDNS passa a retornar registros A ou AAAA que apontam diretamente para os endereços IP dos Pods que estão por trás do Service.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição documentada para um Service headless com selector — EndpointSlices mais registros DNS apontando diretamente para os Pods."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service (Headless Services, with selectors)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/service/#headless-services"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

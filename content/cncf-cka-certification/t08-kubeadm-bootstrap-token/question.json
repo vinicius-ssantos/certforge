@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o conhecimento básico do propósito documentado do bootstrap token gerado por `kubeadm init`, sem exigir conhecimento do fluxo interno completo de join.",
+  "prompt": "Por padrão, `kubeadm init` gera e imprime um bootstrap token. Qual é o propósito documentado desse token?",
+  "explanation": "A referência de `kubeadm init` descreve a flag `--token` como 'o token a ser usado para estabelecer confiança bidirecional entre nós e nós do control-plane' (tradução livre de: 'The token to use for establishing bidirectional trust between nodes and control-plane nodes'). A fase `bootstrap-token` da inicialização é descrita como responsável por gerar tokens de bootstrap usados para um nó entrar (join) no cluster.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Autenticar o administrador humano que executa `kubeadm init` pela primeira vez, sendo descartado imediatamente após a inicialização do primeiro nó do control-plane, sem qualquer uso posterior no fluxo de join.",
+      "correct": false,
+      "explanation": "Incorreto: o token documentado não se destina a autenticar quem executa `kubeadm init`; ele serve para estabelecer confiança bidirecional entre nós e nós do control-plane, usado por novos nós entrando no cluster."
+    },
+    {
+      "key": "B",
+      "text": "Substituir completamente a necessidade de qualquer certificado TLS no cluster, servindo como único mecanismo de autenticação entre todos os componentes.",
+      "correct": false,
+      "explanation": "Incorreto: o token não substitui os certificados TLS do cluster; ele é um mecanismo adicional, documentado especificamente para estabelecer confiança entre nós e nós do control-plane."
+    },
+    {
+      "key": "C",
+      "text": "Estabelecer confiança bidirecional entre nós e nós do control-plane, sendo gerado pela fase `bootstrap-token` da inicialização para uso quando um novo nó entra (join) no cluster.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição documentada da flag `--token` e da fase `bootstrap-token` de `kubeadm init`."
+    },
+    {
+      "key": "D",
+      "text": "Definir qual versão do Kubernetes será instalada no cluster, funcionando como um identificador de versão em vez de um mecanismo de confiança entre nós.",
+      "correct": false,
+      "explanation": "Incorreto: o token não tem relação com seleção de versão do Kubernetes; sua função documentada é estabelecer confiança bidirecional entre nós e nós do control-plane."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — kubeadm init (bootstrap token, --token)",
+      "url": "https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-init/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000035",
+  "objectiveKeys": ["CKA-5.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a leitura de um sintoma já capturado (a condição Ready de um Node) e o que ela documentadamente significa, sem exigir operação de um cluster ao vivo.",
+  "prompt": "Um trecho de saída já capturado de `kubectl describe node` mostra a condição `Ready` com status `Unknown` para um determinado Node. Qual é o significado documentado desse status, e o que acontece se ele persistir por mais tempo do que o `node-monitor-grace-period` (padrão de 50 segundos)?",
+  "explanation": "A condição `Ready` é `Unknown` quando o node controller não recebeu nenhuma notícia do Node dentro do `node-monitor-grace-period` (padrão de 50 segundos) — diferente de `False`, que significa que o Node não está saudável e não está aceitando Pods. Se `Ready` permanecer `Unknown` (ou `False`) por mais tempo do que esse período de tolerância do kube-controller-manager, o control plane adiciona um taint ao Node: `node.kubernetes.io/unreachable` no caso de `Unknown`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`Unknown` significa que o Node está saudável, mas recusou deliberadamente aceitar novos Pods por decisão de um administrador; nenhum taint é adicionado automaticamente nesse caso, já que a recusa já é, por si só, uma forma de isolamento deliberado.",
+      "correct": false,
+      "explanation": "Incorreto: `Unknown` não indica uma recusa deliberada e saudável do Node; ele indica ausência de comunicação com o node controller, e um taint é adicionado automaticamente se isso persistir."
+    },
+    {
+      "key": "B",
+      "text": "`Unknown` significa que o node controller não recebeu notícias do Node dentro do `node-monitor-grace-period`; se isso persistir além desse período, o control plane adiciona o taint `node.kubernetes.io/unreachable`.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada — ausência de comunicação dentro do período de tolerância, seguida da adição automática do taint `node.kubernetes.io/unreachable`."
+    },
+    {
+      "key": "C",
+      "text": "`Unknown` é equivalente a `True`, apenas com uma formatação diferente usada em versões mais antigas do Kubernetes; não há diferença de comportamento real entre os dois status.",
+      "correct": false,
+      "explanation": "Incorreto: `Unknown` não é equivalente a `True`; `True` significa que o Node está saudável e aceitando Pods, enquanto `Unknown` significa ausência de comunicação com o node controller."
+    },
+    {
+      "key": "D",
+      "text": "`Unknown` faz o node controller deletar permanentemente o objeto Node da API imediatamente, sem qualquer período de tolerância configurável antes dessa remoção.",
+      "correct": false,
+      "explanation": "Incorreto: a condição `Unknown` não causa remoção imediata do objeto Node; o que acontece, após o período de tolerância, é a adição de um taint de inalcançável, não a deleção do Node."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Node Status (Conditions: Ready) and Node Controller",
+      "url": "https://kubernetes.io/docs/reference/node/node-status/"
+    },
+    {
+      "title": "Kubernetes Documentation — Nodes (Node controller, unreachable taint)",
+      "url": "https://kubernetes.io/docs/concepts/architecture/nodes/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

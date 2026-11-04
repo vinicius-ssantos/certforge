@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000032",
+  "objectiveKeys": ["CKA-2.2"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que as duas formas de consumir um ConfigMap reagem de maneiras diferentes a uma atualização posterior, distinção frequentemente assumida como idêntica entre as duas.",
+  "prompt": "Um ConfigMap é consumido por um container de duas formas simultâneas: uma chave como variável de ambiente, e o próprio ConfigMap montado como volume. O ConfigMap é então atualizado no cluster. O que acontece com cada uma dessas duas formas de consumo, sem reiniciar o container?",
+  "explanation": "ConfigMaps consumidos como variáveis de ambiente não são atualizados automaticamente e exigem um reinício do Pod. Já quando um ConfigMap consumido em um volume é atualizado, as chaves projetadas são eventualmente atualizadas também: o kubelet verifica a atualização em cada sincronização periódica, mas usa um cache local, então o atraso total desde a atualização do ConfigMap até a projeção das novas chaves no Pod pode ser tão longo quanto o período de sincronização do kubelet somado ao atraso de propagação do cache. Um container que usa o ConfigMap como montagem `subPath` não recebe essas atualizações.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A variável de ambiente permanece com o valor antigo até o container ser reiniciado; o arquivo montado como volume é eventualmente atualizado, após um atraso que pode somar o período de sincronização do kubelet ao atraso de propagação do cache.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a distinção documentada — variáveis de ambiente não atualizam sem reinício, enquanto o volume montado eventualmente reflete a mudança, sujeito a esse atraso combinado."
+    },
+    {
+      "key": "B",
+      "text": "Tanto a variável de ambiente quanto o arquivo montado como volume são atualizados instantaneamente e de forma idêntica, assim que o ConfigMap é salvo no cluster.",
+      "correct": false,
+      "explanation": "Incorreto: variáveis de ambiente não são atualizadas automaticamente de forma alguma, e mesmo o volume montado tem um atraso real (sincronização do kubelet + propagação do cache), não é instantâneo."
+    },
+    {
+      "key": "C",
+      "text": "Nenhuma das duas formas reflete a atualização sem reiniciar o container; tanto a variável de ambiente quanto o volume montado ficam congelados no valor do momento em que o Pod foi criado.",
+      "correct": false,
+      "explanation": "Incorreto: o volume montado eventualmente reflete a atualização, sem precisar de reinício — apenas a variável de ambiente é que permanece congelada até o reinício."
+    },
+    {
+      "key": "D",
+      "text": "A variável de ambiente é atualizada eventualmente pelo mesmo mecanismo de sincronização do kubelet usado para volumes, enquanto o arquivo montado como volume é que exige reinício do container para refletir a mudança, já que volumes seriam tratados como imutáveis por padrão.",
+      "correct": false,
+      "explanation": "Incorreto: a relação está invertida — é a variável de ambiente que exige reinício, e o volume montado que é eventualmente atualizado pela sincronização do kubelet, não o contrário."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — ConfigMaps (Mounted ConfigMaps are updated automatically)",
+      "url": "https://kubernetes.io/docs/concepts/configuration/configmap/#mounted-configmaps-are-updated-automatically"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

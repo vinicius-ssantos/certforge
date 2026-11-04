@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que uma ClusterRole pode ser vinculada de duas formas diferentes com escopos diferentes, em vez de assumir que ClusterRole sempre implica alcance cluster-wide.",
+  "prompt": "Uma ClusterRole `secret-reader` existe no cluster. Uma equipe cria uma `RoleBinding` (não uma `ClusterRoleBinding`) no namespace `time-a`, vinculando um usuário a essa ClusterRole. Qual é o alcance efetivo das permissões concedidas a esse usuário?",
+  "explanation": "Uma RoleBinding pode referenciar qualquer Role no mesmo namespace; alternativamente, uma RoleBinding pode referenciar uma ClusterRole e vincular essa ClusterRole ao namespace da própria RoleBinding. Se a intenção fosse vincular a ClusterRole a todos os namespaces do cluster, seria necessário usar uma ClusterRoleBinding em vez de uma RoleBinding. Como uma RoleBinding concede permissões dentro de um namespace específico, enquanto uma ClusterRoleBinding concede esse acesso cluster-wide, o usuário aqui recebe as permissões de `secret-reader` apenas dentro de `time-a`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "As permissões de `secret-reader` passam a valer automaticamente em todos os namespaces do cluster, porque ClusterRole sempre implica alcance cluster-wide, independente de como é vinculada ou de qual objeto de binding é usado para isso.",
+      "correct": false,
+      "explanation": "Incorreto: o alcance cluster-wide vem de usar uma ClusterRoleBinding, não do simples fato de a Role ser uma ClusterRole; vinculada via RoleBinding, o alcance fica restrito ao namespace da RoleBinding."
+    },
+    {
+      "key": "B",
+      "text": "O usuário recebe as permissões de `secret-reader` apenas dentro do namespace `time-a`, porque uma RoleBinding concede permissões em um namespace específico, mesmo quando referencia uma ClusterRole.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada — uma RoleBinding pode referenciar uma ClusterRole, mas o vínculo resultante fica restrito ao namespace da própria RoleBinding."
+    },
+    {
+      "key": "C",
+      "text": "A criação dessa RoleBinding é rejeitada pela API, já que uma RoleBinding nunca pode referenciar uma ClusterRole, apenas Roles comuns do mesmo namespace.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que uma RoleBinding pode, sim, referenciar uma ClusterRole — essa combinação é válida e aceita pela API."
+    },
+    {
+      "key": "D",
+      "text": "O usuário não recebe nenhuma permissão, pois vincular uma ClusterRole através de uma RoleBinding em vez de uma ClusterRoleBinding anula silenciosamente todo o efeito da vinculação.",
+      "correct": false,
+      "explanation": "Incorreto: a vinculação tem efeito real, só que com alcance restrito ao namespace da RoleBinding — ela não anula silenciosamente o efeito da ClusterRole, apenas limita seu escopo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Using RBAC Authorization (RoleBinding and ClusterRoleBinding)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

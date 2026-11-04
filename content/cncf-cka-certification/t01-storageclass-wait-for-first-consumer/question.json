@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000031",
+  "objectiveKeys": ["CKA-1.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender por que o binding imediato de um volume pode conflitar com restrições de agendamento do Pod, e como o modo WaitForFirstConsumer resolve isso.",
+  "prompt": "Uma StorageClass declara `volumeBindingMode: WaitForFirstConsumer`. O que esse modo muda no momento em que o volume é vinculado e provisionado para uma PersistentVolumeClaim que referencia essa classe?",
+  "explanation": "Um administrador de cluster pode resolver o problema do binding imediato especificando o modo `WaitForFirstConsumer`, que atrasa o binding e o provisionamento de um PersistentVolume até que um Pod usando a PersistentVolumeClaim seja criado. Os PersistentVolumes são então selecionados ou provisionados em conformidade com a topologia especificada pelas restrições de agendamento do Pod, incluindo requisitos de recursos, node selectors, afinidade/anti-afinidade e taints/tolerations.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O volume passa a ser provisionado imediatamente na criação da PVC, exatamente como no modo padrão `Immediate`, sem nenhuma mudança de comportamento real.",
+      "correct": false,
+      "explanation": "Incorreto: `WaitForFirstConsumer` muda justamente esse comportamento — ele atrasa o binding/provisionamento em vez de provisionar imediatamente como `Immediate` faz."
+    },
+    {
+      "key": "B",
+      "text": "O binding e o provisionamento do PersistentVolume são atrasados até que um Pod que usa essa PersistentVolumeClaim seja criado, permitindo que o volume seja selecionado ou provisionado conforme as restrições de agendamento desse Pod.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição documentada de `WaitForFirstConsumer` — o atraso permite considerar requisitos de recursos, node selectors, afinidade/anti-afinidade e taints/tolerations do Pod."
+    },
+    {
+      "key": "C",
+      "text": "A PersistentVolumeClaim é rejeitada pela API até que o administrador do cluster aprove manualmente o provisionamento, em um fluxo de aprovação separado.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse fluxo de aprovação manual separado; `WaitForFirstConsumer` apenas atrasa o binding/provisionamento até a criação de um Pod consumidor, sem exigir aprovação manual adicional."
+    },
+    {
+      "key": "D",
+      "text": "O campo apenas documenta, de forma informativa, qual Pod acabou consumindo o volume, sem alterar quando o binding ou o provisionamento efetivamente ocorrem, servindo apenas como metadado de auditoria consultado por ferramentas externas.",
+      "correct": false,
+      "explanation": "Incorreto: o campo tem efeito real sobre o momento do binding/provisionamento, atrasando-o até a criação do Pod consumidor — não é apenas informativo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — StorageClasses (Volume Binding Mode)",
+      "url": "https://kubernetes.io/docs/concepts/storage/storage-classes/#volume-binding-mode"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

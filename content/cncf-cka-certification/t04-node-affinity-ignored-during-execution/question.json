@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000032",
+  "objectiveKeys": ["CKA-2.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o sufixo 'IgnoredDuringExecution' como uma garantia que vale só no momento do agendamento, não durante toda a vida do Pod.",
+  "prompt": "Um Pod é agendado com uma regra `requiredDuringSchedulingIgnoredDuringExecution` de node affinity, satisfeita no momento do agendamento. Depois que o Pod já está em execução, o rótulo do Node é alterado de forma que o Pod deixaria de satisfazer essa regra se ela fosse reavaliada agora. O que acontece com o Pod?",
+  "explanation": "O sufixo `IgnoredDuringExecution` significa que, se os rótulos do Node mudarem depois que o Kubernetes já agendou o Pod, o Pod continua em execução normalmente. A regra `requiredDuringSchedulingIgnoredDuringExecution` é uma condição que o scheduler não pode ignorar no momento de decidir onde colocar o Pod — funciona como `nodeSelector`, mas com sintaxe mais expressiva —, porém, uma vez agendado, uma mudança posterior nos rótulos do Node não afeta Pods já em execução ali.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Pod é imediatamente removido (evicted) do Node, pois a regra de node affinity passa a ser reavaliada continuamente durante toda a execução do Pod.",
+      "correct": false,
+      "explanation": "Incorreto: o sufixo 'IgnoredDuringExecution' significa justamente o oposto — mudanças no rótulo do Node depois do agendamento não afetam o Pod já em execução."
+    },
+    {
+      "key": "B",
+      "text": "O kube-scheduler reagenda automaticamente o Pod em outro Node compatível, de forma transparente, sem interromper a aplicação em nenhum momento.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa reagendamento automático e transparente; a regra simplesmente deixa de ser reavaliada para esse Pod depois que ele já está em execução."
+    },
+    {
+      "key": "C",
+      "text": "O Pod continua em execução normalmente no mesmo Node, porque mudanças nos rótulos do Node depois do agendamento não afetam Pods já em execução sob essa regra.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento documentado — 'IgnoredDuringExecution' significa que o Pod continua em execução mesmo que a mudança de rótulo invalidasse a regra se ela fosse reavaliada."
+    },
+    {
+      "key": "D",
+      "text": "O Pod entra em um estado de erro permanente e precisa ser deletado manualmente, já que o Kubernetes não sabe como lidar com uma regra que não é mais satisfeita.",
+      "correct": false,
+      "explanation": "Incorreto: não há nenhum estado de erro gerado por essa situação; o Pod simplesmente continua rodando normalmente, sem qualquer intervenção necessária."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Assigning Pods to Nodes (Node affinity)",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
