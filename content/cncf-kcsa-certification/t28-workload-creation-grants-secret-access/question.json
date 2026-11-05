@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que a permissão de criar workloads é, na prática, uma forma indireta de acesso a Secrets, um erro comum de modelagem de RBAC, e não apenas que 'get em secrets lê o conteúdo'.",
+  "prompt": "Um usuário não tem permissão RBAC para `get` em Secrets no namespace `financeiro`, mas tem permissão para criar Pods nesse mesmo namespace. Segundo as boas práticas de RBAC do Kubernetes, esse usuário consegue, na prática, ler o conteúdo de Secrets desse namespace?",
+  "explanation": "A documentação de boas práticas de RBAC do Kubernetes afirma que a permissão para criar workloads (Pods, ou recursos que gerenciam Pods) em um namespace concede implicitamente acesso a muitos outros recursos desse namespace, como Secrets, ConfigMaps e PersistentVolumes que podem ser montados nos Pods. Ou seja, um usuário que pode criar Pods pode montar qualquer Secret do namespace em um Pod sob seu controle e ler o conteúdo por essa via, mesmo sem ter permissão direta de `get` sobre o Secret.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Não, porque a permissão de criar Pods é totalmente independente do acesso a Secrets; sem `get` direto em Secrets, não há nenhuma forma de lê-los.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente o oposto -- a permissão de criar workloads concede acesso implícito a Secrets montáveis no namespace, mesmo sem `get` direto sobre eles."
+    },
+    {
+      "key": "B",
+      "text": "Sim, porque a permissão de criar workloads em um namespace concede acesso implícito a outros recursos montáveis em Pods desse namespace, como Secrets e ConfigMaps.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a boa prática de RBAC documentada -- quem pode criar Pods pode montar Secrets do namespace e ler seu conteúdo por essa via indireta."
+    },
+    {
+      "key": "C",
+      "text": "Sim, mas apenas se o usuário também tiver permissão explícita de `list` em Secrets; sem `list`, a criação de Pods não concede acesso a eles.",
+      "correct": false,
+      "explanation": "Incorreto: a permissão de `list`/`watch` é um caminho direto e separado para ler Secrets (via resposta de uma listagem); o caminho indireto descrito na pergunta não depende dessa permissão adicional, e sim apenas da capacidade de criar workloads."
+    },
+    {
+      "key": "D",
+      "text": "Não, porque o Kubernetes impede que um Pod monte qualquer Secret que o usuário que o criou não tenha permissão explícita de `get` para ler, bloqueando a criação do Pod nesse caso.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes não faz essa verificação cruzada entre a permissão de `get` em Secrets do criador e os Secrets que um Pod pode montar; é justamente essa ausência de verificação que torna o acesso implícito possível."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- RBAC Good Practices (workload creation grants implicit access to Secrets)",
+      "url": "https://kubernetes.io/docs/concepts/security/rbac-good-practices/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

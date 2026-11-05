@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende como os controllers internos do Kubernetes estão empacotados no kube-controller-manager, não apenas o que cada controller faz.",
+  "prompt": "O kube-controller-manager executa vários controllers internos do Kubernetes, como o controller de Node e o controller de Deployment. Em termos de processos do sistema operacional, como esses controllers estão organizados dentro do kube-controller-manager?",
+  "explanation": "A documentação do Kubernetes afirma que, logicamente, cada controller é um processo separado, mas para reduzir a complexidade, todos são compilados em um único binário e executados em um único processo. Isso significa que uma falha ou comprometimento do processo do kube-controller-manager afeta potencialmente todos os controllers internos de uma vez, já que eles não têm isolamento de processo entre si.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Cada controller interno roda como seu próprio processo do sistema operacional, com um binário compilado separadamente para cada um e isolamento de memória entre eles, como acontece entre Pods distintos de um mesmo Deployment.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o oposto -- os controllers são logicamente separados, mas compilados em um único binário e executados em um único processo, não em processos independentes."
+    },
+    {
+      "key": "B",
+      "text": "Logicamente cada controller é um processo separado, mas para reduzir a complexidade, todos são compilados em um único binário e executados em um único processo.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a descrição da documentação sobre como o kube-controller-manager empacota os controllers internos do Kubernetes."
+    },
+    {
+      "key": "C",
+      "text": "Os controllers internos não fazem parte do kube-controller-manager; cada um é implantado como um Pod separado agendado no cluster.",
+      "correct": false,
+      "explanation": "Incorreto: os controllers internos (built-in) rodam dentro do processo do kube-controller-manager, componente do control plane, e não como Pods agendados separadamente."
+    },
+    {
+      "key": "D",
+      "text": "O kube-controller-manager delega a execução de cada controller a um Job do Kubernetes agendado pelo kube-scheduler.",
+      "correct": false,
+      "explanation": "Incorreto: não há essa delegação a Jobs agendados; os controllers built-in rodam diretamente dentro do processo do kube-controller-manager."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Cluster Architecture (kube-controller-manager: single binary, single process)",
+      "url": "https://kubernetes.io/docs/concepts/architecture/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

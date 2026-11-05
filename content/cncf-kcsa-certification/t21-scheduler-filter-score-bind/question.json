@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o fluxo de decisão do kube-scheduler (filtragem, pontuação e vinculação), não apenas que ele 'escolhe o nó'.",
+  "prompt": "Um Pod é criado sem `nodeName` definido. Qual é a sequência de etapas que o kube-scheduler executa para decidir em qual nó esse Pod será executado?",
+  "explanation": "O kube-scheduler observa continuamente Pods recém-criados que ainda não têm um nó associado. Para cada um, primeiro executa uma etapa de filtragem, que encontra o conjunto de nós onde é viável agendar o Pod; depois uma etapa de pontuação, que classifica os nós restantes para escolher o posicionamento mais adequado; por fim, o kube-scheduler atribui o Pod ao nó com a maior pontuação (escolhendo um aleatoriamente em caso de empate) e notifica o kube-apiserver dessa decisão em um processo chamado binding.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O kube-scheduler consulta o kubelet de cada nó em tempo real e deixa que o próprio kubelet decida se aceita o Pod, sem nenhuma etapa central de filtragem, pontuação ou notificação posterior ao kube-apiserver.",
+      "correct": false,
+      "explanation": "Incorreto: a decisão é centralizada no kube-scheduler, por meio de filtragem e pontuação, não delegada a cada kubelet individualmente."
+    },
+    {
+      "key": "B",
+      "text": "O kube-scheduler pontua todos os nós do cluster primeiro e só depois filtra, entre os de maior pontuação, quais realmente conseguem executar o Pod.",
+      "correct": false,
+      "explanation": "Incorreto: a ordem é inversa -- a filtragem (encontrar os nós viáveis) acontece antes da pontuação (ranquear os nós restantes), não depois."
+    },
+    {
+      "key": "C",
+      "text": "O kube-scheduler filtra os nós viáveis, pontua os nós restantes para escolher o posicionamento mais adequado e então notifica o kube-apiserver da atribuição em um processo chamado binding.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a sequência documentada -- filtragem, depois pontuação, e por fim a notificação ao kube-apiserver (binding)."
+    },
+    {
+      "key": "D",
+      "text": "O kube-scheduler atribui o Pod ao primeiro nó com recursos suficientes que encontrar, sem comparar outros candidatos entre si.",
+      "correct": false,
+      "explanation": "Incorreto: o kube-scheduler compara explicitamente os nós candidatos entre si na etapa de pontuação, não apenas escolhe o primeiro nó viável."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- kube-scheduler (filtering, scoring, binding)",
+      "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
