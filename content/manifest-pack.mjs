@@ -55,12 +55,14 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // mirror and kernel docs; networking has no vendor to defer to, so it cites the RFCs
     // themselves; CI/CD here means GitHub Actions, so it cites GitHub's own docs; #171's CNCF
     // certification profiles cite cncf.io for facts kubernetes.io does not own (project
-    // governance, maturity levels, the cloud native ecosystem) alongside kubernetes.io itself.
+    // governance, maturity levels, the cloud native ecosystem) alongside kubernetes.io itself;
+    // #173's Terraform Associate profile cites developer.hashicorp.com, HashiCorp's own docs.
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
       "datatracker.ietf.org", "www.rfc-editor.org",
       "docs.github.com", "cncf.io",
+      "developer.hashicorp.com",
     ]);
     for (const reference of question.references) {
       let parsed;
