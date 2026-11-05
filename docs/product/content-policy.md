@@ -60,7 +60,9 @@ question's claimed objective is real reads the same status, source page and veri
 beside the question's own references — a reference is evidence for the *answer*; this is the
 separate evidence that the *objective* it claims is a real line on the provider's page. Reaching it
 needs no catalog-administration permission: reading the source you are judging a claim against is
-not administering the catalog.
+not administering the catalog. `just certification-source-packet` is that artifact — a per-exam
+table of every seeded objective, which published question (if any) claims it, and the verified
+source beside it, generated from `pack.json` and the seeding migration rather than typed by hand.
 
 **When a provider changes an exam.** Read the new page and record it. The new reading replaces the
 previous one — a snapshot is one reading of one page, so an objective no longer listed is no longer

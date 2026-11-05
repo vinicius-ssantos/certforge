@@ -62,7 +62,10 @@ citado por uma questão é real lê o mesmo status, a mesma página fonte e a me
 verificação ao lado das próprias referências da questão — uma referência é evidência para a
 *resposta*; isto é a evidência separada de que o *objetivo* citado é uma linha real na página do
 fornecedor. Chegar até isso não exige permissão de administração do catálogo: ler a fonte contra a
-qual se julga uma afirmação não é administrar o catálogo.
+qual se julga uma afirmação não é administrar o catálogo. `just certification-source-packet` é esse
+artefato — uma tabela por exame de cada objetivo semeado, qual questão publicada (se houver) o
+cita, e a fonte verificada ao lado, gerada do `pack.json` e da migration de semeadura em vez de
+digitada à mão.
 
 **Quando o fornecedor muda a prova.** Leia a página nova e registre. A leitura nova substitui a
 anterior — um snapshot é uma leitura de uma página, então objetivo que não está mais listado não é
