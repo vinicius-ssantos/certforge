@@ -4,8 +4,8 @@
   "objectiveKeys": ["CKAD-5.5"],
   "difficulty": "EASY",
   "difficultyRationale": "Avalia o conhecimento básico da flag que seleciona qual container de um Pod multi-container recebe o shell interativo de `kubectl exec`.",
-  "prompt": "Um Pod tem dois containers, `main-app` e `sidecar`. Uma pessoa quer abrir um shell interativo dentro do container `main-app` especificamente, usando `kubectl exec`. Além de `--stdin`/`-i` e `--tty`/`-t`, qual flag adicional é necessária, e por quê?",
-  "explanation": "`kubectl exec` abre um shell interativo num container já em execução, usando as flags `--stdin`/`-i` e `--tty`/`-t` (ou suas formas curtas combinadas, `-it`). Quando o Pod tem mais de um container, é preciso usar `--container` ou `-c` para especificar qual container da requisição `kubectl exec` deve atingir — sem essa flag em um Pod multi-container, não haveria como indicar qual dos containers deve receber o shell.",
+  "prompt": "Um Pod declara dois containers nesta ordem no manifesto: `sidecar` e depois `main-app`, e não tem a anotação `kubectl.kubernetes.io/default-container`. Uma pessoa quer abrir um shell interativo dentro do container `main-app` especificamente, usando `kubectl exec`. Além de `--stdin`/`-i` e `--tty`/`-t`, qual flag adicional é necessária, e por quê?",
+  "explanation": "`kubectl exec` abre um shell interativo num container já em execução, usando as flags `--stdin`/`-i` e `--tty`/`-t` (ou suas formas curtas combinadas, `-it`). Quando a flag `--container`/`-c` é omitida, `kubectl exec` usa a anotação `kubectl.kubernetes.io/default-container` do Pod, se ela existir; caso contrário, usa o primeiro container declarado no manifesto. Como este Pod não tem essa anotação e `sidecar` é o primeiro container declarado, omitir `-c` atingiria `sidecar`, não `main-app` — por isso `--container`/`-c` é necessária aqui para selecionar `main-app` explicitamente.",
   "options": [
     {
       "key": "A",
@@ -36,6 +36,10 @@
     {
       "title": "Kubernetes Documentation — Get a Shell to a Running Container (kubectl exec, --container/-c)",
       "url": "https://kubernetes.io/docs/tasks/debug/debug-application/get-shell-running-container/"
+    },
+    {
+      "title": "Kubernetes Documentation — kubectl exec reference (-c, --container: default-container annotation or first container when omitted)",
+      "url": "https://kubernetes.io/docs/reference/kubectl/generated/kubectl_exec/"
     }
   ],
   "evidence": {
