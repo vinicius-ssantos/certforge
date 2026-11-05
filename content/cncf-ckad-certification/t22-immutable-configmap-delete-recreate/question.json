@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000023",
+  "objectiveKeys": ["CKAD-3.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que marcar um ConfigMap como imutável é uma decisão sem volta por edição: só resta deletar e recriar o objeto.",
+  "prompt": "Um ConfigMap é criado com o campo `immutable: true`. Depois disso, uma equipe tenta editar o conteúdo do campo `data` desse ConfigMap. O que acontece, e como a equipe consegue, de fato, mudar esse conteúdo?",
+  "explanation": "Uma vez que um ConfigMap é marcado como imutável, não é possível reverter essa marcação nem alterar o conteúdo dos campos `data` ou `binaryData` — só é possível deletar e recriar o ConfigMap. Esse recurso, estável desde o Kubernetes 1.21, protege contra atualizações acidentais que poderiam causar indisponibilidade de aplicações, e melhora a performance do cluster ao reduzir a carga sobre o kube-apiserver em clusters que usam muitos ConfigMaps, encerrando os watches dos ConfigMaps marcados como imutáveis.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A edição é aceita normalmente; `immutable: true` apenas impede que o campo seja removido do manifesto numa atualização futura, sem ter nenhum efeito sobre o conteúdo de `data` em si.",
+      "correct": false,
+      "explanation": "Incorreto: `immutable: true` impede justamente a alteração do conteúdo de `data`/`binaryData`, não apenas a remoção do próprio campo `immutable` do manifesto."
+    },
+    {
+      "key": "B",
+      "text": "Não é possível alterar o conteúdo nem reverter a marcação de imutável; a única forma de mudar o conteúdo é deletar esse ConfigMap e recriá-lo com os novos dados.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a garantia documentada — nem o conteúdo nem a marcação de imutável podem ser revertidos; deletar e recriar é o único caminho para um conteúdo diferente."
+    },
+    {
+      "key": "C",
+      "text": "A marcação de imutável pode ser revertida para `false` numa edição posterior, e a partir daí o conteúdo de `data` volta a ser editável normalmente, sem precisar deletar o objeto.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que não é possível reverter a marcação de imutável; não existe esse caminho de voltar `immutable` para `false`."
+    },
+    {
+      "key": "D",
+      "text": "O conteúdo pode ser editado livremente a qualquer momento; `immutable: true` controla apenas se Pods que já montaram esse ConfigMap recebem a atualização, não se a edição em si é aceita pela API.",
+      "correct": false,
+      "explanation": "Incorreto: a edição do conteúdo em si é rejeitada pela API quando o ConfigMap está marcado como imutável; não é uma questão de os Pods montados receberem ou não a atualização de um conteúdo que, de fato, mudou."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — ConfigMaps (Immutable ConfigMaps)",
+      "url": "https://kubernetes.io/docs/concepts/configuration/configmap/#configmap-immutable"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
