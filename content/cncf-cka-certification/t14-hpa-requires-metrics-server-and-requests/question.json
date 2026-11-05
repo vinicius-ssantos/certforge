@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000032",
+  "objectiveKeys": ["CKA-2.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia as duas condições concretas que o HorizontalPodAutoscaler exige para calcular utilização de CPU por porcentagem, não apenas o conceito geral de autoscaling.",
+  "prompt": "Um HorizontalPodAutoscaler é configurado para manter a utilização média de CPU em 50%, apontando para um Deployment cujos containers não declaram `resources.requests.cpu`. O metrics-server está instalado e funcionando normalmente no cluster. O que acontece com esse HPA?",
+  "explanation": "O HorizontalPodAutoscaler calcula a utilização como uma porcentagem do resource request equivalente declarado nos containers do Pod, quando um valor de utilização-alvo (em vez de um valor bruto) é usado. A documentação é explícita: 'se alguns dos containers do Pod não tiverem o resource request relevante definido, a utilização de CPU do Pod não será definida, e o autoscaler não tomará nenhuma ação para essa métrica'. Ter o metrics-server instalado resolve apenas a primeira condição (uma fonte para a Metrics API que fornece o uso bruto de CPU por Pod) — a segunda condição, resource requests declarados, é independente e também obrigatória para que a porcentagem-alvo seja calculável.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O HPA assume um valor padrão de 100m de CPU como request implícito para cada container sem declaração explícita, e calcula a utilização normalmente a partir desse padrão.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse valor padrão implícito assumido pelo HPA; sem o request declarado no container, não há base para calcular a porcentagem de utilização."
+    },
+    {
+      "key": "B",
+      "text": "A utilização de CPU do Pod não fica definida, e o HPA não toma nenhuma ação de escala com base nessa métrica, independentemente do metrics-server estar funcionando.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação declara — sem o resource request relevante, a utilização do Pod fica indefinida e o autoscaler não age sobre essa métrica, mesmo com uma fonte de métricas funcionando."
+    },
+    {
+      "key": "C",
+      "text": "O HPA falha ao ser criado, e o API server rejeita o objeto HorizontalPodAutoscaler porque o Deployment referenciado não tem resource requests declarados.",
+      "correct": false,
+      "explanation": "Incorreto: a criação do HPA não é bloqueada por essa ausência; o problema aparece no cálculo da métrica em tempo de execução, não na validação de criação do objeto."
+    },
+    {
+      "key": "D",
+      "text": "O HPA passa a usar automaticamente o uso absoluto de CPU em millicores como alvo, ignorando a porcentagem de 50% configurada, já que não há request para calcular a porcentagem.",
+      "correct": false,
+      "explanation": "Incorreto: não há essa conversão automática de um alvo de utilização percentual para um alvo de valor bruto; a métrica simplesmente fica indefinida e nenhuma ação é tomada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Horizontal Pod Autoscaling",
+      "url": "https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

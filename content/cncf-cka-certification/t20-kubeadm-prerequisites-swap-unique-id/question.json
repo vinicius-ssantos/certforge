@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia dois pré-requisitos concretos e documentados antes de instalar kubeadm/kubelet/kubectl em um node, não apenas requisitos genéricos de hardware.",
+  "prompt": "Antes de instalar kubeadm, kubelet e kubectl em um node, a página de instalação do kubeadm documenta pré-requisitos específicos sobre identificação única do node e sobre memória swap, em seções diferentes da mesma página. Quais são esses dois pré-requisitos?",
+  "explanation": "A seção 'Before you begin' da documentação de instalação do kubeadm lista como pré-requisito 'hostname, endereço MAC e product_uuid únicos para cada node' — o Kubernetes usa esses valores para identificar os nodes de forma única no cluster, e valores não únicos podem causar falha na instalação. Mais abaixo na mesma página, a seção separada 'Swap configuration' documenta que 'o comportamento padrão de um kubelet é falhar ao iniciar se memória swap for detectada em um node', o que significa que swap deve ser desabilitado ou tolerado explicitamente pelo kubelet (via configuração `failSwapOn: false`). Esses dois pré-requisitos são independentes um do outro: identificação única do node evita conflitos na identificação de nodes pelo cluster, enquanto a configuração de swap afeta diretamente se o próprio processo do kubelet consegue iniciar.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Hostname, endereço MAC e product_uuid únicos para cada node; e que swap esteja desabilitado ou explicitamente tolerado pela configuração do kubelet.",
+      "correct": true,
+      "explanation": "Correto: são exatamente os dois pré-requisitos documentados na seção 'Before you begin' da instalação do kubeadm."
+    },
+    {
+      "key": "B",
+      "text": "Um range de IP fixo pré-reservado para os Pods de cada node; e que o firewall local esteja completamente desabilitado antes da instalação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não lista um range de IP fixo pré-reservado nem o desligamento completo do firewall como pré-requisitos; ela cita portas específicas que precisam estar abertas, não a ausência total de firewall."
+    },
+    {
+      "key": "C",
+      "text": "Um usuário `root` dedicado exclusivamente ao kubelet; e que o node tenha pelo menos duas interfaces de rede físicas separadas.",
+      "correct": false,
+      "explanation": "Incorreto: não há esse requisito de usuário root dedicado nem de múltiplas interfaces de rede físicas listado entre os pré-requisitos de instalação."
+    },
+    {
+      "key": "D",
+      "text": "Um certificado TLS emitido manualmente para cada node antes da instalação; e que o relógio do sistema esteja sincronizado via um servidor NTP específico do Kubernetes.",
+      "correct": false,
+      "explanation": "Incorreto: certificados TLS são gerados pelo próprio processo de inicialização do kubeadm, não emitidos manualmente antes da instalação; a sincronização de horário não é listada como um desses dois pré-requisitos específicos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Installing kubeadm (Before you begin: unique hostname/MAC/product_uuid)",
+      "url": "https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#before-you-begin"
+    },
+    {
+      "title": "Kubernetes Documentation — Installing kubeadm (Swap configuration: kubelet fails to start by default if swap is detected)",
+      "url": "https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#swap-configuration"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

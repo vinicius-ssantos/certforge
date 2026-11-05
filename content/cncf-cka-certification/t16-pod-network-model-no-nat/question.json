@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o requisito fundamental do modelo de rede do Kubernetes (comunicação direta sem NAT), não apenas qual componente implementa esse modelo.",
+  "prompt": "Dois Pods estão agendados em nodes diferentes do mesmo cluster, sem nenhuma NetworkPolicy restringindo o tráfego entre eles. De acordo com o modelo de rede fundamental exigido pelo Kubernetes, como esses dois Pods se comunicam entre si?",
+  "explanation": "O modelo de rede do Kubernetes exige que cada Pod receba seu próprio endereço IP exclusivo em todo o cluster, e que todos os Pods possam se comunicar com todos os outros Pods, estejam eles no mesmo node ou em nodes diferentes, diretamente, sem o uso de proxies ou tradução de endereços (NAT). Isso vale independentemente de os Pods estarem no mesmo node ou em nodes distintos: a exigência documentada é de comunicação Pod-a-Pod direta em todo o cluster, usando o IP real de cada Pod, sem qualquer camada de NAT entre eles.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Os Pods se comunicam diretamente usando seus próprios endereços IP exclusivos de cluster, sem passar por NAT, independentemente de estarem no mesmo node ou em nodes diferentes.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o requisito documentado do modelo de rede do Kubernetes — comunicação Pod-a-Pod direta, com IP próprio de cada Pod, sem NAT, em todo o cluster."
+    },
+    {
+      "key": "B",
+      "text": "O tráfego entre os dois Pods passa obrigatoriamente por NAT no node de origem, já que os IPs de Pod só são roteáveis dentro do próprio node onde foram atribuídos, não entre nodes distintos do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o modelo de rede do Kubernetes exige justamente o oposto — comunicação direta sem NAT entre Pods, mesmo quando estão em nodes diferentes."
+    },
+    {
+      "key": "C",
+      "text": "Os dois Pods só conseguem se comunicar se um Service do tipo ClusterIP for criado explicitamente para expor um deles ao outro.",
+      "correct": false,
+      "explanation": "Incorreto: comunicação direta Pod-a-Pod usando o IP do Pod é parte do modelo de rede básico do Kubernetes e não depende da criação de um Service; Services resolvem outro problema (descoberta e estabilidade de endereço)."
+    },
+    {
+      "key": "D",
+      "text": "A comunicação entre os dois Pods depende exclusivamente de uma NetworkPolicy explícita permitindo o tráfego; sem ela, o tráfego é bloqueado por padrão.",
+      "correct": false,
+      "explanation": "Incorreto: na ausência de qualquer NetworkPolicy, o tráfego entre Pods não é restrito — o comportamento padrão é permitir toda comunicação, não bloqueá-la."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Service Networking (The Kubernetes network model)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/#the-kubernetes-network-model"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

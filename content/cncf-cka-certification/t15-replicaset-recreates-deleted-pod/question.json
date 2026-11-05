@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000032",
+  "objectiveKeys": ["CKA-2.4"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia o mecanismo de autocorreção no nível do ReplicaSet (recriação de Pods para atingir a contagem desejada), distinto da autocorreção baseada em probes dentro de um Pod.",
+  "prompt": "Um Deployment mantém um ReplicaSet com `replicas: 3`. Um administrador deleta manualmente um dos três Pods gerenciados por esse ReplicaSet usando `kubectl delete pod`. Sem nenhuma outra ação, o que acontece a seguir?",
+  "explanation": "O propósito de um ReplicaSet é manter um conjunto estável de Pods réplica em execução a qualquer momento. A documentação declara isso diretamente: o ReplicaSet 'cumpre seu propósito criando e deletando Pods conforme necessário para alcançar o número desejado'. Ao deletar um dos três Pods, a contagem observada (2) diverge da contagem desejada (3) declarada em `replicas`; o controlador do ReplicaSet detecta essa divergência e cria um novo Pod a partir do mesmo Pod template para restaurar a contagem. Esse mecanismo de autocorreção opera no nível do ReplicaSet — substituindo Pods inteiros que desaparecem — e é distinto da reinicialização de containers dentro de um Pod feita pelo kubelet com base em liveness probes, que não envolve criar ou deletar o objeto Pod.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nada acontece automaticamente; o ReplicaSet permanece com apenas 2 Pods até que um administrador aumente manualmente o campo `replicas` ou crie um novo Pod.",
+      "correct": false,
+      "explanation": "Incorreto: o ReplicaSet reconcilia continuamente o número observado de Pods com o número desejado; a deleção manual não exige nenhuma intervenção adicional para ser corrigida."
+    },
+    {
+      "key": "B",
+      "text": "O controlador do ReplicaSet cria um novo Pod a partir do mesmo Pod template para restaurar a contagem de réplicas declarada em `replicas`.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o comportamento documentado — o ReplicaSet cria Pods conforme necessário para alcançar o número desejado de réplicas, usando seu Pod template."
+    },
+    {
+      "key": "C",
+      "text": "O kubelet do node onde o Pod estava detecta a deleção e reinicia o mesmo Pod no lugar, preservando sua identidade (nome e IP) original.",
+      "correct": false,
+      "explanation": "Incorreto: um Pod deletado não é 'reiniciado' pelo kubelet com a mesma identidade; o ReplicaSet cria um novo objeto Pod, com nome e IP diferentes, para substituir o que foi removido."
+    },
+    {
+      "key": "D",
+      "text": "O Deployment pai marca o ReplicaSet como degradado e cria um ReplicaSet totalmente novo para substituir o atual, mesmo sem nenhuma mudança no Pod template.",
+      "correct": false,
+      "explanation": "Incorreto: não é necessário criar um novo ReplicaSet para repor um único Pod deletado; o mesmo ReplicaSet existente cria o Pod substituto, já que o Pod template não mudou."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — ReplicaSet",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

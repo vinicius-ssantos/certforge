@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o mecanismo de seleção de controlador via IngressClass quando múltiplos Ingress controllers estão instalados, distinto do fato mais básico de que um Ingress precisa de algum controlador.",
+  "prompt": "Um cluster tem dois Ingress controllers diferentes instalados simultaneamente. Um recurso Ingress declara `spec.ingressClassName: external-lb`, e um objeto IngressClass chamado `external-lb` existe no cluster com `spec.controller: example.com/ingress-controller`. Como o Kubernetes determina qual dos dois controladores deve implementar esse Ingress específico?",
+  "explanation": "O encadeamento documentado é: o Ingress referencia um objeto IngressClass através de `spec.ingressClassName`; esse objeto IngressClass contém configuração adicional, incluindo o nome do controlador que deve implementar aquela classe, declarado em `spec.controller`. Ou seja, a ligação entre um Ingress e o controlador responsável por ele não é direta — ela passa pelo objeto IngressClass intermediário, cujo campo `spec.controller` nomeia o controlador. Com dois controladores instalados, apenas aquele cujo nome corresponde ao valor declarado em `spec.controller` da IngressClass referenciada deve atuar sobre esse Ingress específico.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O encadeamento é: `spec.ingressClassName` do Ingress referencia o objeto IngressClass, e o campo `spec.controller` dessa IngressClass nomeia o controlador responsável por implementá-la.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a cadeia documentada — Ingress aponta para a IngressClass via `ingressClassName`, e a IngressClass aponta para o controlador via `spec.controller`."
+    },
+    {
+      "key": "B",
+      "text": "Ambos os controladores processam o mesmo Ingress simultaneamente, e o primeiro a configurar o balanceador de carga correspondente 'ganha' o recurso, independentemente de qual IngressClass foi referenciada no campo `spec.ingressClassName`.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa disputa entre controladores; a seleção é determinística, feita através do campo `spec.controller` da IngressClass referenciada pelo Ingress."
+    },
+    {
+      "key": "C",
+      "text": "O campo `metadata.name` do próprio recurso Ingress precisa corresponder exatamente ao nome de um dos dois controladores instalados.",
+      "correct": false,
+      "explanation": "Incorreto: o nome do Ingress não tem relação com a seleção do controlador; a seleção passa por `spec.ingressClassName` apontando para uma IngressClass, cujo `spec.controller` identifica o controlador."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes escolhe automaticamente o controlador que foi instalado primeiro no cluster, ignorando o campo `spec.ingressClassName` declarado no Ingress.",
+      "correct": false,
+      "explanation": "Incorreto: a ordem de instalação dos controladores não determina a seleção; o mecanismo documentado usa `spec.ingressClassName` do Ingress e `spec.controller` da IngressClass correspondente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Ingress (IngressClass)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-class"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
