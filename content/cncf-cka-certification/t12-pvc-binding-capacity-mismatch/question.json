@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000031",
+  "objectiveKeys": ["CKA-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o critério real de vinculação entre PersistentVolumeClaim e PersistentVolume (capacidade), não apenas o conceito geral de que PVCs e PVs se vinculam.",
+  "prompt": "Um cluster já provisionado estaticamente possui apenas PersistentVolumes de 50Gi disponíveis. Uma nova PersistentVolumeClaim solicita 100Gi de armazenamento. O que acontece com essa PVC?",
+  "explanation": "Um loop de controle no plano de controle observa novas PVCs e tenta encontrar um PersistentVolume compatível para vinculá-la. Compatibilidade inclui a capacidade solicitada: um PV só pode satisfazer uma claim se sua capacidade for suficiente. A documentação é explícita nesse ponto, usando exatamente este cenário como exemplo: um cluster provisionado com PVs de 50Gi não atende a uma PVC que solicita 100Gi. A PVC permanece sem vínculo indefinidamente até que um PV compatível (nesse caso, de ao menos 100Gi) esteja disponível no cluster — não há fallback automático que combine múltiplos PVs menores nem que vincule parcialmente a claim a um PV insuficiente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A PVC é automaticamente vinculada a um dos PVs de 50Gi, e o Kubernetes expande silenciosamente esse PV para 100Gi em segundo plano para satisfazer a claim, sem exigir nenhuma ação do administrador.",
+      "correct": false,
+      "explanation": "Incorreto: vinculação não aciona expansão automática de um PV existente; a compatibilidade é avaliada com a capacidade atual do PV, que é insuficiente aqui."
+    },
+    {
+      "key": "B",
+      "text": "A PVC permanece sem vínculo (unbound) indefinidamente até que um PersistentVolume com capacidade suficiente (pelo menos 100Gi) esteja disponível no cluster.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o comportamento documentado — a claim fica sem vínculo até que um PV compatível apareça; a documentação usa este mesmo cenário (PVs de 50Gi vs. claim de 100Gi) como exemplo direto."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes combina dois PVs de 50Gi automaticamente para formar um volume lógico de 100Gi e vincula a PVC a essa combinação.",
+      "correct": false,
+      "explanation": "Incorreto: PersistentVolumes não são combinados automaticamente para satisfazer uma claim maior; a vinculação é sempre um mapeamento um-para-um entre uma PVC e um único PV."
+    },
+    {
+      "key": "D",
+      "text": "A criação da PVC é rejeitada pelo API server no momento da criação, porque nenhum PV compatível existe ainda no cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o API server aceita a criação da PVC normalmente; o que fica pendente é a vinculação a um PV, não a criação do objeto PVC em si."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Persistent Volumes (Binding)",
+      "url": "https://kubernetes.io/docs/concepts/storage/persistent-volumes/#binding"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

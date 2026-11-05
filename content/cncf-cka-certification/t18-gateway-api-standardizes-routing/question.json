@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o que a Gateway API padroniza em relação a casos de uso que o Ingress só resolvia via anotações específicas de cada controlador, não apenas a existência da Gateway API.",
+  "prompt": "Uma equipe precisa de roteamento HTTP baseado em cabeçalhos (header-based matching) e de distribuição ponderada de tráfego entre versões de um serviço (traffic weighting). Historicamente, com o recurso Ingress, esse tipo de caso de uso exigia o quê, e o que a Gateway API muda nesse ponto?",
+  "explanation": "A documentação descreve a Gateway API como 'expressiva': ela oferece suporte nativo, através de seus próprios tipos de objeto, para casos de uso de roteamento de tráfego comuns — como correspondência baseada em cabeçalho e distribuição ponderada de tráfego — que só eram possíveis com Ingress através do uso de anotações específicas do controlador. Ou seja, o Ingress não tinha, na própria especificação da API, um jeito padronizado de expressar esses casos de uso; cada controlador de Ingress definia suas próprias anotações não padronizadas para suportá-los. A Gateway API move esses casos de uso para dentro da própria API, como campos de primeira classe dos seus recursos (como HTTPRoute), em vez de depender de anotações específicas de implementação.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Com Ingress, esses casos de uso exigiam anotações específicas do controlador, não padronizadas pela API; a Gateway API os oferece como funcionalidade nativa dos próprios tipos de objeto da API.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação descreve na característica 'Expressiva' da Gateway API — recursos que só eram possíveis em Ingress via anotações específicas do controlador agora são suportados nativamente pelos tipos da própria API."
+    },
+    {
+      "key": "B",
+      "text": "Esses casos de uso nunca foram possíveis com Ingress, nem mesmo com anotações customizadas; eles só existem a partir da introdução da Gateway API.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que esses casos de uso 'só eram possíveis em Ingress usando anotações customizadas' — ou seja, eram possíveis, só não de forma padronizada pela especificação da API."
+    },
+    {
+      "key": "C",
+      "text": "Ambos, Ingress e Gateway API, exigem anotações específicas do controlador para esses casos de uso; a diferença entre as duas é apenas o nome do recurso usado.",
+      "correct": false,
+      "explanation": "Incorreto: a diferença não é só de nome — a Gateway API suporta esses casos de uso nativamente nos seus próprios tipos, sem depender de anotações específicas de controlador, o que o Ingress exigia."
+    },
+    {
+      "key": "D",
+      "text": "A Gateway API resolve isso delegando o roteamento inteiramente a um service mesh externo, já que a própria API não define nenhum tipo relacionado a roteamento de tráfego e depende totalmente de ferramentas de terceiros para isso.",
+      "correct": false,
+      "explanation": "Incorreto: a Gateway API é descrita como uma família de tipos de API que fornecem roteamento de tráfego avançado diretamente; ela não delega essa responsabilidade inteiramente a um service mesh externo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Gateway API",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/gateway/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

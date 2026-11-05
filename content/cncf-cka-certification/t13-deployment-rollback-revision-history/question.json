@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000032",
+  "objectiveKeys": ["CKA-2.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia o que torna o rollback de um Deployment possível (ReplicaSets antigos preservados via revisionHistoryLimit), não apenas o comando usado para disparar o rollback.",
+  "prompt": "Um administrador define `spec.revisionHistoryLimit: 0` em um Deployment já em produção. Algum tempo depois, uma nova revisão desse Deployment termina seu rollout com sucesso -- todas as réplicas novas ficam disponíveis e o ReplicaSet anterior é limpo -- e só então a equipe percebe um problema na aplicação e executa `kubectl rollout undo`. O que acontece?",
+  "explanation": "O histórico de revisões de um Deployment é armazenado nos próprios ReplicaSets que ele controla — cada revisão corresponde a um ReplicaSet antigo mantido no cluster. `.spec.revisionHistoryLimit` controla quantos desses ReplicaSets antigos são retidos para permitir rollback; a documentação afirma explicitamente que configurar esse campo como zero significa que todos os ReplicaSets antigos com zero réplicas são limpos, e que, nesse caso, 'um novo rollout do Deployment não pode ser desfeito, já que seu histórico de revisões foi limpo'. Essa limpeza só começa depois que o Deployment atinge um estado completo (rollout concluído com sucesso) -- é exatamente o cenário descrito aqui, e não o de um rollout que ainda está em andamento ou travado, caso em que o ReplicaSet anterior ainda poderia existir. Como a configuração da revisão anterior vive no ReplicaSet que a representa, uma vez que esse ReplicaSet é deletado, a capacidade de rollback para aquela revisão específica desaparece junto com ele.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O rollback funciona normalmente, porque o Kubernetes guarda o histórico de revisões separadamente do objeto Deployment, em um local independente dos ReplicaSets antigos.",
+      "correct": false,
+      "explanation": "Incorreto: o histórico de revisões é armazenado nos próprios ReplicaSets antigos, não em um local separado e independente deles."
+    },
+    {
+      "key": "B",
+      "text": "`kubectl rollout undo` falha ou não tem efeito, porque não há mais ReplicaSets antigos retidos para reverter o Deployment a uma revisão anterior.",
+      "correct": true,
+      "explanation": "Correto: com `revisionHistoryLimit: 0`, os ReplicaSets antigos são limpos; sem eles, não existe revisão anterior para a qual reverter, e a documentação afirma diretamente que o rollout não pode ser desfeito nesse caso."
+    },
+    {
+      "key": "C",
+      "text": "`kubectl rollout undo` recria do zero a configuração da revisão anterior a partir dos eventos de auditoria do cluster, mesmo sem o ReplicaSet correspondente.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse mecanismo de reconstrução a partir de eventos de auditoria; a configuração de uma revisão só existe enquanto o ReplicaSet que a representa existir."
+    },
+    {
+      "key": "D",
+      "text": "O comando reverte apenas as réplicas atuais para zero, sem criar nenhum novo ReplicaSet, deixando a aplicação fora do ar até uma intervenção manual.",
+      "correct": false,
+      "explanation": "Incorreto: esse não é o comportamento documentado; o problema específico aqui é a ausência de histórico de revisão para reverter, não uma redução forçada de réplicas a zero."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Deployments (Revision History Limit)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#revision-history-limit"
+    },
+    {
+      "title": "Kubernetes Documentation — Deployments (Rolling Back a Deployment)",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

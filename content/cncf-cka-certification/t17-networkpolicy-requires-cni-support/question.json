@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000033",
+  "objectiveKeys": ["CKA-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a dependência real de enforcement de NetworkPolicy no plugin de rede (CNI), não apenas a sintaxe do recurso NetworkPolicy.",
+  "prompt": "Um administrador cria uma NetworkPolicy de negação padrão em um namespace. O cluster usa um plugin de rede (CNI) que não implementa enforcement de NetworkPolicy. O que acontece com o tráfego de rede nesse namespace depois que a NetworkPolicy é criada?",
+  "explanation": "NetworkPolicies são implementadas pelo plugin de rede, não pelo API server. A documentação é direta nesse ponto: enviar o objeto NetworkPolicy para o API server do cluster 'não terá efeito, a menos que a solução de rede escolhida suporte NetworkPolicy', e ainda: 'criar um recurso NetworkPolicy sem um controlador que o implemente não terá efeito'. O API server aceita e armazena o objeto normalmente — a criação não é rejeitada —, mas, sem um componente que o implemente, nenhum enforcement real ocorre, e o tráfego continua fluindo exatamente como fluía antes da NetworkPolicy existir.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O API server rejeita a criação do objeto NetworkPolicy, porque detecta que o plugin de rede instalado não suporta enforcement.",
+      "correct": false,
+      "explanation": "Incorreto: o API server não valida se o plugin de rede suporta NetworkPolicy no momento da criação; a documentação não descreve nenhuma rejeição ou erro nesse caso."
+    },
+    {
+      "key": "B",
+      "text": "O tráfego de rede continua fluindo normalmente, sem qualquer restrição, porque o objeto NetworkPolicy não tem efeito sem um plugin que o implemente.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação afirma — sem um plugin de rede que suporte NetworkPolicy, o recurso criado não tem efeito, e o tráfego não é filtrado."
+    },
+    {
+      "key": "C",
+      "text": "O kube-apiserver aplica o enforcement da política diretamente, já que NetworkPolicy é um recurso nativo da API e não depende de nenhum componente externo.",
+      "correct": false,
+      "explanation": "Incorreto: o enforcement de NetworkPolicy não é feito pelo kube-apiserver; ele depende do plugin de rede do cluster, que precisa suportar explicitamente esse recurso."
+    },
+    {
+      "key": "D",
+      "text": "O cluster bloqueia automaticamente todo o tráfego do namespace como medida de segurança padrão, até que um plugin de rede compatível seja instalado.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse bloqueio automático de segurança; o comportamento documentado é o oposto — a política simplesmente não tem efeito, e o tráfego permanece sem restrição."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Network Policies (Prerequisites)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/#prerequisites"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

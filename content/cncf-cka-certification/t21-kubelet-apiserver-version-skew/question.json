@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia a política concreta de version skew entre kubelet e kube-apiserver, relevante para planejar a ordem de upgrade do ciclo de vida do cluster.",
+  "prompt": "Em um cluster com um único kube-apiserver na versão 1.37, qual é a versão mais antiga de kubelet que ainda é suportada em algum node, segundo a política de version skew do Kubernetes?",
+  "explanation": "A política de version skew documenta duas regras sobre kubelet em relação a kube-apiserver: 'kubelet não deve ser mais novo que kube-apiserver', e 'kubelet pode ser até três versões secundárias (minor versions) mais antigo que kube-apiserver'. Para um kube-apiserver em 1.37, isso coloca o limite inferior em 1.34 — a própria documentação lista exatamente este exemplo, com kube-apiserver em 1.37 suportando kubelet em 1.37, 1.36, 1.35 e 1.34. Essa é a regra para um único kube-apiserver; em um cluster HA com múltiplas instâncias de kube-apiserver em versões diferentes, a faixa permitida se estreita para a versão mais antiga entre as instâncias do apiserver.",
+  "options": [
+    {
+      "key": "A",
+      "text": "1.34 — kubelet pode ser até três versões secundárias mais antigo que kube-apiserver, e a documentação lista exatamente este exemplo para kube-apiserver 1.37.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o exemplo que a documentação da política de version skew apresenta para um kube-apiserver em 1.37."
+    },
+    {
+      "key": "B",
+      "text": "1.37 — kubelet deve estar sempre na mesma versão exata que kube-apiserver, sem nenhuma defasagem permitida entre os dois.",
+      "correct": false,
+      "explanation": "Incorreto: a política permite explicitamente até três versões secundárias de defasagem para kubelet em relação a kube-apiserver; não é exigida a mesma versão exata."
+    },
+    {
+      "key": "C",
+      "text": "1.36 — kubelet pode ser no máximo uma versão secundária mais antigo que kube-apiserver, nunca mais que isso.",
+      "correct": false,
+      "explanation": "Incorreto: o limite documentado não é de uma única versão secundária; a política permite até três versões secundárias de defasagem para kubelet (duas, para versões de kubelet anteriores a 1.25)."
+    },
+    {
+      "key": "D",
+      "text": "Não há limite inferior definido; qualquer versão de kubelet, independentemente de quão antiga, é suportada com qualquer versão de kube-apiserver em qualquer topologia de cluster.",
+      "correct": false,
+      "explanation": "Incorreto: existe um limite inferior explícito e documentado (três versões secundárias mais antigo que kube-apiserver); não é uma defasagem ilimitada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Version Skew Policy (kubelet)",
+      "url": "https://kubernetes.io/docs/setup/release/version-skew-policy/#kubelet"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
