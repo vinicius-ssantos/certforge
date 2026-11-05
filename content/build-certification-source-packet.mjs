@@ -65,6 +65,15 @@ function readSeededObjectives(migrationPath) {
   return objectives;
 }
 
+/** The `source_url` the migration's own objective-snapshot INSERT recorded, if any. */
+function readSeededSourceUrl(migrationPath) {
+  const sql = readFileSync(migrationPath, "utf8");
+  const insert = /INSERT INTO certforge\.catalog_exam_objective_snapshot\s*\([^)]*\)\s*VALUES\s*([\s\S]*?);/.exec(sql);
+  if (!insert) return null;
+  const url = /'(https:\/\/[^']+)'/.exec(insert[1]);
+  return url ? url[1] : null;
+}
+
 const lines = [
   "# Certification source packet",
   "",
@@ -89,14 +98,17 @@ const lines = [
 for (const packDir of certificationPackDirs()) {
   const { manifest, questions } = readManifestPack(packDir);
   const cert = manifest.certification;
+  const migrationPath = findObjectiveMigration(cert.examCode);
+  const sourceUrl = migrationPath ? readSeededSourceUrl(migrationPath) : null;
+
   lines.push(`## ${manifest.trackSlug}`, "");
   lines.push(
     `**${cert.provider} ${cert.examCode}.** Verified ${cert.verifiedOn} against`,
     `\`${cert.providerVersion}\`. Digest \`${cert.snapshotDigest}\`.`,
+    sourceUrl ? `Source: <${sourceUrl}>.` : "Source: _(no seeding migration found; URL unknown)_.",
     "",
   );
 
-  const migrationPath = findObjectiveMigration(cert.examCode);
   const seeded = migrationPath ? readSeededObjectives(migrationPath) : [];
   const claimed = new Map();
   for (const question of questions) {

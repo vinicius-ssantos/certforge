@@ -20,27 +20,28 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 
 **CNCF CKA.** Verified 2026-11-04 against
 `cncf/curriculum@b3c8508 (CKA_Curriculum_v1.37.pdf, commit 2026-10-15)`. Digest `sha256:634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c`.
+Source: <https://github.com/cncf/curriculum/blob/b3c8508b9f6cd0bcfa76c2e4b7cc9b6a2f109bec/CKA_Curriculum_v1.37.pdf>.
 
 | Objective | Title | Claimed by |
 |---|---|---|
 | `CKA-1.1` | Implement storage classes and dynamic volume provisioning | `t01-storageclass-wait-for-first-consumer` |
 | `CKA-1.2` | Configure volume types, access modes and reclaim policies | `t02-pv-reclaim-policy-retain-vs-delete` |
-| `CKA-1.3` | Manage persistent volumes and persistent volume claims | _none yet_ |
-| `CKA-2.1` | Understand application deployments and how to perform rolling update and rollbacks | _none yet_ |
+| `CKA-1.3` | Manage persistent volumes and persistent volume claims | `t12-pvc-binding-capacity-mismatch` |
+| `CKA-2.1` | Understand application deployments and how to perform rolling update and rollbacks | `t13-deployment-rollback-revision-history` |
 | `CKA-2.2` | Use ConfigMaps and Secrets to configure applications | `t03-configmap-volume-vs-env-update` |
-| `CKA-2.3` | Configure workload autoscaling | _none yet_ |
-| `CKA-2.4` | Understand the primitives used to create robust, self-healing, application deployments | _none yet_ |
+| `CKA-2.3` | Configure workload autoscaling | `t14-hpa-requires-metrics-server-and-requests` |
+| `CKA-2.4` | Understand the primitives used to create robust, self-healing, application deployments | `t15-replicaset-recreates-deleted-pod` |
 | `CKA-2.5` | Configure Pod admission and scheduling (limits, node affinity, etc.) | `t04-node-affinity-ignored-during-execution` |
-| `CKA-3.1` | Understand connectivity between Pods | _none yet_ |
-| `CKA-3.2` | Define and enforce Network Policies | _none yet_ |
+| `CKA-3.1` | Understand connectivity between Pods | `t16-pod-network-model-no-nat` |
+| `CKA-3.2` | Define and enforce Network Policies | `t17-networkpolicy-requires-cni-support` |
 | `CKA-3.3` | Use ClusterIP, NodePort, LoadBalancer service types and endpoints | `t05-loadbalancer-builds-on-nodeport` |
-| `CKA-3.4` | Use the Gateway API to manage Ingress traffic | _none yet_ |
-| `CKA-3.5` | Know how to use Ingress controllers and Ingress resources | _none yet_ |
+| `CKA-3.4` | Use the Gateway API to manage Ingress traffic | `t18-gateway-api-standardizes-routing` |
+| `CKA-3.5` | Know how to use Ingress controllers and Ingress resources | `t19-ingressclass-selects-controller` |
 | `CKA-3.6` | Understand and use CoreDNS | `t06-headless-service-dns-pod-ips` |
 | `CKA-4.1` | Manage role based access control (RBAC) | `t07-rolebinding-references-clusterrole` |
-| `CKA-4.2` | Prepare underlying infrastructure for installing a Kubernetes cluster | _none yet_ |
+| `CKA-4.2` | Prepare underlying infrastructure for installing a Kubernetes cluster | `t20-kubeadm-prerequisites-swap-unique-id` |
 | `CKA-4.3` | Create and manage Kubernetes clusters using kubeadm | `t08-kubeadm-bootstrap-token` |
-| `CKA-4.4` | Manage the lifecycle of Kubernetes clusters | _none yet_ |
+| `CKA-4.4` | Manage the lifecycle of Kubernetes clusters | `t21-kubelet-apiserver-version-skew` |
 | `CKA-4.5` | Implement and configure a highly-available control plane | _none yet_ |
 | `CKA-4.6` | Use Helm and Kustomize to install cluster components | _none yet_ |
 | `CKA-4.7` | Understand extension interfaces (CNI, CSI, CRI, etc.) | `t09-cni-implements-network-model` |
@@ -51,12 +52,13 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 | `CKA-5.4` | Manage and evaluate container output streams | `t11-kubectl-logs-all-containers` |
 | `CKA-5.5` | Troubleshoot services and networking | _none yet_ |
 
-11 of 27 seeded objectives claimed by a published question.
+21 of 27 seeded objectives claimed by a published question.
 
 ## cncf-ckad-certification
 
 **CNCF CKAD.** Verified 2026-11-03 against
 `cncf/curriculum@f423fa4 (CKAD_Curriculum_v1.37.pdf, commit 2026-10-01)`. Digest `sha256:7736d2f0291239d62e9fc618304413ee9b6e53fc4580aac70bf4328203c1c210`.
+Source: <https://github.com/cncf/curriculum/blob/f423fa49c0cab0820533babd95b37ebe8fd89e67/CKAD_Curriculum_v1.37.pdf>.
 
 | Objective | Title | Claimed by |
 |---|---|---|
@@ -91,6 +93,7 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 
 **CNCF KCNA.** Verified 2026-11-03 against
 `cncf/curriculum@c2df915 (KCNA_Curriculum.pdf, commit 2026-03-22)`. Digest `sha256:2141ce75db8c67a72588775345d3b8448e4a6d3f3b46c37f86f4b388c153b8ff`.
+Source: <https://github.com/cncf/curriculum/blob/c2df915fb5a07e4c7872a902f42e32192edf995b/KCNA_Curriculum.pdf>.
 
 | Objective | Title | Claimed by |
 |---|---|---|
@@ -114,6 +117,7 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 
 **CNCF KCSA.** Verified 2026-11-03 against
 `cncf/curriculum@007442f (KCSA Curriculum.pdf, commit 2024-06-24)`. Digest `sha256:2855eb7db729ab9ad0136b87d002560f82297e66e811026159df946227d5114a`.
+Source: <https://github.com/cncf/curriculum/blob/007442fa374ea3bd6e9217450388041803ad06ce/KCSA%20Curriculum.pdf>.
 
 | Objective | Title | Claimed by |
 |---|---|---|
@@ -124,18 +128,18 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 | `KCSA-1.5` | Artifact Repository and Image Security | `t02-image-digest-vs-tag` |
 | `KCSA-1.6` | Workload and Application Code Security | `t11-code-security-ecosystem-extensions` |
 | `KCSA-2.1` | API Server | `t03-api-server-request-stages` |
-| `KCSA-2.2` | Controller Manager | _none yet_ |
-| `KCSA-2.3` | Scheduler | _none yet_ |
+| `KCSA-2.2` | Controller Manager | `t20-controller-manager-single-process` |
+| `KCSA-2.3` | Scheduler | `t21-scheduler-filter-score-bind` |
 | `KCSA-2.4` | Kubelet | `t12-kubelet-authz-alwaysallow` |
-| `KCSA-2.5` | Container Runtime | _none yet_ |
+| `KCSA-2.5` | Container Runtime | `t22-cri-plugin-interface` |
 | `KCSA-2.6` | KubeProxy | `t13-kubeproxy-modes-default-iptables` |
-| `KCSA-2.7` | Pod | _none yet_ |
+| `KCSA-2.7` | Pod | `t23-host-namespaces-restricted-baseline` |
 | `KCSA-2.8` | Etcd | `t04-etcd-unencrypted-by-default` |
-| `KCSA-2.9` | Container Networking | _none yet_ |
-| `KCSA-2.10` | Client Security | _none yet_ |
-| `KCSA-2.11` | Storage | _none yet_ |
+| `KCSA-2.9` | Container Networking | `t24-pod-network-no-nat-between-pods` |
+| `KCSA-2.10` | Client Security | `t25-client-cert-cn-as-username` |
+| `KCSA-2.11` | Storage | `t26-hostpath-volume-security-risk` |
 | `KCSA-3.1` | Pod Security Standards | `t05-pod-security-standards-levels` |
-| `KCSA-3.2` | Pod Security Admissions | _none yet_ |
+| `KCSA-3.2` | Pod Security Admissions | `t27-pod-security-admission-namespace-labels` |
 | `KCSA-3.3` | Authentication | _none yet_ |
 | `KCSA-3.4` | Secrets | `t14-secret-readable-by-pod-creator` |
 | `KCSA-3.5` | Isolation and Segmentation | _none yet_ |
@@ -146,19 +150,19 @@ question are a visible gap by this project's own policy (ADR 0017), not a defect
 | `KCSA-4.3` | Denial of Service | `t16-api-priority-fairness-overload` |
 | `KCSA-4.4` | Malicious Code Execution and Compromised Applications in Containers | _none yet_ |
 | `KCSA-4.5` | Attacker on the Network | `t17-networkpolicy-default-deny-ingress` |
-| `KCSA-4.6` | Access to Sensitive Data | _none yet_ |
+| `KCSA-4.6` | Access to Sensitive Data | `t28-workload-creation-grants-secret-access` |
 | `KCSA-4.7` | Privilege Escalation | `t07-allow-privilege-escalation-default` |
 | `KCSA-5.1` | Supply Chain Security | _none yet_ |
 | `KCSA-5.2` | Image Repository | `t18-imagepullsecrets-private-registry` |
 | `KCSA-5.3` | Observability | _none yet_ |
 | `KCSA-5.4` | Service Mesh | _none yet_ |
 | `KCSA-5.5` | PKI | `t09-kubeadm-pki-default-ca` |
-| `KCSA-5.6` | Connectivity | _none yet_ |
+| `KCSA-5.6` | Connectivity | `t29-networkpolicy-egress-only-still-isolates-ingress` |
 | `KCSA-5.7` | Admission Control | `t19-mutating-vs-validating-webhook` |
 | `KCSA-6.1` | Compliance Frameworks | _none yet_ |
 | `KCSA-6.2` | Threat Modeling Frameworks | _none yet_ |
 | `KCSA-6.3` | Supply Chain Compliance | _none yet_ |
 | `KCSA-6.4` | Automation and Tooling | _none yet_ |
 
-19 of 42 seeded objectives claimed by a published question.
+29 of 42 seeded objectives claimed by a published question.
 
