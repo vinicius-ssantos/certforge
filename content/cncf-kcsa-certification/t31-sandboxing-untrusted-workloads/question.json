@@ -5,36 +5,36 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Avalia se o candidato distingue isolamento por namespace (soft multi-tenancy) de sandboxing de containers como técnicas complementares, não equivalentes -- um erro comum é assumir que o isolamento de namespace já é suficiente para código assumido como malicioso.",
   "prompt": "Uma equipe vai executar, no mesmo cluster multi-tenant onde outros tenants já usam isolamento por namespace, uma carga de trabalho que roda código fornecido por usuários externos não confiáveis (por exemplo, um serviço que executa scripts enviados por clientes). Segundo a documentação do Kubernetes sobre multi-tenancy, que técnica adicional ela recomenda especificamente para esse tipo de carga de trabalho, e por quê?",
-  "explanation": "A documentação descreve sandboxing de containers (por exemplo, via RuntimeClass com um runtime como gVisor ou Kata Containers) como uma forma de isolar cargas de trabalho que compartilham um cluster, recomendando-a especificamente quando se está executando código não confiável, partindo da premissa de que a carga de trabalho é assumida como potencialmente maliciosa. O ambiente de sandbox ajuda a isolar o host de 'container escapes', nos quais um atacante exploraria uma vulnerabilidade para obter acesso ao sistema host e a tudo que roda nele -- uma proteção que o isolamento por namespace, por si só, não oferece.",
+  "explanation": "A documentação descreve sandboxing como uma forma de isolar cargas de trabalho em um cluster compartilhado, executando cada Pod em um ambiente de execução separado -- como uma máquina virtual ou um kernel em espaço de usuário --, e afirma que essa técnica é frequentemente recomendada quando se está executando código não confiável, cuja carga de trabalho é assumida como potencialmente maliciosa. Executar cargas de trabalho em um ambiente de sandbox ajuda a isolar o host de 'container escapes', nos quais um atacante exploraria uma vulnerabilidade para obter acesso ao sistema host e a tudo que roda nele.",
   "options": [
     {
       "key": "A",
       "text": "Apenas aumentar as ResourceQuotas do namespace já em uso, já que a documentação trata o isolamento por namespace como suficiente mesmo para cargas de trabalho cujo código é assumido como potencialmente malicioso.",
       "correct": false,
-      "explanation": "Incorreto: a documentação recomenda sandboxing adicional justamente porque o isolamento por namespace não insula o host contra um container escape; aumentar quotas não endereça esse risco."
+      "explanation": "Incorreto: a documentação recomenda sandboxing adicional justamente para código não confiável, e aumentar quotas não envolve executar o Pod em um ambiente de execução isolado."
     },
     {
       "key": "B",
-      "text": "Migrar a carga de trabalho para 'hard multi-tenancy' com um namespace dedicado a ela, já que a documentação trata isolamento por namespace e sandboxing de containers como técnicas de isolamento totalmente equivalentes e intercambiáveis entre si em qualquer cenário.",
+      "text": "Migrar a carga de trabalho para 'hard multi-tenancy' com um namespace dedicado a ela, já que a documentação trata isolamento por namespace e sandboxing de containers como técnicas de isolamento totalmente equivalentes e intercambiáveis entre si em qualquer cenário, apenas com nomes diferentes para o mesmo mecanismo subjacente.",
       "correct": false,
-      "explanation": "Incorreto: a documentação descreve sandboxing e isolamento por namespace como técnicas distintas e complementares, não como equivalentes -- um namespace dedicado não insula o host de um container escape."
+      "explanation": "Incorreto: a documentação descreve sandboxing como executar cada Pod em um ambiente de execução separado (máquina virtual ou kernel em espaço de usuário) -- uma técnica distinta de isolar por namespace, não equivalente a ela."
     },
     {
       "key": "C",
-      "text": "Sandboxing de containers (por exemplo, via RuntimeClass com gVisor ou Kata Containers), porque a documentação recomenda essa técnica quando se executa código não confiável, assumido como potencialmente malicioso, para insular o host de container escapes.",
+      "text": "Sandboxing, executando a carga de trabalho em um ambiente de execução separado como uma máquina virtual ou um kernel em espaço de usuário, porque a documentação recomenda essa técnica quando se executa código não confiável, assumido como potencialmente malicioso, para ajudar a insular o host de container escapes.",
       "correct": true,
-      "explanation": "Correto: é exatamente essa a recomendação da documentação para cargas de trabalho com código não confiável, como proteção adicional além do isolamento por namespace."
+      "explanation": "Correto: é exatamente essa a recomendação da documentação para cargas de trabalho com código não confiável."
     },
     {
       "key": "D",
       "text": "Desabilitar o NetworkPolicy padrão desse namespace, pois a ausência de regras de rede já garante, segundo a documentação, isolamento suficiente contra código malicioso em execução nos containers.",
       "correct": false,
-      "explanation": "Incorreto: desabilitar NetworkPolicy reduz isolamento de rede e não tem relação com proteção contra container escape; a documentação não sugere essa ação como mitigação para código não confiável."
+      "explanation": "Incorreto: desabilitar NetworkPolicy reduz isolamento de rede e não envolve executar o Pod em um ambiente de execução separado; a documentação não sugere essa ação como mitigação para código não confiável."
     }
   ],
   "references": [
     {
-      "title": "Kubernetes Documentation -- Multi-tenancy (Sandboxing containers)",
+      "title": "Kubernetes Documentation -- Multi-tenancy (Sandboxing containers: separate execution environment, insulates the host from container escapes)",
       "url": "https://kubernetes.io/docs/concepts/security/multi-tenancy/#sandboxing-containers"
     }
   ],

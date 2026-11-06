@@ -3,15 +3,15 @@
   "topicId": "b3000000-0000-4000-8000-000000000015",
   "objectiveKeys": ["KCSA-5.1"],
   "difficulty": "MEDIUM",
-  "difficultyRationale": "Avalia se o candidato conhece o uso de 'keyless signing' do cosign para os artefatos de release do próprio Kubernetes, e entende o que torna esse método notável em termos de gestão de chaves em comparação com uma assinatura por chave privada estática de longa duração.",
-  "prompt": "Como parte da segurança da cadeia de suprimentos (supply chain) dos próprios artefatos de release do Kubernetes, a documentação descreve o processo de assinatura dos binários (tarballs, arquivos SPDX, binários individuais) publicados em cada release. Segundo a documentação, qual ferramenta e qual método de assinatura são usados, e o que torna esse método notável em termos de gestão de chaves?",
-  "explanation": "A documentação afirma que o processo de release do Kubernetes assina todos os artefatos binários usando o 'keyless signing' do cosign. O que torna esse método notável é que a verificação não depende de uma chave privada estática e de longa duração mantida pelo projeto: a assinatura sem chave elimina a necessidade dessa infraestrutura de chave privada persistente para verificar a autenticidade dos artefatos.",
+  "difficultyRationale": "Avalia se o candidato conhece o uso de 'keyless signing' do cosign para os artefatos de release do próprio Kubernetes, e entende que a verificação se baseia em identidade e emissor OIDC (`--certificate-identity`/`--certificate-oidc-issuer`), não em uma chave pública fixa do projeto.",
+  "prompt": "Como parte da segurança da cadeia de suprimentos (supply chain) dos próprios artefatos de release do Kubernetes, a documentação descreve o processo de assinatura dos binários (tarballs, arquivos SPDX, binários individuais) publicados em cada release, e como verificar essa assinatura. Segundo a documentação, qual ferramenta e qual método de assinatura são usados, e qual informação de identidade a verificação exige em vez de uma chave pública?",
+  "explanation": "A documentação afirma que o processo de release do Kubernetes assina todos os artefatos binários usando o 'keyless signing' do cosign, e mostra a verificação via `cosign verify-blob` exigindo os parâmetros `--certificate-identity` (a identidade, por exemplo uma conta de serviço do Google) e `--certificate-oidc-issuer` (o emissor OIDC dessa identidade) em vez de uma chave pública fixa do projeto.",
   "options": [
     {
       "key": "A",
-      "text": "cosign, usando 'keyless signing' -- o que elimina a necessidade de uma infraestrutura de chave privada estática e de longa duração mantida pelo projeto para verificar os artefatos.",
+      "text": "cosign, usando 'keyless signing' -- a verificação exige `--certificate-identity` e `--certificate-oidc-issuer` (a identidade do assinante e seu emissor OIDC), em vez de uma chave pública fixa do projeto.",
       "correct": true,
-      "explanation": "Correto: é exatamente essa a descrição da documentação para o processo de assinatura dos binários de release do Kubernetes."
+      "explanation": "Correto: é exatamente essa a descrição da documentação para o processo de assinatura e verificação dos binários de release do Kubernetes."
     },
     {
       "key": "B",
@@ -21,9 +21,9 @@
     },
     {
       "key": "C",
-      "text": "cosign, mas usando uma chave privada de longa duração armazenada em um HSM do projeto, exigindo a mesma chave para verificar qualquer release passado ou futuro.",
+      "text": "cosign, mas a verificação exige apenas a chave pública fixa do projeto (`--key k8s-release.pub`), sem qualquer parâmetro de identidade ou emissor OIDC.",
       "correct": false,
-      "explanation": "Incorreto: a documentação descreve especificamente o 'keyless signing' do cosign, cuja característica notável é não depender de uma chave privada de longa duração."
+      "explanation": "Incorreto: a documentação mostra a verificação exigindo `--certificate-identity` e `--certificate-oidc-issuer`, não uma chave pública fixa -- é exatamente essa ausência de chave fixa que caracteriza o 'keyless signing'."
     },
     {
       "key": "D",

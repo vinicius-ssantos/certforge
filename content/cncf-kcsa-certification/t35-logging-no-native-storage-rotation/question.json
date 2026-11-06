@@ -34,7 +34,11 @@
   ],
   "references": [
     {
-      "title": "Kubernetes Documentation -- Logging Architecture (no native log storage; kubelet log rotation)",
+      "title": "Kubernetes Documentation -- Logging Architecture (no native storage solution for log data)",
+      "url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/"
+    },
+    {
+      "title": "Kubernetes Documentation -- Logging Architecture (kubelet log rotation; 40MiB-written/10MiB-rotated example)",
       "url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/#log-rotation"
     },
     {

@@ -34,8 +34,8 @@
   ],
   "references": [
     {
-      "title": "Kubernetes Documentation -- Authenticating (multiple authentication strategies, first success short-circuits evaluation)",
-      "url": "https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authentication-strategies"
+      "title": "Kubernetes Documentation -- Authenticating (multiple authentication methods, first success short-circuits evaluation)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authentication-methods"
     }
   ],
   "evidence": {
