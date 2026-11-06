@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000047",
+  "objectiveKeys": ["TFA-7c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber o nome exato da variável de ambiente que habilita logs detalhados (TF_LOG), para onde a saída vai (stderr) e a ordem de verbosidade decrescente dos seus níveis -- não apenas que 'existe uma forma de ver mais detalhes'.",
+  "prompt": "Uma pessoa quer depurar um comportamento inesperado do Terraform e precisa habilitar logs detalhados, escolhendo o nível de verbosidade mais apropriado. Segundo a documentação oficial sobre depuração, qual variável de ambiente habilita esses logs, para onde eles são direcionados, e quais são seus níveis, em ordem decrescente de verbosidade?",
+  "explanation": "A documentação afirma que o Terraform tem logs detalhados que podem ser habilitados definindo a variável de ambiente TF_LOG para qualquer valor, fazendo os logs detalhados aparecerem no stderr. É possível definir TF_LOG para um dos níveis, em ordem decrescente de verbosidade: TRACE, DEBUG, INFO, WARN ou ERROR. Definir TF_LOG como JSON gera logs no nível TRACE ou mais alto, usando uma codificação JSON interpretável -- mas a documentação avisa que essa codificação JSON não é considerada uma interface estável.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A variável TF_LOG, direcionando os logs para stdout; seus níveis, em ordem decrescente de verbosidade, seriam ERROR, WARN, INFO, DEBUG, TRACE -- a ordem inversa da descrita na documentação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação direciona os logs detalhados para stderr, não stdout, e lista a ordem decrescente de verbosidade como TRACE, DEBUG, INFO, WARN, ERROR -- não a ordem inversa."
+    },
+    {
+      "key": "B",
+      "text": "TF_LOG, que direciona os logs detalhados para stderr; seus níveis, em ordem decrescente de verbosidade, são TRACE, DEBUG, INFO, WARN e ERROR -- e TF_LOG=JSON produz esses logs em uma codificação JSON interpretável, embora não considerada uma interface estável pela documentação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a variável, o destino da saída, a ordem dos níveis e a observação sobre a codificação JSON que a documentação descreve."
+    },
+    {
+      "key": "C",
+      "text": "TF_DEBUG, uma variável que a documentação descreveria como aceitando apenas o valor true ou false, sem níveis intermediários de verbosidade nem qualquer opção de codificação JSON.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação nomeia a variável como TF_LOG, não TF_DEBUG, e descreve múltiplos níveis de verbosidade (TRACE, DEBUG, INFO, WARN, ERROR) além da opção de codificação JSON -- não um simples alternador true/false."
+    },
+    {
+      "key": "D",
+      "text": "TF_LOG, mas a documentação afirmaria que essa variável não aceita nenhum nível de verbosidade -- apenas habilita ou desabilita todos os logs possíveis de uma só vez, sem nenhuma granularidade entre eles nem qualquer opção de formatação de saída disponível para quem for depurar.",
+      "correct": false,
+      "explanation": "Incorreto: embora definir TF_LOG para qualquer valor já habilite logs detalhados, a documentação descreve níveis específicos de verbosidade (TRACE, DEBUG, INFO, WARN, ERROR) que podem ser escolhidos, não apenas um alternador sem granularidade."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Debugging Terraform (Set the TF_LOG variable: levels, stderr output, JSON encoding not a stable interface)",
+      "url": "https://developer.hashicorp.com/terraform/internals/debugging#set-the-tf_log-variable"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

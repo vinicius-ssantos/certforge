@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000048",
+  "objectiveKeys": ["TFA-8a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige reconhecer a definição oficial de HCP Terraform e o que ela inclui -- gerenciar runs em um ambiente consistente e confiável, com acesso a state e secrets compartilhados, controles de acesso, um registro privado de módulos e controles de política -- em vez de tratá-lo como um simples executor remoto do comando apply.",
+  "prompt": "Uma equipe quer que seus runs do Terraform aconteçam em um ambiente remoto consistente, com state compartilhado entre os membros da equipe, em vez de cada pessoa executar terraform apply localmente com seu próprio state. Segundo a documentação oficial, o que é o HCP Terraform e o que ele inclui para resolver esse tipo de necessidade?",
+  "explanation": "A documentação descreve o HCP Terraform como uma aplicação que ajuda equipes a usar o Terraform em conjunto. Ela afirma que o HCP Terraform gerencia runs do Terraform em um ambiente consistente e confiável, e inclui acesso facilitado a state e dados secretos compartilhados, controles de acesso para aprovar mudanças na infraestrutura, um registro privado para compartilhar módulos Terraform, e controles de política detalhados para governar o conteúdo das configurações Terraform.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma aplicação que ajuda equipes a usar o Terraform em conjunto, gerenciando runs em um ambiente consistente e confiável, com acesso a state e secrets compartilhados, controles de acesso, um registro privado de módulos e controles de política para governar configurações.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para o HCP Terraform e o que ele inclui."
+    },
+    {
+      "key": "B",
+      "text": "Um comando da CLI local do Terraform que apenas substitui terraform apply por uma versão mais rápida, sem nenhuma relação com state compartilhado, controles de acesso ou registro de módulos entre os membros da equipe de infraestrutura responsável pelas configurações aplicadas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o HCP Terraform como uma aplicação separada, não um comando da CLI local, e inclui explicitamente state compartilhado, controles de acesso e um registro privado de módulos."
+    },
+    {
+      "key": "C",
+      "text": "Um provider do Terraform que precisa ser declarado em required_providers para que qualquer configuração possa ser aplicada, da mesma forma que o provider aws ou azurerm.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve o HCP Terraform como um provider -- ele é uma aplicação para gerenciar runs e colaboração em equipe, não um plugin declarado em required_providers."
+    },
+    {
+      "key": "D",
+      "text": "Uma ferramenta exclusivamente de armazenamento de state remoto, sem nenhum recurso de controle de acesso, registro de módulos ou controle de política sobre o conteúdo das configurações que a equipe mantém.",
+      "correct": false,
+      "explanation": "Incorreto: embora inclua acesso a state compartilhado, a documentação descreve o HCP Terraform com um escopo muito mais amplo, incluindo controles de acesso, registro privado de módulos e controles de política -- não apenas armazenamento de state."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — What is HCP Terraform? (manages runs in a consistent environment; shared state/secrets, access controls, private registry, policy controls)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
