@@ -23,7 +23,7 @@
       "key": "C",
       "text": "Declarando a região diretamente dentro de cada bloco resource individualmente, sem nenhum bloco provider adicional, já que o Terraform escolhe a região automaticamente por recurso com base no nome do módulo que o declara.",
       "correct": false,
-      "explanation": "Incorreto: a região e demais argumentos específicos do provider ficam no bloco provider, não em cada resource; sem um segundo bloco provider com alias, não há como um recurso apontar para uma configuração alternativa."
+      "explanation": "Incorreto: o Terraform não escolhe a região automaticamente com base no nome do módulo -- isso não é um mecanismo documentado. A forma documentada para múltiplas configurações do mesmo provider é um bloco provider adicional com alias, referenciado pelo meta-argumento provider do recurso."
     },
     {
       "key": "D",
