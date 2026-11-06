@@ -196,21 +196,21 @@ Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
 | `TFA-4f` | Define resource dependencies in configuration | `t20-depends-on-hidden-dependency` |
 | `TFA-4g` | Validate configuration using custom conditions | `t21-precondition-postcondition-timing` |
 | `TFA-4h` | Understand best practices for managing sensitive data, including secrets management with Vault | `t22-sensitive-vs-ephemeral-storage` |
-| `TFA-5a` | Explain how Terraform sources modules | _none yet_ |
-| `TFA-5b` | Describe variable scope within modules | _none yet_ |
-| `TFA-5c` | Use modules in configuration | _none yet_ |
-| `TFA-5d` | Manage module versions | _none yet_ |
-| `TFA-6a` | Describe the local backend | _none yet_ |
-| `TFA-6b` | Describe state locking | _none yet_ |
-| `TFA-6c` | Configure remote state using the backend block | _none yet_ |
-| `TFA-6d` | Manage resource drift and Terraform state | _none yet_ |
-| `TFA-7a` | Import existing infrastructure into your Terraform workspace | _none yet_ |
-| `TFA-7b` | Use the CLI to inspect state | _none yet_ |
-| `TFA-7c` | Describe when and how to use verbose logging | _none yet_ |
-| `TFA-8a` | Use HCP Terraform to create infrastructure | _none yet_ |
-| `TFA-8b` | Describe HCP Terraform collaboration and governance features | _none yet_ |
-| `TFA-8c` | Describe how to organize and use HCP Terraform workspaces and projects | _none yet_ |
-| `TFA-8d` | Configure and use HCP Terraform integration | _none yet_ |
+| `TFA-5a` | Explain how Terraform sources modules | `t23-module-source-types` |
+| `TFA-5b` | Describe variable scope within modules | `t24-variable-scope-root-vs-child-module` |
+| `TFA-5c` | Use modules in configuration | `t25-module-input-output-reference` |
+| `TFA-5d` | Manage module versions | `t26-module-version-constraint-git-ref` |
+| `TFA-6a` | Describe the local backend | `t27-local-backend-default` |
+| `TFA-6b` | Describe state locking | `t28-state-locking-automatic` |
+| `TFA-6c` | Configure remote state using the backend block | `t29-backend-block-limitations` |
+| `TFA-6d` | Manage resource drift and Terraform state | `t30-refresh-only-mode-drift` |
+| `TFA-7a` | Import existing infrastructure into your Terraform workspace | `t31-import-cli-vs-import-block` |
+| `TFA-7b` | Use the CLI to inspect state | `t32-state-list-and-show-inspect` |
+| `TFA-7c` | Describe when and how to use verbose logging | `t33-tf-log-verbosity-levels` |
+| `TFA-8a` | Use HCP Terraform to create infrastructure | `t34-hcp-terraform-what-it-is` |
+| `TFA-8b` | Describe HCP Terraform collaboration and governance features | `t35-hcp-terraform-governance-features` |
+| `TFA-8c` | Describe how to organize and use HCP Terraform workspaces and projects | `t36-hcp-terraform-workspaces-vs-directories` |
+| `TFA-8d` | Configure and use HCP Terraform integration | `t37-hcp-terraform-vcs-integration` |
 
-22 of 37 seeded objectives claimed by a published question.
+37 of 37 seeded objectives claimed by a published question.
 
