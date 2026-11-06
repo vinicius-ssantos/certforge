@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000016",
+  "objectiveKeys": ["KCSA-6.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe a diferença concreta entre Build L1 e Build L2 na trilha de build do SLSA -- L1 exige apenas que a proveniência exista (podendo ser forjada ou ignorada), enquanto L2 exige proveniência assinada e gerada por uma plataforma de build hospedada -- em vez de tratar os níveis do SLSA como uma escala genérica de 'mais seguro'.",
+  "prompt": "Uma organização publica um artefato de software com proveniência de build (provenance) que apenas descreve como o artefato foi construído, mas essa proveniência não é assinada nem gerada por uma plataforma de build hospedada -- qualquer pessoa poderia forjá-la ou ignorá-la sem muito esforço. Segundo a especificação do SLSA (Supply-chain Levels for Software Artifacts) para a trilha de build, esse artefato atende a qual nível, e o que seria necessário para avançar ao próximo?",
+  "explanation": "A especificação do SLSA (trilha de build) descreve o Build L1 como o nível em que o pacote tem proveniência mostrando como foi construído, mas essa proveniência pode ser incompleta ou não assinada -- é trivial de contornar ou forjar, e seu foco é mitigar erros (mistakes), não adulteração. Para avançar ao Build L2, a especificação exige proveniência assinada, gerada por uma plataforma de build hospedada (hosted build platform) -- o foco do L2 passa a ser adulteração após o build (tampering after the build).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Build L1, e avançar ao Build L2 exigiria que a proveniência passasse a ser assinada e gerada por uma plataforma de build hospedada -- o L1 por si só é trivial de contornar ou forjar.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a descrição que a especificação do SLSA dá para o Build L1 e para o requisito de avançar ao Build L2."
+    },
+    {
+      "key": "B",
+      "text": "Build L3, pois a especificação do SLSA afirma que qualquer proveniência de build, mesmo não assinada e gerada manualmente, já satisfaz o nível mais alto da trilha de build por si só.",
+      "correct": false,
+      "explanation": "Incorreto: a especificação descreve o Build L3 como exigindo uma plataforma de build hardened (endurecida) contra adulteração durante o build -- muito além de uma proveniência simplesmente existir, que caracteriza apenas o Build L1."
+    },
+    {
+      "key": "C",
+      "text": "Build L0, e não seria possível avançar a nenhum outro nível sem antes reescrever todo o processo de build do zero, já que a especificação trataria a mera existência de proveniência como equivalente à ausência total de SLSA.",
+      "correct": false,
+      "explanation": "Incorreto: a especificação descreve o Build L0 como 'nenhuma garantia' (sem requisitos), mas o cenário descrito já tem proveniência mostrando como o artefato foi construído -- isso corresponde ao Build L1, não ao L0."
+    },
+    {
+      "key": "D",
+      "text": "Build L2, e avançar ao Build L3 exigiria apenas assinar digitalmente essa mesma proveniência, sem nenhuma mudança na plataforma de build usada para gerá-la.",
+      "correct": false,
+      "explanation": "Incorreto: proveniência não assinada e não gerada por uma plataforma hospedada caracteriza o Build L1, não o L2 -- e a especificação exige uma plataforma de build hardened, não apenas uma assinatura, para alcançar o Build L3."
+    }
+  ],
+  "references": [
+    {
+      "title": "SLSA v1.2 -- Build Track Basics (Build L1: provenance exists, trivial to forge/bypass; Build L2: signed provenance from a hosted build platform)",
+      "url": "https://slsa.dev/spec/v1.2/build-track-basics"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

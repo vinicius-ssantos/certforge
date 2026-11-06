@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000016",
+  "objectiveKeys": ["KCSA-6.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe localizar uma técnica específica dentro da matriz MITRE ATT&CK para Containers pela tática correta -- 'Escape to Host' está sob Privilege Escalation, não sob Persistence ou Defense Evasion, com as quais é fácil confundir conceitualmente.",
+  "prompt": "A matriz MITRE ATT&CK para Containers (attack.mitre.org) lista a técnica 'Escape to Host' -- um atacante escapando do isolamento do container para o sistema operacional do nó hospedeiro. Segundo a própria matriz, sob qual tática essa técnica está categorizada?",
+  "explanation": "A matriz ATT&CK para Containers organiza suas técnicas em táticas, incluindo Initial Access, Execution, Persistence, Privilege Escalation, Discovery e outras. 'Escape to Host' aparece listada na coluna de Privilege Escalation (6 técnicas), junto com técnicas como Exploitation for Privilege Escalation -- não na coluna de Persistence, nem na de Discovery.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Persistence, pois escapar para o host hospedeiro teria como único objetivo manter acesso de longo prazo ao cluster, sem relação com a obtenção de privilégios mais altos do que os do container original.",
+      "correct": false,
+      "explanation": "Incorreto: a matriz lista 'Escape to Host' na coluna de Privilege Escalation, não na de Persistence -- o foco dessa técnica é a elevação de privilégio obtida ao sair do isolamento do container."
+    },
+    {
+      "key": "B",
+      "text": "Privilege Escalation, junto com técnicas como Exploitation for Privilege Escalation, pois escapar do isolamento do container para o sistema operacional do host concede ao atacante um nível de acesso maior do que ele tinha dentro do container.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a coluna em que a matriz ATT&CK para Containers lista a técnica 'Escape to Host'."
+    },
+    {
+      "key": "C",
+      "text": "Discovery, já que escapar para o host seria classificado pela matriz apenas como uma forma de descobrir informações sobre a infraestrutura subjacente, sem conceder ao atacante nenhum nível adicional de acesso, controle ou execução de comandos sobre o sistema hospedeiro.",
+      "correct": false,
+      "explanation": "Incorreto: a matriz não lista 'Escape to Host' em Discovery -- essa técnica concede acesso ao sistema host, não apenas informação sobre ele, e está categorizada em Privilege Escalation."
+    },
+    {
+      "key": "D",
+      "text": "Em uma tática de evasão de defesa, pois a matriz trataria o escape do container exclusivamente como uma forma de evitar ferramentas de monitoramento, sem qualquer ganho de privilégio associado à técnica.",
+      "correct": false,
+      "explanation": "Incorreto: a matriz categoriza 'Escape to Host' em Privilege Escalation -- o efeito central documentado é o ganho de acesso ao host, não apenas evasão de detecção."
+    }
+  ],
+  "references": [
+    {
+      "title": "MITRE ATT&CK -- Containers Matrix (Escape to Host, listed under the Privilege Escalation tactic)",
+      "url": "https://attack.mitre.org/matrices/enterprise/containers/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

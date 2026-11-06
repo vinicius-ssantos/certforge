@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000011",
+  "objectiveKeys": ["KCSA-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que os CIS Benchmarks para Kubernetes não são um único documento universal, mas uma família de benchmarks separados por plataforma/distribuição, cada um versionado de forma independente -- não apenas que 'o CIS tem um benchmark para Kubernetes'.",
+  "prompt": "Uma equipe quer usar os CIS Benchmarks como referência de controles de segurança para um cluster Kubernetes gerenciado (por exemplo, no Amazon EKS). Segundo a própria página de benchmarks do CIS para Kubernetes, existe um único CIS Benchmark universal que cobre qualquer forma de rodar Kubernetes, ou benchmarks distintos por plataforma?",
+  "explanation": "A página oficial do CIS afirma que o CIS Benchmark para Kubernetes é produto de um processo de consenso da comunidade e consiste em diretrizes de configuração segura, disponíveis gratuitamente em PDF para uso não comercial. Mas o CIS publica benchmarks distintos por plataforma/distribuição -- por exemplo, Amazon EKS, Azure AKS, Google GKE, Oracle OKE, Red Hat OpenShift, além de um benchmark genérico 'Kubernetes' -- cada um com seu próprio número de versão. Não existe um único benchmark universal que cubra todas essas plataformas de forma idêntica.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim, existe um único CIS Benchmark universal chamado apenas 'Kubernetes', e ele é o mesmo documento recomendado pelo CIS para qualquer distribuição ou serviço gerenciado, incluindo EKS, AKS, GKE, OKE e OpenShift, sem nenhuma variante de versão específica de plataforma nessa lista.",
+      "correct": false,
+      "explanation": "Incorreto: a página do CIS lista benchmarks distintos para Amazon EKS, Azure AKS, Google GKE, Oracle OKE e Red Hat OpenShift, além do benchmark genérico 'Kubernetes' -- não é um único documento universal."
+    },
+    {
+      "key": "B",
+      "text": "Não: o CIS publica benchmarks distintos por plataforma/distribuição (por exemplo, EKS, AKS, GKE, OKE, OpenShift, além de um benchmark genérico 'Kubernetes'), cada um com seu próprio número de versão, como diretrizes de configuração segura desenvolvidas por consenso da comunidade.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a lista de benchmarks distintos que a página oficial do CIS apresenta para Kubernetes, cada um versionado separadamente."
+    },
+    {
+      "key": "C",
+      "text": "Não existe nenhum CIS Benchmark para Kubernetes; o CIS publica benchmarks apenas para sistemas operacionais e bancos de dados, nunca para orquestradores de containers.",
+      "correct": false,
+      "explanation": "Incorreto: a própria página do CIS é dedicada aos benchmarks de Kubernetes, incluindo variantes para EKS, AKS, GKE, OKE e OpenShift."
+    },
+    {
+      "key": "D",
+      "text": "Sim, existe um único benchmark universal, mas ele é vendido exclusivamente por assinatura paga, sem nenhuma versão disponível gratuitamente em PDF para uso não comercial.",
+      "correct": false,
+      "explanation": "Incorreto: a página do CIS afirma explicitamente que os CIS Benchmarks estão disponíveis gratuitamente em PDF para uso não comercial -- e, de qualquer forma, não há um único benchmark universal, e sim vários por plataforma."
+    }
+  ],
+  "references": [
+    {
+      "title": "CIS -- CIS Kubernetes Benchmarks (community consensus; distinct, separately-versioned benchmarks per platform: EKS, AKS, GKE, OKE, OpenShift, generic Kubernetes; free PDF for non-commercial use)",
+      "url": "https://www.cisecurity.org/benchmark/kubernetes"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
