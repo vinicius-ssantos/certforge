@@ -40,6 +40,10 @@
     {
       "title": "Terraform Documentation — Output Values (Sensitive values in outputs: redacted by default; terraform output -json/-raw show plaintext)",
       "url": "https://developer.hashicorp.com/terraform/language/values/outputs#sensitive-values-in-outputs"
+    },
+    {
+      "title": "Terraform Documentation — Manage sensitive data (sensitive values are stored in both state and plan files)",
+      "url": "https://developer.hashicorp.com/terraform/language/manage-sensitive-data#hide-sensitive-variables-and-outputs"
     }
   ],
   "evidence": {

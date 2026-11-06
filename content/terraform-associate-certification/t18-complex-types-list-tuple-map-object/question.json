@@ -4,14 +4,14 @@
   "objectiveKeys": ["TFA-4d"],
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige saber exatamente quais tipos a documentação chama de 'tipos complexos' (list/tuple, set, map/object) e como cada par se comporta entre si, em vez de assumir que qualquer tipo coleção é intercambiável com qualquer outro.",
-  "prompt": "A documentação oficial do Terraform, na seção 'More About Complex Types', descreve como list/tuple e map/object se comportam entre si na maioria das situações, e quais tipos são chamados de 'tipos complexos'. Segundo essa seção, o que ela afirma?",
-  "explanation": "A documentação afirma que list/tuple e map/object (junto com o tipo set relacionado) são chamados de tipos complexos, estruturais ou de coleção -- em contraste com string, number e bool, chamados de tipos primitivos. Na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si; por isso, quando a distinção não é relevante, a documentação usa cada par de termos de forma intercambiável.",
+  "prompt": "A documentação oficial do Terraform descreve, na seção 'Types', quais tipos são chamados de 'tipos complexos', e, na seção 'More About Complex Types', como list/tuple e map/object se comportam entre si na maioria das situações. Segundo essas duas seções, o que elas afirmam?",
+  "explanation": "A documentação afirma, na seção 'Types', que string, number e bool são chamados de tipos primitivos, enquanto list/tuple e map/object são chamados de tipos complexos, estruturais ou de coleção (o tipo set é mencionado como relacionado a eles, sem que a documentação o rotule com esses mesmos termos). Na seção 'More About Complex Types', ela afirma que, na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si; por isso, quando a distinção não é relevante, a documentação usa cada par de termos de forma intercambiável.",
   "options": [
     {
       "key": "A",
-      "text": "list/tuple e map/object (junto com set) são chamados de tipos complexos; na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si.",
+      "text": "list/tuple e map/object são chamados de tipos complexos (com set mencionado como um tipo relacionado); na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si.",
       "correct": true,
-      "explanation": "Correto: é exatamente essa a classificação e o comportamento que a seção 'More About Complex Types' descreve."
+      "explanation": "Correto: é exatamente essa a classificação e o comportamento que as seções 'Types' e 'More About Complex Types' descrevem."
     },
     {
       "key": "B",
@@ -21,7 +21,7 @@
     },
     {
       "key": "C",
-      "text": "list e map são sempre totalmente intercambiáveis entre si em qualquer contexto de configuração, já que a documentação não haveria nenhuma distinção relevante entre o tipo lista e o tipo mapa.",
+      "text": "list e map são sempre totalmente intercambiáveis entre si em qualquer contexto de configuração, já que a documentação não haveria nenhuma distinção relevante entre o tipo lista e o tipo mapa em nenhuma situação prática.",
       "correct": false,
       "explanation": "Incorreto: a documentação descreve a intercambiabilidade dentro de cada par -- list com tuple, e map com object --, não entre list e map, que permanecem tipos distintos com comportamentos diferentes."
     },
@@ -34,7 +34,11 @@
   ],
   "references": [
     {
-      "title": "Terraform Documentation — Types and Values (More About Complex Types: list/tuple, set, map/object)",
+      "title": "Terraform Documentation — Types and Values (Types: primitive types vs. complex/structural/collection types)",
+      "url": "https://developer.hashicorp.com/terraform/language/expressions/types#types"
+    },
+    {
+      "title": "Terraform Documentation — Types and Values (More About Complex Types: list/tuple and map/object behave identically within each pair)",
       "url": "https://developer.hashicorp.com/terraform/language/expressions/types#more-about-complex-types"
     }
   ],
