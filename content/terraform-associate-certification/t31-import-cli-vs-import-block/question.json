@@ -3,9 +3,9 @@
   "topicId": "b3000000-0000-4000-8000-000000000047",
   "objectiveKeys": ["TFA-7a"],
   "difficulty": "MEDIUM",
-  "difficultyRationale": "Exige saber que a documentação descreve dois caminhos distintos para importar infraestrutura existente -- o comando terraform import, para um único recurso, e o bloco import na configuração, para vários -- em vez de tratar 'importar' como um único mecanismo.",
+  "difficultyRationale": "Exige saber que, entre as abordagens que a documentação descreve para importar infraestrutura existente, o comando terraform import se aplica a um único recurso e o bloco import na configuração se aplica a vários -- em vez de tratar 'importar' como um único mecanismo.",
   "prompt": "Uma equipe precisa importar um único bucket S3 já existente para o state do Terraform, e depois, em outro projeto, precisa importar várias dezenas de recursos existentes de uma vez, revisando as importações como parte do fluxo normal de plan e apply. Segundo a documentação oficial sobre workflows de importação, qual mecanismo a documentação recomenda para cada um desses dois casos?",
-  "explanation": "A documentação descreve dois workflows de importação. Para importar um único recurso existente, ela recomenda o comando terraform import -- antes de executá-lo, é preciso escrever manualmente um bloco resource que descreva onde o Terraform deve mapear o objeto importado. Para importar mais de um recurso de uma vez, ela recomenda o bloco import na configuração: esse bloco gera a configuração automaticamente e permite revisar as importações como parte do fluxo normal de plan e apply.",
+  "explanation": "Entre as abordagens que a documentação descreve para importar infraestrutura existente, duas se aplicam a esses dois cenários. Para importar um único recurso existente, ela recomenda o comando terraform import -- antes de executá-lo, é preciso escrever manualmente um bloco resource que descreva onde o Terraform deve mapear o objeto importado. Para importar mais de um recurso de uma vez, ela recomenda o bloco import na configuração: esse bloco gera a configuração automaticamente e permite revisar as importações como parte do fluxo normal de plan e apply.",
   "options": [
     {
       "key": "A",
@@ -29,7 +29,7 @@
       "key": "D",
       "text": "Nenhum dos dois casos pode ser resolvido sem recriar manualmente cada recurso do zero usando terraform apply, já que a documentação não descreveria nenhum mecanismo de importação de infraestrutura já existente.",
       "correct": false,
-      "explanation": "Incorreto: a documentação descreve explicitamente dois workflows de importação de infraestrutura existente -- o comando terraform import e o bloco import --, sem exigir recriar os recursos do zero."
+      "explanation": "Incorreto: a documentação descreve explicitamente abordagens para importar infraestrutura existente, incluindo o comando terraform import e o bloco import, sem exigir recriar os recursos do zero."
     }
   ],
   "references": [
