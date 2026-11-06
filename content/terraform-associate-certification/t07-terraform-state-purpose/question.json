@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000042",
+  "objectiveKeys": ["TFA-2d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender por que o Terraform precisa de uma estrutura de estado própria em vez de depender de tags do provedor — um raciocínio histórico explícito na documentação, não apenas a afirmação genérica de que 'o Terraform tem um state file'.",
+  "prompt": "A documentação oficial sobre o propósito do Terraform state explica que, para alguns provedores como a AWS, seria teoricamente possível usar tags para mapear a configuração aos recursos reais — e que versões iniciais do Terraform tentaram exatamente isso. Por que a documentação diz que essa abordagem foi abandonada em favor de uma estrutura de estado própria?",
+  "explanation": "A documentação afirma que, embora para alguns providers como AWS fosse teoricamente possível usar algo como tags, os primeiros prototypes do Terraform que tentaram isso rapidamente encontraram problemas — o principal deles sendo que nem todo recurso suporta tags, e nem todo provedor de nuvem suporta tags. Por isso, para mapear a configuração aos recursos do mundo real, o Terraform usa sua própria estrutura de estado (o state file), que atua como o banco de dados necessário para essa correspondência.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque tags são mutáveis e qualquer usuário com acesso ao provedor de nuvem poderia alterá-las livremente, tornando-as, segundo a documentação, um mecanismo de segurança inadequado para armazenar segredos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não menciona mutabilidade de tags nem segurança de segredos como motivo — o problema citado é a falta de suporte a tags em certos recursos e provedores."
+    },
+    {
+      "key": "B",
+      "text": "Porque nem todo tipo de recurso e nem todo provedor de nuvem suporta tags, o que tornava a abordagem baseada em tags insuficiente para mapear configuração a recursos de forma geral.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o motivo que a documentação cita como o principal problema enfrentado pelos prototypes iniciais baseados em tags."
+    },
+    {
+      "key": "C",
+      "text": "Porque o uso de tags tornaria o Terraform dependente de uma conexão constante com a internet para toda operação, enquanto o state file permite operação totalmente offline.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não apresenta conectividade ou operação offline como a razão para abandonar tags; o motivo apontado é a falta de suporte universal a tags entre recursos e provedores."
+    },
+    {
+      "key": "D",
+      "text": "Porque tags só podem armazenar uma única string por recurso, e a documentação afirma que isso impediria o Terraform de rastrear mais de uma dependência de recurso por vez.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não discute limite de tamanho ou cardinalidade de tags como motivo; o problema citado é a ausência de suporte a tags em certos recursos e provedores, não uma limitação de capacidade das tags em si."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Purpose of Terraform State (Mapping to the Real World)",
+      "url": "https://developer.hashicorp.com/terraform/language/state/purpose#mapping-to-the-real-world"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
