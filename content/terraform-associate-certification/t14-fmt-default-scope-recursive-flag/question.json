@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3g"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber o escopo padrão de terraform fmt (apenas o diretório atual ou especificado, sem recursão) e o papel específico da opção -recursive, em vez de assumir que o comando já processa subdiretórios por padrão.",
+  "prompt": "Um módulo Terraform tem arquivos de configuração tanto no diretório raiz quanto em um subdiretório chamado modules/network. Uma pessoa executa terraform fmt sem nenhuma opção, a partir do diretório raiz. Segundo a documentação oficial, esse comando formata os arquivos do subdiretório modules/network também, e o que a opção -recursive faz?",
+  "explanation": "A documentação afirma que, por padrão, o comando terraform fmt processa apenas o diretório especificado ou o diretório atual -- não subdiretórios. A opção -recursive processa arquivos em subdiretórios, além do diretório atual. Portanto, sem passar -recursive, os arquivos em modules/network não seriam formatados por essa execução.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim, por padrão terraform fmt já processa recursivamente todos os subdiretórios a partir de onde é executado, e a opção -recursive apenas desativa esse comportamento para formatar somente o diretório atual.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto -- por padrão o comando só processa o diretório atual ou especificado; -recursive é o que adiciona o processamento de subdiretórios, não o que o desativa."
+    },
+    {
+      "key": "B",
+      "text": "Não, por padrão terraform fmt processa apenas o diretório especificado ou o diretório atual, sem incluir subdiretórios; a opção -recursive é o que faz o comando processar também os arquivos em subdiretórios.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o comportamento padrão e o efeito da opção -recursive que a documentação do comando descreve."
+    },
+    {
+      "key": "C",
+      "text": "Não, terraform fmt nunca processa subdiretórios, nem mesmo com a opção -recursive, pois a documentação afirma que o comando foi projetado para operar em um único diretório por execução, sem exceção.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente a opção -recursive como uma forma de processar arquivos em subdiretórios além do diretório atual -- não é verdade que o comando nunca processa subdiretórios."
+    },
+    {
+      "key": "D",
+      "text": "Sim, pois a documentação afirma que terraform fmt sempre formata o módulo inteiro referenciado por qualquer chamada module dentro da configuração, independentemente de onde esses módulos estejam localizados no sistema de arquivos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve esse comportamento baseado em blocos module; o escopo padrão é apenas o diretório atual ou especificado, ampliável a subdiretórios com a opção -recursive."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform fmt (default scope is the current/specified directory only; -recursive processes subdirectories)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/fmt#usage"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

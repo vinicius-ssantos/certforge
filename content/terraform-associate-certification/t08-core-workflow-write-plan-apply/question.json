@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige reconhecer os três passos nomeados pela documentação oficial para o fluxo de trabalho central do Terraform, e o que cada um faz -- sem envolver sintaxe ou opções de comando.",
+  "prompt": "Segundo a visão geral do fluxo de trabalho central (core workflow) na documentação oficial do Terraform, quais são os três passos desse fluxo, na ordem em que a documentação os apresenta, e o que cada um faz?",
+  "explanation": "A documentação descreve o fluxo de trabalho central do Terraform como tendo três passos: Write (escrever/criar) -- autorar infraestrutura como código; Plan (planejar) -- revisar as mudanças antes de aplicá-las; e Apply (aplicar) -- provisionar infraestrutura reproduzível. Não há um quarto passo central chamado 'Destroy' nessa visão geral -- destruir infraestrutura é uma operação separada, não um dos três passos do fluxo central.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Plan, Write, Apply -- nessa ordem: primeiro planejar mentalmente a infraestrutura, depois escrever o código e, por fim, aplicá-lo, sem que a documentação descreva uma etapa formal de revisão do plano gerado antes da aplicação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista a ordem como Write, Plan, Apply -- primeiro escrever o código, depois gerar e revisar um plano, e só então aplicar -- não Plan antes de Write, e o Plan é uma etapa formal de revisão, não um planejamento mental informal."
+    },
+    {
+      "key": "B",
+      "text": "Write, Plan, Apply, Destroy -- quatro passos centrais, sendo Destroy o passo final obrigatório de todo ciclo de vida de infraestrutura gerenciada pelo Terraform.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o fluxo central como tendo três passos, não quatro -- Destroy não é listado como um dos passos do core workflow."
+    },
+    {
+      "key": "C",
+      "text": "Write, Plan, Apply -- escrever o código de infraestrutura, revisar as mudanças propostas antes de aplicá-las, e então provisionar a infraestrutura de forma reproduzível.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a definição que a visão geral do core workflow dá para os três passos, nessa ordem -- Write (autorar código), Plan (revisar mudanças) e Apply (provisionar infraestrutura reproduzível)."
+    },
+    {
+      "key": "D",
+      "text": "Init, Validate, Apply -- inicializar o diretório de trabalho, validar a sintaxe da configuração e aplicar as mudanças, sem nenhuma etapa dedicada a gerar e revisar um plano de execução antes da aplicação.",
+      "correct": false,
+      "explanation": "Incorreto: Init e Validate são comandos de apoio ao fluxo, mas a documentação nomeia os três passos do core workflow como Write, Plan e Apply -- não Init, Validate, Apply -- e inclui explicitamente uma etapa de revisão do plano antes de aplicar."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Core Terraform Workflow (Write, Plan, Apply)",
+      "url": "https://developer.hashicorp.com/terraform/intro/core-workflow#core-terraform-workflow-overview"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

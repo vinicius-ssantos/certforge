@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber exatamente o que terraform validate verifica (sintaxe e consistência interna) e o que ele explicitamente não verifica (serviços remotos, como state remoto ou APIs de provider) -- uma distinção que separa validate de plan.",
+  "prompt": "Uma configuração Terraform referencia um recurso cujo provider exige credenciais de API que não estão configuradas no ambiente. Uma pessoa executa terraform validate nessa configuração. Segundo a documentação oficial, o que esse comando verifica, e ele detectaria a ausência dessas credenciais de API?",
+  "explanation": "A documentação afirma que terraform validate executa verificações que avaliam se uma configuração é sintaticamente válida e internamente consistente, independentemente de quaisquer variáveis fornecidas ou do state existente -- e que ele não valida serviços remotos, como state remoto ou APIs de provider. Portanto, a ausência de credenciais de API não seria detectada por esse comando, já que isso exigiria consultar a API do provider, algo que a documentação diz explicitamente que validate não faz.",
+  "options": [
+    {
+      "key": "A",
+      "text": "terraform validate verifica apenas se a sintaxe básica da configuração está bem-formada (chaves e aspas balanceadas), sem checar a correção de nomes de atributos ou tipos de valores dentro dos blocos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que validate também verifica a correção de nomes de atributos e tipos de valores, não apenas sintaxe básica bem-formada -- ele cobre consistência interna da configuração, não só chaves e aspas balanceadas."
+    },
+    {
+      "key": "B",
+      "text": "terraform validate verifica se a configuração é sintaticamente válida e internamente consistente, mas não valida serviços remotos como state remoto ou APIs de provider -- então ele não detectaria a ausência das credenciais de API, pois isso exigiria acessar a API do provider.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a distinção que a documentação faz -- validate cobre sintaxe e consistência interna, não serviços remotos como APIs de provider."
+    },
+    {
+      "key": "C",
+      "text": "terraform validate executa uma chamada de teste contra a API de cada provider referenciado na configuração para confirmar que as credenciais fornecidas são válidas, detectando esse tipo de problema antes mesmo de qualquer execução de terraform plan ou terraform apply pela pessoa responsável.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que validate não valida serviços remotos, como APIs de provider -- não há chamada de teste de credenciais nesse comando."
+    },
+    {
+      "key": "D",
+      "text": "terraform validate é equivalente a terraform plan, incluindo a leitura do state remoto e a geração de um plano de execução completo, apenas sem aplicar as mudanças propostas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue os dois comandos -- para verificar a configuração no contexto de uma execução específica (com state e variáveis), ela recomenda terraform plan, que inclui uma verificação de validação implícita; validate por si só não lê state remoto nem gera um plano."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform validate (does not validate remote services such as remote state or provider APIs)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/validate#introduction"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

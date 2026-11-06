@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3e"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber o comportamento padrão de terraform apply sem um arquivo de plano salvo (gera um plano e pede aprovação) e o papel específico de -auto-approve, em vez de assumir que apply sempre executa sem confirmação.",
+  "prompt": "Uma pessoa executa terraform apply em um terminal interativo, sem passar um arquivo de plano salvo e sem usar a opção -auto-approve. Segundo a documentação oficial, o que acontece antes de o Terraform realizar qualquer operação sobre a infraestrutura?",
+  "explanation": "A documentação afirma que, ao executar terraform apply sem passar um arquivo de plano salvo, o Terraform cria automaticamente um novo plano de execução, como se terraform plan tivesse sido executado, pede aprovação desse plano, e só então realiza as operações indicadas. A opção -auto-approve instrui o Terraform a aplicar o plano sem pedir essa confirmação -- ou seja, pular a aprovação não é o comportamento padrão, é o efeito explícito dessa opção.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Terraform realiza as operações sobre a infraestrutura imediatamente, sem gerar nem exibir nenhum plano de execução, já que pedir aprovação só ocorre quando a opção -auto-approve é explicitamente usada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação inverte exatamente essa relação -- o comportamento padrão é gerar um plano e pedir aprovação; é -auto-approve que remove esse pedido, não o contrário."
+    },
+    {
+      "key": "B",
+      "text": "O comando falha com um erro exigindo que um arquivo de plano salvo seja passado explicitamente, já que a documentação afirma que terraform apply nunca gera um plano por conta própria.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente o caso de executar apply sem um arquivo de plano salvo como o comportamento padrão (Automatic Plan Mode), no qual o Terraform gera o plano automaticamente -- o comando não falha exigindo um arquivo de plano."
+    },
+    {
+      "key": "C",
+      "text": "O Terraform gera um novo plano de execução, pede aprovação desse plano e só então realiza as operações -- a menos que a opção -auto-approve seja usada, que instrui o Terraform a aplicar o plano sem pedir confirmação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o comportamento padrão que a documentação descreve para terraform apply sem um plano salvo, e o papel de -auto-approve."
+    },
+    {
+      "key": "D",
+      "text": "O Terraform pede aprovação apenas quando a configuração cria recursos novos; para mudanças que apenas modificam ou destroem recursos existentes, ele aplica diretamente sem pedir confirmação, independentemente de -auto-approve.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não condiciona o pedido de aprovação ao tipo de ação (criar, modificar ou destruir) -- o comportamento padrão de pedir aprovação vale para o plano gerado como um todo, até que -auto-approve seja usado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform apply (Automatic Plan Mode: generates a plan, prompts for approval; -auto-approve skips it)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/apply#automatic-plan-mode"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

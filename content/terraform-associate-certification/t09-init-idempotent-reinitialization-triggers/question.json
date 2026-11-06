@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que terraform init é idempotente (sem efeito se nada mudou) e reconhecer especificamente quais mudanças de configuração exigem reinicialização, não apenas que 'init prepara o diretório'.",
+  "prompt": "Uma equipe já executou terraform init com sucesso em um diretório de trabalho e, meses depois, roda terraform init novamente sem ter alterado nada na configuração. Depois, ela altera os requisitos de um provider (provider requirements) na configuração. Segundo a documentação oficial, o que a documentação afirma sobre cada uma dessas duas situações?",
+  "explanation": "A documentação afirma que o comando terraform init é idempotente, e não terá efeito se nenhuma mudança for necessária -- você pode reinicializar a qualquer momento. Ela também afirma que certos tipos de mudança na configuração exigem reinicialização antes que operações normais possam continuar, incluindo mudanças nos requisitos de providers, nas fontes ou restrições de versão de módulos, e na configuração do backend. Se a reinicialização for necessária e não for feita, comandos que dependem da inicialização falharão com um erro informando isso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Rodar terraform init de novo sem mudanças é idempotente e não tem efeito; e, depois de alterar os requisitos de um provider, é necessário reinicializar, pois essa é uma das mudanças que a documentação cita como exigindo reinicialização.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação afirma sobre a idempotência do init e sobre mudanças em provider requirements exigirem reinicialização."
+    },
+    {
+      "key": "B",
+      "text": "Rodar terraform init de novo sem mudanças sempre falha com um erro, pois a documentação afirma que o comando só pode ser executado uma única vez por diretório de trabalho durante todo o seu ciclo de vida.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- você pode reinicializar a qualquer momento, e o comando é idempotente, sem falhar quando não há mudanças pendentes."
+    },
+    {
+      "key": "C",
+      "text": "Alterar os requisitos de um provider nunca exige reinicialização, já que a documentação afirma que apenas mudanças na configuração do backend remoto disparam essa exigência.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista explicitamente mudanças nos requisitos de providers, junto com mudanças de módulos e de backend, como gatilhos para reinicialização -- não apenas mudanças de backend."
+    },
+    {
+      "key": "D",
+      "text": "Terraform detecta automaticamente a mudança nos requisitos do provider e reinicializa o diretório de trabalho sozinho na próxima execução de qualquer comando, sem exigir que o usuário execute terraform init manualmente em nenhum momento do ciclo de vida do diretório.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que, se a reinicialização for necessária e não for feita, comandos que dependem da inicialização falham com um erro -- o Terraform não reinicializa automaticamente por conta própria."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Initialize the Working Directory (Reinitialization: idempotent; provider/module/backend changes require it)",
+      "url": "https://developer.hashicorp.com/terraform/cli/init#reinitialization"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
