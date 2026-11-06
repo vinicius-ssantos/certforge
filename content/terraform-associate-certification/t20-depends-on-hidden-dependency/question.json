@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4f"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que depends_on só é necessário para dependências ocultas que o Terraform não pode inferir sozinho -- não para toda relação entre recursos --, e em quais blocos ele pode ser usado.",
+  "prompt": "Um recurso depende do comportamento de outro, mas não referencia nenhum atributo desse outro recurso em seus próprios argumentos -- então o Terraform não consegue inferir essa dependência automaticamente. Segundo a documentação oficial sobre o depends_on, quando é necessário declarar essa dependência explicitamente, e em quais tipos de bloco esse meta-argumento pode ser usado?",
+  "explanation": "A documentação afirma que depends_on serve para lidar com dependências ocultas de recurso ou módulo que o Terraform não consegue inferir automaticamente. Só é necessário especificar explicitamente uma dependência quando um recurso ou módulo depende do comportamento de outro recurso mas não acessa nenhum dado desse recurso em seus argumentos. O meta-argumento pode ser usado em blocos module e em todos os blocos resource, independentemente do tipo de recurso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sempre que um recurso referencia um atributo de outro recurso em seus próprios argumentos, mesmo quando o Terraform já consegue inferir essa ordem de criação automaticamente a partir dessa própria referência de atributo.",
+      "correct": false,
+      "explanation": "Incorreto: quando um recurso já referencia o atributo de outro, o Terraform infere a dependência automaticamente -- depends_on serve apenas para dependências ocultas, que não aparecem em nenhuma referência de atributo."
+    },
+    {
+      "key": "B",
+      "text": "depends_on só pode ser usado em blocos resource, nunca em blocos module, já que módulos não têm dependências que precisem ser declaradas explicitamente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que depends_on pode ser usado tanto em blocos module quanto em todos os blocos resource."
+    },
+    {
+      "key": "C",
+      "text": "Apenas quando um recurso depende do comportamento de outro sem acessar nenhum dado desse recurso em seus argumentos; pode ser usado em blocos module e em todos os blocos resource, independentemente do tipo de recurso.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a condição e o escopo de uso que a documentação descreve para depends_on."
+    },
+    {
+      "key": "D",
+      "text": "depends_on aceita qualquer expressão arbitrária como valor, não apenas uma lista de referências a outros recursos ou módulos da mesma configuração.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que a lista não pode incluir expressões arbitrárias, porque o valor de depends_on precisa ser conhecido antes de o Terraform conhecer as relações entre recursos e poder avaliar expressões com segurança."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — depends_on meta-argument reference (hidden dependencies Terraform cannot automatically infer)",
+      "url": "https://developer.hashicorp.com/terraform/language/meta-arguments/depends_on"
+    },
+    {
+      "title": "Terraform Documentation — depends_on meta-argument reference (Usage: module/resource blocks, no arbitrary expressions)",
+      "url": "https://developer.hashicorp.com/terraform/language/meta-arguments/depends_on#usage"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

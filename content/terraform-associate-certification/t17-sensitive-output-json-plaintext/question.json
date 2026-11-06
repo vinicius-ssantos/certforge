@@ -1,0 +1,52 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que sensitive apenas redige a saída da CLI padrão, mas não impede terraform output -json/-raw de exibir o valor em texto plano -- uma exceção documentada que contraria a suposição de que sensitive = true sempre esconde o valor.",
+  "prompt": "Uma equipe declara uma variável database_password com sensitive = true, usada depois em um output chamado connection_string, também marcado como sensitive = true. Depois do apply, alguém executa terraform output -json. Segundo a documentação oficial, o que acontece com o valor desse output nesse comando, comparado ao que aparece no resumo padrão do apply?",
+  "explanation": "A documentação afirma que, no resumo padrão do apply, o Terraform redige outputs sensíveis (exibindo algo como \"(sensitive value)\"). No entanto, ela também afirma que, se o comando terraform output for usado com as flags -json ou -raw, o Terraform exibe outputs sensíveis em texto plano -- ou seja, a redação no resumo do apply não se estende a esse uso específico do comando output.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O argumento sensitive só é válido em blocos output, não em blocos variable, então declarar sensitive = true na variável database_password não teria efeito algum.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve sensitive = true como válido tanto em blocos variable quanto em blocos output, com o mesmo efeito de redação na CLI em ambos."
+    },
+    {
+      "key": "B",
+      "text": "O Terraform sempre redige o valor em qualquer comando ou contexto, incluindo terraform output -json e -raw, pois a documentação afirma que sensitive = true garante redação universal sem qualquer exceção documentada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que terraform output com -json ou -raw exibe outputs sensíveis em texto plano -- não há redação universal sem exceções."
+    },
+    {
+      "key": "C",
+      "text": "O argumento sensitive = true impede que o Terraform armazene o valor no state ou no plan, então nem o apply nem o output teriam esse valor disponível para exibir.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o Terraform armazena valores sensitive tanto no state quanto no plan -- sensitive só controla a exibição na CLI, não o armazenamento."
+    },
+    {
+      "key": "D",
+      "text": "No resumo padrão do apply, o Terraform mostra o output como um valor redigido; mas ao executar terraform output -json, a documentação afirma que o Terraform exibe outputs sensíveis em texto plano.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a exceção que a documentação descreve para o comando terraform output com -json ou -raw."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Input Variables (Sensitive values in variables: stored in state; terraform output -json/-raw show plaintext)",
+      "url": "https://developer.hashicorp.com/terraform/language/values/variables#sensitive-values-in-variables"
+    },
+    {
+      "title": "Terraform Documentation — Output Values (Sensitive values in outputs: redacted by default; terraform output -json/-raw show plaintext)",
+      "url": "https://developer.hashicorp.com/terraform/language/values/outputs#sensitive-values-in-outputs"
+    },
+    {
+      "title": "Terraform Documentation — Manage sensitive data (sensitive values are stored in both state and plan files)",
+      "url": "https://developer.hashicorp.com/terraform/language/manage-sensitive-data#hide-sensitive-variables-and-outputs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
