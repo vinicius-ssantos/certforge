@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4e"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber em quais blocos dynamic é suportado (resource, data, provider, provisioner) e a recomendação de boas práticas (usar só quando necessário para uma interface limpa de módulo reutilizável), não apenas que 'dynamic gera blocos repetidos'.",
+  "prompt": "Um módulo Terraform reutilizável precisa gerar múltiplos blocos aninhados setting dentro de um recurso aws_elastic_beanstalk_environment, a partir de uma lista de valores fornecida por quem usa o módulo. Segundo a documentação oficial, qual construção permite isso, em quais tipos de bloco ela é suportada, e qual é a recomendação de boas práticas sobre seu uso?",
+  "explanation": "A documentação descreve o bloco dynamic como a construção que permite construir blocos aninhados repetíveis dinamicamente, suportada dentro de blocos resource, data, provider e provisioner. Como boa prática, ela recomenda usar blocos dynamic apenas quando necessário para esconder detalhes e construir uma interface limpa para um módulo reutilizável, escrevendo blocos aninhados literalmente sempre que possível, já que o uso excessivo de dynamic pode tornar a configuração difícil de ler e manter.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um bloco dynamic, suportado em qualquer tipo de bloco da linguagem Terraform, incluindo blocos variable e output, sem nenhuma restrição de onde pode ser usado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista o suporte a dynamic especificamente dentro de resource, data, provider e provisioner -- não em blocos variable ou output."
+    },
+    {
+      "key": "B",
+      "text": "Um bloco dynamic, suportado dentro de blocos resource, data, provider e provisioner; a documentação recomenda usá-lo apenas quando necessário para uma interface limpa de módulo reutilizável, escrevendo blocos aninhados literalmente sempre que possível.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a construção, o escopo de suporte e a recomendação de boas práticas que a documentação descreve."
+    },
+    {
+      "key": "C",
+      "text": "Um bloco dynamic; a documentação recomenda usá-lo como padrão para todo bloco aninhado em qualquer módulo, reservando blocos aninhados escritos literalmente apenas para casos excepcionais em que a legibilidade do módulo não seja considerada uma preocupação relevante pela equipe responsável.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação recomenda o oposto -- escrever blocos aninhados literalmente sempre que possível, reservando dynamic para quando for necessário esconder detalhes em uma interface de módulo reutilizável."
+    },
+    {
+      "key": "D",
+      "text": "Um bloco dynamic cujo for_each só pode iterar sobre uma variável de entrada de nível superior, nunca sobre um valor de mapa ou outro tipo complexo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não impõe essa restrição -- o for_each de um bloco dynamic pode iterar sobre qualquer valor de lista, conjunto ou mapa fornecido, não apenas sobre uma variável de entrada de nível superior."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — dynamic Blocks (supported inside resource, data, provider, and provisioner blocks)",
+      "url": "https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks"
+    },
+    {
+      "title": "Terraform Documentation — dynamic Blocks (Best Practices: use only for a clean reusable-module interface; write literal blocks where possible)",
+      "url": "https://developer.hashicorp.com/terraform/language/expressions/dynamic-blocks#best-practices-for-dynamic-blocks"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

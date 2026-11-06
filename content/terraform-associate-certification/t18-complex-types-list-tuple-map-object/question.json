@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber exatamente quais tipos a documentação chama de 'tipos complexos' (list/tuple, set, map/object) e como cada par se comporta entre si, em vez de assumir que qualquer tipo coleção é intercambiável com qualquer outro.",
+  "prompt": "A documentação oficial do Terraform, na seção 'More About Complex Types', descreve como list/tuple e map/object se comportam entre si na maioria das situações, e quais tipos são chamados de 'tipos complexos'. Segundo essa seção, o que ela afirma?",
+  "explanation": "A documentação afirma que list/tuple e map/object (junto com o tipo set relacionado) são chamados de tipos complexos, estruturais ou de coleção -- em contraste com string, number e bool, chamados de tipos primitivos. Na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si; por isso, quando a distinção não é relevante, a documentação usa cada par de termos de forma intercambiável.",
+  "options": [
+    {
+      "key": "A",
+      "text": "list/tuple e map/object (junto com set) são chamados de tipos complexos; na maioria das situações, list e tuple se comportam de forma idêntica entre si, assim como map e object entre si.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a classificação e o comportamento que a seção 'More About Complex Types' descreve."
+    },
+    {
+      "key": "B",
+      "text": "string, number e bool são os tipos complexos, enquanto list e map são tratados pela documentação como tipos primitivos, por representarem um único valor escalar.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação inverte exatamente essa classificação -- string/number/bool são os tipos primitivos, e list/tuple e map/object são os tipos complexos."
+    },
+    {
+      "key": "C",
+      "text": "list e map são sempre totalmente intercambiáveis entre si em qualquer contexto de configuração, já que a documentação não haveria nenhuma distinção relevante entre o tipo lista e o tipo mapa.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a intercambiabilidade dentro de cada par -- list com tuple, e map com object --, não entre list e map, que permanecem tipos distintos com comportamentos diferentes."
+    },
+    {
+      "key": "D",
+      "text": "Não existe nenhuma distinção significativa entre tipos no Terraform, já que a documentação afirma que todos os valores são tratados internamente apenas como texto.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve um modelo de tipos explícito (string, number, bool, list/tuple, set, map/object, null) com diferenças relevantes entre eles, não um tratamento uniforme de todos os valores como texto."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Types and Values (More About Complex Types: list/tuple, set, map/object)",
+      "url": "https://developer.hashicorp.com/terraform/language/expressions/types#more-about-complex-types"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

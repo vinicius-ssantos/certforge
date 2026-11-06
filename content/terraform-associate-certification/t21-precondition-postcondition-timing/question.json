@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4g"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber exatamente quando cada bloco é avaliado (precondition ao criar o plano, antes de criar o recurso; postcondition depois de planejar/aplicar ou de ler uma fonte de dados), não apenas que 'os dois validam a configuração'.",
+  "prompt": "Uma equipe quer impor duas verificações em um recurso aws_instance: uma que confirma, antes de criar a instância, que a AMI selecionada é da arquitetura x86_64; e outra que confirma, depois de planejar e aplicar a mudança, uma garantia sobre o resultado final. Segundo a documentação oficial, quais blocos de validação correspondem a cada uma dessas duas verificações, e quando o Terraform avalia cada um?",
+  "explanation": "A documentação afirma que blocos precondition verificam as suposições da configuração para recursos, fontes de dados e outputs antes de o Terraform criá-los -- o Terraform avalia preconditions quando cria um plano. Blocos postcondition validam as garantias que esses recursos e fontes de dados devem cumprir; o Terraform avalia postconditions depois de planejar e aplicar mudanças em um recurso, ou depois de ler uma fonte de dados.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Apenas blocos data podem ter precondition ou postcondition; blocos resource e output não suportam esse tipo de validação segundo a documentação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve precondition e postcondition em recursos, fontes de dados e outputs -- não apenas em blocos data."
+    },
+    {
+      "key": "B",
+      "text": "Um bloco postcondition para verificar a arquitetura da AMI antes da criação, e um bloco precondition para a garantia final -- a documentação inverteria os nomes usuais em relação ao momento exato em que cada um deles é avaliado pelo Terraform.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não inverte os nomes -- precondition é avaliada antes da criação, ao planejar, e postcondition depois de planejar e aplicar, exatamente na ordem oposta à descrita nesta alternativa."
+    },
+    {
+      "key": "C",
+      "text": "Tanto precondition quanto postcondition são avaliadas apenas durante o apply, nunca durante o plan, já que a documentação trata as duas como idênticas em relação ao momento de avaliação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o Terraform avalia preconditions quando cria um plano -- antes do apply --, não apenas durante o apply; os dois blocos não são avaliados no mesmo momento."
+    },
+    {
+      "key": "D",
+      "text": "Um bloco precondition para verificar a arquitetura da AMI antes da criação -- avaliado quando o Terraform cria o plano --, e um bloco postcondition para a garantia final -- avaliado depois de planejar e aplicar a mudança no recurso.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a correspondência e o momento de avaliação que a documentação descreve para precondition e postcondition."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Validate your configuration (Preconditions: evaluated when Terraform creates a plan)",
+      "url": "https://developer.hashicorp.com/terraform/language/validate#preconditions"
+    },
+    {
+      "title": "Terraform Documentation — Validate your configuration (Postconditions: evaluated after planning and applying, or after reading a data source)",
+      "url": "https://developer.hashicorp.com/terraform/language/validate#postconditions"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

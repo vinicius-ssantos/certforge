@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4h"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que sensitive só oculta o valor da saída da CLI, mas o Terraform continua armazenando-o no state e no plan -- distinto de ephemeral, que omite o valor por completo desses arquivos -- em vez de tratar os dois argumentos como equivalentes.",
+  "prompt": "Uma equipe quer que um valor sensível -- um token de API de curta duração -- fique completamente fora dos arquivos de state e plan do Terraform, não apenas oculto na saída da CLI. Segundo a documentação oficial sobre como gerenciar dados sensíveis, o argumento sensitive por si só resolve isso, e qual argumento foi introduzido especificamente para esse problema?",
+  "explanation": "A documentação afirma que o argumento sensitive, usado em blocos variable ou output, apenas redige esses valores da saída da CLI do Terraform e da UI do HCP Terraform -- mas o Terraform continua armazenando os valores de variáveis e outputs sensitive tanto no state quanto no plan. O argumento ephemeral (Terraform 1.10 ou posterior), em contraste, omite esse valor por completo dos arquivos de state e plan -- um problema diferente do de apenas ocultar a exibição.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Não: sensitive apenas redige o valor na saída da CLI e na UI do HCP Terraform, mas o Terraform continua armazenando-o no state e no plan; o argumento ephemeral (Terraform 1.10+) é o que omite esse valor por completo desses arquivos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção entre os dois argumentos que a documentação descreve."
+    },
+    {
+      "key": "B",
+      "text": "Sim: a documentação afirma que sensitive, por si só, já impede completamente que o Terraform armazene o valor em qualquer arquivo de state ou plan.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- o Terraform armazena os valores de variáveis e outputs sensitive tanto no state quanto no plan; sensitive só controla a exibição na CLI."
+    },
+    {
+      "key": "C",
+      "text": "Sim, porque ephemeral é apenas um nome alternativo para o mesmo comportamento de sensitive, sem nenhuma diferença funcional documentada entre os dois argumentos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue claramente os dois -- sensitive oculta a exibição na CLI, enquanto ephemeral omite o valor dos arquivos de state e plan; não são o mesmo comportamento."
+    },
+    {
+      "key": "D",
+      "text": "Não existe, segundo a documentação, nenhuma forma de omitir um valor sensível dos arquivos de state e plan do Terraform -- todo valor usado em qualquer parte da configuração é necessariamente armazenado de forma permanente e irreversível neles.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o argumento ephemeral exatamente como a forma de omitir um valor dos arquivos de state e plan -- não é verdade que todo valor seja necessariamente armazenado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Manage sensitive data (Hide sensitive variables and outputs: redacts CLI output; still stored in state/plan)",
+      "url": "https://developer.hashicorp.com/terraform/language/manage-sensitive-data#hide-sensitive-variables-and-outputs"
+    },
+    {
+      "title": "Terraform Documentation — Manage sensitive data (Omit values from state and plan files: the ephemeral argument, Terraform 1.10+)",
+      "url": "https://developer.hashicorp.com/terraform/language/manage-sensitive-data#omit-values-from-state-and-plan-files"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

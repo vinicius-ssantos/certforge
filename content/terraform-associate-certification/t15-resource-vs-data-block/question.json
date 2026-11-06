@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber a diferença fundamental documentada entre resource e data -- um provisiona infraestrutura, o outro apenas busca dados sem provisionar nada -- em vez de tratá-los como intercambiáveis.",
+  "prompt": "Uma configuração Terraform precisa tanto criar uma nova instância EC2 quanto consultar informações sobre uma AMI já existente que não é gerenciada por essa configuração. Segundo a documentação oficial, qual bloco deve ser usado para cada uma dessas duas necessidades, e qual é a diferença fundamental entre eles?",
+  "explanation": "A documentação descreve o bloco resource como aquele que define uma infraestrutura e especifica as configurações que o Terraform usa para criá-la. Já o bloco data busca dados sobre um recurso a partir do provider, sem provisionar um objeto de infraestrutura associado. Por isso, para consultar a AMI existente sem criá-la, usa-se um bloco data; para criar a instância EC2, um bloco resource.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um bloco resource para ambos os casos, já que a documentação não distingue a função de resource e data -- os dois blocos sempre provisionam um objeto de infraestrutura e exigem exatamente as mesmas configurações de provider, sem nenhuma diferença de comportamento entre eles.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que o bloco data busca dados sem provisionar um objeto de infraestrutura associado -- os dois blocos não têm a mesma função."
+    },
+    {
+      "key": "B",
+      "text": "Um bloco data para a AMI existente -- que apenas busca dados do provider, sem provisionar nada --, e um bloco resource para a instância EC2 -- que define a infraestrutura e as configurações que o Terraform usa para criá-la.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção que a documentação faz entre os dois blocos."
+    },
+    {
+      "key": "C",
+      "text": "Um bloco data para ambos, já que resource é usado apenas quando a infraestrutura já existe e precisa ser apenas consultada, nunca para criar algo novo.",
+      "correct": false,
+      "explanation": "Incorreto: é o bloco resource que define e cria infraestrutura; é o data que consulta algo já existente sem criar nada -- a afirmação inverte as duas funções."
+    },
+    {
+      "key": "D",
+      "text": "Um bloco provider para a AMI existente, pois é esse bloco que consulta informações de recursos já existentes, e um bloco resource para a instância EC2.",
+      "correct": false,
+      "explanation": "Incorreto: o bloco provider configura um provider nomeado, não consulta dados de recursos existentes -- essa é a função do bloco data."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — resource block reference (defines infrastructure and the settings Terraform uses to create it)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/resource"
+    },
+    {
+      "title": "Terraform Documentation — data block reference (fetches data without provisioning an associated infrastructure object)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/data"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

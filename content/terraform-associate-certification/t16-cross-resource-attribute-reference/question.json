@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber a sintaxe concreta de referência a um recurso e o que ela representa (o próprio recurso gerenciado, cujos atributos são elementos do objeto), não apenas que 'é possível referenciar outro recurso'.",
+  "prompt": "Uma configuração Terraform cria um papel IAM (aws_iam_role) e precisa usar o nome desse papel ao configurar um perfil de instância (aws_iam_instance_profile) na mesma configuração. Segundo a documentação oficial sobre referências a valores nomeados, qual sintaxe permite que o segundo recurso acesse um atributo do primeiro, e o que esse tipo de referência representa?",
+  "explanation": "A documentação afirma que <TIPO_DO_RECURSO>.<NOME> representa um recurso gerenciado do tipo e nome indicados. Quando o recurso não usa count nem for_each, o valor dessa referência é um objeto cujos atributos são elementos desse objeto, acessíveis usando notação de ponto ou colchetes -- por isso aws_iam_role.example.name referencia o atributo name do recurso aws_iam_role.example.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Toda referência entre dois recursos deve passar obrigatoriamente por uma variável declarada com um bloco variable, nunca pela referência direta ao recurso.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não exige esse intermediário -- a referência direta ao recurso pelo seu tipo e nome é o mecanismo documentado para acessar seus atributos."
+    },
+    {
+      "key": "B",
+      "text": "Não é possível referenciar o atributo de um recurso dentro de outro recurso na mesma configuração; para isso a documentação exige declarar um bloco data adicional que duplique a leitura desse mesmo valor a partir do provider.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a referência direta <TIPO_DO_RECURSO>.<NOME>.<ATRIBUTO> entre recursos da mesma configuração, sem exigir um bloco data intermediário para isso."
+    },
+    {
+      "key": "C",
+      "text": "<TIPO_DO_RECURSO>.<NOME>.<ATRIBUTO> -- essa referência representa o recurso gerenciado do tipo e nome indicados, e seus atributos são elementos desse objeto, acessíveis via notação de ponto ou colchetes.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a sintaxe e a semântica que a documentação descreve para referenciar um recurso gerenciado e seus atributos."
+    },
+    {
+      "key": "D",
+      "text": "module.<NOME>.<ATRIBUTO>, já que a documentação usa essa mesma sintaxe para referenciar tanto recursos quanto módulos dentro da mesma configuração.",
+      "correct": false,
+      "explanation": "Incorreto: module.<NOME> representa a saída de um módulo filho, um tipo de valor nomeado diferente de uma referência a recurso -- a sintaxe para um recurso é <TIPO_DO_RECURSO>.<NOME>, não module.<NOME>."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — References to Named Values (Resources: <RESOURCE TYPE>.<NAME>, attributes accessed via dot/bracket notation)",
+      "url": "https://developer.hashicorp.com/terraform/language/expressions/references#resources"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
