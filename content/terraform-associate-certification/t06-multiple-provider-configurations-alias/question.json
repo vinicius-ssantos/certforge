@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000042",
+  "objectiveKeys": ["TFA-2c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige conhecer o mecanismo concreto (alias) que permite declarar mais de uma configuração do mesmo provider em uma única configuração Terraform, não apenas saber que 'é possível usar vários providers'.",
+  "prompt": "Uma configuração Terraform precisa criar recursos AWS em duas regiões diferentes (us-east-1 e us-west-2) usando o mesmo provider aws. Segundo a documentação oficial, como se declara mais de uma configuração desse provider dentro da mesma configuração Terraform?",
+  "explanation": "A documentação do bloco provider mostra exatamente esse cenário: duas configurações do provider aws, uma padrão (sem alias, apontando para us-east-1) e outra com o argumento alias (apontando para us-west-2). Recursos que devem usar a configuração alternativa referenciam o provider explicitamente com a sintaxe <TIPO_DO_PROVIDER>.<ALIAS> no meta-argumento provider do recurso. Um bloco provider configura um provider nomeado, que é um plugin que permite ao Terraform interagir com APIs de nuvem, SaaS e outras — e nada na documentação sugere que múltiplas configurações do mesmo provider exijam módulos Terraform totalmente separados.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Declarando um segundo bloco provider \"aws\" com o argumento alias definido para identificá-lo, e referenciando esse alias no meta-argumento provider dos recursos que devem usar a configuração alternativa.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o padrão de 'Multiple provider configurations' da documentação — um provider padrão e um ou mais providers com alias, selecionados por recurso através do meta-argumento provider."
+    },
+    {
+      "key": "B",
+      "text": "Isso não é suportado: cada configuração Terraform só pode ter uma única configuração ativa de um dado provider, então seria necessário criar dois módulos raiz totalmente separados, um para cada região.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve e exemplifica exatamente o caso de múltiplas configurações do mesmo provider dentro de uma única configuração, usando alias — não é necessário separar em módulos raiz distintos."
+    },
+    {
+      "key": "C",
+      "text": "Declarando a região diretamente dentro de cada bloco resource individualmente, sem nenhum bloco provider adicional, já que o Terraform escolhe a região automaticamente por recurso com base no nome do módulo que o declara.",
+      "correct": false,
+      "explanation": "Incorreto: a região e demais argumentos específicos do provider ficam no bloco provider, não em cada resource; sem um segundo bloco provider com alias, não há como um recurso apontar para uma configuração alternativa."
+    },
+    {
+      "key": "D",
+      "text": "Usando duas versões diferentes do provider aws simultaneamente, uma para cada região, já que a versão do provider é o que determina a região de destino dos recursos.",
+      "correct": false,
+      "explanation": "Incorreto: a versão do provider (restrição declarada em required_providers) não tem relação com a região de destino dos recursos; regiões diferentes são tratadas com múltiplas configurações (alias) do mesmo provider."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — provider Block (Background, Multiple provider configurations)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/provider#multiple-provider-configurations"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

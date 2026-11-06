@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000041",
+  "objectiveKeys": ["TFA-1a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige apenas reconhecer a definição oficial de Infrastructure as Code dada pela própria documentação do Terraform, sem envolver sintaxe ou operação de comandos.",
+  "prompt": "Segundo a documentação oficial do Terraform, qual alternativa descreve corretamente o que é Infrastructure as Code (IaC) na forma como o Terraform a implementa?",
+  "explanation": "A documentação oficial afirma que o HashiCorp Terraform é uma ferramenta de infrastructure as code que permite definir recursos de nuvem e on-premises em arquivos de configuração legíveis por humanos, que podem ser versionados, reutilizados e compartilhados, usando depois um fluxo de trabalho consistente para provisionar e gerenciar toda essa infraestrutura ao longo do seu ciclo de vida. Não é uma técnica restrita a contêineres, nem uma automação de cliques em painel, nem um sistema de reversão automática de mudanças manuais.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um conjunto de scripts imperativos que automatizam cliques no painel visual de um provedor de nuvem, eliminando por completo a necessidade de qualquer arquivo de configuração.",
+      "correct": false,
+      "explanation": "Incorreto: IaC no Terraform é declarativo e baseado em arquivos de configuração versionáveis — não é uma automação imperativa de interações com um painel visual, e o arquivo de configuração é central, não eliminado."
+    },
+    {
+      "key": "B",
+      "text": "Um padrão de monitoramento contínuo que detecta mudanças feitas manualmente fora do Terraform e as reverte automaticamente sem qualquer intervenção humana, publicando ao final um relatório de auditoria de conformidade para cada recurso afetado pela reversão.",
+      "correct": false,
+      "explanation": "Incorreto: isso descreveria um mecanismo de correção automática de drift com auditoria, que não é como a documentação define infrastructure as code."
+    },
+    {
+      "key": "C",
+      "text": "Definir recursos de nuvem e on-premises em arquivos de configuração legíveis por humanos, que podem ser versionados, reutilizados e compartilhados, usando um fluxo de trabalho consistente para provisionar e gerenciar essa infraestrutura.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a definição que a página de introdução do Terraform dá para o que a ferramenta faz como infrastructure as code."
+    },
+    {
+      "key": "D",
+      "text": "Uma técnica exclusiva para provisionar contêineres, que não se aplica a outros tipos de recurso de infraestrutura, como rede, armazenamento ou DNS.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Terraform como capaz de gerenciar tanto componentes de baixo nível (computação, armazenamento, rede) quanto de alto nível (entradas de DNS, recursos de SaaS) — não é restrito a contêineres."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Introduction to Terraform",
+      "url": "https://developer.hashicorp.com/terraform/intro"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

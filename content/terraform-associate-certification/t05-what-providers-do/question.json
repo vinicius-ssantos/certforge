@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000042",
+  "objectiveKeys": ["TFA-2b"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige reconhecer a relação direta entre provider e os tipos de recurso/data source que ele adiciona, um fato declarado diretamente pela documentação sem exigir composição de múltiplas seções.",
+  "prompt": "Segundo a seção 'What Providers Do' da documentação oficial do Terraform, qual é a relação entre um provider e os resource types que o Terraform consegue gerenciar?",
+  "explanation": "A documentação afirma que cada provider adiciona um conjunto de resource types e/ou data sources que o Terraform pode gerenciar, e que todo resource type é implementado por um provider — sem providers, o Terraform não consegue gerenciar nenhum tipo de infraestrutura. A maioria dos providers configura uma plataforma de infraestrutura específica (nuvem ou self-hosted), mas alguns oferecem utilitários locais, como geração de números aleatórios para nomes de recursos únicos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Terraform já vem com um conjunto fixo e embutido de resource types que funciona para qualquer provedor de nuvem, e os providers servem apenas para traduzir credenciais de autenticação.",
+      "correct": false,
+      "explanation": "Incorreto: resource types não são embutidos de forma genérica no Terraform — eles são implementados pelos próprios providers, cada um definindo os tipos de recurso que sabe gerenciar."
+    },
+    {
+      "key": "B",
+      "text": "Providers servem exclusivamente para configurar plataformas de nuvem remotas; nenhum provider oferece utilitários locais, como geração de valores aleatórios ou manipulação de arquivos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação cita explicitamente que providers também podem oferecer utilitários locais, como gerar números aleatórios para nomes de recursos únicos — não se limitam a plataformas remotas."
+    },
+    {
+      "key": "C",
+      "text": "Cada provider adiciona um conjunto de resource types e/ou data sources que o Terraform pode gerenciar; todo resource type é implementado por algum provider, e sem providers o Terraform não gerencia nenhuma infraestrutura.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a relação descrita na seção 'What Providers Do' da documentação de providers."
+    },
+    {
+      "key": "D",
+      "text": "Um resource type pode existir e ser aplicado normalmente mesmo sem nenhum provider instalado, desde que o bloco resource esteja escrito corretamente na configuração e tenha sido revisado manualmente por um operador experiente antes de cada apply.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que sem providers o Terraform não consegue gerenciar nenhum tipo de infraestrutura — todo resource type depende de um provider que o implemente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Providers (What Providers Do)",
+      "url": "https://developer.hashicorp.com/terraform/language/providers#what-providers-do"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

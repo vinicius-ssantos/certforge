@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000042",
+  "objectiveKeys": ["TFA-2a"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber tanto quando a instalação de providers acontece (terraform init) quanto onde a versão é declarada (required_providers), e não apenas um dos dois fatos isoladamente.",
+  "prompt": "Um módulo Terraform declara um bloco required_providers com uma restrição de versão para um provider. De acordo com a documentação oficial, quando o Terraform CLI efetivamente localiza e instala esse provider, e onde a restrição de versão deve ser declarada?",
+  "explanation": "A documentação afirma que o Terraform CLI localiza e instala providers ao inicializar um diretório de trabalho (terraform init), podendo baixá-los automaticamente de um registro do Terraform ou carregá-los de um mirror ou cache local — e que sempre que a configuração de providers de um diretório persistente é alterada, é necessário reinicializar. A restrição de versão de cada provider é declarada no argumento version dentro do bloco required_providers, para que o Terraform selecione uma única versão compatível com todos os módulos; se omitida, o Terraform aceita qualquer versão disponível.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A instalação ocorre durante terraform apply, e a restrição de versão deve ser declarada diretamente dentro de cada bloco resource que usa esse provider, repetida de forma idêntica em todos os módulos que referenciam o mesmo provider na configuração.",
+      "correct": false,
+      "explanation": "Incorreto: a instalação de providers acontece ao inicializar o diretório de trabalho (terraform init), não durante o apply, e a restrição de versão vai no bloco required_providers, não em cada resource individualmente."
+    },
+    {
+      "key": "B",
+      "text": "A instalação ocorre ao executar terraform init, que baixa o provider de um registro do Terraform ou o carrega de um mirror/cache local, e a restrição de versão é declarada no argumento version dentro do bloco required_providers.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação sobre instalação de providers e sobre requisitos de providers descreve."
+    },
+    {
+      "key": "C",
+      "text": "O Terraform não instala providers automaticamente em nenhum momento; cada versão de provider precisa ser baixada e copiada manualmente para o diretório .terraform antes de qualquer comando ser executado.",
+      "correct": false,
+      "explanation": "Incorreto: o Terraform CLI baixa e instala providers automaticamente a partir de um registro (ou os carrega de um mirror/cache) durante a inicialização — não exige cópia manual como passo normal de uso."
+    },
+    {
+      "key": "D",
+      "text": "A instalação só ocorre quando se usa HCP Terraform ou Terraform Enterprise; ao executar o Terraform CLI localmente, nenhum provider precisa ser instalado antes do plan ou apply.",
+      "correct": false,
+      "explanation": "Incorreto: tanto o Terraform CLI local (via terraform init) quanto HCP Terraform/Terraform Enterprise instalam providers como parte de sua respectiva execução — a instalação não é exclusiva de um ambiente remoto."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Providers (Provider Installation)",
+      "url": "https://developer.hashicorp.com/terraform/language/providers#provider-installation"
+    },
+    {
+      "title": "Terraform Documentation — Provider Requirements (Require providers, Version Constraints)",
+      "url": "https://developer.hashicorp.com/terraform/language/providers/requirements#require-providers"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

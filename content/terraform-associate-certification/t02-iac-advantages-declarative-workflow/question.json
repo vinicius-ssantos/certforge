@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000041",
+  "objectiveKeys": ["TFA-1b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige combinar duas vantagens distintas que a seção 'Why Terraform?' atribui ao padrão de IaC do Terraform — configuração declarativa e geração de plano antes da aplicação — em vez de reconhecer apenas uma característica isolada.",
+  "prompt": "A seção 'Why Terraform?' da documentação oficial descreve várias vantagens do padrão de IaC do Terraform. Qual das alternativas combina corretamente duas dessas vantagens, citadas explicitamente na página?",
+  "explanation": "A documentação descreve que os arquivos de configuração do Terraform são declarativos — descrevem o estado final desejado, e o Terraform resolve a lógica de dependências com um grafo de recursos, criando ou modificando recursos não dependentes em paralelo — e que o Terraform gera um plano e pede aprovação antes de modificar a infraestrutura, usando o state file como fonte de verdade para decidir as mudanças necessárias. Nenhuma das outras alternativas corresponde ao que a página efetivamente afirma.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Execução obrigatoriamente sequencial de cada recurso, um por vez, e aplicação automática de qualquer mudança de configuração sem qualquer etapa de revisão ou aprovação prévia, mesmo em ambientes de produção compartilhados por várias equipes.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário em ambos os pontos — o Terraform paraleliza recursos não dependentes via grafo de recursos, e exige aprovação de um plano antes de aplicar mudanças."
+    },
+    {
+      "key": "B",
+      "text": "Configuração imperativa passo a passo, escrita como uma sequência de instruções de criação de recursos, dispensando qualquer mecanismo de planejamento prévio.",
+      "correct": false,
+      "explanation": "Incorreto: a página afirma que você não precisa escrever instruções passo a passo porque o Terraform lida com a lógica subjacente — a configuração é declarativa, não imperativa."
+    },
+    {
+      "key": "C",
+      "text": "Dependência de tags dos provedores de nuvem para rastrear o estado da infraestrutura, dispensando qualquer arquivo de estado próprio do Terraform.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação sobre o propósito do state explica que o Terraform tentou essa abordagem em prototypes iniciais, encontrou problemas (nem todo recurso ou provedor suporta tags) e por isso usa sua própria estrutura de estado."
+    },
+    {
+      "key": "D",
+      "text": "Configuração declarativa do estado final da infraestrutura, com execução de um grafo de recursos para paralelizar mudanças não dependentes, e geração de um plano de execução que exige aprovação antes de ser aplicado.",
+      "correct": true,
+      "explanation": "Correto: a seção 'Automate changes' descreve exatamente a configuração declarativa com grafo de recursos para paralelismo, e a seção 'Track your infrastructure' descreve o plano que exige aprovação antes de modificar a infraestrutura."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Introduction to Terraform (Why Terraform? — Automate changes, Track your infrastructure)",
+      "url": "https://developer.hashicorp.com/terraform/intro#why-terraform"
+    },
+    {
+      "title": "Terraform Documentation — Purpose of Terraform State (Mapping to the Real World)",
+      "url": "https://developer.hashicorp.com/terraform/language/state/purpose#mapping-to-the-real-world"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
