@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000046",
+  "objectiveKeys": ["TFA-6c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber as restrições documentadas sobre o bloco backend -- apenas um por configuração, e sem poder referenciar valores nomeados -- em vez de tratá-lo como um bloco comum que aceita qualquer expressão.",
+  "prompt": "Uma pessoa tenta declarar dois blocos backend na mesma configuração Terraform, e em outro tenta usar uma variável de entrada dentro do bloco backend para definir um dos seus argumentos. Segundo a documentação oficial sobre o bloco backend, o que ela afirma sobre cada uma dessas duas tentativas?",
+  "explanation": "A documentação lista, entre as limitações importantes do bloco backend, que uma configuração só pode fornecer um bloco backend, e que um bloco backend não pode referenciar valores nomeados, como variáveis de entrada, valores locais ou atributos de data source. Por isso, nenhuma das duas tentativas é suportada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Ambas são suportadas sem restrição: a documentação não impõe nenhum limite à quantidade de blocos backend por configuração, nem ao tipo de expressão que pode ser usada dentro deles.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista explicitamente as duas restrições -- apenas um bloco backend por configuração, e nenhuma referência a valores nomeados dentro dele."
+    },
+    {
+      "key": "B",
+      "text": "Declarar dois blocos backend é permitido, desde que cada um use um tipo de backend diferente; apenas o uso de variáveis de entrada dentro do bloco backend não é suportado em nenhuma circunstância, segundo essa mesma documentação oficial sobre o bloco backend.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não condiciona o limite de blocos backend ao tipo usado em cada um -- ela afirma que uma configuração só pode fornecer um bloco backend, de qualquer tipo."
+    },
+    {
+      "key": "C",
+      "text": "Nenhuma das duas é suportada: a documentação afirma que uma configuração só pode fornecer um bloco backend, e que um bloco backend não pode referenciar valores nomeados, como variáveis de entrada, valores locais ou atributos de data source.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a dupla restrição que a documentação lista entre as limitações do bloco backend."
+    },
+    {
+      "key": "D",
+      "text": "Usar uma variável de entrada dentro do bloco backend é permitido, desde que essa variável declare o argumento const = true; apenas declarar dois blocos backend não é suportado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhuma exceção baseada em const = true para o bloco backend -- ela afirma que ele não pode referenciar valores nomeados, sem essa condição."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Backend block configuration overview (Define a backend block: one block per configuration, no named-value references)",
+      "url": "https://developer.hashicorp.com/terraform/language/backend#define-a-backend-block"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

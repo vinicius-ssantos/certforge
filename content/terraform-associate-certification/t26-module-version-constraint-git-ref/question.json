@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000045",
+  "objectiveKeys": ["TFA-5d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o mecanismo de versionamento de um módulo depende de onde ele está hospedado -- argumento version para registros, parâmetro de query ref para repositórios Git -- em vez de assumir que version funciona para qualquer origem de módulo.",
+  "prompt": "Uma equipe usa um módulo hospedado em um repositório Git (não em um registro Terraform) e quer fixá-lo em uma tag específica, v1.2.0. Segundo a documentação oficial, o argumento version do bloco module resolve isso para módulos Git, e qual mecanismo a documentação descreve para esse caso?",
+  "explanation": "A documentação afirma que, se você está usando módulos de um registro, pode adicionar o argumento version com uma restrição de versão. Mas, se estiver usando módulos hospedados no GitHub, BitBucket ou outro repositório Git, o Terraform clona e usa o branch padrão referenciado por HEAD -- para selecionar uma versão específica nesses casos, você adiciona o parâmetro de query ref na localização especificada no argumento source, referenciando qualquer valor suportado pelo comando git checkout, como uma tag, branch ou hash SHA-1.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim: o argumento version funciona da mesma forma para módulos Git e para módulos de registro, bastando declarar version = \"1.2.0\" no bloco module em ambos os casos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve version como aplicável a módulos de registro; para módulos Git, o mecanismo é o parâmetro de query ref na URL do source, não o argumento version."
+    },
+    {
+      "key": "B",
+      "text": "Não existe forma de fixar uma versão específica de um módulo hospedado em um repositório Git; a documentação afirma que módulos Git sempre usam o branch padrão referenciado por HEAD, sem nenhuma exceção possível, mesmo usando qualquer parâmetro de query adicional na URL do source.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente o parâmetro de query ref como a forma de selecionar uma tag, branch ou hash específico em vez do branch padrão referenciado por HEAD."
+    },
+    {
+      "key": "C",
+      "text": "Não: version é para módulos de registro; para um módulo Git, a documentação descreve adicionar o parâmetro de query ref ao source (por exemplo, source = \"git::https://exemplo.com/modulo.git?ref=v1.2.0\"), referenciando qualquer valor que git checkout aceitaria.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o mecanismo que a documentação descreve para fixar a versão de um módulo hospedado em um repositório Git."
+    },
+    {
+      "key": "D",
+      "text": "Sim, mas apenas combinando version com um bloco required_providers adicional específico para esse módulo Git, já que a documentação trataria módulos e providers da mesma forma quanto a versionamento.",
+      "correct": false,
+      "explanation": "Incorreto: required_providers versiona providers, não módulos -- a documentação não combina os dois mecanismos; para um módulo Git, o versionamento é feito via parâmetro de query ref no source, não via required_providers."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Use modules in your configuration (Install a specific version of the module: version argument for registries, ref query parameter for Git)",
+      "url": "https://developer.hashicorp.com/terraform/language/modules/configuration#install-a-specific-version-of-the-module"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

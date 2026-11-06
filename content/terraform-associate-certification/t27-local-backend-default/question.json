@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000046",
+  "objectiveKeys": ["TFA-6a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o backend local é o padrão quando nenhum backend é configurado, e exatamente o que ele faz (armazena, trava e opera localmente) -- não apenas que 'o state fica em algum lugar'.",
+  "prompt": "Uma configuração Terraform não declara nenhum bloco backend dentro do bloco terraform. Segundo a documentação oficial, qual backend o Terraform usa nesse caso, e o que esse backend faz com o state?",
+  "explanation": "A documentação afirma que o Terraform usa um backend chamado local por padrão quando nenhum outro é configurado. O backend local armazena o state no sistema de arquivos local, trava esse state usando APIs do sistema operacional, e realiza as operações localmente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Terraform se recusa a executar qualquer operação até que um backend seja explicitamente configurado, já que a documentação não definiria nenhum backend padrão.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que o Terraform usa o backend local por padrão quando nenhum backend é configurado -- não há recusa de execução."
+    },
+    {
+      "key": "B",
+      "text": "O Terraform usa o backend local por padrão: ele armazena o state no sistema de arquivos local, trava esse state usando APIs do sistema operacional, e realiza as operações localmente.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para o backend local e seu papel como padrão."
+    },
+    {
+      "key": "C",
+      "text": "O Terraform usa automaticamente o backend remote do HCP Terraform por padrão, mesmo sem nenhuma configuração explícita de backend ou de cloud block na configuração.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o backend local, não o remote do HCP Terraform, como o padrão usado na ausência de configuração explícita."
+    },
+    {
+      "key": "D",
+      "text": "O backend local armazena o state localmente, mas a documentação afirma que ele nunca trava o state durante operações, tornando-o inseguro para uso em qualquer cenário com mais de uma pessoa.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o backend local trava o state usando APIs do sistema operacional -- travamento faz parte do que ele faz, não é uma trava ausente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Backend Type: local (stores state locally, locks via system APIs, local operations)",
+      "url": "https://developer.hashicorp.com/terraform/language/backend/local#local"
+    },
+    {
+      "title": "Terraform Documentation — Backend block configuration overview (Default backend: local)",
+      "url": "https://developer.hashicorp.com/terraform/language/backend#default-backend"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

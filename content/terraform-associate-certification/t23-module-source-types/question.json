@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000045",
+  "objectiveKeys": ["TFA-5a"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber os tipos de origem de módulo que a documentação lista como suportados, não apenas que 'módulos podem vir de um registro'.",
+  "prompt": "Uma equipe quer usar um módulo hospedado em um registro Terraform, e outra equipe quer usar um módulo que vive em um diretório local do mesmo repositório. Segundo a documentação oficial sobre o bloco module, de quais tipos de origem o Terraform pode instalar um módulo?",
+  "explanation": "A documentação afirma que você pode especificar módulos hospedados no registro Terraform público ou privado, em repositórios Git, em serviços de armazenamento de objetos (como S3 ou GCS), e no próprio sistema de arquivos local -- usando um caminho que comece com ./ ou ../ para indicar uma origem local.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Apenas no registro Terraform público, já que a documentação não suporta nenhum outro tipo de origem para módulos, nem caminhos locais nem repositórios Git.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista explicitamente caminhos locais, repositórios Git e serviços de armazenamento de objetos como origens válidas, além do registro Terraform."
+    },
+    {
+      "key": "B",
+      "text": "Somente caminhos locais, pois a documentação afirma que módulos remotos foram descontinuados e que todo módulo precisa estar no mesmo repositório da configuração que o usa, sem exceção para nenhum outro tipo de origem.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhuma descontinuação de módulos remotos -- ela lista registros, repositórios Git e armazenamento de objetos como origens válidas além de caminhos locais."
+    },
+    {
+      "key": "C",
+      "text": "Registro Terraform público ou privado, repositórios Git, serviços de armazenamento de objetos (como S3 ou GCS) e o sistema de arquivos local (usando um caminho que começa com ./ ou ../).",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a lista de origens de módulo que a documentação descreve como suportadas."
+    },
+    {
+      "key": "D",
+      "text": "Qualquer URL HTTP, mas nunca um caminho local no sistema de arquivos, já que a documentação trataria módulos locais como um caso não suportado pelo argumento source.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente caminhos locais (com prefixo ./ ou ../) como um tipo de origem suportado pelo argumento source."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — module block reference (Local paths)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/module#local-paths"
+    },
+    {
+      "title": "Terraform Documentation — module block reference (Terraform registry)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/module#terraform-registry"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

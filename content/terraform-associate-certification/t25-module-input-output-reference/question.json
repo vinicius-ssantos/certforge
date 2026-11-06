@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000045",
+  "objectiveKeys": ["TFA-5c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber a sintaxe concreta para passar entradas a um módulo e para ler as saídas que ele expõe de volta, não apenas que 'módulos têm entradas e saídas'.",
+  "prompt": "Uma configuração chama um módulo \"vpc\" que expõe um output chamado vpc_id, e esse módulo espera um input chamado servers. Segundo a documentação oficial sobre o uso de módulos na configuração, como se passa o valor do input servers ao módulo, e como se referencia o output vpc_id dele em outro recurso da configuração?",
+  "explanation": "A documentação mostra que inputs são passados como argumentos dentro do próprio bloco module que chama o módulo (por exemplo, servers = 5), e que outputs de um módulo filho são referenciados usando a expressão module.<NOME_DO_MODULO>.<NOME_DO_OUTPUT> -- por exemplo, module.vpc.vpc_id -- em outro recurso da mesma configuração.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O input é passado como argumento dentro do próprio bloco module (por exemplo, servers = 5), e o output é referenciado com module.vpc.vpc_id em outro recurso da configuração.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a sintaxe que a documentação mostra para passar inputs e referenciar outputs de um módulo."
+    },
+    {
+      "key": "B",
+      "text": "O input precisa ser declarado em um arquivo terraform.tfvars separado exclusivo para esse módulo, e o output é referenciado com data.vpc.vpc_id, usando um bloco data em vez da expressão module.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação mostra o input como um argumento comum dentro do bloco module, não em um tfvars exclusivo do módulo, e o output é referenciado com module.<NOME>.<OUTPUT>, não com data.<NOME>.<OUTPUT>."
+    },
+    {
+      "key": "C",
+      "text": "Inputs e outputs de módulos não podem ser referenciados fora do próprio módulo; cada módulo só pode usar seus próprios valores internamente, sem expor nada à configuração que o chama.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente o mecanismo para expor outputs de um módulo à configuração que o chama, via module.<NOME>.<OUTPUT> -- outputs existem justamente para isso."
+    },
+    {
+      "key": "D",
+      "text": "O input é passado como argumento no bloco module, mas o output só pode ser lido executando terraform output separadamente depois do apply, nunca referenciado diretamente em outro recurso da configuração.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação mostra module.<NOME>.<OUTPUT> sendo referenciado diretamente dentro de outro recurso da própria configuração, não apenas lido depois via terraform output."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Use modules in your configuration (Specify input values)",
+      "url": "https://developer.hashicorp.com/terraform/language/modules/configuration#specify-input-values"
+    },
+    {
+      "title": "Terraform Documentation — Use modules in your configuration (Reference module output values)",
+      "url": "https://developer.hashicorp.com/terraform/language/modules/configuration#reference-module-output-values"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
