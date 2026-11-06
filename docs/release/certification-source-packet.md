@@ -123,7 +123,7 @@ Source: <https://github.com/cncf/curriculum/blob/007442fa374ea3bd6e9217450388041
 |---|---|---|
 | `KCSA-1.1` | The 4Cs of Cloud Native Security | _none yet_ |
 | `KCSA-1.2` | Cloud Provider and Infrastructure Security | `t10-node-isolation-immutable-os` |
-| `KCSA-1.3` | Controls and Frameworks | _none yet_ |
+| `KCSA-1.3` | Controls and Frameworks | `t38-cis-benchmarks-per-platform-not-universal` |
 | `KCSA-1.4` | Isolation Techniques | `t01-multi-tenancy-isolation-spectrum` |
 | `KCSA-1.5` | Artifact Repository and Image Security | `t02-image-digest-vs-tag` |
 | `KCSA-1.6` | Workload and Application Code Security | `t11-code-security-ecosystem-extensions` |
@@ -159,12 +159,12 @@ Source: <https://github.com/cncf/curriculum/blob/007442fa374ea3bd6e9217450388041
 | `KCSA-5.5` | PKI | `t09-kubeadm-pki-default-ca` |
 | `KCSA-5.6` | Connectivity | `t29-networkpolicy-egress-only-still-isolates-ingress` |
 | `KCSA-5.7` | Admission Control | `t19-mutating-vs-validating-webhook` |
-| `KCSA-6.1` | Compliance Frameworks | _none yet_ |
-| `KCSA-6.2` | Threat Modeling Frameworks | _none yet_ |
-| `KCSA-6.3` | Supply Chain Compliance | _none yet_ |
+| `KCSA-6.1` | Compliance Frameworks | `t39-nist-sp-800-190-container-security-scope` |
+| `KCSA-6.2` | Threat Modeling Frameworks | `t40-mitre-attack-escape-to-host-privilege-escalation` |
+| `KCSA-6.3` | Supply Chain Compliance | `t41-slsa-build-l1-vs-l2-provenance-signing` |
 | `KCSA-6.4` | Automation and Tooling | `t37-validatingadmissionpolicy-in-process` |
 
-37 of 42 seeded objectives claimed by a published question.
+41 of 42 seeded objectives claimed by a published question.
 
 ## terraform-associate-certification
 
@@ -181,21 +181,21 @@ Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
 | `TFA-2b` | Describe how Terraform uses providers | `t05-what-providers-do` |
 | `TFA-2c` | Write Terraform configuration using multiple providers | `t06-multiple-provider-configurations-alias` |
 | `TFA-2d` | Explain how Terraform uses and manages state | `t07-terraform-state-purpose` |
-| `TFA-3a` | Describe the Terraform workflow | _none yet_ |
-| `TFA-3b` | Initialize a Terraform working directory | _none yet_ |
-| `TFA-3c` | Validate a Terraform configuration | _none yet_ |
-| `TFA-3d` | Generate and review an execution plan for Terraform | _none yet_ |
-| `TFA-3e` | Apply changes to infrastructure with Terraform | _none yet_ |
-| `TFA-3f` | Destroy Terraform-managed infrastructure | _none yet_ |
-| `TFA-3g` | Apply formatting and style adjustments to a configuration | _none yet_ |
-| `TFA-4a` | Use and differentiate resource and data blocks | _none yet_ |
-| `TFA-4b` | Refer to resource attributes and create cross-resource references | _none yet_ |
-| `TFA-4c` | Use variables and outputs | _none yet_ |
-| `TFA-4d` | Understand and use complex types | _none yet_ |
-| `TFA-4e` | Write dynamic configuration using expressions and functions | _none yet_ |
-| `TFA-4f` | Define resource dependencies in configuration | _none yet_ |
-| `TFA-4g` | Validate configuration using custom conditions | _none yet_ |
-| `TFA-4h` | Understand best practices for managing sensitive data, including secrets management with Vault | _none yet_ |
+| `TFA-3a` | Describe the Terraform workflow | `t08-core-workflow-write-plan-apply` |
+| `TFA-3b` | Initialize a Terraform working directory | `t09-init-idempotent-reinitialization-triggers` |
+| `TFA-3c` | Validate a Terraform configuration | `t10-validate-scope-no-remote-checks` |
+| `TFA-3d` | Generate and review an execution plan for Terraform | `t11-plan-preview-does-not-apply` |
+| `TFA-3e` | Apply changes to infrastructure with Terraform | `t12-apply-default-prompts-for-approval` |
+| `TFA-3f` | Destroy Terraform-managed infrastructure | `t13-destroy-alias-for-apply-destroy` |
+| `TFA-3g` | Apply formatting and style adjustments to a configuration | `t14-fmt-default-scope-recursive-flag` |
+| `TFA-4a` | Use and differentiate resource and data blocks | `t15-resource-vs-data-block` |
+| `TFA-4b` | Refer to resource attributes and create cross-resource references | `t16-cross-resource-attribute-reference` |
+| `TFA-4c` | Use variables and outputs | `t17-sensitive-output-json-plaintext` |
+| `TFA-4d` | Understand and use complex types | `t18-complex-types-list-tuple-map-object` |
+| `TFA-4e` | Write dynamic configuration using expressions and functions | `t19-dynamic-blocks-usage-and-best-practice` |
+| `TFA-4f` | Define resource dependencies in configuration | `t20-depends-on-hidden-dependency` |
+| `TFA-4g` | Validate configuration using custom conditions | `t21-precondition-postcondition-timing` |
+| `TFA-4h` | Understand best practices for managing sensitive data, including secrets management with Vault | `t22-sensitive-vs-ephemeral-storage` |
 | `TFA-5a` | Explain how Terraform sources modules | _none yet_ |
 | `TFA-5b` | Describe variable scope within modules | _none yet_ |
 | `TFA-5c` | Use modules in configuration | _none yet_ |
@@ -212,5 +212,5 @@ Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
 | `TFA-8c` | Describe how to organize and use HCP Terraform workspaces and projects | _none yet_ |
 | `TFA-8d` | Configure and use HCP Terraform integration | _none yet_ |
 
-7 of 37 seeded objectives claimed by a published question.
+22 of 37 seeded objectives claimed by a published question.
 
