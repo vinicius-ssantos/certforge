@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000016",
+  "objectiveKeys": ["KCSA-6.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece o ValidatingAdmissionPolicy como alternativa in-process, baseada em CEL, aos webhooks de admissão externos para automatizar a aplicação de políticas de segurança -- e não o confunde com mecanismos descontinuados ou que dependem de servidor externo.",
+  "prompt": "Uma equipe quer aplicar regras de validação de política de segurança -- por exemplo, exigir que todo Pod declare `resources.limits` -- sem precisar implantar, operar e manter disponível um servidor de admission webhook externo. Segundo a documentação do Kubernetes, qual recurso oferece uma alternativa declarativa e 'in-process' aos webhooks de admissão de validação para esse tipo de automação, e como as regras de validação são escritas?",
+  "explanation": "A documentação descreve o ValidatingAdmissionPolicy como uma alternativa declarativa e in-process aos webhooks de admissão de validação. As regras de validação da política são escritas usando Common Expression Language (CEL), e, por ser in-process, não exige implantar e manter disponível um servidor de webhook externo para avaliar cada requisição de admissão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "MutatingWebhookConfiguration, pois a documentação a descreve como a alternativa in-process recomendada para validação declarativa de políticas, eliminando a necessidade de qualquer servidor externo.",
+      "correct": false,
+      "explanation": "Incorreto: um MutatingWebhookConfiguration configura um webhook externo (não é in-process) e serve para mutação de objetos, não é a alternativa in-process que a documentação descreve para validação declarativa."
+    },
+    {
+      "key": "B",
+      "text": "ValidatingAdmissionPolicy, que a documentação descreve como uma alternativa declarativa e in-process aos webhooks de admissão de validação, com regras escritas em Common Expression Language (CEL).",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição da documentação para o ValidatingAdmissionPolicy."
+    },
+    {
+      "key": "C",
+      "text": "ResourceQuota, pois a documentação a descreve como o mecanismo que permite escrever regras de validação arbitrárias em Common Expression Language (CEL) para qualquer campo de um Pod.",
+      "correct": false,
+      "explanation": "Incorreto: ResourceQuota limita o consumo agregado de recursos por namespace e não usa CEL nem oferece validação arbitrária de campos de Pod."
+    },
+    {
+      "key": "D",
+      "text": "PodSecurityPolicy, pois a documentação a descreve como o recurso atual, baseado em CEL, para declarar políticas de validação in-process.",
+      "correct": false,
+      "explanation": "Incorreto: PodSecurityPolicy foi removido do Kubernetes e nunca foi baseado em CEL; o recurso atual para validação declarativa in-process é o ValidatingAdmissionPolicy."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Validating Admission Policy (declarative, in-process alternative to webhooks, written in CEL)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/validating-admission-policy/#what-is-validating-admission-policy"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece o campo `readOnlyRootFilesystem` do securityContext como mitigação específica contra escrita de código adicional por uma aplicação já comprometida, distinta de `allowPrivilegeEscalation`, que controla escalonamento de privilégio, não a possibilidade de escrita.",
+  "prompt": "Depois que uma aplicação dentro de um container é comprometida -- por exemplo, por uma vulnerabilidade na própria aplicação --, um atacante tenta gravar um binário malicioso adicional no filesystem do container para executá-lo e manter a execução de código maliciosa. Segundo a documentação do Kubernetes, qual configuração do `securityContext` do container mitiga diretamente esse passo específico do ataque, e o que ela faz?",
+  "explanation": "A documentação descreve o campo `readOnlyRootFilesystem` do securityContext como responsável por montar o filesystem raiz do container como somente leitura. Com `readOnlyRootFilesystem: true`, um processo comprometido dentro do container não consegue gravar novos arquivos executáveis nesse filesystem raiz, o que mitiga diretamente esse passo do ataque. A documentação também observa que esse campo é inconsistente com, e por isso não pode ser combinado com, um container que roda como `privileged` ou que tem a capability `CAP_SYS_ADMIN`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`allowPrivilegeEscalation: true`, pois a documentação descreve esse campo como o mecanismo que controla se um processo comprometido pode gravar novos arquivos executáveis no container.",
+      "correct": false,
+      "explanation": "Incorreto: `allowPrivilegeEscalation` controla se um processo pode ganhar mais privilégios do que seu processo pai (por exemplo, via um binário setuid), não a capacidade de gravar novos arquivos no filesystem."
+    },
+    {
+      "key": "B",
+      "text": "`readOnlyRootFilesystem: true`, porque a documentação a descreve como responsável por montar o filesystem raiz do container como somente leitura, impedindo a gravação de novos arquivos executáveis nele.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição da documentação para esse campo, e o efeito de impedir escrita no filesystem raiz mitiga diretamente esse passo do ataque."
+    },
+    {
+      "key": "C",
+      "text": "`readOnlyRootFilesystem: true` combinado livremente com `privileged: true`, já que a documentação trata essas duas configurações como totalmente compatíveis entre si em qualquer container, sem nenhuma restrição documentada entre elas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que `readOnlyRootFilesystem` é inconsistente com, e não pode ser combinado com, um container `privileged` ou com a capability `CAP_SYS_ADMIN`."
+    },
+    {
+      "key": "D",
+      "text": "`runAsNonRoot: false`, pois a documentação afirma que impedir a gravação de novos arquivos depende exclusivamente de o processo do container ser executado como root.",
+      "correct": false,
+      "explanation": "Incorreto: `runAsNonRoot` controla a identidade do usuário com que o processo é executado, não a capacidade de escrita no filesystem raiz, que é controlada por `readOnlyRootFilesystem`."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Configure a Security Context for a Pod or Container (readOnlyRootFilesystem)",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

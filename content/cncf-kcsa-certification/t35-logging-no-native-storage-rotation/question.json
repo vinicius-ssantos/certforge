@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que o Kubernetes não fornece armazenamento nativo de logs nem agregação em nível de cluster por padrão, e que a rotação feita pelo kubelet pode descartar dados mais antigos do que `kubectl logs` consegue retornar -- uma lacuna de observabilidade relevante em uma investigação de segurança.",
+  "prompt": "Uma equipe de resposta a incidentes investiga um Pod que teve atividade suspeita, mas ao executar `kubectl logs` encontra bem menos conteúdo do que esperava para o período investigado. Segundo a documentação do Kubernetes sobre arquitetura de logging, como ela explica esse tipo de lacuna, em relação ao armazenamento e à rotação de logs de containers?",
+  "explanation": "A documentação afirma que o Kubernetes não fornece uma solução de armazenamento nativa para dados de log nem uma arquitetura de logging em nível de cluster por padrão, e que o próprio kubelet é responsável por rotacionar os logs dos containers. Ela dá como exemplo que, se um Pod escreve 40 MiB de logs e o kubelet rotaciona os logs após 10 MiB, `kubectl logs` retorna no máximo 10 MiB -- então dados mais antigos de um incidente podem já ter sido descartados pela rotação, a menos que tenham sido exportados antes para um backend de logging em nível de cluster configurado separadamente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`kubectl logs` sempre retorna o histórico completo de logs de um Pod desde sua criação, pois o Kubernetes armazena nativamente todo o histórico de logs de cada container no etcd.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o Kubernetes não fornece armazenamento nativo para dados de log; logs de containers não são persistidos no etcd."
+    },
+    {
+      "key": "B",
+      "text": "A ausência de conteúdo indica necessariamente que o container nunca escreveu nada em stdout/stderr durante todo o período investigado, já que a rotação de logs do kubelet está sempre desabilitada por padrão em qualquer instalação do Kubernetes, independentemente da versão do cluster, do runtime de container usado ou de qualquer configuração aplicada ao kubelet.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a rotação de logs do kubelet como um comportamento existente, não desabilitado por padrão; a lacuna pode vir da rotação, não da ausência de escrita."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes não fornece armazenamento nativo de logs, e o kubelet rotaciona os logs dos containers -- por isso `kubectl logs` pode retornar menos dados do que o Pod efetivamente escreveu, se dados mais antigos já tiverem sido descartados pela rotação e não exportados antes para um backend externo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a explicação que a documentação dá, incluindo o exemplo numérico de rotação após 10 MiB mesmo quando o Pod escreveu 40 MiB."
+    },
+    {
+      "key": "D",
+      "text": "O Kubernetes garante uma arquitetura de logging em nível de cluster por padrão, agregando automaticamente os logs de todos os nós em um backend central sem necessidade de configuração adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- o Kubernetes não fornece uma solução nativa para logging em nível de cluster; isso exige configurar um backend separado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Logging Architecture (no native log storage; kubelet log rotation)",
+      "url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/#log-rotation"
+    },
+    {
+      "title": "Kubernetes Documentation -- Logging Architecture (cluster-level logging architectures)",
+      "url": "https://kubernetes.io/docs/concepts/cluster-administration/logging/#cluster-level-logging-architectures"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

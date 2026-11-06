@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece o uso de 'keyless signing' do cosign para os artefatos de release do próprio Kubernetes, e entende o que torna esse método notável em termos de gestão de chaves em comparação com uma assinatura por chave privada estática de longa duração.",
+  "prompt": "Como parte da segurança da cadeia de suprimentos (supply chain) dos próprios artefatos de release do Kubernetes, a documentação descreve o processo de assinatura dos binários (tarballs, arquivos SPDX, binários individuais) publicados em cada release. Segundo a documentação, qual ferramenta e qual método de assinatura são usados, e o que torna esse método notável em termos de gestão de chaves?",
+  "explanation": "A documentação afirma que o processo de release do Kubernetes assina todos os artefatos binários usando o 'keyless signing' do cosign. O que torna esse método notável é que a verificação não depende de uma chave privada estática e de longa duração mantida pelo projeto: a assinatura sem chave elimina a necessidade dessa infraestrutura de chave privada persistente para verificar a autenticidade dos artefatos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "cosign, usando 'keyless signing' -- o que elimina a necessidade de uma infraestrutura de chave privada estática e de longa duração mantida pelo projeto para verificar os artefatos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição da documentação para o processo de assinatura dos binários de release do Kubernetes."
+    },
+    {
+      "key": "B",
+      "text": "GPG, usando uma chave privada estática mantida pelo SIG Release e distribuída publicamente junto com os binários, para que qualquer pessoa externa ao projeto possa assinar novos releases exatamente da mesma forma.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o uso do cosign com assinatura 'keyless', não GPG com uma chave privada estática distribuída publicamente."
+    },
+    {
+      "key": "C",
+      "text": "cosign, mas usando uma chave privada de longa duração armazenada em um HSM do projeto, exigindo a mesma chave para verificar qualquer release passado ou futuro.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve especificamente o 'keyless signing' do cosign, cuja característica notável é não depender de uma chave privada de longa duração."
+    },
+    {
+      "key": "D",
+      "text": "Nenhuma assinatura é aplicada aos binários; a documentação cobre apenas a verificação de assinaturas de imagens de container, não dos binários standalone do release.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente a assinatura e verificação dos binários de release (tarballs, arquivos SPDX, binários individuais), além das imagens de container."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Verify Signed Kubernetes Artifacts (binary signatures via cosign's keyless signing)",
+      "url": "https://kubernetes.io/docs/tasks/administer-cluster/verify-signed-artifacts/#verifying-binary-signatures"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
