@@ -11,7 +11,7 @@
       "key": "A",
       "text": "Providers são plugins que permitem ao Terraform interagir com as APIs de cada plataforma ou serviço — como AWS, Azure, GCP ou Kubernetes —, de modo que o Terraform funciona com virtualmente qualquer serviço que exponha uma API acessível.",
       "correct": true,
-      "explanation": "Correto: a seção 'How does Terraform work?' afirma exatamente isso — providers são o que habilita o Terraform a trabalhar com praticamente qualquer plataforma ou serviço com uma API acessível."
+      "explanation": "Correto: a documentação de providers afirma que o Terraform depende de plugins chamados providers para interagir com APIs, e a seção 'How does Terraform work?' da introdução afirma que são os providers que habilitam o Terraform a trabalhar com praticamente qualquer plataforma ou serviço com uma API acessível."
     },
     {
       "key": "B",
@@ -36,6 +36,10 @@
     {
       "title": "Terraform Documentation — Introduction to Terraform (How does Terraform work?)",
       "url": "https://developer.hashicorp.com/terraform/intro#how-does-terraform-work"
+    },
+    {
+      "title": "Terraform Documentation — Providers (providers are plugins that interact with cloud/SaaS/other APIs)",
+      "url": "https://developer.hashicorp.com/terraform/language/providers"
     }
   ],
   "evidence": {

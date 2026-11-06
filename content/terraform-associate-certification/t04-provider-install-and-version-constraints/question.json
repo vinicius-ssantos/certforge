@@ -38,8 +38,12 @@
       "url": "https://developer.hashicorp.com/terraform/language/providers#provider-installation"
     },
     {
-      "title": "Terraform Documentation — Provider Requirements (Require providers, Version Constraints)",
+      "title": "Terraform Documentation — Provider Requirements (Require providers: the version argument)",
       "url": "https://developer.hashicorp.com/terraform/language/providers/requirements#require-providers"
+    },
+    {
+      "title": "Terraform Documentation — Provider Requirements (Version Constraints: a single compatible version; omitted accepts any version)",
+      "url": "https://developer.hashicorp.com/terraform/language/providers/requirements#version-constraints"
     }
   ],
   "evidence": {
