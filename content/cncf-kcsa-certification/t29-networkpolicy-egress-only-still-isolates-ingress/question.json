@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece o default específico de policyTypes quando o campo é omitido e a política tem apenas regras de egress -- um comportamento contraintuitivo que pode bloquear tráfego de entrada sem intenção.",
+  "prompt": "Uma equipe cria, em um namespace onde nenhum outro `NetworkPolicy` seleciona os mesmos Pods, um `NetworkPolicy` que seleciona um conjunto de Pods e define apenas uma seção `egress`, sem definir nenhuma seção `ingress` e sem definir explicitamente o campo `policyTypes`. A equipe espera que essa política restrinja apenas o tráfego de saída, deixando o tráfego de entrada para esses Pods exatamente como estava antes. O que realmente acontece com o tráfego de entrada (ingress) desses Pods?",
+  "explanation": "A documentação do Kubernetes afirma que, se `policyTypes` não for especificado em um NetworkPolicy, por padrão `Ingress` sempre será definido, e `Egress` será definido apenas se o NetworkPolicy tiver alguma regra de egress. Como essa política omite `policyTypes` mas tem uma regra de egress, ela se torna uma política tanto de ingress quanto de egress -- e, por não ter nenhuma seção `ingress` com regras que permitam tráfego de entrada, os Pods selecionados passam a negar todo o tráfego de entrada por padrão, um efeito colateral não intencional. Isso vale porque nenhuma outra política seleciona esses Pods nesse cenário; se houvesse, as políticas de NetworkPolicy se combinam de forma aditiva -- o tráfego permitido por qualquer política aplicável permanece permitido --, então uma política de ingress pré-existente que já permitisse esse tráfego continuaria valendo mesmo com esta nova política.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O tráfego de entrada continua exatamente como antes, sem nenhuma restrição, porque a política só define uma seção `egress`.",
+      "correct": false,
+      "explanation": "Incorreto: como `policyTypes` foi omitido, `Ingress` é incluído por padrão junto com `Egress` (por haver uma regra de egress), então a política passa a isolar os Pods também para ingress."
+    },
+    {
+      "key": "B",
+      "text": "Todo o tráfego de entrada para os Pods selecionados passa a ser negado por padrão, porque `Ingress` é incluído em `policyTypes` por padrão mesmo quando o campo é omitido.",
+      "correct": true,
+      "explanation": "Correto: `Ingress` é sempre incluído por padrão quando `policyTypes` é omitido, e como não há nenhuma regra de ingress que permita tráfego, os Pods selecionados ficam isolados -- e, portanto, com todo ingress negado por padrão."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes rejeita a criação dessa política, porque um NetworkPolicy não pode definir uma seção `egress` sem também definir uma seção `ingress`.",
+      "correct": false,
+      "explanation": "Incorreto: um NetworkPolicy com apenas uma seção `egress` é perfeitamente válido e aceito pelo kube-apiserver; não há essa exigência de seção pareada."
+    },
+    {
+      "key": "D",
+      "text": "O tráfego de entrada é restrito apenas às mesmas origens permitidas na seção `egress`, já que o Kubernetes espelha automaticamente as regras entre ingress e egress quando `policyTypes` não é definido.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse espelhamento automático de regras entre egress e ingress; a seção `egress` não concede, por si só, nenhuma permissão de entrada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Network Policies (policyTypes default when omitted)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/network-policies/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.7"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece os campos específicos que o Pod Security Standard Baseline restringe para impedir que um Pod compartilhe namespaces do host, não apenas o conceito geral de 'isolamento'.",
+  "prompt": "Um Pod define `spec.hostNetwork: true`, `spec.hostPID: true` e `spec.hostIPC: true`, fazendo-o compartilhar os namespaces de rede, de processos e de memória compartilhada do nó hospedeiro. Esse Pod passaria pelo nível **Baseline** do Pod Security Standard?",
+  "explanation": "O Pod Security Standard Baseline lista `spec.hostNetwork`, `spec.hostPID` e `spec.hostIPC` como campos restritos sob a categoria 'Host Namespaces', cujos únicos valores permitidos são indefinido/nulo ou `false`. Um Pod com qualquer um desses três campos definido como `true` compartilha namespaces do host com o nó, o que viola o nível Baseline e seria rejeitado por um admission controller configurado para impor essa política.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim, porque o Pod Security Standard Baseline só restringe capabilities e SELinux, e não trata do compartilhamento de namespaces do host.",
+      "correct": false,
+      "explanation": "Incorreto: 'Host Namespaces' (hostNetwork, hostPID, hostIPC) é justamente uma das categorias restritas pelo nível Baseline, não uma categoria tratada apenas em níveis mais altos."
+    },
+    {
+      "key": "B",
+      "text": "Não, porque o Baseline restringe explicitamente `hostNetwork`, `hostPID` e `hostIPC`, cujos únicos valores permitidos são indefinido ou `false`.",
+      "correct": true,
+      "explanation": "Correto: a tabela do Pod Security Standard Baseline lista exatamente esses três campos como restritos, permitindo apenas que fiquem indefinidos ou como `false`."
+    },
+    {
+      "key": "C",
+      "text": "Sim, desde que o Pod também defina um `securityContext.runAsNonRoot: true`, o que compensa o compartilhamento dos namespaces do host.",
+      "correct": false,
+      "explanation": "Incorreto: `runAsNonRoot` é uma restrição independente; ela não isenta o Pod da restrição separada sobre hostNetwork/hostPID/hostIPC exigida pelo Baseline."
+    },
+    {
+      "key": "D",
+      "text": "Depende apenas do runtime de container configurado no nó; o Pod Security Standard não define regras sobre compartilhamento de namespaces do host.",
+      "correct": false,
+      "explanation": "Incorreto: a restrição sobre hostNetwork/hostPID/hostIPC vem da política Pod Security Standard em si, aplicada independentemente de qual runtime de container está em uso no nó."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Pod Security Standards (Baseline: Host Namespaces)",
+      "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

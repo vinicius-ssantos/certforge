@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.9"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende a implicação de segurança do modelo de rede padrão do Kubernetes -- confiança ampla entre Pods por padrão -- e não apenas o mecanismo de CNI em si.",
+  "prompt": "Em um cluster recém-criado, sem nenhum `NetworkPolicy` definido, dois Pods em namespaces diferentes, rodando em nós diferentes, tentam se comunicar diretamente pelo IP um do outro. Pelo modelo de rede fundamental do Kubernetes, o que acontece?",
+  "explanation": "O modelo de rede fundamental do Kubernetes exige que todo Pod receba seu próprio endereço IP exclusivo no cluster e que todos os Pods possam se comunicar com todos os outros Pods, estejam no mesmo nó ou em nós diferentes, diretamente e sem uso de proxies ou tradução de endereços (NAT) -- isso vale independentemente de estarem em namespaces diferentes, a menos que haja segmentação de rede intencional. Essa é a razão de segurança pela qual `NetworkPolicy` existe: sem ela, o cluster é uma rede plana onde qualquer Pod pode, por padrão, alcançar qualquer outro.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A comunicação é bloqueada por padrão, porque Pods em namespaces diferentes são isolados uns dos outros mesmo sem nenhum `NetworkPolicy`.",
+      "correct": false,
+      "explanation": "Incorreto: namespaces do Kubernetes não isolam tráfego de rede por padrão; isolamento de rede só existe quando um `NetworkPolicy` o impõe explicitamente."
+    },
+    {
+      "key": "B",
+      "text": "A comunicação é bem-sucedida, porque o modelo de rede do Kubernetes exige que todos os Pods possam se comunicar diretamente entre si, sem NAT, independentemente do nó ou namespace.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a exigência do modelo de rede fundamental do Kubernetes -- comunicação direta entre quaisquer Pods, sem NAT, ressalvada apenas segmentação de rede intencional."
+    },
+    {
+      "key": "C",
+      "text": "A comunicação exige necessariamente passar por um Service do tipo `ClusterIP`; Pods nunca podem se comunicar diretamente pelo próprio IP.",
+      "correct": false,
+      "explanation": "Incorreto: Services facilitam a descoberta e balanceamento, mas o modelo de rede do Kubernetes já garante conectividade direta IP a IP entre Pods, sem exigir um Service para isso."
+    },
+    {
+      "key": "D",
+      "text": "A comunicação só funciona se os dois Pods estiverem no mesmo nó, já que o modelo de rede do Kubernetes não garante conectividade direta entre nós diferentes sem um túnel configurado manualmente.",
+      "correct": false,
+      "explanation": "Incorreto: o modelo de rede do Kubernetes garante explicitamente a comunicação entre Pods 'estejam no mesmo nó ou em nós diferentes', não apenas dentro do mesmo nó."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Service Networking (the Kubernetes network model)",
+      "url": "https://kubernetes.io/docs/concepts/services-networking/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

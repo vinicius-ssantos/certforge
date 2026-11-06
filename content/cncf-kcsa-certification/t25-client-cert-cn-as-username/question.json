@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.10"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende como um client X.509 é mapeado para uma identidade de usuário no Kubernetes, não apenas que 'certificados autenticam clientes'.",
+  "prompt": "Um cliente se apresenta ao kube-apiserver com um certificado X.509 válido, assinado pela CA de confiança de clientes do cluster, cujo campo 'subject' contém `/CN=bob`. Como o Kubernetes determina qual é o nome de usuário desse cliente para fins de autorização via RBAC?",
+  "explanation": "Quando um cliente apresenta um certificado válido assinado pela CA de confiança de clientes do cluster, ele é considerado autenticado, e o Kubernetes determina o nome de usuário a partir do campo 'Common Name' (CN) do 'subject' do certificado -- no exemplo, o usuário seria `bob`. A partir daí, o subsistema de RBAC decide se esse usuário está autorizado a realizar a operação solicitada sobre o recurso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Kubernetes usa o campo Common Name (CN) do 'subject' do certificado como o nome de usuário para autorização via RBAC.",
+      "correct": true,
+      "explanation": "Correto: a documentação descreve exatamente esse mapeamento -- o CN do certificado se torna o nome de usuário usado pelo RBAC."
+    },
+    {
+      "key": "B",
+      "text": "O Kubernetes ignora o conteúdo do certificado e usa sempre o nome do arquivo `kubeconfig` fornecido pelo cliente como nome de usuário.",
+      "correct": false,
+      "explanation": "Incorreto: o nome do arquivo kubeconfig não tem relação com a identidade autenticada; a identidade vem do conteúdo do certificado em si, especificamente do campo CN."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes exige uma chamada de API separada para registrar manualmente o usuário `bob` antes que o certificado possa ser usado para autenticação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que um usuário normal não pode ser adicionado via chamada de API; qualquer cliente que apresente um certificado válido já é considerado autenticado, sem registro prévio."
+    },
+    {
+      "key": "D",
+      "text": "O nome de usuário é determinado pelo endereço IP de origem da conexão TLS, não pelo conteúdo do certificado apresentado.",
+      "correct": false,
+      "explanation": "Incorreto: a identidade do cliente vem do certificado apresentado (especificamente do CN), não do endereço IP de origem da conexão."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Authenticating (Users in Kubernetes, X.509 client certificates)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/authentication/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

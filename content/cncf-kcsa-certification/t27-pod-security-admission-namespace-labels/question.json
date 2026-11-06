@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": ["KCSA-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o mecanismo de aplicação do Pod Security Admission -- labels de namespace e os modos enforce/audit/warn -- distinto de apenas conhecer os níveis do Pod Security Standards.",
+  "prompt": "Uma equipe quer que o nível **restricted** do Pod Security Standard seja imposto, rejeitando Pods não conformes, apenas no namespace `pagamentos`, sem afetar os demais namespaces do cluster. Como isso é configurado usando o admission controller Pod Security (built-in) do Kubernetes?",
+  "explanation": "O Kubernetes oferece um admission controller Pod Security embutido (built-in) para impor os Pod Security Standards, e as restrições de segurança de Pod são aplicadas no nível do namespace. A configuração é feita com labels no próprio namespace, no formato `pod-security.kubernetes.io/<MODE>: <LEVEL>`, em que `MODE` deve ser `enforce`, `audit` ou `warn`, e `LEVEL` deve ser `privileged`, `baseline` ou `restricted`. No modo `enforce`, violações da política fazem o Pod ser rejeitado -- mas essa restrição se aplica apenas aos objetos Pod resultantes, não aos recursos de workload (como Deployments) que os geram.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Aplicando o label `pod-security.kubernetes.io/enforce: restricted` ao namespace `pagamentos`, deixando os demais namespaces sem esse label.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a forma documentada de configurar o Pod Security Admission por namespace, usando o label no formato `pod-security.kubernetes.io/<MODE>: <LEVEL>`."
+    },
+    {
+      "key": "B",
+      "text": "Criando um `ValidatingWebhookConfiguration` customizado, já que o Kubernetes não oferece nenhum admission controller embutido para Pod Security Standards.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes oferece um admission controller Pod Security embutido (built-in) para esse propósito; um webhook customizado não é necessário para impor os níveis padrão."
+    },
+    {
+      "key": "C",
+      "text": "Definindo `restricted: true` diretamente no `spec` de cada Deployment do namespace `pagamentos`, campo que o kube-apiserver usa para aplicar o Pod Security Standard correspondente.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse campo `restricted` no spec de um Deployment; a configuração é feita por labels no namespace, não em cada recurso de workload individualmente."
+    },
+    {
+      "key": "D",
+      "text": "Definindo uma anotação `kubernetes.io/pod-security-level: restricted` em cada ServiceAccount usado pelos Pods do namespace `pagamentos`.",
+      "correct": false,
+      "explanation": "Incorreto: a configuração do Pod Security Admission é feita por labels no namespace (`pod-security.kubernetes.io/<MODE>`), não por anotações em ServiceAccounts."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Pod Security Admission",
+      "url": "https://kubernetes.io/docs/concepts/security/pod-security-admission/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

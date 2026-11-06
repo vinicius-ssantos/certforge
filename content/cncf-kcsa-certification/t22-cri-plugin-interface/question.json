@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o propósito da Container Runtime Interface (CRI) como interface plugável entre kubelet e runtime, não apenas que 'containerd é um runtime'.",
+  "prompt": "Um cluster Kubernetes pode usar containerd ou CRI-O como seu container runtime, sem exigir recompilação do kubelet nem dos demais componentes do cluster. O que torna essa troca de runtime possível?",
+  "explanation": "A Container Runtime Interface (CRI) é uma interface plugável baseada em gRPC que define o protocolo de comunicação entre o kubelet e o container runtime local. Por ser uma interface desacoplada do runtime específico, qualquer runtime que implemente a versão v1 da CRI pode ser usado pelo kubelet sem necessidade de recompilar o kubelet ou outros componentes do cluster para cada runtime diferente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A Container Runtime Interface (CRI) define um protocolo gRPC plugável entre o kubelet e o runtime, permitindo usar qualquer runtime compatível com a versão v1 da CRI sem recompilar o kubelet.",
+      "correct": true,
+      "explanation": "Correto: a documentação descreve a CRI exatamente assim -- um protocolo plugável que dispensa recompilação dos componentes do cluster para trocar de runtime."
+    },
+    {
+      "key": "B",
+      "text": "O kube-apiserver mantém drivers internos para cada runtime suportado e os seleciona dinamicamente a cada criação de Pod, sem envolvimento do kubelet.",
+      "correct": false,
+      "explanation": "Incorreto: a comunicação com o runtime acontece entre o kubelet e o runtime local do nó via CRI, não entre o kube-apiserver e o runtime."
+    },
+    {
+      "key": "C",
+      "text": "Cada runtime de container precisa ser compilado junto com o binário do kubelet; trocar de runtime exige publicar uma nova versão do kubelet.",
+      "correct": false,
+      "explanation": "Incorreto: a própria existência da CRI tem o objetivo de evitar essa recompilação -- o kubelet se comunica com qualquer runtime compatível por um protocolo plugável, não por compilação conjunta."
+    },
+    {
+      "key": "D",
+      "text": "Containerd e CRI-O são, na verdade, o mesmo processo interno do kubelet exposto sob nomes diferentes, por isso a troca não exige nenhuma reconfiguração nem reinício de nenhum componente do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: containerd e CRI-O são runtimes de container distintos e independentes; o que permite a troca entre eles é a CRI como protocolo comum, não serem o mesmo processo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Container Runtime Interface (CRI)",
+      "url": "https://kubernetes.io/docs/concepts/architecture/cri/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

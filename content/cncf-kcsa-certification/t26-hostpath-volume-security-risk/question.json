@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000012",
+  "objectiveKeys": ["KCSA-2.11"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende o risco de segurança específico do volume `hostPath` -- acesso ao filesystem e a credenciais do nó --, não apenas que ele 'monta um diretório do host'.",
+  "prompt": "Um Pod não confiável monta um volume `hostPath` apontando para um diretório do nó hospedeiro, em modo leitura-escrita. Segundo a documentação do Kubernetes, por que esse volume representa um risco de segurança, além de simplesmente expor arquivos do host?",
+  "explanation": "A documentação do Kubernetes alerta que volumes `hostPath` apresentam muitos riscos de segurança e que, se possível, devem ser evitados. O acesso ao filesystem do host pode expor credenciais privilegiadas do sistema (como as do próprio kubelet) ou APIs privilegiadas (como o socket do container runtime), que podem ser usadas para fuga do container (container escape) ou para atacar outras partes do cluster. Além disso, uma montagem leitura-escrita de um `hostPath` não confiável permite que os containers do Pod subvertam qualquer restrição de diretório aplicada apenas em tempo de admissão.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque o acesso ao filesystem do host pode expor credenciais privilegiadas (como as do kubelet) ou APIs privilegiadas (como o socket do container runtime), possibilitando fuga do container ou ataque a outras partes do cluster.",
+      "correct": true,
+      "explanation": "Correto: essa é exatamente a justificativa da documentação para o risco de segurança do hostPath, além da simples exposição de arquivos."
+    },
+    {
+      "key": "B",
+      "text": "Porque volumes `hostPath` sempre são montados como somente leitura pelo Kubernetes, o que impede qualquer uso legítimo de armazenamento persistente.",
+      "correct": false,
+      "explanation": "Incorreto: hostPath pode ser montado em modo leitura-escrita (como no cenário descrito); o problema não é uma restrição inexistente de somente-leitura, mas o acesso privilegiado que o modo leitura-escrita permite."
+    },
+    {
+      "key": "C",
+      "text": "Porque o Kubernetes recalcula automaticamente as cotas de armazenamento do nó inteiro sempre que um hostPath é usado, mesmo que o Pod seja removido e o diretório montado não exista mais em nenhum outro Pod agendado no mesmo nó do cluster.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação nota que o uso de hostPath não é tratado como uso de armazenamento efêmero e precisa ser monitorado manualmente -- isso é uma preocupação operacional de disco, não o motivo central do risco de segurança descrito."
+    },
+    {
+      "key": "D",
+      "text": "Porque hostPath exige que o Pod rode com `hostNetwork: true`, expondo a interface de rede do nó junto com o diretório montado.",
+      "correct": false,
+      "explanation": "Incorreto: usar um volume hostPath não exige nem implica `hostNetwork: true`; são configurações independentes entre si."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Volumes (hostPath security risks)",
+      "url": "https://kubernetes.io/docs/concepts/storage/volumes/#hostpath"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
