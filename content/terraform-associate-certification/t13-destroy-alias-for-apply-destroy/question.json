@@ -35,7 +35,11 @@
   "references": [
     {
       "title": "Terraform Documentation — terraform destroy (a convenience alias for terraform apply -destroy; plan -destroy previews without executing)",
-      "url": "https://developer.hashicorp.com/terraform/cli/commands/destroy#terraform-destroy-command"
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/destroy#usage"
+    },
+    {
+      "title": "Terraform Documentation — terraform apply (Automatic Plan Mode: generates a plan, prompts for approval by default -- inherited by destroy as a form of apply)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/apply#automatic-plan-mode"
     }
   ],
   "evidence": {
