@@ -57,12 +57,22 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // certification profiles cite cncf.io for facts kubernetes.io does not own (project
     // governance, maturity levels, the cloud native ecosystem) alongside kubernetes.io itself;
     // #173's Terraform Associate profile cites developer.hashicorp.com, HashiCorp's own docs.
+    // KCSA's "Controls and Frameworks", "Compliance Frameworks", "Threat Modeling Frameworks"
+    // and "Supply Chain Compliance" objectives name no source at all -- the CNCF curriculum PDF
+    // is a bare topic-title outline with zero citations for these four. The four hosts below are
+    // an editorial judgment call, not a curriculum citation: each is the industry-canonical
+    // primary source for exactly what its objective's title conventionally means (CIS Benchmarks
+    // for controls/compliance, MITRE ATT&CK for threat modeling, SLSA for supply-chain
+    // compliance), confirmed by a human decision under #171 rather than by anything the
+    // curriculum itself points to.
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
       "datatracker.ietf.org", "www.rfc-editor.org",
       "docs.github.com", "cncf.io",
       "developer.hashicorp.com",
+      "www.cisecurity.org", "csrc.nist.gov",
+      "attack.mitre.org", "slsa.dev",
     ]);
     for (const reference of question.references) {
       let parsed;
