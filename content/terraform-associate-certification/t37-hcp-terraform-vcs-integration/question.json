@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000048",
+  "objectiveKeys": ["TFA-8d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber os benefícios concretos que a documentação atribui especificamente a conectar o HCP Terraform a um provedor de VCS -- runs automáticos a partir de commits, planos especulativos em pull requests, e publicação de módulos via tag -- em vez de uma noção vaga de 'integração com Git'.",
+  "prompt": "Uma organização configura seu HCP Terraform para conectar um provedor de VCS (version control system) às suas workspaces. Segundo a documentação oficial sobre integração com VCS, quais benefícios concretos essa conexão passa a oferecer que não estariam disponíveis sem ela?",
+  "explanation": "A documentação afirma que, quando workspaces estão vinculadas a um repositório VCS, o HCP Terraform pode iniciar automaticamente runs do Terraform quando mudanças são commitadas na branch especificada. Ela também afirma que o HCP Terraform facilita a revisão de código ao prever automaticamente como pull requests afetarão a infraestrutura (planos especulativos em pull requests), e que publicar novas versões de um módulo Terraform privado se torna tão simples quanto enviar uma tag ao repositório desse módulo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Runs do Terraform iniciados automaticamente a partir de commits na branch especificada, planos especulativos que preveem o efeito de pull requests na infraestrutura, e publicação de novas versões de um módulo privado apenas enviando uma tag ao repositório do módulo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o conjunto de benefícios que a documentação atribui especificamente à conexão com um provedor de VCS."
+    },
+    {
+      "key": "B",
+      "text": "Nenhum benefício adicional -- a documentação afirmaria que todos os recursos do HCP Terraform funcionam de forma idêntica com ou sem uma conexão VCS configurada, tornando essa conexão puramente opcional e sem efeito prático sobre o workflow da equipe de desenvolvimento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que uma conexão VCS fornece recursos e workflows adicionais que não estão disponíveis sem ela, como runs automáticos e planos especulativos em pull requests."
+    },
+    {
+      "key": "C",
+      "text": "Apenas a possibilidade de armazenar o arquivo .tf no repositório Git, já que, sem uma conexão VCS configurada, a documentação afirmaria que o HCP Terraform não conseguiria ler nenhum arquivo de configuração Terraform em nenhuma circunstância.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não condiciona a leitura de arquivos de configuração à existência de uma conexão VCS -- os benefícios específicos de uma conexão VCS são runs automáticos a partir de commits, planos especulativos em pull requests e publicação de módulos via tag."
+    },
+    {
+      "key": "D",
+      "text": "Runs automáticos a partir de commits, mas a documentação afirmaria que publicar uma nova versão de um módulo privado exige sempre um upload manual de arquivo através da interface web, independentemente de a conexão VCS estar configurada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a publicação de uma nova versão de um módulo privado como tão simples quanto enviar uma tag ao repositório do módulo quando há uma conexão VCS -- não um upload manual obrigatório via interface web."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — VCS Integrations Overview (automatic runs on commit, speculative plans on pull requests, publish module versions via tag)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs/vcs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

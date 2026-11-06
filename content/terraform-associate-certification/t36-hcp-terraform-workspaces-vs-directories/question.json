@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000048",
+  "objectiveKeys": ["TFA-8c"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o HCP Terraform organiza coleções de infraestrutura em workspaces, o equivalente ao diretório de trabalho local que a CLI usa, e não apenas que 'workspace é uma palavra usada pelo HCP Terraform'.",
+  "prompt": "Uma equipe que já organiza suas configurações Terraform em diretórios de trabalho locais separados -- cada um com sua própria configuração, state e variáveis -- decide migrar para o HCP Terraform. Segundo a documentação oficial sobre workspaces, qual é o conceito do HCP Terraform equivalente a esses diretórios de trabalho locais, e o que ele contém?",
+  "explanation": "A documentação afirma que, quando executado localmente, o Terraform gerencia cada coleção de infraestrutura com um diretório de trabalho persistente, que contém uma configuração, dados de state e variáveis. O HCP Terraform gerencia coleções de infraestrutura com workspaces em vez de diretórios -- um workspace contém tudo que o Terraform precisa para gerenciar uma dada coleção de infraestrutura, e workspaces separados funcionam como diretórios de trabalho completamente separados.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O workspace, que contém tudo que o Terraform precisa para gerenciar uma coleção de infraestrutura (equivalente a configuração, state e variáveis), e workspaces separados funcionam como diretórios de trabalho completamente separados.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a equivalência e o conteúdo que a documentação descreve para workspaces no HCP Terraform."
+    },
+    {
+      "key": "B",
+      "text": "O módulo Terraform, já que a documentação trataria module e workspace como sinônimos completos, sem nenhuma distinção entre organizar código reutilizável e organizar coleções de infraestrutura gerenciadas separadamente pela equipe de operações.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não trata module e workspace como sinônimos -- um module é uma unidade de configuração reutilizável, enquanto um workspace é o equivalente, no HCP Terraform, a um diretório de trabalho local."
+    },
+    {
+      "key": "C",
+      "text": "Nenhum conceito equivalente existe; a documentação afirmaria que o HCP Terraform exige manter um único diretório de trabalho compartilhado entre todas as coleções de infraestrutura da organização, sem nenhuma forma de separá-las.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente o workspace como o conceito equivalente, permitindo separar coleções de infraestrutura exatamente como diretórios de trabalho locais separados fariam."
+    },
+    {
+      "key": "D",
+      "text": "A organização (organization), que a documentação descreveria como contendo a configuração, o state e as variáveis de uma única coleção de infraestrutura, análoga a um diretório de trabalho local.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o workspace, não a organization, como o conceito que contém a configuração, o state e as variáveis de uma coleção específica de infraestrutura, equivalente a um diretório de trabalho local."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — Workspaces Overview (Introduction: local working directory vs. HCP Terraform workspace)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs/workspaces#introduction"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

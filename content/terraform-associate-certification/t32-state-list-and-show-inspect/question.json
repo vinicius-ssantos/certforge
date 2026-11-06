@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000047",
+  "objectiveKeys": ["TFA-7b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber os dois comandos distintos para inspecionar o state via CLI -- terraform state list, para enumerar recursos, e terraform state show, para ver os atributos de um recurso específico -- em vez de assumir que um único comando faz as duas coisas.",
+  "prompt": "Uma pessoa quer primeiro enumerar todos os recursos presentes no state de uma configuração Terraform, e depois examinar os atributos de um recurso específico encontrado nessa lista. Segundo a documentação oficial, quais dois comandos da CLI ela deveria usar para cada uma dessas duas tarefas?",
+  "explanation": "A documentação descreve terraform state list como o comando que lista os recursos dentro do state do Terraform, usando a sintaxe terraform state list [options] [address...] -- se nenhum endereço for informado, todos os recursos são listados. Para examinar os atributos de um recurso específico, ela descreve terraform state show [options] ADDRESS, que exige um endereço apontando para um único recurso no state, no formato de resource addressing.",
+  "options": [
+    {
+      "key": "A",
+      "text": "terraform state list para enumerar os recursos do state, e terraform state show para examinar os atributos de um recurso específico, este último exigindo um endereço que aponte para esse único recurso.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a dupla de comandos e o requisito de endereço único que a documentação descreve para essas duas tarefas."
+    },
+    {
+      "key": "B",
+      "text": "terraform state show para enumerar todos os recursos do state sem precisar de nenhum endereço, e terraform state list para examinar os atributos de um recurso específico a partir de seu endereço.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação inverte exatamente essas funções -- é state list que enumera recursos sem exigir endereço, e state show que exige um endereço de um único recurso para mostrar seus atributos."
+    },
+    {
+      "key": "C",
+      "text": "Apenas terraform state list resolve as duas tarefas, já que a documentação afirma que esse comando, ao receber um endereço de um único recurso, já exibe todos os atributos desse recurso em vez de apenas listá-lo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve terraform state list como um comando de listagem, filtrável por endereço, não como um comando que exibe atributos -- essa é a função de terraform state show."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum dos dois comandos aceita um endereço de recurso como argumento; a documentação afirmaria que ambos sempre operam sobre o state inteiro, sem nenhuma forma de filtrar ou apontar para um recurso específico.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve ambos os comandos aceitando endereços no formato de resource addressing -- state list os usa para filtrar, e state show exige um endereço de um único recurso."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform state list (lists resources in state; all resources if no address given)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/state/list#usage"
+    },
+    {
+      "title": "Terraform Documentation — terraform state show (shows a single resource's attributes; requires an address)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/state/show#usage"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

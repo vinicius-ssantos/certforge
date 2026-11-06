@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000048",
+  "objectiveKeys": ["TFA-8b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber quais recursos de colaboração e governança a documentação atribui especificamente às edições pagas e à edição Standard do HCP Terraform -- times com níveis de permissão diferentes, e auditoria/validação contínua/detecção de drift --, em vez de tratar 'colaboração' como um recurso vago e único.",
+  "prompt": "Uma organização que já usa o HCP Terraform com mais de cinco usuários quer criar times com níveis de permissão diferentes entre si, e também habilitar auditoria, validação contínua e detecção automática de drift de configuração. Segundo a documentação oficial, quais edições do HCP Terraform a documentação associa a cada um desses dois conjuntos de recursos?",
+  "explanation": "A documentação afirma que as edições pagas do HCP Terraform permitem adicionar mais de cinco usuários e criar times com níveis de permissão diferentes, colaborando de forma mais eficaz. Ela afirma, separadamente, que a edição Standard do HCP Terraform permite habilitar logging de auditoria, validação contínua e detecção automática de drift de configuração -- um conjunto de recursos de governança atribuído especificamente a essa edição.",
+  "options": [
+    {
+      "key": "A",
+      "text": "As edições pagas, para times com permissões diferentes e mais de cinco usuários; e a edição Standard, para logging de auditoria, validação contínua e detecção automática de drift de configuração.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a atribuição de recursos a cada edição que a documentação descreve."
+    },
+    {
+      "key": "B",
+      "text": "Apenas a edição gratuita resolve ambos os conjuntos de recursos, já que a documentação afirmaria que todo recurso de colaboração e governança do HCP Terraform está disponível sem custo para equipes de qualquer tamanho.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui mais de cinco usuários e times com permissões diferentes às edições pagas, e auditoria/validação contínua/detecção de drift especificamente à edição Standard -- não à edição gratuita."
+    },
+    {
+      "key": "C",
+      "text": "A edição Standard, para mais de cinco usuários e times com permissões diferentes; e as edições pagas em geral, para auditoria, validação contínua e detecção de drift -- invertendo a atribuição que a documentação faz entre esses dois conjuntos de recursos e as edições.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui usuários/times de permissão diferente às edições pagas em geral, e auditoria/validação contínua/detecção de drift especificamente à edição Standard -- não o inverso."
+    },
+    {
+      "key": "D",
+      "text": "Nenhuma edição do HCP Terraform oferece detecção automática de drift de configuração; a documentação afirmaria que drift só pode ser detectado manualmente, executando terraform plan localmente fora do HCP Terraform.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui detecção automática de drift de configuração especificamente à edição Standard do HCP Terraform, não apenas a uma verificação manual local."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — What is HCP Terraform? (paid editions: 5+ users, teams with different permission levels; Standard Edition: audit logging, continuous validation, drift detection)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
