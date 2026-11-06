@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000046",
+  "objectiveKeys": ["TFA-6b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o travamento de state é automático em qualquer operação que possa escrever state (não um passo manual), e que nem todo backend o suporta -- em vez de assumir que travar o state é algo que o usuário precisa acionar.",
+  "prompt": "Duas pessoas executam terraform apply quase ao mesmo tempo contra o mesmo backend, que suporta travamento de state. Segundo a documentação oficial sobre travamento de state, o que acontece, e esse travamento exige alguma ação manual de quem executa o comando?",
+  "explanation": "A documentação afirma que, se suportado pelo backend, o Terraform trava o state para todas as operações que poderiam escrever o state -- isso acontece automaticamente, sem exibir nenhuma mensagem perguntando algo à pessoa, e sem exigir uma ação manual para ativá-lo. Isso impede que outras execuções adquiram o lock e potencialmente corrompam o state. É possível desabilitar o travamento na maioria dos comandos com a flag -lock=false, mas a documentação não recomenda isso. Nem todo backend suporta travamento.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nada acontece: a documentação afirma que o Terraform nunca trava o state automaticamente, exigindo que a pessoa execute manualmente um comando terraform lock antes de cada apply.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o travamento acontece automaticamente em operações que poderiam escrever state, sem nenhum comando terraform lock manual."
+    },
+    {
+      "key": "B",
+      "text": "O travamento só ocorre em comandos de leitura de state, como terraform show, nunca em comandos que escrevem state, como apply, já que escrever já seria considerado uma operação segura por padrão em qualquer backend, independentemente de suportar travamento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o travamento ocorre justamente em operações que poderiam escrever state -- é o contrário do que esta alternativa descreve."
+    },
+    {
+      "key": "C",
+      "text": "O travamento de state é suportado por todo backend sem exceção, e a documentação afirma que não existe nenhuma flag para desabilitá-lo em nenhum comando.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que nem todo backend suporta travamento, e que a flag -lock=false pode desabilitá-lo na maioria dos comandos, embora isso não seja recomendado."
+    },
+    {
+      "key": "D",
+      "text": "O travamento acontece automaticamente, sem ação manual da pessoa, em qualquer operação que possa escrever state -- isso impede que outra execução adquira o lock e corrompa o state; é possível desabilitar com -lock=false, mas isso não é recomendado.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento automático e a flag de desabilitação que a documentação descreve para o travamento de state."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — State: Locking (automatic on write operations; -lock=false; not all backends support it)",
+      "url": "https://developer.hashicorp.com/terraform/language/state/locking#state-locking"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

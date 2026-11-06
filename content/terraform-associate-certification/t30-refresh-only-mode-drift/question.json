@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000046",
+  "objectiveKeys": ["TFA-6d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o modo refresh-only só atualiza o state para refletir mudanças externas, sem reconciliar a infraestrutura real com a configuração -- em vez de confundi-lo com um plano/apply normal que corrigiria o drift alterando recursos.",
+  "prompt": "Alguém alterou manualmente um recurso fora do fluxo normal do Terraform (por exemplo, durante a resposta a um incidente), e agora o state do Terraform não reflete mais o estado real desse recurso. Segundo a documentação oficial sobre os modos de planejamento do terraform plan, qual modo serve para esse cenário, e o que ele realmente faz?",
+  "explanation": "A documentação descreve o modo refresh-only (ativado com a opção -refresh-only) como aquele que cria um plano cujo objetivo é apenas atualizar o state do Terraform e os valores de output do módulo raiz para refletir mudanças feitas nos objetos remotos fora do Terraform -- útil justamente quando um objeto remoto foi alterado intencionalmente fora do fluxo usual, como ao responder a um incidente. Esse modo não altera a infraestrutura real nem a reconcilia com a configuração; ele apenas sincroniza o registro que o Terraform mantém.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O modo destroy (-destroy), porque a documentação descreve esse modo como o responsável por reconciliar qualquer divergência entre state e infraestrutura real, destruindo e recriando os recursos afetados.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o modo destroy como aquele cujo objetivo é destruir todos os objetos remotos existentes, não reconciliar divergências entre state e infraestrutura real -- esse é o papel do modo refresh-only."
+    },
+    {
+      "key": "B",
+      "text": "O modo normal padrão (sem nenhuma opção adicional), que a documentação descreve como capaz de, por si só, alterar a infraestrutura real de volta para corresponder ao state desatualizado, sem nenhuma etapa de refresh envolvida em qualquer parte do processo de planejamento.",
+      "correct": false,
+      "explanation": "Incorreto: o modo normal padrão sincroniza o state com a realidade e depois propõe mudanças na infraestrutura para corresponder à configuração -- ele não se limita a apenas atualizar o state, que é o que o cenário descrito pede e o que o modo refresh-only faz."
+    },
+    {
+      "key": "C",
+      "text": "Não existe, segundo a documentação, nenhum modo de planejamento dedicado a esse cenário; a única forma de lidar com isso seria reescrever manualmente o arquivo de state inteiro à mão.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente o modo refresh-only como dedicado a esse cenário, sem exigir edição manual do arquivo de state."
+    },
+    {
+      "key": "D",
+      "text": "O modo refresh-only (-refresh-only), que cria um plano cujo objetivo é apenas atualizar o state e os outputs do módulo raiz para refletir mudanças feitas nos objetos remotos fora do Terraform -- sem alterar a infraestrutura real.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para o modo refresh-only e o cenário em que ele é útil."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform plan (Planning Modes: Refresh-only mode updates state and root module outputs without changing infrastructure)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/plan#planning-modes"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

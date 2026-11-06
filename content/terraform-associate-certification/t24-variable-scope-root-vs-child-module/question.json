@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000045",
+  "objectiveKeys": ["TFA-5b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que uma variável é escopada ao módulo em que é declarada, e que a forma de atribuir seu valor muda conforme esse módulo é o módulo raiz ou um módulo filho -- não que toda variável é configurada da mesma forma em qualquer módulo.",
+  "prompt": "Um módulo filho declara uma variável chamada instance_count. Segundo a documentação oficial do bloco variable, como o valor dessa variável é definido quando ela está em um módulo raiz, comparado a quando está em um módulo filho?",
+  "explanation": "A documentação afirma que você pode definir variáveis tanto no módulo raiz quanto em módulos filhos: no módulo raiz, você define o valor usando opções de linha de comando, variáveis de ambiente, arquivos de definição de variáveis, ou um workspace do HCP Terraform; em módulos filhos, o módulo pai passa valores ao módulo filho como argumentos no bloco module. A variável pertence ao módulo em que foi declarada -- seu valor não é compartilhado automaticamente entre módulos sem essa passagem explícita.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Em ambos os casos, o valor é sempre lido diretamente de uma variável de ambiente com o mesmo nome da variável, sem distinção entre módulo raiz e módulo filho.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue as duas formas -- variáveis de ambiente são apenas uma das formas de definir valores no módulo raiz; em um módulo filho, o valor vem do módulo pai via bloco module, não de variáveis de ambiente."
+    },
+    {
+      "key": "B",
+      "text": "Variáveis em módulos filhos não podem ter seus valores definidos de forma alguma; elas sempre usam obrigatoriamente o valor default declarado no próprio bloco variable, mesmo que um default não tenha sido especificado em nenhuma parte da configuração.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o módulo pai passando valores ao módulo filho via bloco module -- não existe essa obrigatoriedade de usar apenas um default, e um default nem sempre é declarado."
+    },
+    {
+      "key": "C",
+      "text": "Uma variável declarada em um módulo filho herda automaticamente o valor de qualquer variável com o mesmo nome já definida no módulo raiz, sem que o bloco module precise passar nenhum argumento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve herança automática por nome -- o módulo pai precisa passar o valor explicitamente como argumento no bloco module que chama o módulo filho."
+    },
+    {
+      "key": "D",
+      "text": "No módulo raiz, o valor é definido por opções de linha de comando, variáveis de ambiente, arquivos de definição de variáveis, ou um workspace do HCP Terraform; em um módulo filho, o módulo pai passa o valor como argumento no bloco module que o chama.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção que a documentação do bloco variable descreve entre módulo raiz e módulo filho."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — variable block reference (Background: root module vs. child module variable values)",
+      "url": "https://developer.hashicorp.com/terraform/language/block/variable#background"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
