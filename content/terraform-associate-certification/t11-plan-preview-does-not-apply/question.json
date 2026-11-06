@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que terraform plan, isoladamente, nunca executa as mudanças que propõe, e os três passos concretos que a documentação descreve para a criação do plano (ler state atual, comparar à configuração, propor ações) -- não apenas que 'plan mostra o que vai mudar'.",
+  "prompt": "Uma pessoa executa terraform plan em uma configuração que já tem infraestrutura provisionada, sem passar nenhuma opção adicional. Segundo a documentação oficial, o comando por si só modifica a infraestrutura real, e quais operações ele realiza por padrão para produzir seu resultado?",
+  "explanation": "A documentação afirma explicitamente que o comando plan, isoladamente, não executa as mudanças propostas. Por padrão, ao criar um plano, o Terraform lê o estado atual de quaisquer objetos remotos já existentes para garantir que o state esteja atualizado, compara a configuração atual ao state anterior observando as diferenças, e propõe um conjunto de ações de mudança que, se aplicadas, fariam os objetos remotos corresponderem à configuração.",
+  "options": [
+    {
+      "key": "A",
+      "text": "terraform plan aplica diretamente qualquer mudança necessária para que a infraestrutura real corresponda à configuração, funcionando como um sinônimo de terraform apply que apenas imprime um log mais detalhado das operações realizadas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que o comando plan, isoladamente, não executa as mudanças propostas -- ele apenas as propõe para revisão."
+    },
+    {
+      "key": "B",
+      "text": "terraform plan ignora completamente o state existente e gera suas propostas de mudança comparando apenas a configuração atual com a versão anterior do próprio arquivo de configuração em um sistema de controle de versão.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o Terraform lê o estado atual dos objetos remotos existentes e compara a configuração ao state anterior -- não à versão anterior do arquivo de configuração em um VCS."
+    },
+    {
+      "key": "C",
+      "text": "terraform plan apenas verifica se a sintaxe da configuração está correta, sem consultar o state nem propor nenhuma ação de mudança concreta sobre recursos.",
+      "correct": false,
+      "explanation": "Incorreto: isso descreveria algo mais próximo de terraform validate; a documentação afirma que plan lê o state dos objetos remotos existentes e propõe um conjunto de ações de mudança concretas."
+    },
+    {
+      "key": "D",
+      "text": "terraform plan não modifica a infraestrutura por si só; por padrão, ele lê o estado atual dos objetos remotos existentes, compara a configuração ao state anterior e propõe um conjunto de ações de mudança.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a sequência de operações que a documentação descreve para a criação de um plano por padrão, e ela afirma explicitamente que o comando plan não executa as mudanças propostas."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform plan (reads current state, compares to config, proposes changes; does not carry them out)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/plan#introduction"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

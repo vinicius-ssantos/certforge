@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3f"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que terraform destroy é documentado como um alias de conveniência para terraform apply -destroy (herdando seu comportamento de aprovação), e distinguir isso de terraform plan -destroy, que apenas prevê o efeito sem executá-lo.",
+  "prompt": "Uma equipe quer primeiro visualizar o que seria destruído em uma configuração Terraform, sem destruir nada ainda, e só depois, se o resultado for o esperado, efetivamente destruir os recursos. Segundo a documentação oficial, quais dois comandos ela deveria usar para cada uma dessas duas etapas, e como terraform destroy se relaciona com terraform apply?",
+  "explanation": "A documentação afirma que terraform plan -destroy executa o plan em modo destroy, mostrando as mudanças de destruição propostas sem executá-las -- um plano especulativo de destruição. Para efetivamente destruir, a documentação descreve terraform destroy como apenas um alias de conveniência para o comando terraform apply -destroy; por isso, ele aceita a maioria das opções que apply aceita e, como uma forma de apply, herda o comportamento padrão de gerar um plano e pedir aprovação antes de realizar as operações.",
+  "options": [
+    {
+      "key": "A",
+      "text": "terraform destroy --dry-run para visualizar sem executar, e terraform destroy --confirm para destruir de fato -- sendo que a documentação não descreve nenhuma relação entre terraform destroy e terraform apply.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não cita opções chamadas --dry-run ou --confirm para terraform destroy; ela descreve terraform plan -destroy para visualizar e afirma explicitamente que terraform destroy é um alias de conveniência para terraform apply -destroy."
+    },
+    {
+      "key": "B",
+      "text": "Não existe forma de visualizar o efeito de uma destruição antes de executá-la; a documentação afirma que toda destruição de infraestrutura gerenciada pelo Terraform é necessariamente imediata e não pode ser precedida por um plano, nem mesmo em modo especulativo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve exatamente terraform plan -destroy como uma forma de criar um plano especulativo de destruição, mostrando o efeito proposto sem executá-lo."
+    },
+    {
+      "key": "C",
+      "text": "terraform plan -destroy para visualizar, e terraform destroy para destruir -- mas, diferente de terraform apply, a documentação afirma que terraform destroy sempre executa imediatamente, sem gerar nem pedir aprovação de nenhum plano.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve terraform destroy como um alias de conveniência para terraform apply -destroy -- por ser uma forma de apply, ele herda o comportamento padrão de gerar um plano e pedir aprovação antes de executar, a menos que -auto-approve seja usado."
+    },
+    {
+      "key": "D",
+      "text": "terraform plan -destroy para visualizar sem executar, e terraform destroy para destruir de fato -- sendo que a documentação descreve terraform destroy como um alias de conveniência para terraform apply -destroy, herdando seu comportamento de aprovação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a combinação e a relação que a documentação descreve entre os dois comandos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — terraform destroy (a convenience alias for terraform apply -destroy; plan -destroy previews without executing)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/destroy#terraform-destroy-command"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
