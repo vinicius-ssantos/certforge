@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000013",
+  "objectiveKeys": ["KCSA-3.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato sabe que múltiplos métodos de autenticação podem ser habilitados ao mesmo tempo no kube-apiserver e que a decisão é por sucesso do primeiro módulo, não por combinação ou votação entre eles -- um modelo que surpreende quem assume que identidades seriam mescladas.",
+  "prompt": "Um cluster Kubernetes tem o kube-apiserver configurado com múltiplos métodos de autenticação habilitados simultaneamente (por exemplo, certificados de cliente X.509 e um webhook de token). Uma requisição chega com credenciais que seriam aceitas por mais de um desses métodos. Segundo a documentação do Kubernetes, como o kube-apiserver decide qual identidade atribuir a essa requisição?",
+  "explanation": "A documentação afirma que é possível habilitar múltiplos métodos de autenticação ao mesmo tempo no kube-apiserver, e que, quando múltiplos módulos de autenticação estão habilitados, o primeiro módulo que autenticar a requisição com sucesso decide a identidade -- essa decisão interrompe (short-circuit) a avaliação dos módulos restantes. Não há combinação, mesclagem ou votação entre as identidades que os diferentes módulos atribuiriam.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O primeiro módulo de autenticação que autenticar a requisição com sucesso decide a identidade, e essa decisão interrompe a avaliação dos módulos de autenticação restantes.",
+      "correct": true,
+      "explanation": "Correto: a documentação descreve exatamente esse comportamento de short-circuit pelo primeiro módulo bem-sucedido, sem combinação com os demais módulos configurados."
+    },
+    {
+      "key": "B",
+      "text": "O kube-apiserver combina os atributos de todos os módulos que aceitariam a requisição, mesclando usuário e grupos de cada um em uma única identidade composta, resultado que nenhum dos módulos isoladamente atribuiria.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhuma mesclagem de identidades entre módulos; o primeiro módulo que autentica com sucesso decide, sozinho, a identidade da requisição."
+    },
+    {
+      "key": "C",
+      "text": "O kube-apiserver rejeita a requisição por ambiguidade sempre que mais de um módulo poderia autenticá-la, já que a documentação permite apenas um método de autenticação habilitado por vez.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que é possível habilitar múltiplos métodos de autenticação ao mesmo tempo; não há essa restrição de um único método por vez nem rejeição por ambiguidade."
+    },
+    {
+      "key": "D",
+      "text": "O kube-apiserver sempre usa o último módulo de autenticação configurado na lista, ignorando o resultado de todos os módulos anteriores que também aceitariam a requisição.",
+      "correct": false,
+      "explanation": "Incorreto: é o primeiro módulo bem-sucedido que decide, não o último configurado; a ordem de avaliação prioriza o primeiro sucesso, não a posição final na lista."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Authenticating (multiple authentication methods, first success short-circuits evaluation)",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/authentication/#authentication-methods"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

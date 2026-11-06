@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000015",
+  "objectiveKeys": ["KCSA-5.4"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Avalia conhecimento direto da definição do glossário oficial do Kubernetes para 'service mesh' via o verbete de Istio, incluindo o fato de que não exige mudança no código da aplicação e não é específico do Kubernetes.",
+  "prompt": "O glossário oficial do Kubernetes, no verbete sobre Istio, descreve a relação entre o Istio e o conceito de 'service mesh'. Segundo essa definição, o que caracteriza essa camada de infraestrutura, e ela exige mudanças no código das aplicações?",
+  "explanation": "O glossário descreve o Istio como uma camada de infraestrutura entre um serviço e a rede que, quando combinada com os deployments dos serviços, é comumente chamada de 'service mesh'. Ele afirma explicitamente que adicionar o Istio não exige mudar o código da aplicação, e que o control plane do Istio abstrai a plataforma de gerenciamento de cluster subjacente, que pode ser o Kubernetes, o Mesosphere, etc. -- ou seja, o conceito de service mesh descrito não é específico do Kubernetes.",
+  "options": [
+    {
+      "key": "A",
+      "text": "É descrita como uma biblioteca que precisa ser importada e compilada dentro do código-fonte de cada aplicação para interceptar chamadas de rede, exigindo mudanças em cada serviço.",
+      "correct": false,
+      "explanation": "Incorreto: o glossário afirma explicitamente que adicionar o Istio não exige mudar o código da aplicação."
+    },
+    {
+      "key": "B",
+      "text": "É descrita como sinônimo de Ingress Controller, responsável apenas por expor serviços para fora do cluster, sem qualquer relação com tráfego, políticas ou telemetria entre os serviços internos do próprio cluster, nem com o control plane.",
+      "correct": false,
+      "explanation": "Incorreto: o glossário descreve o Istio como integrando microsserviços, gerenciando fluxo de tráfego, aplicando políticas e agregando telemetria -- não como um sinônimo de Ingress Controller."
+    },
+    {
+      "key": "C",
+      "text": "É descrita como um recurso nativo do Kubernetes -- um objeto da API chamado ServiceMesh -- específico dessa plataforma e não disponível em outros orquestradores de cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o glossário descreve o Istio como uma plataforma aberta não específica do Kubernetes, cujo control plane abstrai a plataforma de cluster subjacente (Kubernetes, Mesosphere, etc.), não como um objeto nativo da API do Kubernetes."
+    },
+    {
+      "key": "D",
+      "text": "É descrita como uma camada de infraestrutura entre um serviço e a rede que, combinada com os deployments dos serviços, é comumente chamada de 'service mesh' -- e adicionar o Istio não exige mudar o código da aplicação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição do glossário oficial do Kubernetes para o Istio e o conceito de service mesh."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Glossary (Istio: a layer of infrastructure commonly referred to as a service mesh)",
+      "url": "https://kubernetes.io/docs/reference/glossary/?all=true#term-istio"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

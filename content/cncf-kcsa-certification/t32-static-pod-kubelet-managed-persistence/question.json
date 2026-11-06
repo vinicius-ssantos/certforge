@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000014",
+  "objectiveKeys": ["KCSA-4.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato entende que Pods estáticos são gerenciados diretamente pelo kubelet a partir do filesystem do nó, não pelo kube-apiserver -- o que faz com que `kubectl delete pod` não os remova, um mecanismo de persistência contraintuitivo para quem assume que toda remoção via API é definitiva.",
+  "prompt": "Um atacante que já obteve acesso de escrita ao filesystem de um nó cria manualmente um manifesto de Pod no diretório observado pelo kubelet como fonte de Pods estáticos daquele nó. Um administrador nota esse Pod em `kubectl get pods` e tenta removê-lo executando `kubectl delete pod` contra o kube-apiserver. Segundo a documentação do Kubernetes sobre Pods estáticos, o que acontece?",
+  "explanation": "A documentação mostra que, ao tentar remover um Pod estático usando `kubectl` a partir do kube-apiserver, o kubelet não remove o Pod estático -- ele continua em execução, pois é gerenciado diretamente pelo kubelet a partir do manifesto no filesystem do nó, e não pelo kube-apiserver. Isso torna um Pod estático plantado dessa forma um mecanismo de persistência que sobrevive a tentativas de remoção feitas apenas via API: o Pod continua em execução, já que o manifesto que o define continua no disco do nó e nenhuma chamada ao kube-apiserver o afeta.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O `kubectl delete pod` remove o Pod normalmente, pois todo Pod visível em `kubectl get pods` é necessariamente gerenciado pelo kube-apiserver e sujeito aos mesmos comandos que um Pod comum.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação demonstra que o Pod estático continua em execução após o `kubectl delete pod`, exatamente porque não é gerenciado pelo kube-apiserver."
+    },
+    {
+      "key": "B",
+      "text": "O kubelet remove o Pod automaticamente na sincronização seguinte, pois qualquer Pod sem um `ownerReference` válido registrado no etcd é recolhido pelo garbage collector do control plane, independentemente de ter sido criado como Pod estático.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve esse comportamento para Pods estáticos; pelo contrário, o kubelet os recria a partir do manifesto no disco, mantendo-os em execução."
+    },
+    {
+      "key": "C",
+      "text": "O kube-apiserver rejeita a exibição desse Pod em `kubectl get pods`, pois Pods estáticos nunca aparecem na API, tornando esse tipo de ataque detectável apenas diretamente no nó.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação mostra Pods estáticos aparecendo normalmente em `kubectl get pods` (como um 'mirror Pod'); o problema não é falta de visibilidade, mas a impossibilidade de removê-lo só pela API."
+    },
+    {
+      "key": "D",
+      "text": "O kubelet não remove o Pod estático: ele continua em execução, já que o Pod é gerenciado diretamente pelo kubelet a partir do manifesto no filesystem do nó, não pelo kube-apiserver.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento que a documentação descreve e demonstra para Pods estáticos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation -- Create static Pods (kubelet does not remove a static Pod deleted via the API)",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/#behavior-of-static-pods"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
