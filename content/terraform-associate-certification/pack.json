@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "terraform-associate-certification",
+  "trackSlug": "terraform-associate-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "Terraform Associate 004",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "HashiCorp",
+    "examCode": "TFA004",
+    "providerVersion": "HashiCorp Certified: Terraform Associate (004), tested on Terraform 1.12",
+    "snapshotDigest": "sha256:249cfd20b60eb415af2ab872d99c174efea173a5fb7425e9255f4ce116747471",
+    "verifiedOn": "2026-11-05"
+  }
+}

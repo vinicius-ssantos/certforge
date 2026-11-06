@@ -20,6 +20,7 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { readManifestPack } from "./manifest-pack.mjs";
+import { loadPackManifest } from "./pack-manifest.mjs";
 
 const CONTENT_DIR = "content";
 const MIGRATION_DIR = "src/main/resources/db/migration";
@@ -40,15 +41,20 @@ function certificationPackDirs() {
 }
 
 /**
- * The migration that seeded one exam's objectives is named by this project's own convention:
- * `V<N>__seed_cncf_<examCode>_certification_track.sql`. Finding it by that name, rather than by
- * cross-referencing exam_code through catalog_certification_exam and catalog_exam_objective by
- * their shared track_version_id, trades a little generality for not parsing SQL joins by regex.
- * A future non-CNCF or non-naming-convention pack will need this generalised, not silently matched.
+ * The migration that seeded one exam's objectives is found by its own `exam_code`, not by a
+ * filename convention: #173's Terraform migration broke the CNCF-only
+ * `seed_cncf_<examCode>_certification_track.sql` naming this used to match on, which is exactly
+ * the "future non-CNCF or non-naming-convention pack" this function's prior version warned would
+ * need it generalised. Reading each migration's own `catalog_certification_exam` INSERT for the
+ * exam code trades a little speed for not depending on how a migration happens to be named.
  */
 function findObjectiveMigration(examCode) {
-  const needle = `seed_cncf_${examCode.toLowerCase()}_certification_track.sql`;
-  const match = readdirSync(MIGRATION_DIR).find((name) => name.endsWith(needle));
+  const examInsert = new RegExp(
+    `INSERT INTO certforge\\.catalog_certification_exam[\\s\\S]*?'${examCode}'`,
+  );
+  const match = readdirSync(MIGRATION_DIR)
+    .filter((name) => name.endsWith(".sql"))
+    .find((name) => examInsert.test(readFileSync(join(MIGRATION_DIR, name), "utf8")));
   return match ? join(MIGRATION_DIR, match) : null;
 }
 
@@ -96,7 +102,14 @@ const lines = [
 ];
 
 for (const packDir of certificationPackDirs()) {
-  const { manifest, questions } = readManifestPack(packDir);
+  // A pack scaffolded ahead of its first question (editorialStatus DRAFT, no question
+  // directories yet) has no question to validate -- readManifestPack rejects that as an
+  // empty pack, which would otherwise crash the packet for every other certification track
+  // too. Read its manifest alone and treat it as claiming nothing yet.
+  const hasQuestions = readdirSync(packDir, { withFileTypes: true }).some((entry) => entry.isDirectory());
+  const { manifest, questions } = hasQuestions
+    ? readManifestPack(packDir)
+    : { manifest: loadPackManifest(packDir), questions: [] };
   const cert = manifest.certification;
   const migrationPath = findObjectiveMigration(cert.examCode);
   const sourceUrl = migrationPath ? readSeededSourceUrl(migrationPath) : null;
