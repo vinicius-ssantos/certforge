@@ -73,8 +73,8 @@ Source: <https://github.com/cncf/curriculum/blob/f423fa49c0cab0820533babd95b37eb
 | `CKAD-3.1` | Discover and use resources that extend Kubernetes (CRD, Operators) | `t16-crd-operator-relationship` |
 | `CKAD-3.2` | Understand authentication, authorization and admission control | `t17-admission-control-modifies-rejects` |
 | `CKAD-3.3` | Understand requests, limits, quotas | `t05-cpu-throttle-vs-memory-oomkill` |
-| `CKAD-3.4` | Define resource requirements | _none yet_ |
-| `CKAD-3.5` | Understand ConfigMaps | _none yet_ |
+| `CKAD-3.4` | Define resource requirements | `t21-resourcequota-rejects-pod` |
+| `CKAD-3.5` | Understand ConfigMaps | `t22-immutable-configmap-delete-recreate` |
 | `CKAD-3.6` | Create and consume Secrets | `t06-secret-consumption-methods` |
 | `CKAD-3.7` | Understand ServiceAccounts | `t18-default-serviceaccount-per-namespace` |
 | `CKAD-3.8` | Understand Application Security (SecurityContexts, Capabilities, etc.) | `t07-securitycontext-capabilities` |
@@ -83,11 +83,11 @@ Source: <https://github.com/cncf/curriculum/blob/f423fa49c0cab0820533babd95b37eb
 | `CKAD-4.3` | Use Ingress rules to expose applications | `t09-ingress-needs-controller` |
 | `CKAD-5.1` | Understand API deprecations | `t20-ga-api-deprecation-guarantee` |
 | `CKAD-5.2` | Implement probes and health checks | `t10-liveness-vs-readiness-probe` |
-| `CKAD-5.3` | Use built-in CLI tools to monitor Kubernetes applications | _none yet_ |
+| `CKAD-5.3` | Use built-in CLI tools to monitor Kubernetes applications | `t23-kubectl-top-needs-metrics-server` |
 | `CKAD-5.4` | Utilize container logs | `t11-kubectl-logs-previous-multicontainer` |
-| `CKAD-5.5` | Debugging in Kubernetes | _none yet_ |
+| `CKAD-5.5` | Debugging in Kubernetes | `t24-kubectl-exec-interactive-shell` |
 
-20 of 24 seeded objectives claimed by a published question.
+24 of 24 seeded objectives claimed by a published question.
 
 ## cncf-kcna-certification
 
@@ -140,29 +140,77 @@ Source: <https://github.com/cncf/curriculum/blob/007442fa374ea3bd6e9217450388041
 | `KCSA-2.11` | Storage | `t26-hostpath-volume-security-risk` |
 | `KCSA-3.1` | Pod Security Standards | `t05-pod-security-standards-levels` |
 | `KCSA-3.2` | Pod Security Admissions | `t27-pod-security-admission-namespace-labels` |
-| `KCSA-3.3` | Authentication | _none yet_ |
+| `KCSA-3.3` | Authentication | `t30-authn-first-success-short-circuits` |
 | `KCSA-3.4` | Secrets | `t14-secret-readable-by-pod-creator` |
-| `KCSA-3.5` | Isolation and Segmentation | _none yet_ |
+| `KCSA-3.5` | Isolation and Segmentation | `t31-sandboxing-untrusted-workloads` |
 | `KCSA-3.6` | Audit Logging | `t15-audit-log-stages` |
 | `KCSA-3.7` | Network Policy | `t06-networkpolicy-default-non-isolated` |
 | `KCSA-4.1` | Kubernetes Trust Boundaries and Data Flow | `t08-kubelet-unauthenticated-by-default` |
-| `KCSA-4.2` | Persistence | _none yet_ |
+| `KCSA-4.2` | Persistence | `t32-static-pod-kubelet-managed-persistence` |
 | `KCSA-4.3` | Denial of Service | `t16-api-priority-fairness-overload` |
-| `KCSA-4.4` | Malicious Code Execution and Compromised Applications in Containers | _none yet_ |
+| `KCSA-4.4` | Malicious Code Execution and Compromised Applications in Containers | `t33-readonly-root-filesystem-mitigates-write` |
 | `KCSA-4.5` | Attacker on the Network | `t17-networkpolicy-default-deny-ingress` |
 | `KCSA-4.6` | Access to Sensitive Data | `t28-workload-creation-grants-secret-access` |
 | `KCSA-4.7` | Privilege Escalation | `t07-allow-privilege-escalation-default` |
-| `KCSA-5.1` | Supply Chain Security | _none yet_ |
+| `KCSA-5.1` | Supply Chain Security | `t34-cosign-keyless-signing-release-artifacts` |
 | `KCSA-5.2` | Image Repository | `t18-imagepullsecrets-private-registry` |
-| `KCSA-5.3` | Observability | _none yet_ |
-| `KCSA-5.4` | Service Mesh | _none yet_ |
+| `KCSA-5.3` | Observability | `t35-logging-no-native-storage-rotation` |
+| `KCSA-5.4` | Service Mesh | `t36-istio-service-mesh-glossary` |
 | `KCSA-5.5` | PKI | `t09-kubeadm-pki-default-ca` |
 | `KCSA-5.6` | Connectivity | `t29-networkpolicy-egress-only-still-isolates-ingress` |
 | `KCSA-5.7` | Admission Control | `t19-mutating-vs-validating-webhook` |
 | `KCSA-6.1` | Compliance Frameworks | _none yet_ |
 | `KCSA-6.2` | Threat Modeling Frameworks | _none yet_ |
 | `KCSA-6.3` | Supply Chain Compliance | _none yet_ |
-| `KCSA-6.4` | Automation and Tooling | _none yet_ |
+| `KCSA-6.4` | Automation and Tooling | `t37-validatingadmissionpolicy-in-process` |
 
-29 of 42 seeded objectives claimed by a published question.
+37 of 42 seeded objectives claimed by a published question.
+
+## terraform-associate-certification
+
+**HashiCorp TFA004.** Verified 2026-11-05 against
+`HashiCorp Certified: Terraform Associate (004), tested on Terraform 1.12`. Digest `sha256:249cfd20b60eb415af2ab872d99c174efea173a5fb7425e9255f4ce116747471`.
+Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `TFA-1a` | Explain what IaC is | `t01-infrastructure-as-code-definition` |
+| `TFA-1b` | Describe the advantages of IaC patterns | `t02-iac-advantages-declarative-workflow` |
+| `TFA-1c` | Explain how Terraform manages multi-cloud, hybrid cloud, and service-agnostic workflows | `t03-multi-cloud-service-agnostic-providers` |
+| `TFA-2a` | Install and version Terraform providers | `t04-provider-install-and-version-constraints` |
+| `TFA-2b` | Describe how Terraform uses providers | `t05-what-providers-do` |
+| `TFA-2c` | Write Terraform configuration using multiple providers | `t06-multiple-provider-configurations-alias` |
+| `TFA-2d` | Explain how Terraform uses and manages state | `t07-terraform-state-purpose` |
+| `TFA-3a` | Describe the Terraform workflow | _none yet_ |
+| `TFA-3b` | Initialize a Terraform working directory | _none yet_ |
+| `TFA-3c` | Validate a Terraform configuration | _none yet_ |
+| `TFA-3d` | Generate and review an execution plan for Terraform | _none yet_ |
+| `TFA-3e` | Apply changes to infrastructure with Terraform | _none yet_ |
+| `TFA-3f` | Destroy Terraform-managed infrastructure | _none yet_ |
+| `TFA-3g` | Apply formatting and style adjustments to a configuration | _none yet_ |
+| `TFA-4a` | Use and differentiate resource and data blocks | _none yet_ |
+| `TFA-4b` | Refer to resource attributes and create cross-resource references | _none yet_ |
+| `TFA-4c` | Use variables and outputs | _none yet_ |
+| `TFA-4d` | Understand and use complex types | _none yet_ |
+| `TFA-4e` | Write dynamic configuration using expressions and functions | _none yet_ |
+| `TFA-4f` | Define resource dependencies in configuration | _none yet_ |
+| `TFA-4g` | Validate configuration using custom conditions | _none yet_ |
+| `TFA-4h` | Understand best practices for managing sensitive data, including secrets management with Vault | _none yet_ |
+| `TFA-5a` | Explain how Terraform sources modules | _none yet_ |
+| `TFA-5b` | Describe variable scope within modules | _none yet_ |
+| `TFA-5c` | Use modules in configuration | _none yet_ |
+| `TFA-5d` | Manage module versions | _none yet_ |
+| `TFA-6a` | Describe the local backend | _none yet_ |
+| `TFA-6b` | Describe state locking | _none yet_ |
+| `TFA-6c` | Configure remote state using the backend block | _none yet_ |
+| `TFA-6d` | Manage resource drift and Terraform state | _none yet_ |
+| `TFA-7a` | Import existing infrastructure into your Terraform workspace | _none yet_ |
+| `TFA-7b` | Use the CLI to inspect state | _none yet_ |
+| `TFA-7c` | Describe when and how to use verbose logging | _none yet_ |
+| `TFA-8a` | Use HCP Terraform to create infrastructure | _none yet_ |
+| `TFA-8b` | Describe HCP Terraform collaboration and governance features | _none yet_ |
+| `TFA-8c` | Describe how to organize and use HCP Terraform workspaces and projects | _none yet_ |
+| `TFA-8d` | Configure and use HCP Terraform integration | _none yet_ |
+
+7 of 37 seeded objectives claimed by a published question.
 
