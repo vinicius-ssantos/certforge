@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000016",
+  "objectiveKeys": ["KCSA-6.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Avalia se o candidato conhece a publicação de referência do NIST para segurança de containers de aplicação (SP 800-190) e o escopo exato que seu próprio resumo declara -- explicar riscos de segurança e fornecer recomendações -- em vez de confundi-la com um padrão de certificação ou um produto de software.",
+  "prompt": "Uma equipe quer citar uma publicação de referência do NIST especificamente sobre segurança de tecnologias de container de aplicação. Segundo o resumo (abstract) da própria publicação no site do NIST (csrc.nist.gov), qual é essa publicação e o que ela afirma fazer?",
+  "explanation": "O resumo oficial da publicação no site do NIST (SP 800-190, 'Application Container Security Guide', finalizada em 25/09/2017) afirma que tecnologias de container de aplicação são uma forma de virtualização de sistema operacional combinada com empacotamento de software de aplicação, fornecendo uma forma portátil, reutilizável e automatizável de empacotar e executar aplicações. A publicação explica as potenciais preocupações de segurança associadas ao uso de containers e fornece recomendações para tratar essas preocupações -- ela não é um padrão de certificação nem um produto de software.",
+  "options": [
+    {
+      "key": "A",
+      "text": "SP 800-190, que o próprio resumo descreve como explicando as potenciais preocupações de segurança associadas ao uso de containers de aplicação e fornecendo recomendações para tratar essas preocupações.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que o resumo oficial da publicação no site do NIST apresenta para a SP 800-190."
+    },
+    {
+      "key": "B",
+      "text": "SP 800-190, que o resumo descreve como um programa de certificação formal que audita e certifica clusters Kubernetes individuais quanto à conformidade, emitindo um selo de aprovação do NIST para cada cluster avaliado.",
+      "correct": false,
+      "explanation": "Incorreto: o resumo não descreve nenhum programa de certificação ou auditoria de clusters -- a publicação explica preocupações de segurança e fornece recomendações, não emite certificações."
+    },
+    {
+      "key": "C",
+      "text": "SP 800-190, que o resumo descreve como uma ferramenta de software (um scanner automatizado) desenvolvida e distribuída pelo NIST para detectar vulnerabilidades em imagens de container.",
+      "correct": false,
+      "explanation": "Incorreto: a SP 800-190 é uma publicação de texto com recomendações, não uma ferramenta de software de scanning distribuída pelo NIST."
+    },
+    {
+      "key": "D",
+      "text": "SP 800-190, que o resumo afirma tratar exclusivamente de máquinas virtuais tradicionais, sem nenhuma menção a containers ou a virtualização em nível de sistema operacional.",
+      "correct": false,
+      "explanation": "Incorreto: o resumo descreve explicitamente containers de aplicação como uma forma de virtualização de sistema operacional combinada com empacotamento de software -- o foco da publicação é containers, não máquinas virtuais tradicionais."
+    }
+  ],
+  "references": [
+    {
+      "title": "NIST -- SP 800-190, Application Container Security Guide (abstract: explains container security concerns, provides recommendations)",
+      "url": "https://csrc.nist.gov/pubs/sp/800/190/final"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
