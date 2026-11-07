@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000035",
+  "objectiveKeys": ["CKA-5.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender a dependência documentada entre `kubectl top`, a Metrics API e o metrics-server, e distinguir o pipeline de métricas de recursos (curto prazo, em memória) de um pipeline completo de métricas com dados históricos — não apenas lembrar a sintaxe de um comando.",
+  "prompt": "Uma pessoa executa `kubectl top nodes` em um cluster recém-criado e recebe, em uma saída já capturada, um erro indicando que a Metrics API não está disponível. De acordo com a documentação sobre o pipeline de métricas de recursos, qual é a causa mais provável desse erro, e como esse pipeline se diferencia de um pipeline completo de métricas (full metrics pipeline)?",
+  "explanation": "A documentação do pipeline de métricas de recursos afirma que 'the metrics-server implements the Metrics API' e inclui uma nota explícita: 'You must deploy the metrics-server or alternative adapter that serves the Metrics API to be able to access it' — ou seja, nada expõe a Metrics API por padrão. A página sobre ferramentas de monitoramento de recursos descreve esse pipeline como coletado 'by the lightweight, short-term, in-memory metrics-server and exposed via the metrics.k8s.io API', usado por `kubectl top` e pelo Horizontal Pod Autoscaler. Em contraste, um 'full metrics pipeline' busca métricas do kubelet e as expõe via as APIs `custom.metrics.k8s.io` ou `external.metrics.k8s.io`, tipicamente usando uma solução de monitoramento compatível com OpenMetrics (como as listadas no CNCF Landscape) para métricas mais ricas — o pipeline de métricas de recursos em si não guarda histórico, apenas um snapshot atual em memória.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O erro ocorre porque o `kube-apiserver` agrega uso de recursos internamente por padrão, sem precisar de nenhum componente adicional; esse erro específico só pode significar que a conta usada não tem permissão RBAC para a chamada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário — é necessário implantar o metrics-server (ou um adaptador alternativo) para que a Metrics API exista; o kube-apiserver não agrega essas métricas por conta própria."
+    },
+    {
+      "key": "B",
+      "text": "O erro significa que o cluster precisa ter a Custom Metrics API habilitada, já que `kubectl top` é documentado como um cliente exclusivo de `custom.metrics.k8s.io`, nunca de `metrics.k8s.io`.",
+      "correct": false,
+      "explanation": "Incorreto: `kubectl top` é documentado como consumidor da Metrics API (`metrics.k8s.io`), implementada pelo metrics-server — não da Custom Metrics API, que pertence a um pipeline completo separado."
+    },
+    {
+      "key": "C",
+      "text": "O erro indica que o etcd perdeu o histórico de uso de recursos do cluster; o pipeline de métricas de recursos é documentado como um armazenamento histórico persistido no etcd, e restaurar esse histórico no etcd resolveria o problema sem precisar reinstalar nenhum componente adicional.",
+      "correct": false,
+      "explanation": "Incorreto: o pipeline de métricas de recursos é descrito como leve, de curto prazo e em memória (não persistido no etcd), e não guarda histórico — por isso a documentação indica um pipeline completo separado para métricas mais ricas."
+    },
+    {
+      "key": "D",
+      "text": "O erro ocorre porque nenhum componente que implementa a Metrics API (normalmente o metrics-server) foi implantado; o pipeline resultante é leve e em memória, usado por `kubectl top`/HPA, diferente do full metrics pipeline, que expõe métricas mais ricas por outra API.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a causa e a distinção documentadas — a Metrics API não existe sem a implantação explícita do metrics-server (ou equivalente), e o pipeline de métricas de recursos que ela habilita é um snapshot leve e em memória, diferente de um pipeline completo de métricas com uma solução de monitoramento dedicada."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Resource metrics pipeline (Metrics API, Metrics Server deployment requirement)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-metrics-pipeline/"
+    },
+    {
+      "title": "Kubernetes Documentation — Tools for Monitoring Resources (Resource metrics pipeline vs. Full metrics pipeline)",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-cluster/resource-usage-monitoring/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
