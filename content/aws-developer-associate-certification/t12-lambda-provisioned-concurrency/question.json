@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000056",
+  "objectiveKeys": ["DVA-4.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige conhecer duas restrições específicas e fáceis de confundir: que provisioned concurrency nunca pode ser aplicada a $LATEST (apenas a uma versão publicada ou alias), e que o Application Auto Scaling depende de um valor inicial de provisioned concurrency já configurado para gerenciar o escalonamento corretamente -- um candidato que só sabe que 'provisioned concurrency elimina cold start' tende a assumir que ela se aplica a qualquer versão da função ou que o Auto Scaling parte do zero sem pré-configuração.",
+  "prompt": "Uma equipe quer eliminar cold starts de uma função AWS Lambda crítica de uma API interativa configurando provisioned concurrency, e também pretende usar o Application Auto Scaling com uma política de rastreamento de destino (target tracking) para ajustar essa concorrência provisionada automaticamente conforme a utilização. Segundo a documentação oficial do Lambda, a que a provisioned concurrency pode ser aplicada, e o que a equipe precisa garantir antes de ativar essa política de Application Auto Scaling?",
+  "explanation": "A documentação do Lambda afirma que não é possível usar provisioned concurrency com a versão $LATEST de uma função -- ela precisa ser aplicada a uma versão publicada específica ou a um alias. A documentação também afirma que, para usar o Application Auto Scaling para gerenciar a provisioned concurrency, é necessário garantir que a função já tenha um valor inicial de provisioned concurrency configurado antes; sem esse valor inicial, o Application Auto Scaling pode não gerenciar corretamente o escalonamento da função.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Provisioned concurrency pode ser aplicada diretamente à versão $LATEST da função, que é inclusive a opção recomendada pela documentação para manter funções críticas sempre prontas para responder sem cold start.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que não é possível usar provisioned concurrency com a versão $LATEST de uma função -- ela precisa ser aplicada a uma versão publicada específica ou a um alias."
+    },
+    {
+      "key": "B",
+      "text": "Provisioned concurrency pode ser aplicada a uma versão publicada ou a um alias da função, e o Application Auto Scaling consegue gerenciar o escalonamento da função corretamente mesmo que nenhum valor inicial de provisioned concurrency tenha sido configurado antes.",
+      "correct": false,
+      "explanation": "Incorreto: a primeira parte está certa, mas a documentação recomenda garantir um valor inicial de provisioned concurrency configurado antes de usar o Application Auto Scaling -- sem esse valor inicial, o Application Auto Scaling pode não gerenciar o escalonamento da função corretamente."
+    },
+    {
+      "key": "C",
+      "text": "Provisioned concurrency só pode ser aplicada a uma versão publicada ou a um alias da função, nunca à versão $LATEST; antes de ativar o Application Auto Scaling com uma política de rastreamento de destino, a equipe precisa garantir que já exista um valor inicial de provisioned concurrency configurado, pois sem ele o Application Auto Scaling pode não gerenciar corretamente o escalonamento da função.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a restrição de versão/alias e a recomendação de pré-configuração que a documentação do Lambda descreve para o uso de provisioned concurrency com o Application Auto Scaling."
+    },
+    {
+      "key": "D",
+      "text": "Provisioned concurrency pode ser aplicada tanto a $LATEST quanto a versões publicadas ou aliases da função, mas o Application Auto Scaling só funciona com políticas de agendamento (scheduled scaling) baseadas em horários previsíveis de tráfego, nunca com políticas de rastreamento de destino (target tracking) baseadas na métrica de utilização percentual da provisioned concurrency observada ao longo do tempo.",
+      "correct": false,
+      "explanation": "Incorreto: provisioned concurrency não pode ser aplicada a $LATEST, e a documentação descreve tanto o scheduled scaling quanto o target tracking como formas válidas de o Application Auto Scaling gerenciar a provisioned concurrency -- não apenas o agendamento."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Lambda Developer Guide -- Configuring provisioned concurrency (cannot be used with $LATEST; Application Auto Scaling requires an initial provisioned concurrency value)",
+      "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

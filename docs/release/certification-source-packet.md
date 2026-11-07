@@ -60,14 +60,14 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-ass
 | `DVA-2.1` | Implement authentication and authorization mechanisms for applications and AWS services | `t4-cognito-user-pools-vs-identity-pools` |
 | `DVA-2.2` | Implement encryption and manage sensitive data by using AWS services | `t5-secrets-manager-vs-parameter-store-rotation` |
 | `DVA-2.3` | Identify and mitigate security risks associated with using and integrating AI services into application development | `t6-bedrock-model-deployment-account-isolation` |
-| `DVA-3.1` | Prepare application artifacts to be deployed to AWS | _none yet_ |
-| `DVA-3.2` | Implement and automate application testing in AWS environments | _none yet_ |
-| `DVA-3.3` | Deploy code by using AWS continuous integration and continuous delivery (CI/CD) services | _none yet_ |
-| `DVA-4.1` | Assist in a root cause analysis | _none yet_ |
-| `DVA-4.2` | Apply logging, monitoring, and observability best practices | _none yet_ |
-| `DVA-4.3` | Optimize applications by using AWS services and features | _none yet_ |
+| `DVA-3.1` | Prepare application artifacts to be deployed to AWS | `t7-codedeploy-appspec-lambda-hooks` |
+| `DVA-3.2` | Implement and automate application testing in AWS environments | `t8-codebuild-test-report-expiration` |
+| `DVA-3.3` | Deploy code by using AWS continuous integration and continuous delivery (CI/CD) services | `t9-codedeploy-lambda-traffic-shifting-configs` |
+| `DVA-4.1` | Assist in a root cause analysis | `t10-xray-annotations-vs-metadata` |
+| `DVA-4.2` | Apply logging, monitoring, and observability best practices | `t11-cloudwatch-embedded-metric-format` |
+| `DVA-4.3` | Optimize applications by using AWS services and features | `t12-lambda-provisioned-concurrency` |
 
-6 of 12 seeded objectives claimed by a published question.
+12 of 12 seeded objectives claimed by a published question.
 
 ## aws-solutions-architect-associate-certification
 

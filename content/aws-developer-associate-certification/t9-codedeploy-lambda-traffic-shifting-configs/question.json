@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000055",
+  "objectiveKeys": ["DVA-3.3"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que o CodeDeploy mantém conjuntos de configurações de implantação predefinidas completamente separados por plataforma de computação -- as configurações canary/linear baseadas em deslocamento percentual de tráfego ao longo do tempo só existem para Lambda e Amazon ECS, enquanto EC2/On-Premises usa um modelo distinto, baseado em quantidade mínima de hosts saudáveis (OneAtATime/HalfAtATime/AllAtOnce) -- em vez de assumir que o nome de uma configuração predefinida é portátil entre plataformas de computação.",
+  "prompt": "Uma equipe configura um grupo de implantação do AWS CodeDeploy para uma aplicação serverless usando a configuração de implantação predefinida CodeDeployDefault.LambdaLinear10PercentEvery2Minutes, e depois pergunta se poderia usar essa mesma configuração, com esse mesmo nome, em um grupo de implantação EC2/On-Premises que também implanta a aplicação em instâncias atrás de um load balancer. Segundo a documentação oficial do CodeDeploy, o que essa configuração faz na implantação do Lambda, e ela está disponível para a plataforma de computação EC2/On-Premises?",
+  "explanation": "A documentação do CodeDeploy descreve CodeDeployDefault.LambdaLinear10PercentEvery2Minutes como uma configuração que desloca 10% do tráfego a cada dois minutos até que todo o tráfego tenha sido deslocado para a nova versão da função Lambda. Essa configuração pertence ao conjunto de configurações de implantação predefinidas da plataforma de computação Lambda (assim como as configurações canary e linear do Amazon ECS); a plataforma EC2/On-Premises tem seu próprio conjunto de configurações predefinidas -- CodeDeployDefault.OneAtATime, CodeDeployDefault.HalfAtATime e CodeDeployDefault.AllAtOnce -- baseadas em host mínimo saudável, não em deslocamento percentual de tráfego ao longo do tempo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A configuração desloca 10% do tráfego a cada dois minutos até deslocar todo o tráfego para a nova versão da função Lambda, e essa mesma configuração, com esse mesmo nome e os mesmos incrementos percentuais e intervalos de tempo, também está disponível para ser selecionada em qualquer grupo de implantação EC2/On-Premises que use um Classic Load Balancer, um Application Load Balancer ou um Network Load Balancer da Elastic Load Balancing para rotear o tráfego entre as instâncias originais e as instâncias de substituição.",
+      "correct": false,
+      "explanation": "Incorreto: a primeira parte está certa, mas a documentação lista configurações de implantação predefinidas separadas para cada plataforma de computação -- CodeDeployDefault.LambdaLinear10PercentEvery2Minutes pertence exclusivamente ao conjunto de configurações da plataforma Lambda, e não existe com esse nome para EC2/On-Premises."
+    },
+    {
+      "key": "B",
+      "text": "A configuração desloca 10% do tráfego uma única vez, no início da implantação, e os 90% restantes permanecem definitivamente sem receber tráfego até que alguém aprove manualmente a continuação.",
+      "correct": false,
+      "explanation": "Incorreto: essa descrição corresponde a uma configuração canary parcialmente aplicada, não à configuração linear -- a documentação descreve a configuração linear deslocando 10% do tráfego repetidamente, em intervalos fixos (nesse caso, a cada dois minutos), até que 100% do tráfego tenha sido deslocado, sem exigir aprovação manual entre os incrementos."
+    },
+    {
+      "key": "C",
+      "text": "A configuração desloca 10% do tráfego a cada dois minutos, mas para em 90% e nunca desloca o restante automaticamente, encerrando a implantação como bem-sucedida mesmo sem 100% do tráfego migrado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o deslocamento linear continua a cada intervalo até que todo o tráfego (100%) tenha sido deslocado para a nova versão -- ela não para em 90% nem considera a implantação concluída antes disso."
+    },
+    {
+      "key": "D",
+      "text": "A configuração desloca 10% do tráfego a cada dois minutos até deslocar todo o tráfego para a nova versão da função Lambda; essa configuração pertence ao conjunto de configurações predefinidas da plataforma de computação Lambda, e não está disponível para EC2/On-Premises, cuja plataforma usa configurações baseadas em host mínimo saudável, como OneAtATime, HalfAtATime e AllAtOnce, em vez de deslocamento percentual de tráfego ao longo do tempo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição e a distinção entre plataformas de computação que a documentação do CodeDeploy apresenta para configurações de implantação."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS CodeDeploy User Guide -- Working with deployment configurations in CodeDeploy (Lambda linear/canary configurations vs EC2/On-Premises minimum healthy host configurations)",
+      "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

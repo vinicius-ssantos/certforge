@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000056",
+  "objectiveKeys": ["DVA-4.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber a diferença exata entre annotations (indexadas, usadas em expressões de filtro e na API GetTraceSummaries) e metadata (não indexada) -- uma distinção fácil de inverter de memória, já que ambas são pares chave-valor adicionados ao mesmo segmento e servem, à primeira vista, a um propósito parecido.",
+  "prompt": "Durante uma investigação de causa raiz de erros intermitentes relatados por um cliente específico, uma equipe instrumentada com o AWS X-Ray quer conseguir filtrar os traces desse cliente usando expressões de filtro no console do X-Ray (ou a API GetTraceSummaries), a partir de um identificador de cliente registrado no segmento. Segundo a documentação oficial do X-Ray, a equipe deve registrar esse identificador como annotation ou como metadata no segmento para conseguir fazer essa busca, e por quê?",
+  "explanation": "A documentação do X-Ray diferencia annotations de metadata: annotations são pares chave-valor simples que são indexados, podendo ser usados em expressões de filtro e na API GetTraceSummaries (com um limite de até 50 annotations indexadas por trace); metadata são pares chave-valor que podem ter valores de qualquer tipo, incluindo objetos e listas, mas não são indexados, servindo para guardar dados no trace que não precisam ser usados em buscas.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Como annotation: annotations são pares chave-valor simples indexados (até 50 por trace) e podem ser usados em expressões de filtro e na API GetTraceSummaries; metadata não é indexado e, por isso, não serve para esse tipo de busca.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção que a documentação do X-Ray estabelece entre annotations (indexadas, usadas para filtrar) e metadata (não indexada)."
+    },
+    {
+      "key": "B",
+      "text": "Como metadata: metadata é a estrutura indexada do X-Ray, feita justamente para buscas rápidas por expressões de filtro, enquanto annotation existe apenas para armazenar objetos e listas sem necessidade de busca.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação inverte exatamente essa relação -- é a annotation que é indexada e usada em expressões de filtro, enquanto metadata não é indexada e não serve para busca."
+    },
+    {
+      "key": "C",
+      "text": "Tanto annotation quanto metadata são indexados pelo X-Ray e podem ser usados de forma intercambiável em expressões de filtro, então a escolha entre os dois não afeta a capacidade de busca.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que apenas annotations são indexadas; metadata explicitamente não é indexada, então as duas formas não são intercambiáveis quando o objetivo é buscar ou filtrar traces."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum dos dois -- a documentação recomenda criar um subsegmento separado nomeado com o identificador do cliente para cada requisição enviada pela aplicação, já que, nessa leitura, subsegmentos seriam a única estrutura do X-Ray pesquisável por expressão de filtro no console ou pela API GetTraceSummaries.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve subsegmentos como uma estrutura pesquisável por filtro para esse propósito -- subsegmentos registram detalhes sobre chamadas posteriores feitas pela aplicação (como para um banco de dados), não identificadores de busca; o mecanismo documentado para esse cenário são as annotations."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS X-Ray Developer Guide -- AWS X-Ray concepts (Annotations and metadata: annotations are indexed for filter expressions, metadata is not indexed)",
+      "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
