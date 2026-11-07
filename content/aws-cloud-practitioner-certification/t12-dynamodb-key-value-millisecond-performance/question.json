@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o Amazon DynamoDB é especificamente um banco de dados key-value/documento com desempenho de milissegundos de dígito único em qualquer escala, distinguindo-o de um banco de dados relacional como o Amazon RDS.",
+  "prompt": "Uma aplicação de e-commerce de alto tráfego precisa de um banco de dados NoSQL totalmente gerenciado que ofereça desempenho de milissegundos de dígito único (single-digit millisecond) independentemente da escala. Segundo a documentação oficial de serviços de banco de dados da AWS, qual serviço atende a esse requisito, e como ela o descreve?",
+  "explanation": "A documentação descreve o Amazon DynamoDB como um banco de dados key-value e de documentos que entrega desempenho de milissegundos de dígito único em qualquer escala. É um banco de dados totalmente gerenciado, multi-Region, com segurança integrada, backup e restauração, e cache em memória para aplicações de escala de internet. A documentação afirma que o DynamoDB pode processar mais de 10 trilhões de requisições por dia e suportar picos de mais de 20 milhões de requisições por segundo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon RDS, que a documentação descreve como o banco de dados key-value totalmente gerenciado da AWS, com desempenho de milissegundos de dígito único em qualquer escala.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon RDS como um serviço de banco de dados relacional, não key-value -- é o Amazon DynamoDB que oferece esse desempenho específico em um banco de dados key-value/documento."
+    },
+    {
+      "key": "B",
+      "text": "Amazon DynamoDB, que a documentação descreve como um banco de dados key-value e de documentos totalmente gerenciado, que entrega desempenho de milissegundos de dígito único em qualquer escala.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá ao Amazon DynamoDB."
+    },
+    {
+      "key": "C",
+      "text": "Amazon DynamoDB, mas a documentação afirmaria que ele é um banco de dados relacional tradicional, compatível com MySQL e PostgreSQL, projetado para alto desempenho e disponibilidade em escala global.",
+      "correct": false,
+      "explanation": "Incorreto: a descrição de compatibilidade com MySQL e PostgreSQL e foco relacional é do Amazon Aurora, não do DynamoDB -- o DynamoDB é descrito como um banco de dados key-value e de documentos, não relacional."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum serviço de banco de dados da AWS oferece garantia de desempenho em milissegundos; a documentação afirmaria que esse nível de latência só é alcançável fora da nuvem, em hardware dedicado on-premises.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente o Amazon DynamoDB como entregando desempenho de milissegundos de dígito único em qualquer escala, como um serviço totalmente gerenciado na nuvem."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Database services overview (Amazon DynamoDB: key-value and document database, single-digit millisecond performance at any scale)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/database.html#amazon-dynamodb"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000052",
+  "objectiveKeys": ["CLF-4.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir os quatro modelos de preço que a documentação descreve -- On-Demand, Savings Plans, Spot Instances e Reservas -- pelo compromisso e desconto que cada um exige/oferece, não apenas saber que 'a AWS tem descontos por uso'.",
+  "prompt": "Uma equipe quer executar uma carga de trabalho tolerante a falhas que pode ser interrompida a qualquer momento, aceitando esse risco em troca do maior desconto possível sobre o preço On-Demand. Segundo a documentação oficial sobre como funciona o preço da AWS, qual modelo de preço atende a esse cenário, e qual desconto máximo ela indica?",
+  "explanation": "A documentação lista, entre os modelos de preço da AWS: instâncias On-Demand (pague por hora ou segundo, sem compromisso de longo prazo nem pagamento adiantado); Savings Plans (desconto em troca de um compromisso de uso consistente por um ou três anos); Spot Instances (solicitam capacidade de computação ociosa sem nenhum compromisso adiantado, a uma taxa com desconto de até 90% sobre o preço On-Demand); e Reservas (desconto de até 75% ao pagar pela capacidade com antecedência). O cenário de carga de trabalho tolerante a falhas e interrompível, buscando o maior desconto possível, corresponde às Spot Instances.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Savings Plans, que a documentação descreve como exigindo nenhum compromisso de uso e oferecendo o maior desconto possível (até 90%) especificamente para cargas de trabalho interrompíveis a qualquer momento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve Savings Plans como exigindo um compromisso de uso consistente por um ou três anos -- não é o modelo sem compromisso voltado a cargas interrompíveis; esse é o papel das Spot Instances."
+    },
+    {
+      "key": "B",
+      "text": "Spot Instances, que a documentação descreve como permitindo solicitar capacidade de computação ociosa sem compromisso adiantado, a uma taxa com desconto de até 90% em relação ao preço On-Demand.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição e o desconto máximo que a documentação atribui às Spot Instances, o modelo adequado para cargas tolerantes a falhas e interrompíveis."
+    },
+    {
+      "key": "C",
+      "text": "Instâncias On-Demand, que a documentação descreve como o modelo com o maior desconto possível entre todos, justamente por não exigir nenhum compromisso de uso nem pagamento adiantado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve as instâncias On-Demand como o preço de referência, sem desconto adicional por compromisso -- os maiores descontos vêm de Spot Instances (até 90%) ou Reservas (até 75%), não do modelo On-Demand."
+    },
+    {
+      "key": "D",
+      "text": "Reservas, que a documentação descreve como oferecendo um desconto de até 90% sem exigir nenhum pagamento adiantado da capacidade reservada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve as Reservas como exigindo pagamento da capacidade com antecedência para obter um desconto de até 75%, não de até 90% sem pagamento adiantado -- esse desconto maior e sem compromisso adiantado é das Spot Instances."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- How AWS Pricing Works (Key principles: On-Demand, Savings Plans, Spot Instances up to 90% off, Reservations up to 75% off)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/key-principles.html#use-the-right-pricing-model-for-the-job"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

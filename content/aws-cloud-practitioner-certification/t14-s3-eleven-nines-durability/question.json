@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber o número exato de 'noves' de durabilidade que a documentação atribui ao Amazon S3 (99.999999999%, ou 11 noves) e que S3 é armazenamento de objetos, não de bloco ou de arquivo.",
+  "prompt": "Uma equipe precisa armazenar grandes volumes de dados não estruturados (como backups e arquivos de mídia) com altíssima durabilidade, sem se preocupar em gerenciar servidores de arquivo. Segundo a documentação oficial de serviços de armazenamento da AWS, qual serviço atende a essa necessidade, e qual nível de durabilidade ela afirma que ele oferece?",
+  "explanation": "A documentação descreve o Amazon Simple Storage Service (Amazon S3) como um serviço de armazenamento de objetos (object storage) que oferece escalabilidade, disponibilidade de dados, segurança e desempenho líderes do setor. Ela afirma explicitamente que o Amazon S3 é projetado para 99.999999999% (11 noves) de durabilidade, armazenando dados para milhões de aplicações de empresas em todo o mundo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon S3, mas a documentação afirmaria uma durabilidade de apenas 99.9% (três noves), considerada adequada apenas para dados temporários e não críticos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma uma durabilidade muito maior -- 99.999999999% (11 noves) -- não 99.9%."
+    },
+    {
+      "key": "B",
+      "text": "Amazon S3, mas a documentação afirmaria que ele é um serviço de armazenamento em bloco (block storage), projetado especificamente para ser conectado a instâncias Amazon EC2 individuais.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon S3 como armazenamento de objetos, não de bloco -- armazenamento em bloco conectado a instâncias EC2 é a descrição do Amazon EBS."
+    },
+    {
+      "key": "C",
+      "text": "Amazon S3, que a documentação afirma ser projetado para 99.999999999% (11 noves) de durabilidade, como um serviço de armazenamento de objetos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a cifra de durabilidade e a classificação como armazenamento de objetos que a documentação atribui ao Amazon S3."
+    },
+    {
+      "key": "D",
+      "text": "Amazon EBS, que a documentação descreve como o serviço de armazenamento de objetos com 11 noves de durabilidade, recomendado para backups e arquivos de mídia não estruturados.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon EBS como armazenamento em bloco persistente para uso com instâncias EC2, não como armazenamento de objetos -- a cifra de 11 noves de durabilidade e a classificação de object storage pertencem ao Amazon S3."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Storage services overview (Amazon S3: object storage, designed for 99.999999999%/11 9s of durability)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/storage-services.html#amazon-s3"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

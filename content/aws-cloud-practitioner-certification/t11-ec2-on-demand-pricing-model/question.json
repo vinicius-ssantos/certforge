@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber o que o Amazon EC2 é e o que caracteriza especificamente suas instâncias On-Demand -- pagamento por hora ou segundo, sem compromisso de longo prazo nem pagamento adiantado -- em vez de apenas saber que 'EC2 é o serviço de servidores virtuais da AWS'.",
+  "prompt": "Uma equipe precisa de capacidade de computação na AWS sem assumir nenhum compromisso de longo prazo nem fazer pagamento adiantado, pagando apenas pelo tempo em que a instância efetivamente roda. Segundo a documentação oficial, qual serviço fornece essa capacidade, e qual opção de instâncias atende especificamente a esse requisito?",
+  "explanation": "A documentação descreve o Amazon Elastic Compute Cloud (Amazon EC2) como um serviço web que fornece capacidade de computação segura e redimensionável (resizable) na nuvem, reduzindo para minutos o tempo necessário para obter e inicializar novas instâncias. Dentro do EC2, as instâncias On-Demand permitem pagar pela capacidade de computação por hora ou por segundo, dependendo das instâncias executadas, sem nenhum compromisso de longo prazo nem pagamento adiantado -- é possível aumentar ou diminuir a capacidade de computação conforme as demandas da aplicação, pagando apenas as taxas horárias especificadas pela instância usada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon EC2, mas a documentação afirmaria que toda instância EC2 exige necessariamente um compromisso de uso de um ou três anos antes de poder ser lançada, independentemente do modelo de instância escolhido.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve especificamente as instâncias On-Demand como não exigindo nenhum compromisso de longo prazo -- essa exigência de compromisso de um ou três anos se aplica a outros modelos, como Savings Plans, não a toda instância EC2."
+    },
+    {
+      "key": "B",
+      "text": "Amazon EC2, mas apenas por meio de Reservas (Reserved Instances), já que a documentação descreveria esse como o único modelo de instância do EC2 que não exige pagamento adiantado nem compromisso de longo prazo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve as Reservas como exigindo pagamento adiantado da capacidade para obter um desconto maior -- é justamente o modelo On-Demand, não as Reservas, que não exige compromisso nem pagamento adiantado."
+    },
+    {
+      "key": "C",
+      "text": "Amazon S3, porque a documentação o descreve como o serviço responsável por fornecer capacidade de computação redimensionável sob demanda, sem compromissos de longo prazo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon S3 como um serviço de armazenamento de objetos, não como o serviço de capacidade de computação -- esse é o papel do Amazon EC2."
+    },
+    {
+      "key": "D",
+      "text": "Amazon EC2, usando instâncias On-Demand -- que permitem pagar pela capacidade de computação por hora ou por segundo, sem compromissos de longo prazo nem pagamentos adiantados.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para o Amazon EC2 e para o modelo de instâncias On-Demand."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Compute services overview (Amazon EC2: On-Demand Instances pay by the hour or second, no long-term commitments or upfront payments)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/compute-services.html#amazon-ec2"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

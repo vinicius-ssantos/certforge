@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000052",
+  "objectiveKeys": ["CLF-4.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o Basic Support já está disponível automaticamente para todo cliente AWS, cobrindo apenas perguntas de conta/cobrança e verificações de saúde do serviço -- sem casos de suporte técnico, que exigem um plano pago -- em vez de assumir que todo suporte da AWS é pago.",
+  "prompt": "Um cliente AWS que nunca assinou nenhum plano de suporte pago quer saber a quais recursos de suporte ele já tem acesso. Segundo a documentação oficial sobre os planos de suporte da AWS, o que o Basic Support oferece, e todo cliente AWS tem acesso a ele automaticamente?",
+  "explanation": "A documentação afirma que o Basic Support oferece assistência para perguntas de conta e cobrança e aumentos de cota de serviço. Todos os clientes AWS têm automaticamente acesso 24x7 a esses recursos do Basic Support: respostas individuais a perguntas de conta e cobrança, fóruns de suporte, verificações de saúde do serviço, e documentação, white papers técnicos e guias de boas práticas. Os outros planos (acima do Basic) é que oferecem casos de suporte técnico, com preço mensal.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Basic Support oferece assistência para contas e cobrança, verificações de saúde do serviço e acesso à documentação, e todo cliente AWS tem acesso automático 24x7 a esses recursos, sem precisar assinar nenhum plano pago.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição e a disponibilidade automática que a documentação atribui ao Basic Support."
+    },
+    {
+      "key": "B",
+      "text": "O Basic Support não existe como um nível próprio -- a documentação afirmaria que todo cliente AWS precisa assinar pelo menos o plano Business Support+ antes de ter qualquer acesso a suporte, mesmo para perguntas de cobrança.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Basic Support como um nível próprio, disponível automaticamente para todos os clientes, sem exigir assinatura de nenhum plano pago como o Business Support+."
+    },
+    {
+      "key": "C",
+      "text": "O Basic Support inclui, junto com as perguntas de conta e cobrança, casos de suporte técnico ilimitados sobre configuração e desempenho de qualquer software de terceiros rodando em instâncias Amazon EC2.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui o suporte técnico sobre software de terceiros em instâncias EC2 aos planos pagos acima do Basic (como o Business Support+), não ao Basic Support, que cobre apenas conta, cobrança, verificações de saúde e documentação."
+    },
+    {
+      "key": "D",
+      "text": "O Basic Support exige uma taxa mensal mínima para ser ativado, e só então o cliente passa a ter acesso a respostas sobre perguntas de conta e cobrança.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que todo cliente AWS já tem acesso automático 24x7 ao Basic Support, sem nenhuma taxa mensal mínima para ativá-lo."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- AWS Support Plans (Features of AWS Support Plans: Basic Support is automatic 24x7 for all AWS customers -- account/billing questions, forums, service health checks, documentation)",
+      "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html#features"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000052",
+  "objectiveKeys": ["CLF-4.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir AWS Cost Explorer (visualizar e entender custos e uso já ocorridos) de AWS Budgets (definir limites e receber alertas sobre custos futuros/previstos) -- não tratá-los como o mesmo recurso.",
+  "prompt": "Uma equipe quer, por um lado, visualizar e entender seus custos e uso da AWS ao longo do tempo com relatórios customizados, e por outro, ser alertada quando o custo real ou previsto exceder um valor orçado que ela mesma define. Segundo a documentação oficial sobre gerenciamento de custos da AWS, quais dois recursos atendem a cada uma dessas necessidades?",
+  "explanation": "A documentação descreve o AWS Cost Explorer como tendo uma interface fácil de usar que permite visualizar, entender e gerenciar os custos e o uso da AWS ao longo do tempo, por meio de relatórios customizados com gráficos e dados tabulares. Já o AWS Budgets dá a capacidade de definir orçamentos customizados que alertam quando os custos ou o uso excedem (ou estão previstos a exceder) o valor orçado -- os orçamentos podem ser rastreados mensal, trimestral ou anualmente, e os alertas podem ser enviados por e-mail ou por um tópico do Amazon SNS.",
+  "options": [
+    {
+      "key": "A",
+      "text": "AWS Cost Explorer para os alertas de orçamento previsto, e AWS Budgets para a visualização de relatórios customizados de custo e uso -- invertendo os papéis que a documentação atribui a cada um dos dois recursos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui a visualização de relatórios customizados ao Cost Explorer, e os alertas de orçamento ao AWS Budgets -- não o inverso."
+    },
+    {
+      "key": "B",
+      "text": "Apenas o AWS Cost and Usage Report resolve as duas necessidades, já que a documentação não descreveria nenhum recurso dedicado a alertas de orçamento previsto.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o AWS Cost and Usage Report como uma listagem detalhada de uso por serviço, e descreve separadamente o AWS Budgets como o recurso dedicado especificamente a alertas de orçamento previsto ou excedido."
+    },
+    {
+      "key": "C",
+      "text": "AWS Cost Explorer para visualizar e entender custos e uso ao longo do tempo com relatórios customizados, e AWS Budgets para definir orçamentos que alertam quando o custo real ou previsto excede o valor definido.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a atribuição de funções que a documentação descreve para o Cost Explorer e para o AWS Budgets."
+    },
+    {
+      "key": "D",
+      "text": "AWS Budgets para ambas as necessidades, pois a documentação afirmaria que ele também gera os relatórios customizados com gráficos de custo e uso, tornando o Cost Explorer redundante.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue os dois recursos -- é o Cost Explorer, não o Budgets, que oferece a interface de relatórios customizados com gráficos e dados tabulares para visualizar custo e uso."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- AWS Cost Management overview (AWS Cost Explorer: visualize and understand costs/usage over time; AWS Budgets: alerts when costs exceed or are forecasted to exceed a budgeted amount)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/aws-cost-management.html#aws-cost-explorer"
+    },
+    {
+      "title": "AWS Documentation -- AWS Cost Management overview (AWS Budgets)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/aws-cost-management.html#aws-budgets"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
