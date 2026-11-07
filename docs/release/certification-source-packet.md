@@ -46,6 +46,29 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practit
 
 19 of 19 seeded objectives claimed by a published question.
 
+## aws-developer-associate-certification
+
+**AWS DVAC03.** Verified 2026-11-07 against
+`AWS Certified Developer - Associate (DVA-C03), Exam Guide (registration opened October 27, 2026)`. Digest `sha256:98b8e605309cd90dd51567b3e69987663e454ba7c26fa4adba4291d9f64c23a9`.
+Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-03/developer-associate-03.pdf>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `DVA-1.1` | Develop code for applications that are hosted on AWS | _none yet_ |
+| `DVA-1.2` | Develop code for AWS Lambda | _none yet_ |
+| `DVA-1.3` | Use data stores during application development | _none yet_ |
+| `DVA-2.1` | Implement authentication and authorization mechanisms for applications and AWS services | _none yet_ |
+| `DVA-2.2` | Implement encryption and manage sensitive data by using AWS services | _none yet_ |
+| `DVA-2.3` | Identify and mitigate security risks associated with using and integrating AI services into application development | _none yet_ |
+| `DVA-3.1` | Prepare application artifacts to be deployed to AWS | _none yet_ |
+| `DVA-3.2` | Implement and automate application testing in AWS environments | _none yet_ |
+| `DVA-3.3` | Deploy code by using AWS continuous integration and continuous delivery (CI/CD) services | _none yet_ |
+| `DVA-4.1` | Assist in a root cause analysis | _none yet_ |
+| `DVA-4.2` | Apply logging, monitoring, and observability best practices | _none yet_ |
+| `DVA-4.3` | Optimize applications by using AWS services and features | _none yet_ |
+
+0 of 12 seeded objectives claimed by a published question.
+
 ## cncf-cka-certification
 
 **CNCF CKA.** Verified 2026-11-04 against
