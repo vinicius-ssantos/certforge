@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000049",
+  "objectiveKeys": ["CLF-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que 'rehost' é especificamente a estratégia de migração conhecida como 'lift and shift' -- mover a aplicação sem fazer nenhuma mudança nela -- em vez de confundi-la com estratégias que modernizam a aplicação durante a migração.",
+  "prompt": "Uma equipe quer migrar uma aplicação do ambiente on-premises para a AWS Cloud sem fazer nenhuma mudança na aplicação em si. Segundo a documentação oficial da AWS sobre estratégias de migração (as '7 Rs'), qual estratégia corresponde a esse cenário, e por qual outro nome ela também é conhecida?",
+  "explanation": "A documentação lista sete estratégias de migração, conhecidas como os '7 Rs': Retire, Retain, Rehost, Relocate, Repurchase, Replatform, e Refactor or re-architect. Ela descreve especificamente o Rehost como a estratégia também conhecida como 'lift and shift' -- usando essa estratégia, você move suas aplicações do ambiente de origem para a AWS Cloud sem fazer nenhuma mudança na aplicação.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Retain, que a documentação descreve como mover a aplicação para a AWS Cloud sem nenhuma mudança, mantendo apenas o nome original da aplicação como estratégia de identificação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve Retain como a estratégia para aplicações que permanecem no ambiente de origem e não são migradas -- não uma estratégia de migração sem mudanças."
+    },
+    {
+      "key": "B",
+      "text": "Refactor or re-architect, que a documentação descreve como a estratégia recomendada especificamente para migrações sem nenhuma mudança na aplicação, por ser a mais simples das sete estratégias listadas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve Refactor or re-architect como a estratégia mais complexa, que envolve modernizar a aplicação durante a migração -- é Rehost, não Refactor, que não envolve nenhuma mudança na aplicação."
+    },
+    {
+      "key": "C",
+      "text": "Rehost, também conhecida como 'lift and shift' -- usando essa estratégia, você move a aplicação do ambiente de origem para a AWS Cloud sem fazer nenhuma mudança na aplicação em si.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a estratégia e o nome alternativo que a documentação descreve para esse cenário."
+    },
+    {
+      "key": "D",
+      "text": "Repurchase, que a documentação descreve como migrar sem nenhuma mudança na aplicação ao trocar a licença do software atual por uma nova licença equivalente da AWS Marketplace.",
+      "correct": false,
+      "explanation": "Incorreto: Repurchase é uma das sete estratégias, mas não é a descrita como 'lift and shift' sem mudanças -- esse é o papel específico do Rehost na documentação."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- About the migration strategies (the 7 Rs: Rehost, also known as lift and shift, moves applications with no changes)",
+      "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/large-migration-guide/migration-strategies.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000050",
+  "objectiveKeys": ["CLF-2.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o AWS Config avalia continuamente recursos contra regras definidas e sinaliza recursos não conformes automaticamente -- um conceito central de governança -- em vez de confundi-lo com uma ferramenta de scanning de vulnerabilidades.",
+  "prompt": "Uma equipe quer que a AWS avalie continuamente se as configurações de seus recursos obedecem a regras internas definidas, sinalizando automaticamente qualquer recurso que viole essas regras. Segundo a documentação oficial, qual serviço resolve esse cenário, e o que ele faz quando detecta uma violação?",
+  "explanation": "A documentação do AWS Config afirma que você pode usar as regras do AWS Config para avaliar as configurações dos seus recursos AWS. Quando o AWS Config detecta que um recurso viola as condições de uma das suas regras, ele sinaliza o recurso como não conforme (noncompliant) e envia uma notificação. O AWS Config avalia continuamente seus recursos à medida que eles são criados, alterados ou excluídos.",
+  "options": [
+    {
+      "key": "A",
+      "text": "AWS Config, mas a documentação afirma que, ao detectar uma violação, ele corrige automaticamente a configuração do recurso sem enviar nenhuma notificação, sem que a equipe de operações seja informada sobre a mudança.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o AWS Config sinalizando o recurso como não conforme e enviando uma notificação -- a remediação automática existe como recurso separado, mas não é isso que a documentação descreve como a reação padrão à violação de uma regra."
+    },
+    {
+      "key": "B",
+      "text": "AWS Config, mas a documentação afirma que ele só avalia a configuração dos recursos uma única vez, no momento em que são criados, sem reavaliar depois caso a configuração seja alterada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o AWS Config avalia continuamente os recursos à medida que são criados, alterados ou excluídos -- não apenas uma vez no momento da criação."
+    },
+    {
+      "key": "C",
+      "text": "AWS Config: quando detecta que um recurso viola as condições de uma regra, ele sinaliza o recurso como não conforme e envia uma notificação, avaliando os recursos continuamente à medida que são criados, alterados ou excluídos.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para o comportamento do AWS Config com suas regras."
+    },
+    {
+      "key": "D",
+      "text": "AWS Config, mas a documentação afirma que a sinalização de recursos não conformes exige que alguém verifique manualmente cada recurso periodicamente via polling, já que o serviço não reage a mudanças de configuração por conta própria.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que você pode usar o AWS Config para ser notificado sempre que recursos são criados, modificados ou excluídos, sem precisar monitorar essas mudanças fazendo polling das chamadas feitas a cada recurso."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- What Is AWS Config? (Resource Administration: Config rules flag noncompliant resources and send a notification)",
+      "url": "https://docs.aws.amazon.com/config/latest/developerguide/WhatIsConfig.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

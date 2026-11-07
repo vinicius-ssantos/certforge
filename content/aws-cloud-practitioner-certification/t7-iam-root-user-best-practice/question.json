@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000050",
+  "objectiveKeys": ["CLF-2.3"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o usuário root tem acesso completo a todos os serviços e recursos, e que a documentação recomenda explicitamente não usá-lo para tarefas do dia a dia -- em vez de tratar o root como apenas 'mais um tipo de usuário IAM'.",
+  "prompt": "Uma pessoa acabou de criar uma conta AWS e tem acesso à identidade de login inicial dessa conta. Segundo a documentação oficial do IAM, que identidade é essa, que nível de acesso ela tem, e o que a documentação recomenda sobre seu uso no dia a dia?",
+  "explanation": "A documentação do IAM afirma que, ao criar uma conta AWS, você começa com uma identidade de login única chamada usuário root da conta AWS (AWS account root user), que tem acesso completo a todos os serviços e recursos da AWS. A documentação recomenda fortemente que você não use o usuário root para tarefas do dia a dia -- em vez disso, você deve usar o IAM para configurar outras identidades, como administradores, analistas e desenvolvedores, concedendo a elas acesso apenas aos recursos de que precisam.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma identidade temporária que a documentação afirma expirar automaticamente 24 horas após a criação da conta, precisando ser substituída por um usuário IAM antes desse prazo para a conta continuar funcional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhuma expiração automática de 24 horas para o usuário root -- ele permanece disponível indefinidamente, ainda que seu uso cotidiano não seja recomendado."
+    },
+    {
+      "key": "B",
+      "text": "Um usuário IAM comum como qualquer outro, sem nenhum acesso diferenciado em relação aos demais usuários que seriam criados posteriormente na mesma conta.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o usuário root como tendo acesso completo a todos os serviços e recursos, diferente de um usuário IAM comum criado posteriormente com permissões limitadas."
+    },
+    {
+      "key": "C",
+      "text": "O usuário root da conta AWS, mas a documentação recomenda usá-lo normalmente para todas as tarefas do dia a dia, já que ele seria a identidade mais segura e indicada para esse propósito segundo a documentação, sem necessidade de criar outras identidades IAM.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação recomenda fortemente o oposto -- não usar o usuário root para tarefas do dia a dia, reservando tarefas que realmente exigem credenciais de root para casos específicos documentados separadamente."
+    },
+    {
+      "key": "D",
+      "text": "O usuário root da conta AWS, que tem acesso completo a todos os serviços e recursos da AWS; a documentação recomenda fortemente não usá-lo para tarefas do dia a dia, usando o IAM para criar outras identidades com acesso apenas ao necessário.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a identidade, o nível de acesso e a recomendação que a documentação do IAM descreve."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- What is IAM? (AWS account root user: full access; recommendation against everyday use)",
+      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

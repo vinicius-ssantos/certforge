@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000049",
+  "objectiveKeys": ["CLF-1.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber os três fatores fundamentais de custo que a documentação de economia da AWS lista explicitamente -- computação, armazenamento e transferência de dados de saída -- em vez de uma noção vaga de 'a nuvem cobra pelo uso'.",
+  "prompt": "Segundo a documentação oficial da AWS sobre como funciona o pricing da AWS, quais são os três fatores fundamentais de custo com a AWS, e o que ela afirma sobre a cobrança por transferência de dados de entrada entre serviços AWS na mesma Region?",
+  "explanation": "A documentação afirma que há três fatores fundamentais de custo com a AWS: computação, armazenamento e transferência de dados de saída (outbound). Na maioria dos casos, não há cobrança para transferência de dados de entrada (inbound) nem para transferência de dados entre outros serviços AWS dentro da mesma Region -- embora existam algumas exceções, por isso a documentação recomenda verificar as taxas de transferência de dados antes de começar.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Computação, armazenamento e transferência de dados de saída; mas a documentação afirma que toda transferência de dados entre serviços AWS na mesma Region é sempre cobrada, sem nenhuma exceção para esse caso em nenhuma circunstância.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que, na maioria dos casos, não há cobrança para transferência entre outros serviços AWS dentro da mesma Region -- o oposto do que esta alternativa descreve, embora existam algumas exceções."
+    },
+    {
+      "key": "B",
+      "text": "Apenas computação e armazenamento, já que a documentação afirma que toda transferência de dados -- de entrada ou de saída, dentro ou fora de uma Region -- é sempre gratuita, sem nenhuma exceção documentada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista transferência de dados de saída como um terceiro fator fundamental de custo, cobrado e agregado entre serviços -- não é verdade que toda transferência seja sempre gratuita."
+    },
+    {
+      "key": "C",
+      "text": "Computação, armazenamento e transferência de dados de entrada; a documentação afirma que é a transferência de entrada, não a de saída, que aparece na fatura mensal como AWS Data Transfer Out.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a transferência de dados de saída (outbound), não a de entrada, como o fator de custo que aparece na fatura como AWS Data Transfer Out."
+    },
+    {
+      "key": "D",
+      "text": "Computação, armazenamento e transferência de dados de saída; na maioria dos casos, não há cobrança para transferência de dados de entrada nem para transferência entre serviços AWS na mesma Region, com algumas exceções.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a lista de fatores fundamentais de custo e a observação sobre transferência de dados que a documentação descreve."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- How AWS Pricing Works (Key principles: three fundamental drivers of cost -- compute, storage, outbound data transfer)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/key-principles.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

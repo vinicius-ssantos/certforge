@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000050",
+  "objectiveKeys": ["CLF-2.4"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o AWS Artifact é o recurso específico para baixar documentos de conformidade (como relatórios SOC e ISO) sob demanda e gratuitamente, não apenas um serviço genérico de 'segurança'.",
+  "prompt": "Uma equipe de auditoria precisa obter relatórios de conformidade da AWS com padrões como ISO e SOC, para apresentar a reguladores. Segundo a documentação oficial, qual recurso da AWS fornece esses documentos, e quanto custa usá-lo?",
+  "explanation": "A documentação afirma que o AWS Artifact fornece downloads sob demanda de documentos de segurança e conformidade da AWS -- por exemplo, relatórios de conformidade com padrões ISO, PCI e relatórios SOC (System and Organization Controls) -- além de certificações de órgãos de credenciamento. A documentação afirma explicitamente que a AWS fornece os documentos e acordos do AWS Artifact sem custo algum (free of charge).",
+  "options": [
+    {
+      "key": "A",
+      "text": "AWS Artifact, que fornece downloads sob demanda de documentos de segurança e conformidade (como relatórios ISO, PCI e SOC) e certificações de órgãos de credenciamento; a documentação afirma que esses documentos e acordos são fornecidos sem custo algum.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o recurso e a política de custo que a documentação descreve para obter esses documentos."
+    },
+    {
+      "key": "B",
+      "text": "AWS Config, que a documentação descreve como a ferramenta específica para baixar relatórios de conformidade ISO, PCI e SOC prontos para apresentar a reguladores externos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o AWS Config como uma ferramenta para avaliar e monitorar a configuração de recursos, não como a fonte de download de relatórios de conformidade ISO/PCI/SOC -- esse é o papel do AWS Artifact."
+    },
+    {
+      "key": "C",
+      "text": "AWS Artifact, mas a documentação afirma que o acesso a esses documentos exige uma assinatura paga adicional, cobrada por relatório baixado, além da fatura normal de uso de outros serviços AWS.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que a AWS fornece os documentos e acordos do AWS Artifact sem custo algum -- não há cobrança adicional por relatório baixado."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum recurso da AWS fornece esses relatórios; a documentação afirmaria que relatórios de conformidade como SOC e ISO precisam ser solicitados diretamente aos órgãos de credenciamento, sem qualquer intermediação de um serviço AWS em qualquer circunstância.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o AWS Artifact especificamente como o recurso da AWS para obter esses relatórios sob demanda, sem precisar contatar os órgãos de credenciamento diretamente."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- What is AWS Artifact? (On-demand downloads of compliance reports -- ISO, PCI, SOC -- provided free of charge)",
+      "url": "https://docs.aws.amazon.com/artifact/latest/ug/what-is-aws-artifact.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
