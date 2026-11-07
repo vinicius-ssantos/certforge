@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "aws-developer-associate-certification",
+  "trackSlug": "aws-developer-associate-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "AWS Developer Associate DVA-C02",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "AWS",
+    "examCode": "DVAC02",
+    "providerVersion": "AWS Certified Developer - Associate (DVA-C02), Exam Guide version 2.1 (published December 12, 2024)",
+    "snapshotDigest": "sha256:cd9676e3d82beddf30ab47d78f822bfc278b4392b5c6acd388470c75b73c8c97",
+    "verifiedOn": "2026-11-07"
+  }
+}

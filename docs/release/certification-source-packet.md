@@ -24,27 +24,51 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practit
 
 | Objective | Title | Claimed by |
 |---|---|---|
-| `CLF-1.1` | Define the benefits of the AWS Cloud | _none yet_ |
-| `CLF-1.2` | Identify design principles of the AWS Cloud | _none yet_ |
-| `CLF-1.3` | Understand the benefits of and strategies for migration to the AWS Cloud | _none yet_ |
-| `CLF-1.4` | Understand concepts of cloud economics | _none yet_ |
-| `CLF-2.1` | Understand the AWS shared responsibility model | _none yet_ |
-| `CLF-2.2` | Understand AWS Cloud security, governance, and compliance concepts | _none yet_ |
-| `CLF-2.3` | Identify AWS access management capabilities | _none yet_ |
-| `CLF-2.4` | Identify components and resources for security | _none yet_ |
-| `CLF-3.1` | Define methods of deploying and operating in the AWS Cloud | _none yet_ |
-| `CLF-3.2` | Define the AWS global infrastructure | _none yet_ |
-| `CLF-3.3` | Identify AWS compute services | _none yet_ |
-| `CLF-3.4` | Identify AWS database services | _none yet_ |
-| `CLF-3.5` | Identify AWS network services | _none yet_ |
-| `CLF-3.6` | Identify AWS storage services | _none yet_ |
-| `CLF-3.7` | Identify AWS artificial intelligence and machine learning (AI/ML) services and analytics services | _none yet_ |
-| `CLF-3.8` | Identify services from other in-scope AWS service categories | _none yet_ |
-| `CLF-4.1` | Compare AWS pricing models | _none yet_ |
-| `CLF-4.2` | Understand resources for billing, budget, and cost management | _none yet_ |
-| `CLF-4.3` | Identify AWS technical resources and AWS Support options | _none yet_ |
+| `CLF-1.1` | Define the benefits of the AWS Cloud | `t1-six-advantages-of-cloud-computing` |
+| `CLF-1.2` | Identify design principles of the AWS Cloud | `t2-well-architected-design-principles` |
+| `CLF-1.3` | Understand the benefits of and strategies for migration to the AWS Cloud | `t3-seven-rs-migration-strategies` |
+| `CLF-1.4` | Understand concepts of cloud economics | `t4-fundamental-cost-drivers` |
+| `CLF-2.1` | Understand the AWS shared responsibility model | `t5-shared-responsibility-model` |
+| `CLF-2.2` | Understand AWS Cloud security, governance, and compliance concepts | `t6-aws-config-compliance-monitoring` |
+| `CLF-2.3` | Identify AWS access management capabilities | `t7-iam-root-user-best-practice` |
+| `CLF-2.4` | Identify components and resources for security | `t8-aws-artifact-compliance-documents` |
+| `CLF-3.1` | Define methods of deploying and operating in the AWS Cloud | `t9-deployment-models-cloud-hybrid-onprem` |
+| `CLF-3.2` | Define the AWS global infrastructure | `t10-region-and-availability-zone` |
+| `CLF-3.3` | Identify AWS compute services | `t11-ec2-on-demand-pricing-model` |
+| `CLF-3.4` | Identify AWS database services | `t12-dynamodb-key-value-millisecond-performance` |
+| `CLF-3.5` | Identify AWS network services | `t13-vpc-logically-isolated-network` |
+| `CLF-3.6` | Identify AWS storage services | `t14-s3-eleven-nines-durability` |
+| `CLF-3.7` | Identify AWS artificial intelligence and machine learning (AI/ML) services and analytics services | `t15-rekognition-image-video-analysis` |
+| `CLF-3.8` | Identify services from other in-scope AWS service categories | `t16-sqs-decouple-microservices` |
+| `CLF-4.1` | Compare AWS pricing models | `t17-pricing-models-comparison` |
+| `CLF-4.2` | Understand resources for billing, budget, and cost management | `t18-cost-explorer-and-budgets` |
+| `CLF-4.3` | Identify AWS technical resources and AWS Support options | `t19-basic-support-free-for-all-customers` |
 
-0 of 19 seeded objectives claimed by a published question.
+19 of 19 seeded objectives claimed by a published question.
+
+## aws-developer-associate-certification
+
+**AWS DVAC02.** Verified 2026-11-07 against
+`AWS Certified Developer - Associate (DVA-C02), Exam Guide version 2.1 (published December 12, 2024)`. Digest `sha256:cd9676e3d82beddf30ab47d78f822bfc278b4392b5c6acd388470c75b73c8c97`.
+Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-associate-02/developer-associate-02.pdf>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `DVA-1.1` | Develop code for applications hosted on AWS | _none yet_ |
+| `DVA-1.2` | Develop code for AWS Lambda | _none yet_ |
+| `DVA-1.3` | Use data stores in application development | _none yet_ |
+| `DVA-2.1` | Implement authentication and/or authorization for applications and AWS services | _none yet_ |
+| `DVA-2.2` | Implement encryption by using AWS services | _none yet_ |
+| `DVA-2.3` | Manage sensitive data in application code | _none yet_ |
+| `DVA-3.1` | Prepare application artifacts to be deployed to AWS | _none yet_ |
+| `DVA-3.2` | Test applications in development environments | _none yet_ |
+| `DVA-3.3` | Automate deployment testing | _none yet_ |
+| `DVA-3.4` | Deploy code by using AWS Continuous Integration and Continuous Delivery (CI/CD) services | _none yet_ |
+| `DVA-4.1` | Assist in a root cause analysis | _none yet_ |
+| `DVA-4.2` | Instrument code for observability | _none yet_ |
+| `DVA-4.3` | Optimize applications by using AWS services and features | _none yet_ |
+
+0 of 13 seeded objectives claimed by a published question.
 
 ## cncf-cka-certification
 
