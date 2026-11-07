@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000054",
+  "objectiveKeys": ["DVA-2.3"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber o mecanismo arquitetural específico que a documentação atribui ao isolamento de dados no Amazon Bedrock -- a conta de implantação de modelo (Model Deployment Account), por provedor e por Região, operada pela própria equipe do serviço Bedrock -- em vez de aceitar uma afirmação genérica de 'é seguro' ou cair em opções que protegem apenas um lado (prompt ou completion) do fluxo.",
+  "prompt": "A equipe de segurança de uma empresa está avaliando o uso do Amazon Bedrock para enviar prompts contendo dados de clientes a modelos de fundação de provedores terceiros. A principal preocupação é se o provedor do modelo teria acesso aos prompts e às respostas (completions) gerados para a empresa, ou poderia usá-los para re-treinar seu próprio modelo. Segundo a documentação oficial de proteção de dados do Amazon Bedrock, essa preocupação é procedente?",
+  "explanation": "A documentação de proteção de dados do Amazon Bedrock afirma: \"Amazon Bedrock has a concept of a Model Deployment Account—in each AWS Region where Amazon Bedrock is available, there is one such deployment account per model provider. These accounts are owned and operated by the Amazon Bedrock service team. Model providers don't have any access to those accounts... Because the model providers don't have access to those accounts, they don't have access to Amazon Bedrock logs or to customer prompts and completions.\" Ou seja, a arquitetura de contas isoladas, operadas pelo próprio serviço Bedrock e não pelo provedor do modelo, é o que a documentação aponta como a razão de o provedor não ter acesso nem aos prompts nem às completions dos clientes.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim: a documentação afirma que o Amazon Bedrock copia os prompts e as respostas de cada cliente para a conta do provedor do modelo, para que ele possa usá-los no re-treinamento de versões futuras do modelo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto -- os provedores de modelo não têm acesso às contas de implantação de modelo nem aos prompts e completions dos clientes, já que essas contas são operadas pela própria equipe do serviço Bedrock, não pelo provedor."
+    },
+    {
+      "key": "B",
+      "text": "Não, mas apenas porque a empresa pode desativar esse compartilhamento configurando uma política de VPC endpoint específica; sem essa configuração adicional, a documentação afirma que o provedor do modelo tem acesso padrão aos prompts e completions dos clientes.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não condiciona essa proteção a nenhuma configuração opcional de VPC endpoint -- ela descreve a separação por contas de implantação de modelo, operadas pela equipe do Bedrock e inacessíveis ao provedor, como uma característica arquitetural do serviço, não algo que precise ser ativado pelo cliente."
+    },
+    {
+      "key": "C",
+      "text": "Em parte: a documentação afirma que o provedor do modelo não tem acesso às respostas (completions) geradas, mas tem acesso aos prompts de entrada enviados pelos clientes, já que eles precisariam necessariamente passar pela infraestrutura própria do provedor, fora da conta de implantação de modelo operada pelo Bedrock, para que a inferência do modelo de fundação pudesse ocorrer.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não distingue prompts de completions nesse ponto, e também não descreve a inferência como algo que ocorra fora da conta de implantação de modelo operada pelo Bedrock -- ela afirma que, por não terem acesso a essas contas, os provedores não têm acesso nem aos prompts nem às completions dos clientes, igualmente."
+    },
+    {
+      "key": "D",
+      "text": "Não: a documentação descreve que, em cada Região em que o Amazon Bedrock está disponível, existe uma conta de implantação de modelo (Model Deployment Account) por provedor de modelo, operada pela própria equipe do serviço Bedrock; como os provedores de modelo não têm acesso a essas contas, eles não têm acesso aos logs do Bedrock nem aos prompts e completions dos clientes.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o mecanismo e a conclusão que a documentação de proteção de dados do Amazon Bedrock descreve."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Data protection (Amazon Bedrock) (Model Deployment Account per provider per Region, operated by the Bedrock service team; model providers lack access to Bedrock logs, customer prompts and completions)",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/data-protection.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

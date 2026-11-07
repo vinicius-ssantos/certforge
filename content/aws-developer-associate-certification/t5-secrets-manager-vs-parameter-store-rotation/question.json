@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000054",
+  "objectiveKeys": ["DVA-2.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que criptografia via AWS KMS (que ambos os serviços oferecem) não é o mesmo que rotação automática de credenciais -- a documentação da AWS compara os dois serviços lado a lado e atribui rotação automática apenas ao Secrets Manager, independentemente do tier do parâmetro usado no Parameter Store.",
+  "prompt": "Uma aplicação precisa armazenar credenciais de um banco de dados e também precisa que esse segredo seja rotacionado automaticamente em um cronograma, sem exigir alterações no código da aplicação a cada rotação. Um desenvolvedor sugere usar um parâmetro `SecureString` no AWS Systems Manager Parameter Store, já que ele também é criptografado com o AWS KMS. Segundo a documentação oficial da AWS, essa escolha atende ao requisito de rotação automática?",
+  "explanation": "A própria documentação da AWS compara os dois serviços em uma tabela: na linha \"Credential rotation\", o Parameter Store aparece como `None`, enquanto o AWS Secrets Manager aparece como \"Automatic, with native database integrations\". A documentação do Parameter Store também recomenda explicitamente: \"For secrets such as database credentials, API keys, or tokens, we recommend AWS Secrets Manager, which provides purpose built security controls including automatic rotation and cross-region replication.\" Já a documentação do Secrets Manager afirma: \"With Secrets Manager, you can configure an automatic rotation schedule for your secrets. This enables you to replace long-term secrets with short-term ones... Since the credentials are no longer stored with the application, rotating credentials no longer requires updating your applications.\"",
+  "options": [
+    {
+      "key": "A",
+      "text": "Sim: a documentação descreve o Parameter Store como funcionalmente idêntico ao AWS Secrets Manager para esse requisito, já que ambos oferecem rotação automática integrada e nativa com bancos de dados.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve os dois serviços como equivalentes nesse ponto -- na comparação oficial, a rotação de credenciais do Parameter Store é listada como `None`, enquanto a do Secrets Manager é \"Automatic, with native database integrations\"."
+    },
+    {
+      "key": "B",
+      "text": "Não: a documentação compara os dois serviços e indica que o Parameter Store não oferece rotação de credenciais (`None`), enquanto o AWS Secrets Manager é descrito como oferecendo rotação automática, com integrações nativas com bancos de dados -- por isso a documentação recomenda o Secrets Manager especificamente para credenciais como as de banco de dados.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção e a recomendação que a documentação da AWS apresenta entre os dois serviços para esse caso de uso."
+    },
+    {
+      "key": "C",
+      "text": "Não: a documentação afirma que nenhum dos dois serviços oferece suporte a rotação automática de credenciais, sendo necessário implementar a rotação manualmente fora da AWS em ambos os casos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente o AWS Secrets Manager como oferecendo rotação automática (\"Automatic, with native database integrations\") -- a limitação de não ter rotação (`None`) é específica do Parameter Store, não de ambos os serviços."
+    },
+    {
+      "key": "D",
+      "text": "Sim, mas apenas se o parâmetro for do tipo avançado (`advanced tier`): a documentação descreve o tier avançado do Parameter Store como o único que inclui rotação automática de credenciais via políticas de parâmetro, com limites mais altos de tamanho e quantidade de parâmetros por conta e Região que tornariam esse recurso disponível apenas nesse tier.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve as políticas de parâmetro do tier avançado como recursos de expiração e notificação (por exemplo, avisar quando um parâmetro não foi rotacionado dentro de um prazo), não como um mecanismo de rotação automática do valor do segredo -- a coluna \"Credential rotation\" permanece `None` para o Parameter Store independentemente do tier escolhido."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- AWS Systems Manager Parameter Store (comparison table: Credential rotation None vs Secrets Manager's automatic rotation; recommendation to use Secrets Manager for database credentials)",
+      "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html"
+    },
+    {
+      "title": "AWS Documentation -- What is AWS Secrets Manager? (configurable automatic rotation schedule; rotating credentials no longer requires updating applications)",
+      "url": "https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

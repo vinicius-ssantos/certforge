@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000054",
+  "objectiveKeys": ["DVA-2.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber qual das duas metades do Amazon Cognito é responsável por cadastro/login (user pool, um diretório de usuários e provedor OIDC) e qual é responsável por conceder credenciais da AWS (identity pool) -- uma resposta superficial de \"Cognito cuida do login\" não distingue as duas metades nem percebe que apenas uma delas emite credenciais da AWS.",
+  "prompt": "Uma aplicação móvel precisa de duas capacidades: (1) permitir que usuários finais se cadastrem e façam login com usuário e senha; e (2), depois do login, permitir que o próprio app móvel chame diretamente a API do Amazon S3, usando credenciais da AWS temporárias com permissões restritas a cada usuário. Segundo a documentação oficial do Amazon Cognito, quais dois componentes do serviço atendem a cada uma dessas necessidades, respectivamente?",
+  "explanation": "A documentação descreve um Amazon Cognito user pool como \"a user directory for web and mobile app authentication and authorization... an OpenID Connect (OIDC) identity provider (IdP)\", responsável por cadastro e login. Sobre a outra metade do serviço, ela afirma: \"The other half of Amazon Cognito is identity pools. Identity pools provide credentials that authorize and monitor API requests to AWS services, for example Amazon DynamoDB or Amazon S3, from your users.\" Ou seja, o user pool resolve a necessidade (1) e o identity pool resolve a necessidade (2).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Um Amazon Cognito identity pool atende à necessidade (1), funcionando como diretório de usuários e provedor de identidade OIDC para cadastro e login; e um Amazon Cognito user pool atende à necessidade (2), fornecendo credenciais temporárias da AWS.",
+      "correct": false,
+      "explanation": "Incorreto: essa opção inverte os papéis que a documentação atribui a cada componente -- é o user pool que funciona como diretório/provedor OIDC de login, e é o identity pool que fornece as credenciais da AWS."
+    },
+    {
+      "key": "B",
+      "text": "Um único Amazon Cognito user pool atende sozinho às duas necessidades, já que a documentação descreve o user pool como responsável tanto por cadastro e login quanto pela emissão direta de credenciais temporárias da AWS para chamar o Amazon S3, tornando dispensável a criação de qualquer identity pool separado para esse tipo de aplicação móvel.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui a emissão de credenciais da AWS que autorizam chamadas a serviços como o Amazon S3 ao identity pool, não ao user pool -- ela descreve esses dois componentes como \"metades\" distintas e complementares do Cognito, e um identity pool continua sendo necessário para a necessidade (2)."
+    },
+    {
+      "key": "C",
+      "text": "Um Amazon Cognito user pool atende à necessidade (1); a necessidade (2) exige criar, para cada usuário, uma IAM role individual associada diretamente ao user pool, já que a documentação não descreve nenhuma integração entre user pools e identity pools para esse fim.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente a integração entre as duas metades do Cognito -- o token de ID emitido pelo user pool é passado a um identity pool, que concede credenciais da AWS -- em vez de exigir uma IAM role individual associada diretamente ao user pool."
+    },
+    {
+      "key": "D",
+      "text": "Um Amazon Cognito user pool atende à necessidade (1), funcionando como diretório de usuários e provedor de identidade OIDC para cadastro e login; e um Amazon Cognito identity pool atende à necessidade (2), fornecendo credenciais que autorizam e monitoram chamadas à API de serviços da AWS, como o Amazon S3, para esses usuários.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a divisão de responsabilidades que a documentação do Amazon Cognito descreve entre user pools (autenticação) e identity pools (credenciais da AWS para autorização de chamadas a serviços como o Amazon S3)."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Authenticating users with Amazon Cognito user pools (user pool as directory/OIDC IdP; identity pools as the service's other half, providing credentials that authorize API requests to AWS services)",
+      "url": "https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-identity-pools.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
