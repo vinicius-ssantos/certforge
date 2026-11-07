@@ -34,7 +34,7 @@
   ],
   "references": [
     {
-      "title": "AWS Documentation -- How AWS Pricing Works (Key principles: three fundamental drivers of cost -- compute, storage, outbound data transfer)",
+      "title": "AWS Documentation -- How AWS Pricing Works (Key principles: three fundamental drivers of cost -- compute, storage, outbound data transfer; page marked 'for historical reference only', but this specific pricing-model fact is unchanged on the live page as of verification)",
       "url": "https://docs.aws.amazon.com/whitepapers/latest/how-aws-pricing-works/key-principles.html"
     }
   ],
