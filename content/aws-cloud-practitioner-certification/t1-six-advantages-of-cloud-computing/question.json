@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000049",
+  "objectiveKeys": ["CLF-1.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige reconhecer as seis vantagens da computação em nuvem listadas pela documentação oficial da AWS, não apenas uma noção genérica de 'a nuvem é mais barata'.",
+  "prompt": "Segundo o whitepaper oficial da AWS sobre a visão geral da AWS, uma das seis vantagens da computação em nuvem é trocar despesas fixas por despesas variáveis. Qual das alternativas abaixo descreve corretamente essa vantagem, segundo a documentação?",
+  "explanation": "A documentação afirma que, em vez de precisar investir pesadamente em data centers e servidores antes de saber como você vai usá-los, você pode pagar apenas quando consome recursos de computação, e pagar apenas pelo quanto consome -- essa é a vantagem de 'trocar despesas fixas por despesas variáveis', uma das seis vantagens da computação em nuvem que a documentação lista (junto com economias de escala, parar de adivinhar capacidade, aumentar velocidade e agilidade, parar de gastar com manutenção de data centers, e expandir globalmente em minutos).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Trocar despesas fixas por despesas variáveis significa pagar apenas quando você consome recursos de computação e apenas pelo quanto consome, em vez de investir pesadamente em data centers e servidores antes de saber como vai usá-los.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá para essa vantagem específica."
+    },
+    {
+      "key": "B",
+      "text": "Trocar despesas fixas por despesas variáveis significa que a AWS cobra um valor fixo mensal idêntico para qualquer cliente, independentemente do volume de recursos consumido, eliminando qualquer variação na fatura mês a mês ao longo de todo o contrato.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o oposto -- você paga pelo que consome, de forma variável, não um valor fixo mensal igual para todos os clientes."
+    },
+    {
+      "key": "C",
+      "text": "Trocar despesas fixas por despesas variáveis descreve a prática de converter contratos de longo prazo com fornecedores de hardware em contratos de leasing com prazo igualmente fixo, mas com parcelas menores.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve essa vantagem em termos de leasing de hardware -- ela descreve pagar apenas pelo consumo real de recursos de computação, sem necessidade de investimento prévio em infraestrutura própria."
+    },
+    {
+      "key": "D",
+      "text": "Trocar despesas fixas por despesas variáveis é outro nome que a documentação usa para a vantagem de ir global em minutos, tratando as duas expressões como sinônimos de uma mesma vantagem.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista essas como duas vantagens distintas entre as seis -- 'trocar despesas fixas por despesas variáveis' trata de custo, e 'ir global em minutos' trata de implantar aplicações em múltiplas regiões rapidamente."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Overview of Amazon Web Services (Six advantages of cloud computing: trade fixed expense for variable expense)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/six-advantages-of-cloud-computing.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

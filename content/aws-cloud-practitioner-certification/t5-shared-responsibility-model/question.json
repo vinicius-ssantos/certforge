@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000050",
+  "objectiveKeys": ["CLF-2.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber a divisão exata de responsabilidades para uma instância EC2 -- a AWS cuida do host/virtualização/físico, o cliente cuida do guest OS, software e do security group -- em vez de apenas repetir o slogan 'segurança é responsabilidade compartilhada'.",
+  "prompt": "Uma empresa provisiona instâncias Amazon EC2. Segundo o AWS Well-Architected Framework, no modelo de responsabilidade compartilhada, o que é responsabilidade da AWS e o que é responsabilidade do cliente nesse cenário específico?",
+  "explanation": "A documentação descreve a divisão como 'Security of the Cloud' (responsabilidade da AWS) versus 'Security in the Cloud' (responsabilidade do cliente). Para o EC2, a AWS opera, gerencia e controla os componentes desde a camada do sistema operacional host e de virtualização até a segurança física das instalações onde o serviço opera. O cliente é responsável pela gestão do sistema operacional guest (incluindo atualizações e patches de segurança), por qualquer software de aplicação instalado nas instâncias, e pela configuração do firewall fornecido pela AWS (chamado security group) em cada instância.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A AWS é responsável por tudo, incluindo a aplicação de patches de segurança no sistema operacional guest e a configuração do security group de cada instância, já que 'Security of the Cloud' cobriria qualquer camada do EC2 segundo a documentação, sem nenhuma exceção reservada ao cliente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui especificamente ao cliente a responsabilidade pelo sistema operacional guest (incluindo patches) e pela configuração do security group -- isso está em 'Security in the Cloud', não em 'Security of the Cloud'."
+    },
+    {
+      "key": "B",
+      "text": "A AWS opera e controla desde o host operacional e a camada de virtualização até a segurança física das instalações; o cliente é responsável pelo sistema operacional guest (incluindo patches), pelo software de aplicação instalado, e pela configuração do security group de cada instância.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a divisão de responsabilidades que a documentação descreve para o EC2 no modelo de responsabilidade compartilhada."
+    },
+    {
+      "key": "C",
+      "text": "O cliente é responsável por tudo, incluindo a segurança física das instalações onde o EC2 é executado, já que a documentação trataria 'Security of the Cloud' como uma responsabilidade do cliente, não da AWS.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui a segurança física das instalações à AWS ('Security of the Cloud'), não ao cliente -- é o oposto do que esta alternativa descreve."
+    },
+    {
+      "key": "D",
+      "text": "Nenhuma responsabilidade é dividida: a documentação afirmaria que, para o EC2 especificamente, a AWS e o cliente compartilham cada tarefa de segurança igualmente, sem nenhuma atribuição exclusiva a um dos dois lados.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui tarefas específicas e exclusivas a cada lado para o EC2 -- não descreve uma divisão igualitária e indiferenciada de cada tarefa."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- AWS Well-Architected Framework, Security Pillar (Shared responsibility: Security of the Cloud vs. Security in the Cloud, EC2 example)",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/shared-responsibility.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

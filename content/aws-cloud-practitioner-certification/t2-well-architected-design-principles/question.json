@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000049",
+  "objectiveKeys": ["CLF-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o AWS Well-Architected Framework lista princípios gerais de design específicos para a nuvem -- como 'testar sistemas em escala de produção' -- em vez de apenas saber que 'a AWS recomenda boas práticas'.",
+  "prompt": "Segundo o AWS Well-Architected Framework, um dos princípios gerais de design para a nuvem é 'testar sistemas em escala de produção'. Como a documentação descreve a vantagem prática desse princípio?",
+  "explanation": "A documentação afirma que, na nuvem, você pode criar um ambiente de teste em escala de produção sob demanda, completar seus testes e depois desativar os recursos -- e, como você só paga pelo ambiente de teste enquanto ele está em execução, é possível simular seu ambiente real por uma fração do custo de testar on-premises. Esse é um dos princípios gerais de design que o Well-Architected Framework lista (junto com parar de adivinhar capacidade, automatizar com experimentação arquitetural em mente, considerar arquiteturas evolutivas, guiar arquiteturas usando dados, e melhorar através de game days).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Testar em escala de produção significa que todo teste precisa ser feito permanentemente em um ambiente idêntico ao de produção, mantido ativo o tempo todo, mesmo quando nenhum teste está em andamento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o oposto -- o ambiente de teste é criado sob demanda e desativado depois, não mantido permanentemente ativo."
+    },
+    {
+      "key": "B",
+      "text": "Testar em escala de produção permite criar, sob demanda, um ambiente de teste em escala de produção, completar os testes e depois desativar os recursos -- pagando pelo ambiente de teste apenas enquanto ele está em execução, por uma fração do custo de testar on-premises.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a vantagem que a documentação descreve para esse princípio de design."
+    },
+    {
+      "key": "C",
+      "text": "Testar em escala de produção é o princípio que recomenda substituir todos os ambientes de teste por testes exclusivamente manuais, eliminando qualquer automação do processo de criação e desativação de recursos de teste, independentemente do estágio em que o projeto se encontra.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não recomenda eliminar automação -- outro dos princípios gerais de design é justamente automatizar com experimentação arquitetural em mente."
+    },
+    {
+      "key": "D",
+      "text": "Testar em escala de produção é um sinônimo que a documentação usa para o princípio de melhorar através de game days, tratando as duas expressões como a mesma prática.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista esses como dois princípios gerais de design distintos entre os listados -- um sobre criar ambientes de teste sob demanda, o outro sobre simular eventos de produção regularmente."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- AWS Well-Architected Framework (General design principles: Test systems at production scale)",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/general-design-principles.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
