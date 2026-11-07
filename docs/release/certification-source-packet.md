@@ -69,6 +69,31 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-ass
 
 0 of 12 seeded objectives claimed by a published question.
 
+## aws-solutions-architect-associate-certification
+
+**AWS SAAC03.** Verified 2026-11-07 against
+`AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide v1.1 (published Oct 29, 2026)`. Digest `sha256:8959456c08b980947e6a6936e4f9e23b7a1fd0df2274b1c846222c49e7e63152`.
+Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `SAA-1.1` | Design secure access to AWS resources | _none yet_ |
+| `SAA-1.2` | Design secure workloads and applications | _none yet_ |
+| `SAA-1.3` | Determine appropriate data security controls | _none yet_ |
+| `SAA-2.1` | Design scalable and loosely coupled architectures | _none yet_ |
+| `SAA-2.2` | Design highly available and/or fault-tolerant architectures | _none yet_ |
+| `SAA-3.1` | Determine high-performing and/or scalable storage solutions | _none yet_ |
+| `SAA-3.2` | Design high-performing and elastic compute solutions | _none yet_ |
+| `SAA-3.3` | Determine high-performing database solutions | _none yet_ |
+| `SAA-3.4` | Determine high-performing and/or scalable network architectures | _none yet_ |
+| `SAA-3.5` | Determine high-performing data ingestion and transformation solutions | _none yet_ |
+| `SAA-4.1` | Design cost-optimized storage solutions | _none yet_ |
+| `SAA-4.2` | Design cost-optimized compute solutions | _none yet_ |
+| `SAA-4.3` | Design cost-optimized database solutions | _none yet_ |
+| `SAA-4.4` | Design cost-optimized network architectures | _none yet_ |
+
+0 of 14 seeded objectives claimed by a published question.
+
 ## cncf-cka-certification
 
 **CNCF CKA.** Verified 2026-11-04 against
