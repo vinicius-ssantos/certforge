@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000053",
+  "objectiveKeys": ["DVA-1.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que `PutItem` é incondicional por padrão (sobrescreve silenciosamente) e que a forma documentada de mudar isso é uma `ConditionExpression` explícita -- não um comportamento automático, nem um efeito colateral de `ReturnValues`, nem algo que um contador atômico resolveria, já que a própria documentação descreve contadores atômicos como não idempotentes e inadequados para esse tipo de conflito de escrita.",
+  "prompt": "Dois microsserviços podem, em paralelo, tentar criar o mesmo pedido em uma tabela do Amazon DynamoDB usando `PutItem` com a mesma chave primária. O time quer garantir que, se o item já existir, a segunda tentativa falhe em vez de sobrescrever silenciosamente o pedido já criado. Segundo a documentação oficial do DynamoDB sobre como trabalhar com itens, qual é o comportamento padrão do `PutItem` nesse cenário, e como ele pode ser alterado para atender a esse requisito?",
+  "explanation": "A documentação afirma: \"By default, the DynamoDB write operations (PutItem, DeleteItem) are unconditional: Each operation overwrites an existing item that has the specified primary key.\" Para mudar esse comportamento, ela descreve escritas condicionais: \"To request a conditional PutItem, DeleteItem, or UpdateItem, you specify a condition expression... Conditional writes are helpful... you might want a PutItem operation to succeed only if there is not already an item with the same primary key.\" Quando a condição falha, a documentação afirma que a operação \"returns a ConditionalCheckFailedException\". Logo, usar `ConditionExpression` como `attribute_not_exists(id)` é a forma documentada de bloquear a sobrescrita.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Por padrão, o `PutItem` é uma operação incondicional que sobrescreve um item existente com a mesma chave primária; para evitar isso, a equipe deve usar uma escrita condicional, especificando uma `ConditionExpression` como `attribute_not_exists(id)`, que faz a operação falhar com `ConditionalCheckFailedException` caso o item já exista.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento padrão incondicional e essa a forma documentada de torná-lo condicional, com a exceção `ConditionalCheckFailedException` sendo retornada quando a condição não é satisfeita."
+    },
+    {
+      "key": "B",
+      "text": "Por padrão, o `PutItem` já falha automaticamente com `ConditionalCheckFailedException` sempre que o item com a mesma chave primária já existe, sem que seja necessário especificar nenhuma `ConditionExpression`, já que a documentação descreve todas as operações de escrita do DynamoDB como condicionais por padrão.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- as operações de escrita `PutItem` e `DeleteItem` são incondicionais por padrão, sobrescrevendo o item existente. Uma `ConditionExpression` precisa ser especificada explicitamente para tornar a escrita condicional."
+    },
+    {
+      "key": "C",
+      "text": "Por padrão, o `PutItem` sobrescreve o item existente, e esse comportamento não pode ser alterado por nenhum outro parâmetro da operação; a documentação recomenda usar exclusivamente o `UpdateItem` com um contador atômico incrementado a cada tentativa para detectar e resolver colisões de escrita concorrentes nesse cenário, de forma equivalente a uma escrita condicional.",
+      "correct": false,
+      "explanation": "Incorreto: o comportamento incondicional pode sim ser alterado, via `ConditionExpression`. Além disso, a documentação descreve contadores atômicos como não idempotentes, sujeitos a contagem duplicada em retentativas, e recomenda uma escrita condicional, não um contador atômico, justamente para casos em que esse tipo de colisão não pode ser tolerado -- as duas técnicas não são equivalentes."
+    },
+    {
+      "key": "D",
+      "text": "Por padrão, o `PutItem` sobrescreve o item existente com a mesma chave primária; para evitar isso, basta configurar o parâmetro `ReturnValues` como `ALL_OLD`, que a documentação descreve como a opção que bloqueia a sobrescrita e devolve um erro quando o item já existe.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve `ReturnValues` = `ALL_OLD` apenas como a opção que devolve os atributos do item como ele era antes da sobrescrita -- ela não impede a sobrescrita, que ainda ocorre normalmente. Bloquear a sobrescrita exige uma `ConditionExpression`."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Working with items and attributes in DynamoDB (conditional writes: PutItem/DeleteItem unconditional by default; ConditionExpression; ConditionalCheckFailedException; atomic counters are not idempotent)",
+      "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithItems.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000053",
+  "objectiveKeys": ["DVA-1.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que a reutilização do ambiente de execução do Lambda se aplica a recursos como clientes de SDK e conexões de banco de dados (que devem ser inicializados fora do handler), mas não deve ser usada para guardar dados específicos de usuário entre invocações -- um ponto que a documentação trata como risco de segurança, não apenas de performance. Uma resposta superficial como \"tire tudo do handler\" erra justamente essa segunda parte.",
+  "prompt": "Uma função AWS Lambda em Node.js cria um cliente do SDK da AWS e abre uma conexão com um banco de dados dentro do corpo do método handler, a cada invocação, porque o desenvolvedor presume que isso evita qualquer problema. A função também guarda, em uma variável no escopo do módulo, dados específicos do usuário atendido pela invocação, na expectativa de reaproveitá-los na próxima chamada. Segundo as boas práticas documentadas pela AWS para funções do Lambda, o que deveria ser diferente nesse código, e por quê?",
+  "explanation": "A documentação de boas práticas do Lambda recomenda: \"Take advantage of execution environment reuse to improve the performance of your function. Initialize SDK clients and database connections outside of the function handler... Subsequent invocations processed by the same instance of your function can reuse these resources.\" Ao mesmo tempo, ela alerta: \"To avoid potential data leaks across invocations, don't use the execution environment to store user data, events, or other information with security implications.\" Ou seja, mover o cliente do SDK e a conexão de banco para fora do handler é a prática recomendada, mas guardar dados específicos de usuário no ambiente de execução entre invocações é exatamente o que a documentação desaconselha.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nada deveria mudar: a documentação recomenda sempre inicializar clientes do SDK e conexões com banco de dados dentro do handler, a cada invocação, para garantir que nenhum estado de uma invocação anterior afete a atual.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação recomenda o oposto para clientes de SDK e conexões de banco -- inicializá-los fora do handler para que invocações subsequentes na mesma instância da função os reaproveitem, reduzindo o tempo de execução."
+    },
+    {
+      "key": "B",
+      "text": "O cliente do SDK e a conexão com o banco de dados devem ser movidos para fora do handler, e os dados específicos do usuário também devem permanecer armazenados no escopo do módulo entre invocações, já que a documentação afirma que o ambiente de execução garante persistência de estado entre todas as invocações subsequentes.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não garante que o estado persista entre todas as invocações subsequentes, e alerta especificamente que armazenar dados de usuário ou de evento no ambiente de execução pode causar vazamento de dados entre invocações -- o que essa opção mantém sem correção."
+    },
+    {
+      "key": "C",
+      "text": "O cliente do SDK e a conexão com o banco de dados devem ser movidos para fora do handler, pois a documentação recomenda aproveitar a reutilização do ambiente de execução para que invocações subsequentes processadas pela mesma instância da função reaproveitem esses recursos; já os dados específicos do usuário não devem ser armazenados no ambiente de execução, pois a documentação alerta que isso pode causar vazamento de dados entre invocações.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a dupla recomendação da documentação -- reaproveitar recursos como clientes de SDK e conexões de banco fora do handler, mas não usar o ambiente de execução para guardar dados de usuário com implicações de segurança."
+    },
+    {
+      "key": "D",
+      "text": "Apenas a conexão com o banco de dados deve ser movida para fora do handler; clientes do SDK da AWS, segundo a documentação, devem sempre ser recriados a cada invocação para evitar o esgotamento de conexões TCP simultâneas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação recomenda inicializar clientes de SDK fora do handler junto com as conexões de banco de dados, exatamente para reaproveitá-los entre invocações -- ela não distingue um caso do outro nem recomenda recriar clientes de SDK a cada chamada."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Best practices for working with AWS Lambda functions (execution environment reuse; initialize SDK clients and database connections outside the handler; avoid storing user data with security implications in the execution environment)",
+      "url": "https://docs.aws.amazon.com/lambda/latest/dg/best-practices.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

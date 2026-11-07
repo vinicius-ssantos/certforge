@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000053",
+  "objectiveKeys": ["DVA-1.1"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber qual das opções de metadados do Instance Metadata Service (HttpTokens) é a que efetivamente alterna entre IMDSv1 e IMDSv2, e qual é o mecanismo de duas etapas (PUT para obter o token, GET com o token no cabeçalho) que o IMDSv2 exige -- em vez de confundir isso com HttpEndpoint (que apenas liga/desliga o serviço) ou HttpPutResponseHopLimit (que controla saltos de rede, relevante para containers, não a versão do protocolo).",
+  "prompt": "Uma aplicação hospedada em instâncias Amazon EC2 obtém credenciais temporárias de um IAM role fazendo chamadas ao Instance Metadata Service (IMDS). Durante uma revisão de segurança, a equipe decide exigir que todas as instâncias aceitem exclusivamente a versão mais recente do protocolo IMDS. Segundo a documentação oficial do Amazon EC2, qual opção de metadados configura essa exigência, e qual é a diferença de mecanismo entre as chamadas do IMDSv1 e do IMDSv2?",
+  "explanation": "A documentação do Amazon EC2 descreve a opção de metadados \"Metadata version\" (parâmetro `HttpTokens`) com dois valores possíveis: `IMDSv1 or IMDSv2 (token optional)` ou `IMDSv2 only (token required)`. Ela afirma explicitamente: \"When requesting instance metadata, IMDSv2 calls require a token. IMDSv1 calls do not require a token.\" A documentação sobre como recuperar credenciais de segurança da metadata mostra o mecanismo do IMDSv2 como duas etapas: primeiro uma requisição PUT a `/latest/api/token` para obter um token de sessão, e depois uma requisição GET aos metadados incluindo esse token no cabeçalho `X-aws-ec2-metadata-token`; já o IMDSv1 atende a chamada GET diretamente, sem nenhum token.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Configurando a opção de metadados `HttpTokens` como `optional`, que a documentação descreve como a opção que torna obrigatório o uso de um token de sessão em toda chamada ao IMDS, eliminando chamadas GET diretas sem token.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve `HttpTokens` como `optional` sendo exatamente o oposto -- a opção em que tanto chamadas IMDSv1 (sem token) quanto IMDSv2 (com token) são aceitas. A opção que exige exclusivamente token é `required`."
+    },
+    {
+      "key": "B",
+      "text": "Configurando a opção de metadados `HttpTokens` como `required` (IMDSv2 somente), que a documentação descreve como exigindo que a aplicação primeiro obtenha um token de sessão por meio de uma requisição PUT ao endpoint `/latest/api/token`, incluindo esse token no cabeçalho `X-aws-ec2-metadata-token` de cada requisição GET subsequente -- diferente do IMDSv1, cujas chamadas GET aos metadados não exigem esse token.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a opção (`HttpTokens` = `required`) e esse o mecanismo de duas etapas que a documentação do Amazon EC2 descreve para o IMDSv2, em contraste com o GET direto e sem token do IMDSv1."
+    },
+    {
+      "key": "C",
+      "text": "Desabilitando completamente o IMDS (`HttpEndpoint` definido como `disabled`) em todas as instâncias, já que a documentação não descreve nenhuma opção de metadados que distinga entre as duas versões do protocolo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve uma opção de metadados específica (`HttpTokens`, \"Metadata version\") dedicada a essa distinção entre IMDSv1 e IMDSv2. Além disso, desabilitar o IMDS inteiramente impediria a própria aplicação de obter as credenciais do IAM role de que depende."
+    },
+    {
+      "key": "D",
+      "text": "Configurando o limite de saltos de resposta (`HttpPutResponseHopLimit`) para `1`, que a documentação apresenta como a configuração responsável por impedir chamadas IMDSv1 e exigir exclusivamente token de sessão via IMDSv2, já que esse limite -- ajustável de `1` a `64` saltos de rede permitidos para a resposta ao PUT, e especialmente relevante em ambientes de containers -- seria, nessa leitura, o único mecanismo usado pela instância para decidir se aceita ou recusa chamadas de metadados sem token.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve `HttpPutResponseHopLimit` apenas como o número de saltos de rede permitidos para a resposta ao PUT (relevante, por exemplo, em ambientes de containers), não como a opção que determina se o IMDSv1 é aceito -- essa é a responsabilidade exclusiva de `HttpTokens`, não do limite de saltos."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Configure the Instance Metadata Service options (HttpTokens: IMDSv1 or IMDSv2 token optional vs IMDSv2 only token required)",
+      "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-options.html"
+    },
+    {
+      "title": "AWS Documentation -- Retrieve security credentials from instance metadata (IMDSv2: PUT to /latest/api/token, then GET with token header; IMDSv1: direct GET)",
+      "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-metadata-security-credentials.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
