@@ -5,7 +5,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige distinguir os quatro modelos de preço que a documentação descreve -- On-Demand, Savings Plans, Spot Instances e Reservas -- pelo compromisso e desconto que cada um exige/oferece, não apenas saber que 'a AWS tem descontos por uso'.",
   "prompt": "Uma equipe quer executar uma carga de trabalho tolerante a falhas que pode ser interrompida a qualquer momento, aceitando esse risco em troca do maior desconto possível sobre o preço On-Demand. Segundo a documentação oficial de serviços de computação da AWS, qual modelo de preço atende a esse cenário, e qual desconto máximo ela indica?",
-  "explanation": "A documentação lista, entre os modelos de preço do Amazon EC2: instâncias On-Demand (pague por hora ou segundo, sem compromisso de longo prazo nem pagamento adiantado); Savings Plans (desconto de até 72% em troca de um compromisso de uso consistente por um ou três anos); Spot Instances (solicitam capacidade de computação ociosa sem nenhum compromisso adiantado, a um desconto de até 90% em relação ao preço On-Demand); e Reservas (desconto de até 72% ao pagar pela capacidade com antecedência). O cenário de carga de trabalho tolerante a falhas e interrompível, buscando o maior desconto possível, corresponde às Spot Instances.",
+  "explanation": "A documentação lista, entre os modelos de preço do Amazon EC2: instâncias On-Demand (pague por hora ou segundo, sem compromisso de longo prazo nem pagamento adiantado); Savings Plans (desconto de até 72% em troca de um compromisso de uso consistente por um ou três anos); Spot Instances (solicitam capacidade de computação ociosa sem nenhum compromisso adiantado, a um desconto de até 90% em relação ao preço On-Demand); e Reservas (desconto de até 72% em troca de um compromisso de prazo de um ou três anos -- o pagamento em si pode ser All Upfront, Partial Upfront ou No Upfront, então o que a Reserva exige é o compromisso de prazo, não necessariamente um pagamento adiantado). O cenário de carga de trabalho tolerante a falhas e interrompível, buscando o maior desconto possível, corresponde às Spot Instances.",
   "options": [
     {
       "key": "A",
@@ -27,15 +27,19 @@
     },
     {
       "key": "D",
-      "text": "Reservas, que a documentação descreve como oferecendo um desconto de até 90% sem exigir nenhum pagamento adiantado da capacidade reservada.",
+      "text": "Reservas, que a documentação descreve como oferecendo um desconto de até 90% sem exigir nenhum compromisso de prazo sobre a capacidade reservada.",
       "correct": false,
-      "explanation": "Incorreto: a documentação descreve as Reservas como exigindo pagamento da capacidade com antecedência para obter um desconto significativo de até 72%, não de até 90% sem pagamento adiantado -- esse desconto maior e sem compromisso adiantado é das Spot Instances."
+      "explanation": "Incorreto: a documentação descreve as Reservas como exigindo um compromisso de prazo (um ou três anos) para obter um desconto significativo de até 72%, não de até 90% sem esse compromisso -- esse desconto maior e sem compromisso de prazo é das Spot Instances."
     }
   ],
   "references": [
     {
       "title": "AWS Documentation -- Compute services overview (Amazon EC2 instance types: On-Demand, Reserved Instances up to 72% off, Savings Plans up to 72% off with a 1-or-3-year term, Spot Instances up to 90% off)",
       "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/compute-services.html#amazon-ec2"
+    },
+    {
+      "title": "AWS Documentation -- Reserved Instances for Amazon EC2 overview (Term commitment: 1 or 3 years; Payment options: All/Partial/No Upfront -- the commitment is the term, not necessarily upfront payment)",
+      "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-reserved-instances.html"
     }
   ],
   "evidence": {
