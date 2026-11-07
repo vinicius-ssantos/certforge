@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000055",
+  "objectiveKeys": ["DVA-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige conhecer o prazo específico (30 dias) e a única forma documentada de superá-lo -- exportação para o Amazon S3 configurada no grupo de relatórios -- em vez de assumir que relatórios de teste do CodeBuild são permanentes ou que a única saída, quando um relatório antigo não pode mais ser visto, é reexecutar os testes.",
+  "prompt": "Uma equipe configura uma seção 'reports' no buildspec.yml de um projeto do AWS CodeBuild para publicar os resultados de testes automatizados no formato JUnit XML em um grupo de relatórios, como parte da automação de testes do pipeline. Passados alguns meses, ao tentar consultar o relatório de testes de uma build antiga para investigar uma regressão, a equipe descobre que não consegue mais visualizá-lo. Segundo a documentação oficial do CodeBuild, o que explica esse comportamento, e como a equipe poderia ter evitado perder o acesso a esse relatório?",
+  "explanation": "A documentação do CodeBuild afirma que um relatório de testes expira 30 dias depois de ser criado, e que não é possível visualizar um relatório expirado. Para manter relatórios de teste por mais de 30 dias, é possível exportar os arquivos de dados brutos dos resultados dos testes para um bucket do Amazon S3 -- informação especificada na configuração do grupo de relatórios -- e os arquivos de teste exportados não expiram.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Relatórios de teste do CodeBuild nunca expiram -- eles permanecem disponíveis indefinidamente no CodeBuild, então a equipe deveria simplesmente ter esperado mais tempo para a consulta funcionar.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que um relatório de testes expira 30 dias depois de criado e que relatórios expirados não podem ser visualizados -- eles não permanecem disponíveis indefinidamente."
+    },
+    {
+      "key": "B",
+      "text": "O relatório expirou porque passou de 30 dias, e a única forma de recuperar esses dados seria executar os testes novamente, já que a documentação não prevê nenhuma forma de preservar relatórios além do prazo padrão de expiração.",
+      "correct": false,
+      "explanation": "Incorreto: embora o relatório realmente expire após 30 dias, a documentação descreve sim uma forma de preservá-los: exportar os arquivos de dados brutos dos resultados dos testes para um bucket do Amazon S3, informado na configuração do grupo de relatórios -- e esses arquivos exportados não expiram."
+    },
+    {
+      "key": "C",
+      "text": "O relatório expirou porque relatórios de teste do CodeBuild expiram automaticamente 30 dias depois de criados e não podem ser visualizados depois disso; para preservá-los por mais tempo, a equipe deveria ter configurado o grupo de relatórios para exportar os arquivos de dados brutos dos resultados para um bucket do Amazon S3, que não expiram.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o comportamento de expiração e a opção de exportação para o Amazon S3 que a documentação do CodeBuild descreve para relatórios de teste."
+    },
+    {
+      "key": "D",
+      "text": "O relatório expirou porque a equipe não criou manualmente o grupo de relatórios antes de rodar os testes; sem essa criação prévia e sem referenciar a ARN de um grupo já existente no buildspec, o CodeBuild descarta automaticamente, logo após a build terminar, todos os relatórios de testes gerados por builds anteriores do mesmo projeto, independentemente do formato do arquivo de relatório usado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que não é necessário criar um grupo de relatórios antes de rodar os testes -- se um nome de grupo de relatórios é especificado no buildspec, o CodeBuild cria esse grupo automaticamente ao executar os relatórios; essa não é a causa da expiração do relatório."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS CodeBuild User Guide -- Test reports in AWS CodeBuild (report expiration after 30 days and exporting raw test result files to Amazon S3)",
+      "url": "https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000055",
+  "objectiveKeys": ["DVA-3.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que a seção 'hooks' do AppSpec varia por plataforma de computação -- uma implantação do Lambda só aceita BeforeAllowTraffic e AfterAllowTraffic, enquanto ValidateService é exclusivo da plataforma EC2/On-Premises e BeforeInstall/AfterInstall são válidos para EC2/On-Premises e Amazon ECS, mas não para Lambda; confundir esses conjuntos é um erro comum de quem memorizou 'hooks do CodeDeploy' como uma lista única.",
+  "prompt": "Uma equipe está preparando o arquivo AppSpec que acompanha o artefato de uma função AWS Lambda para ser implantado pelo AWS CodeDeploy com uma configuração de implantação canary. Além do deslocamento de tráfego, a equipe quer executar uma validação logo depois que todo o tráfego tiver sido direcionado para a nova versão, e pensa em declarar os hooks ValidateService e AfterAllowTraffic na seção 'hooks' do AppSpec. Segundo a documentação oficial do CodeDeploy, quais hooks de ciclo de vida são válidos na seção 'hooks' de um AppSpec para uma implantação do Lambda, e em que momento cada um é executado?",
+  "explanation": "A documentação do CodeDeploy lista apenas dois hooks de ciclo de vida válidos na seção 'hooks' de um AppSpec para uma implantação do AWS Lambda: BeforeAllowTraffic, usado para executar tarefas antes de o tráfego ser deslocado para a nova versão da função, e AfterAllowTraffic, usado para executar tarefas depois que todo o tráfego já foi deslocado para ela. ValidateService é um hook de ciclo de vida válido apenas para implantações em EC2/On-Premises, não para implantações do Lambda; incluí-lo no AppSpec de uma implantação do Lambda não corresponde a nenhum hook documentado para essa plataforma de computação.",
+  "options": [
+    {
+      "key": "A",
+      "text": "ValidateService e AfterAllowTraffic são hooks válidos para uma implantação do Lambda, exatamente como em uma implantação EC2/On-Premises, já que a documentação não diferencia a seção 'hooks' do AppSpec por plataforma de computação, tratando os hooks do Lambda, do Amazon ECS e do EC2/On-Premises como um único conjunto compartilhado entre todas as plataformas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve seções 'hooks' diferentes para cada plataforma de computação -- ValidateService é um hook válido apenas para EC2/On-Premises, e não aparece na lista de hooks válidos para uma implantação do Lambda."
+    },
+    {
+      "key": "B",
+      "text": "Apenas BeforeAllowTraffic e AfterAllowTraffic são hooks válidos para uma implantação do Lambda: BeforeAllowTraffic executa tarefas antes do tráfego ser deslocado para a nova versão da função, e AfterAllowTraffic executa tarefas depois que todo o tráfego já foi deslocado para ela.",
+      "correct": true,
+      "explanation": "Correto: a documentação do CodeDeploy lista exatamente esses dois hooks para a seção 'hooks' de um AppSpec de implantação do Lambda, cada um associado a esse momento específico do ciclo de vida da implantação."
+    },
+    {
+      "key": "C",
+      "text": "BeforeInstall e AfterInstall são os únicos hooks válidos para uma implantação do Lambda, usados para validar a função antes e depois de ela ser instalada no ambiente de execução.",
+      "correct": false,
+      "explanation": "Incorreto: BeforeInstall e AfterInstall são hooks de ciclo de vida válidos para implantações EC2/On-Premises, não para implantações do Lambda -- a documentação não os lista na seção 'hooks' para a plataforma de computação Lambda."
+    },
+    {
+      "key": "D",
+      "text": "Somente AfterAllowTraffic é um hook válido para uma implantação do Lambda; a documentação não prevê nenhum hook executado antes do deslocamento de tráfego para essa plataforma de computação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação também lista o hook BeforeAllowTraffic, executado antes de o tráfego ser deslocado para a nova versão da função -- não apenas o AfterAllowTraffic."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS CodeDeploy User Guide -- AppSpec 'hooks' section (list of lifecycle event hooks for an AWS Lambda deployment vs an EC2/On-Premises deployment)",
+      "url": "https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000056",
+  "objectiveKeys": ["DVA-4.2"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que o embedded metric format dispensa a chamada direta a PutMetricData e a permissão cloudwatch:PutMetricData correspondente -- bastando logs:PutLogEvents -- e que, diferente de uma chamada de API tradicional de métricas, o evento de log original permanece consultável via Logs Insights. Um candidato que só sabe que 'EMF gera métricas a partir de logs', sem esses dois detalhes de permissão e retenção, tende a escolher uma opção que reintroduz uma chamada de API desnecessária ou que descarta o log.",
+  "prompt": "Uma equipe de uma função AWS Lambda quer gerar métricas personalizadas de latência de negócio diretamente a partir dos próprios logs estruturados da função, sem fazer chamadas adicionais de API para publicar métricas, e mantendo o evento de log detalhado disponível para ser consultado depois via CloudWatch Logs Insights durante uma investigação de causa raiz. Segundo a documentação oficial do CloudWatch, qual abordagem atende a esse cenário, e quais permissões do IAM a função Lambda precisa para publicar métricas dessa forma?",
+  "explanation": "A documentação do CloudWatch descreve o embedded metric format (EMF) como uma forma de gerar métricas personalizadas de forma assíncrona a partir de logs estruturados escritos no CloudWatch Logs: o CloudWatch extrai automaticamente as métricas incorporadas, e os eventos de log detalhados associados a essas métricas continuam disponíveis para consulta via CloudWatch Logs Insights, ajudando a investigar causas raiz de eventos operacionais. A documentação afirma explicitamente que, para gerar métricas a partir de logs com o embedded metric format, é necessária a permissão logs:PutLogEvents, mas não é necessário ter também a permissão cloudwatch:PutMetricData.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Chamar a API PutMetricData do CloudWatch diretamente a cada evento de negócio relevante, já que essa é a única forma documentada de manter a métrica associada ao evento de log original que a gerou.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o embedded metric format exatamente como uma alternativa a chamadas adicionais de API como a PutMetricData -- usando EMF, a métrica é extraída automaticamente do próprio log estruturado, sem exigir essa chamada separada."
+    },
+    {
+      "key": "B",
+      "text": "Usar o embedded metric format (EMF), estruturando os logs conforme a especificação do EMF; o CloudWatch extrai as métricas automaticamente a partir desses logs e mantém o evento de log detalhado disponível para consulta via Logs Insights, exigindo apenas a permissão logs:PutLogEvents, sem necessidade de cloudwatch:PutMetricData.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a abordagem e a permissão mínima que a documentação do CloudWatch descreve para gerar métricas a partir de logs com o embedded metric format."
+    },
+    {
+      "key": "C",
+      "text": "Usar o embedded metric format (EMF), mas a função Lambda precisa ter tanto a permissão logs:PutLogEvents quanto a permissão cloudwatch:PutMetricData, já que o EMF internamente ainda depende de uma chamada síncrona à API PutMetricData para cada métrica extraída de cada evento de log estruturado antes de ela ficar disponível para alarmes e dashboards do CloudWatch.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que não é necessário ter também a permissão cloudwatch:PutMetricData para gerar métricas a partir de logs usando o embedded metric format -- apenas logs:PutLogEvents é exigida."
+    },
+    {
+      "key": "D",
+      "text": "Usar o embedded metric format (EMF), mas o CloudWatch descarta o evento de log original depois de extrair a métrica incorporada, então ele não fica disponível para consulta posterior via Logs Insights.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- os eventos de log detalhados associados às métricas extraídas continuam disponíveis e podem ser consultados via CloudWatch Logs Insights para investigar causas raiz, não são descartados."
+    }
+  ],
+  "references": [
+    {
+      "title": "Amazon CloudWatch User Guide -- Embedding metrics within logs (embedded metric format: logs:PutLogEvents permission without cloudwatch:PutMetricData, and detailed log events remain queryable via Logs Insights)",
+      "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
