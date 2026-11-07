@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.6"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige comparar o que está documentado especificamente para Helm (o objeto 'release' com revisões numeradas e um comando dedicado de rollback) contra o que a documentação do Kustomize descreve (kustomization files, bases e overlays), em vez de tratar os dois mecanismos de instalação de componentes do cluster como equivalentes.",
+  "prompt": "Uma equipe instala componentes do cluster de duas formas diferentes: com `kubectl apply -k <diretorio>` sobre um diretório de Kustomize (um overlay que referencia um base via `kustomization.yaml`), e com `helm install <release> <chart>`. Depois de uma atualização malsucedida em cada um dos dois fluxos, qual afirmação descreve corretamente uma diferença documentada entre eles quanto a reverter para um estado anterior?",
+  "explanation": "A documentação do Helm descreve que instalar um chart 'creates a new release object' (tradução livre: 'cria um novo objeto de release'), e que esse objeto acumula revisões numeradas: 'A release version is an incremental revision' e 'Every time an install, upgrade, or rollback happens, the revision number is incremented by 1' ('a cada install, upgrade ou rollback, o número de revisão é incrementado em 1'). A partir disso, a documentação descreve um comando dedicado para reverter: 'it is easy to roll back to a previous release using helm rollback [RELEASE] [REVISION]' ('é fácil reverter para uma release anterior usando helm rollback [RELEASE] [REVISION]'). Já a documentação do Kustomize, ao descrever o uso de `kubectl apply -k`, não menciona nenhum objeto de release, número de revisão incremental ou comando de rollback dedicado: ela descreve apenas kustomization files, bases (diretórios com um `kustomization.yaml` contendo recursos e customizações) e overlays (diretórios cujo `kustomization.yaml` referencia um ou mais bases e aplica customizações adicionais sobre eles). Reverter um overlay de Kustomize, conforme documentado, depende de reaplicar uma versão anterior dos próprios arquivos (por exemplo, via controle de versão), não de um mecanismo de revisão nativo da ferramenta.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Kustomize também cria um objeto de release com revisões numeradas, acessível por um comando `kubectl rollback -k` equivalente ao `helm rollback`; a única diferença é a sintaxe do comando.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação do Kustomize não descreve nenhum objeto de release, revisão numerada ou comando `kubectl rollback -k`; ela trata apenas de kustomization files, bases e overlays. Esse mecanismo de release com revisões é documentado especificamente para Helm."
+    },
+    {
+      "key": "B",
+      "text": "O Helm cria um objeto de release com revisões numeradas e documenta `helm rollback [RELEASE] [REVISION]` para reverter; o Kustomize não documenta mecanismo equivalente.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a diferença documentada — Helm tem o conceito de release com revisões numeradas e um comando `helm rollback` dedicado; a documentação do Kustomize não apresenta nada equivalente, apenas bases, overlays e kustomization files."
+    },
+    {
+      "key": "C",
+      "text": "Nenhuma das duas ferramentas documenta qualquer forma de reverter uma instalação anterior; em ambos os casos, reverter sempre exige excluir e recriar manualmente todos os recursos do zero.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação do Helm descreve explicitamente um comando dedicado para reverter, `helm rollback [RELEASE] [REVISION]`, que não exige excluir e recriar recursos manualmente."
+    },
+    {
+      "key": "D",
+      "text": "O `helm upgrade` sempre cria um objeto de release inteiramente novo e independente a cada execução, em vez de atualizar o release existente; por isso o Helm não tem, segundo a documentação, uma noção de revisões incrementais de uma mesma release.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o `helm upgrade` como uma atualização do release existente, afirmando que o Helm 'tries to perform the least invasive upgrade' e 'will only update things that have changed since the last release' -- não a criação de um release novo e independente; e descreve explicitamente revisões incrementais da mesma release, incrementadas em 1 a cada install, upgrade ou rollback."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Declarative Management of Kubernetes Objects Using Kustomize",
+      "url": "https://kubernetes.io/docs/tasks/manage-kubernetes-objects/kustomization/"
+    },
+    {
+      "title": "Helm Documentation — Using Helm",
+      "url": "https://helm.sh/docs/intro/using_helm/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
