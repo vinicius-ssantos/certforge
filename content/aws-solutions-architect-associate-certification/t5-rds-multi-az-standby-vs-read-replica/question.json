@@ -1,0 +1,52 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000061",
+  "objectiveKeys": ["SAA-2.2"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige distinguir dois mecanismos do RDS que são frequentemente confundidos por terem 'uma cópia extra do banco' em comum: a réplica standby de um Multi-AZ DB instance deployment usa replicação síncrona, dá failover automático e não serve tráfego de leitura; já uma read replica usa replicação assíncrona, serve leitura, mas sua promoção a instância independente é uma ação manual, não um failover automático. Confundir os dois leva a presumir incorretamente que uma read replica garante alta disponibilidade automática, ou que a standby pode ser usada para escalar leitura.",
+  "prompt": "Uma aplicação usa uma única instância do Amazon RDS. A equipe de arquitetura quer, ao mesmo tempo, (1) proteção contra indisponibilidade da instância principal com promoção automática de uma réplica em caso de falha, e (2) descarregar consultas de relatórios de leitura pesada para fora da instância principal. Segundo a documentação oficial do Amazon RDS, que mecanismo atende a cada necessidade, e como eles diferem entre si?",
+  "explanation": "A documentação do Amazon RDS descreve que, em um Multi-AZ DB instance deployment, a réplica standby é replicada de forma síncrona a partir da instância principal e fornece suporte a failover, mas a opção de alta disponibilidade não é uma solução de escalonamento para cenários somente leitura -- não é possível usar uma réplica standby para servir tráfego de leitura. Já uma read replica é uma cópia somente leitura atualizada de forma assíncrona a partir da instância de origem, usada para descarregar tráfego de leitura e escalar além da capacidade de uma única instância em workloads com leitura intensa; a documentação afirma que read replicas devem ser criadas manualmente (o RDS não oferece autoscaling de read replicas) e que, embora uma read replica possa ser promovida a uma instância independente como solução de recuperação de desastre caso a instância principal falhe, essa promoção é uma ação, não um failover automático -- esse é o papel da réplica standby em um Multi-AZ DB instance deployment.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma read replica é mantida sincronizada com a instância principal por replicação síncrona e é promovida automaticamente para assumir como nova instância principal sempre que o RDS detecta que a principal falhou, sendo por isso o mecanismo recomendado para failover automático.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a replicação de uma read replica como assíncrona, não síncrona, e afirma que você pode promover uma read replica a uma instância independente como solução de recuperação de desastre -- uma ação manual, não uma promoção automática; o failover automático é o papel da réplica standby em um Multi-AZ DB instance deployment, que usa replicação síncrona."
+    },
+    {
+      "key": "B",
+      "text": "A réplica standby de um Multi-AZ DB instance deployment pode servir tráfego de leitura para descarregar consultas de relatórios da instância principal, exatamente como uma read replica, além de fornecer a mesma proteção de failover automático.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- a opção de alta disponibilidade de um Multi-AZ DB instance deployment não é uma solução de escalonamento para cenários somente leitura, e não é possível usar uma réplica standby para servir tráfego de leitura; para servir leitura, a documentação indica usar uma read replica (ou um Multi-AZ DB cluster)."
+    },
+    {
+      "key": "C",
+      "text": "Multi-AZ, com standby replicada de forma síncrona, garante failover automático mas não serve leitura; uma read replica, assíncrona e criada manualmente, descarrega consultas de leitura, mas sua promoção a instância independente não é um failover automático.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa divisão de papéis -- standby síncrona para failover automático sem servir leitura, read replica assíncrona e manual para descarregar leitura -- que a documentação do Amazon RDS descreve."
+    },
+    {
+      "key": "D",
+      "text": "Nem a réplica standby nem a read replica exigem configuração manual para escalar -- o RDS cria e remove automaticamente tanto réplicas standby quanto read replicas conforme a carga de trabalho muda, sem nenhuma ação do operador.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que o RDS não oferece suporte a autoscaling de read replicas (a adição ou remoção automática de read replicas conforme a demanda de leitura muda) e que read replicas devem ser criadas manualmente; a réplica standby, por sua vez, é provisionada uma única vez para suporte a failover, não criada ou removida dinamicamente para fins de escalonamento."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Configuring and managing a Multi-AZ deployment for Amazon RDS",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html"
+    },
+    {
+      "title": "AWS Documentation -- Multi-AZ DB instance deployments for Amazon RDS (standby síncrona; não serve tráfego de leitura)",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZSingleStandby.html"
+    },
+    {
+      "title": "AWS Documentation -- Working with DB instance read replicas (replicação assíncrona; criação manual; promoção como recuperação de desastre)",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

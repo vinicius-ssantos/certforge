@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000060",
+  "objectiveKeys": ["SAA-1.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber o mecanismo exato pelo qual uma aplicação em uma instância EC2 obtém permissões de forma segura -- role com política de permissões e política de confiança, associada à instância por meio de um instance profile, fornecendo credenciais temporárias renovadas automaticamente -- e não apenas 'sei que preciso usar o IAM de algum jeito'. Também exige saber que recursos do tipo EC2 não aceitam políticas baseadas em recurso como S3 ou SQS aceitam.",
+  "prompt": "Uma equipe de arquitetura precisa que uma aplicação, em execução em uma instância Amazon EC2, acesse um bucket do Amazon S3 especificado, sem incorporar nenhuma credencial de longo prazo na instância. Segundo a documentação oficial do IAM, qual é a forma recomendada de conceder esse acesso, e por quê?",
+  "explanation": "A documentação do IAM descreve que, em vez de distribuir credenciais de longo prazo para uma instância Amazon EC2, você deve usar uma role do IAM para gerenciar credenciais temporárias para aplicações que são executadas na instância. Você cria a role com uma política de permissões (definindo o que ela pode fazer, por exemplo ler um bucket do S3) e uma política de confiança (permitindo que o serviço Amazon EC2 assuma a role) e, por causa da separação adicional introduzida pela virtualização, precisa criar um instance profile anexado à instância -- o instance profile contém a role e fornece as credenciais temporárias da role à aplicação em execução. Como as credenciais são temporárias e atualizadas automaticamente, a equipe não precisa gerenciar nem redistribuir chaves.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Criar a role do IAM com a política de permissões necessária e incluí-la no pacote de deployment da aplicação, presumindo que ela será descoberta automaticamente em tempo de execução sem a necessidade de um instance profile.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que, por causa da separação adicional introduzida pela virtualização, é necessária uma etapa extra -- a criação de um instance profile anexado à instância -- para que a role e suas permissões associadas fiquem disponíveis para as aplicações que são executadas nela; sem o instance profile, a role não é disponibilizada à instância."
+    },
+    {
+      "key": "B",
+      "text": "Criar uma role do IAM com política de permissões para o bucket do S3 e política de confiança que permite ao Amazon EC2 assumi-la, associando-a à instância via instance profile -- a aplicação recebe credenciais temporárias renovadas automaticamente.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o mecanismo -- role com política de permissões e política de confiança, anexada à instância via instance profile, fornecendo credenciais temporárias atualizadas automaticamente -- que a documentação descreve para esse cenário."
+    },
+    {
+      "key": "C",
+      "text": "Criar um usuário do IAM para a aplicação, gerar um par de chaves de acesso de longo prazo para esse usuário e armazenar o ID da chave de acesso e a chave de acesso secreta em um arquivo de configuração na instância para a aplicação usar diretamente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve esse caminho como trabalho adicional evitável -- os desenvolvedores teriam que gerenciar as credenciais e garantir que elas fossem distribuídas e atualizadas com segurança em cada instância, ao contrário de uma role, que fornece credenciais temporárias sem exigir essa distribuição manual."
+    },
+    {
+      "key": "D",
+      "text": "Anexar a política de permissões de acesso ao S3 diretamente à própria instância EC2, como uma política baseada em recurso, já que recursos de computação na AWS aceitam políticas baseadas em recurso da mesma forma que buckets do S3 ou filas do SQS aceitam.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista buckets do Amazon S3, vaults do Amazon Glacier, tópicos do Amazon SNS e filas do Amazon SQS como exemplos de recursos que aceitam políticas baseadas em recurso -- instâncias do Amazon EC2 não estão entre eles; o acesso a uma instância EC2 é concedido por meio de uma role associada via instance profile, não por uma política anexada diretamente à instância."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- IAM roles (role vs. usuário IAM; credenciais temporárias; política de permissões e política de confiança)",
+      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html"
+    },
+    {
+      "title": "AWS Documentation -- Use an IAM role to grant permissions to applications running on Amazon EC2 instances (instance profile; credenciais temporárias renovadas automaticamente)",
+      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

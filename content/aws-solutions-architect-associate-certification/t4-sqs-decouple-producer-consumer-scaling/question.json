@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000061",
+  "objectiveKeys": ["SAA-2.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender que o desacoplamento do Amazon SQS depende do produtor não esperar por nenhuma confirmação do consumidor e de a fila absorver picos de carga sem instruções de provisionamento -- não apenas 'sei que existe uma fila no meio'. Também exige saber que a mensagem só é removida da fila depois que o consumidor termina de processá-la, não ao simplesmente começar o processamento.",
+  "prompt": "Em uma arquitetura de processamento de pedidos, uma camada web recebe e envia pedidos, e uma camada de workers os processa. A equipe quer que a capacidade da camada de workers, e eventuais indisponibilidades nela, não afetem a capacidade da camada web de continuar aceitando pedidos, e quer que a arquitetura absorva aumentos repentinos de carga sem exigir nenhuma instrução de provisionamento antecipada. Segundo a documentação oficial do Amazon SQS, qual arquitetura atende a esses requisitos, e por quê?",
+  "explanation": "A documentação do Amazon SQS descreve o SQS como um serviço que permite integrar e desacoplar sistemas e componentes distribuídos, e lista como benefício de escalabilidade o fato de que o SQS pode processar cada solicitação em buffer de forma independente, escalando de forma transparente para lidar com qualquer aumento de carga ou pico, sem nenhuma instrução de provisionamento. O ciclo de vida da mensagem descrito pela documentação mostra que um produtor envia uma mensagem à fila, que é armazenada de forma redundante nos servidores do Amazon SQS, e que um consumidor a recebe quando está pronto para processá-la; a mensagem só é excluída da fila pelo consumidor depois de processada, para impedir que ela seja recebida e processada novamente quando o timeout de visibilidade expirar. Inserir uma fila do Amazon SQS entre a camada web (produtora) e a camada de workers (consumidora) atende a ambos os requisitos: o produtor não espera por nenhuma confirmação do consumidor, e a fila absorve os picos de carga sem exigir provisionamento prévio.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Inserir uma fila do Amazon SQS entre a web e os workers: a web envia a mensagem e segue em frente; o worker a recebe quando pronto e só a exclui após concluir o processamento -- a fila escala de forma transparente para absorver picos, sem instruções de provisionamento.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o desacoplamento -- produtor que envia e segue em frente, consumidor que recebe quando está pronto, exclusão só após o processamento, escalabilidade sem instruções de provisionamento -- que a documentação descreve para o Amazon SQS."
+    },
+    {
+      "key": "B",
+      "text": "Inserir a fila do Amazon SQS, mas exigir que a camada web espere por uma confirmação explícita da camada de workers antes de considerar a requisição do pedido concluída, já que isso seria necessário para a mensagem ser considerada entregue.",
+      "correct": false,
+      "explanation": "Incorreto: segundo o ciclo de vida descrito pela documentação, a mensagem é distribuída de forma redundante pelos servidores do Amazon SQS no momento em que o produtor a envia, e é o consumidor que a recebe separadamente quando está pronto -- não há descrição de o produtor precisar esperar por uma confirmação do consumidor; exigir essa espera reintroduziria a dependência síncrona que o desacoplamento busca evitar."
+    },
+    {
+      "key": "C",
+      "text": "Não usar o Amazon SQS e, em vez disso, provisionar manualmente servidores adicionais para a camada de workers antes dos picos de tráfego esperados, já que a documentação afirma que o Amazon SQS exige instruções de provisionamento antes de conseguir absorver aumentos ou picos de carga.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- o Amazon SQS escala de forma transparente para lidar com qualquer aumento de carga ou pico sem nenhuma instrução de provisionamento, o que é justamente o benefício que elimina a necessidade de provisionar manualmente capacidade adicional com antecedência."
+    },
+    {
+      "key": "D",
+      "text": "Usar o Amazon SQS, mas fazer com que a camada de workers exclua cada mensagem da fila no momento em que começa a processá-la, em vez de depois de concluir o processamento, já que a documentação descreve esse comportamento como o propósito do timeout de visibilidade.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve que o consumidor exclui a mensagem depois de processá-la, para impedir que ela seja recebida novamente quando o timeout de visibilidade expirar -- o timeout de visibilidade serve para ocultar temporariamente a mensagem enquanto ela está sendo processada, não para substituir a exclusão após a conclusão; excluir ao simplesmente começar o processamento arrisca perder a mensagem caso o worker falhe antes de terminar."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- What is Amazon Simple Queue Service? (desacoplamento, escalabilidade sem instruções de provisionamento, ciclo de vida da mensagem)",
+      "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

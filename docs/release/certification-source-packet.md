@@ -77,11 +77,11 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-arc
 
 | Objective | Title | Claimed by |
 |---|---|---|
-| `SAA-1.1` | Design secure access to AWS resources | _none yet_ |
-| `SAA-1.2` | Design secure workloads and applications | _none yet_ |
-| `SAA-1.3` | Determine appropriate data security controls | _none yet_ |
-| `SAA-2.1` | Design scalable and loosely coupled architectures | _none yet_ |
-| `SAA-2.2` | Design highly available and/or fault-tolerant architectures | _none yet_ |
+| `SAA-1.1` | Design secure access to AWS resources | `t1-iam-role-ec2-instance-profile-temporary-credentials` |
+| `SAA-1.2` | Design secure workloads and applications | `t2-security-groups-vs-network-acls` |
+| `SAA-1.3` | Determine appropriate data security controls | `t3-s3-sse-kms-customer-managed-key-audit` |
+| `SAA-2.1` | Design scalable and loosely coupled architectures | `t4-sqs-decouple-producer-consumer-scaling` |
+| `SAA-2.2` | Design highly available and/or fault-tolerant architectures | `t5-rds-multi-az-standby-vs-read-replica` |
 | `SAA-3.1` | Determine high-performing and/or scalable storage solutions | `t6-ebs-io2-block-express-sustained-iops` |
 | `SAA-3.2` | Design high-performing and elastic compute solutions | `t7-ec2-cluster-placement-group-low-latency` |
 | `SAA-3.3` | Determine high-performing database solutions | `t8-rds-read-replica-vs-multi-az` |
@@ -92,7 +92,7 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-arc
 | `SAA-4.3` | Design cost-optimized database solutions | `t13-dynamodb-on-demand-capacity-mode` |
 | `SAA-4.4` | Design cost-optimized network architectures | `t14-vpc-gateway-endpoint-vs-nat-gateway-cost` |
 
-9 of 14 seeded objectives claimed by a published question.
+14 of 14 seeded objectives claimed by a published question.
 
 ## cncf-cka-certification
 
