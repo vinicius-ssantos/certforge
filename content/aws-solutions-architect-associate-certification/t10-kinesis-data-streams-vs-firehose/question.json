@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000062",
+  "objectiveKeys": ["SAA-3.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que a exigência de múltiplas aplicações de consumo lendo concorrentemente e de forma independente o mesmo stream, com lógica de processamento personalizada, é especificamente atribuída pela documentação ao Kinesis Data Streams -- enquanto o Firehose é descrito como entrega totalmente gerenciada a destinos fixos sem necessidade de escrever uma aplicação consumidora, o que o torna inadequado quando é exigido processamento customizado por múltiplos consumidores.",
+  "prompt": "Uma equipe de engenharia de dados precisa que múltiplas aplicações de consumo leiam, de forma concorrente e independente, os mesmos registros de um stream de cliques de um site, cada uma executando uma lógica de processamento personalizada (agregações customizadas, arquivamento, geração de alertas), com atraso entre a gravação e a disponibilidade do registro (put-to-get delay) tipicamente abaixo de 1 segundo. Segundo a documentação oficial da AWS, qual serviço atende a esse cenário?",
+  "explanation": "A documentação do Amazon Kinesis Data Streams descreve que múltiplas aplicações de consumo podem ler dados do mesmo stream, de forma concorrente e independente -- por exemplo, uma aplicação pode calcular agregados em tempo real enquanto outra arquiva os dados no Amazon S3 -- e que o put-to-get delay é tipicamente inferior a 1 segundo. Isso exige escrever aplicações de processamento (Kinesis Data Streams applications), frequentemente usando a Kinesis Client Library. Já o Amazon Data Firehose é descrito como um serviço totalmente gerenciado que entrega dados automaticamente a destinos como Amazon S3, Amazon Redshift e OpenSearch Service sem que o usuário precise escrever aplicações ou gerenciar recursos -- não é voltado a múltiplas aplicações de consumo customizadas lendo o mesmo stream.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon Data Firehose, que a documentação descreve como permitindo múltiplas aplicações de consumo personalizadas lerem concorrentemente do mesmo stream, com put-to-get delay tipicamente abaixo de 1 segundo.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Firehose como entregando dados automaticamente a destinos configurados, sem que o usuário escreva aplicações de consumo -- a leitura concorrente por múltiplas aplicações personalizadas com put-to-get delay abaixo de 1 segundo é a descrição do Kinesis Data Streams, não do Firehose."
+    },
+    {
+      "key": "B",
+      "text": "Amazon Kinesis Data Streams, mas a documentação afirmaria que ele é um serviço totalmente gerenciado que entrega automaticamente os dados a destinos como Amazon S3 ou Amazon Redshift, sem necessidade de escrever uma aplicação de processamento.",
+      "correct": false,
+      "explanation": "Incorreto: essa descrição -- entrega automática gerenciada a destinos fixos, sem escrever aplicação de consumo -- é a que a documentação atribui ao Amazon Data Firehose, não ao Kinesis Data Streams, que exige aplicações de consumo (Kinesis Data Streams applications) escritas pelo usuário."
+    },
+    {
+      "key": "C",
+      "text": "Amazon Kinesis Data Streams, que a documentação descreve como permitindo que múltiplas aplicações de consumo leiam dados do mesmo stream de forma concorrente e independente, com put-to-get delay tipicamente inferior a 1 segundo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação atribui ao Kinesis Data Streams, incluindo o exemplo de duas aplicações lendo o mesmo stream concorrentemente -- uma calculando agregados, outra arquivando os dados."
+    },
+    {
+      "key": "D",
+      "text": "Amazon Data Firehose, pois a documentação afirmaria que ele oferece controle total sobre a lógica de processamento em tempo real através de múltiplas aplicações concorrentes de consumo, da mesma forma que o Kinesis Data Streams.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto sobre o Firehose -- 'você não precisa escrever aplicações ou gerenciar recursos' -- o que é incompatível com a exigência de controle total sobre lógica de processamento personalizada por múltiplas aplicações concorrentes, papel do Kinesis Data Streams."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- What is Amazon Kinesis Data Streams? (multiple consumer applications can read from the same stream concurrently and independently; put-to-get delay typically less than 1 second)",
+      "url": "https://docs.aws.amazon.com/streams/latest/dev/introduction.html"
+    },
+    {
+      "title": "AWS Documentation -- What is Amazon Data Firehose? (fully managed service that automatically delivers streaming data to destinations such as Amazon S3, Redshift, OpenSearch; you don't need to write applications or manage resources)",
+      "url": "https://docs.aws.amazon.com/firehose/latest/dev/what-is-this-service.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

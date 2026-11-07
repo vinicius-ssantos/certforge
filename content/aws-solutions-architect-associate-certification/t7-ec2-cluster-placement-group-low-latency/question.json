@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000062",
+  "objectiveKeys": ["SAA-3.2"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir o propósito específico de cada uma das três estratégias de grupo de posicionamento do EC2 (cluster para baixa latência entre nós, spread para reduzir falhas correlacionadas, partition para workloads distribuídos replicados) e saber que o comportamento padrão do EC2, sem nenhum grupo, já tende a espalhar instâncias -- não basta saber que 'placement group melhora performance'.",
+  "prompt": "Uma aplicação de HPC (high-performance computing) fortemente acoplada, com comunicação nó a nó que exige a menor latência de rede possível, será implantada em várias instâncias EC2 dentro da mesma Availability Zone. Segundo a documentação oficial do Amazon EC2 sobre grupos de posicionamento, qual estratégia atende a esse requisito?",
+  "explanation": "A documentação de grupos de posicionamento do Amazon EC2 descreve a estratégia Cluster como empacotando instâncias próximas umas das outras dentro de uma Availability Zone, o que permite que workloads alcancem a performance de rede de baixa latência necessária para a comunicação nó a nó fortemente acoplada, típica de aplicações de HPC. As demais estratégias têm propósitos distintos: Spread busca reduzir falhas correlacionadas espalhando um pequeno grupo de instâncias por hardware distinto; Partition espalha instâncias por partições lógicas para workloads distribuídos e replicados como Hadoop, Cassandra e Kafka. Sem nenhum grupo de posicionamento, a própria documentação afirma que o EC2 já tenta espalhar as instâncias pelo hardware para minimizar falhas correlacionadas -- o oposto do agrupamento necessário para baixa latência.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Cluster placement group, que a documentação descreve como empacotando instâncias próximas dentro de uma Availability Zone, permitindo a performance de rede de baixa latência necessária para a comunicação nó a nó fortemente acoplada típica de aplicações de HPC.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição e o propósito que a documentação atribui à estratégia Cluster."
+    },
+    {
+      "key": "B",
+      "text": "Spread placement group, que a documentação descreve como a estratégia voltada a empacotar instâncias próximas umas das outras para maximizar a performance de rede entre elas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Spread como posicionando estritamente um pequeno grupo de instâncias em hardware distinto entre si, para reduzir falhas correlacionadas -- o oposto de empacotar instâncias próximas para baixa latência, que é o papel do Cluster."
+    },
+    {
+      "key": "C",
+      "text": "Partition placement group, que a documentação descreve como a estratégia recomendada especificamente para otimizar a latência de comunicação nó a nó em aplicações de HPC fortemente acopladas.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação associa o Partition a workloads distribuídos e replicados em larga escala, como Hadoop, Cassandra e Kafka, espalhando grupos de instâncias por partições que não compartilham hardware entre si -- não é a estratégia que a documentação recomenda para baixa latência de HPC, papel do Cluster."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum grupo de posicionamento é necessário, pois a documentação afirma que, por padrão, o Amazon EC2 já tenta posicionar as instâncias de forma a empacotá-las o máximo possível no mesmo hardware subjacente, otimizando a latência entre elas, sem qualquer cobrança adicional por essa otimização automática.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto -- sem um grupo de posicionamento, o EC2 tenta espalhar as instâncias pelo hardware subjacente para minimizar falhas correlacionadas, não para empacotá-las e otimizar a latência. A ausência de cobrança é real (criar um grupo de posicionamento também não tem custo), mas não torna essa alternativa correta: empacotar instâncias para baixa latência exige explicitamente um Cluster placement group."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Placement groups for your Amazon EC2 instances (Cluster: packs instances close together within an AZ for low-latency HPC network performance; Partition: Hadoop/Cassandra/Kafka; Spread: reduces correlated failures; default behavior spreads instances to minimize correlated failures)",
+      "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

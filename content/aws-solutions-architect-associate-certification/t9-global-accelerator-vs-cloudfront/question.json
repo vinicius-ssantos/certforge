@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000062",
+  "objectiveKeys": ["SAA-3.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o Global Accelerator opera na camada de rede sobre TCP/UDP, roteando tráfego por IPs estáticos anycast sem armazenar conteúdo em cache, enquanto o CloudFront é uma rede de cache de borda para conteúdo web HTTP/HTTPS -- confundir os dois é um erro comum, já que ambos usam a rede global da AWS para reduzir latência.",
+  "prompt": "Uma empresa de jogos online precisa reduzir a latência de um jogo multiplayer em tempo real que usa tráfego TCP e UDP (não HTTP) entre jogadores distribuídos globalmente e servidores de jogo hospedados em múltiplas Regiões da AWS. Segundo a documentação oficial da AWS, qual serviço atende a esse cenário?",
+  "explanation": "A documentação do AWS Global Accelerator descreve o serviço como fornecendo endereços IP estáticos (anycast) que servem como pontos de entrada fixos para os clientes; o tráfego entra na rede global da AWS pela edge location mais próxima do usuário e é roteado até o endpoint regional ótimo. O Global Accelerator termina conexões TCP nas edge locations e, para UDP, encaminha fragmentos IP ao endpoint configurado -- ele opera na camada de rede, sem armazenar conteúdo em cache, servindo qualquer tráfego TCP/UDP. Já o Amazon CloudFront é descrito como um serviço que acelera a distribuição de conteúdo web estático e dinâmico (HTML, CSS, JS, imagens) por HTTP/HTTPS, armazenando cópias desse conteúdo em cache nas edge locations -- não é voltado a tráfego TCP/UDP arbitrário de uma aplicação de jogo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon CloudFront, que a documentação descreve como acelerando a distribuição de qualquer tráfego TCP e UDP armazenando-o em cache nas edge locations, independentemente do protocolo da aplicação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o CloudFront como voltado à distribuição de conteúdo web estático e dinâmico por HTTP/HTTPS (arquivos como .html, .css, .js e imagens) -- não ao tráfego TCP/UDP arbitrário de uma aplicação de jogo, que é o papel do Global Accelerator."
+    },
+    {
+      "key": "B",
+      "text": "AWS Global Accelerator, que a documentação descreve como fornecendo endereços IP estáticos que roteiam o tráfego do cliente, a partir da edge location mais próxima, pela rede global da AWS até o endpoint regional ótimo -- terminando conexões TCP nas edge locations e suportando fragmentação IP para o protocolo UDP.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação atribui ao AWS Global Accelerator, adequado a tráfego TCP e UDP de aplicações não-HTTP, como jogos multiplayer em tempo real."
+    },
+    {
+      "key": "C",
+      "text": "AWS Global Accelerator, mas a documentação afirmaria que ele funciona apenas com tráfego HTTP/HTTPS, armazenando em cache as respostas nas edge locations de forma equivalente ao CloudFront.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve o Global Accelerator como um serviço de cache de conteúdo HTTP -- ele opera na camada de rede sobre TCP/UDP, roteando tráfego pela rede global da AWS sem armazenar conteúdo em cache, diferentemente do CloudFront."
+    },
+    {
+      "key": "D",
+      "text": "Amazon CloudFront, pois a documentação afirmaria que ele fornece endereços IP estáticos anycast que preservam o endereço IP de origem do cliente para qualquer protocolo de transporte, sem a necessidade de um domínio do CloudFront, e que esses IPs estáticos seriam suficientes para rotear tráfego TCP e UDP de um jogo multiplayer.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui ao CloudFront a atribuição de um nome de domínio à distribuição (por exemplo, algo como d111111abcdef8.cloudfront.net), não endereços IP estáticos anycast para qualquer protocolo de transporte -- esse mecanismo, e o roteamento de tráfego TCP/UDP de jogos, é descrito para o Global Accelerator, não para o CloudFront."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- How AWS Global Accelerator works (static anycast IP addresses, routes traffic over the AWS global network from the nearest edge location, terminates TCP connections at edge locations, forwards UDP fragments to the endpoint)",
+      "url": "https://docs.aws.amazon.com/global-accelerator/latest/dg/introduction-how-it-works.html"
+    },
+    {
+      "title": "AWS Documentation -- What is Amazon CloudFront? (speeds up distribution of static and dynamic web content over HTTP/HTTPS through a worldwide network of edge locations that cache content)",
+      "url": "https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

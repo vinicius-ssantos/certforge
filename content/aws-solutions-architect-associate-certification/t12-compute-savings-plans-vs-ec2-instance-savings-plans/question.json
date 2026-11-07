@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000063",
+  "objectiveKeys": ["SAA-4.2"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que existem dois tipos distintos de Savings Plans voltados a cômputo EC2 com descontos máximos diferentes e numericamente específicos (Compute Savings Plans: até 66%; EC2 Instance Savings Plans: até 72%) e que a flexibilidade (incluindo cobertura de Fargate e Lambda) é exatamente o que se perde ao trocar o plano mais flexível pelo de maior desconto -- um erro comum é assumir que o plano mais flexível também oferece o maior desconto, ou vice-versa.",
+  "prompt": "Uma empresa executa cargas de trabalho em instâncias EC2 de múltiplas famílias e Regiões e também migra parte dessas cargas para AWS Fargate e AWS Lambda ao longo do tempo. A equipe de FinOps quer firmar um compromisso de uso que continue garantindo desconto mesmo que a família de instância, o tamanho, o sistema operacional, a tenancy, a Região ou o serviço de computação (incluindo migrações para Fargate/Lambda) mudem no futuro, aceitando um desconto máximo menor em troca dessa flexibilidade total. Segundo a documentação oficial da AWS sobre Savings Plans, qual tipo de plano atende a esse cenário, e qual o desconto máximo que a documentação indica para ele?",
+  "explanation": "A documentação de tipos de Savings Plans descreve os Compute Savings Plans como o tipo que oferece a maior flexibilidade, com preços de até 66% abaixo do On-Demand, aplicando-se independentemente da família de instância, tamanho, Região, sistema operacional ou tenancy, e também ao uso de AWS Fargate e AWS Lambda -- permitindo, por exemplo, migrar uma aplicação do Amazon EC2 para o Amazon ECS via Fargate sem perder o desconto. Já os EC2 Instance Savings Plans oferecem um desconto maior, de até 72%, em troca do compromisso com uma família de instância específica em uma Região escolhida, e não se aplicam a Fargate nem Lambda.",
+  "options": [
+    {
+      "key": "A",
+      "text": "EC2 Instance Savings Plans, que a documentação descreve como aplicáveis independentemente da família de instância, Região, sistema operacional ou tenancy, com desconto de até 72% sobre o preço On-Demand.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve os EC2 Instance Savings Plans como exigindo o compromisso com uma família de instância específica em uma Região escolhida -- aplicam-se livremente apenas ao tamanho, sistema operacional e tenancy dentro dessa família/Região, não independentemente da família ou da Região."
+    },
+    {
+      "key": "B",
+      "text": "Compute Savings Plans, que a documentação descreve como o tipo mais flexível, aplicando-se independentemente da família de instância, tamanho, Região, sistema operacional ou tenancy, e também ao uso de AWS Fargate e AWS Lambda, com desconto de até 66% sobre o preço On-Demand.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição e o desconto máximo (até 66%) que a documentação atribui aos Compute Savings Plans."
+    },
+    {
+      "key": "C",
+      "text": "Compute Savings Plans, mas a documentação afirmaria que esse tipo exige o compromisso com uma família de instância específica em uma Região já escolhida, assim como os EC2 Instance Savings Plans, diferindo apenas no desconto oferecido e na cobertura de AWS Fargate e AWS Lambda.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve os Compute Savings Plans como aplicáveis independentemente da família de instância ou Região -- é justamente essa flexibilidade, ausente nos EC2 Instance Savings Plans, que os diferencia, além do desconto e da cobertura de Fargate/Lambda."
+    },
+    {
+      "key": "D",
+      "text": "EC2 Instance Savings Plans, pois a documentação afirmaria que esse tipo também se aplica ao uso de AWS Fargate e AWS Lambda, com desconto de até 72% sobre o preço On-Demand.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui a cobertura de AWS Fargate e AWS Lambda aos Compute Savings Plans, não aos EC2 Instance Savings Plans, que se aplicam somente a instâncias EC2 dentro da família e Região comprometidas."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Savings Plans types (Compute Savings Plans: most flexible, up to 66% off On-Demand, applies regardless of instance family/size/Region/OS/tenancy, also applies to Fargate and Lambda; EC2 Instance Savings Plans: up to 72% off On-Demand, commitment to a specific instance family in a chosen Region)",
+      "url": "https://docs.aws.amazon.com/savingsplans/latest/userguide/plan-types.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
