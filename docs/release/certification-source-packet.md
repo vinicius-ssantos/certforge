@@ -24,27 +24,52 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practit
 
 | Objective | Title | Claimed by |
 |---|---|---|
-| `CLF-1.1` | Define the benefits of the AWS Cloud | _none yet_ |
-| `CLF-1.2` | Identify design principles of the AWS Cloud | _none yet_ |
-| `CLF-1.3` | Understand the benefits of and strategies for migration to the AWS Cloud | _none yet_ |
-| `CLF-1.4` | Understand concepts of cloud economics | _none yet_ |
-| `CLF-2.1` | Understand the AWS shared responsibility model | _none yet_ |
-| `CLF-2.2` | Understand AWS Cloud security, governance, and compliance concepts | _none yet_ |
-| `CLF-2.3` | Identify AWS access management capabilities | _none yet_ |
-| `CLF-2.4` | Identify components and resources for security | _none yet_ |
-| `CLF-3.1` | Define methods of deploying and operating in the AWS Cloud | _none yet_ |
-| `CLF-3.2` | Define the AWS global infrastructure | _none yet_ |
-| `CLF-3.3` | Identify AWS compute services | _none yet_ |
-| `CLF-3.4` | Identify AWS database services | _none yet_ |
-| `CLF-3.5` | Identify AWS network services | _none yet_ |
-| `CLF-3.6` | Identify AWS storage services | _none yet_ |
-| `CLF-3.7` | Identify AWS artificial intelligence and machine learning (AI/ML) services and analytics services | _none yet_ |
-| `CLF-3.8` | Identify services from other in-scope AWS service categories | _none yet_ |
-| `CLF-4.1` | Compare AWS pricing models | _none yet_ |
-| `CLF-4.2` | Understand resources for billing, budget, and cost management | _none yet_ |
-| `CLF-4.3` | Identify AWS technical resources and AWS Support options | _none yet_ |
+| `CLF-1.1` | Define the benefits of the AWS Cloud | `t1-six-advantages-of-cloud-computing` |
+| `CLF-1.2` | Identify design principles of the AWS Cloud | `t2-well-architected-design-principles` |
+| `CLF-1.3` | Understand the benefits of and strategies for migration to the AWS Cloud | `t3-seven-rs-migration-strategies` |
+| `CLF-1.4` | Understand concepts of cloud economics | `t4-fundamental-cost-drivers` |
+| `CLF-2.1` | Understand the AWS shared responsibility model | `t5-shared-responsibility-model` |
+| `CLF-2.2` | Understand AWS Cloud security, governance, and compliance concepts | `t6-aws-config-compliance-monitoring` |
+| `CLF-2.3` | Identify AWS access management capabilities | `t7-iam-root-user-best-practice` |
+| `CLF-2.4` | Identify components and resources for security | `t8-aws-artifact-compliance-documents` |
+| `CLF-3.1` | Define methods of deploying and operating in the AWS Cloud | `t9-deployment-models-cloud-hybrid-onprem` |
+| `CLF-3.2` | Define the AWS global infrastructure | `t10-region-and-availability-zone` |
+| `CLF-3.3` | Identify AWS compute services | `t11-ec2-on-demand-pricing-model` |
+| `CLF-3.4` | Identify AWS database services | `t12-dynamodb-key-value-millisecond-performance` |
+| `CLF-3.5` | Identify AWS network services | `t13-vpc-logically-isolated-network` |
+| `CLF-3.6` | Identify AWS storage services | `t14-s3-eleven-nines-durability` |
+| `CLF-3.7` | Identify AWS artificial intelligence and machine learning (AI/ML) services and analytics services | `t15-rekognition-image-video-analysis` |
+| `CLF-3.8` | Identify services from other in-scope AWS service categories | `t16-sqs-decouple-microservices` |
+| `CLF-4.1` | Compare AWS pricing models | `t17-pricing-models-comparison` |
+| `CLF-4.2` | Understand resources for billing, budget, and cost management | `t18-cost-explorer-and-budgets` |
+| `CLF-4.3` | Identify AWS technical resources and AWS Support options | `t19-basic-support-free-for-all-customers` |
 
-0 of 19 seeded objectives claimed by a published question.
+19 of 19 seeded objectives claimed by a published question.
+
+## aws-solutions-architect-associate-certification
+
+**AWS SAAC03.** Verified 2026-11-07 against
+`AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide version 1.1 (published October 29, 2026)`. Digest `sha256:8959456c08b980947e6a6936e4f9e23b7a1fd0df2274b1c846222c49e7e63152`.
+Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `SAA-1.1` | Design secure access to AWS resources | _none yet_ |
+| `SAA-1.2` | Design secure workloads and applications | _none yet_ |
+| `SAA-1.3` | Determine appropriate data security controls | _none yet_ |
+| `SAA-2.1` | Design scalable and loosely coupled architectures | _none yet_ |
+| `SAA-2.2` | Design highly available and/or fault-tolerant architectures | _none yet_ |
+| `SAA-3.1` | Determine high-performing and/or scalable storage solutions | _none yet_ |
+| `SAA-3.2` | Design high-performing and elastic compute solutions | _none yet_ |
+| `SAA-3.3` | Determine high-performing database solutions | _none yet_ |
+| `SAA-3.4` | Determine high-performing and/or scalable network architectures | _none yet_ |
+| `SAA-3.5` | Determine high-performing data ingestion and transformation solutions | _none yet_ |
+| `SAA-4.1` | Design cost-optimized storage solutions | _none yet_ |
+| `SAA-4.2` | Design cost-optimized compute solutions | _none yet_ |
+| `SAA-4.3` | Design cost-optimized database solutions | _none yet_ |
+| `SAA-4.4` | Design cost-optimized network architectures | _none yet_ |
+
+0 of 14 seeded objectives claimed by a published question.
 
 ## cncf-cka-certification
 
