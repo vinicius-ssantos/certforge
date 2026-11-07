@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.2"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber a relação hierárquica entre Region e Availability Zone na infraestrutura global da AWS -- uma Region contém múltiplas Availability Zones, cada uma com data centers discretos e redundantes -- em vez de tratar os dois termos como sinônimos.",
+  "prompt": "Segundo a documentação oficial da AWS sobre infraestrutura global, o que é uma AWS Region, e qual é sua relação com as Availability Zones?",
+  "explanation": "A documentação afirma que uma AWS Region é uma localização física no mundo onde a AWS tem múltiplas Availability Zones. As Availability Zones consistem em um ou mais data centers discretos, cada um com energia, rede e conectividade redundantes, hospedados em instalações separadas -- o que permite operar aplicações e bancos de dados de produção mais altamente disponíveis, tolerantes a falhas e escaláveis do que seria possível com um único data center.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma AWS Region é uma localização física no mundo onde a AWS tem múltiplas Availability Zones, cada uma composta por um ou mais data centers discretos, com energia, rede e conectividade redundantes, em instalações separadas.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição de Region e sua relação com as Availability Zones que a documentação oficial descreve."
+    },
+    {
+      "key": "B",
+      "text": "Uma AWS Region e uma Availability Zone são termos sinônimos usados pela documentação para se referir ao mesmo conceito -- um único data center físico isolado dos demais.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue os dois termos -- uma Region contém múltiplas Availability Zones, e cada Availability Zone consiste em um ou mais data centers, não um único data center isolado chamado indistintamente de Region ou Availability Zone."
+    },
+    {
+      "key": "C",
+      "text": "Uma Availability Zone é uma coleção de múltiplas AWS Regions, cada uma localizada em um país diferente, usada para fornecer redundância entre continentes.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação inverte exatamente essa relação -- é a Region que contém múltiplas Availability Zones, não o contrário."
+    },
+    {
+      "key": "D",
+      "text": "Uma AWS Region é uma única instalação de data center sem nenhuma redundância interna, e a documentação não descreve nenhum conceito de Availability Zone como parte da infraestrutura global da AWS em nenhuma de suas Regions.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente as Availability Zones como parte da infraestrutura de cada Region, cada uma com energia, rede e conectividade redundantes -- não uma única instalação sem redundância."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Global infrastructure (AWS Region contains multiple Availability Zones; each Availability Zone is one or more discrete data centers with redundant power, networking, and connectivity)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/global-infrastructure.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

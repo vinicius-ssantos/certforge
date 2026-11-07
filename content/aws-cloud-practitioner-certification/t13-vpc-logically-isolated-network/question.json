@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o Amazon VPC permite provisionar uma seção logicamente isolada da nuvem AWS, com controle total sobre o próprio intervalo de IP, sub-redes e tabelas de rotas -- não apenas que 'VPC é a rede da AWS'.",
+  "prompt": "Uma equipe quer lançar recursos AWS dentro de uma rede virtual isolada que ela mesma define, com controle total sobre o intervalo de endereços IP, a criação de sub-redes e a configuração de tabelas de rotas. Segundo a documentação oficial de serviços de rede da AWS, qual serviço permite isso, e como ela o descreve?",
+  "explanation": "A documentação descreve o Amazon Virtual Private Cloud (Amazon VPC) como o serviço que permite provisionar uma seção logicamente isolada da nuvem AWS, onde é possível lançar recursos AWS em uma rede virtual definida pelo próprio usuário. A documentação afirma que há controle completo sobre o ambiente de rede virtual, incluindo a seleção do próprio intervalo de endereços IP, a criação de sub-redes e a configuração de tabelas de rotas e gateways de rede.",
+  "options": [
+    {
+      "key": "A",
+      "text": "AWS Global Accelerator, que a documentação descreve como o serviço que permite provisionar uma seção logicamente isolada da nuvem AWS com controle total sobre o intervalo de IP e as sub-redes, substituindo completamente a necessidade de qualquer VPC na conta.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o AWS Global Accelerator como um serviço de rede focado em melhorar a disponibilidade e o desempenho de aplicações para usuários globais, não como o serviço de rede virtual isolada -- esse é o papel do Amazon VPC."
+    },
+    {
+      "key": "B",
+      "text": "Elastic Load Balancing (ELB), porque a documentação o descreve como o serviço responsável por fornecer uma seção isolada e configurável da rede da AWS para lançamento de recursos.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Elastic Load Balancing como um serviço que distribui tráfego de aplicações entre múltiplos destinos, não como o serviço de rede virtual isolada -- esse é o papel do Amazon VPC."
+    },
+    {
+      "key": "C",
+      "text": "Amazon VPC, mas a documentação afirmaria que ele não permite nenhuma personalização de sub-redes, oferecendo apenas uma única rede padrão compartilhada entre todos os clientes da AWS.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- você pode personalizar facilmente a configuração de rede da sua VPC, criando sub-redes próprias, incluindo uma sub-rede pública para servidores web e uma sub-rede privada para sistemas de backend."
+    },
+    {
+      "key": "D",
+      "text": "Amazon VPC, que a documentação descreve como permitindo provisionar uma seção logicamente isolada da nuvem AWS, onde se lança recursos AWS em uma rede virtual definida pelo usuário, com controle total sobre intervalo de IP, sub-redes e tabelas de rotas.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá ao Amazon VPC."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Networking services overview (Amazon VPC: logically isolated section of the AWS Cloud, full control over IP range, subnets, and route tables)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/networking-services.html#amazon-vpc"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

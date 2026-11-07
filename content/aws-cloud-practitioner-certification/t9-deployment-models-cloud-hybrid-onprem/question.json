@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.1"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige distinguir os três modelos de implantação (deployment models) que a documentação descreve -- cloud, privado (on-premises) e híbrido -- pela definição de cada um, não apenas reconhecer os nomes.",
+  "prompt": "Uma organização mantém sua infraestrutura de TI existente em seus próprios data centers e quer conectar essa infraestrutura a recursos na nuvem, estendendo seu ambiente atual sem migrar tudo de uma vez. Segundo a documentação oficial da AWS sobre tipos de computação em nuvem, qual modelo de implantação descreve esse cenário, e como ela o define?",
+  "explanation": "A documentação define três modelos de implantação. No modelo 'Cloud', a aplicação é totalmente implantada na nuvem. No modelo 'Private cloud (on-premises)', os recursos são implantados localmente, sem muitos dos benefícios da computação em nuvem. No modelo 'Hybrid', a implantação conecta infraestrutura e aplicações entre recursos baseados na nuvem e recursos existentes que não estão na nuvem -- o método mais comum de implantação híbrida é entre a nuvem e a infraestrutura on-premises existente, para estender e crescer a infraestrutura de uma organização para a nuvem enquanto conecta os recursos da nuvem ao sistema interno.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O modelo 'Cloud', porque a documentação o define como a implantação de recursos usando ferramentas de virtualização e gerenciamento de recursos inteiramente dentro do data center já existente da organização, sem nenhum recurso rodando fora dele.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o modelo 'Cloud' como uma aplicação totalmente implantada na nuvem, não como recursos mantidos inteiramente no data center existente -- esse último é o modelo 'Private cloud (on-premises)'."
+    },
+    {
+      "key": "B",
+      "text": "O modelo 'Private cloud (on-premises)', porque a documentação o define especificamente como a conexão entre infraestrutura existente e novos recursos criados na nuvem para estender o ambiente atual.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define 'Private cloud (on-premises)' como a implantação de recursos localmente, usando virtualização e ferramentas de gerenciamento -- sem conexão com recursos na nuvem; essa conexão é o que caracteriza o modelo híbrido."
+    },
+    {
+      "key": "C",
+      "text": "O modelo 'Hybrid', que a documentação define como uma forma de conectar infraestrutura e aplicações entre recursos baseados na nuvem e recursos existentes que não estão na nuvem, geralmente estendendo a infraestrutura on-premises para a nuvem.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a definição que a documentação dá ao modelo de implantação híbrido, incluindo o exemplo mais comum -- conectar a nuvem à infraestrutura on-premises existente."
+    },
+    {
+      "key": "D",
+      "text": "Nenhum dos três modelos descritos na documentação cobre esse cenário, já que ela trataria conectar um data center existente a recursos na nuvem como uma arquitetura não documentada e não suportada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve explicitamente o modelo híbrido para exatamente esse cenário -- conectar infraestrutura existente a recursos na nuvem -- como um dos três modelos de implantação documentados."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Types of cloud computing (Deployment models: Cloud, Private cloud/on-premises, Hybrid)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/types-of-cloud-computing.html#cloud-computing-deployment-models"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

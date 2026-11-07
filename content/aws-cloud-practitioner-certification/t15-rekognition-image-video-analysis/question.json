@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.7"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o Amazon Rekognition é o serviço de IA/ML para análise de imagem e vídeo que não exige expertise prévia em machine learning -- distinto de um serviço de texto ou de fala.",
+  "prompt": "Uma equipe quer adicionar à sua aplicação a capacidade de identificar objetos, pessoas, texto e atividades em imagens e vídeos, sem precisar ter expertise em machine learning. Segundo a documentação oficial de serviços de IA/ML da AWS, qual serviço atende a essa necessidade, e como ela o descreve?",
+  "explanation": "A documentação descreve o Amazon Rekognition como o serviço que facilita adicionar análise de imagem e vídeo às aplicações, usando tecnologia de deep learning comprovada e altamente escalável que não exige expertise em machine learning para ser usada. Com o Amazon Rekognition, é possível identificar objetos, pessoas, texto, cenas e atividades em imagens e vídeos, além de detectar conteúdo inadequado.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon Transcribe, que a documentação descreve como o serviço que identifica objetos, pessoas, texto e atividades em imagens e vídeos usando deep learning, sem exigir expertise em machine learning.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon Transcribe como um serviço de conversão de fala em texto (speech-to-text), não de análise de imagem e vídeo -- essa é a descrição do Amazon Rekognition."
+    },
+    {
+      "key": "B",
+      "text": "Amazon Comprehend, que a documentação descreve como o serviço de análise de imagem e vídeo com reconhecimento facial e detecção de objetos, cenas e atividades.",
+      "correct": false,
+      "explanation": "Incorreto: o Amazon Comprehend é descrito pela documentação como um serviço de processamento de linguagem natural sobre texto, não de análise de imagem e vídeo -- essa é a função do Amazon Rekognition."
+    },
+    {
+      "key": "C",
+      "text": "Amazon Rekognition, mas a documentação afirmaria que ele exige que a equipe já tenha expertise avançada em machine learning e treine seus próprios modelos de deep learning do zero antes de identificar qualquer objeto em qualquer imagem ou vídeo enviado para análise.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- o Amazon Rekognition usa tecnologia de deep learning que não exige expertise em machine learning para ser usada."
+    },
+    {
+      "key": "D",
+      "text": "Amazon Rekognition, que a documentação descreve como facilitando adicionar análise de imagem e vídeo às aplicações usando deep learning, permitindo identificar objetos, pessoas, texto, cenas e atividades, sem exigir expertise em machine learning.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá ao Amazon Rekognition."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Machine Learning and AI services overview (Amazon Rekognition: image and video analysis using deep learning, no ML expertise required)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/machine-learning.html#amazon-rekognition"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

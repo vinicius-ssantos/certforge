@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000051",
+  "objectiveKeys": ["CLF-3.8"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige saber que o Amazon SQS é um serviço de fila de mensagens totalmente gerenciado, da categoria de integração de aplicações, usado para desacoplar e escalar microsserviços -- não um serviço de computação, armazenamento ou banco de dados.",
+  "prompt": "Uma equipe quer desacoplar os componentes de uma arquitetura de microsserviços, permitindo que eles enviem, armazenem e recebam mensagens entre si sem exigir que todos os serviços estejam disponíveis ao mesmo tempo. Segundo a documentação oficial de serviços de integração de aplicações da AWS, qual serviço atende a essa necessidade, e como ela o descreve?",
+  "explanation": "A documentação descreve o Amazon Simple Queue Service (Amazon SQS) como um serviço de fila de mensagens totalmente gerenciado que permite desacoplar e escalar microsserviços, sistemas distribuídos e aplicações serverless. Usando o Amazon SQS, é possível enviar, armazenar e receber mensagens entre componentes de software em qualquer volume, sem perder mensagens nem exigir que outros serviços estejam disponíveis.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Amazon SQS, que a documentação descreve como um serviço de fila de mensagens totalmente gerenciado para desacoplar e escalar microsserviços, sistemas distribuídos e aplicações serverless.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação dá ao Amazon Simple Queue Service."
+    },
+    {
+      "key": "B",
+      "text": "Amazon EC2, que a documentação descreve como o serviço responsável por filas de mensagens para desacoplar microsserviços, sem relação com capacidade de computação.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon EC2 como um serviço de capacidade de computação (instâncias/servidores virtuais), não como um serviço de fila de mensagens -- essa é a função do Amazon SQS."
+    },
+    {
+      "key": "C",
+      "text": "Amazon SQS, mas a documentação afirmaria que ele exige que todos os componentes envolvidos estejam disponíveis e conectados simultaneamente para que uma mensagem seja entregue, sem suportar nenhuma forma de desacoplamento.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- o Amazon SQS permite enviar, armazenar e receber mensagens sem exigir que outros serviços estejam disponíveis ao mesmo tempo, o que caracteriza o desacoplamento."
+    },
+    {
+      "key": "D",
+      "text": "Amazon RDS, que a documentação classifica como um serviço de integração de aplicações para fila de mensagens entre microsserviços, equivalente em função ao Amazon SQS.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o Amazon RDS como um serviço de banco de dados relacional, não como um serviço de fila de mensagens da categoria de integração de aplicações -- essa categoria e função pertencem ao Amazon SQS."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Application integration services overview (Amazon SQS: fully managed message queuing service to decouple and scale microservices)",
+      "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-overview/application-integration.html#amazon-sqs"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
