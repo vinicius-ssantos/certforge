@@ -16,6 +16,36 @@ whether a claimed objective is real and whether the answer is correct -- this on
 source in front of them instead of leaving it in the catalog-admin API. Objectives with no
 question are a visible gap by this project's own policy (ADR 0017), not a defect in this packet.
 
+## aws-cloud-practitioner-certification
+
+**AWS CLFC02.** Verified 2026-11-06 against
+`AWS Certified Cloud Practitioner (CLF-C02), Exam Guide version 1.3 (published October 29, 2026)`. Digest `sha256:de4d07b2b31f6df3465076342c43d7066362d26e356a1a57edd8901616c38c69`.
+Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/cloud-practitioner-02/cloud-practitioner-02.pdf>.
+
+| Objective | Title | Claimed by |
+|---|---|---|
+| `CLF-1.1` | Define the benefits of the AWS Cloud | _none yet_ |
+| `CLF-1.2` | Identify design principles of the AWS Cloud | _none yet_ |
+| `CLF-1.3` | Understand the benefits of and strategies for migration to the AWS Cloud | _none yet_ |
+| `CLF-1.4` | Understand concepts of cloud economics | _none yet_ |
+| `CLF-2.1` | Understand the AWS shared responsibility model | _none yet_ |
+| `CLF-2.2` | Understand AWS Cloud security, governance, and compliance concepts | _none yet_ |
+| `CLF-2.3` | Identify AWS access management capabilities | _none yet_ |
+| `CLF-2.4` | Identify components and resources for security | _none yet_ |
+| `CLF-3.1` | Define methods of deploying and operating in the AWS Cloud | _none yet_ |
+| `CLF-3.2` | Define the AWS global infrastructure | _none yet_ |
+| `CLF-3.3` | Identify AWS compute services | _none yet_ |
+| `CLF-3.4` | Identify AWS database services | _none yet_ |
+| `CLF-3.5` | Identify AWS network services | _none yet_ |
+| `CLF-3.6` | Identify AWS storage services | _none yet_ |
+| `CLF-3.7` | Identify AWS artificial intelligence and machine learning (AI/ML) services and analytics services | _none yet_ |
+| `CLF-3.8` | Identify services from other in-scope AWS service categories | _none yet_ |
+| `CLF-4.1` | Compare AWS pricing models | _none yet_ |
+| `CLF-4.2` | Understand resources for billing, budget, and cost management | _none yet_ |
+| `CLF-4.3` | Identify AWS technical resources and AWS Support options | _none yet_ |
+
+0 of 19 seeded objectives claimed by a published question.
+
 ## cncf-cka-certification
 
 **CNCF CKA.** Verified 2026-11-04 against
