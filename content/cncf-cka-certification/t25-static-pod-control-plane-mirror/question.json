@@ -5,7 +5,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Exige reconhecer, a partir de uma anotação já capturada, que um componente do control plane é gerenciado como Static Pod pelo kubelet, e inferir a consequência documentada disso para uma tentativa de correção via `kubectl delete`, em vez de apenas identificar qual componente está com problema.",
   "prompt": "Em um cluster inicializado com kubeadm, um trecho de saída já capturado de `kubectl get pods -n kube-system` mostra o Pod `kube-scheduler-controlplane` em estado `CrashLoopBackOff`, e um trecho de `kubectl describe pod kube-scheduler-controlplane -n kube-system` mostra a anotação `kubernetes.io/config.mirror` presente nesse Pod. A pessoa responsável executa `kubectl delete pod kube-scheduler-controlplane -n kube-system`, esperando que isso resolva o problema recriando o Pod do zero. De acordo com a documentação sobre Static Pods, o que acontece de fato, e por quê?",
-  "explanation": "A documentação de Static Pods afirma que 'kubeadm uses static Pods to run kube-apiserver, kube-controller-manager, kube-scheduler, and etcd on control plane nodes' e que, quando o control plane roda como Pods, eles 'are likely static Pods', reconhecíveis pela anotação `kubernetes.io/config.mirror` em seus mirror Pods no namespace `kube-system`. Static Pods 'are managed directly by the kubelet daemon on a specific node, without the API server observing them'. A documentação de criação de Static Pods confirma explicitamente que, ao tentar usar `kubectl` para deletar o mirror Pod da API server, 'the kubelet doesn't remove the static Pod' — o kubelet o recria a partir do manifesto local no node, então o `kubectl delete` não resolve a causa raiz, que precisa ser corrigida no próprio node.",
+  "explanation": "A documentação de Static Pods afirma que 'kubeadm uses static Pods to run kube-apiserver, kube-controller-manager, kube-scheduler, and etcd on control plane nodes' e que, quando o control plane roda como Pods, eles 'are likely static Pods', reconhecíveis pela anotação `kubernetes.io/config.mirror` em seus mirror Pods no namespace `kube-system`. Static Pods 'are managed directly by the kubelet daemon on a specific node, without the API server observing them'. A documentação de criação de Static Pods confirma explicitamente que, ao tentar usar `kubectl` para deletar o mirror Pod da API server, 'the kubelet doesn't remove the static Pod' — o container subjacente, gerenciado diretamente pelo kubelet, nunca é removido nem reiniciado por essa ação e continua rodando sem interrupção; apenas o mirror Pod (a representação desse Static Pod na API server) é recriado pelo kubelet para refletir esse estado. Por isso o `kubectl delete` não resolve a causa raiz do `CrashLoopBackOff`, que precisa ser corrigida no próprio node.",
   "options": [
     {
       "key": "A",
@@ -17,13 +17,13 @@
       "key": "B",
       "text": "O `kubectl delete` remove permanentemente o workload do kube-scheduler daquele node, e a documentação afirma que a única forma de trazê-lo de volta é executar novamente `kubeadm init` no control plane inteiro.",
       "correct": false,
-      "explanation": "Incorreto: a documentação não descreve perda permanente nem necessidade de reexecutar `kubeadm init`; o que ela descreve é o kubelet recriando o Static Pod a partir do manifesto local, sem qualquer intervenção do control plane."
+      "explanation": "Incorreto: a documentação não descreve perda permanente nem necessidade de reexecutar `kubeadm init`; o que ela descreve é o container do Static Pod continuando a rodar sem interrupção, com o kubelet apenas recriando o mirror Pod na API server, sem qualquer intervenção do control plane."
     },
     {
       "key": "C",
-      "text": "O `kubectl delete` não remove o Static Pod: o kubelet do node, que gerencia esse Pod diretamente e sem a observação da API server, o recria a partir do manifesto local, então a causa raiz do `CrashLoopBackOff` só pode ser corrigida diretamente no node.",
+      "text": "O `kubectl delete` não remove o Static Pod: o kubelet mantém o container rodando sem interrupção, apenas recriando o mirror Pod na API, então a causa raiz precisa ser corrigida no próprio node.",
       "correct": true,
-      "explanation": "Correto: é exatamente o comportamento documentado — a anotação identifica um mirror Pod de um Static Pod, e a documentação afirma textualmente que o kubelet não remove o Static Pod quando o mirror Pod é deletado via API server."
+      "explanation": "Correto: é exatamente o comportamento documentado — a anotação identifica um mirror Pod de um Static Pod; a documentação afirma textualmente que o kubelet não remove o Static Pod quando o mirror Pod é deletado via API server, e o container subjacente, gerenciado diretamente pelo kubelet sem a observação da API server, nunca é removido nem reiniciado por essa ação -- apenas o mirror Pod (a representação na API) é recriado para refletir esse estado."
     },
     {
       "key": "D",
