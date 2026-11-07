@@ -125,10 +125,10 @@ Source: <https://github.com/cncf/curriculum/blob/b3c8508b9f6cd0bcfa76c2e4b7cc9b6
 | `CKA-4.7` | Understand extension interfaces (CNI, CSI, CRI, etc.) | `t09-cni-implements-network-model` |
 | `CKA-4.8` | Understand CRDs, install and configure operators | `t24-crd-registers-api-server-resource-type` |
 | `CKA-5.1` | Troubleshoot clusters and nodes | `t10-node-ready-condition-unknown` |
-| `CKA-5.2` | Troubleshoot cluster components | _none yet_ |
-| `CKA-5.3` | Monitor cluster and application resource usage | _none yet_ |
+| `CKA-5.2` | Troubleshoot cluster components | `t25-static-pod-control-plane-mirror` |
+| `CKA-5.3` | Monitor cluster and application resource usage | `t26-kubectl-top-requires-metrics-server` |
 | `CKA-5.4` | Manage and evaluate container output streams | `t11-kubectl-logs-all-containers` |
-| `CKA-5.5` | Troubleshoot services and networking | _none yet_ |
+| `CKA-5.5` | Troubleshoot services and networking | `t27-service-endpointslice-selector-vs-readiness` |
 
 24 of 27 seeded objectives claimed by a published question.
 
