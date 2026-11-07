@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000060",
+  "objectiveKeys": ["SAA-1.2"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber duas distinções específicas e frequentemente confundidas ao mesmo tempo: security groups são stateful e só suportam regras de permissão (sem negação explícita), operando no nível da instância, enquanto network ACLs são stateless (exigindo regras de entrada e saída configuradas separadamente) e suportam tanto permissão quanto negação, operando no nível da subnet -- memorizar apenas 'os dois controlam tráfego' não é suficiente para escolher o mecanismo certo.",
+  "prompt": "Uma equipe de segurança identificou um intervalo de endereços IP específico que precisa ser explicitamente bloqueado para todas as instâncias de uma subnet, enquanto cada instância continua controlando, por conta própria, quais outras portas e protocolos aceita por meio de regras de permissão. Segundo a documentação oficial da Amazon VPC, qual mecanismo deve ser usado para o bloqueio explícito, e por quê?",
+  "explanation": "A documentação da Amazon VPC descreve que uma network ACL permite ou nega tráfego de entrada ou saída específico no nível da subnet, com cada regra podendo permitir ou negar tráfego -- diferente de um security group, cujas regras só podem permitir tráfego (não existe uma construção de negação em um security group). A documentação também afirma que network ACLs são stateless: se uma regra permite tráfego de entrada, a resposta a esse tráfego não é automaticamente permitida, sendo necessário configurar regras de saída correspondentes -- ao contrário dos security groups, que são stateful e permitem automaticamente o tráfego de resposta a uma solicitação permitida. Por isso, o bloqueio explícito de um intervalo de IP no nível da subnet deve ser feito com uma regra de negação em uma network ACL, enquanto cada instância continua usando as regras de permissão do seu security group para seu próprio controle de acesso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar uma regra de negação para esse intervalo de IP no security group de cada instância, já que security groups suportam regras explícitas de permissão e de negação no nível da instância, e a regra de negação simplesmente teria prioridade sobre qualquer regra de permissão conflitante.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não descreve nenhuma construção de regra de negação para security groups -- as regras de um security group só podem permitir tráfego; um bloqueio explícito exige uma network ACL, que sim suporta regras de negação."
+    },
+    {
+      "key": "B",
+      "text": "Criar a network ACL com a regra de negação, mas não configurar nenhuma regra de saída correspondente, já que a documentação descreve as network ACLs como stateful -- assim como os security groups -- permitindo automaticamente o tráfego de resposta ao que foi permitido na entrada.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- network ACLs são stateless, então a resposta a um tráfego de entrada permitido não é automaticamente permitida, sendo necessário configurar também as regras de saída; esse comportamento automático é característica dos security groups, que são stateful."
+    },
+    {
+      "key": "C",
+      "text": "Criar uma network ACL com regra de negação para esse IP, associada à subnet -- NACLs podem permitir ou negar no nível da subnet, enquanto os security groups de cada instância continuam avaliados separadamente, no nível da instância, só com regras de permissão.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a combinação -- regra de negação em uma network ACL no nível da subnet, já que security groups só suportam regras de permissão -- que a documentação descreve para esse cenário."
+    },
+    {
+      "key": "D",
+      "text": "Depender apenas da regra de saída padrão do security group de cada instância, que permite todo o tráfego, já que essa regra também controla o tráfego de entrada no nível da subnet inteira, tornando uma network ACL separada desnecessária para esse controle.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o security group como um mecanismo associado a recursos individuais (como uma instância), controlando o tráfego de entrada e saída dessa instância -- não como um mecanismo de controle no nível da subnet; esse controle no nível da subnet é o papel da network ACL."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Control traffic to your AWS resources using security groups (stateful; apenas regras de permissão; nível da instância)",
+      "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-security-groups.html"
+    },
+    {
+      "title": "AWS Documentation -- Control subnet traffic with network access control lists (stateless; regras de permissão e negação; nível da subnet)",
+      "url": "https://docs.aws.amazon.com/vpc/latest/userguide/vpc-network-acls.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
