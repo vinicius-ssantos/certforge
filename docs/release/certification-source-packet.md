@@ -72,7 +72,7 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/developer-ass
 ## aws-solutions-architect-associate-certification
 
 **AWS SAAC03.** Verified 2026-11-07 against
-`AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide version 1.1 (published October 29, 2026)`. Digest `sha256:8959456c08b980947e6a6936e4f9e23b7a1fd0df2274b1c846222c49e7e63152`.
+`AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide v1.1 (published Oct 29, 2026)`. Digest `sha256:8959456c08b980947e6a6936e4f9e23b7a1fd0df2274b1c846222c49e7e63152`.
 Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf>.
 
 | Objective | Title | Claimed by |

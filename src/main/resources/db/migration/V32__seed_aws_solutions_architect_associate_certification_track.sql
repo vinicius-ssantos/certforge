@@ -48,7 +48,7 @@ INSERT INTO certforge.catalog_exam_objective_snapshot
     (track_version_id, provider_version, verified_on, source_url, source_digest, status)
 VALUES
 ('b2000000-0000-4000-8000-000000000008',
- 'AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide version 1.1 (published October 29, 2026)', '2026-11-07',
+ 'AWS Certified Solutions Architect - Associate (SAA-C03), Exam Guide v1.1 (published Oct 29, 2026)', '2026-11-07',
  'https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.pdf',
  'sha256:8959456c08b980947e6a6936e4f9e23b7a1fd0df2274b1c846222c49e7e63152', 'VERIFIED');
 
