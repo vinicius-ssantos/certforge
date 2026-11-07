@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000060",
+  "objectiveKeys": ["SAA-1.3"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que a capacidade de auditar o uso da chave via CloudTrail e de definir controles de acesso granulares sobre a própria chave é atribuída especificamente a uma chave gerenciada pelo cliente no AWS KMS (SSE-KMS) -- e não ao SSE-S3, nem à chave gerenciada pela AWS (aws/s3) dentro do próprio SSE-KMS, que a documentação explicitamente diz não poder ser compartilhada entre contas. Confundir 'é criptografia' com 'tem a flexibilidade de controle e auditoria exigida' é o erro mais comum aqui.",
+  "prompt": "Uma empresa precisa armazenar objetos sensíveis no Amazon S3 com um controle de segurança de dados que permita auditar, pelo AWS CloudTrail, cada operação de uso da chave de criptografia (como geração de chave de dados e decriptação), além de definir, por meio de uma política da própria chave, exatamente quais principals do IAM podem usá-la -- aceitando uma cobrança adicional por isso. Segundo a documentação oficial do Amazon S3 e do AWS KMS, qual opção de criptografia no servidor atende a esse controle, e por quê?",
+  "explanation": "A documentação do Amazon S3 descreve a criptografia no servidor com chaves do AWS KMS (SSE-KMS) usando uma chave gerenciada pelo cliente como a opção que oferece essa flexibilidade: você pode criar, visualizar, editar, monitorar, habilitar ou desabilitar e agendar a exclusão da chave, definir as políticas que controlam como e por quem ela pode ser usada, e auditar o uso da chave via AWS CloudTrail (que registra operações como GenerateDataKey e Decrypt) -- com cobranças adicionais por usar chaves do AWS KMS. Já o SSE-S3 (chaves gerenciadas pelo Amazon S3) é a criptografia padrão, sem cobrança adicional, mas a documentação não atribui a ele essas capacidades de política de chave personalizada nem de auditoria de operações de chave via AWS KMS.",
+  "options": [
+    {
+      "key": "A",
+      "text": "SSE-S3 (chaves gerenciadas pelo Amazon S3), já que a documentação afirma que, além de ser a opção padrão e não ter cobrança adicional, ela também oferece a mesma política de chave personalizada por principal e a mesma auditoria de operações de chave via AWS CloudTrail que o AWS KMS oferece.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o SSE-S3 apenas como a criptografia padrão sem cobrança adicional -- ela não atribui a ele política de chave personalizada nem auditoria de operações de chave via AWS KMS; essas capacidades são descritas especificamente para chaves do AWS KMS."
+    },
+    {
+      "key": "B",
+      "text": "SSE-KMS usando a chave gerenciada pela AWS (aws/s3), em vez de uma chave gerenciada pelo cliente, já que a documentação afirma que a chave gerenciada pela AWS oferece a mesma flexibilidade de política e o mesmo suporte a compartilhamento entre contas que uma chave gerenciada pelo cliente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o contrário -- objetos criptografados com a chave gerenciada pela AWS não podem ser compartilhados entre contas, sendo necessária uma chave gerenciada pelo cliente para esse compartilhamento; a documentação também atribui a capacidade de criar, rotacionar, desabilitar e definir controles de acesso personalizados especificamente à chave gerenciada pelo cliente, não à chave gerenciada pela AWS."
+    },
+    {
+      "key": "C",
+      "text": "SSE-S3, já que a documentação afirma que o Amazon S3 encaminha automaticamente cada evento de criptografia e decriptação ao AWS KMS para auditoria centralizada, independentemente de qual opção de criptografia no servidor esteja configurada no bucket.",
+      "correct": false,
+      "explanation": "Incorreto: o SSE-S3 usa o gerenciamento de chaves do próprio Amazon S3, não o AWS KMS; a auditoria de operações como GenerateDataKey e Decrypt via AWS CloudTrail que a documentação descreve se aplica ao uso de chaves do AWS KMS com SSE-KMS, não ao SSE-S3."
+    },
+    {
+      "key": "D",
+      "text": "SSE-KMS usando uma chave gerenciada pelo cliente no AWS KMS, já que a documentação afirma que chaves gerenciadas pelo cliente permitem definir controles de acesso e auditar seu uso via AWS CloudTrail, com cobranças adicionais por usar chaves do AWS KMS em comparação ao SSE-S3.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a combinação de controle de acesso pela política da chave, auditoria via CloudTrail e cobrança adicional que a documentação atribui a uma chave gerenciada pelo cliente usada com SSE-KMS."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Using server-side encryption with AWS KMS keys (SSE-KMS): política de chave, auditoria via CloudTrail, cobrança adicional",
+      "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingKMSEncryption.html"
+    },
+    {
+      "title": "AWS Documentation -- Using server-side encryption with Amazon S3 managed keys (SSE-S3): padrão, sem cobrança adicional",
+      "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/UsingServerSideEncryption.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
