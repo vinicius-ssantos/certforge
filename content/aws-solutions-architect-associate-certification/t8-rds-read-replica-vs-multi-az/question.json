@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000062",
+  "objectiveKeys": ["SAA-3.3"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Testa a confusão clássica entre Multi-AZ (alta disponibilidade/failover, réplica standby síncrona que não atende leitura) e read replicas (escala de leitura, réplica assíncrona que pode ser lida), além do fato específico de que o RDS não oferece autoscaling automático de read replicas -- a criação é manual, segundo a documentação.",
+  "prompt": "Uma aplicação de e-commerce enfrenta alta carga de leitura vinda de relatórios de negócio, degradando o desempenho da instância primária do Amazon RDS, que já está configurada em Multi-AZ para alta disponibilidade. Segundo a documentação oficial do Amazon RDS, qual ação resolve esse problema de carga de leitura?",
+  "explanation": "A documentação de read replicas do Amazon RDS lista, como um dos casos de uso, escalar além da capacidade de computação ou E/S de uma única instância para workloads de leitura intensiva, direcionando esse excesso de tráfego de leitura para uma ou mais read replicas -- exatamente o cenário de relatórios de negócio sobrecarregando a leitura na instância primária. A documentação também afirma explicitamente que, ao contrário de uma read replica, a réplica standby de uma implantação Multi-AZ não pode atender tráfego de leitura (a replicação com o standby é síncrona, destinada à alta disponibilidade, não à escala de leitura) e que o RDS não oferece autoscaling de read replicas -- elas devem ser criadas manualmente.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nenhuma ação é necessária, pois a documentação descreve a réplica standby de uma implantação Multi-AZ como capaz de atender tráfego de leitura, reduzindo automaticamente a carga de leitura sobre a instância primária.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto -- 'ao contrário de uma read replica, uma réplica standby não pode atender tráfego de leitura'. A replicação com o standby é síncrona e existe para alta disponibilidade, não para escalar leitura."
+    },
+    {
+      "key": "B",
+      "text": "Promover a réplica standby da implantação Multi-AZ para se tornar uma segunda instância primária ativa, já que a documentação recomenda essa promoção como forma de balancear a carga de leitura entre duas instâncias simultaneamente ativas, eliminando a necessidade de criar qualquer read replica adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve a promoção de réplicas no contexto de disaster recovery (tornar uma réplica autônoma caso a instância primária falhe), não como mecanismo de balanceamento de carga de leitura entre duas instâncias simultaneamente ativas -- e não elimina a necessidade de uma read replica para esse fim."
+    },
+    {
+      "key": "C",
+      "text": "Habilitar o autoscaling de read replicas, para que o Amazon RDS adicione e remova réplicas automaticamente conforme a demanda de leitura de relatórios varia ao longo do dia.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que 'o RDS não oferece suporte a autoscaling de read replicas' -- a criação e remoção de read replicas deve ser feita manualmente, não automaticamente com base na demanda."
+    },
+    {
+      "key": "D",
+      "text": "Criar uma ou mais read replicas e direcionar o tráfego de leitura dos relatórios de negócio para elas, já que a documentação lista esse cenário -- escalar além da capacidade de uma única instância para workloads de leitura intensiva -- como um caso de uso de read replicas.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o caso de uso que a documentação atribui às read replicas, cuja replicação assíncrona a partir da instância primária permite atender o tráfego de leitura intensiva sem sobrecarregar a instância primária."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Working with DB instance read replicas (read replicas scale read-heavy workloads via asynchronous replication; a Multi-AZ standby replica can't serve read traffic, replication with the standby is synchronous; RDS doesn't support autoscaling of read replicas, they must be created manually)",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_ReadRepl.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

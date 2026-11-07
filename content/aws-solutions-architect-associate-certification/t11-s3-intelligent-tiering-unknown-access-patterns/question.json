@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000063",
+  "objectiveKeys": ["SAA-4.1"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o S3 Intelligent-Tiering é a classe recomendada especificamente quando o padrão de acesso é desconhecido ou muda com o tempo, e que ela não cobra taxa de recuperação -- diferente de S3 Standard-IA, que exige um padrão de acesso conhecido e cobra por recuperação -- não basta saber que 'existem classes de armazenamento mais baratas que o Standard'.",
+  "prompt": "Uma plataforma de data lake recebe arquivos de múltiplas fontes cujo padrão de acesso é desconhecido e pode mudar com o tempo: alguns objetos deixam de ser acessados por meses e depois voltam a ser lidos sem aviso. A equipe quer reduzir o custo de armazenamento automaticamente, sem adicionar complexidade operacional e sem taxas de recuperação quando um objeto frio volta a ser acessado. Segundo a documentação oficial do Amazon S3, qual classe de armazenamento atende a esse cenário?",
+  "explanation": "A documentação do Amazon S3 descreve a classe S3 Intelligent-Tiering como projetada para otimizar custos de armazenamento movendo automaticamente os dados para a camada de acesso mais econômica quando o padrão de acesso muda, sem sobrecarga operacional nem impacto no desempenho, mediante uma pequena taxa de monitoramento e automação por objeto. A documentação afirma explicitamente que não há taxas de recuperação no S3 Intelligent-Tiering, e que essa classe é a recomendada para dados com padrões de acesso desconhecidos, em mudança ou imprevisíveis -- exatamente o cenário do data lake.",
+  "options": [
+    {
+      "key": "A",
+      "text": "S3 Standard-Infrequent Access (S3 Standard-IA), que a documentação descreve como a classe recomendada para dados com padrão de acesso desconhecido ou em mudança, movendo os objetos automaticamente entre camadas sem cobrar taxa de recuperação quando o acesso volta a ocorrer, de forma semelhante à camada de arquivo frequente.",
+      "correct": false,
+      "explanation": "Incorreto: o S3 Standard-IA é descrito para dados com padrão de acesso infrequente já conhecido, não desconhecido ou em mudança; ele também cobra uma taxa de recuperação por GB quando os dados são acessados e não move objetos automaticamente entre camadas -- é o S3 Intelligent-Tiering que não cobra taxa de recuperação e move objetos automaticamente conforme o padrão observado."
+    },
+    {
+      "key": "B",
+      "text": "S3 Glacier Flexible Retrieval, que a documentação descreve como movendo objetos automaticamente entre camadas quentes e frias com base no padrão de acesso observado pelo S3, sem necessidade de regras de ciclo de vida definidas manualmente.",
+      "correct": false,
+      "explanation": "Incorreto: as classes do S3 Glacier são destinadas a arquivamento e dependem de regras de ciclo de vida definidas manualmente (ou de requisições de restauração) para mover ou recuperar objetos -- o monitoramento automático e contínuo do padrão de acesso, sem regras manuais, é o que a documentação atribui ao S3 Intelligent-Tiering."
+    },
+    {
+      "key": "C",
+      "text": "S3 Intelligent-Tiering, mas a documentação afirmaria que essa classe cobra uma taxa de recuperação sempre que um objeto arquivado é acessado novamente, de forma equivalente às camadas de arquivamento do S3 Glacier.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma explicitamente que 'não há taxas de recuperação no S3 Intelligent-Tiering' -- apenas uma pequena taxa de monitoramento e automação por objeto, independentemente de quantas vezes o objeto muda de camada."
+    },
+    {
+      "key": "D",
+      "text": "S3 Intelligent-Tiering, que a documentação descreve como a classe recomendada para dados com padrões de acesso desconhecidos, em mudança ou imprevisíveis, movendo objetos automaticamente entre camadas de acesso conforme o padrão observado, sem impacto no desempenho e sem taxas de recuperação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição que a documentação atribui ao S3 Intelligent-Tiering, incluindo a ausência de taxas de recuperação e a recomendação explícita para dados com padrão de acesso desconhecido ou em mudança."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Managing storage costs with Amazon S3 Intelligent-Tiering (automatically moves data to the most cost-effective tier as access patterns change, no operational overhead or performance impact, no retrieval charges, recommended for data with unknown, changing, or unpredictable access patterns)",
+      "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/intelligent-tiering.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

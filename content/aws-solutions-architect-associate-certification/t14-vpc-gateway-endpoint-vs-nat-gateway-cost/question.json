@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000063",
+  "objectiveKeys": ["SAA-4.4"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que o NAT Gateway cobra por hora de disponibilidade e por GB processado, que um gateway VPC endpoint para S3/DynamoDB não usa AWS PrivateLink e não tem cobrança adicional, e que uma subnet privada por definição não tem rota para um internet gateway -- não basta saber genericamente que 'VPC endpoints reduzem custo'.",
+  "prompt": "Uma carga de trabalho em uma subnet privada de uma VPC faz chamadas frequentes e de alto volume de dados ao Amazon S3, atualmente roteadas através de um NAT Gateway hospedado na subnet pública. A equipe de FinOps identifica que a cobrança por GB processado pelo NAT Gateway está entre as maiores linhas do custo de rede. Segundo a documentação oficial da AWS, qual mudança de arquitetura reduz esse custo sem exigir que a subnet deixe de ser privada?",
+  "explanation": "A documentação de pricing de NAT Gateway afirma que, ao provisionar um NAT Gateway, a cobrança ocorre por hora de disponibilidade e por GB de dados processado -- e recomenda, como estratégia de redução de custo, considerar a criação de um gateway endpoint ou interface endpoint para os serviços AWS mais acessados. A documentação de gateway VPC endpoints afirma explicitamente que 'não há cobrança adicional pelo uso de gateway endpoints' e que 'gateway endpoints não usam o AWS PrivateLink' -- eles permitem que instâncias em uma subnet privada acessem o Amazon S3 ou o DynamoDB sem precisar de um internet gateway ou de um dispositivo NAT, bastando associar o endpoint às tabelas de rotas da subnet.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Criar um segundo NAT Gateway na mesma subnet privada, já que a documentação recomendaria essa abordagem como a principal estratégia para reduzir a cobrança por GB processado quando o destino do tráfego é o Amazon S3, distribuindo o volume de dados processado entre os dois NAT Gateways criados.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define que um NAT Gateway público é criado em uma subnet pública, não em uma subnet privada, e sua estratégia de redução de custo recomendada para tráfego a serviços como S3 é criar um gateway endpoint ou interface endpoint -- duplicar o NAT Gateway não elimina a cobrança por GB processado, apenas a distribui entre dois recursos igualmente cobrados."
+    },
+    {
+      "key": "B",
+      "text": "Criar um gateway VPC endpoint para o Amazon S3 e associá-lo às tabelas de rotas da subnet privada, já que a documentação afirma que não há cobrança adicional pelo uso de gateway endpoints, e o tráfego destinado ao S3 passa a ser roteado diretamente para o endpoint em vez do NAT Gateway.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a recomendação e a ausência de cobrança adicional que a documentação atribui aos gateway endpoints para Amazon S3 e DynamoDB."
+    },
+    {
+      "key": "C",
+      "text": "Criar um gateway VPC endpoint para o Amazon S3, mas a documentação afirmaria que esse tipo de endpoint usa o AWS PrivateLink e cobra por hora de uso e por GB processado, de forma equivalente a um NAT Gateway.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma o oposto -- 'gateway endpoints não usam o AWS PrivateLink, diferentemente dos demais tipos de VPC endpoint' -- e que não há cobrança adicional pelo uso de gateway endpoints."
+    },
+    {
+      "key": "D",
+      "text": "Substituir o NAT Gateway por um internet gateway anexado diretamente à subnet privada, permitindo que as instâncias acessem o Amazon S3 publicamente sem a cobrança por processamento de dados do NAT Gateway.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação define subnet privada como aquela que, por definição, não tem rota para um internet gateway -- anexar uma rota de internet gateway a ela equivaleria a torná-la uma subnet pública, o que viola a exigência de manter a subnet privada."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Pricing for NAT gateways (charged per hour of availability and per GB of data processed; recommends gateway/interface endpoints for AWS services as a cost-reduction strategy)",
+      "url": "https://docs.aws.amazon.com/vpc/latest/userguide/nat-gateway-pricing.html"
+    },
+    {
+      "title": "AWS Documentation -- Gateway endpoints (no additional charge for using gateway endpoints; gateway endpoints do not use AWS PrivateLink; provide connectivity to Amazon S3 and DynamoDB without an internet gateway or NAT device)",
+      "url": "https://docs.aws.amazon.com/vpc/latest/privatelink/gateway-endpoints.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

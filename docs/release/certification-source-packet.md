@@ -82,17 +82,17 @@ Source: <https://docs.aws.amazon.com/pdfs/aws-certification/latest/solutions-arc
 | `SAA-1.3` | Determine appropriate data security controls | _none yet_ |
 | `SAA-2.1` | Design scalable and loosely coupled architectures | _none yet_ |
 | `SAA-2.2` | Design highly available and/or fault-tolerant architectures | _none yet_ |
-| `SAA-3.1` | Determine high-performing and/or scalable storage solutions | _none yet_ |
-| `SAA-3.2` | Design high-performing and elastic compute solutions | _none yet_ |
-| `SAA-3.3` | Determine high-performing database solutions | _none yet_ |
-| `SAA-3.4` | Determine high-performing and/or scalable network architectures | _none yet_ |
-| `SAA-3.5` | Determine high-performing data ingestion and transformation solutions | _none yet_ |
-| `SAA-4.1` | Design cost-optimized storage solutions | _none yet_ |
-| `SAA-4.2` | Design cost-optimized compute solutions | _none yet_ |
-| `SAA-4.3` | Design cost-optimized database solutions | _none yet_ |
-| `SAA-4.4` | Design cost-optimized network architectures | _none yet_ |
+| `SAA-3.1` | Determine high-performing and/or scalable storage solutions | `t6-ebs-io2-block-express-sustained-iops` |
+| `SAA-3.2` | Design high-performing and elastic compute solutions | `t7-ec2-cluster-placement-group-low-latency` |
+| `SAA-3.3` | Determine high-performing database solutions | `t8-rds-read-replica-vs-multi-az` |
+| `SAA-3.4` | Determine high-performing and/or scalable network architectures | `t9-global-accelerator-vs-cloudfront` |
+| `SAA-3.5` | Determine high-performing data ingestion and transformation solutions | `t10-kinesis-data-streams-vs-firehose` |
+| `SAA-4.1` | Design cost-optimized storage solutions | `t11-s3-intelligent-tiering-unknown-access-patterns` |
+| `SAA-4.2` | Design cost-optimized compute solutions | `t12-compute-savings-plans-vs-ec2-instance-savings-plans` |
+| `SAA-4.3` | Design cost-optimized database solutions | `t13-dynamodb-on-demand-capacity-mode` |
+| `SAA-4.4` | Design cost-optimized network architectures | `t14-vpc-gateway-endpoint-vs-nat-gateway-cost` |
 
-0 of 14 seeded objectives claimed by a published question.
+9 of 14 seeded objectives claimed by a published question.
 
 ## cncf-cka-certification
 

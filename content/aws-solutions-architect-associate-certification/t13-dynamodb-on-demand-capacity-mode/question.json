@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000063",
+  "objectiveKeys": ["SAA-4.3"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige conhecer o número exato que a documentação associa ao modo on-demand do DynamoDB -- acomodação instantânea de até o dobro do pico de tráfego anterior, com risco de throttling apenas se esse dobro for excedido dentro de uma janela de 30 minutos -- e não confundir essa propriedade específica com uma capacidade ilimitada e instantânea para qualquer múltiplo de tráfego, nem atribuí-la ao modo provisioned.",
+  "prompt": "Uma aplicação tem um padrão de tráfego altamente imprevisível, com picos súbitos que podem dobrar a carga anterior sem aviso, e a equipe quer evitar tanto o throttling quanto o custo de capacidade provisionada ociosa durante os períodos de baixo uso. Segundo a documentação oficial do Amazon DynamoDB, qual modo de capacidade atende a esse cenário, e que múltiplo do tráfego de pico anterior ele acomoda instantaneamente?",
+  "explanation": "A documentação do Amazon DynamoDB descreve o modo de capacidade on-demand como oferecendo uma experiência de banco de dados verdadeiramente serverless, cobrando por requisição de leitura e escrita realmente efetuada (sem capacidade ociosa a pagar) e escalando automaticamente sem planejamento de capacidade. A documentação afirma, especificamente, que 'o modo de capacidade on-demand acomoda instantaneamente até o dobro do tráfego de pico anterior' em uma tabela -- por exemplo, se o pico anterior foi de 50.000 leituras por segundo, o modo on-demand acomoda instantaneamente até 100.000 leituras por segundo de forma sustentada. A própria documentação também afirma que pode ocorrer throttling se esse dobro do pico anterior for excedido dentro de uma janela de 30 minutos, recomendando pré-aquecimento da tabela ou distribuir o crescimento de tráfego ao longo desse período.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Modo de capacidade provisioned (provisionado) com Auto Scaling do Application Auto Scaling, já que a documentação atribui a esse modo a capacidade de acomodar instantaneamente até o dobro do tráfego de pico anterior de uma tabela.",
+      "correct": false,
+      "explanation": "Incorreto: é especificamente ao modo on-demand que a documentação atribui a propriedade de acomodar instantaneamente até o dobro do tráfego de pico anterior já alcançado pela tabela -- essa descrição não aparece associada ao modo provisioned com Auto Scaling."
+    },
+    {
+      "key": "B",
+      "text": "Modo de capacidade on-demand, mas a documentação afirmaria que ele acomoda instantaneamente qualquer aumento de tráfego, sem limite, independentemente de quão distante esteja do pico anterior já alcançado pela tabela.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação limita essa acomodação instantânea a até o dobro do pico de tráfego anterior, e afirma explicitamente que pode ocorrer throttling se o workload exceder o dobro do pico anterior dentro de uma janela de 30 minutos -- não é uma acomodação instantânea sem limite."
+    },
+    {
+      "key": "C",
+      "text": "Modo de capacidade on-demand, que a documentação descreve como acomodando instantaneamente o tráfego até o dobro do pico de tráfego anterior já alcançado pela tabela, sem necessidade de planejamento de capacidade e cobrando apenas pelas requisições de leitura e escrita realmente efetuadas.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição, incluindo o limiar de 'até o dobro do pico anterior', que a documentação atribui ao modo de capacidade on-demand do DynamoDB."
+    },
+    {
+      "key": "D",
+      "text": "Modo de capacidade provisioned sem Auto Scaling, com um valor fixo de RCU/WCU definido manualmente acima do pico esperado, já que a documentação recomenda essa abordagem especificamente para cargas com picos súbitos e imprevisíveis, evitando o custo de capacidade ociosa durante os períodos de baixo uso da tabela.",
+      "correct": false,
+      "explanation": "Incorreto: um valor fixo de capacidade provisionada acima do pico esperado gera exatamente o custo de capacidade ociosa durante os períodos de baixo uso que a equipe quer evitar, e não acomoda instantaneamente picos imprevisíveis -- é o modo on-demand, cobrando por requisição realmente efetuada, que a documentação recomenda para esse objetivo."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- DynamoDB on-demand capacity mode (serverless, pay-per-request, no capacity planning; on-demand instantly accommodates up to double the previous peak traffic on a table; throttling can occur if you exceed double your previous peak within 30 minutes)",
+      "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/on-demand-capacity-mode.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000062",
+  "objectiveKeys": ["SAA-3.1"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige conhecer os limites numéricos exatos de IOPS e throughput de cada tipo de volume do Amazon EBS (gp3 até 80.000 IOPS/2.000 MiB/s; io1 até 64.000 IOPS; io2 Block Express até 256.000 IOPS/4.000 MiB/s) e associá-los ao limiar específico citado pela documentação para io2 Block Express -- não basta saber que 'volumes SSD são rápidos' ou memorizar apenas o nome do tipo mais caro.",
+  "prompt": "Um banco de dados transacional crítico, hospedado em instâncias Nitro, precisa sustentar mais de 80.000 IOPS (ou mais de 2.000 MiB/s de throughput) com latência média abaixo de 500 microssegundos por operação de 16 KiB. Segundo a documentação oficial de tipos de volume do Amazon EBS, qual tipo de volume é especificamente recomendado para esse requisito?",
+  "explanation": "A documentação de tipos de volume do Amazon EBS atribui ao io2 Block Express, especificamente, os workloads que exigem 'latência sub-milissegundo consistente com latência média abaixo de 500 microssegundos', 'performance de IOPS sustentada' e 'mais de 80.000 IOPS ou 2.000 MiB/s de throughput'. O gp3 tem como limite máximo exatamente 80.000 IOPS e 2.000 MiB/s (em instâncias Nitro) -- ou seja, não atende a uma exigência que ultrapasse esse teto. O io1 tem como máximo 64.000 IOPS e 1.000 MiB/s, abaixo do necessário. O st1 (Throughput Optimized HDD) é voltado a workloads de streaming de big data, data warehouses e processamento de logs, não a bancos de dados transacionais de baixa latência.",
+  "options": [
+    {
+      "key": "A",
+      "text": "gp3 (General Purpose SSD), já que a documentação lista seu IOPS máximo como 80.000 e seu throughput máximo como 2.000 MiB/s, atendendo a qualquer exigência igual ou superior a esses valores.",
+      "correct": false,
+      "explanation": "Incorreto: 80.000 IOPS e 2.000 MiB/s são exatamente o teto máximo do gp3 segundo a documentação -- ele não atende a um requisito que exija mais do que esse teto; é esse limiar específico ('mais de 80.000 IOPS ou 2.000 MiB/s') que a documentação atribui ao io2 Block Express."
+    },
+    {
+      "key": "B",
+      "text": "io1 (Provisioned IOPS SSD), já que a documentação o descreve como voltado a workloads que exigem performance de IOPS sustentada ou mais de 16.000 IOPS, cobrindo qualquer exigência acima desse valor, inclusive acima de 80.000 IOPS -- além de suportar Multi-Attach e reservas NVMe, segundo a mesma documentação de tipos de volume.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação atribui ao io1 o limiar de 'mais de 16.000 IOPS', mas também limita seu IOPS máximo a 64.000 e seu throughput máximo a 1.000 MiB/s -- abaixo dos mais de 80.000 IOPS / 2.000 MiB/s exigidos no cenário. Suportar Multi-Attach e reservas NVMe não altera esse teto de performance; é ao io2 Block Express que a documentação atribui o limiar exigido."
+    },
+    {
+      "key": "C",
+      "text": "io2 Block Express, que a documentação descreve como voltado a workloads que exigem latência sub-milissegundo consistente com média abaixo de 500 microssegundos, performance de IOPS sustentada, e mais de 80.000 IOPS ou 2.000 MiB/s de throughput -- com máximos de 256.000 IOPS e 4.000 MiB/s.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a descrição de caso de uso que a documentação atribui ao io2 Block Express, cujos máximos (256.000 IOPS, 4.000 MiB/s) comportam a exigência do cenário."
+    },
+    {
+      "key": "D",
+      "text": "st1 (Throughput Optimized HDD), já que a documentação o recomenda para workloads que exigem sustentação de alto IOPS com baixa latência, como bancos de dados transacionais de alta performance.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação lista os casos de uso do st1 como big data, data warehouses e processamento de logs -- workloads de streaming orientados a throughput, não bancos de dados transacionais de baixa latência, que exigem volumes SSD como o io2 Block Express."
+    }
+  ],
+  "references": [
+    {
+      "title": "AWS Documentation -- Amazon EBS volume types (io2 Block Express: >80,000 IOPS or 2,000 MiB/s, <500 microsecond average latency, max 256,000 IOPS / 4,000 MiB/s; gp3 max 80,000 IOPS / 2,000 MiB/s; io1 max 64,000 IOPS / 1,000 MiB/s)",
+      "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volume-types.html"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
