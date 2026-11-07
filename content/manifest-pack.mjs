@@ -64,7 +64,9 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // primary source for exactly what its objective's title conventionally means (CIS Benchmarks
     // for controls/compliance, MITRE ATT&CK for threat modeling, SLSA for supply-chain
     // compliance), confirmed by a human decision under #171 rather than by anything the
-    // curriculum itself points to.
+    // curriculum itself points to. #172's AWS Cloud Practitioner profile cites docs.aws.amazon.com,
+    // which serves both roles the Terraform profile needed two different hosts for elsewhere: it
+    // hosts the exam guide PDF itself (coverage) and AWS's own service documentation (correctness).
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
@@ -73,6 +75,7 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
       "developer.hashicorp.com",
       "www.cisecurity.org", "csrc.nist.gov",
       "attack.mitre.org", "slsa.dev",
+      "docs.aws.amazon.com",
     ]);
     for (const reference of question.references) {
       let parsed;

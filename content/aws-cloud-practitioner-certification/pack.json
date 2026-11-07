@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "packId": "aws-cloud-practitioner-certification",
+  "trackSlug": "aws-cloud-practitioner-certification",
+  "trackKind": "CERTIFICATION",
+  "trackVersion": "AWS Cloud Practitioner CLF-C02",
+  "language": "pt-BR",
+  "sourcePolicy": "infrastructure-official-v1",
+  "evidenceProfile": "reference-backed-v1",
+  "editorialStatus": "DRAFT",
+  "certification": {
+    "provider": "AWS",
+    "examCode": "CLFC02",
+    "providerVersion": "AWS Certified Cloud Practitioner (CLF-C02), Exam Guide version 1.3 (published October 29, 2026)",
+    "snapshotDigest": "sha256:de4d07b2b31f6df3465076342c43d7066362d26e356a1a57edd8901616c38c69",
+    "verifiedOn": "2026-11-06"
+  }
+}
