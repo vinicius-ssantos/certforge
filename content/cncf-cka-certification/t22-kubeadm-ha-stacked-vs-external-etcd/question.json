@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.5"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir as duas topologias de etcd documentadas para control plane HA com kubeadm a partir de uma descrição de cenário (onde o etcd roda e com quem ele se comunica), em vez de apenas reconhecer os nomes 'stacked' e 'external' de memória, e associar a topologia correta ao seu trade-off documentado.",
+  "prompt": "Um administrador está desenhando um control plane altamente disponível (HA) com kubeadm. No desenho, cada control plane node cria seu próprio membro etcd local, e esse membro etcd se comunica apenas com o kube-apiserver do mesmo node — não há hosts de etcd separados dos control plane nodes. Qual topologia documentada corresponde a esse desenho, e qual é o trade-off documentado associado a ela?",
+  "explanation": "A documentação de topologias HA do kubeadm descreve a topologia de etcd empilhado (stacked) assim: 'A stacked HA cluster is a topology where the distributed data storage cluster provided by etcd is stacked on top of the cluster formed by the nodes managed by kubeadm that run control plane components' (tradução livre: 'um cluster HA empilhado é uma topologia em que o cluster de armazenamento distribuído de dados fornecido pelo etcd é empilhado sobre o cluster formado pelos nós gerenciados pelo kubeadm que executam componentes do control plane'), complementada por: 'Each control plane node creates a local etcd member and this etcd member communicates only with the kube-apiserver of this node' ('cada control plane node cria um membro etcd local, e esse membro etcd se comunica apenas com o kube-apiserver desse node'). O trade-off documentado é o risco de 'falha acoplada' ('coupled failure'): 'If one node goes down, both an etcd member and a control plane instance are lost, and redundancy is compromised' ('se um node cai, tanto um membro etcd quanto uma instância de control plane são perdidos, e a redundância fica comprometida'), por isso a documentação recomenda um mínimo de três control plane nodes empilhados para um cluster HA ('You should therefore run a minimum of three stacked control plane nodes for an HA cluster').",
+  "options": [
+    {
+      "key": "A",
+      "text": "Topologia de etcd externo (external etcd): o etcd roda em hosts dedicados, separados dos control plane nodes, o que exige o dobro de hosts (mínimo de três para control plane e três para etcd), mas reduz o impacto de perder um único node sobre a redundância do cluster.",
+      "correct": false,
+      "explanation": "Incorreto para este cenário: na topologia externa a documentação descreve que 'etcd members run on separate hosts, and each etcd host communicates with the kube-apiserver of each control plane node' — hosts de etcd separados dos control plane nodes. O cenário descrito tem o etcd rodando no próprio control plane node, o que caracteriza a topologia empilhada, não a externa."
+      },
+    {
+      "key": "B",
+      "text": "Topologia de etcd empilhado (stacked): o etcd roda no mesmo node que o control plane, com o risco documentado de 'falha acoplada' ao perder um node.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a topologia e o trade-off descritos na documentação para o cenário onde cada control plane node cria seu próprio membro etcd local que só conversa com o kube-apiserver do mesmo node."
+    },
+    {
+      "key": "C",
+      "text": "Topologia de etcd empilhado (stacked), mas a documentação não associa a essa topologia nenhum risco adicional de disponibilidade em relação à topologia externa — ambas têm exatamente o mesmo perfil de risco por node.",
+      "correct": false,
+      "explanation": "Incorreto: a topologia identificada está certa, mas a documentação é explícita sobre o risco adicional: 'a stacked cluster runs the risk of failed coupling', já que perder um node nessa topologia tira simultaneamente um membro etcd e uma instância de control plane, o que não ocorre na topologia externa, onde essas duas peças estão desacopladas em hosts diferentes."
+    },
+    {
+      "key": "D",
+      "text": "Topologia de etcd externo (external etcd), e a documentação não recomenda nenhum número mínimo de hosts de control plane ou de etcd para esse desenho, deixando esse dimensionamento inteiramente a critério do administrador.",
+      "correct": false,
+      "explanation": "Incorreto em dois pontos: o cenário descreve etcd rodando no próprio control plane node, o que é a topologia empilhada, não a externa; e a documentação é explícita quanto ao dimensionamento mínimo, afirmando que a topologia externa exige 'a minimum of three hosts for control plane nodes and three hosts for etcd nodes'."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Options for Highly Available Topology",
+      "url": "https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/ha-topology/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

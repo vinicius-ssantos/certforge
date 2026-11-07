@@ -67,6 +67,10 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // curriculum itself points to. #172's AWS Cloud Practitioner profile cites docs.aws.amazon.com,
     // which serves both roles the Terraform profile needed two different hosts for elsewhere: it
     // hosts the exam guide PDF itself (coverage) and AWS's own service documentation (correctness).
+    // CKA's "Use Helm and Kustomize to install cluster components" (CKA-4.6) objective is itself
+    // split across two hosts: Kustomize is documented directly on kubernetes.io, but Helm is a
+    // separate CNCF project with its own docs site, so helm.sh covers exactly the half of this
+    // objective kubernetes.io doesn't.
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
@@ -76,6 +80,7 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
       "www.cisecurity.org", "csrc.nist.gov",
       "attack.mitre.org", "slsa.dev",
       "docs.aws.amazon.com",
+      "helm.sh",
     ]);
     for (const reference of question.references) {
       let parsed;

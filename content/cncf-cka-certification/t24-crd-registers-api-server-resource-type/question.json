@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000034",
+  "objectiveKeys": ["CKA-4.8"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir o que a criação de um CustomResourceDefinition por si só registra na API (um novo caminho de recurso servido pelo próprio kube-apiserver, com validação de schema opcional) do que ela não faz automaticamente (reconciliação por um controlador/operator, ou a necessidade de um API server dedicado), em vez de tratar CRD e operator como sinônimos.",
+  "prompt": "Um desenvolvedor cria um objeto CustomResourceDefinition (CRD) chamado `crontabs.stable.example.com`, especificando uma versão `v1` com um schema `openAPIV3Schema`. Nenhum outro componente é instalado no cluster. De acordo com a documentação, o que acontece imediatamente como resultado direto da criação desse CRD?",
+  "explanation": "A documentação de CustomResourceDefinitions afirma: 'When you create a new CustomResourceDefinition (CRD), the Kubernetes API Server creates a new RESTful resource path for each version you specify' (tradução livre: 'quando você cria um novo CustomResourceDefinition, o Kubernetes API Server cria um novo caminho de recurso RESTful para cada versão especificada'). Ou seja, é o próprio kube-apiserver que passa a servir o novo tipo de recurso — não é necessário implantar um API server dedicado para isso; essa é a alternativa descrita separadamente como 'Set up an Extension API Server'. A documentação também descreve que, com validação OpenAPI v3.0, 'a schema can be specified, which is validated during creation and updates' ('um schema pode ser especificado, que é validado durante a criação e atualizações'), cobrindo os campos customizados definidos em `spec`. Já a reconciliação automática de instâncias desse novo recurso não vem do CRD isoladamente: a documentação de recursos customizados explica que 'When you combine a custom resource with a custom controller, custom resources provide a true declarative API' ('quando você combina um recurso customizado com um controlador customizado, recursos customizados fornecem uma verdadeira API declarativa') — ou seja, o comportamento de observar e reconciliar instâncias (o padrão Operator) depende de um controlador adicional, que o CRD por si só não instala.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Kubernetes API Server cria um novo caminho de recurso RESTful para a versão `v1`, servindo e validando (via `openAPIV3Schema`) o novo tipo de recurso, sem exigir um API server dedicado.",
+      "correct": true,
+      "explanation": "Correto: é exatamente o que a documentação descreve — o próprio kube-apiserver cria o caminho RESTful para a versão especificada e aplica a validação OpenAPI v3.0 quando um schema é fornecido, sem necessidade de um API server separado."
+    },
+    {
+      "key": "B",
+      "text": "A criação do CRD instala automaticamente um controlador que observa e reconcilia continuamente as instâncias desse novo tipo de recurso, implementando o padrão Operator sem nenhum componente adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação distingue as duas peças — um recurso customizado por si só permite apenas armazenar e recuperar dados estruturados; é a combinação com um controlador customizado adicional que fornece uma 'verdadeira API declarativa' (o padrão Operator). O CRD isolado não instala esse controlador."
+      },
+    {
+      "key": "C",
+      "text": "Para que objetos desse novo tipo de recurso possam ser criados e consultados, é necessário implantar e registrar um API server dedicado (API aggregation), já que o kube-apiserver nativo não pode servir tipos de recurso definidos por um CRD.",
+      "correct": false,
+      "explanation": "Incorreto: implantar um API server dedicado é a alternativa descrita separadamente ('Set up an Extension API Server'), não o que um CRD faz. A documentação afirma que o próprio Kubernetes API Server cria o caminho de recurso RESTful para cada versão do CRD — não é necessário um API server adicional para isso."
+    },
+    {
+      "key": "D",
+      "text": "O CRD não oferece nenhuma validação nativa dos campos customizados em `spec`; a única forma documentada de validar esses campos é através de webhooks de admissão configurados separadamente.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação mostra que, ao especificar um schema `openAPIV3Schema` na versão do CRD, esse schema 'é validado durante a criação e atualizações' pelo próprio mecanismo de validação OpenAPI v3.0 — uma validação nativa, que não depende de webhooks de admissão configurados separadamente."
+    }
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Documentation — Custom Resources",
+      "url": "https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/"
+    },
+    {
+      "title": "Kubernetes Documentation — Extend the Kubernetes API with CustomResourceDefinitions",
+      "url": "https://kubernetes.io/docs/tasks/extend-kubernetes/custom-resources/custom-resource-definitions/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

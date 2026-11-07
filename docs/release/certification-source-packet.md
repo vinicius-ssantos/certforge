@@ -120,17 +120,17 @@ Source: <https://github.com/cncf/curriculum/blob/b3c8508b9f6cd0bcfa76c2e4b7cc9b6
 | `CKA-4.2` | Prepare underlying infrastructure for installing a Kubernetes cluster | `t20-kubeadm-prerequisites-swap-unique-id` |
 | `CKA-4.3` | Create and manage Kubernetes clusters using kubeadm | `t08-kubeadm-bootstrap-token` |
 | `CKA-4.4` | Manage the lifecycle of Kubernetes clusters | `t21-kubelet-apiserver-version-skew` |
-| `CKA-4.5` | Implement and configure a highly-available control plane | _none yet_ |
-| `CKA-4.6` | Use Helm and Kustomize to install cluster components | _none yet_ |
+| `CKA-4.5` | Implement and configure a highly-available control plane | `t22-kubeadm-ha-stacked-vs-external-etcd` |
+| `CKA-4.6` | Use Helm and Kustomize to install cluster components | `t23-helm-release-vs-kustomize-overlay` |
 | `CKA-4.7` | Understand extension interfaces (CNI, CSI, CRI, etc.) | `t09-cni-implements-network-model` |
-| `CKA-4.8` | Understand CRDs, install and configure operators | _none yet_ |
+| `CKA-4.8` | Understand CRDs, install and configure operators | `t24-crd-registers-api-server-resource-type` |
 | `CKA-5.1` | Troubleshoot clusters and nodes | `t10-node-ready-condition-unknown` |
 | `CKA-5.2` | Troubleshoot cluster components | _none yet_ |
 | `CKA-5.3` | Monitor cluster and application resource usage | _none yet_ |
 | `CKA-5.4` | Manage and evaluate container output streams | `t11-kubectl-logs-all-containers` |
 | `CKA-5.5` | Troubleshoot services and networking | _none yet_ |
 
-21 of 27 seeded objectives claimed by a published question.
+24 of 27 seeded objectives claimed by a published question.
 
 ## cncf-ckad-certification
 
