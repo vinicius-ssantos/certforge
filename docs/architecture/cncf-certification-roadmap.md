@@ -168,11 +168,12 @@ cluster." It splits into two genuinely different problems:
   containers, which means genuine sandboxing (gVisor/Kata/microVM-class isolation), not plain
   Docker. This is a security-sensitive infrastructure project in its own right — #175's own
   acceptance criteria require a reviewed threat model and ADR before any of it ships. **That
-  design-only step was taken 2026-11-08:** see
+  review happened 2026-11-08:** the product owner reviewed and accepted
   [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md) and
   [the isolation plan](hands-on-labs-isolation.md), plus the new "Hands-on lab runner threats"
-  section of `threat-model.md`. None of it is Accepted or built yet — it is written specifically
-  to be reviewed before Phase 2's actual construction starts.
+  section of `threat-model.md`, in PR #350 — satisfying #175's first acceptance criterion. Phase
+  2's actual construction (the orchestrator, microVM provisioning, and the grader) has not
+  started.
 
 **All 27 seeded objectives are covered (2026-11-08)**, including every Troubleshooting objective
 this section used to say was blocked on #175 Phase 2 — Phase 1's static-diagnosis pattern turned
@@ -220,11 +221,11 @@ third-party blogs do, which this pack's `infrastructure-official-v1` source poli
 allow. This is an honest, permanent gap, not a "not yet authored" one; do not re-attempt it
 without a new primary source actually appearing on an allowlisted host.
 
-CKS remains plan-only. Its hard prerequisite (CKA) is now built, but Phase 2 of #175 — the thing
-that actually unblocks CKS, since CKS has no Phase-1-style static-diagnosis fallback the way CKA's
-Troubleshooting domain did — is still unbuilt. What changed 2026-11-08: #175's own first
-acceptance criterion (a reviewed threat model, ADR, and isolation plan) now has a design-only
-answer — [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md),
-[the isolation plan](hands-on-labs-isolation.md), and a new section of `threat-model.md` — written
-specifically to be reviewed, not self-approved. Phase 2's actual construction, and CKS content
-authoring after it, both wait on that review.
+CKS remains plan-only. Its hard prerequisite (CKA) is now built, and #175's first acceptance
+criterion (a reviewed threat model, ADR, and isolation plan) was satisfied 2026-11-08 — the
+product owner reviewed and accepted [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md),
+[the isolation plan](hands-on-labs-isolation.md), and the new section of `threat-model.md` in PR
+#350. What CKS is still waiting on is Phase 2's actual *construction* (the orchestrator, microVM
+provisioning, and the grader), since CKS has no Phase-1-style static-diagnosis fallback the way
+CKA's Troubleshooting domain did — that construction has not started, and CKS content authoring
+waits on it.

@@ -1,8 +1,12 @@
 # ADR 0027: Isolate hands-on lab execution with microVM-class sandboxing, not plain containers
 
-- Status: **Proposed.** This is a design-only artifact for #175's own first acceptance criterion
-  ("Threat model, ADR e plano de isolamento com segurança revisada") — it is not Accepted until a
-  human security review actually happens, which this ADR cannot grant to itself.
+- Status: **Accepted** (2026-11-08, by the product owner, after reviewing this ADR together with
+  `docs/architecture/hands-on-labs-isolation.md` and the new "Hands-on lab runner threats" section
+  of `threat-model.md` in PR #350). This satisfies #175's own first acceptance criterion
+  ("Threat model, ADR e plano de isolamento com segurança revisada"). Acceptance covers the
+  design only — the isolation tier, the `LabSpec` schema, and the threat enumeration — not any
+  implementation, since none exists yet; see the Rollout section of the isolation plan for what
+  Phase 2's actual construction still needs before it ships.
 - Date: 2026-11-08
 - Issue: [#175](https://github.com/vinicius-ssantos/certforge/issues/175) ("Design safe hands-on
   labs for Docker, Kubernetes and IaC"), depends on #164
@@ -91,10 +95,9 @@ Cleanup itself is a tested behavior (#175's own acceptance criterion), not an as
 
 **6. Phase 1 and Phase 2 stay separately tracked.** Phase 1 (static diagnosis, already shipped
 through #171's content packs) required none of the above and is not retroactively subject to this
-ADR. This ADR, and the isolation plan it points to, govern Phase 2 only — and Phase 2 remains
-unbuilt until this document (or a revision of it) receives an actual human security review, per
-#175's first acceptance criterion. Marking this ADR "Accepted" is a separate, future action by
-whoever performs that review, not something this document does for itself.
+ADR. This ADR, and the isolation plan it points to, govern Phase 2 only — and Phase 2's
+*construction* remains unbuilt even now that this document is Accepted: acceptance covers the
+design, not an implementation, which is separate follow-on work the Rollout section scopes.
 
 ## Consequences
 
