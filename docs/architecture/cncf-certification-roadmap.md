@@ -128,13 +128,20 @@ full force. Every question stays strictly conceptual.
 (committed 2026-10-15). `sha256:634b793704485c2ac424a90902e0f8b28f7348a49814393434f808e3e78ec18c`.
 Read with `pdftotext -layout`. Verified 2026-11-04.
 
-| Domain | Weight | Covered by this round's pack |
+| Domain | Weight | Covered |
 |---|---|---|
-| Storage | 10% | CKA-1.1, 1.2 |
-| Workloads and Scheduling | 15% | CKA-2.2, 2.5 |
-| Servicing and Networking | 20% | CKA-3.3, 3.6 |
-| Cluster Architecture, Installation and Configuration | 25% | CKA-4.1, 4.3, 4.7 |
-| Troubleshooting | 30% | CKA-5.1, 5.4 (Phase 1 only — see below) |
+| Storage | 10% | CKA-1.1 through 1.3 (all 3) |
+| Workloads and Scheduling | 15% | CKA-2.1 through 2.5 (all 5) |
+| Servicing and Networking | 20% | CKA-3.1 through 3.6 (all 6) |
+| Cluster Architecture, Installation and Configuration | 25% | CKA-4.1 through 4.8 (all 8) |
+| Troubleshooting | 30% | CKA-5.1 through 5.5 (all 5, Phase 1 only — see below) |
+
+All 27 objectives are covered (2026-11-08). Full coverage was reached incrementally: the pack
+opened this round with CKA-1.1/1.2, 2.2/2.5, 3.3/3.6, 4.1/4.3/4.7 and the two Phase 1
+Troubleshooting questions below, then closed the remaining 16 (including the 3 Troubleshooting
+objectives this section used to say were blocked on #175 Phase 2 — see below) through two more
+authoring rounds, each independently re-verified against the live `kubernetes.io`/`helm.sh` pages
+before merging.
 
 Troubleshooting is the single largest domain across all five CNCF certs this project tracks, and
 is almost entirely unteachable by multiple choice in general — it is "diagnose this broken live
@@ -146,22 +153,32 @@ cluster." It splits into two genuinely different problems:
   skill, so it needs no new infrastructure: ordinary multiple choice, exactly like
   KCNA/KCSA/CKAD, works today with no schema change. (`GUIDED_RESPONSE` does **not** work for
   this without further validation and delivery changes first — `RevisionRules` hard-rejects it
-  outside `TrackKind.INTERVIEW`, confirmed while fixing a Codex finding on #302.) This project's
-  two Troubleshooting questions (`CKA-5.1`, a Node's `Ready` condition going `Unknown`; `CKA-5.4`,
-  the `kubectl logs --all-containers` flag) are Phase 1 only and never imply live cluster
-  operation — exactly the order #175 itself specifies: *"Começar com leitura/debug de
-  Dockerfile/YAML e testes estáticos; só depois laboratórios em sandbox."*
+  outside `TrackKind.INTERVIEW`, confirmed while fixing a Codex finding on #302.) **Done
+  (2026-11-08): all five Troubleshooting objectives now ship this way** — `CKA-5.1` (a Node's
+  `Ready` condition going `Unknown`), `CKA-5.2` (a kubeadm Static Pod's mirror Pod being recreated
+  without the underlying container restarting), `CKA-5.3` (`kubectl top` depending on an explicitly
+  deployed metrics-server), `CKA-5.4` (the `kubectl logs --all-containers` flag), and `CKA-5.5` (a
+  Service's `EndpointSlice` showing no endpoints vs. a selected-but-not-`serving` one) — none of
+  them implies live cluster operation, exactly the order #175 itself specifies: *"Começar com
+  leitura/debug de Dockerfile/YAML e testes estáticos; só depois laboratórios em sandbox."*
 - **Phase 2 — live sandboxed labs (#175, real infrastructure, not started).** An ephemeral
   `kind`/`k3d` cluster per session, a browser terminal bridged to it, deterministic evaluation
   against the cluster's actual end state, and strict resource/network/time limits — #175
   explicitly forbids the host's Docker socket, real credentials, paid cloud and privileged
   containers, which means genuine sandboxing (gVisor/Kata/microVM-class isolation), not plain
   Docker. This is a security-sensitive infrastructure project in its own right — #175's own
-  acceptance criteria require a reviewed threat model and ADR before any of it ships.
+  acceptance criteria require a reviewed threat model and ADR before any of it ships. **That
+  design-only step was taken 2026-11-08:** see
+  [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md) and
+  [the isolation plan](hands-on-labs-isolation.md), plus the new "Hands-on lab runner threats"
+  section of `threat-model.md`. None of it is Accepted or built yet — it is written specifically
+  to be reviewed before Phase 2's actual construction starts.
 
-16 of the 27 seeded objectives remain uncovered, including 3 of Troubleshooting's 5 — the gap
-stays visible in the objective snapshot, the same way KCNA/KCSA/CKAD's gaps are, until #175
-closes Phase 2 for real.
+**All 27 seeded objectives are covered (2026-11-08)**, including every Troubleshooting objective
+this section used to say was blocked on #175 Phase 2 — Phase 1's static-diagnosis pattern turned
+out sufficient for all five, not just the two originally shipped. Phase 2 (real sandboxed
+execution) is unaffected by this: it remains a separate, not-yet-built capability, now with a
+reviewable design.
 
 ### CKS — Certified Kubernetes Security Specialist — plan only
 
@@ -189,14 +206,25 @@ Source: `CKS_Curriculum v1.37.pdf` (filename has a literal space), commit
 | Monitoring, Logging and Runtime Security | 20% |
 
 Plan: same reasoning as CKA — fully performance-based, plus a hard CKA prerequisite that is itself
-only a plan, not built. Document only this round.
+only a plan, not built. Document only this round. See "Follow-up tracked under #171" below for
+what changed 2026-11-08 on the #175 side of this blocker.
 
 ## Follow-up tracked under #171
 
-- KCNA is done — all 13 objectives covered (#308). Close the remaining uncovered objectives in
-  KCSA (33 of 42 remain, including all of Compliance and Security Frameworks), CKAD (13 of 24
-  remain) and CKA (16 of 27 remain, including 3 of Troubleshooting's 5 — those three wait on #175
-  Phase 2, not on authoring effort).
-- CKS can now start its content plan in earnest (its hard prerequisite, CKA, is built), but
-  should still stay plan-only until #175 lands, since CKS is fully performance-based with no
-  Phase-1-style static-diagnosis fallback the way CKA's Troubleshooting domain has.
+Status as of 2026-11-08: KCNA (13/13), CKAD (24/24), and CKA (27/27) are all at full objective
+coverage. KCSA is at 41/42 — the one remaining objective, `KCSA-1.1` ("The 4Cs of Cloud Native
+Security"), was re-checked directly against the live `kubernetes.io` page on 2026-11-08 and
+confirmed still unsourceable: that page no longer documents the 4Cs at all (it now organizes
+security by lifecycle phase instead), and no `cncf.io` page documents them either — only
+third-party blogs do, which this pack's `infrastructure-official-v1` source policy does not
+allow. This is an honest, permanent gap, not a "not yet authored" one; do not re-attempt it
+without a new primary source actually appearing on an allowlisted host.
+
+CKS remains plan-only. Its hard prerequisite (CKA) is now built, but Phase 2 of #175 — the thing
+that actually unblocks CKS, since CKS has no Phase-1-style static-diagnosis fallback the way CKA's
+Troubleshooting domain did — is still unbuilt. What changed 2026-11-08: #175's own first
+acceptance criterion (a reviewed threat model, ADR, and isolation plan) now has a design-only
+answer — [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md),
+[the isolation plan](hands-on-labs-isolation.md), and a new section of `threat-model.md` — written
+specifically to be reviewed, not self-approved. Phase 2's actual construction, and CKS content
+authoring after it, both wait on that review.

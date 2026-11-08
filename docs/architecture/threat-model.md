@@ -112,6 +112,114 @@ Before `v0.5.0`, a dedicated runner review must address:
 
 Required direction: disposable restricted environments, no network, no database credentials, read-only base image, bounded writable storage, non-root execution, strict time and resource limits, job quotas, output truncation, image provenance, patching, and runner-specific monitoring.
 
+## Hands-on lab runner threats (#175)
+
+This section is distinct from "Future runner threats" above, which was written for ADR 0006's
+Java-execution runner: that runner compiles and runs text inside a language runtime with no
+legitimate need for raw syscalls, devices, or kernel capabilities. #175's labs are categorically
+wider — the learner needs to drive a real Docker daemon or Kubernetes cluster, which is the entire
+point of the lab. [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md) and
+[the isolation plan](hands-on-labs-isolation.md) are the design response; this section records the
+threats they answer, in this document's own format, so it stays reviewable alongside everything
+else here.
+
+### Container/VM escape to the host
+
+Threat: a learner's commands inside a lab exploit a kernel or hypervisor bug to reach the host
+running other learners' sessions or this application's own infrastructure.
+
+Controls: microVM-class isolation (Kata Containers/Firecracker, or gVisor) instead of a plain
+container sharing the host kernel; non-root execution inside the guest; a minimal, audited guest
+base image rebuilt on a patching cadence; no capability ever granted at the host level.
+
+### Host Docker socket or privileged-container exposure
+
+Threat: the orchestrator mounts the host's `/var/run/docker.sock` or runs a lab `--privileged` to
+make a nested Docker/Kubernetes runtime work the easy way — both documented, direct routes to
+host-level compromise.
+
+Controls: both are forbidden outright by #175's acceptance criteria and by ADR 0027 decision 2; a
+nested daemon runs only inside the guest microVM's own kernel, which the host does not trust
+regardless of what runs inside it.
+
+### Kubernetes control-plane or credential leakage
+
+Threat: an ephemeral cluster's kubeconfig or a service-account token leaves the session, or a
+lab's own RBAC-escalation exercise is used to pivot beyond its single ephemeral cluster.
+
+Controls: the cluster's API server is reachable only from inside the microVM's own network
+namespace, never exposed to the host network; kubeconfig is generated fresh per session, lives
+only inside the guest, and is destroyed with the VM; no token issued for one session has scope
+beyond that session's own ephemeral cluster.
+
+### Resource exhaustion inside a session
+
+Threat: a learner's shell spins unbounded processes, allocates unbounded memory, fills disk, or
+runs a cryptominer.
+
+Controls: hard `wallClockSeconds`/`memoryMiB`/`cpuMillicores`/`diskMiB`/`processCount` limits per
+`LabSpec`, enforced by the orchestrator at the hypervisor level as the primary boundary, with
+in-guest cgroups as defense in depth only; unconditional destroy at timeout.
+
+### Network egress and exfiltration
+
+Threat: a lab session is used to reach arbitrary internet hosts — exfiltrating data, relaying
+abuse traffic, or reaching a cryptomining pool.
+
+Controls: default-deny egress (`network.egress: none` in every `LabSpec` unless explicitly
+justified); the one permitted exception (`image-pull-only`) is scoped to a single pinned registry
+and is expected to stay unused once base images are pre-cached.
+
+### Supply-chain risk in lab images and fixtures
+
+Threat: a compromised base image or a fixture bundle ships a backdoor that activates inside the
+guest.
+
+Controls: every `LabSpec` image is pinned by digest, never a floating tag; fixtures are static
+bundles committed to this repository and reviewed like any other change, never fetched live at
+session start; pinned digests are periodically re-scanned the same way release images already are.
+
+### Evaluator spoofing
+
+Threat: a learner manipulates an in-guest agent that reports lab completion, so it always claims
+success regardless of the real end state.
+
+Controls: the grader is a separate process outside the learner's shell context, reading final
+state through the orchestrator's own access path, never trusting anything the learner's shell
+writes — ADR 0027 decision 4.
+
+### Cross-session contamination
+
+Threat: a microVM, its filesystem, or its generated credentials are reused between sessions or
+between learners, leaking one learner's lab state into the next.
+
+Controls: destroy-on-exit is unconditional — on success, failure, timeout, or orchestrator error —
+and nothing about a session (image layer cache aside) is ever reused for a different session.
+
+### Abusive automation against the lab orchestrator
+
+Threat: scripted abuse starts many lab sessions to exhaust host capacity, independent of anything
+that happens inside any one session.
+
+Controls: per-account rate limiting on lab starts, the same pattern already proven for sign-in
+throttling (`IdentityIT`); a capacity ceiling with graceful queuing or rejection rather than
+over-provisioning host resources.
+
+### Unsafe diagnostic output
+
+Threat: logs or crash dumps capture a learner's raw shell transcript, which is unbounded user
+content even though it is not one of this application's own secrets.
+
+Controls: the same bounded, allowlisted telemetry fields as the rest of this document — session
+id, resource usage, and the grader's structured verdict are logged by default; the raw transcript
+is never captured unless a separate, access-controlled, retention-bounded abuse investigation
+specifically needs it.
+
+### Status
+
+None of the above is built. This section exists to satisfy #175's first acceptance criterion
+before any of Phase 2's code is written, per ADR 0027.
+
 ## Review cadence
 
 Update this document when a new trust boundary, personal-data field, administrative capability, external integration, or execution mechanism is introduced.
