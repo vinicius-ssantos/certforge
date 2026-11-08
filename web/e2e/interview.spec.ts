@@ -102,7 +102,13 @@ test.describe("interview preparation", () => {
     // Two items, each answered on its own terms. Which kind is on the screen is read from the
     // page rather than assumed, because the order of a session is the server's to choose.
     for (let answered = 0; answered < 2; answered++) {
-      const guided = await page.getByText("Guided answer").isVisible();
+      const guidedMarker = page.getByText("Guided answer");
+      const objectiveMarker = page.getByLabel(/The expected option/);
+      // isVisible() does not wait, so right after the previous "Next item" click it can read
+      // false before React has rendered either marker, sending this branch down the wrong path
+      // for a question type that was never on screen. Wait for one of them first.
+      await expect(guidedMarker.or(objectiveMarker)).toBeVisible();
+      const guided = await guidedMarker.isVisible();
       if (guided) {
         await expect(page.getByText(/Nothing grades this answer/)).toBeVisible();
         await page.getByLabel(/Your answer/).fill("Fixture answer typed by the test.");
