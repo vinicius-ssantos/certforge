@@ -217,8 +217,9 @@ specifically needs it.
 
 ### Status
 
-None of the above is built. This section exists to satisfy #175's first acceptance criterion
-before any of Phase 2's code is written, per ADR 0027.
+None of the above is built. This section, together with ADR 0027 and its isolation plan, was
+reviewed and accepted by the product owner on 2026-11-08 (PR #350), satisfying #175's first
+acceptance criterion before any of Phase 2's code is written.
 
 ## Review cadence
 

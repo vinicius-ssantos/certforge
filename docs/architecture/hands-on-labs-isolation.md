@@ -1,8 +1,9 @@
 # Hands-on labs: isolation plan (#175 Phase 2)
 
-Status: design only, no code. This is the isolation plan [ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md)
-points to for #175's first acceptance criterion. Nothing here ships until that ADR has had an
-actual human security review.
+Status: design accepted (2026-11-08, PR #350), no code yet. This is the isolation plan
+[ADR 0027](../adr/0027-isolate-hands-on-lab-execution.md) points to for #175's first acceptance
+criterion, now satisfied. Nothing here is implemented yet — see Rollout below for what Phase 2's
+actual construction still needs.
 
 ## What this document is not
 
@@ -142,9 +143,10 @@ it rather than over-provisioning host resources.
 
 - **Phase 1 — done.** Static-diagnosis questions, no execution. Shipped through #171's content
   packs; no further action from this document.
-- **Phase 2 — this document's scope, not yet started.** In order:
-  1. Human security review of ADR 0027 and this document; ADR 0027 is marked Accepted only as a
-     result of that review, not by this document asserting it.
+- **Phase 2 — this document's scope. Design accepted 2026-11-08; construction not started.** In
+  order:
+  1. ~~Human security review of ADR 0027 and this document.~~ Done — the product owner reviewed
+     and accepted ADR 0027 in PR #350.
   2. Build the orchestrator and microVM provisioning for exactly one `LabSpec` (the readiness-probe
      lab, the simplest of the three) as a vertical slice, entirely outside the main application's
      deployment, per ADR 0006's existing "separate restricted runner service" principle.

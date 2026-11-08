@@ -30,6 +30,6 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0024](0024-ai-reviewer-verified-tier.md) | Extend the AI-reviewer fast lane to Verified-tier content, with its own recorded checklist | Accepted |
 | [0025](0025-ai-reviewer-approval-is-final.md) | Make the AI reviewer's approval final, with no human confirmation step | Accepted |
 | [0026](0026-ai-reviewer-fast-lane-for-every-pack.md) | Extend the AI reviewer's fast lane to every content pack and track kind | Accepted |
-| [0027](0027-isolate-hands-on-lab-execution.md) | Isolate hands-on lab execution with microVM-class sandboxing, not plain containers | **Proposed** |
+| [0027](0027-isolate-hands-on-lab-execution.md) | Isolate hands-on lab execution with microVM-class sandboxing, not plain containers | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.
