@@ -130,7 +130,7 @@ Source: <https://github.com/cncf/curriculum/blob/b3c8508b9f6cd0bcfa76c2e4b7cc9b6
 | `CKA-5.4` | Manage and evaluate container output streams | `t11-kubectl-logs-all-containers` |
 | `CKA-5.5` | Troubleshoot services and networking | `t27-service-endpointslice-selector-vs-readiness` |
 
-24 of 27 seeded objectives claimed by a published question.
+27 of 27 seeded objectives claimed by a published question.
 
 ## cncf-ckad-certification
 
