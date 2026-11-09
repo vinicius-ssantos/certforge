@@ -37,12 +37,12 @@ const addBlock = (target, question, language, body) =>
 
 test("the pack stands on its references, and says so for every question", () => {
   const live = assertEvidence(pack);
-  assert.equal(live.total, 85);
+  assert.equal(live.total, 100);
   assert.equal(live.profile, "reference-backed-v1");
-  assert.deepEqual(live.byType, { "reference-backed": 85 });
+  assert.deepEqual(live.byType, { "reference-backed": 100 });
   // The #166 criterion: the questions nothing mechanical checks are named, not inferred from a
   // missing key. Every one of them, which is what a pack of prose and quoted snippets honestly is.
-  assert.equal(live.withoutExecutableEvidence.length, 85);
+  assert.equal(live.withoutExecutableEvidence.length, 100);
   assert.ok(live.withoutExecutableEvidence.includes("t01-image-vs-container"));
 });
 

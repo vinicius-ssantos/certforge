@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige usar a estrutura de árvore de um rastro (trace_id compartilhado e hierarquia por parent_id) para localizar qual etapa específica de uma cadeia de chamadas é responsável pela latência.",
+  "prompt": "Uma requisição do usuário passa por um serviço de borda, que chama um serviço de catálogo, que por sua vez chama um serviço de preços. A requisição inteira demora 900ms. Abrindo o rastro dessa requisição no backend de tracing, todos os spans compartilham o mesmo `trace_id`, e cada span aponta para seu `parent_id`. Qual é a forma correta de identificar qual das três etapas é responsável pela maior parte dos 900ms?",
+  "explanation": "A documentação de rastros do OpenTelemetry descreve um rastro como uma árvore de spans conectados por relações pai-filho, em que spans compartilhando o mesmo `trace_id` têm sua hierarquia representada pelo campo `parent_id`. Isso significa que cada span tem sua própria duração registrada dentro dessa árvore, então basta comparar a duração de cada span individualmente para ver qual etapa específica (borda, catálogo ou preços) consumiu a maior parte do tempo total — sem precisar adivinhar a partir do tempo total da requisição.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Dividir 900ms igualmente entre as três etapas, já que a árvore de spans do OpenTelemetry não registra a duração de cada etapa separadamente.",
+      "correct": false,
+      "explanation": "Incorreto: a árvore de spans registra justamente a duração de cada etapa de forma individual; dividir o total igualmente ignora essa informação disponível e pode levar a investigar a etapa errada."
+    },
+    {
+      "key": "B",
+      "text": "Comparar a duração registrada em cada span individual da árvore — borda, catálogo e preços — usando a hierarquia de `parent_id` sob o mesmo `trace_id` para ver qual etapa consumiu mais tempo.",
+      "correct": true,
+      "explanation": "Correto: isso é exatamente o que a estrutura de árvore descrita na documentação de rastros do OpenTelemetry permite — cada span tem sua própria duração, e a hierarquia por `parent_id` sob o mesmo `trace_id` mostra onde, na cadeia de chamadas, o tempo foi gasto."
+    },
+    {
+      "key": "C",
+      "text": "Ignorar o rastro e assumir que o serviço mais recentemente implantado é sempre a causa, independentemente do que os spans mostrem.",
+      "correct": false,
+      "explanation": "Incorreto: essa abordagem descarta justamente a evidência que o rastro foi construído para fornecer — a duração por etapa — em favor de uma suposição sobre qual serviço mudou por último, que pode não ter relação com a causa real."
+    },
+    {
+      "key": "D",
+      "text": "Como os três spans compartilham o mesmo `trace_id`, eles necessariamente têm a mesma duração, então não é possível distinguir qual etapa é mais lenta a partir do rastro registrado pelo backend.",
+      "correct": false,
+      "explanation": "Incorreto: compartilhar o mesmo `trace_id` identifica que os spans pertencem ao mesmo rastro, mas não implica que tenham a mesma duração — cada span registra seu próprio intervalo de tempo dentro dessa árvore."
+    }
+  ],
+  "references": [
+    {
+      "title": "Traces | OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/concepts/signals/traces/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

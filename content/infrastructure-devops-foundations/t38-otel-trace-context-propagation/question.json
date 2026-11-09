@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige correlacionar um sintoma observável (rastros quebrados) com uma causa específica de infraestrutura (um proxy removendo cabeçalhos), em vez de apenas definir o conceito de propagação de contexto.",
+  "prompt": "Um serviço A chama um serviço B através de um proxy reverso recém-instalado entre eles. Depois dessa mudança, cada chamada de A para B passa a aparecer no backend de tracing como dois rastros completamente separados e sem relação, em vez de um único rastro contínuo — mesmo que A e B continuem instrumentados exatamente como antes. Qual é a causa mais provável?",
+  "explanation": "A documentação de propagação de contexto do OpenTelemetry descreve que o contexto de um rastro é transferido entre processos por meio de cabeçalhos HTTP, usando um propagador como o W3C Trace Context — é assim que, por exemplo, \"Service B uses these values to create a new span that belongs to the same trace, setting the span from Service A as its parent\". Se o proxy reverso recém-introduzido remove ou não repassa o cabeçalho `traceparent` (ou equivalente) entre A e B, o serviço B nunca recebe o `trace_id` do serviço A e cria um rastro novo e desconectado ao atender a requisição — a instrumentação de A e B continua correta, mas o elo entre elas foi cortado no meio do caminho.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O proxy reverso provavelmente está removendo ou não repassando o cabeçalho de contexto de rastro (como `traceparent`) entre as duas chamadas, então o serviço B nunca recebe o `trace_id` de A e inicia um rastro novo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse o mecanismo que a documentação de propagação de contexto do OpenTelemetry descreve — sem o cabeçalho de contexto chegando ao serviço downstream, ele não tem como vincular seu próprio span ao rastro de origem."
+    },
+    {
+      "key": "B",
+      "text": "O backend de tracing tem um limite fixo de quantos spans cabem em um único rastro, e a adição do proxy fez o rastro exceder esse limite, forçando o backend a dividi-lo automaticamente em dois rastros separados e menores.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação de rastros do OpenTelemetry não descreve um comportamento de divisão automática de um rastro por limite de tamanho; o sintoma descrito — dois rastros completamente desconectados logo após introduzir um novo salto de rede — aponta para perda do cabeçalho de propagação, não para um limite de capacidade."
+    },
+    {
+      "key": "C",
+      "text": "Isso é esperado: cada processo de rede, incluindo um proxy, sempre inicia seu próprio rastro independente por design, então um rastro nunca atravessa mais de um salto de rede.",
+      "correct": false,
+      "explanation": "Incorreto: a própria premissa da propagação de contexto documentada pelo OpenTelemetry é permitir que um rastro atravesse múltiplos processos e saltos de rede quando o contexto é repassado corretamente; se isso nunca funcionasse através de um proxy, a propagação de contexto não teria propósito."
+    },
+    {
+      "key": "D",
+      "text": "O problema é certamente no serviço B, que precisa reiniciar seu processo para reconhecer o novo proxy na topologia de rede.",
+      "correct": false,
+      "explanation": "Incorreto: a continuidade de um rastro depende do cabeçalho de contexto chegar na requisição, não de B \"reconhecer\" a topologia de rede; reiniciar B não resolve um cabeçalho que o proxy não está repassando."
+    }
+  ],
+  "references": [
+    {
+      "title": "Context propagation | OpenTelemetry",
+      "url": "https://opentelemetry.io/docs/concepts/context-propagation/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

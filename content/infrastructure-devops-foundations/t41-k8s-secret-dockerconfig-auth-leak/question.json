@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige transferir o mesmo princípio de base64-não-é-confidencialidade para um cenário concreto de compartilhamento de credenciais, em vez de apenas repetir a definição.",
+  "prompt": "Um engenheiro de plataforma precisa depurar um problema de `imagePullSecret` e, para pedir ajuda em um canal de chat da empresa, exporta o Secret do tipo `kubernetes.io/dockerconfigjson` com `kubectl get secret regcred -o yaml` e cola o conteúdo completo no chat, assumindo que o valor em base64 do campo `.dockerconfigjson` está seguro para compartilhar porque \"não dá para ler isso de olho\". Qual é o risco real dessa ação?",
+  "explanation": "A documentação de Secrets do Kubernetes traz um alerta específico sobre esse exato tipo de Secret: o valor `auth` dentro do `.dockerconfigjson` está apenas em base64 — \"it is obscured but not secret\" — e qualquer pessoa que consiga ler esse Secret pode aprender o token de acesso ao registry de imagens. Colar o YAML completo em um chat da empresa expõe esse token para qualquer pessoa com acesso ao canal, de forma equivalente a colar a senha do registry em texto puro, mesmo que o valor pareça ilegível a olho nu.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O risco é mínimo: o formato `dockerconfigjson` foi desenhado para ser compartilhado entre equipes, já que o acesso ao registry de imagens normalmente não é considerado sensível.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação do Kubernetes trata o valor `auth` desse tipo de Secret como equivalente a um token de acesso ao registry, não como algo seguro para compartilhamento geral."
+    },
+    {
+      "key": "B",
+      "text": "Colar o YAML no chat expõe o token de acesso ao registry de imagens para qualquer pessoa com acesso ao canal, porque o valor `auth` dentro de `.dockerconfigjson` está apenas em base64, não criptografado.",
+      "correct": true,
+      "explanation": "Correto: a documentação de Secrets do Kubernetes descreve exatamente esse campo como \"obscured but not secret\", e afirma que qualquer pessoa capaz de ler o Secret pode aprender o token de acesso ao registry — exatamente o que aconteceu ao colar o conteúdo no chat."
+    },
+    {
+      "key": "C",
+      "text": "Não há risco relevante, desde que o canal de chat use conexão criptografada (HTTPS/TLS) entre o cliente e o servidor da ferramenta de chat.",
+      "correct": false,
+      "explanation": "Incorreto: a criptografia em trânsito da ferramenta de chat protege contra interceptação na rede, mas não impede que qualquer pessoa com acesso de leitura ao canal decodifique o base64 e obtenha o token depois que a mensagem já foi entregue."
+    },
+    {
+      "key": "D",
+      "text": "O risco só existiria se o Secret também contivesse uma senha de banco de dados; para credenciais de registry de imagens especificamente, a documentação do Kubernetes não aplica o mesmo alerta sobre base64.",
+      "correct": false,
+      "explanation": "Incorreto: o alerta citado na documentação do Kubernetes é específico para esse tipo de Secret (`dockerconfigjson`) e seu campo `auth`, não um alerta genérico sobre senhas de banco de dados aplicado por extensão."
+    }
+  ],
+  "references": [
+    {
+      "title": "Secrets | Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender por que uma tag de versão não é uma referência estável do ponto de vista de segurança de cadeia de suprimentos, mesmo quando aparenta ser uma versão fixa.",
+  "prompt": "Um workflow de CI referencia uma GitHub Action de terceiros como `uses: some-org/some-action@v2`, fixando o que parece ser uma versão estável. Uma revisão de segurança recomenda trocar essa referência para um commit SHA completo em vez da tag `v2`. Qual é a justificativa documentada para essa troca?",
+  "explanation": "O guia de referência de uso seguro do GitHub para Actions recomenda fixar referências a Actions em um commit SHA no arquivo de workflow, justamente porque \"a tag can be moved or deleted if a bad actor gains access to the repository storing the action\". Isso significa que, mesmo que `v2` pareça uma versão fixa hoje, a tag é apenas um ponteiro que o mantenedor (ou alguém que comprometa a conta do mantenedor) pode mover para apontar para um código completamente diferente no futuro, sem que o workflow precise mudar uma linha — o que ajuda a mitigar o risco de alguém adicionar um backdoor ao repositório da Action. Um commit SHA aponta para um conteúdo específico e verificável, então mudar o que `v2` aponta não afeta workflows que já fixaram o SHA.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Uma tag como `v2` é apenas um ponteiro que pode ser movido pelo mantenedor (ou por quem comprometer o repositório) para um código diferente; um commit SHA aponta para um conteúdo específico, o que mitiga esse risco.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a justificativa do guia de referência de uso seguro do GitHub — uma tag pode ser movida ou apagada se um ator malicioso obtiver acesso ao repositório da Action, o que fixar em um commit SHA ajuda a mitigar."
+    },
+    {
+      "key": "B",
+      "text": "A troca é puramente de desempenho: referenciar por commit SHA faz o GitHub Actions baixar a Action mais rápido do que referenciar por tag, sem relação com segurança.",
+      "correct": false,
+      "explanation": "Incorreto: a justificativa documentada para fixar em commit SHA é de segurança de cadeia de suprimentos — mitigar o risco de uma tag ser movida para código malicioso — não de desempenho de download."
+    },
+    {
+      "key": "C",
+      "text": "Tags como `v2` deixam de funcionar automaticamente depois de um certo tempo por política do próprio GitHub, então fixar em um commit SHA é a única forma possível de a Action continuar executando.",
+      "correct": false,
+      "explanation": "Incorreto: não existe essa política de expiração automática de tags documentada; tags continuam funcionando normalmente, e o motivo para preferir um commit SHA é a possibilidade de a tag ser movida, não uma expiração."
+    },
+    {
+      "key": "D",
+      "text": "A troca não tem relação alguma com segurança de cadeia de suprimentos; serve apenas para deixar o workflow mais legível, já que um commit SHA completo é sempre mais fácil de identificar visualmente do que uma tag curta.",
+      "correct": false,
+      "explanation": "Incorreto: um commit SHA completo é tipicamente menos legível que uma tag como `v2`; a justificativa real é de segurança — impedir que uma tag seja redirecionada para código diferente — não de legibilidade do workflow."
+    }
+  ],
+  "references": [
+    {
+      "title": "Secure use reference | GitHub Docs",
+      "url": "https://docs.github.com/en/actions/security-for-github-actions/security-guides/security-hardening-for-github-actions"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

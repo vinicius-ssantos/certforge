@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige saber que vincular uma ClusterRole não amplia automaticamente seu alcance; quem decide o alcance é o tipo de binding usado, uma distinção fácil de confundir sob pressão.",
+  "prompt": "Uma ClusterRole chamada `secret-reader` concede permissão de leitura sobre Secrets, pensada para ser usada apenas dentro do namespace `pagamentos`. Para conceder isso a uma conta de serviço, alguém cria, por engano, uma ClusterRoleBinding em vez de uma RoleBinding, referenciando essa mesma ClusterRole. Qual é o efeito prático desse engano?",
+  "explanation": "A documentação de RBAC do Kubernetes distingue claramente os dois mecanismos: uma RoleBinding concede as permissões apenas dentro do namespace em que ela própria existe — inclusive quando referencia uma ClusterRole, limitando o efeito dessa ClusterRole ao namespace da RoleBinding — enquanto uma ClusterRoleBinding concede a mesma permissão em todos os namespaces do cluster. Como a `secret-reader` foi pensada para valer só em `pagamentos`, usar uma ClusterRoleBinding em vez de uma RoleBinding amplia, sem intenção, a permissão de leitura de Secrets para todos os namespaces do cluster — exatamente o oposto do isolamento que a equipe pretendia.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nenhum efeito prático: o nome da ClusterRole já determina o alcance da permissão, então vincular com ClusterRoleBinding ou RoleBinding dá exatamente o mesmo resultado.",
+      "correct": false,
+      "explanation": "Incorreto: o nome da ClusterRole não limita seu alcance; é o tipo de binding usado — RoleBinding (escopo do próprio namespace) ou ClusterRoleBinding (todos os namespaces) — que determina onde a permissão concedida pela ClusterRole efetivamente se aplica."
+    },
+    {
+      "key": "B",
+      "text": "A conta de serviço passa a poder ler Secrets em todos os namespaces do cluster, não apenas em `pagamentos`, porque uma ClusterRoleBinding concede a permissão referenciada em todo o cluster.",
+      "correct": true,
+      "explanation": "Correto: a documentação de RBAC do Kubernetes descreve exatamente essa diferença — uma RoleBinding restringe a ClusterRole referenciada ao seu próprio namespace, enquanto uma ClusterRoleBinding aplica a mesma permissão a todos os namespaces, o que é o engano cometido aqui."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes rejeita a criação dessa ClusterRoleBinding, porque não é permitido vincular uma ClusterRole criada com a intenção de uso em um único namespace através de um binding de alcance cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o Kubernetes não rastreia a \"intenção de uso\" de uma ClusterRole; ele permite normalmente vincular qualquer ClusterRole tanto por RoleBinding quanto por ClusterRoleBinding, deixando o alcance real a critério de qual binding for escolhido."
+    },
+    {
+      "key": "D",
+      "text": "A conta de serviço continua restrita ao namespace `pagamentos`, porque o conteúdo da ClusterRole (que fala apenas em Secrets, sem mencionar outros namespaces) é o que determina o alcance final, independentemente do tipo de binding.",
+      "correct": false,
+      "explanation": "Incorreto: o conteúdo das regras da ClusterRole (quais recursos e verbos) não inclui informação de namespace; é o tipo de binding — RoleBinding ou ClusterRoleBinding — que decide se esse conjunto de regras vale só no namespace do binding ou no cluster inteiro."
+    }
+  ],
+  "references": [
+    {
+      "title": "Using RBAC Authorization | Kubernetes",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/rbac/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

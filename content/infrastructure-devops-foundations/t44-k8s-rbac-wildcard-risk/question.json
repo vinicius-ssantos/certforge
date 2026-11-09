@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige entender por que uma permissão com curinga é um risco contínuo, não apenas no momento em que é criada, correlacionando-a com mudanças futuras no cluster.",
+  "prompt": "Para destravar rapidamente a depuração de um incidente, alguém cria temporariamente uma ClusterRole com `resources: [\"*\"]` e `verbs: [\"*\"]` vinculada a uma conta de serviço, pretendendo restringi-la depois. Semanas se passam e ninguém restringe a role. Meses depois, um novo CRD de terceiros é instalado no cluster, criando um novo tipo de recurso. Qual é a consequência dessa ClusterRole com curinga permanecer como estava?",
+  "explanation": "A documentação de RBAC do Kubernetes traz um alerta específico sobre esse exato padrão: \"Using wildcards in resource and verb entries could result in overly permissive access being granted to sensitive resources. For instance, if a new resource type is added, or a new subresource is added, or a new custom verb is checked, the wildcard entry automatically grants access, which may be undesirable.\" Isso significa que, quando o novo CRD de terceiros cria um tipo de recurso que nem existia no momento em que a ClusterRole foi escrita, a conta de serviço ganha acesso total a esse novo recurso automaticamente, sem que ninguém tenha decidido isso explicitamente — exatamente o risco que a documentação descreve.",
+  "options": [
+    {
+      "key": "A",
+      "text": "A conta de serviço ganha acesso total ao novo tipo de recurso automaticamente, mesmo que esse recurso nem existisse quando a ClusterRole foi criada, porque o curinga concede acesso a qualquer recurso presente ou futuro.",
+      "correct": true,
+      "explanation": "Correto: é exatamente esse cenário que a documentação de RBAC do Kubernetes descreve como risco das entradas com curinga — um novo tipo de recurso adicionado depois concede acesso automaticamente, de forma indesejada."
+    },
+    {
+      "key": "B",
+      "text": "Nenhuma: curingas em ClusterRole só se aplicam aos tipos de recurso que já existiam no cluster no momento em que a role foi criada, então novos CRDs nunca são afetados.",
+      "correct": false,
+      "explanation": "Incorreto: isso contraria diretamente o alerta da documentação do Kubernetes, que afirma explicitamente que um novo tipo de recurso adicionado depois é automaticamente coberto pelo curinga."
+    },
+    {
+      "key": "C",
+      "text": "O Kubernetes revoga automaticamente qualquer ClusterRole com curinga depois de 30 dias por padrão, como medida de segurança contra esquecimento, então a situação já teria se corrigido sozinha, sem qualquer intervenção manual da equipe.",
+      "correct": false,
+      "explanation": "Incorreto: não existe esse mecanismo de expiração automática documentado para ClusterRoles; uma vez concedida, uma permissão com curinga permanece válida indefinidamente até ser alterada manualmente."
+    },
+    {
+      "key": "D",
+      "text": "O problema afeta apenas novos verbos personalizados, nunca novos tipos de recurso, então a instalação de um CRD específico não representa risco adicional.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação cita explicitamente novo tipo de recurso, novo subrecurso e novo verbo personalizado como os três casos cobertos pelo mesmo risco de curinga — não apenas verbos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Using RBAC Authorization | Kubernetes",
+      "url": "https://kubernetes.io/docs/reference/access-authn-authz/rbac/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

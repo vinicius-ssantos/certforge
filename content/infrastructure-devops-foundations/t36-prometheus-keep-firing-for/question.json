@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige distinguir `for` (atraso para disparar) de `keep_firing_for` (atraso para resolver), que atuam em pontas opostas do ciclo de vida do alerta.",
+  "prompt": "Um alerta de erro elevado já usa `for: 2m` e dispara corretamente quando o problema é real. O sintoma agora é outro: a taxa de erro oscila em torno do limite, então o alerta resolve e dispara de novo repetidamente em poucos minutos, inundando o canal de notificações mesmo com o `for` configurado. Qual mecanismo das regras de alerta do Prometheus foi feito exatamente para esse tipo de instabilidade na borda de resolução?",
+  "explanation": "A cláusula `for` controla apenas quando o alerta passa a disparar, exigindo que a condição persista por um tempo mínimo antes do estado `firing` — ela não evita que o alerta oscile entre disparado e resolvido quando o sinal flutua perto do limite depois de já estar ativo. Para esse lado do problema, a documentação de regras de alerta descreve `keep_firing_for`, que mantém o alerta em estado disparado por uma duração mínima mesmo depois que a condição deixa de ser verdadeira — a própria documentação cita isso como forma de evitar situações de alertas instáveis (flapping).",
+  "options": [
+    {
+      "key": "A",
+      "text": "Aumentar o valor de `for` de 2m para um número maior, já que `for` também controla a estabilidade do lado em que o alerta resolve.",
+      "correct": false,
+      "explanation": "Incorreto: `for` atua somente na transição para `firing`, controlando quanto tempo a condição precisa persistir antes do alerta disparar; ele não mantém o alerta ativo depois que a condição já deixou de ser verdadeira, então não resolve a instabilidade na resolução."
+    },
+    {
+      "key": "B",
+      "text": "Adicionar `keep_firing_for` à regra, mantendo o alerta em estado disparado por um tempo mínimo mesmo após a condição parar de ser verdadeira.",
+      "correct": true,
+      "explanation": "Correto: a documentação descreve `keep_firing_for` como o mecanismo pensado para evitar justamente alertas instáveis (flapping) perto da fronteira de resolução, mantendo o estado disparado por uma duração mínima mesmo quando a condição momentaneamente deixa de ser verdadeira."
+    },
+    {
+      "key": "C",
+      "text": "Trocar a expressão da regra para usar uma função de agregação diferente, o que por si só elimina qualquer oscilação perto do limite configurado.",
+      "correct": false,
+      "explanation": "Incorreto: mudar a função de agregação pode alterar o que é medido, mas não existe garantia documentada de que isso elimine oscilação perto de um limite; o mecanismo específico para esse problema é `keep_firing_for`, não uma troca arbitrária de função."
+    },
+    {
+      "key": "D",
+      "text": "Desativar as notificações do canal de alerta até a oscilação parar sozinha, já que regras de alerta do Prometheus não têm controle para esse cenário.",
+      "correct": false,
+      "explanation": "Incorreto: existe sim um controle documentado para esse cenário — `keep_firing_for` — então desativar notificações manualmente descarta uma solução nativa já disponível na configuração da regra."
+    }
+  ],
+  "references": [
+    {
+      "title": "Alerting rules | Prometheus",
+      "url": "https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

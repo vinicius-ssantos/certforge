@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige conhecer a cláusula `for` das regras de alerta do Prometheus e aplicar seu efeito a um cenário de ruído de curta duração.",
+  "prompt": "Um time configura um alerta de alta latência disparando assim que a expressão PromQL ultrapassa o limite, sem usar a cláusula `for`. Durante um deploy, a latência sobe por 15 segundos em uma única coleta e volta ao normal, mas o on-call é página mesmo assim por um problema que já se resolveu sozinho. Qual ajuste resolve esse ruído sem exigir monitoramento manual constante?",
+  "explanation": "A documentação de regras de alerta do Prometheus descreve a cláusula opcional `for`, que faz o Prometheus esperar a condição permanecer verdadeira continuamente por uma duração mínima antes de contar o alerta como `firing`. Configurando, por exemplo, `for: 5m`, um pico isolado de uma única coleta nunca chega a disparar o alerta, porque a condição não se mantém verdadeira por tempo suficiente — enquanto um problema real e sustentado ainda é capturado.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Adicionar `for: 5m` à regra de alerta, para que o Prometheus só conte o alerta como disparado depois que a condição se mantiver verdadeira continuamente por esse período.",
+      "correct": true,
+      "explanation": "Correto: é exatamente para esse caso que a cláusula `for` existe segundo a documentação — ela evita que uma elevação passageira de uma única coleta seja tratada como um alerta ativo."
+    },
+    {
+      "key": "B",
+      "text": "Diminuir o intervalo de scrape da métrica de latência, já que coletar com mais frequência faz o Prometheus ignorar picos isolados automaticamente.",
+      "correct": false,
+      "explanation": "Incorreto: o intervalo de scrape controla a frequência de coleta, não a lógica de disparo do alerta; coletar com mais frequência não faz o Prometheus esperar a condição persistir — isso é função da cláusula `for`, não do intervalo de coleta."
+    },
+    {
+      "key": "C",
+      "text": "Remover a regra de alerta de latência, já que qualquer alerta baseado em uma única série temporal é inerentemente não confiável e deve ser substituído por verificação manual.",
+      "correct": false,
+      "explanation": "Incorreto: o ruído descrito tem uma causa mecânica específica e documentada (ausência da cláusula `for`), não uma falha inerente ao conceito de alertar sobre essa métrica; remover o alerta troca um falso positivo evitável por nenhuma cobertura."
+    },
+    {
+      "key": "D",
+      "text": "Aumentar o limite numérico do alerta até que o pico do deploy fique abaixo dele, mantendo a regra disparando imediatamente sem `for`.",
+      "correct": false,
+      "explanation": "Incorreto: subir o limite apenas esconde esse pico específico sem resolver o problema de fundo — disparar imediatamente sem esperar persistência — e ainda reduz a sensibilidade do alerta para problemas reais que fiquem abaixo do novo limite inflado."
+    }
+  ],
+  "references": [
+    {
+      "title": "Alerting rules | Prometheus",
+      "url": "https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

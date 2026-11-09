@@ -23,7 +23,7 @@ test("stages valid general questions for the legacy editorial importer without m
   try {
     const destination = join(temp, "stage");
     const result = stageEditorialPack("content/infrastructure-devops-foundations", destination);
-    assert.equal(result.count, 85);
+    assert.equal(result.count, 100);
     const output = JSON.parse(readFileSync(join(destination, "t01-image-vs-container", "question.json"), "utf8"));
     assert.deepEqual(output, request);
     assert.throws(() => stageEditorialPack("content/infrastructure-devops-foundations", destination));
@@ -89,11 +89,11 @@ test("staging says what the questions stand on, and refuses a claim nothing back
   const temp = mkdtempSync(join(tmpdir(), "certforge-stage-evidence-"));
   try {
     const result = stageEditorialPack("content/infrastructure-devops-foundations", join(temp, "staged"));
-    // 85 questions of prose and quoted snippets, and the operator about to import them is
+    // 100 questions of prose and quoted snippets, and the operator about to import them is
     // told so rather than left to assume the build checked something.
     assert.equal(result.evidenceProfile, "reference-backed-v1");
-    assert.deepEqual(result.evidenceByType, { "reference-backed": 85 });
-    assert.equal(result.withoutExecutableEvidence, 85);
+    assert.deepEqual(result.evidenceByType, { "reference-backed": 100 });
+    assert.equal(result.withoutExecutableEvidence, 100);
 
     const source = join(temp, "claimed");
     cpSync("content/infrastructure-devops-foundations", source, { recursive: true });
