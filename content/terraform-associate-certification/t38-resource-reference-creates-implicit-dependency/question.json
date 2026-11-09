@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4b"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige ler um trecho real de HCL e identificar que a referência ao atributo de outro recurso, por si só, já cria uma dependência no grafo -- sem precisar de depends_on -- em vez de assumir que a ordem é apenas a ordem de declaração no arquivo.",
+  "prompt": "Dado o seguinte trecho de configuração:\n\n```hcl\nresource \"aws_vpc\" \"main\" {\n  cidr_block = \"10.0.0.0/16\"\n}\n\nresource \"aws_subnet\" \"app\" {\n  vpc_id     = aws_vpc.main.id\n  cidr_block = \"10.0.1.0/24\"\n}\n```\n\nSegundo a documentação oficial sobre como o Terraform constrói seu grafo de dependências, por que `aws_subnet.app` depende de `aws_vpc.main`, e isso exigiria um depends_on explícito?",
+  "explanation": "A documentação sobre a construção do grafo descreve que, ao interpretar as configurações de recurso e provider, referências a atributos de um recurso são transformadas em dependências do recurso que contém a referência em direção ao recurso referenciado. Como `aws_subnet.app` referencia `aws_vpc.main.id` no argumento `vpc_id`, essa própria referência já cria a dependência -- o Terraform sabe que precisa processar `aws_vpc.main` antes de poder resolver esse argumento. Não é necessário depends_on, que serve apenas para dependências que não aparecem em nenhuma referência de atributo.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque `aws_subnet.app` referencia `aws_vpc.main.id` em `vpc_id`; a documentação descreve que referências a atributos de um recurso são transformadas em dependências para o recurso referenciado, sem precisar de depends_on.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a regra que a documentação descreve para como o grafo interpreta referências em argumentos de recurso."
+    },
+    {
+      "key": "B",
+      "text": "Porque o bloco `aws_subnet.app` está declarado depois de `aws_vpc.main` no arquivo; a ordem de declaração no arquivo é o que determina a ordem de execução do Terraform.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não baseia a ordem de execução na ordem textual de declaração no arquivo -- o grafo é construído a partir das referências entre recursos, não da posição no arquivo."
+    },
+    {
+      "key": "C",
+      "text": "Não depende; os dois recursos são independentes e o Terraform pode criá-los em qualquer ordem, inclusive em paralelo, já que nenhum depends_on foi declarado.",
+      "correct": false,
+      "explanation": "Incorreto: mesmo sem depends_on, a própria referência ao atributo `aws_vpc.main.id` já cria uma dependência implícita, segundo a documentação sobre a construção do grafo."
+    },
+    {
+      "key": "D",
+      "text": "Depende, mas apenas porque toda a configuração teria que declarar explicitamente depends_on em `aws_subnet.app` apontando para `aws_vpc.main` para que essa dependência exista.",
+      "correct": false,
+      "explanation": "Incorreto: depends_on é necessário apenas para dependências ocultas, que não aparecem em nenhuma referência de atributo -- não é o caso aqui, onde a referência em `vpc_id` já basta."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Internals — Resource Graph (references to resource attributes are turned into dependencies)",
+      "url": "https://developer.hashicorp.com/terraform/internals/v1.12.x/graph"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

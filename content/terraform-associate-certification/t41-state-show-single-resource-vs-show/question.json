@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000047",
+  "objectiveKeys": ["TFA-7b"],
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige diferenciar dois comandos de nome parecido pelo escopo real deles -- um recurso específico versus o state ou plano inteiro -- a partir da saída mostrada, em vez de assumir que são variações do mesmo comando.",
+  "prompt": "Uma pessoa roda o seguinte comando e recebe esta saída:\n\n```\n$ terraform state show aws_instance.web\n# aws_instance.web:\nresource \"aws_instance\" \"web\" {\n    ami           = \"ami-0c55b159cbfafe1f0\"\n    id            = \"i-0abc123def456\"\n    instance_type = \"t3.micro\"\n    tags = {\n        \"Name\" = \"web-server\"\n    }\n}\n```\n\nSegundo a documentação oficial, qual é a diferença de escopo entre `terraform state show <endereço>` e o comando `terraform show` (sem subcomando `state`)?",
+  "explanation": "A documentação do `terraform state show` descreve que o comando mostra os atributos de um único recurso no state que corresponde ao endereço indicado, e que esse comando exige um endereço que aponte para exatamente um recurso no state. Já a documentação do `terraform show` descreve que ele fornece saída legível a partir de um arquivo de state ou de plano inteiro -- usado para inspecionar todo o state atual como o Terraform o vê, ou um plano salvo, sem se limitar a um único recurso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`terraform state show <endereço>` mostra os atributos de um único recurso específico no state; `terraform show` mostra, a partir de um state ou plano, a saída legível referente a todo o arquivo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção de escopo que a documentação descreve para os dois comandos -- um recurso específico contra o state ou plano inteiro."
+    },
+    {
+      "key": "B",
+      "text": "Os dois comandos são sinônimos e produzem exatamente a mesma saída; `state show` é apenas uma forma mais longa de escrever `terraform show`.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve escopos diferentes -- `state show` exige um endereço de um único recurso, enquanto `show` cobre o state ou plano inteiro."
+    },
+    {
+      "key": "C",
+      "text": "`terraform state show` exige obrigatoriamente um arquivo de plano salvo como argumento, enquanto `terraform show` só pode ler o state atual, nunca um plano.",
+      "correct": false,
+      "explanation": "Incorreto: inverte os dois comandos -- é o `terraform show` que pode ler tanto o state atual quanto um arquivo de plano salvo; o `state show` trabalha sobre o state e exige um endereço de recurso, não um arquivo de plano."
+    },
+    {
+      "key": "D",
+      "text": "`terraform state show <endereço>` mostra todos os recursos do state cujo nome contém o endereço indicado como substring, nunca um recurso único e exato.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que o comando exige um endereço que aponte para exatamente um recurso no state, não uma busca por substring entre vários recursos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform CLI Documentation — state show (shows the attributes of a single resource matching the given address)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/state/show"
+    },
+    {
+      "title": "Terraform CLI Documentation — show (human-readable output from a state or plan file)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/show"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

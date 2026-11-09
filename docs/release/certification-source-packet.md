@@ -262,16 +262,16 @@ Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
 | `TFA-3a` | Describe the Terraform workflow | `t08-core-workflow-write-plan-apply` |
 | `TFA-3b` | Initialize a Terraform working directory | `t09-init-idempotent-reinitialization-triggers` |
 | `TFA-3c` | Validate a Terraform configuration | `t10-validate-scope-no-remote-checks` |
-| `TFA-3d` | Generate and review an execution plan for Terraform | `t11-plan-preview-does-not-apply` |
+| `TFA-3d` | Generate and review an execution plan for Terraform | `t11-plan-preview-does-not-apply`, `t39-plan-output-update-vs-replace` |
 | `TFA-3e` | Apply changes to infrastructure with Terraform | `t12-apply-default-prompts-for-approval` |
 | `TFA-3f` | Destroy Terraform-managed infrastructure | `t13-destroy-alias-for-apply-destroy` |
 | `TFA-3g` | Apply formatting and style adjustments to a configuration | `t14-fmt-default-scope-recursive-flag` |
 | `TFA-4a` | Use and differentiate resource and data blocks | `t15-resource-vs-data-block` |
-| `TFA-4b` | Refer to resource attributes and create cross-resource references | `t16-cross-resource-attribute-reference` |
+| `TFA-4b` | Refer to resource attributes and create cross-resource references | `t16-cross-resource-attribute-reference`, `t38-resource-reference-creates-implicit-dependency` |
 | `TFA-4c` | Use variables and outputs | `t17-sensitive-output-json-plaintext` |
 | `TFA-4d` | Understand and use complex types | `t18-complex-types-list-tuple-map-object` |
 | `TFA-4e` | Write dynamic configuration using expressions and functions | `t19-dynamic-blocks-usage-and-best-practice` |
-| `TFA-4f` | Define resource dependencies in configuration | `t20-depends-on-hidden-dependency` |
+| `TFA-4f` | Define resource dependencies in configuration | `t20-depends-on-hidden-dependency`, `t40-depends-on-with-hidden-dependency-code` |
 | `TFA-4g` | Validate configuration using custom conditions | `t21-precondition-postcondition-timing` |
 | `TFA-4h` | Understand best practices for managing sensitive data, including secrets management with Vault | `t22-sensitive-vs-ephemeral-storage` |
 | `TFA-5a` | Explain how Terraform sources modules | `t23-module-source-types` |
@@ -282,8 +282,8 @@ Source: <https://developer.hashicorp.com/certifications/terraform-associate>.
 | `TFA-6b` | Describe state locking | `t28-state-locking-automatic` |
 | `TFA-6c` | Configure remote state using the backend block | `t29-backend-block-limitations` |
 | `TFA-6d` | Manage resource drift and Terraform state | `t30-refresh-only-mode-drift` |
-| `TFA-7a` | Import existing infrastructure into your Terraform workspace | `t31-import-cli-vs-import-block` |
-| `TFA-7b` | Use the CLI to inspect state | `t32-state-list-and-show-inspect` |
+| `TFA-7a` | Import existing infrastructure into your Terraform workspace | `t31-import-cli-vs-import-block`, `t42-import-without-matching-config-plans-destroy` |
+| `TFA-7b` | Use the CLI to inspect state | `t32-state-list-and-show-inspect`, `t41-state-show-single-resource-vs-show` |
 | `TFA-7c` | Describe when and how to use verbose logging | `t33-tf-log-verbosity-levels` |
 | `TFA-8a` | Use HCP Terraform to create infrastructure | `t34-hcp-terraform-what-it-is` |
 | `TFA-8b` | Describe HCP Terraform collaboration and governance features | `t35-hcp-terraform-governance-features` |

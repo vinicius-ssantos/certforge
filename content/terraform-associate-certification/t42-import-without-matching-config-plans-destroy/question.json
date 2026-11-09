@@ -1,0 +1,48 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000047",
+  "objectiveKeys": ["TFA-7a"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que terraform import só grava no state, sem gerar a configuração correspondente -- então importar sem antes (ou depois) escrever o bloco resource deixa a configuração e o state fora de sincronia.",
+  "prompt": "Uma pessoa roda o seguinte comando sem ter escrito antes nenhum bloco `resource \"aws_instance\" \"web\"` na configuração:\n\n```\n$ terraform import aws_instance.web i-0abc123def456\naws_instance.web: Importing from ID \"i-0abc123def456\"...\naws_instance.web: Import complete!\n```\n\nSegundo a documentação oficial sobre `terraform import`, o que esse comando realmente fez, e o que acontece no próximo `terraform plan` se o bloco `resource` correspondente continuar ausente da configuração?",
+  "explanation": "A documentação de uso do import afirma que, antes de rodar o comando, é preciso escrever manualmente um bloco resource que descreva para onde o Terraform deve mapear o objeto importado -- o comando em si só grava o recurso no arquivo de state. Como resultado, se esse bloco de configuração continuar ausente (ou não corresponder ao objeto real), o Terraform planejará destruir os objetos importados na próxima execução, porque não há nenhuma configuração que diga ao Terraform para gerenciar esse recurso.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O comando apenas registrou a instância existente no arquivo de state; como nenhum bloco resource correspondente existe na configuração, o próximo `terraform plan` vai planejar destruir esse recurso.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a consequência que a documentação de uso do import descreve para uma importação sem a configuração correspondente -- o Terraform planeja destruir o que está no state mas não na configuração."
+    },
+    {
+      "key": "B",
+      "text": "O comando gerou automaticamente um bloco `resource \"aws_instance\" \"web\"` completo no arquivo de configuração, então nada precisa ser escrito manualmente antes do próximo `terraform plan`.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação afirma que é preciso escrever manualmente o bloco resource antes de importar -- o comando em si só grava no state, não gera configuração (isso é o que o bloco `import` da linguagem faz, não o comando `terraform import`)."
+    },
+    {
+      "key": "C",
+      "text": "O comando falhou silenciosamente sem efeito nenhum, porque terraform import exige que o bloco resource já exista na configuração antes de poder ser executado -- a mensagem \"Import complete!\" apareceria mesmo sem importar nada.",
+      "correct": false,
+      "explanation": "Incorreto: a mensagem \"Import complete!\" reflete uma importação real que grava a instância no state; o problema é que a configuração não foi escrita, não que o comando tenha falhado."
+    },
+    {
+      "key": "D",
+      "text": "O próximo `terraform plan` não mostrará nenhuma mudança, já que o recurso agora está no state e isso por si só é suficiente para o Terraform considerá-lo totalmente gerenciado e sincronizado.",
+      "correct": false,
+      "explanation": "Incorreto: estar no state não basta -- sem o bloco resource correspondente na configuração, o Terraform não tem como saber que deve manter esse recurso, e planejará destruí-lo."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform CLI Documentation — import (you must manually write a resource configuration block before running the command)",
+      "url": "https://developer.hashicorp.com/terraform/cli/import"
+    },
+    {
+      "title": "Terraform CLI Documentation — import usage (Terraform will plan to destroy the imported objects on the next run if the configuration does not match)",
+      "url": "https://developer.hashicorp.com/terraform/cli/import/usage"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

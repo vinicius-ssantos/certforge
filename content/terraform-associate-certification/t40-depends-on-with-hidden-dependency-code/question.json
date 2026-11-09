@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000044",
+  "objectiveKeys": ["TFA-4f"],
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige olhar para um trecho de HCL onde nenhum argumento referencia o outro recurso e concluir, a partir do comportamento descrito na documentação, que depends_on é necessário mesmo sem nenhuma referência de atributo visível.",
+  "prompt": "Dado o seguinte trecho de configuração:\n\n```hcl\nresource \"aws_iam_role_policy\" \"app\" {\n  name   = \"app-policy\"\n  role   = aws_iam_role.app.id\n  policy = data.aws_iam_policy_document.app.json\n}\n\nresource \"aws_instance\" \"app\" {\n  ami           = \"ami-0abc123\"\n  instance_type = \"t3.micro\"\n\n  depends_on = [aws_iam_role_policy.app]\n}\n```\n\nO script de inicialização da instância (não mostrado aqui) só funciona corretamente se a política já estiver anexada à role antes de a instância subir, mas nenhum argumento de `aws_instance.app` referencia qualquer atributo de `aws_iam_role_policy.app`. Segundo a documentação oficial sobre o depends_on, por que esse `depends_on` explícito é necessário aqui, e por que o Terraform não conseguiria inferir essa ordem sozinho?",
+  "explanation": "A documentação do depends_on afirma que ele existe para dependências ocultas de recurso ou módulo que o Terraform não consegue inferir automaticamente -- isto é, quando um recurso depende do comportamento de outro, mas não acessa nenhum dado desse recurso em seus próprios argumentos. É exatamente esse o caso: `aws_instance.app` depende do comportamento de `aws_iam_role_policy.app` (a política já estar anexada), mas nenhum argumento de `aws_instance.app` referencia um atributo de `aws_iam_role_policy.app`. Sem o depends_on explícito, o Terraform não teria nenhuma referência de atributo para inferir a ordem a partir do grafo, e poderia criar a instância antes da política estar anexada.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Porque a instância depende do comportamento da política (estar anexada antes de o script rodar), mas nenhum argumento de `aws_instance.app` referencia um atributo de `aws_iam_role_policy.app` -- sem essa referência, o Terraform não tem como inferir a dependência a partir do grafo.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a condição que a documentação descreve para quando depends_on é necessário -- dependência de comportamento, sem nenhuma referência de atributo que permita a inferência automática."
+    },
+    {
+      "key": "B",
+      "text": "Não seria necessário; como `aws_iam_role_policy.app` está declarado antes de `aws_instance.app` no arquivo, o Terraform já criaria os dois na ordem correta sem precisar de depends_on.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não baseia a ordem de execução na posição textual no arquivo -- sem uma referência de atributo ou um depends_on explícito, essa ordem não é garantida."
+    },
+    {
+      "key": "C",
+      "text": "Porque `role = aws_iam_role.app.id` já cria essa dependência automaticamente entre `aws_iam_role_policy.app` e `aws_instance.app`, tornando o depends_on mostrado redundante e sem efeito.",
+      "correct": false,
+      "explanation": "Incorreto: essa referência cria uma dependência entre `aws_iam_role_policy.app` e `aws_iam_role.app`, não entre `aws_iam_role_policy.app` e `aws_instance.app` -- os dois recursos do enunciado continuam sem nenhuma referência de atributo entre si."
+    },
+    {
+      "key": "D",
+      "text": "Porque depends_on é obrigatório em toda configuração Terraform que use mais de dois recursos, independentemente de existir ou não uma dependência de comportamento entre eles.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve depends_on como necessário apenas para dependências ocultas específicas, não como um requisito geral de toda configuração com múltiplos recursos."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform Documentation — depends_on meta-argument reference (hidden dependencies Terraform cannot automatically infer)",
+      "url": "https://developer.hashicorp.com/terraform/language/meta-arguments/depends_on"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
