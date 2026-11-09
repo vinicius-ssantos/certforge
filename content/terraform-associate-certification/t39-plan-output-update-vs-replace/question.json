@@ -1,0 +1,44 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "b3000000-0000-4000-8000-000000000043",
+  "objectiveKeys": ["TFA-3d"],
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige ler um plano real e diferenciar os dois símbolos de alteração -- `~` e `-/+` -- em vez de assumir que toda mudança em um plano de execução implica destruir e recriar o recurso.",
+  "prompt": "Dado o seguinte trecho de saída de `terraform plan`:\n\n```\n  # aws_instance.web will be updated in-place\n  ~ resource \"aws_instance\" \"web\" {\n        id            = \"i-0abc123\"\n      ~ instance_type = \"t3.micro\" -> \"t3.small\"\n    }\n\n  # aws_db_instance.main must be replaced\n-/+ resource \"aws_db_instance\" \"main\" {\n      ~ identifier = \"prod-db\" -> (known after apply) # forces replacement\n    }\n```\n\nSegundo a documentação oficial sobre os símbolos de saída do `terraform plan`, o que diferencia o que vai acontecer com `aws_instance.web` do que vai acontecer com `aws_db_instance.main`?",
+  "explanation": "A documentação do terraform plan descreve o símbolo `~` como atualização do recurso sem destruí-lo e recriá-lo, e o símbolo `-/+` como destruir o recurso e depois recriá-lo. No trecho, `aws_instance.web` recebe apenas `~` -- o Terraform vai alterar `instance_type` em vigor, sem destruir a instância. Já `aws_db_instance.main` recebe `-/+` e o comentário `# forces replacement` na mudança de `identifier`: alterar esse atributo específico não pode ser aplicado em vigor, então o Terraform precisa destruir o recurso atual e criar um novo para refletir o novo valor.",
+  "options": [
+    {
+      "key": "A",
+      "text": "`aws_instance.web` será atualizado em vigor (`~`, sem destruir e recriar); `aws_db_instance.main` será destruído e recriado (`-/+`), porque a alteração em `identifier` força a substituição.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção que a documentação dá para os símbolos `~` e `-/+`, e o comentário `# forces replacement` confirma qual atributo causa a substituição."
+    },
+    {
+      "key": "B",
+      "text": "Ambos serão destruídos e recriados, já que qualquer mudança listada em um plano do Terraform sempre implica destruir o recurso atual primeiro, independentemente do símbolo usado.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o símbolo `~` como atualização sem destruir e recriar -- só o recurso marcado com `-/+` será destruído e recriado."
+    },
+    {
+      "key": "C",
+      "text": "Nenhum dos dois será realmente alterado; os dois trechos representam apenas uma simulação informativa, sem nenhuma mudança real na infraestrutura, mesmo depois de um `terraform apply` desse plano.",
+      "correct": false,
+      "explanation": "Incorreto: um `terraform plan` descreve mudanças reais que seriam aplicadas por um `terraform apply` correspondente -- os símbolos indicam o tipo de mudança, não se ela é real."
+    },
+    {
+      "key": "D",
+      "text": "`aws_db_instance.main` será atualizado em vigor, e `aws_instance.web` será destruído e recriado -- a leitura correta dos símbolos `~` e `-/+` no trecho é a inversa do que parece.",
+      "correct": false,
+      "explanation": "Incorreto: inverte os símbolos -- `~` aparece em `aws_instance.web` (atualização em vigor) e `-/+` aparece em `aws_db_instance.main` (destruir e recriar)."
+    }
+  ],
+  "references": [
+    {
+      "title": "Terraform CLI Documentation — plan (output symbols: ~ update in-place, -/+ destroy and then create replacement, forces replacement)",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/plan"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}
