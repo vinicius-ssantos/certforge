@@ -1,0 +1,41 @@
+{
+  "labId": "docker-multistage-bloat-v1",
+  "isolation": "gvisor",
+  "image": {
+    "ref": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662"
+  },
+  "fixture": {
+    "path": "docker-multistage-bloat-v1"
+  },
+  "objective": {
+    "title": "Fix a Docker multi-stage build",
+    "description": "The Dockerfile ships the full build toolchain and source in its final image. Rewrite it as a proper multi-stage build: compile in a builder stage, then copy only the resulting binary into a minimal final stage."
+  },
+  "allowedCommands": ["docker", "vi", "nano", "cat", "ls"],
+  "limits": {
+    "wallClockSeconds": 900,
+    "memoryMiB": 1024,
+    "cpuMillicores": 1000,
+    "diskMiB": 2048,
+    "processCount": 64
+  },
+  "network": {
+    "egress": "none"
+  },
+  "filesystem": {
+    "writableScratchMiB": 512
+  },
+  "evaluation": {
+    "type": "deterministic-probe",
+    "checks": [
+      {
+        "description": "The built image's final layer does not contain the Go toolchain",
+        "probe": "docker run --rm docker-multistage-bloat-v1:lab which go"
+      },
+      {
+        "description": "The built image is under the fixture's size budget",
+        "probe": "docker image inspect docker-multistage-bloat-v1:lab --format '{{.Size}}'"
+      }
+    ]
+  }
+}

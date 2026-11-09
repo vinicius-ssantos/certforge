@@ -1,0 +1,32 @@
+# Fixture for lab "readiness-probe-wrong-port-v1" (#175).
+#
+# Bug: the container listens on 8080, but readinessProbe.httpGet.port targets 8081. The Pod
+# will never report Ready. The learner's objective is to fix the probe's port (or the
+# container's, consistently) so the Deployment's Pods become Ready.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: web:lab
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 2
+            periodSeconds: 5
