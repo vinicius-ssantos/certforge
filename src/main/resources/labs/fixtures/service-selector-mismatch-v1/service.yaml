@@ -1,0 +1,15 @@
+# Fixture for lab "service-selector-mismatch-v1" (#175), paired with deployment.yaml.
+#
+# Bug: spec.selector targets app: web-frontend, but deployment.yaml's Pods carry
+# app: web-backend -- no label matches, so this Service has no endpoints. The learner's
+# objective is to correct the selector so the Service has a serving endpoint.
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-backend
+spec:
+  selector:
+    app: web-frontend
+  ports:
+    - port: 80
+      targetPort: 8080

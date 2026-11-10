@@ -1,0 +1,24 @@
+# Fixture for lab "service-selector-mismatch-v1" (#175), paired with service.yaml.
+#
+# This Deployment's Pods carry label app: web-backend.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-backend
+  labels:
+    app: web-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-backend
+  template:
+    metadata:
+      labels:
+        app: web-backend
+    spec:
+      containers:
+        - name: web-backend
+          image: web-backend:lab
+          ports:
+            - containerPort: 8080
