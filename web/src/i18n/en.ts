@@ -182,6 +182,15 @@ export const en = {
     continueMock: "Continue mock exam",
     startingMock: "Starting…",
     startMock: (examCode: string) => `Start ${examCode} mock`,
+    readinessHeading: "Content readiness",
+    readinessVerifiedOn: (providerVersion: string, date: string) =>
+      `Checked against ${providerVersion} on ${date}.`,
+    readinessStale: "The provider has published something newer since this reading.",
+    readinessCoverage: (claimed: number, total: number) =>
+      `${claimed} of ${total} ${plural(TAG, total, { one: "objective", other: "objectives" })} have a published question.`,
+    readinessGapsCaption: "Objectives with no published question yet",
+    readinessGapKey: "Objective",
+    readinessGapTitle: "Title",
   },
   question: {
     heading: (number: number, total: number) => `Question ${number} of ${total}`,

@@ -1,7 +1,11 @@
 import type { Page } from "@playwright/test";
+import { adminApi, put } from "./api";
 import { expect, test } from "./test";
 import { FIXTURE_COUNT, TOPIC_NAME } from "./seed";
 import { expectNoA11yViolations, expectReflows, register } from "./helpers";
+
+/** The fixed id V4 seeds the active Java SE 21 (1Z0-830) exam version with. */
+const JAVA_SE_21_VERSION_ID = "a2000000-0000-4000-8000-000000000001";
 
 async function startPractice(page: Page) {
   await page.getByRole("link", { name: "Java Certification" }).click();
@@ -158,6 +162,42 @@ test.describe("the learner journey", () => {
 
     await page.goto("/history");
     await expect(page.getByRole("heading", { level: 1, name: "Sign in" })).toBeVisible();
+  });
+
+  /**
+   * The seeded Java SE 21 exam version has no verified objectives snapshot, so no learner has ever
+   * seen a readiness report (#176) -- this verifies one as an administrator would and confirms it
+   * shows up, with the one objective nothing claims yet called out as a gap.
+   */
+  test("the readiness report appears once an administrator verifies the exam objectives", async ({
+    page,
+    isMobile,
+  }) => {
+    const admin = await adminApi();
+    await put(admin, `/api/admin/catalog/exam-versions/${JAVA_SE_21_VERSION_ID}/objectives`, {
+      providerVersion: "E2E reading 1",
+      verifiedOn: "2026-10-22",
+      sourceUrl: "https://education.oracle.com/java-se-21-developer/pexam_1Z0-830",
+      sourceDigest: `sha256:${"a".repeat(64)}`,
+      objectives: [
+        { key: "E2E-1.1", title: "An objective with a published question already" },
+        { key: "E2E-99.9", title: "An objective nothing claims yet" },
+      ],
+    });
+    await admin.dispose();
+
+    await register(page);
+    await page.getByRole("link", { name: "Java Certification" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Java Certification" })).toBeVisible();
+
+    const readiness = page.getByRole("region", { name: "Content readiness" });
+    await expect(readiness).toContainText("E2E reading 1");
+    await expect(readiness).toContainText("0 of 2 objectives");
+    await expect(readiness.getByRole("row", { name: /E2E-99\.9/ })).toBeVisible();
+    if (!isMobile) {
+      await expectNoA11yViolations(page);
+    }
+    await expectReflows(page);
   });
 
   test("the sign-in and registration pages have no accessibility violations", async ({ page }) => {

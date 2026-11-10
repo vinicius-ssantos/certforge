@@ -740,6 +740,48 @@ class PreparationCatalogIT {
                 .value(org.hamcrest.Matchers.contains(nullValue())));
   }
 
+  /**
+   * The learner-facing readiness report (#176): absent before anyone has verified the objectives
+   * page, and once verified, showing the full gap when no published question claims either
+   * objective yet -- there is none seeded for a freshly created track, so every objective is a gap
+   * by construction, which is exactly what a learner should see rather than a false zero.
+   */
+  @Test
+  void aLearnerSeesObjectiveReadinessOnlyAfterAVerifiedReading() throws Exception {
+    String trackSlug = slug();
+    String trackId = createTrack(trackSlug);
+    String versionId = createExamVersion(trackId, "V1");
+    String topicId = createTopic(trackId, "topic-" + trackSlug, null);
+    map(versionId, topicId);
+    send(post("/api/admin/catalog/tracks/" + trackId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+    send(post("/api/admin/catalog/exam-versions/" + versionId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+
+    mvc.perform(get("/api/catalog/tracks/" + trackSlug).cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.objectiveReadiness").doesNotExist());
+
+    setObjectives(
+            versionId,
+            reading(
+                "2026-01",
+                "2026-10-22",
+                "{\"key\":\"1.1\",\"title\":\"First\"},{\"key\":\"2.1\",\"title\":\"Second\"}"))
+        .andExpect(status().isOk());
+
+    mvc.perform(get("/api/catalog/tracks/" + trackSlug).cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.objectiveReadiness.providerVersion").value("2026-01"))
+        .andExpect(jsonPath("$.objectiveReadiness.verifiedOn").value("2026-10-22"))
+        .andExpect(jsonPath("$.objectiveReadiness.status").value("VERIFIED"))
+        .andExpect(jsonPath("$.objectiveReadiness.totalObjectives").value(2))
+        .andExpect(jsonPath("$.objectiveReadiness.claimedObjectives").value(0))
+        .andExpect(
+            jsonPath("$.objectiveReadiness.gaps[*].key")
+                .value(org.hamcrest.Matchers.containsInAnyOrder("1.1", "2.1")));
+  }
+
   @Test
   void anInterviewTaxonomyHasNoProviderPageToVerify() throws Exception {
     // Built directly, the way the interview-context test above does: the admin API creates

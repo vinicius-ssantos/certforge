@@ -3,8 +3,11 @@ package dev.certforge.preparationcatalog.internal;
 import dev.certforge.preparationcatalog.ExamVersionView;
 import dev.certforge.preparationcatalog.GeneralTrackView;
 import dev.certforge.preparationcatalog.InterviewTrackView;
+import dev.certforge.preparationcatalog.ObjectiveGapView;
+import dev.certforge.preparationcatalog.ObjectiveReadinessView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.PreparationTrackId;
+import dev.certforge.preparationcatalog.PublishedObjectiveClaims;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.preparationcatalog.TopicView;
@@ -31,9 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 class CatalogReadService implements PreparationCatalog {
 
   private final CatalogRepository repository;
+  private final PublishedObjectiveClaims claims;
 
-  CatalogReadService(CatalogRepository repository) {
+  CatalogReadService(CatalogRepository repository, PublishedObjectiveClaims claims) {
     this.repository = repository;
+    this.claims = claims;
   }
 
   @Override
@@ -184,7 +189,8 @@ class CatalogReadService implements PreparationCatalog {
                     track.provider(),
                     track.certificationName(),
                     toView(version),
-                    topicTree(track.id(), version.id())));
+                    topicTree(track.id(), version.id()),
+                    objectiveReadiness(version).orElse(null)));
   }
 
   /** Only called for a version that {@link TrackVersionRow#isCertification()} vouched for. */
@@ -196,6 +202,36 @@ class CatalogReadService implements PreparationCatalog {
         version.examName(),
         version.javaRelease(),
         version.objectivesUrl());
+  }
+
+  /**
+   * Empty when nobody has read the provider's page for this version yet -- there is no snapshot to
+   * report readiness against, so {@link TrackView#objectiveReadiness()} carries none rather than a
+   * zero coverage that would misreport "nothing claimed" as "nothing to claim" (#176).
+   */
+  Optional<ObjectiveReadinessView> objectiveReadiness(TrackVersionRow version) {
+    return repository
+        .findObjectiveSnapshot(version.id())
+        .map(
+            snapshot -> {
+              List<CatalogRows.ObjectiveRow> objectives = repository.findObjectives(version.id());
+              Set<String> claimedKeys = claims.claimedIn(new TrackVersionId(version.id()));
+              List<ObjectiveGapView> gaps =
+                  objectives.stream()
+                      .filter(objective -> !claimedKeys.contains(objective.objectiveKey()))
+                      .map(
+                          objective ->
+                              new ObjectiveGapView(objective.objectiveKey(), objective.title()))
+                      .toList();
+              return new ObjectiveReadinessView(
+                  snapshot.providerVersion(),
+                  snapshot.verifiedOn(),
+                  snapshot.status(),
+                  snapshot.sourceUrl(),
+                  objectives.size(),
+                  objectives.size() - gaps.size(),
+                  gaps);
+            });
   }
 
   /** Builds the ordered topic tree of an exam version from its explicit mappings. */

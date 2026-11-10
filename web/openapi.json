@@ -1607,6 +1607,18 @@
         "required" : [ "answered", "correct", "lastAnsweredAt", "sureAndWrong", "unsureAndRight" ],
         "type" : "object"
       },
+      "ObjectiveGapView" : {
+        "properties" : {
+          "key" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "key", "title" ],
+        "type" : "object"
+      },
       "ObjectiveOutcome" : {
         "properties" : {
           "correct" : {
@@ -1641,6 +1653,39 @@
           }
         },
         "required" : [ "correct", "correctOptions", "explanation", "options", "references", "selectedOptions" ],
+        "type" : "object"
+      },
+      "ObjectiveReadinessView" : {
+        "properties" : {
+          "claimedObjectives" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "gaps" : {
+            "items" : {
+              "$ref" : "#/components/schemas/ObjectiveGapView"
+            },
+            "type" : "array"
+          },
+          "providerVersion" : {
+            "type" : "string"
+          },
+          "sourceUrl" : {
+            "type" : "string"
+          },
+          "status" : {
+            "type" : "string"
+          },
+          "totalObjectives" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "verifiedOn" : {
+            "format" : "date",
+            "type" : "string"
+          }
+        },
+        "required" : [ "claimedObjectives", "gaps", "providerVersion", "sourceUrl", "status", "totalObjectives", "verifiedOn" ],
         "type" : "object"
       },
       "ObjectiveSourceEntry" : {
@@ -2849,6 +2894,10 @@
           "name" : {
             "type" : "string"
           },
+          "objectiveReadiness" : {
+            "$ref" : "#/components/schemas/ObjectiveReadinessView",
+            "type" : "null"
+          },
           "provider" : {
             "type" : "string"
           },
@@ -2862,7 +2911,7 @@
             "type" : "array"
           }
         },
-        "required" : [ "certificationName", "examVersion", "id", "kind", "name", "provider", "slug", "topics" ],
+        "required" : [ "certificationName", "examVersion", "id", "kind", "name", "objectiveReadiness", "provider", "slug", "topics" ],
         "type" : "object"
       },
       "Verification" : {

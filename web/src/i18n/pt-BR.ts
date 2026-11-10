@@ -165,6 +165,15 @@ export const ptBR: Catalog = {
     continueMock: "Continuar simulado",
     startingMock: "Começando…",
     startMock: (examCode: string) => `Começar simulado ${examCode}`,
+    readinessHeading: "Prontidão do conteúdo",
+    readinessVerifiedOn: (providerVersion: string, date: string) =>
+      `Confrontado com ${providerVersion} em ${date}.`,
+    readinessStale: "O fornecedor publicou algo mais novo desde esta leitura.",
+    readinessCoverage: (claimed: number, total: number) =>
+      `${claimed} de ${total} ${plural(TAG, total, { one: "objetivo", other: "objetivos" })} têm questão publicada.`,
+    readinessGapsCaption: "Objetivos ainda sem questão publicada",
+    readinessGapKey: "Objetivo",
+    readinessGapTitle: "Título",
   },
 
   question: {

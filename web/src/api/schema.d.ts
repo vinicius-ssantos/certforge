@@ -1632,6 +1632,10 @@ export interface components {
             sureAndWrong: string[];
             unsureAndRight: string[];
         };
+        ObjectiveGapView: {
+            key: string;
+            title: string;
+        };
         ObjectiveOutcome: {
             correct: boolean;
             correctOptions: string[];
@@ -1639,6 +1643,18 @@ export interface components {
             options: components["schemas"]["OptionAnswerView"][];
             references: components["schemas"]["ReferenceView"][];
             selectedOptions: string[];
+        };
+        ObjectiveReadinessView: {
+            /** Format: int32 */
+            claimedObjectives: number;
+            gaps: components["schemas"]["ObjectiveGapView"][];
+            providerVersion: string;
+            sourceUrl: string;
+            status: string;
+            /** Format: int32 */
+            totalObjectives: number;
+            /** Format: date */
+            verifiedOn: string;
         };
         ObjectiveSourceEntry: {
             key: string;
@@ -2059,6 +2075,7 @@ export interface components {
             /** @enum {string} */
             kind: "CERTIFICATION" | "INTERVIEW" | "GENERAL";
             name: string;
+            objectiveReadiness: components["schemas"]["ObjectiveReadinessView"];
             provider: string;
             slug: string;
             topics: components["schemas"]["TopicView"][];

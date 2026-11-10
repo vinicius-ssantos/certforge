@@ -1,5 +1,6 @@
 package dev.certforge.preparationcatalog;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ public record TrackView(
     String provider,
     String certificationName,
     ExamVersionView examVersion,
-    List<TopicView> topics) {}
+    List<TopicView> topics,
+    @Schema(nullable = true) ObjectiveReadinessView objectiveReadiness) {}

@@ -185,7 +185,8 @@ class MockExamPlannerTest {
             "Java SE 21 Developer Professional",
             21,
             "https://education.oracle.com/"),
-        topics);
+        topics,
+        null);
   }
 
   private static List<TopicView> topics(int count) {
