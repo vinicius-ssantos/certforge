@@ -33,7 +33,7 @@ function edit(target, question, change) {
 
 test("the pack matches the debt recorded for it, and nothing more", () => {
   const live = assertPackQuality(pack);
-  assert.equal(live.total, 85);
+  assert.equal(live.total, 100);
   const debt = JSON.parse(readFileSync(join(pack, "quality-debt.json"), "utf8"));
   assert.equal(debt.templatedOptionExplanations.length, 51);
   assert.equal(debt.placeholderReferenceTitles.length, 69);
@@ -109,11 +109,11 @@ test("the difficulty matrix is reported as counts, including the ones that are m
   assert.deepEqual(difficultySpread([{ difficulty: "HARD" }, { difficulty: "HARD" }]), { EASY: 0, MEDIUM: 0, HARD: 2 });
   // The real pack offers all three, which is the matrix #167 and #168 ask for — thinly at the ends.
   const live = inspectPackQuality(pack);
-  assert.deepEqual(live.difficulty, { EASY: 8, MEDIUM: 66, HARD: 11 });
+  assert.deepEqual(live.difficulty, { EASY: 10, MEDIUM: 75, HARD: 15 });
 });
 
 test("two options a learner cannot tell apart are refused outright", () => {
-  // Neither pack does this today, over all 220 questions, so there is no ledger entry and no debt:
+  // Neither pack does this today, over all 250 questions, so there is no ledger entry and no debt:
   // a question whose options repeat each other cannot be answered as asked, however well the
   // learner knows the subject.
   assert.deepEqual(inspectPackQuality(pack).indistinguishable, []);

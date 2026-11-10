@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige aplicar o mesmo princípio de confiança zero a uma decisão de arquitetura (mTLS leste-oeste via service mesh), em vez de apenas a um único serviço isolado, e justificar o investimento em termos do próprio princípio.",
+  "prompt": "Uma plataforma avalia adotar mTLS entre todos os serviços internos (tráfego leste-oeste) via um service mesh, mesmo que todos esses serviços já rodem dentro do mesmo cluster privado, sem exposição direta à internet. Alguém questiona o investimento: \"isso é esforço redundante — o cluster já é uma rede isolada, então criptografar e autenticar tráfego interno não acrescenta proteção real\". Como o princípio de confiança zero do NIST SP 800-207 avalia esse argumento?",
+  "explanation": "O princípio central da confiança zero descrito no NIST SP 800-207 é que nenhuma confiança implícita deve ser concedida com base apenas na localização de rede de um ativo. Tráfego leste-oeste dentro do mesmo cluster privado ainda está sujeito a esse princípio: se um único serviço for comprometido, um atacante com acesso à rede interna do cluster poderia se comunicar livremente com qualquer outro serviço sem autenticação, exatamente o cenário que confiar na \"rede isolada\" deixa de cobrir. Autenticar e criptografar o tráfego leste-oeste com mTLS substitui a suposição \"está na mesma rede, então é confiável\" por uma verificação de identidade explícita entre cada par de serviços, que é o que o princípio pede.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O argumento está correto: uma vez que o tráfego está confinado a uma rede privada dentro do mesmo cluster, o princípio de confiança zero do NIST SP 800-207 considera autenticação adicional entre serviços dispensável.",
+      "correct": false,
+      "explanation": "Incorreto: isso é exatamente a suposição que o princípio de confiança zero rejeita — conceder confiança implícita com base na localização de rede, mesmo quando essa localização é uma rede privada isolada."
+    },
+    {
+      "key": "B",
+      "text": "O argumento assume confiança implícita por localização de rede, que o NIST SP 800-207 trata como insuficiente; mTLS leste-oeste substitui isso por verificação de identidade entre serviços.",
+      "correct": true,
+      "explanation": "Correto: o princípio central do NIST SP 800-207 é não conceder confiança implícita por localização de rede; isso se aplica igualmente a uma rede privada dentro de um cluster, e mTLS leste-oeste é precisamente o mecanismo que remove essa suposição ao exigir identidade verificada entre serviços."
+    },
+    {
+      "key": "C",
+      "text": "O mTLS entre serviços internos só se justifica pelo desempenho, nunca pela segurança, já que o NIST SP 800-207 trata exclusivamente de criptografia como otimização de rede, não como controle de confiança.",
+      "correct": false,
+      "explanation": "Incorreto: o NIST SP 800-207 trata mTLS e verificação de identidade como mecanismos ligados diretamente ao princípio de confiança, não como uma otimização de desempenho de rede."
+    },
+    {
+      "key": "D",
+      "text": "A confiança zero, segundo o NIST SP 800-207, se aplica apenas a usuários humanos acessando sistemas, nunca à comunicação entre serviços automatizados dentro de um cluster.",
+      "correct": false,
+      "explanation": "Incorreto: o princípio de não conceder confiança implícita por localização se aplica a ativos e contas de forma geral, o que inclui a comunicação entre serviços automatizados, não apenas o acesso de usuários humanos."
+    }
+  ],
+  "references": [
+    {
+      "title": "NIST SP 800-207, Zero Trust Architecture | CSRC",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

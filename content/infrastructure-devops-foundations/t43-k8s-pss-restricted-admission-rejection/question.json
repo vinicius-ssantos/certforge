@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige diagnosticar uma rejeição de admissão correlacionando o nível Restricted dos Pod Security Standards com um campo ausente no manifesto, não apenas conhecer a regra isoladamente.",
+  "prompt": "Um namespace é migrado de `pod-security.kubernetes.io/enforce: baseline` para `restricted`. No dia seguinte, um Deployment que antes funcionava sem problemas passa a falhar na criação de novos Pods, e o evento reportado menciona violação relacionada a `runAsNonRoot`. O manifesto do Pod não tem nenhum campo `securityContext` definido, nem no nível do Pod nem no nível do container. Qual é a explicação mais provável?",
+  "explanation": "A documentação de Pod Security Standards do Kubernetes lista, entre os controles exigidos pelo nível Restricted, que os containers devem ser obrigados a rodar como usuários não-root, com os campos `spec.securityContext.runAsNonRoot` (ou seu equivalente no nível do container) exigidos como `true`. Antes da migração, o namespace estava em Baseline, que não impõe esse controle, então o Pod sem `securityContext` nenhum era admitido normalmente — o container podia estar rodando como root por padrão da imagem sem que nada fosse verificado. Depois de mover o namespace para Restricted, essa mesma ausência de `securityContext` passa a ser rejeitada, porque o nível Restricted exige a declaração explícita de `runAsNonRoot: true`, que o manifesto nunca teve.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O nível Restricted exige a declaração explícita de `runAsNonRoot: true`, que esse manifesto nunca teve; sob Baseline isso não era verificado, então o Pod era admitido mesmo sem o campo.",
+      "correct": true,
+      "explanation": "Correto: a documentação de Pod Security Standards lista exatamente esse controle — exigir `runAsNonRoot` — como parte do nível Restricted e não do Baseline, o que explica por que a mesma definição de Pod passou a ser rejeitada só depois da migração de nível."
+    },
+    {
+      "key": "B",
+      "text": "A mudança de nível não deveria afetar Pods já em execução nem novos Pods do mesmo Deployment; a falha é necessariamente um bug do controlador de admissão, não um efeito esperado da migração.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve o controle de admissão como avaliado a cada criação de Pod segundo o nível vigente do namespace naquele momento; um novo Pod criado depois da migração é avaliado contra o nível novo, então a rejeição é o comportamento esperado, não um bug."
+    },
+    {
+      "key": "C",
+      "text": "O problema é certamente que a imagem do container não existe mais no registry, e a mensagem sobre `runAsNonRoot` é apenas um efeito colateral não relacionado de um erro de pull de imagem.",
+      "correct": false,
+      "explanation": "Incorreto: o evento relatado menciona especificamente violação de `runAsNonRoot`, que é um controle de admissão de Pod Security Standards, não um erro de pull de imagem; a causa descrita no evento já indica a área correta do problema."
+    },
+    {
+      "key": "D",
+      "text": "O nível Restricted substitui completamente o Baseline, então todos os Pods do namespace precisam ser recriados manualmente antes que qualquer política de admissão volte a funcionar.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve os níveis como cumulativos (Restricted inclui tudo do Baseline mais controles adicionais), e a avaliação de admissão ocorre normalmente a cada criação de Pod, sem exigir uma recriação manual geral do namespace para \"reativar\" a política."
+    }
+  ],
+  "references": [
+    {
+      "title": "Pod Security Standards | Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

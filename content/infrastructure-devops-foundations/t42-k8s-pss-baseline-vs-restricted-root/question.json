@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige saber que os níveis dos Pod Security Standards são cumulativos e que apenas o nível Restricted exige containers não-root, não o Baseline.",
+  "prompt": "Um namespace recebe o rótulo `pod-security.kubernetes.io/enforce: baseline` como parte de um esforço de hardening. A equipe assume que isso já bloqueia qualquer Pod cujo container rode como root, já que \"baseline é o nível de segurança básico aplicado a tudo\". Um Pod sem `securityContext` nenhum é então criado nesse namespace. O que acontece?",
+  "explanation": "A documentação de Pod Security Standards do Kubernetes descreve os níveis como cumulativos, do mais permissivo ao mais restritivo, e caracteriza o Baseline como uma política \"minimamente restritiva que previne escaladas de privilégio conhecidas\" — ela não exige que o container rode como não-root. A exigência de rodar como não-root (`runAsNonRoot`) está especificamente no nível Restricted, que inclui tudo do Baseline mas adiciona controles mais estritos. Por isso, o Pod sem `securityContext` é admitido normalmente sob a política Baseline, mesmo rodando como root, porque a regra que bloquearia isso simplesmente não existe nesse nível.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O Pod é rejeitado na criação, porque a política Baseline já bloqueia qualquer container que não declare `runAsNonRoot: true` explicitamente.",
+      "correct": false,
+      "explanation": "Incorreto: a exigência de `runAsNonRoot` está documentada como parte do nível Restricted, não do Baseline; o Baseline não contém esse controle."
+    },
+    {
+      "key": "B",
+      "text": "O Pod é admitido normalmente e pode rodar como root, porque a exigência de não rodar como root está documentada apenas no nível Restricted, não no Baseline.",
+      "correct": true,
+      "explanation": "Correto: a documentação de Pod Security Standards do Kubernetes caracteriza o Baseline como focado em prevenir escaladas de privilégio conhecidas, sem exigir usuário não-root — esse controle específico pertence ao nível Restricted, mais estrito."
+    },
+    {
+      "key": "C",
+      "text": "O Pod é admitido, mas o kubelet força silenciosamente a troca para um usuário não-root em tempo de execução, sem que isso apareça em nenhuma mensagem de evento.",
+      "correct": false,
+      "explanation": "Incorreto: os Pod Security Standards atuam como controle de admissão — aceitam ou rejeitam o Pod na criação, de acordo com o nível configurado — e não reescrevem silenciosamente o usuário de execução de um container admitido."
+    },
+    {
+      "key": "D",
+      "text": "O comportamento depende exclusivamente da versão do container runtime (containerd ou CRI-O), já que os Pod Security Standards delegam essa decisão ao runtime escolhido.",
+      "correct": false,
+      "explanation": "Incorreto: os Pod Security Standards são aplicados pelo controlador de admissão do Kubernetes com base no nível do namespace, não delegados à escolha de container runtime instalado no nó."
+    }
+  ],
+  "references": [
+    {
+      "title": "Pod Security Standards | Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/security/pod-security-standards/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige apenas reconhecer a diferença entre codificação e confidencialidade, um mal-entendido comum e diretamente contradito pela documentação oficial.",
+  "prompt": "Durante uma revisão de segurança, alguém roda `kubectl get secret db-credentials -o yaml`, vê que o campo `data.password` aparece como uma string em base64 e conclui: \"está tudo certo, a senha já está criptografada no próprio Secret\". Por que essa conclusão está errada?",
+  "explanation": "A documentação de Secrets do Kubernetes é explícita sobre isso: os valores do campo `data` são codificados em base64 porque o próprio formato exige strings, e um exemplo de Secret TLS na documentação traz o comentário \"values are base64 encoded, which obscures them but does NOT provide any useful level of confidentiality\". Qualquer pessoa com acesso de leitura ao objeto Secret pode decodificar o base64 trivialmente e obter a senha original; a proteção real desse valor vem do controle de acesso (RBAC) sobre quem pode ler aquele Secret, não da codificação em si.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Base64 só torna o valor ilegível a olho nu; quem tem permissão de leitura sobre o Secret decodifica-o trivialmente, então a proteção real vem do controle de acesso, não da codificação.",
+      "correct": true,
+      "explanation": "Correto: é exatamente a distinção que a documentação de Secrets do Kubernetes faz ao afirmar que a codificação em base64 obscurece o valor, mas não fornece nenhum nível útil de confidencialidade."
+    },
+    {
+      "key": "B",
+      "text": "A conclusão está certa: base64 é um algoritmo de criptografia reconhecido amplamente na indústria, então qualquer valor codificado dessa forma já está protegido contra leitura não autorizada.",
+      "correct": false,
+      "explanation": "Incorreto: base64 é uma codificação reversível, não um algoritmo de criptografia; a própria documentação do Kubernetes nega explicitamente que ela forneça confidencialidade."
+    },
+    {
+      "key": "C",
+      "text": "A conclusão só estaria errada se o cluster não usasse TLS entre os nós, já que é o TLS da comunicação do cluster que criptografa o conteúdo do campo `data` do Secret.",
+      "correct": false,
+      "explanation": "Incorreto: TLS na comunicação entre nós protege dados em trânsito, mas não é o que determina se o valor dentro do campo `data` de um Secret já lido via `kubectl get` está ou não decodificável; a questão aqui é sobre o formato do próprio valor armazenado, não sobre o transporte de rede."
+    },
+    {
+      "key": "D",
+      "text": "A conclusão está errada apenas porque o comando deveria ter usado `-o json` em vez de `-o yaml`; no formato JSON, o Kubernetes exibiria o valor já criptografado.",
+      "correct": false,
+      "explanation": "Incorreto: o formato de saída (`-o yaml` ou `-o json`) não altera o conteúdo do campo `data`, que permanece codificado em base64 em ambos os formatos; a diferença não está na representação da saída."
+    }
+  ],
+  "references": [
+    {
+      "title": "Secrets | Kubernetes",
+      "url": "https://kubernetes.io/docs/concepts/configuration/secret/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

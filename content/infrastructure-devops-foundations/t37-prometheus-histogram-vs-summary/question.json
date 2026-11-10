@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "HARD",
+  "difficultyRationale": "Exige entender por que quantis pré-calculados de um Summary não podem ser combinados entre instâncias, o que não é óbvio ao olhar só a definição isolada de cada tipo de métrica.",
+  "prompt": "Um serviço roda em 20 réplicas atrás de um load balancer e cada réplica expõe sua própria latência de requisição como um Summary do Prometheus, calculando o p99 internamente. Alguém tenta responder \"qual é o p99 de latência do serviço como um todo\" fazendo a média aritmética do p99 reportado por cada uma das 20 réplicas. Por que esse número final não representa de forma confiável o p99 real do serviço?",
+  "explanation": "A página do Prometheus sobre histogramas e summaries afirma que quantis de um Summary são calculados dentro do próprio processo instrumentado e expostos diretamente, e que não é possível agregar quantis já calculados — a própria documentação chama de estatisticamente sem sentido (\"nonsensical\") calcular a média de quantis pré-computados. Cada réplica calculou seu p99 sobre sua própria amostra de requisições; a média dessas 20 estimativas independentes não reconstrói o p99 da distribuição combinada das 20 réplicas. Um Histogram, por outro lado, expõe contagens por faixa (bucket) que podem ser somadas entre réplicas antes de calcular o quantil do agregado com `histogram_quantile()`.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O número está correto; a média de 20 valores de p99 independentes é, por definição estatística, igual ao p99 da distribuição combinada de todas as requisições das 20 réplicas.",
+      "correct": false,
+      "explanation": "Incorreto: isso contraria diretamente o que a documentação do Prometheus afirma sobre Summary — quantis pré-calculados não são agregáveis, e a própria página chama essa média de estatisticamente sem sentido."
+    },
+    {
+      "key": "B",
+      "text": "O Summary calcula o quantil dentro do próprio processo, sobre a amostra local da réplica; quantis já calculados de réplicas diferentes não se recombinam no quantil do conjunto todo, e a documentação chama isso de não agregável.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a limitação que a documentação de histogramas e summaries do Prometheus descreve — quantis de um Summary não são agregáveis entre instâncias, e calcular a média deles produz um valor sem sentido estatístico."
+    },
+    {
+      "key": "C",
+      "text": "O erro é só de arredondamento de ponto flutuante na média; usando uma mediana geométrica em vez de uma média aritmética simples, o resultado passa a representar corretamente o p99 combinado do serviço inteiro, réplica por réplica.",
+      "correct": false,
+      "explanation": "Incorreto: o problema não é a escolha da fórmula de combinação nem arredondamento — é que o Summary não expõe os dados brutos necessários para reconstruir o quantil do conjunto combinado; nenhuma fórmula de agregação sobre os quantis já calculados resolve isso."
+    },
+    {
+      "key": "D",
+      "text": "Não há nenhum problema real de agregação; a diferença entre Histogram e Summary no Prometheus é apenas de nome e de como a métrica aparece listada na interface.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação descreve uma diferença funcional real entre os dois tipos quanto à agregação entre instâncias, não apenas uma diferença de rótulo ou de exibição."
+    }
+  ],
+  "references": [
+    {
+      "title": "Histograms and summaries | Prometheus",
+      "url": "https://prometheus.io/docs/practices/histograms/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

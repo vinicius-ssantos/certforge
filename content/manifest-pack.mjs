@@ -70,7 +70,10 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
     // CKA's "Use Helm and Kustomize to install cluster components" (CKA-4.6) objective is itself
     // split across two hosts: Kustomize is documented directly on kubernetes.io, but Helm is a
     // separate CNCF project with its own docs site, so helm.sh covers exactly the half of this
-    // objective kubernetes.io doesn't.
+    // objective kubernetes.io doesn't. #174's Observability & SRE scenarios need two more CNCF
+    // projects with their own docs sites, the same way Helm did: opentelemetry.io for trace/span
+    // structure and context propagation, and prometheus.io for metric types and alerting-rule
+    // semantics (`for`, `keep_firing_for`) neither kubernetes.io nor cncf.io documents itself.
     const officialHosts = new Set([
       "docs.docker.com", "kubernetes.io",
       "man7.org", "docs.kernel.org",
@@ -81,6 +84,7 @@ export function validateGeneralQuestion(question, manifest, name = "unknown") {
       "attack.mitre.org", "slsa.dev",
       "docs.aws.amazon.com",
       "helm.sh",
+      "opentelemetry.io", "prometheus.io",
     ]);
     for (const reference of question.references) {
       let parsed;

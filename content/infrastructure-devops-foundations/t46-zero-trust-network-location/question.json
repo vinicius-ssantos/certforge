@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000309",
+  "difficulty": "MEDIUM",
+  "difficultyRationale": "Exige aplicar o princípio central de confiança zero (nenhuma confiança implícita por localização de rede) para contestar uma suposição comum de que estar dentro do perímetro já é suficiente.",
+  "prompt": "Um serviço interno expõe uma API sem autenticação entre processos, porque \"ele só é alcançável de dentro da VPC privada, atrás do firewall perimetral — se alguém já está lá dentro, já passou pela barreira real\". Segundo o modelo de arquitetura de confiança zero, por que esse raciocínio é insuficiente como controle de segurança?",
+  "explanation": "A publicação especial NIST SP 800-207 (Zero Trust Architecture) define o princípio central da confiança zero como a ausência de confiança implícita concedida a ativos ou contas de usuário apenas com base em sua localização física ou de rede. Isso significa que estar dentro da VPC ou atrás do firewall perimetral não é, por si só, evidência suficiente de que uma requisição deve ser confiada — qualquer entidade que já esteja dentro do perímetro (por exemplo, um processo comprometido, uma credencial de outro serviço vazada, ou um movimento lateral depois de uma invasão inicial) poderia acessar a API livremente se a única barreira for a posição na rede.",
+  "options": [
+    {
+      "key": "A",
+      "text": "O raciocínio está correto: a arquitetura de confiança zero existe justamente para reforçar que estar dentro do perímetro de rede é sempre a evidência mais forte e mais confiável de que uma requisição é legítima.",
+      "correct": false,
+      "explanation": "Incorreto: isso inverte o princípio central da confiança zero segundo o NIST SP 800-207, que trata a localização de rede como insuficiente para conceder confiança implícita, não como a evidência mais forte de legitimidade."
+    },
+    {
+      "key": "B",
+      "text": "Estar dentro da VPC não é, por si só, evidência suficiente para conceder confiança segundo o NIST SP 800-207; uma entidade já dentro do perímetro poderia acessar a API livremente se a rede for a única barreira.",
+      "correct": true,
+      "explanation": "Correto: o NIST SP 800-207 define exatamente esse princípio — nenhuma confiança implícita é concedida com base apenas na localização física ou de rede de um ativo ou conta — o que torna a autenticação entre serviços necessária independentemente de estar \"dentro\" do perímetro."
+    },
+    {
+      "key": "C",
+      "text": "O raciocínio só seria um problema se a VPC usasse endereçamento IPv4 em vez de IPv6, já que o modelo de confiança zero trata exclusivamente de esquemas de endereçamento de rede.",
+      "correct": false,
+      "explanation": "Incorreto: o NIST SP 800-207 não condiciona o princípio de confiança zero ao esquema de endereçamento IP usado; o ponto central é não conceder confiança implícita por localização de rede, qualquer que seja o esquema de endereçamento."
+    },
+    {
+      "key": "D",
+      "text": "Não há problema de confiança aqui; a única preocupação da confiança zero é garantir que o tráfego entre VPCs diferentes, nunca o tráfego dentro da mesma VPC, seja autenticado.",
+      "correct": false,
+      "explanation": "Incorreto: o princípio do NIST SP 800-207 não distingue \"dentro da mesma VPC\" de \"entre VPCs diferentes\" como categorias com regras de confiança diferentes; a ausência de confiança implícita por localização de rede vale para qualquer posição na topologia, inclusive dentro do mesmo segmento."
+    }
+  ],
+  "references": [
+    {
+      "title": "NIST SP 800-207, Zero Trust Architecture | CSRC",
+      "url": "https://csrc.nist.gov/pubs/sp/800/207/final"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

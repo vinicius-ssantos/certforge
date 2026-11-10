@@ -1,0 +1,43 @@
+{
+  "type": "SINGLE_CHOICE",
+  "topicId": "a3000000-0000-4000-8000-000000000307",
+  "difficulty": "EASY",
+  "difficultyRationale": "Exige apenas reconhecer qual dos dois tipos básicos de métrica do Prometheus é apropriado para um valor que pode cair, sem envolver consultas PromQL.",
+  "prompt": "Uma equipe instrumenta um worker pool e quer expor, no Prometheus, o número de processos atualmente em execução — um valor que sobe quando um worker inicia e cai quando ele termina. Alguém sugere modelar isso como um Counter, já que \"é só um número que a gente incrementa e decrementa\". Qual é o problema dessa escolha?",
+  "explanation": "A documentação do Prometheus define Counter como uma métrica cujo valor só pode aumentar ou ser zerado (por exemplo, quando o processo reinicia) — não é um tipo pensado para registrar quedas de valor durante a operação normal. Um número de processos em execução sobe e desce o tempo todo, então o tipo correto é Gauge, que representa um valor que pode subir ou cair livremente. Modelar isso como Counter faria ferramentas e funções que assumem monotonicidade (como `rate()`) interpretarem cada queda como um reset do processo, distorcendo qualquer gráfico ou alerta construído sobre a métrica.",
+  "options": [
+    {
+      "key": "A",
+      "text": "Nenhum: Counter aceita incrementos e decrementos livremente, então representa esse valor com a mesma fidelidade de um Gauge.",
+      "correct": false,
+      "explanation": "Incorreto: a própria definição de Counter do Prometheus é que ele só sobe (ou é zerado); decrementar um Counter contraria essa semântica e confunde qualquer consumidor da métrica que assuma monotonicidade."
+    },
+    {
+      "key": "B",
+      "text": "Counter é feito para valores que só aumentam ou são zerados no reinício; um valor que sobe e desce durante a operação normal deve ser um Gauge, não um Counter.",
+      "correct": true,
+      "explanation": "Correto: isso é exatamente a distinção que a página de tipos de métrica do Prometheus estabelece entre Counter e Gauge, e o número de processos em execução é o próprio exemplo que a documentação usa para Gauge."
+    },
+    {
+      "key": "C",
+      "text": "O problema é só de nome: basta renomear a métrica para terminar em `_total` e o Prometheus passa a tratá-la como Gauge automaticamente.",
+      "correct": false,
+      "explanation": "Incorreto: a convenção de sufixo `_total` é usada para Counters para indicar que o valor é cumulativo; ela não transforma o tipo da métrica nem resolve a incompatibilidade semântica descrita no cenário."
+    },
+    {
+      "key": "D",
+      "text": "Não há diferença prática entre os dois tipos; a escolha entre Counter e Gauge é apenas uma preferência de estilo de cada equipe, sem nenhum efeito sobre consultas ou alertas.",
+      "correct": false,
+      "explanation": "Incorreto: Counter e Gauge têm semânticas diferentes e funções PromQL diferentes assumem qual delas foi usada; tratar a escolha como estilística ignora o contrato que a métrica está fazendo com quem a consome."
+    }
+  ],
+  "references": [
+    {
+      "title": "Metric types | Prometheus",
+      "url": "https://prometheus.io/docs/concepts/metric_types/"
+    }
+  ],
+  "evidence": {
+    "type": "reference-backed"
+  }
+}

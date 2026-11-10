@@ -72,7 +72,7 @@ test("the infrastructure pack spreads its keys and gives itself away by length",
   const live = assertAnswerTells(questions, readAnswerTellsLedger(INFRA), INFRA);
   assert.deepEqual(live.neverCorrect, []);
   assert.equal(live.longestIsCorrect.leaking, 54);
-  // Pick the longest option every time and score 77% on a pack of seventy, knowing nothing.
+  // Pick the longest option every time and score 54% on a pack of a hundred, knowing nothing.
   assert.ok(live.longestIsCorrect.leaking * 4 > live.longestIsCorrect.measured * 2);
 });
 

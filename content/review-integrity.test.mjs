@@ -7,11 +7,12 @@ import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity
 
 const pack = "content/infrastructure-devops-foundations";
 test("all recorded human sign-offs match the current question blobs", () => {
-  // 70 of the pack's 85 questions carry a human sign-off; the other 15 (#169/#170) are
-  // unreviewed drafts with no review.json entry at all, which this check does not require —
-  // it only refuses a sign-off whose recorded bytes no longer match the question it names.
+  // 70 of the pack's 100 questions carry a human sign-off; the other 30 (15 from #169/#170,
+  // 15 from #174) are unreviewed drafts with no review.json entry at all, which this check
+  // does not require — it only refuses a sign-off whose recorded bytes no longer match the
+  // question it names.
   const state = assertPackReviewsCurrent(pack);
-  assert.equal(state.total, 85);
+  assert.equal(state.total, 100);
   assert.equal(state.accepted, 70);
 });
 test("editing a reviewed prompt revokes its recorded sign-off", () => {
