@@ -9,6 +9,14 @@ import { expect, test } from "./test";
  * refuses with `insufficient_mock_content`. Nothing else in this suite publishes that many
  * questions across every topic, so until now no spec exercised the mock exam in a real browser;
  * `docs/release/v0.3.0-scope-proposal.md` names that absence directly.
+ *
+ * The `zz-` prefix is deliberate, not a typo: `review.spec.ts` and others each treat one specific
+ * certification topic as theirs alone and top it up to an exact count for their own scenario.
+ * Topping up every topic here, including theirs, is only safe once their own setup has already
+ * run — Playwright runs spec files in filename order under this project's `workers: 1` config, so
+ * this file is named to sort after all of them (after `screenshots.spec.ts`, today's last file).
+ * By the time this file's `beforeAll` runs, every other topic already carries whatever count its
+ * own spec wanted, and this only ever adds to a topic nothing else has touched.
  */
 const TRACK_SLUG = "java-certification";
 const QUESTIONS_PER_TOPIC = 5;
