@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { Topic } from "../api/types";
-import { useText } from "../i18n/useText";
+import { formatDate } from "../history/format";
+import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
@@ -59,6 +60,7 @@ function isActiveMock(error: unknown): error is ApiError {
 
 export function TrackPage() {
   const t = useText();
+  const { locale } = useLocale();
   const { slug = "" } = useParams();
   const api = useApi();
   const navigate = useNavigate();
@@ -151,6 +153,62 @@ export function TrackPage() {
               {t.track.objectives}
             </a>
           </p>
+          {/* Absent, not a false zero, until someone has verified the objectives page (#176) --
+              the same "a field left out means the fact doesn't exist yet" convention the exam
+              version's own java release already follows above. */}
+          {track.data.objectiveReadiness ? (
+            <section aria-labelledby="readiness-heading">
+              <h2 id="readiness-heading">{t.track.readinessHeading}</h2>
+              <p className="muted">
+                {t.track.readinessVerifiedOn(
+                  track.data.objectiveReadiness.providerVersion,
+                  formatDate(track.data.objectiveReadiness.verifiedOn, locale),
+                )}
+              </p>
+              {track.data.objectiveReadiness.status === "STALE" ? (
+                <p role="status">{t.track.readinessStale}</p>
+              ) : null}
+              <p>
+                <span className="bar-cell">
+                  <span className="mini" aria-hidden="true">
+                    <i
+                      className="low"
+                      style={{
+                        width: `${
+                          (track.data.objectiveReadiness.claimedObjectives /
+                            track.data.objectiveReadiness.totalObjectives) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </span>
+                  {t.track.readinessCoverage(
+                    track.data.objectiveReadiness.claimedObjectives,
+                    track.data.objectiveReadiness.totalObjectives,
+                  )}
+                </span>
+              </p>
+              {track.data.objectiveReadiness.gaps.length > 0 ? (
+                <ScrollableTable label={t.track.readinessGapsCaption}>
+                  <caption className="visually-hidden">{t.track.readinessGapsCaption}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">{t.track.readinessGapKey}</th>
+                      <th scope="col">{t.track.readinessGapTitle}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {track.data.objectiveReadiness.gaps.map((gap) => (
+                      <tr key={gap.key}>
+                        <th scope="row">{gap.key}</th>
+                        <td>{gap.title}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </ScrollableTable>
+              ) : null}
+            </section>
+          ) : null}
           {track.data.kind === "CERTIFICATION" ? (
             <section
               className={
