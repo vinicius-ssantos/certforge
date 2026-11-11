@@ -103,7 +103,10 @@ class CatalogAdminService {
             examCode.trim(),
             examName.trim(),
             javaRelease,
-            objectivesUrl.trim()));
+            objectivesUrl.trim(),
+            // Every exam version created through this endpoint today is multiple-choice; CKAD and
+            // CKA got PERFORMANCE_BASED from V33's backfill, not from here (#171).
+            "MULTIPLE_CHOICE"));
     return getTrack(trackId);
   }
 

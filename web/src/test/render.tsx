@@ -134,6 +134,7 @@ export const javaTrack = {
     examName: "Java SE 21 Developer Professional",
     javaRelease: 21,
     objectivesUrl: "https://education.oracle.com/java-se-21-developer-professional/pexam_1Z0-830",
+    examFormat: "MULTIPLE_CHOICE",
   },
   topics: [
     {

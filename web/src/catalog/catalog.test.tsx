@@ -125,7 +125,13 @@ describe("a certification that is not about a Java release", () => {
     name: "CKAD",
     provider: "CNCF",
     certificationName: "Certified Kubernetes Application Developer",
-    examVersion: { ...javaTrack.examVersion, label: "CKAD 2026", examCode: "CKAD", javaRelease: null },
+    examVersion: {
+      ...javaTrack.examVersion,
+      label: "CKAD 2026",
+      examCode: "CKAD",
+      javaRelease: null,
+      examFormat: "PERFORMANCE_BASED",
+    },
   };
 
   it("names the exam without inventing a release, in the list", async () => {

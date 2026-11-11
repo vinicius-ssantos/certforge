@@ -33,7 +33,8 @@ class CatalogReadServiceTest {
           "T-1",
           "Tester Exam",
           null,
-          "https://example.com/objectives");
+          "https://example.com/objectives",
+          "MULTIPLE_CHOICE");
 
   @Test
   void isEmptyWhenNobodyHasReadTheProvidersPageYet() {

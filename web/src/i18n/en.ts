@@ -171,7 +171,10 @@ export const en = {
     mockHeading: "Full mock exam",
     mockBody:
       "Run a timed full mock with a server-enforced deadline, delayed feedback and a final topic breakdown. The current CertForge blueprint controls the question count, duration and practice target.",
-    mockCaveat: "The practice target is for study guidance and is not an Oracle score prediction.",
+    mockCaveat: (provider: string) =>
+      `This is CertForge's own practice exam, not an official ${provider} exam, and the practice target is for study guidance only -- not a score prediction.`,
+    performanceBasedNotice:
+      "This is a hands-on, performance-based exam. Practice here covers concepts only -- no guided hands-on lab is linked to this track yet, so it does not test the live-terminal skill the real exam grades.",
     mockAvailabilityLoading: "Checking whether this mock can start",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Not available yet. ${missing} reviewed ${plural(TAG, missing, { one: "question is", other: "questions are" })} still missing across ${topics} ${plural(TAG, topics, { one: "topic", other: "topics" })}. A full mock requires ${perTopic} published questions in every topic.`,

@@ -33,7 +33,7 @@ class CatalogRepository {
   // LEFT JOIN: an interview version has no exam row, and must still be read rather than vanish.
   private static final String SELECT_VERSION =
       "select v.id, v.track_id, v.label, v.status,"
-          + " e.exam_code, e.exam_name, e.java_release, e.objectives_url"
+          + " e.exam_code, e.exam_name, e.java_release, e.objectives_url, e.exam_format"
           + " from certforge.catalog_track_version v"
           + " left join certforge.catalog_certification_exam e on e.track_version_id = v.id";
   private static final String SELECT_TOPIC =
@@ -140,13 +140,15 @@ class CatalogRepository {
     }
     jdbc.sql(
             "insert into certforge.catalog_certification_exam"
-                + " (track_version_id, exam_code, exam_name, java_release, objectives_url)"
-                + " values (:id, :code, :name, :release, :url)")
+                + " (track_version_id, exam_code, exam_name, java_release, objectives_url,"
+                + " exam_format)"
+                + " values (:id, :code, :name, :release, :url, :format)")
         .param("id", row.id())
         .param("code", row.examCode())
         .param(NAME, row.examName())
         .param("release", row.javaRelease())
         .param("url", row.objectivesUrl())
+        .param("format", row.examFormat())
         .update();
   }
 
@@ -389,7 +391,8 @@ class CatalogRepository {
         // getObject rather than getInt: an interview version has no exam row, and getInt would
         // read a null as 0 and quietly claim the version targets Java 0.
         rs.getObject("java_release", Integer.class),
-        rs.getString("objectives_url"));
+        rs.getString("objectives_url"),
+        rs.getString("exam_format"));
   }
 
   private static TopicRow mapTopic(ResultSet rs, int rowNum) throws SQLException {
