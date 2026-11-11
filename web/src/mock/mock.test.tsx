@@ -161,6 +161,60 @@ describe("mock exam entry", () => {
     expect(screen.getByText("0 of 2 answered · Practice target 68%")).toBeInTheDocument();
   });
 
+  it("names the real provider in the unofficial-exam disclosure, not a hardcoded one (#171)", async () => {
+    const ckad = {
+      ...javaTrack,
+      slug: "cncf-ckad",
+      provider: "CNCF",
+      examVersion: { ...javaTrack.examVersion, javaRelease: null, examFormat: "MULTIPLE_CHOICE" },
+    };
+    renderApp(
+      {
+        "GET /api/catalog/tracks/cncf-ckad": { body: ckad },
+        "GET /api/study/mock-exams/availability": { body: availability() },
+      },
+      { path: "/tracks/cncf-ckad" },
+    );
+
+    expect(
+      await screen.findByText(
+        "This is CertForge's own practice exam, not an official CNCF exam, and the practice target is for study guidance only -- not a score prediction.",
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it("warns that a performance-based exam has no hands-on lab yet (#171)", async () => {
+    const ckad = {
+      ...javaTrack,
+      slug: "cncf-ckad",
+      provider: "CNCF",
+      examVersion: { ...javaTrack.examVersion, javaRelease: null, examFormat: "PERFORMANCE_BASED" },
+    };
+    renderApp(
+      {
+        "GET /api/catalog/tracks/cncf-ckad": { body: ckad },
+        "GET /api/study/mock-exams/availability": { body: availability() },
+      },
+      { path: "/tracks/cncf-ckad" },
+    );
+
+    const notice = await screen.findByText(/hands-on, performance-based exam/);
+    expect(notice).toHaveAttribute("role", "status");
+  });
+
+  it("says nothing about hands-on labs for a plain multiple-choice exam", async () => {
+    renderApp(
+      {
+        "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+        "GET /api/study/mock-exams/availability": { body: availability() },
+      },
+      { path: "/tracks/java-certification" },
+    );
+
+    await screen.findByText("Full mock exam");
+    expect(screen.queryByText(/performance-based exam/)).not.toBeInTheDocument();
+  });
+
   it("continues an already-active mock without treating the conflict as a failure", async () => {
     const user = userEvent.setup();
     renderApp(

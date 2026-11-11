@@ -725,6 +725,9 @@
           "examCode" : {
             "type" : "string"
           },
+          "examFormat" : {
+            "type" : "string"
+          },
           "examName" : {
             "type" : "string"
           },
@@ -743,7 +746,7 @@
             "type" : "string"
           }
         },
-        "required" : [ "examCode", "examName", "id", "javaRelease", "label", "objectivesUrl" ],
+        "required" : [ "examCode", "examFormat", "examName", "id", "javaRelease", "label", "objectivesUrl" ],
         "type" : "object"
       },
       "ExpectedConceptRequest" : {

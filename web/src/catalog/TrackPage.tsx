@@ -153,6 +153,12 @@ export function TrackPage() {
               {t.track.objectives}
             </a>
           </p>
+          {/* A performance-based exam (CKAD, CKA) is graded on a live terminal, and a quiz pack
+              can only ever test the conceptual layer underneath it (#171) -- said here rather than
+              left as a fact only a migration comment recorded. */}
+          {track.data.examVersion.examFormat === "PERFORMANCE_BASED" ? (
+            <p role="status">{t.track.performanceBasedNotice}</p>
+          ) : null}
           {/* Absent, not a false zero, until someone has verified the objectives page (#176) --
               the same "a field left out means the fact doesn't exist yet" convention the exam
               version's own java release already follows above. */}
@@ -220,7 +226,7 @@ export function TrackPage() {
             >
               <h2 id="mock-entry-heading">{t.track.mockHeading}</h2>
               <p>{t.track.mockBody}</p>
-              <p className="muted">{t.track.mockCaveat}</p>
+              <p className="muted">{t.track.mockCaveat(track.data.provider)}</p>
               {mockAvailability.isPending ? (
                 <Loading label={t.track.mockAvailabilityLoading} />
               ) : null}

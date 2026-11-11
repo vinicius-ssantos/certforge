@@ -201,7 +201,8 @@ class CatalogReadService implements PreparationCatalog {
         version.examCode(),
         version.examName(),
         version.javaRelease(),
-        version.objectivesUrl());
+        version.objectivesUrl(),
+        version.examFormat());
   }
 
   /**

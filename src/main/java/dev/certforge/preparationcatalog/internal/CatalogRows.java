@@ -31,7 +31,8 @@ interface CatalogRows {
       String examCode,
       String examName,
       Integer javaRelease,
-      String objectivesUrl) {
+      String objectivesUrl,
+      String examFormat) {
 
     boolean isCertification() {
       return examCode != null;

@@ -155,7 +155,10 @@ export const ptBR: Catalog = {
     mockHeading: "Simulado completo",
     mockBody:
       "Faça um simulado completo cronometrado, com prazo imposto pelo servidor, feedback adiado e um balanço final por tópico. O blueprint atual do CertForge define a quantidade de questões, a duração e a meta de prática.",
-    mockCaveat: "A meta de prática serve de orientação para o estudo e não é uma previsão de nota da Oracle.",
+    mockCaveat: (provider: string) =>
+      `Este é um simulado autoral do CertForge, não uma prova oficial da ${provider}, e a meta de prática serve apenas de orientação para o estudo -- não é uma previsão de nota.`,
+    performanceBasedNotice:
+      "Esta é uma prova prática, de desempenho ao vivo. A prática aqui cobre apenas os conceitos -- ainda não há um laboratório prático vinculado a esta trilha, então ela não testa a habilidade de terminal que a prova real avalia.",
     mockAvailabilityLoading: "Verificando se este simulado pode começar",
     mockUnavailable: (missing: number, topics: number, perTopic: number) =>
       `Ainda não está disponível. ${plural(TAG, missing, { one: "Falta", other: "Faltam" })} ${missing} ${plural(TAG, missing, { one: "questão revisada", other: "questões revisadas" })} em ${topics} ${plural(TAG, topics, { one: "tópico", other: "tópicos" })}. Um simulado completo exige ${perTopic} questões publicadas em cada tópico.`,

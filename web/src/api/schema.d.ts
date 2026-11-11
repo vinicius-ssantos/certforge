@@ -1318,6 +1318,7 @@ export interface components {
         };
         ExamVersionView: {
             examCode: string;
+            examFormat: string;
             examName: string;
             /** Format: uuid */
             id: string;

@@ -184,7 +184,8 @@ class MockExamPlannerTest {
             examCode,
             "Java SE 21 Developer Professional",
             21,
-            "https://education.oracle.com/"),
+            "https://education.oracle.com/",
+            "MULTIPLE_CHOICE"),
         topics,
         null);
   }

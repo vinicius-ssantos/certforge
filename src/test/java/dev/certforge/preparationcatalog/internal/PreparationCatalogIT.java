@@ -56,6 +56,7 @@ class PreparationCatalogIT {
   @Autowired MockMvc mvc;
   @Autowired JdbcTemplate jdbc;
   @Autowired PreparationCatalog catalog;
+  @Autowired CatalogRepository repository;
 
   private Cookie admin;
   private Cookie learner;
@@ -440,6 +441,58 @@ class PreparationCatalogIT {
             jsonPath("$.examVersions[?(@.label=='V1')].javaRelease")
                 .value(org.hamcrest.Matchers.contains(21)));
     assertThat(versionId).isNotBlank();
+  }
+
+  /**
+   * A hands-on, performance-based exam (#171) is surfaced to the learner as such, not left as a
+   * fact only a migration comment recorded. Every exam this admin endpoint creates defaults to
+   * MULTIPLE_CHOICE; a direct column flip here stands in for V33's backfill of CKAD and CKA.
+   */
+  @Test
+  void aPerformanceBasedExamIsIdentifiedAsSuchToTheLearner() throws Exception {
+    String trackSlug = slug();
+    String trackId = createTrack(trackSlug);
+    String versionId = createExamVersion(trackId, "V1");
+    String topicId = createTopic(trackId, "topic-" + trackSlug, null);
+    map(versionId, topicId);
+    jdbc.update(
+        "update certforge.catalog_certification_exam set exam_format = 'PERFORMANCE_BASED'"
+            + " where track_version_id = ?",
+        UUID.fromString(versionId));
+    send(post("/api/admin/catalog/tracks/" + trackId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+    send(post("/api/admin/catalog/exam-versions/" + versionId + "/activate"), admin, null)
+        .andExpect(status().isOk());
+
+    mvc.perform(get("/api/catalog/tracks/" + trackSlug).cookie(learner))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.examVersion.examFormat").value("PERFORMANCE_BASED"));
+  }
+
+  /**
+   * V33's backfill (#171): CKAD and CKA are the only seeded exams marked performance-based; KCNA,
+   * like every other exam seeded so far, keeps the column's MULTIPLE_CHOICE default.
+   */
+  @Test
+  void theBackfillMarksOnlyCkadAndCkaAsPerformanceBased() {
+    assertThat(
+            repository
+                .findExamVersion(UUID.fromString("b2000000-0000-4000-8000-000000000003"))
+                .orElseThrow()
+                .examFormat())
+        .isEqualTo("PERFORMANCE_BASED");
+    assertThat(
+            repository
+                .findExamVersion(UUID.fromString("b2000000-0000-4000-8000-000000000004"))
+                .orElseThrow()
+                .examFormat())
+        .isEqualTo("PERFORMANCE_BASED");
+    assertThat(
+            repository
+                .findExamVersion(UUID.fromString("b2000000-0000-4000-8000-000000000001"))
+                .orElseThrow()
+                .examFormat())
+        .isEqualTo("MULTIPLE_CHOICE");
   }
 
   /**
