@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
-import type { Misconception } from "../api/types";
+import type { CertificationProgress, Misconception } from "../api/types";
 import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
@@ -12,6 +12,68 @@ import { PRACTICE_TARGET_PERCENT, meetsTarget } from "./target";
 
 function percent(accuracy: number | null, noValue: string): string {
   return accuracy === null ? noValue : `${Math.round(accuracy * 100)}%`;
+}
+
+/**
+ * One row per active certification track, aggregated from the same topic counts as the table
+ * below. It is coverage of what has been practised and how accurate it was, not a prediction of
+ * exam readiness -- the page's own contract against a readiness field applies here too (#176).
+ */
+function Certifications({ rows }: { rows: CertificationProgress[] }) {
+  const t = useText();
+  if (rows.length === 0) {
+    return null;
+  }
+  return (
+    <section aria-labelledby="certifications-heading">
+      <h2 id="certifications-heading">{t.progress.certificationsHeading}</h2>
+      <ScrollableTable label={t.progress.certificationsCaption}>
+        <caption className="visually-hidden">{t.progress.certificationsCaption}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{t.progress.certificationName}</th>
+            <th scope="col">{t.progress.topic}</th>
+            <th scope="col">{t.progress.accuracy}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr key={row.trackSlug}>
+              <th scope="row">
+                <Link to={`/tracks/${row.trackSlug}`}>
+                  {row.trackName ?? t.progress.fallbackCertificationName}
+                </Link>
+              </th>
+              <td>
+                <span className="bar-cell">
+                  <span className="mini" aria-hidden="true">
+                    <i style={{ width: `${(row.topicsAttempted / row.topicsTotal) * 100}%` }} />
+                  </span>
+                  {t.progress.topicsPracticed(row.topicsAttempted, row.topicsTotal)}
+                </span>
+              </td>
+              <td>
+                {row.accuracy === null ? (
+                  <span className="pill pill-new">{t.progress.notStarted}</span>
+                ) : (
+                  <span className="bar-cell">
+                    <span className="mini" aria-hidden="true">
+                      <i
+                        className={meetsTarget(row.accuracy) ? undefined : "low"}
+                        style={{ width: `${Math.round(row.accuracy * 100)}%` }}
+                      />
+                    </span>
+                    {percent(row.accuracy, t.progress.noValue)}
+                  </span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </ScrollableTable>
+      <p className="hint">{t.progress.certificationsNote}</p>
+    </section>
+  );
 }
 
 /**
@@ -75,6 +137,10 @@ export function ProgressPage() {
   const progress = useQuery({
     queryKey: ["progress", "topics"],
     queryFn: () => unwrap(api.GET("/api/progress/topics")),
+  });
+  const certifications = useQuery({
+    queryKey: ["progress", "certifications"],
+    queryFn: () => unwrap(api.GET("/api/progress/certifications")),
   });
   const misconceptions = useQuery({
     queryKey: ["review", "misconceptions"],
@@ -168,6 +234,12 @@ export function ProgressPage() {
       {progress.data && progress.data.length > 0 ? (
         <p className="hint">{t.progress.targetNote(PRACTICE_TARGET_PERCENT)}</p>
       ) : null}
+      {/* Same "secondary request says so rather than vanishing" contract as misconceptions below. */}
+      {certifications.isPending ? <Loading /> : null}
+      {certifications.isError ? (
+        <ErrorState error={certifications.error} onRetry={() => void certifications.refetch()} />
+      ) : null}
+      {certifications.data ? <Certifications rows={certifications.data} /> : null}
       {/*
        * A section that renders nothing when there is nothing to show cannot also render
        * nothing when it failed to load: a learner with real confidently-wrong answers would

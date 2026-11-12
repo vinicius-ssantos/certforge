@@ -33,6 +33,7 @@ export type SessionHistoryItem = Schemas["SessionHistoryItem"];
 export type AttemptHistoryPage = Schemas["PageAttemptHistoryItem"];
 export type AttemptHistoryItem = Schemas["AttemptHistoryItem"];
 export type TopicProgress = Schemas["TopicProgress"];
+export type CertificationProgress = Schemas["CertificationProgress"];
 export type ReviewQueue = Schemas["Queue"];
 export type ReviewQueueItem = Schemas["QueueItem"];
 export type ReviewReason = ReviewQueueItem["reason"];

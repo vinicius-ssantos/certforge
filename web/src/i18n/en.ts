@@ -375,6 +375,18 @@ export const en = {
     targetNote: (percent: number) =>
       `“Solid” means ${percent}% or better, the mock exam's pass mark. It describes your practice so far, not a prediction about the exam.`,
     fallbackTopic: "Topic",
+    certificationsHeading: "Progress by certification",
+    certificationsCaption: "Your topic coverage and accuracy by certification",
+    certificationName: "Certification",
+    topicsPracticed: (attempted: number, total: number) =>
+      `${attempted} of ${total} ${plural(TAG, total, { one: "topic", other: "topics" })}`,
+    /**
+     * Coverage of what has been practised, not a prediction of exam readiness -- the same
+     * contract {@link targetNote} states for a single topic, said once more for the rollup (#176).
+     */
+    certificationsNote:
+      "This is how much of each certification you have practised and how accurate you were, not a prediction about the exam.",
+    fallbackCertificationName: "Certification",
     misconceptionsHeading: "Where you were sure and wrong",
     misconceptionsBodyStart:
       "These are answers you got wrong while saying you were confident. That is worth more than a wrong answer you knew was a guess, because nothing told you to look again. It is evidence of where to look, ",

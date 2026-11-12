@@ -629,6 +629,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/progress/certifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["certifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/progress/rebuild": {
         parameters: {
             query?: never;
@@ -1247,6 +1263,19 @@ export interface components {
             /** Format: uuid */
             trackVersionId: string;
             unrecognisedRequirements: string[];
+        };
+        CertificationProgress: {
+            accuracy: number | null;
+            /** Format: int32 */
+            attempted: number;
+            /** Format: int32 */
+            correct: number;
+            /** Format: int32 */
+            topicsAttempted: number;
+            /** Format: int32 */
+            topicsTotal: number;
+            trackName: string;
+            trackSlug: string;
         };
         ConceptMarkView: {
             /** Format: int32 */
@@ -3040,6 +3069,26 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ObjectiveSourceView"];
+                };
+            };
+        };
+    };
+    certifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["CertificationProgress"][];
                 };
             };
         };

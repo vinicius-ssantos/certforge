@@ -1,5 +1,6 @@
 package dev.certforge.progress.internal;
 
+import dev.certforge.progress.internal.ProgressViews.CertificationProgress;
 import dev.certforge.progress.internal.ProgressViews.RebuildResult;
 import dev.certforge.progress.internal.ProgressViews.Reconciliation;
 import dev.certforge.progress.internal.ProgressViews.TopicProgress;
@@ -25,6 +26,14 @@ class ProgressController {
   @GetMapping("/topics")
   List<TopicProgress> topics() {
     return service.topics();
+  }
+
+  /**
+   * One entry per active certification track, aggregated from the same topics as {@link #topics()}.
+   */
+  @GetMapping("/certifications")
+  List<CertificationProgress> certifications() {
+    return service.certifications();
   }
 
   /** Whether the stored projection matches the attempts, and where it does not. */

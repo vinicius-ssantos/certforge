@@ -186,6 +186,8 @@ export function renderApp(
     // Empty by default (#176): most tests are about certification tracks and have no reason to
     // care that this call exists. A test exercising general tracks overrides it via `routes`.
     "GET /api/catalog/general-tracks": { body: [] },
+    // Empty by default (#176): only the progress page's own tests care about this call's shape.
+    "GET /api/progress/certifications": { body: [] },
     "GET /api/study/mock-exams/availability": {
       body: {
         activeSessionId: null,

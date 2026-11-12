@@ -105,7 +105,8 @@ class OpenApiContractIT {
           "/api/study/mock-exams/{sessionId}/result",
           "/api/study/history/attempts",
           "/api/study/history/mock-exams",
-          "/api/progress/topics"
+          "/api/progress/topics",
+          "/api/progress/certifications"
         }) {
       assertThat(contract).as("contract path %s", path).contains("\"" + path + "\"");
     }

@@ -116,6 +116,43 @@ class ProgressService {
     return result;
   }
 
+  /**
+   * One entry per active certification track (#176), aggregated from the same per-topic counts
+   * {@link #topics()} reads. {@code topicsAttempted} is coverage of what has been practised, not a
+   * prediction of exam readiness -- the class-level contract against a readiness field applies here
+   * too.
+   */
+  @Transactional(readOnly = true)
+  List<ProgressViews.CertificationProgress> certifications() {
+    Map<UUID, Counts> stored = repository.find(currentActor.require().value());
+    List<ProgressViews.CertificationProgress> result = new ArrayList<>();
+    for (TrackView track : catalog.activeTracks()) {
+      int topicsTotal = 0;
+      int topicsAttempted = 0;
+      int attempted = 0;
+      int correct = 0;
+      for (TopicView topic : flatten(track.topics())) {
+        Counts counts = stored.get(topic.id().value());
+        topicsTotal++;
+        if (counts != null && counts.attempted() > 0) {
+          topicsAttempted++;
+          attempted += counts.attempted();
+          correct += counts.correct();
+        }
+      }
+      result.add(
+          new ProgressViews.CertificationProgress(
+              track.slug(),
+              track.name(),
+              topicsTotal,
+              topicsAttempted,
+              attempted,
+              correct,
+              accuracy(attempted, correct)));
+    }
+    return result;
+  }
+
   private static List<TopicView> flatten(List<TopicView> topics) {
     List<TopicView> flat = new ArrayList<>();
     for (TopicView topic : topics) {
