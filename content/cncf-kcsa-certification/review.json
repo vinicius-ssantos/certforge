@@ -1,0 +1,253 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t01-multi-tenancy-isolation-spectrum": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8a95f751ba030204e96525fc72d846f201263abd91f781665345b5145a17191b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t02-image-digest-vs-tag": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b566cfbc69b223cd0b1c32ca15bf202d23eb2e05cfcb3df8ee233903fc79016d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t03-api-server-request-stages": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b66f31209d539df99c8d2360796446b3805a321c7c3f6bd0c0ed9d10282f9ca5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t04-etcd-unencrypted-by-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:36976f7eb917830848b7d3ea410379d2775817da2ccb765258e5951be224cc64",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t05-pod-security-standards-levels": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cc29b12f9f8459339b6de3011ef50c08fd8d506968e84c09ab1f05dfbf541bb5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t06-networkpolicy-default-non-isolated": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6332e8e89f04b4a717dcfa358d27ef291e250ed62a73fd2ef5c9a6ff80f18b62",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t07-allow-privilege-escalation-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0094484979154d835d690e3deab58d994797dc5050f7a9187875b37cf3147284",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t08-kubelet-unauthenticated-by-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b4326c4e48c4310b7ab1017ff7a1662c60c96d24b89bf6e0afd3ca31cd0259fe",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t09-kubeadm-pki-default-ca": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8883b145cdbd42a7859f239f3f57d147cb0d47b3f816341e6af789a069564212",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-node-isolation-immutable-os": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fe78282d6eccc002b436ac2322ff8393357ebc7c072653bfe816e04d085a45c3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-code-security-ecosystem-extensions": {
+      "verdict": "APPROVED",
+      "digest": "sha256:37def80086ca3c29e3656fc3c7ef64603acfba76ce405e0a57001804e00c7394",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-kubelet-authz-alwaysallow": {
+      "verdict": "APPROVED",
+      "digest": "sha256:994e0456de8c53555bd343368b41a248cb2d5241ef98dea62df067fa8e1434c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-kubeproxy-modes-default-iptables": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0758980b69cb3761c8b14b79b63a60ec86f10cfc56ef67694b1f3d4e79e690ab",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-secret-readable-by-pod-creator": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a0aee73e5c2e810ff865298170aee0e0a157a1f46dab2d01d1d883d2d237f413",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t15-audit-log-stages": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fdc2fa364e1c3346dceb27134bcd062ab0ba2cad04fdb789ae78c39f8319d564",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t16-api-priority-fairness-overload": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1cadc2e2eba6e6b7e069c2adef76a31acbe7edf827748309110ab5243d4209f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t17-networkpolicy-default-deny-ingress": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b523154e207d6598ef5455db1b7813dea29a5315f428d3a86cd70e9eef3ce557",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t18-imagepullsecrets-private-registry": {
+      "verdict": "APPROVED",
+      "digest": "sha256:79ade16d829e8ee548faf1bfce498b7e20d267ef6ceacddb63af62bef4e04b28",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t19-mutating-vs-validating-webhook": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a0b31a51c914d27a0175e42bee928a67f3893c5e29a1cfd35d63afe4ea88193a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t20-controller-manager-single-process": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b3603b5edfcebee6ef7638db5ae0928295661761d2dafa0277312058145e2bee",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t21-scheduler-filter-score-bind": {
+      "verdict": "APPROVED",
+      "digest": "sha256:955410598a5e005e0a0ee3cf9adfff5e3b6f41a352c8c208224ea7a1b56dce80",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t22-cri-plugin-interface": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d1f3378e9ee322a5234035e3479f5aaffe1a3cc720fec46960b450f3884b2896",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t23-host-namespaces-restricted-baseline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f4dfa5fb44ca5125646c190a0358e5fe565fc3dca320abb633ff56947a0c7b85",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t24-pod-network-no-nat-between-pods": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8dfa72bc0f8d76d8ab79d0a10f5fd073dd68a00bf2ed0153c42b79c759fdd825",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t25-client-cert-cn-as-username": {
+      "verdict": "APPROVED",
+      "digest": "sha256:acbdde01e924369e8e6af2b5cfc724b1bef2fa3f9e0180b5942844ca64df7d48",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t26-hostpath-volume-security-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:563fc12f1aaf9906193f4c49eeb23f217ed8cffdf9b4a28e20adfc7b2cb55940",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t27-pod-security-admission-namespace-labels": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8ac3831942ce1127d43ce10f2a988a24ad2b88514f574a094b70a63e1b64116f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t28-workload-creation-grants-secret-access": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d7d211dd9c3136317b8a81988fe4a36b1a00d404caf92cf36c38adb37e6553e7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t29-networkpolicy-egress-only-still-isolates-ingress": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5c1c820e015b52da17ff31d3e27bb7badcd41c589ad8e217f5782844579dd3bf",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t30-authn-first-success-short-circuits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a8704bd1b4a6c72efc66bf6477546d9ac8eefebff974fe1fb55d5a5e14b99e7d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t31-sandboxing-untrusted-workloads": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a22ca34b3cca193a4007c6eeaef0a66e2cefc968da867d9569657957dbced171",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t32-static-pod-kubelet-managed-persistence": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ad6acb55b01fc9b8bb32f10c2c5a8622cdca50825b9cb1798d3e59b0bde87ae2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t33-readonly-root-filesystem-mitigates-write": {
+      "verdict": "APPROVED",
+      "digest": "sha256:82bd35b7803d96f41bb0e60194748aeae61331804d6ebd06bd3899e1a55a5126",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t35-logging-no-native-storage-rotation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:222a6713a6edfdee5c1fbf2f174d9be246abae89da1314a7a93822c9de782a08",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t36-istio-service-mesh-glossary": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d27097c02bbb8e089efa0c1a8a6cb64c99cc3317510c2be8db4ce713e74a6ff0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t37-validatingadmissionpolicy-in-process": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4397d452d81d2b8dc4c43a38cc1800b35f3b89a28ccb869a28b6a7187ea1689f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t39-nist-sp-800-190-container-security-scope": {
+      "verdict": "APPROVED",
+      "digest": "sha256:47f72de482a75a03e8021490ec88fbe2e68b1f2562806b869ca225e7debda1cb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t34-cosign-keyless-signing-release-artifacts": {
+      "verdict": "APPROVED",
+      "digest": "sha256:956a79afd992570f86637173e5cd393f8520f5124b7fbe0bd2c48269b6008963",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t38-cis-benchmarks-per-platform-not-universal": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1a5244a618e15c3387d68a02f7166c5d1f5d9c7f20ac8ea639335d9e12535593",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t40-mitre-attack-escape-to-host-privilege-escalation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3b97e95590bdfaa7b97ce738ab479be021d55803ea59f67d70f53e8bb743bf3f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t41-slsa-build-l1-vs-l2-provenance-signing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4091551d9a8261b348d798543a2c47eedfa25ad516fab75537ddd57523cdc845",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
