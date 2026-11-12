@@ -1,0 +1,169 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t01-storageclass-wait-for-first-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f07c38b3ba67b1ace3b4109196eee9cdbdb5df25c8af4c0d5bd9e391e950b318",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t02-pv-reclaim-policy-retain-vs-delete": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bfe74068489ecf022fa209b9eb819b5343e1be3a81ca51bc206b9ca44356b154",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t03-configmap-volume-vs-env-update": {
+      "verdict": "APPROVED",
+      "digest": "sha256:34d048a53358fa342dcfb5b21f576a12eb9fca7ce2691e3cd5ea7dee5a4c9a52",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t04-node-affinity-ignored-during-execution": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7fa2e5569d0894df50f5d8f545b2356cb2121d062aed4701136c9d902c89fbd3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t05-loadbalancer-builds-on-nodeport": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b35df04d5cd96b096980d52de181ab61a0906b831857ff84a168fef96efceb44",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t06-headless-service-dns-pod-ips": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c0856ae7ae595302ec47d367b270f3b469a24fcdba9d70fa0f48fb44b5c11cb5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t07-rolebinding-references-clusterrole": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a7caf6c3df6af03c50f9e72ee446ada689b88b43501363dadeaaed8a6cc23254",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t08-kubeadm-bootstrap-token": {
+      "verdict": "APPROVED",
+      "digest": "sha256:131b365262ed205e898756e38a964bd97a6593c2da91f869d84d2bb6c84f9968",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t09-cni-implements-network-model": {
+      "verdict": "APPROVED",
+      "digest": "sha256:46bc3fafcc437996ef84ce7630cdd7a91c3eb5e8750733606a05deaae99120e0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-node-ready-condition-unknown": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1355ecad651823f5f68c2ec44dd870c673f261bccebb215c1f3bf8e4e6d93c43",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-kubectl-logs-all-containers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ba1bf778294227776a3338391df6e2c0affd1206a08dcd06310128d73f77edf0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-pvc-binding-capacity-mismatch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c8976b2c4ad56cb37b43ca5f4561cbd61299a8d86c7c4126fd9a85657fff62d7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-deployment-rollback-revision-history": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f4a849402738f70f8c8ccd3554dee65714c31358820fcef067414565705e79a2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-hpa-requires-metrics-server-and-requests": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c84077bb74b42eabeaae20f055c10307aa1d9266a99c4306d7e3a8fe381f27c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t15-replicaset-recreates-deleted-pod": {
+      "verdict": "APPROVED",
+      "digest": "sha256:022dcdfd3e72f3b68642bf85c03b15443c6186121e336e40fa6d8163ab435e5c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t16-pod-network-model-no-nat": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7351581c17308e096ca1a6651f11dfa4c4067a9f101f1d25082ae6dee195de8a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t17-networkpolicy-requires-cni-support": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8f366e0f4ec47e8d1bb6a766a07b956fa178db5dc9a5cbababab9ba7438afb6a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t18-gateway-api-standardizes-routing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c624d5a3b3365a6d5742e92b2937bc390dde58ca4dfa3f09e1e6c5a25bfc3ed2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t19-ingressclass-selects-controller": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0f99b2c94cf4239557957da6b5582e5c61b9ad92279f710b7aeabee7f510bc0b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t22-kubeadm-ha-stacked-vs-external-etcd": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c77138fcfdadda991abc2461a85dee6f92e0262173b915f265c52b5b8103832b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t23-helm-release-vs-kustomize-overlay": {
+      "verdict": "APPROVED",
+      "digest": "sha256:78a5676f234d3fd74ba5545b7eb4c65394bda289b102cc0029f33be96401723c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t24-crd-registers-api-server-resource-type": {
+      "verdict": "APPROVED",
+      "digest": "sha256:338327f9e1f26be2d28cfa1cee3a9bd0dfb8410f5eb0befa01fbe5706f878634",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t25-static-pod-control-plane-mirror": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2fa2253c27c8f20001dd784a65e6ecd8a928872aff15692142d27975a4e5fdb9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t26-kubectl-top-requires-metrics-server": {
+      "verdict": "APPROVED",
+      "digest": "sha256:767078c7a25bffbf7b2657cd685862a418312905d288a29e06d03f06564e0c3d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t27-service-endpointslice-selector-vs-readiness": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cb39449272f151f786ca756658e07e772fc067619484cbc975d8fe7361ed5cfe",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t20-kubeadm-prerequisites-swap-unique-id": {
+      "verdict": "APPROVED",
+      "digest": "sha256:eb0291b209410041efb9792837b59fa8de1f8e7e26170cae0d953950b1f1e95d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t21-kubelet-apiserver-version-skew": {
+      "verdict": "APPROVED",
+      "digest": "sha256:560866335e68eb0ed499df35b79d4cfadf621fc36485d7a7b4791caad7165e94",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
