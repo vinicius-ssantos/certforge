@@ -7,6 +7,8 @@ import { readManifestPack, readReviewRecordV2, reviewStatusOfV2 } from "./manife
 import { recordAiReview, RefusedError } from "./record-ai-review.mjs";
 
 const reviewedPack = "content/cncf-kcna-certification";
+// Any manifest pack works here; its review.json (if any) is removed in the copy below, so these
+// tests stay meaningful regardless of which packs this project has since reviewed.
 const bareManifestPack = "content/cncf-ckad-certification";
 
 /** A copy of a pack, because every test here writes to its review.json. */
@@ -21,13 +23,23 @@ function withCopy(pack, work) {
   }
 }
 
+/** Like {@link withCopy}, but guarantees no review.json -- a "nobody has reviewed this yet" pack
+ * -- regardless of whether the real content tree still has one unreviewed by the time this runs. */
+function withBareCopy(pack, work) {
+  withCopy(pack, (target) => {
+    const file = join(target, "review.json");
+    if (existsSync(file)) rmSync(file);
+    work(target);
+  });
+}
+
 function firstQuestion(target) {
   const { manifest, questions } = readManifestPack(target);
   return { manifest, question: questions[0] };
 }
 
 test("records a verdict with the V2 digest computed from the question and the pack's own manifest", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     const { manifest, question } = firstQuestion(target);
 
     const result = recordAiReview(target, { question: question.name, verdict: "APPROVED", on: "2026-11-12" });
@@ -41,7 +53,7 @@ test("records a verdict with the V2 digest computed from the question and the pa
 });
 
 test("bootstraps review.json when a manifest pack has none yet, with no named human reviewer", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     assert.equal(existsSync(join(target, "review.json")), false);
     const { question } = firstQuestion(target);
 
@@ -54,7 +66,7 @@ test("bootstraps review.json when a manifest pack has none yet, with no named hu
 });
 
 test("a question with no recorded review is unreviewed until this writes one", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     const { manifest, question } = firstQuestion(target);
     assert.equal(reviewStatusOfV2(readReviewRecordV2(target), manifest, question).state, "unreviewed");
 
@@ -122,7 +134,7 @@ test("changing a verdict on unchanged text says that is what happened", () => {
 });
 
 test("refuses a verdict it does not know, rather than storing it", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     const { question } = firstQuestion(target);
 
     assert.throws(
@@ -134,13 +146,13 @@ test("refuses a verdict it does not know, rather than storing it", () => {
 });
 
 test("refuses a question the pack does not have", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     assert.throws(() => recordAiReview(target, { question: "t99-not-a-question", verdict: "APPROVED" }), /no question named/);
   });
 });
 
 test("refuses a date that is not one", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     const { question } = firstQuestion(target);
     assert.throws(() => recordAiReview(target, { question: question.name, verdict: "APPROVED", on: "yesterday" }), /not a date/);
   });
@@ -154,7 +166,7 @@ test("refuses a flat (non-manifest) pack, whose reviews are bound the other way"
 });
 
 test("records a per-question checklist, deduplicated", () => {
-  withCopy(bareManifestPack, (target) => {
+  withBareCopy(bareManifestPack, (target) => {
     const { question } = firstQuestion(target);
 
     const result = recordAiReview(target, {

@@ -1,0 +1,151 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t01-workload-resource-choice": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f681f934148e88ea49eed2803dc926a39384710980233768210971a0ea14b314",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t02-emptydir-vs-pvc": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6c6f67e142b0c0d35ad5f85fd101af7e77635ac7cacdfcb7e57fd9d0ecc5613e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t03-deployment-rolling-update-replicaset": {
+      "verdict": "APPROVED",
+      "digest": "sha256:04b2a8d9f8a5159b01eb1bd021231692aba96e4126de2ff8d3e95c2995360d0a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t04-kustomize-bases-overlays": {
+      "verdict": "APPROVED",
+      "digest": "sha256:98c11e18fe17ec08d89070b06ab1114a80d1ce76928830499d498102a16b87d1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t05-cpu-throttle-vs-memory-oomkill": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bc7c195f2eccc3464a0f51ea072ce328111ddc0d7f120ab398bd5de790a804fe",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t06-secret-consumption-methods": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5a544ab67fcae735bebaa9f582a5e10199249d8567981062ebec2070f8c5de17",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t07-securitycontext-capabilities": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cefe4f10ee4375704360ea14aa929640db34fce45bbfa6840c97c4b556d7983a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t08-networkpolicy-default-allow": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5c68d92bab27e4e413bbd231153289d3f09ba8f0d5d96e8ef36bf66ee95b20ba",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t09-ingress-needs-controller": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b5a137cb8e8876ba4838894264be0be3192c5a34beb6506e795c5b3d06d1916c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-liveness-vs-readiness-probe": {
+      "verdict": "APPROVED",
+      "digest": "sha256:99f3057e4313b5d70eebec8856a79ce3943c700de1bbee97d2a83c714a287797",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-kubectl-logs-previous-multicontainer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:217627d91c49438efc6c5ba8c1e69b89fa4df465ea9c7f7407f51538cb55fbae",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-imagepullpolicy-latest-tag-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:da9ab6870ab1f52d05664c90bfc6516e00dcba269e98d5435725d39b74da7065",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-canary-deployment-shared-selector": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5368e004ceffef06d799cac2a0d693ac675e68a2d347a2b282873f0a0973e121",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t16-crd-operator-relationship": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d69ba471ac42f2445106e7b54227b84a401bf7fd109675e84c82e10e457a1d15",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t17-admission-control-modifies-rejects": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aa08c37e77cc924e9b579015451d41dd4b22ba57b37bd597007f5b49db0f5a04",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t18-default-serviceaccount-per-namespace": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d5de949bc12e00e199f2e086bb37e3ed7564f1843376f1b7f1217ce9d741a41c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t19-service-endpoints-none-selector-mismatch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:22eda8b325853ab96fbe51b07570e37d29a35f66d055c240ce6042437fc72a8e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t20-ga-api-deprecation-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c2f87e01abd852ae075934671294a289114c37b22cc91308feebfa80b10c5df1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t21-resourcequota-rejects-pod": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4ace2f87098b989660e7f3c8cef440a46ba8873c8b70fcd2b69466a50a5137f6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t23-kubectl-top-needs-metrics-server": {
+      "verdict": "APPROVED",
+      "digest": "sha256:96941817d0f962536fd5e87e751b87c5960b6b305403be69ffd03afc7d1b5a10",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t24-kubectl-exec-interactive-shell": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0bd33a6fe8efc14cd87308c707efbe1389bbbd27e85ebc9632c9167d72a08d59",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-sidecar-initcontainers-restart-always": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fdd338a377d808cd36d6536946b0ded0b407185027ef2956a3ac4b97582b8865",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t15-helm-kubernetes-package-manager": {
+      "verdict": "APPROVED",
+      "digest": "sha256:71fc0b494f26c0ffb3bc71e8ce58ccb7d327b2bc3e3df670272c4f33eeb36a8d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t22-immutable-configmap-delete-recreate": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7e1818b1f554ff52148522e0e776cbddfbebd4a6c72bb44a0a8c503f8f453e9a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
