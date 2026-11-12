@@ -1,0 +1,85 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t01-pod-smallest-deployable-unit": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a344c48464dde6432d91e7cb89fb05af149da345811bdbb3c5914c5fbc9835e0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t02-etcd-control-plane-store": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a5955ff55469f741682c1a47ca61fcafc2e1594e7b136e9e22c2ab4e5910573f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t03-taints-tolerations-scheduling": {
+      "verdict": "APPROVED",
+      "digest": "sha256:64b2199e6667430d876020cc22376fc4a4cc32baac5ae6af12d6509ac272fc36",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t04-container-shared-kernel": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4fe13ab6f4289f403b2b2256792f89a99301a5a452ab8d6b5382f28746b37447",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t05-k8s-service-cluster-ip": {
+      "verdict": "APPROVED",
+      "digest": "sha256:591d504a9bec05fd90fd2a31f81b4185853d55a16a5449989f7e7cbc87f402ca",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t06-k8s-secrets-not-encrypted": {
+      "verdict": "APPROVED",
+      "digest": "sha256:666d62294849daf8806685005dbe2f477a9fdad6341df6da3877a79f3cf2b3b3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t07-k8s-storageclass-dynamic-provisioning": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c5d589f616263070b2b9dd7a87da18ca89f05b82fe428c57dc8ec483bb0fe52b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t08-k8s-declarative-kubectl-apply": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e07f37f2d8ae2ad10526a190cdebdf3185fe9a7246af3baa7b1fd1aabce423ff",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t09-cncf-project-maturity-levels": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f00793fa9a8d7246bf05a0f1b08d49e9b76a96e66fdcb46ec955daf81427a00c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-crashloopbackoff-exponential-backoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bb5161e31f1de3387933f20468093de9967db8c1d3fc1ecda436e313c8168476",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-ephemeral-debug-container": {
+      "verdict": "APPROVED",
+      "digest": "sha256:812272ff599069c3ecd3531f192b3bde23a780fd8973373eafa644ec7f10650d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-metrics-api-current-usage": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0989ed9327b0edf427f339e1f492ea5a3eaca37c8f1bd49ad679eed292c4bb19",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-cncf-governing-board-vs-toc": {
+      "verdict": "APPROVED",
+      "digest": "sha256:afae09a15323867899e019ea44eded14f356db52ef61865d542c9feb569f62cb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
