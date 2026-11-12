@@ -26,6 +26,21 @@ interface ProgressViews {
       @Schema(nullable = true) BigDecimal accuracy,
       @Schema(nullable = true) Instant lastActivityAt) {}
 
+  /**
+   * Progress of one learner across every topic of one certification track. {@code topicsAttempted}
+   * counts topics with at least one attempt, out of {@code topicsTotal}; {@code accuracy} is the
+   * same {@code correct / attempted} rule as {@link TopicProgress}, over the track's combined
+   * counts. This is coverage of what has been practised, not a prediction of exam readiness (#176).
+   */
+  record CertificationProgress(
+      String trackSlug,
+      String trackName,
+      int topicsTotal,
+      int topicsAttempted,
+      int attempted,
+      int correct,
+      @Schema(nullable = true) BigDecimal accuracy) {}
+
   record CountsView(int attempted, int correct, Instant lastActivityAt) {}
 
   /** A topic where the stored projection differs from what the attempts say it should be. */

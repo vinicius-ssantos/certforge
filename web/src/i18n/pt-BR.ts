@@ -331,6 +331,14 @@ export const ptBR: Catalog = {
     targetNote: (percent: number) =>
       `“Firme” significa ${percent}% ou mais, a nota de corte do simulado. Descreve sua prática até aqui, não uma previsão sobre o exame.`,
     fallbackTopic: "Tópico",
+    certificationsHeading: "Progresso por certificação",
+    certificationsCaption: "Sua cobertura de tópicos e precisão por certificação",
+    certificationName: "Certificação",
+    topicsPracticed: (attempted: number, total: number) =>
+      `${attempted} de ${total} ${plural(TAG, total, { one: "tópico", other: "tópicos" })}`,
+    certificationsNote:
+      "Isto mostra o quanto você já praticou de cada certificação e sua precisão, não uma previsão sobre o exame.",
+    fallbackCertificationName: "Certificação",
     misconceptionsHeading: "Onde você estava confiante e errou",
     misconceptionsBodyStart:
       "Estas são respostas que você errou dizendo que estava confiante. Isso vale mais do que um erro que você sabia ser um chute, porque nada te avisou para olhar de novo. É evidência de onde olhar, ",

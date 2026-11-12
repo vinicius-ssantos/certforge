@@ -495,6 +495,37 @@
         "required" : [ "createdAt", "id", "jobTitle", "topics", "trackVersionId", "unrecognisedRequirements" ],
         "type" : "object"
       },
+      "CertificationProgress" : {
+        "properties" : {
+          "accuracy" : {
+            "type" : [ "number", "null" ]
+          },
+          "attempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "correct" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicsAttempted" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicsTotal" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "trackName" : {
+            "type" : "string"
+          },
+          "trackSlug" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "accuracy", "attempted", "correct", "topicsAttempted", "topicsTotal", "trackName", "trackSlug" ],
+        "type" : "object"
+      },
       "ConceptMarkView" : {
         "properties" : {
           "conceptPosition" : {
@@ -4167,6 +4198,27 @@
           }
         },
         "tags" : [ "editorial-catalog-controller" ]
+      }
+    },
+    "/api/progress/certifications" : {
+      "get" : {
+        "operationId" : "certifications",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/CertificationProgress"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "progress-controller" ]
       }
     },
     "/api/progress/rebuild" : {

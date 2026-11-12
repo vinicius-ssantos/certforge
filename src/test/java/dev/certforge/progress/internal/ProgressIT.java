@@ -96,6 +96,22 @@ class ProgressIT {
     return entries.get(0);
   }
 
+  private String certificationsBody(Account as) throws Exception {
+    return mvc.perform(get("/api/progress/certifications").cookie(as.session()))
+        .andExpect(status().isOk())
+        .andReturn()
+        .getResponse()
+        .getContentAsString();
+  }
+
+  /** The certification entry of a track as a map of its fields. */
+  private Map<String, Object> certificationEntry(Account as, String trackSlug) throws Exception {
+    List<Map<String, Object>> entries =
+        JsonPath.read(certificationsBody(as), "$[?(@.trackSlug=='" + trackSlug + "')]");
+    assertThat(entries).hasSize(1);
+    return entries.get(0);
+  }
+
   private boolean consistent(Account as) throws Exception {
     String body =
         mvc.perform(get("/api/progress/reconciliation").cookie(as.session()))
@@ -248,6 +264,56 @@ class ProgressIT {
             "lastActivityAt");
   }
 
+  // ---- per-certification rollup (#176) --------------------------------------------------------
+
+  @Test
+  void certificationProgressAggregatesItsActiveTopicsAccuracyAndCoverage() throws Exception {
+    Started one = study.start(learner, TOPIC_1, 4);
+    study.answerOk(learner, one, 0, "A");
+    study.answerOk(learner, one, 1, "B");
+    study.answerOk(learner, one, 2, "A");
+    // Position 3 is never answered.
+    Started two = study.start(learner, TOPIC_2, 2);
+    study.answerOk(learner, two, 0, "A");
+    study.answerOk(learner, two, 1, "B");
+    // TOPIC_3 is never attempted.
+
+    Map<String, Object> cert = certificationEntry(learner, "java-certification");
+
+    assertThat(cert)
+        .containsEntry("trackName", "Java Certification")
+        .containsEntry("topicsTotal", 10)
+        .containsEntry("topicsAttempted", 2)
+        .containsEntry("attempted", 5)
+        .containsEntry("correct", 3);
+    assertThat(((Number) cert.get("accuracy")).doubleValue()).isEqualTo(0.6);
+  }
+
+  @Test
+  void aCertificationWithNoAttemptsYetHasNoAccuracyButStillListsItsTopicCount() throws Exception {
+    Map<String, Object> cert = certificationEntry(learner, "java-certification");
+
+    assertThat(cert)
+        .containsEntry("topicsTotal", 10)
+        .containsEntry("topicsAttempted", 0)
+        .containsEntry("attempted", 0)
+        .containsEntry("correct", 0);
+    assertThat(cert.get("accuracy")).isNull();
+  }
+
+  @Test
+  void theCertificationPayloadHasNoReadinessOrMasteryScore() throws Exception {
+    assertThat(certificationEntry(learner, "java-certification").keySet())
+        .containsExactlyInAnyOrder(
+            "trackSlug",
+            "trackName",
+            "topicsTotal",
+            "topicsAttempted",
+            "attempted",
+            "correct",
+            "accuracy");
+  }
+
   // ---- reproducibility -----------------------------------------------------------------------
 
   @Test
@@ -373,6 +439,7 @@ class ProgressIT {
   @Test
   void progressRequiresAuthentication() throws Exception {
     mvc.perform(get("/api/progress/topics")).andExpect(status().isUnauthorized());
+    mvc.perform(get("/api/progress/certifications")).andExpect(status().isUnauthorized());
     mvc.perform(get("/api/progress/reconciliation")).andExpect(status().isUnauthorized());
     mvc.perform(post("/api/progress/rebuild").with(csrf())).andExpect(status().isUnauthorized());
   }
