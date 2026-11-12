@@ -1,0 +1,79 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t1-imdsv2-session-oriented-credentials": {
+      "verdict": "APPROVED",
+      "digest": "sha256:163796749c52bbb7c28015b2470174b1fb7e436aca7617dddfd567e684e50ad4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t2-lambda-execution-environment-reuse": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f0659c7518cd67ab0d4c5c2ad897511a9ed5afb056d3885e7caf89ad11af2110",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t3-dynamodb-conditional-writes": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aedde233c911be03231a781c63962c63446f9e4d00d31fbc920d34960e918c56",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t4-cognito-user-pools-vs-identity-pools": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5b815429ea2fe2420e280a3624ca5cfdf2655e7a300d10d1964d26f632cbdee9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t5-secrets-manager-vs-parameter-store-rotation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:203bf8e552a6db468a423ad3b03c595f8d0fbf0e6c290a62fd1325c1a28848a7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t7-codedeploy-appspec-lambda-hooks": {
+      "verdict": "APPROVED",
+      "digest": "sha256:db47864fd7b1e45f54a6ee16a074d61b095df7e6e5fa401ed04ebc191080dbfb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t9-codedeploy-lambda-traffic-shifting-configs": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a2a6880735d08ef2013dc6e1a5752c840e37ef05d5765490ee9ee26173627779",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-xray-annotations-vs-metadata": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4a6ef95b0a934c83ce7fe782f349f2a7acc0e580da3aee472ddf5ce098a3ae6f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-cloudwatch-embedded-metric-format": {
+      "verdict": "APPROVED",
+      "digest": "sha256:399ec1a5c900e3592733a12e159f81c70272ccf79f57869e7ea9c6cabff3f736",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-lambda-provisioned-concurrency": {
+      "verdict": "APPROVED",
+      "digest": "sha256:afe96afc715a47839a34bcc3881972b11c3efb3a02a74977a17b5e0b8497951b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t6-bedrock-model-deployment-account-isolation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:454686921b12d5656e0cc5940b16ef2fc30b183e456c5f368d46cb873d4d6c0c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t8-codebuild-test-report-expiration": {
+      "verdict": "APPROVED",
+      "digest": "sha256:de2577e8ce43fd4239e3e884851ac785850d4eaa8f5f2d1b29fef7e256e15b3a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
