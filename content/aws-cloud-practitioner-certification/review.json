@@ -1,0 +1,121 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t2-well-architected-design-principles": {
+      "verdict": "APPROVED",
+      "digest": "sha256:58e5f77fddcba60ccbb73e89a0676f14de0f75edf9d771be225c5549e7095ab2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t3-seven-rs-migration-strategies": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a99ca2cabb9c793bb397c2044da40fd66ec5305ef5f28be28dcdb4d7e5560c6c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t5-shared-responsibility-model": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fac35ebadcaed8883d9b91af445f3000bdcd5ea6f25275434ca45d744bc30396",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t6-aws-config-compliance-monitoring": {
+      "verdict": "APPROVED",
+      "digest": "sha256:04cff775655eb8caf6aeec19d41ee117584e301361d8a8cc7369e4c3308f3cff",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t7-iam-root-user-best-practice": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cea1f68d2e8d8658d80f23f1f7477f55f099189a1550113c729285be0df97b52",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t8-aws-artifact-compliance-documents": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4932f0b6591532f184ddaa4fb64e84427f96f76afd65b5d380a53d5e05b8fa6b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t19-basic-support-free-for-all-customers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e661d8094134466cec7a8444e70a05e2a3ca8976e93fe19986e897218e403ed9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t1-six-advantages-of-cloud-computing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d6c5811c7e67e210bb14a8cde88214fc4a2f53b0798b271a9819f772ad8b82bb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t4-fundamental-cost-drivers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2566ec623391a4ac6f36b99b241c1a17c1d293ed95ddc97ef7cc553b7303301b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t9-deployment-models-cloud-hybrid-onprem": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ecfdf0bec0385e0d239979c4483c29f64d6413a0991120356e530402d51328d3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-region-and-availability-zone": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a7d014bcf6d14ea0c7c15eb810d6a902513ecf33c28d0cf6b849e64b6f2b6869",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-ec2-on-demand-pricing-model": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e56c38e6a250f642ebc95694773c082e162beb81897ee43423bcc45bfe9207f6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-dynamodb-key-value-millisecond-performance": {
+      "verdict": "APPROVED",
+      "digest": "sha256:98888893c4171582a63dd7b98858435ab1dfd889c4e0d96e247265eb7784e4f0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-vpc-logically-isolated-network": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5c69f0e94174811971c8d71d0f6fea52674a4814e4f6b3ad89d51c997a5439af",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-s3-eleven-nines-durability": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e5a5a57b1f15fec34b560f9c949c720d04df581b81097d2bfb8f07e6cb2fff45",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t15-rekognition-image-video-analysis": {
+      "verdict": "APPROVED",
+      "digest": "sha256:adeec841a9e7b29bcc420ab50a933c8d561f01176978579a0030c6a52a1867fc",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t16-sqs-decouple-microservices": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e71739afe976018d7718d146b5beb5305297fbff56e660d117a4dbe08873f3c5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t17-pricing-models-comparison": {
+      "verdict": "APPROVED",
+      "digest": "sha256:89343c4087c9da4f5101d089b80e3ba9e37a2fdfd216e4421ef67af68e9d6b36",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t18-cost-explorer-and-budgets": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4adc1a256bdf3b323466d34701e00b1f85d8bd04b97a6d65a53ab480a8cdac6b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
