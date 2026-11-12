@@ -3,39 +3,43 @@
   "topicId": "b3000000-0000-4000-8000-000000000048",
   "objectiveKeys": ["TFA-8b"],
   "difficulty": "MEDIUM",
-  "difficultyRationale": "Exige saber quais recursos de colaboração e governança a documentação atribui especificamente às edições pagas e à edição Standard do HCP Terraform -- times com níveis de permissão diferentes, e auditoria/validação contínua/detecção de drift --, em vez de tratar 'colaboração' como um recurso vago e único.",
-  "prompt": "Uma organização que já usa o HCP Terraform com mais de cinco usuários quer criar times com níveis de permissão diferentes entre si, e também habilitar auditoria, validação contínua e detecção automática de drift de configuração. Segundo a documentação oficial, quais edições do HCP Terraform a documentação associa a cada um desses dois conjuntos de recursos?",
-  "explanation": "A documentação afirma que as edições pagas do HCP Terraform permitem adicionar mais de cinco usuários e criar times com níveis de permissão diferentes, colaborando de forma mais eficaz. Ela afirma, separadamente, que a edição Standard do HCP Terraform permite habilitar logging de auditoria, validação contínua e detecção automática de drift de configuração -- um conjunto de recursos de governança atribuído especificamente a essa edição.",
+  "difficultyRationale": "Exige saber que, entre as edições pagas do HCP Terraform, continuous validation e drift detection (agrupadas como 'health assessments') já estão disponíveis a partir da edição Standard, mas audit logging é reservada especificamente à edição Premium -- uma linha de corte diferente da que um candidato tende a assumir ao ver as três funcionalidades mencionadas juntas como 'recursos de governança'.",
+  "prompt": "Uma organização já está na edição Standard do HCP Terraform, onde já habilitou continuous validation e detecção automática de drift de configuração, e agora quer habilitar também audit logging. Segundo a documentação oficial, a edição Standard já inclui audit logging, ou isso exige mudar de edição?",
+  "explanation": "A documentação de workspace health afirma que 'health assessments are available in HCP Terraform Standard and Premium editions' -- e health assessments é o nome que agrupa tanto drift detection quanto continuous validation, então as duas já estavam disponíveis na edição Standard, como a organização já constatou. Audit logging, porém, é descrita de forma diferente: a documentação da visão geral de planos afirma que 'the Premium plan includes all Standard plan features plus enterprise-grade capabilities such as audit logging, custom RBAC, and priority support' -- e a tabela de comparação de planos lista audit logging como 'Not available' em Free, Essentials e Standard, com a marca de disponível apenas na coluna Premium. Ou seja, ao contrário de drift detection e continuous validation, audit logging não está na edição Standard; é necessário migrar para a edição Premium.",
   "options": [
     {
       "key": "A",
-      "text": "As edições pagas, para times com permissões diferentes e mais de cinco usuários; e a edição Standard, para logging de auditoria, validação contínua e detecção automática de drift de configuração.",
-      "correct": true,
-      "explanation": "Correto: é exatamente essa a atribuição de recursos a cada edição que a documentação descreve."
+      "text": "Sim, a edição Standard já inclui audit logging, já que a documentação agrupa continuous validation, drift detection e audit logging como as mesmas 'health assessments' disponíveis nela.",
+      "correct": false,
+      "explanation": "Incorreto: a documentação não trata audit logging como parte de 'health assessments' -- esse termo cobre especificamente drift detection e continuous validation. Audit logging é descrita separadamente, e a tabela de comparação de planos marca Standard como 'Not available' para ela."
     },
     {
       "key": "B",
-      "text": "Apenas a edição gratuita resolve ambos os conjuntos de recursos, já que a documentação afirmaria que todo recurso de colaboração e governança do HCP Terraform está disponível sem custo para equipes de qualquer tamanho.",
-      "correct": false,
-      "explanation": "Incorreto: a documentação atribui mais de cinco usuários e times com permissões diferentes às edições pagas, e auditoria/validação contínua/detecção de drift especificamente à edição Standard -- não à edição gratuita."
+      "text": "Não: ainda que drift detection e continuous validation já estivessem disponíveis na edição Standard ('health assessments are available in HCP Terraform Standard and Premium editions'), a documentação lista audit logging como 'Not available' em Standard, disponível apenas na edição Premium.",
+      "correct": true,
+      "explanation": "Correto: é exatamente essa a distinção que a documentação faz -- health assessments (drift detection e continuous validation) chegam na Standard, mas audit logging é exclusiva da edição Premium, que a documentação descreve como incluindo todos os recursos da Standard mais capacidades como audit logging, RBAC customizado e suporte prioritário."
     },
     {
       "key": "C",
-      "text": "A edição Standard, para mais de cinco usuários e times com permissões diferentes; e as edições pagas em geral, para auditoria, validação contínua e detecção de drift -- invertendo a atribuição que a documentação faz entre esses dois conjuntos de recursos e as edições.",
+      "text": "Não, porque nenhuma edição paga do HCP Terraform oferece audit logging -- a documentação afirmaria que esse recurso só existe no Terraform Enterprise auto-hospedado, nunca em uma edição hospedada pela HashiCorp.",
       "correct": false,
-      "explanation": "Incorreto: a documentação atribui usuários/times de permissão diferente às edições pagas em geral, e auditoria/validação contínua/detecção de drift especificamente à edição Standard -- não o inverso."
+      "explanation": "Incorreto: a documentação atribui audit logging à edição Premium do HCP Terraform (hospedada pela HashiCorp), não exclusivamente a uma instalação auto-hospedada do Terraform Enterprise."
     },
     {
       "key": "D",
-      "text": "Nenhuma edição do HCP Terraform oferece detecção automática de drift de configuração; a documentação afirmaria que drift só pode ser detectado manualmente, executando terraform plan localmente fora do HCP Terraform.",
+      "text": "Sim, mas apenas se a organização também ativar RBAC customizado antes, já que a documentação condicionaria a liberação de audit logging na edição Standard à ativação prévia desse outro recurso específico.",
       "correct": false,
-      "explanation": "Incorreto: a documentação atribui detecção automática de drift de configuração especificamente à edição Standard do HCP Terraform, não apenas a uma verificação manual local."
+      "explanation": "Incorreto: a documentação não descreve essa condição -- ela atribui audit logging e RBAC customizado juntos à edição Premium, como capacidades que vêm junto dela, não como um recurso da Standard destravado por outro."
     }
   ],
   "references": [
     {
-      "title": "Terraform Documentation — What is HCP Terraform? (paid editions: 5+ users, teams with different permission levels; Standard Edition: audit logging, continuous validation, drift detection)",
-      "url": "https://developer.hashicorp.com/terraform/cloud-docs"
+      "title": "HCP Terraform Documentation — Workspace Health (health assessments -- drift detection and continuous validation -- available in Standard and Premium editions)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs/workspaces/health"
+    },
+    {
+      "title": "HCP Terraform Documentation — Overview (plan comparison: audit logging available only in the Premium edition, which includes all Standard features plus it, custom RBAC, and priority support)",
+      "url": "https://developer.hashicorp.com/terraform/cloud-docs/overview"
     }
   ],
   "evidence": {
