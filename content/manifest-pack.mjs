@@ -1,6 +1,6 @@
 // Manifest-backed question reader for non-Java packs. It does not import, approve or publish.
 // Keep this separate from pack.mjs until legacy Java 21 digest regression is proven.
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { EVIDENCE_PROFILES, EVIDENCE_TYPES, loadPackManifest } from "./pack-manifest.mjs";
@@ -162,4 +162,47 @@ export function reviewDigestV2(manifest, question) {
     question.evidence ?? null,
   ];
   return "sha256:" + createHash("sha256").update(JSON.stringify(reviewed)).digest("hex");
+}
+
+/**
+ * The V2 review record of a manifest pack, or null when it has none. Deliberately the same
+ * filename (`review.json`) a pack may already use for `review-integrity.mjs`'s git-blob-sha human
+ * sign-off scheme -- the two have never coexisted in one file, because that scheme is scoped to
+ * `infrastructure-devops-foundations` alone (content/review-integrity.test.mjs) and every pack
+ * reviewed under this V2 scheme starts with no review.json at all. A pack that somehow carried
+ * both would have one entry shape or the other per question, never both, since the two schemes
+ * key on disjoint fields (`sourceGitBlobSha` vs `digest`) and neither reads the other's.
+ */
+export function readReviewRecordV2(pack) {
+  const file = join(pack, "review.json");
+  return existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : null;
+}
+
+/**
+ * What the V2 record says about one question as it stands now, mirroring pack.mjs's
+ * {@link reviewStatusOf} for the legacy Java scheme: `reviewed` while the recorded digest still
+ * matches, `changed` once the question (or the pack's own certification snapshot) has moved since,
+ * and `unreviewed` when the record says nothing about it at all.
+ *
+ * <p>Unlike the legacy scheme, every entry here names its own `reviewer` rather than falling back
+ * to one named at the top of the file: a manifest pack may hold zero human reviewers at all (every
+ * one of its questions AI-reviewed, disclosed, under ADR 0022-0026), so there is no default human
+ * identity to fall back to the way `pack.mjs` has one.
+ */
+export function reviewStatusOfV2(record, manifest, question) {
+  const entry = record?.questions?.[question.name];
+  const current = reviewDigestV2(manifest, question);
+  if (!entry) {
+    return { state: "unreviewed", currentDigest: current };
+  }
+  const matches = entry.digest === current;
+  return {
+    state: matches ? "reviewed" : "changed",
+    verdict: entry.verdict,
+    reviewer: entry.reviewer,
+    checklist: entry.checklist ?? [],
+    reviewedOn: entry.reviewedOn,
+    recordedDigest: entry.digest,
+    currentDigest: current,
+  };
 }

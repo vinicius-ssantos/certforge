@@ -59,6 +59,6 @@ export class Session {
   async signIn(email, password) {
     await this.call("GET", "/api/auth/csrf");
     const response = await this.call("POST", "/api/auth/login", { body: { email, password } });
-    if (!response.ok) throw new Error(`sign-in as ${email} failed with ${response.status}`);
+    if (!response.ok) throw new Error(`sign-in failed with ${response.status}`);
   }
 }
