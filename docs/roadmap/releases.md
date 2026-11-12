@@ -59,11 +59,13 @@ Interview-specific question types, evaluation, and job targeting are explicitly 
 
 Candidate capabilities: error notebook, confidence-aware classification, spaced-review scheduling, daily review queue, recurring misconception visibility.
 
-## `v0.3.0` — Mock Exams
+## `v0.3.0` — Mock Exams and Portuguese
 
-**Outcome:** A learner completes timed simulations and receives a blueprint-based weakness report.
+**Outcome:** A learner completes a timed, blueprint-based simulation, receives a per-topic weakness report for that run, and uses the whole interface in Brazilian Portuguese or English.
 
 Candidate capabilities: timed assessments, question flagging, final submission, controlled topic distribution, unseen-question safeguards, post-exam report.
+
+**Renamed from "Mock Exams" alone**, per [`docs/release/v0.3.0-scope-proposal.md`](../release/v0.3.0-scope-proposal.md#is-this-release-mock-exams): the finished work carries a second learner-visible outcome the roadmap never asked for — the whole interface in Brazilian Portuguese (ADR 0012, #74) — and it is the change most learners meet on the first screen, ahead of the mock exam itself. "Mock Exams" alone would have been accurate about the roadmap and silent about what a learner actually sees. The interview track foundation that also landed in this window is deliberately left out of the name: it has no content and no learner can reach it, so naming it would promise something the tree does not contain.
 
 ## `v0.4.0` — Code Analysis
 
