@@ -2,6 +2,8 @@
 
 Status: PARTLY IMPLEMENTED. Legacy `content/java-se-21` continues unchanged, and the sections below say which parts of this contract are code and which are still a proposal. The manifest, the question schema, the source policy, the review record, the offline artifact checks and the evidence profiles exist, in `content/pack-manifest.mjs`, `content/manifest-pack.mjs`, `content/review-integrity.mjs`, `content/embedded-artifacts.mjs` and `content/evidence.mjs`; the Terraform, GitHub Actions and container-tool adapters do not.
 
+`reviewDigestV2` (point 3 below) sat unconsumed from when it was added until this review: nothing recorded a verdict against it or published from it, so every manifest pack had exactly one way to be accepted — `review-integrity.mjs`'s git-blob-sha human sign-off, scoped in practice to `infrastructure-devops-foundations` alone and explicitly not an editorial decision. `content/record-ai-review.mjs` and `deploy/publish-manifest-pack.mjs` now consume it: the AI-reviewer path ADR 0022-0026 already built for `content/java-se-21`, extended to every manifest pack, with the same disclosed `"ai-reviewer"` identity and the same single `ai-approve` call. It does not touch or reinterpret the existing human sign-off scheme, and it does not publish anything on its own — the track version a pack's topics belong to still has to be activated separately (`topic_not_active` otherwise), the same deliberate, owner-only act it always was.
+
 ## Problem
 
 The current `content/pack.mjs` reads taxonomy from the Java SE 21 V4 seed, inlines `Main.java`, and computes the review digest with `javaRelease`. Java 21's reference whitelist, compiler checks and publish importer cannot simply be applied to Docker, Kubernetes or AWS content. A broad change to that code risks retroactively invalidating 20 reviewed Java questions and 130 unreviewed drafts.
@@ -77,9 +79,9 @@ admits it before a question may claim it.
 
 1. `readPack` resolves the manifest; **no manifest** selects the current Java 21 legacy loader verbatim.
 2. Existing Java 21 semantic `reviewDigest` and `verifiedDigest` must produce exactly the same values; include golden tests against current `review.json`.
-3. New packs use a versioned `reviewDigestV2` including track/version, objective keys and evidence contract, without changing the existing algorithm.
+3. New packs use a versioned `reviewDigestV2` including track/version, objective keys and evidence contract, without changing the existing algorithm. **Implemented**: `content/record-ai-review.mjs` records a verdict against it, `content/manifest-pack.mjs`'s `reviewStatusOfV2` reads it back.
 4. Import uses stable IDs; dry-run validates catalog version and references; repeated import is idempotent.
-5. Import creates only DRAFT or TECHNICAL_REVIEW revisions. Publication requires a human reviewer distinct from author and explicit publisher authorization.
+5. Import creates only DRAFT or TECHNICAL_REVIEW revisions. Publication requires a human reviewer distinct from author and explicit publisher authorization — **superseded for the disclosed AI reviewer by ADR 0026**, the same way it was for `content/java-se-21`: an `ai-reviewer`-attributed entry in a manifest pack's `review.json` publishes through a single `ai-approve` call (`deploy/publish-manifest-pack.mjs`), author/publisher authorization still required and still distinct from the reviewer.
 6. Recheck digest on every edit, and refuse publication when source policy, exam snapshot or verified output changes.
 7. Show objective coverage and missing objectives explicitly; never report exam readiness based on a count of topics.
 

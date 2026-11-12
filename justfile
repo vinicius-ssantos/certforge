@@ -283,6 +283,15 @@ grant-ai-reviewer email password:
 publish-content-ai ai_reviewer_email ai_reviewer_password:
     node deploy/publish-pack.mjs --url {{web_url}} --ai-reviewed-only --ai-reviewer-email {{ quote(ai_reviewer_email) }} --ai-reviewer-password {{ quote(ai_reviewer_password) }}
 
+# A manifest pack's (AWS/Terraform/CNCF/infrastructure-devops-foundations) counterpart to
+# publish-content-ai: carries the AI-reviewer verdicts content/record-ai-review.mjs recorded in
+# `pack`'s review.json (ADR 0022-0026), through the same single ai-approve call per question.
+# Publishing still needs its track version activated first -- a separate, deliberate decision --
+# or every question is held back with topic_not_active.
+[group('content')]
+publish-manifest-pack-ai pack ai_reviewer_email ai_reviewer_password:
+    node deploy/publish-manifest-pack.mjs --url {{web_url}} --pack {{ quote(pack) }} --ai-reviewer-email {{ quote(ai_reviewer_email) }} --ai-reviewer-password {{ quote(ai_reviewer_password) }}
+
 # Regenerate the API contract from the backend and the types the web app is built against.
 [group('content')]
 contract:
