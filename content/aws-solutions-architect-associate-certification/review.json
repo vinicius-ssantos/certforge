@@ -1,0 +1,91 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t1-iam-role-ec2-instance-profile-temporary-credentials": {
+      "verdict": "APPROVED",
+      "digest": "sha256:280cc2391b3382a1006f8e5923be92b375aa87c8c4b6d8045ee383553be70ff3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t2-security-groups-vs-network-acls": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1c7496328e8a321bbd1a1b531a2be520713728f6ce4f426890edeb2bb96e34ef",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t3-s3-sse-kms-customer-managed-key-audit": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ec6a1097d1459d6121ff6871b13e5c703865ffb9a0241789168a34a87614e38c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t4-sqs-decouple-producer-consumer-scaling": {
+      "verdict": "APPROVED",
+      "digest": "sha256:169099e0660f0ead4cc834cb02ddc336dd0ac01adcca14e844a71cbececcc122",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t5-rds-multi-az-standby-vs-read-replica": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9e1f6c4d5c42f922195ec2cf9ba1728cf9d653a8141e27e1bb1d5d3dd790c654",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t7-ec2-cluster-placement-group-low-latency": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a6f6670f201e49aaf19497e7886e025536158a77cc67ea69545f17f2bef96008",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t8-rds-read-replica-vs-multi-az": {
+      "verdict": "APPROVED",
+      "digest": "sha256:01933f244cfe9ee7c88b428878a2a7782d29f0065d50ef94195cc7a12c415653",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t9-global-accelerator-vs-cloudfront": {
+      "verdict": "APPROVED",
+      "digest": "sha256:db6bad264a014b1b87541fcdeacd433d68d37fadbf8d8cc6f41619064fbc77be",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-kinesis-data-streams-vs-firehose": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7a62a078a48c4036340925df6d2d5d495241e8c21214e57366aacaeeafb536ac",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-s3-intelligent-tiering-unknown-access-patterns": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a883a92c04d024f8e067f54f63ddd9382014fca94bbe5c9621dad4d74170ec98",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-dynamodb-on-demand-capacity-mode": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dc5173231bf2f5e896512ff4fc6a4300f6557ff2889efd37403821628bc13a75",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-vpc-gateway-endpoint-vs-nat-gateway-cost": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2a31cc514270d85dc717a081804b7ee5018d31b3cf0fd817e183d22596a2f42e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t6-ebs-io2-block-express-sustained-iops": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5db4a0e670c495486ff387f0d4fd041b6fca2acac7fbd01a469c308481111960",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-compute-savings-plans-vs-ec2-instance-savings-plans": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3cf2979521115c411c769238fe90fea65944f5bcf0680a0e5ef991894927e6c9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
