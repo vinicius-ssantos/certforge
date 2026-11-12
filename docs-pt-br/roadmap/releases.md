@@ -63,11 +63,13 @@ Tipos de questão, avaliação e direcionamento por vaga específicos de entrevi
 
 Capacidades candidatas: caderno de erros, classificação que considera a confiança, agendamento de revisão espaçada, fila diária de revisão, visibilidade de equívocos recorrentes.
 
-## `v0.3.0` — Mock Exams
+## `v0.3.0` — Mock Exams and Portuguese
 
-**Resultado:** Um aluno completa simulações cronometradas e recebe um relatório de pontos fracos baseado em blueprint.
+**Resultado:** Um aluno completa uma simulação cronometrada baseada em blueprint, recebe um relatório de pontos fracos por tópico para aquela prova, e usa a interface inteira em português brasileiro ou inglês.
 
 Capacidades candidatas: avaliações cronometradas, marcação de questões, submissão final, distribuição controlada de tópicos, salvaguardas contra questões inéditas, relatório pós-prova.
+
+**Renomeada de "Mock Exams" sozinha**, conforme [`docs/release/v0.3.0-scope-proposal.md`](../release/v0.3.0-scope-proposal.md#is-this-release-mock-exams): o trabalho concluído carrega um segundo resultado visível ao aluno que o roadmap nunca pediu — a interface inteira em português brasileiro (ADR 0012, #74) —, e é a mudança que a maioria dos alunos encontra primeiro, antes do próprio mock exam. "Mock Exams" sozinha teria sido precisa quanto ao roadmap e silenciosa quanto ao que o aluno de fato vê. A fundação da trilha de entrevista que também chegou nesta janela fica deliberadamente fora do nome: ela não tem conteúdo e nenhum aluno consegue alcançá-la, então nomeá-la prometeria algo que a árvore não contém.
 
 ## `v0.4.0` — Code Analysis
 

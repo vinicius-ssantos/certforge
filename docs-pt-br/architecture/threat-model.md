@@ -84,6 +84,39 @@ A validação contra as imagens de release achou estas; cada uma foi corrigida e
 - **Dependências vulneráveis.** A primeira varredura de imagens achou avisos críticos no Tomcat (incluindo bypass de restrição de segurança e de autenticação) e avisos altos no Jackson em versões gerenciadas pelo Spring Boot 4.1.1. Elas são sobrescritas no `pom.xml`, e a varredura agora reprova o build com qualquer achado alto ou crítico corrigível.
 - **Uma política que o app teria quebrado.** A Content Security Policy estrita bloqueia fontes `data:`, que o build embutia. O build não embute mais recursos.
 
+## Ameaças do mock exam (v0.3.0)
+
+O mock exam (ADR 0015) é um segundo caminho de entrega, cronometrado, sobre o mesmo pool de questões publicadas que a "Divulgação prematura de respostas" acima já cobre, com uma fronteira de confiança própria: o aluno está prestando uma prova pensada para medi-lo, e a única propriedade que ela nunca pode perder é que nada no caminho até o resultado final diz qual opção está correta.
+
+### Burla da resposta tardia pelo pool compartilhado de prática
+
+Ameaça: prática e mock sorteiam das mesmas questões publicadas, e a prática entrega a chave de respostas, as explicações, as referências e a saída de verificação no momento em que uma tentativa é submetida. Um aluno podia apontar `POST /api/study/sessions` ou uma tentativa para as `revisionIds` que o próprio mock aberto dele já tinha sorteado, e ler a chave enquanto o relógio do mock ainda corria — de forma determinística, já que o planejador sorteia cinco por tópico por sessão, então todos os tópicos de um blueprint de dez tópicos podiam ser lidos assim ao mesmo tempo.
+
+Controles: as revisões de um mock aberto saem do pool de prática enquanto ele estiver aberto, então pedir uma pelo nome via prática recebe a mesma recusa que uma revisão não publicada recebe, em vez de uma falha nova e aprendível; um tópico cujas únicas questões publicáveis estejam todas sob exame relata a mesma escassez que já relata por qualquer outro motivo. Uma sessão iniciada *antes* do mock mantém o próprio snapshot e não pode ser puxada de volta ao pool retroativamente, então submeter uma tentativa para uma questão que o aluno está sendo examinado no momento é recusado exatamente no ponto que entregaria a chave — a recusa nomeia o mock no caminho, não a questão, porque não há nada de errado com a questão.
+
+Achada e corrigida na #207 (mesclada), por uma auditoria interna da própria promessa desta release, não por um relato externo. É o motivo de esta seção existir, em vez de só repetir "Divulgação prematura de respostas" com um substantivo novo.
+
+### Autoridade sobre o prazo
+
+Ameaça: o navegador do aluno, e não o servidor, decide quando um mock termina — parando o relógio localmente, reproduzindo um prazo velho depois de reconectar, ou submetendo depois do prazo real com o relógio do navegador atrasado.
+
+Controles: o prazo é calculado e aplicado pelo servidor em toda chamada que altera estado (`respond`, `finish`); o cliente só renderiza a contagem regressiva que recebe. Um mock já vencido recusa uma resposta nova e se encerra por conta própria no próximo contato, em vez de confiar que o cliente vai chamar `finish`.
+
+### A moldura do envio irreversível
+
+Ameaça: um aluno submete por engano, ou é enganado sobre o custo de fazer isso, e um zero irrecuperável substitui cinquenta respostas nunca tentadas.
+
+Controles: `finish` é recusado sem um passo de confirmação anterior que nomeie exatamente quantas questões continuam sem resposta; a contagem de não respondidas se torna a contagem de erros da nota, em vez de um nulo ou um denominador menor, então o número sobre o qual o aluno é avisado é o mesmo número que depois conta contra ele. O `zz-mock-exam.spec.ts` exercita o texto do aviso e a nota resultante de ponta a ponta, não só a recusa.
+
+### Situação na v0.3.0
+
+| Ameaça | Controle como construído | Prova |
+|---|---|---|
+| Burla da resposta tardia pelo pool compartilhado de prática | Revisões sob um mock aberto são excluídas do pool de prática; uma tentativa numa questão sob exame é recusada; o snapshot de uma sessão pré-existente não é afetado | `AttemptSubmissionIT`, `StudySessionIT` (#207); o `zz-mock-exam.spec.ts` confirma que nenhum material de resposta chega à página ou ao seu markup enquanto o mock está `IN_PROGRESS`, inclusive ao revisitar uma questão já respondida |
+| Autoridade sobre o prazo | O prazo é calculado e aplicado no servidor em toda chamada que altera estado; um mock vencido se encerra no próximo contato | `MockExamServiceTest`, `MockExamPersistenceIT` |
+| A moldura do envio irreversível | `finish` exige uma confirmação que nomeia a contagem de não respondidas; essa contagem se torna a contagem de erros da nota | `zz-mock-exam.spec.ts` |
+| Telemetria sensível, estendida aos caminhos do mock | A família de endpoints do mock permanece dentro da mesma convenção de rótulos fixos e cardinalidade limitada do resto da API | A verificação de cardinalidade de métricas do `verify-privacy.mjs`, cujo teto foi elevado de 50 para 100 valores distintos de tag quando os próprios modelos de rota do mock exam foram exercitados pela primeira vez no nível da stack de release (#358) — um limite de sanidade contra crescimento ilimitado, não a verificação de vazamento em si |
+
 ## Riscos residuais e limites aceitos
 
 Conhecidos, declarados e não escondidos pelos testes acima.
