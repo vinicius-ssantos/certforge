@@ -15,6 +15,11 @@ export function inspectPackReviews(packDir) {
   const byName = new Map(questions.map((q) => [q.name, q]));
   const results = [];
   for (const [name, entry] of Object.entries(record.questions ?? {})) {
+    // manifest-pack.mjs's V2 AI-reviewer scheme now shares this same review.json file (#374): its
+    // entries key on `digest`, never `sourceGitBlobSha`, and this scheme must not read them -- an
+    // AI-reviewed question here is not a stale or missing human sign-off, it is simply not this
+    // scheme's entry to judge.
+    if (entry.digest !== undefined) continue;
     const question = byName.get(name);
     if (!question) throw new Error(`Orphaned review: ${name}`);
     const sourceFile = posix.join("content", manifest.packId, name, "question.json");
