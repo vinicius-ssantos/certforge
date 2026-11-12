@@ -82,6 +82,39 @@ Validation against the release images found these; each is fixed and tested.
 - **Vulnerable dependencies.** The first image scan found critical Tomcat advisories (including security-constraint and authentication bypasses) and high Jackson advisories in versions managed by Spring Boot 4.1.1. They are overridden in `pom.xml`, and the scan now fails the build on any fixable high or critical finding.
 - **A policy the app would have broken.** The strict Content Security Policy blocks `data:` fonts, which the build inlined. The build no longer inlines assets.
 
+## Mock exam threats (v0.3.0)
+
+The mock exam (ADR 0015) is a second, timed delivery path over the same published question pool "Premature answer disclosure" above already covers, with its own trust boundary: a learner is sitting a run that is meant to measure them, and the one property it must never lose is that nothing on the way to the terminal result says which option is correct.
+
+### Delayed feedback bypass via the shared practice pool
+
+Threat: Practice and the mock draw from the same published questions, and practice hands over the answer key, explanations, references and verification output the moment an attempt is submitted. A learner could point `POST /api/study/sessions` or an attempt at `revisionIds` their own open mock had already drawn and read the key while the mock's clock still ran — deterministically, since the planner draws five per topic per session, so every topic of a ten-topic blueprint could be read this way at once.
+
+Controls: The revisions of an open mock leave the practice pool for as long as it is open, so asking for one by name through practice gets the same refusal an unpublished revision gets rather than a new, learnable failure; a topic whose only otherwise-publishable questions are all under examination reports the same shortage it already reports for any other cause. A session started *before* the mock keeps its own snapshot and cannot be pulled back into the pool rule retroactively, so submitting an attempt for a question the learner is currently being examined on is refused directly at the point that would hand over the key — the refusal names the mock in the way, not the question, because nothing is wrong with the question.
+
+Found and fixed in #207 (merged), by an internal audit of this release's own promise rather than by an external report. It is the reason this section exists rather than only restating "Premature answer disclosure" with a new noun.
+
+### Deadline authority
+
+Threat: A learner's browser, not the server, decides when a mock ends — stopping the clock locally, replaying a stale deadline after a reconnect, or submitting after the true deadline with a browser clock set back.
+
+Controls: The deadline is server-computed and server-enforced at every mutating call (`respond`, `finish`); the client only renders the countdown it is handed. A run already past its deadline refuses a new answer and finishes itself on the next contact rather than trusting the client to call `finish`.
+
+### Irreversible-submit framing
+
+Threat: A learner submits early by mistake, or is misled about the cost of doing so, and an irrecoverable zero stands in for fifty answers never attempted.
+
+Controls: `finish` is refused without a prior confirmation step naming exactly how many questions are still unanswered; the unanswered count becomes the score's miss count rather than a null or a smaller denominator, so the number a learner is warned about is the same number that then counts against them. `zz-mock-exam.spec.ts` exercises the warning text and the resulting score denominator end to end, not just the refusal.
+
+### Status at v0.3.0
+
+| Threat | Control as built | Proof |
+|---|---|---|
+| Delayed feedback bypass via the shared practice pool | Revisions under an open mock are excluded from the practice pool; an attempt on a question under examination is refused; a pre-existing session's own snapshot is unaffected | `AttemptSubmissionIT`, `StudySessionIT` (#207); `zz-mock-exam.spec.ts` confirms no answer material reaches the page or its markup while `IN_PROGRESS`, including on revisiting an answered question |
+| Deadline authority | Deadline is computed and enforced server-side on every mutating call; an expired run finishes on next contact | `MockExamServiceTest`, `MockExamPersistenceIT` |
+| Irreversible-submit framing | `finish` requires a confirmation naming the unanswered count; that count becomes the miss count in the score | `zz-mock-exam.spec.ts` |
+| Sensitive telemetry, extended to mock paths | The mock endpoint family stays inside the same fixed-label, capped-cardinality metrics convention as the rest of the API | `verify-privacy.mjs`'s metrics cardinality check, whose ceiling was raised from 50 to 100 distinct tag values once the mock exam's own route templates were first exercised at the release-stack level (#358) — a sanity bound against unbounded growth, not the leak check itself |
+
 ## Residual risks and accepted limits
 
 Known, stated, and not hidden by the tests above.
