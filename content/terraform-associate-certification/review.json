@@ -1,0 +1,259 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "t01-infrastructure-as-code-definition": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7f5983f623e1256295cae14ab71e214e697e4aa4db739f448ff87c0d1dd11155",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t02-iac-advantages-declarative-workflow": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3a92bc12c9accb2c4bc1cacc25a7b5aaee1eedb3b438dec37de87e95ca539be3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t03-multi-cloud-service-agnostic-providers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9d773277c8360ae7b30e10aa98082c72677d07ef64a5c8597e743df20e64e160",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t04-provider-install-and-version-constraints": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0e1353fee4ecd4a80aeb8734e9bdb3bab8b9051a3ce1c32483220d90ceb78b7e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t05-what-providers-do": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c1b2efcb766b60e8731ce725fce41ea1554baa98d580a9604dedc7fb051a1ab5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t06-multiple-provider-configurations-alias": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb7ad23c20c920c34db6acb2485bfad0858745621ff0f3996ce64e23e4648d85",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t07-terraform-state-purpose": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7edf538c1d5b71b381ac6602651ba92149c52034f8e7e02b714e9c04afa1fec8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t08-core-workflow-write-plan-apply": {
+      "verdict": "APPROVED",
+      "digest": "sha256:47170d5fabc4e2aeeaf5fc5e38e317d0f6297d528fe57e4d8a2ab80797a475d8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t09-init-idempotent-reinitialization-triggers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:820d5262f738673eaea1a71a7d9fb0863ba4bee878d749ce72de3a830ab23c17",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t10-validate-scope-no-remote-checks": {
+      "verdict": "APPROVED",
+      "digest": "sha256:41f004800ec496e51d49f71f1791a90b3e67d5594c3bb42c366a799862ae3877",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t11-plan-preview-does-not-apply": {
+      "verdict": "APPROVED",
+      "digest": "sha256:833b60a3a8f81044794aa01ba24b9196df6f46bf9e8179da487d00c25100987e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t12-apply-default-prompts-for-approval": {
+      "verdict": "APPROVED",
+      "digest": "sha256:80e5c5a6f9db2955a2a7badbe2bddd21dc445d4813356ff0af083371ea6cb752",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t13-destroy-alias-for-apply-destroy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:43d8407816f81054a24e4baca64b7b41080bc330c288b3cb07b2f617d87f7257",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t14-fmt-default-scope-recursive-flag": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8aed3315e48d0c7e6753fe9ef66c5d6ff8a1ccefc7dea6d3763fed6a051dda0c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t15-resource-vs-data-block": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3718d8c4a01c51a58b986685b06ab7fc43bc38e7fd58b627cc95d080fe09cd6a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t16-cross-resource-attribute-reference": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d408d3a8ceaa62d2de90580125a7bfb2dbd69363d6e68104835fb408abc32b42",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t17-sensitive-output-json-plaintext": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5246ad084d91de82d1868d43648594f82127af17dce7dfc93b47af9bac70ba2d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t18-complex-types-list-tuple-map-object": {
+      "verdict": "APPROVED",
+      "digest": "sha256:411b6ec26df1aeb0d4d2f1bab3aebe5c8535aaa72001266a43836349fcdb3a44",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t19-dynamic-blocks-usage-and-best-practice": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5bbb8c0a138be68a793c4d75abc0e2c5ab96c260154a32b1d509050aec986e83",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t20-depends-on-hidden-dependency": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1fb16235b898189b640be4775fce1bf6a82e46f28b816183c293ce7bccb964b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t21-precondition-postcondition-timing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5ad24f6f66061d4d52955f848a7c55e0cdc788daaa03e5931671234cac59e1b7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t22-sensitive-vs-ephemeral-storage": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1323ed2640cca06c18061254425c8443c0b2c90b093aebef70d865a1ece031a1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t23-module-source-types": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f6f602bb3b2dc8fbaf4999ee45a0e23bb761bc550e594be373070b92282fc982",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t24-variable-scope-root-vs-child-module": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7ffb756c0697f078bee9b09cc0361add94a8673eab97e40a58fee59c1874f366",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t25-module-input-output-reference": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3c4d7ee51f2dc905d42bcd342f1f39af2e1072edbcef11d24df0cd3465b70408",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t26-module-version-constraint-git-ref": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bc425389e394a86ab9effdc671dc40917572745b1d9450e8e4c5b51913a3c746",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t27-local-backend-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0f1ebd581eaa896b8d52e7f20092c5bc3a880b047a4d30620f2296a78f95b255",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t28-state-locking-automatic": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7e058bae7663032efa2d179b06e99dce8c1bf986b0f86b5debc95113d92b5602",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t29-backend-block-limitations": {
+      "verdict": "APPROVED",
+      "digest": "sha256:70447ac3485840fd9e31bbac6e2933541bafe7f25e84bec02832232d528d07dd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t30-refresh-only-mode-drift": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ef606289799ea20a7a936fabbace4d438704d9d51f51ca5fd8cb0be4f4e4936c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t31-import-cli-vs-import-block": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aa7504c186781e91aa29a12c4adebc7408af2c6dc95b627910245e32497e67a1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t32-state-list-and-show-inspect": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f5adc5cc4782a92b3c2740ffc9453f917cf9a59600a432bab551c93a8f94ce81",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t33-tf-log-verbosity-levels": {
+      "verdict": "APPROVED",
+      "digest": "sha256:40ab5f94fb494ce61cb8322e7cb5d5c9e9e9f00a2fa6cdf59a5305b8e19dc587",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t36-hcp-terraform-workspaces-vs-directories": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7292c5844655b56555bc20a6ff925f619004071b97ee69e3f1549dc494266648",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t37-hcp-terraform-vcs-integration": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cd810b0af933056493874f685f9d4a6e05555b167f1f330b2e042ff9fb5e31e9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t38-resource-reference-creates-implicit-dependency": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1c70a2d21572632f6cfedfa77c15d45b970c3e6c69df888a7d6c43829c2e02af",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t39-plan-output-update-vs-replace": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ace16366e31ec8cf65955e02b39b0b98f51346dcd925c262406e77fedf9e8568",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t40-depends-on-with-hidden-dependency-code": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fa7586efbbfd60374ce6ecc7114ed652e0ecdffa0480e93021336cd8b874b75e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t41-state-show-single-resource-vs-show": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e98c7b24e9da90f5e744927a6fdd4c4fcb3c432f45fd84d4c47af9745fbd15fb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t42-import-without-matching-config-plans-destroy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6ccbcad65c6bead324ba488419f5d28e2caadab93d2c0eff938f9ad0ee5f773a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t34-hcp-terraform-what-it-is": {
+      "verdict": "APPROVED",
+      "digest": "sha256:646bd6b66978b87a4bccfb32613ec973e7dce841cf1dd5732f9811030426c9b1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t35-hcp-terraform-governance-features": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6bab9255fc759c800823df701471c36d6620007280b86423e34613b39bef8d61",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    }
+  }
+}
