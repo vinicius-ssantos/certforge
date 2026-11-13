@@ -772,6 +772,186 @@
       "sourceGitBlobSha": "e9f25ec1d78e117b19ff97b739f2988e93a5e1e3",
       "scope": "Owner expressly approved current complete question and key in editorial review; does not authorize editorial API approval, publication, or merge.",
       "serverEditorialStatus": "NOT_SUBMITTED_OR_APPROVED_BY_THIS_RECORD"
+    },
+    "t19-linux-setuid-permission-bit": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8fc26585113052f4fd43a916ceb11cd332b5c7609945a8e46f0ddac165261164",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t20-linux-sigterm-vs-sigkill": {
+      "verdict": "APPROVED",
+      "digest": "sha256:95dfaa2d97aed2472e492e1b3c1bf9960b46160b2f5f0348f93775731bdc9531",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t21-linux-file-descriptor-limit": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d1f743d0903c2fc308e43864040000e85edc55bd3d42b92f8c86238d35f94756",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t22-linux-oom-killer-score": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3ef43455a455ffb160c1e3c4897f0badd22b8f8cead4f182f66ca88260613f90",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t23-linux-port-already-in-use": {
+      "verdict": "APPROVED",
+      "digest": "sha256:01eb0a489b179ed0192f31658ea1affb1e50389ead3eb0bbc084fc21123995a8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t24-net-tcp-three-way-handshake": {
+      "verdict": "APPROVED",
+      "digest": "sha256:672c6aac207e1ef5800fc4fdfb34b95f44d884471826c73739b8977ad973558a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t25-net-bind-loopback-vs-any": {
+      "verdict": "APPROVED",
+      "digest": "sha256:977a54475a871f8f37250ddbf9bc8626bbe4c285be5e414ca99a1769e874822e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t26-net-dns-recursive-resolver": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fdd1c588a31f12354f7bf7a426f225e3dd575d8a7c171b938c845a4efcdf8344",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t27-net-tls-incomplete-chain": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d6ee2480a6febb55218452676667ccd37665217a12619a0b16919f026698ba9d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t28-net-reverse-proxy-read-timeout": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b03f5e1d989702030e3908933804bb19897e911c57eccbe96a7af9ae90b747e1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t29-cicd-workflow-triggers": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c09be86f2875be78412a34cbb3ddff41783d46b2c0e66ba522338a36bb84b109",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t30-cicd-cache-vs-artifact": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7c03ee60fd0d8624bc5cda56d861559c6bc2c590d7315e767c103148ff64cc3f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t31-cicd-matrix-strategy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:56650ffdfd7be671e7e9f59f57e3fc4c5c3d99b64710e4a06d7febe4a80ba3a9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t32-cicd-secrets-oidc": {
+      "verdict": "APPROVED",
+      "digest": "sha256:62b31df66cff0aa4ead7d596348ab69f0bccb6ce57e1fa5b881985f86a845a38",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t33-cicd-environment-protection": {
+      "verdict": "APPROVED",
+      "digest": "sha256:eaa6302c3f665a6529a9cb92b9903b52f400232c8b191178f6bc7028dd41814f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t34-prometheus-counter-vs-gauge": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9e1c5e9ca80b83dccde33f6ec13b966421f627e94a26188f656c6a9677aca003",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t35-prometheus-alert-for-duration": {
+      "verdict": "APPROVED",
+      "digest": "sha256:44ebdab9cb67f85a7a922032b8a53e6f51839ad97227afe7b25ef432b0279852",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t36-prometheus-keep-firing-for": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b6ea22186e4b25d5a8bb2134cd4dff8bc666ddfdda17ce46ad6a104103e34275",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t37-prometheus-histogram-vs-summary": {
+      "verdict": "APPROVED",
+      "digest": "sha256:52eea0b1f795dfb156233452c3d97ffc24cab484074ae45d9c3b71958722280f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t38-otel-trace-context-propagation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e22b42b24fcc0c38705f1c388f7e12bc102ddd2febfa9f12504ba87622991af0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t39-otel-trace-parent-child": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1e5e7e798bd6e51e22e9555fc81388c88cdb02e34a8e556fb34fea0e71fb4a4b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t40-k8s-secret-base64-not-confidentiality": {
+      "verdict": "APPROVED",
+      "digest": "sha256:49c4b1924d247b2a6f468c07a6bca3a7d1d73ed1317837dc0dee2b42c2f93197",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t41-k8s-secret-dockerconfig-auth-leak": {
+      "verdict": "APPROVED",
+      "digest": "sha256:19023b6dda24c931bf16c85fe66387db8be308f2482f6fe8b2ef09de57085a68",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t42-k8s-pss-baseline-vs-restricted-root": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dc35a29e7055f3d1fb19c35cb2fbe911f208fb14bca0cb3a27b5f086fc2d3830",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t43-k8s-pss-restricted-admission-rejection": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4c5641752e9196fc99ce573d2177ef75c633b9db61f350cc773affb06b58d7e4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t44-k8s-rbac-wildcard-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d3052727009a71a7dba7c249c6abf7a2838dcc963c898b15e6ba3ca0be1b176c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t45-k8s-rbac-rolebinding-vs-clusterrolebinding": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2bf2d7aa378391736a3349a252672074a67fe691ac18beaa1ec7c39be90f5515",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t46-zero-trust-network-location": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6bc40e494ace053d5936c038a9c8bbdc1bde1a56a59501588dccc37503d5a74d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t47-zero-trust-service-mesh-mtls": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c3cd0e43ebc15426d55f263feeaafb2b5ed5d1f1b593aa2ba820a6184842af64",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
+    },
+    "t48-supply-chain-pin-action-sha": {
+      "verdict": "APPROVED",
+      "digest": "sha256:67796f9015770f5d1fb3cf0f08ed0cbe9262dcf7de24e747b09dab36da079cac",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-12"
     }
   },
   "caveats": [

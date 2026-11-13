@@ -167,11 +167,11 @@ export function reviewDigestV2(manifest, question) {
 /**
  * The V2 review record of a manifest pack, or null when it has none. Deliberately the same
  * filename (`review.json`) a pack may already use for `review-integrity.mjs`'s git-blob-sha human
- * sign-off scheme -- the two have never coexisted in one file, because that scheme is scoped to
- * `infrastructure-devops-foundations` alone (content/review-integrity.test.mjs) and every pack
- * reviewed under this V2 scheme starts with no review.json at all. A pack that somehow carried
- * both would have one entry shape or the other per question, never both, since the two schemes
- * key on disjoint fields (`sourceGitBlobSha` vs `digest`) and neither reads the other's.
+ * sign-off scheme, scoped to `infrastructure-devops-foundations` (content/review-integrity.test.mjs).
+ * That pack's `review.json` now genuinely mixes both: 70 questions with a human sign-off (never
+ * touched by this scheme), 30 with an AI-reviewer V2 entry recorded by `content/record-ai-review.mjs`
+ * (#374). The two key on disjoint fields (`sourceGitBlobSha` vs `digest`) and neither reads the
+ * other's entries -- `review-integrity.mjs`'s checks skip any entry carrying a `digest`.
  */
 export function readReviewRecordV2(pack) {
   const file = join(pack, "review.json");

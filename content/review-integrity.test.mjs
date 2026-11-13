@@ -8,8 +8,9 @@ import { assertPackReviewsCurrent, inspectPackReviews } from "./review-integrity
 const pack = "content/infrastructure-devops-foundations";
 test("all recorded human sign-offs match the current question blobs", () => {
   // 70 of the pack's 100 questions carry a human sign-off; the other 30 (15 from #169/#170,
-  // 15 from #174) are unreviewed drafts with no review.json entry at all, which this check
-  // does not require — it only refuses a sign-off whose recorded bytes no longer match the
+  // 15 from #174) now carry an AI-reviewer sign-off instead (manifest-pack.mjs's V2 scheme,
+  // keyed on `digest`), which this check skips entirely -- it only judges entries in its own
+  // git-blob-sha scheme, and only refuses one whose recorded bytes no longer match the
   // question it names.
   const state = assertPackReviewsCurrent(pack);
   assert.equal(state.total, 100);
