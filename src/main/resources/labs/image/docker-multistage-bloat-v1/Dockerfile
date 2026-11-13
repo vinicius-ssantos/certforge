@@ -22,7 +22,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends docker.io \
 
 COPY image/docker-multistage-bloat-v1/lab-shell /usr/local/bin/lab-shell
 RUN chmod +x /usr/local/bin/lab-shell \
-    && usermod -s /usr/local/bin/lab-shell ubuntu
+    && usermod -s /usr/local/bin/lab-shell -aG docker ubuntu
+
+# docker.io's own package creates the `docker` group and owns the socket by it; adding `ubuntu`
+# (both lab-shell's learner and, non-root by default, the orchestrator's own grader calls) to it
+# is what lets `docker` run without sudo once the daemon this session's provisioning step starts
+# is actually reachable -- otherwise the socket is root-only and every allowed `docker` command
+# would need sudo, which the allowlist does not grant and the orchestrator does not ask for.
 
 ENV LAB_ALLOWED_COMMANDS="docker cat ls vi nano"
 

@@ -254,15 +254,15 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
      is not pullable outside Vercel's own build pipeline): the fixture lands in the image, the
      allowlist environment variable is baked in, and a realistic session (`ls`, `cat`, a rejected
      `rm`) behaves exactly as `lab-shell`'s own unit-level tests already proved.
-  4. **Blocked: the orchestrator's interactive-session endpoint needs `openInteractive()`'s real
-     REST contract, which is not yet confirmed.** `create`/`cmd`/`stop` all have documented REST
-     API pages (`POST /v2/sandboxes`, `POST .../cmd`, `POST .../stop`) this project's Java backend
-     can call directly (no JVM SDK exists). `openInteractive()` has no such page, and is not
-     wrapped by this project's Vercel MCP tools either -- writing the orchestrator's call to it
-     now would mean guessing a contract, which this document does not do. Confirming the real
-     endpoint (asking Vercel directly, or inspecting the JS SDK's own network calls) is the next
-     concrete step before the vertical slice's controller and WebSocket-credential hand-off can be
-     written.
+  4. **Unblocked 2026-11-13: `openInteractive()`'s real REST contract, found by reading
+     `@vercel/sandbox`'s own shipped source** (`dist/api-client/api-client.js`), since it has no
+     published REST API page the way create/`cmd`/stop do and is not wrapped by this project's
+     Vercel MCP tools. The SDK itself calls:
+     `POST https://api.vercel.com/v2/sandboxes/sessions/{sessionId}/interactive?teamId={teamId}`,
+     body `{}`, `Authorization: Bearer <token>`, response `{ "url": string, "token": string }`
+     (`InteractiveSessionResponse` in the SDK's own validators) -- the literal request this
+     project's Java backend can now make directly, the same way it already does for
+     create/`cmd`/stop.
   5. Add the grader and destroy-on-exit lifecycle, with tests proving cleanup and failure-safety —
      #175's own acceptance criterion.
   6. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
