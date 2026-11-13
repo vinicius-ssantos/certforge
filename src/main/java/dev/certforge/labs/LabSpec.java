@@ -3,7 +3,7 @@ package dev.certforge.labs;
 import java.util.List;
 
 /**
- * The one authoring surface for a hands-on lab (ADR 0027, {@code
+ * The one authoring surface for a hands-on lab (ADR 0027, ADR 0028, {@code
  * docs/architecture/hands-on-labs-isolation.md}). A field left out, or a limit left unbounded,
  * means the lab does not ship -- {@code LabSpecValidator} enforces this mechanically, not merely by
  * convention.
@@ -13,12 +13,11 @@ import java.util.List;
  */
 public record LabSpec(
     String labId,
-    Isolation isolation,
     LabImage image,
     LabFixture fixture,
     LabObjective objective,
     List<String> allowedCommands,
-    LabLimits limits,
+    LabSandbox sandbox,
     LabNetwork network,
     LabFilesystem filesystem,
     LabEvaluation evaluation) {}

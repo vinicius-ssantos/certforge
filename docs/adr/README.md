@@ -30,7 +30,8 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0024](0024-ai-reviewer-verified-tier.md) | Extend the AI-reviewer fast lane to Verified-tier content, with its own recorded checklist | Accepted |
 | [0025](0025-ai-reviewer-approval-is-final.md) | Make the AI reviewer's approval final, with no human confirmation step | Accepted |
 | [0026](0026-ai-reviewer-fast-lane-for-every-pack.md) | Extend the AI reviewer's fast lane to every content pack and track kind | Accepted |
-| [0027](0027-isolate-hands-on-lab-execution.md) | Isolate hands-on lab execution with microVM-class sandboxing, not plain containers | Accepted, decision 1 superseded by 0028 |
+| [0027](0027-isolate-hands-on-lab-execution.md) | Isolate hands-on lab execution with microVM-class sandboxing, not plain containers | Accepted, decision 1 superseded by 0028, decision 2 corrected by 0029 |
 | [0028](0028-vercel-sandbox-for-hands-on-labs.md) | Run hands-on lab sessions on Vercel Sandbox, not a self-hosted Kata/Firecracker fleet | Accepted |
+| [0029](0029-restricted-shell-enforces-the-lab-allowlist.md) | Enforce a lab's command allowlist with a restricted login shell, not a backend proxy | Accepted |
 
 New ADRs should include context, decision, consequences, rejected alternatives, and status. Superseded ADRs remain in history and link to their replacement.

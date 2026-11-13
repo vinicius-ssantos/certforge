@@ -1,6 +1,5 @@
 {
   "labId": "docker-multistage-bloat-v1",
-  "isolation": "gvisor",
   "image": {
     "ref": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662"
   },
@@ -12,12 +11,10 @@
     "description": "The Dockerfile ships the full build toolchain and source in its final image. Rewrite it as a proper multi-stage build: compile in a builder stage, then copy only the resulting binary into a minimal final stage."
   },
   "allowedCommands": ["docker", "vi", "nano", "cat", "ls"],
-  "limits": {
-    "wallClockSeconds": 900,
-    "memoryMiB": 1024,
-    "cpuMillicores": 1000,
-    "diskMiB": 2048,
-    "processCount": 64
+  "sandbox": {
+    "vcpus": 1,
+    "timeoutSeconds": 900,
+    "persistent": false
   },
   "network": {
     "egress": "none"
@@ -30,11 +27,11 @@
     "checks": [
       {
         "description": "The built image's final layer does not contain the Go toolchain",
-        "probe": "docker run --rm docker-multistage-bloat-v1:lab which go"
+        "probe": "docker run --rm --entrypoint sh docker-multistage-bloat-v1:lab -c '! which go >/dev/null 2>&1'"
       },
       {
-        "description": "The built image is under the fixture's size budget",
-        "probe": "docker image inspect docker-multistage-bloat-v1:lab --format '{{.Size}}'"
+        "description": "The built image is under 100MB (the buggy fixture is ~1.27GB; a correct multi-stage build onto a minimal base measured ~15.5MB)",
+        "probe": "size=$(docker image inspect docker-multistage-bloat-v1:lab --format '{{.Size}}'); test \"$size\" -lt 104857600"
       }
     ]
   }

@@ -1,0 +1,72 @@
+#!/bin/sh
+# The restricted login shell for a hands-on lab session (#175, ADR 0028 decision 7's reconciliation
+# of "real interactive terminal" with "allowlist enforced, not merely discouraged").
+#
+# openInteractive() gives the learner's browser a real PTY on a controller-hosted shell, which this
+# project's own backend never sits in the middle of -- so the allowlist cannot be enforced by
+# inspecting a byte stream from outside. It is enforced here instead, at the point of exec, inside
+# the kernel this guest owns: a line the learner types is tokenized by this shell's own word
+# splitting, its first word is checked against $LAB_ALLOWED_COMMANDS, and only then is the exact
+# argv array executed directly -- never re-interpreted by a second shell (`sh -c "$line"` or `eval`
+# would let `;`, `&&`, backticks or `$()` in the typed line escape the check entirely; this script
+# never does either). A rejected line's words are inert: with no second shell, a learner typing
+# `docker build . ; rm -rf /` passes `; rm -rf /` as literal, meaningless arguments to `docker`
+# itself, not as a second command.
+#
+# LAB_ALLOWED_COMMANDS is a space-separated list of exact basenames, baked into the image's
+# environment for one specific LabSpec -- never read from anything the learner can write.
+
+set -u
+
+if [ -z "${LAB_ALLOWED_COMMANDS:-}" ]; then
+  echo "lab-shell: LAB_ALLOWED_COMMANDS is not set; refusing to start." >&2
+  exit 1
+fi
+
+is_allowed() {
+  command_name="$1"
+  for allowed in $LAB_ALLOWED_COMMANDS; do
+    if [ "$command_name" = "$allowed" ]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+echo "Allowed commands: $LAB_ALLOWED_COMMANDS"
+
+while true; do
+  printf '%s' 'lab$ '
+  if ! IFS= read -r line; then
+    echo
+    exit 0
+  fi
+
+  # No-op on a blank line, without treating it as a rejected command.
+  case "$line" in
+    '' | ' '*) ;;
+  esac
+  [ -z "$(printf '%s' "$line" | tr -d '[:space:]')" ] && continue
+
+  # Tokenize the typed line into argv by the shell's own field splitting. This is the one place
+  # the raw line is parsed, and it never passes through sh -c or eval afterward.
+  # shellcheck disable=SC2086
+  set -- $line
+
+  first="$1"
+  case "$first" in
+    */*)
+      # A path (./foo, /bin/foo) rather than a bare name would let a learner spell a disallowed
+      # binary under a name that happens to match an allowed one by basename alone. Refuse it
+      # outright rather than resolving and re-checking it.
+      echo "lab-shell: refusing a path; type a bare command name from: $LAB_ALLOWED_COMMANDS" >&2
+      continue
+      ;;
+  esac
+
+  if is_allowed "$first"; then
+    "$@"
+  else
+    echo "lab-shell: '$first' is not one of the allowed commands for this lab: $LAB_ALLOWED_COMMANDS" >&2
+  fi
+done

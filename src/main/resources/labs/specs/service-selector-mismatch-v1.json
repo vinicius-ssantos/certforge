@@ -1,6 +1,5 @@
 {
   "labId": "service-selector-mismatch-v1",
-  "isolation": "kata",
   "image": {
     "ref": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662"
   },
@@ -12,12 +11,10 @@
     "description": "The web-backend Service has no endpoints. Correct spec.selector so it matches the Deployment's Pod labels, and reapply it."
   },
   "allowedCommands": ["kubectl", "vi", "nano", "cat", "ls"],
-  "limits": {
-    "wallClockSeconds": 900,
-    "memoryMiB": 512,
-    "cpuMillicores": 500,
-    "diskMiB": 256,
-    "processCount": 64
+  "sandbox": {
+    "vcpus": 1,
+    "timeoutSeconds": 900,
+    "persistent": false
   },
   "network": {
     "egress": "none"

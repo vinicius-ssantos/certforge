@@ -1,7 +1,7 @@
 package dev.certforge.labs.internal;
 
 import dev.certforge.labs.LabEvaluationCheck;
-import dev.certforge.labs.LabLimits;
+import dev.certforge.labs.LabSandbox;
 import dev.certforge.labs.LabSpec;
 import java.util.List;
 import java.util.Set;
@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 /**
  * Domain invariants of a {@link LabSpec}. A spec that leaves any field out, or any limit unbounded,
- * does not ship -- there is no implicit default that widens access (ADR 0027).
+ * does not ship -- there is no implicit default that widens access (ADR 0027, ADR 0028).
  */
 final class LabSpecValidator {
 
@@ -33,9 +33,6 @@ final class LabSpecValidator {
     if (isBlank(spec.labId())) {
       found.add("lab_id_missing");
     }
-    if (spec.isolation() == null) {
-      found.add("isolation_missing");
-    }
 
     checkImage(spec, found);
     checkFixture(spec, fixtureBundleExists, found);
@@ -48,7 +45,7 @@ final class LabSpecValidator {
     }
 
     checkAllowedCommands(spec, found);
-    checkLimits(spec.limits(), found);
+    checkSandbox(spec.sandbox(), found);
 
     if (spec.network() == null || spec.network().egress() == null) {
       found.add("egress_missing");
@@ -91,21 +88,17 @@ final class LabSpecValidator {
     }
   }
 
-  private static void checkLimits(LabLimits limits, Set<String> found) {
-    if (limits == null || notPositive(limits.wallClockSeconds())) {
-      found.add("wall_clock_seconds_invalid");
+  private static void checkSandbox(LabSandbox sandbox, Set<String> found) {
+    if (sandbox == null || notPositive(sandbox.vcpus())) {
+      found.add("vcpus_invalid");
+    } else if (sandbox.vcpus() != 1 && sandbox.vcpus() % 2 != 0) {
+      found.add("vcpus_must_be_one_or_even");
     }
-    if (limits == null || notPositive(limits.memoryMiB())) {
-      found.add("memory_mib_invalid");
+    if (sandbox == null || notPositive(sandbox.timeoutSeconds())) {
+      found.add("timeout_seconds_invalid");
     }
-    if (limits == null || notPositive(limits.cpuMillicores())) {
-      found.add("cpu_millicores_invalid");
-    }
-    if (limits == null || notPositive(limits.diskMiB())) {
-      found.add("disk_mib_invalid");
-    }
-    if (limits == null || notPositive(limits.processCount())) {
-      found.add("process_count_invalid");
+    if (sandbox == null || !Boolean.FALSE.equals(sandbox.persistent())) {
+      found.add("persistent_must_be_false");
     }
   }
 

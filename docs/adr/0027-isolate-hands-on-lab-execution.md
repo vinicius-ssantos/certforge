@@ -11,7 +11,12 @@
   [ADR 0028](0028-vercel-sandbox-for-hands-on-labs.md)**, which runs the same microVM boundary on
   Vercel Sandbox instead of infrastructure this project would operate itself. Decisions 2 through 6
   below — the prohibitions, the `LabSpec` contract's intent, deterministic evaluation outside the
-  learner's reach, destroy-on-exit, and the Phase 1/Phase 2 split — stand as written.
+  learner's reach, destroy-on-exit, and the Phase 1/Phase 2 split — stand as written. **Decision
+  2's "rejected at the bridge" wording is corrected by
+  [ADR 0029](0029-restricted-shell-enforces-the-lab-allowlist.md) for the interactive-terminal
+  path**: Vercel Sandbox's `openInteractive()` gives the learner's browser a direct connection to a
+  controller-hosted PTY with no backend bridge in the path, so the allowlist there is enforced by
+  a restricted login shell inside the guest, at `exec` time, not by a process in the middle.
 - Date: 2026-11-08
 - Issue: [#175](https://github.com/vinicius-ssantos/certforge/issues/175) ("Design safe hands-on
   labs for Docker, Kubernetes and IaC"), depends on #164
