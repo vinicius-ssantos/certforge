@@ -43,9 +43,6 @@ while true; do
   fi
 
   # No-op on a blank line, without treating it as a rejected command.
-  case "$line" in
-    '' | ' '*) ;;
-  esac
   [ -z "$(printf '%s' "$line" | tr -d '[:space:]')" ] && continue
 
   # Tokenize the typed line into argv by the shell's own field splitting. This is the one place
