@@ -180,13 +180,28 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
   1. ~~Human security review of ADR 0027 and this document.~~ Done — the product owner reviewed
      and accepted ADR 0027 in PR #350, and ADR 0028's change of isolation engine directly in
      conversation on 2026-11-13.
-  2. **Smoke-test nested container-runtime support inside a Vercel Sandbox, before any other
-     construction.** ADR 0028 decision 7 flags this as unverified: the readiness-probe and
-     selector labs need a Kubernetes API server reachable in-guest, and the multi-stage-build lab
-     needs a working `docker build`. This step confirms both are possible inside the sandbox's own
-     kernel (nested virtualization/containers, not a host-shared kernel) before any `LabSpec` is
-     built against the assumption. A failure here changes the base image strategy, not the
-     isolation decision itself.
+  2. **Smoke-tested 2026-11-13 — mixed result, not a pass.** A throwaway, non-persistent sandbox
+     (`persistent: false`, stopped after ~2.7 minutes, ~47s active CPU) confirmed:
+     - **Docker works.** `apt-get install docker.io`, starting `dockerd` directly, and
+       `docker run hello-world` all succeed end-to-end inside the guest — pulling an image,
+       creating a container, running it, streaming its output. This is exactly what the
+       multi-stage-build lab needs (`docker build` against a real nested daemon) and it is now
+       verified, not assumed.
+     - **`kind` fails.** `kind create cluster` cannot bring up its control-plane node: the node
+       container's own `systemd` (PID 1 inside that doubly-nested container) exits with
+       `Failed to create /init.scope control group: Structure needs cleaning` /
+       `Failed to allocate manager object: Structure needs cleaning` — a cgroup v2 delegation
+       failure specific to running a *second* level of container nesting (a systemd-managed
+       container inside the sandbox's own already-nested Docker), not a failure of nesting itself
+       (plain Docker, one level deep, is fine). This blocks the readiness-probe and
+       Service-selector labs **as currently specified**, which both assumed `kind`.
+     - **Next step, not yet attempted:** k3s (a single binary with its own embedded containerd,
+       no Docker and no nested systemd required) is a promising alternative for the two
+       Kubernetes labs — it would run as a process directly inside the sandbox rather than as a
+       doubly-nested container, sidestepping the exact failure above. This needs its own smoke
+       test before either Kubernetes `LabSpec` is written against it.
+     - The multi-stage-build lab's isolation choice is unblocked by this result; the other two are
+       not yet, and should not be assumed fixed by switching tools until that is itself verified.
   3. Build the orchestrator and Sandbox provisioning for exactly one `LabSpec` (the readiness-probe
      lab, the simplest of the three) as a vertical slice, entirely outside the main application's
      deployment, per ADR 0006's existing "separate restricted runner service" principle.

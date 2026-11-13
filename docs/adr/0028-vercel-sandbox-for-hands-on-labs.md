@@ -111,15 +111,16 @@ the mechanism — the grader is server-side code holding the same `Sandbox` hand
 learner's terminal bridge never has direct access to. The learner's command stream and the grader's
 command stream are issued by different callers against the same API, not by the same process.
 
-**7. Nested container-runtime support (Docker-in-sandbox, `kind`/`k3d`-in-sandbox) is an open
-rollout risk, not a verified fact.** The Vercel Sandbox documentation describes each sandbox as a
-real Linux VM with its own kernel — the same property that makes nested containers possible in
-principle, the same way it is possible inside any Linux VM with cgroups and overlayfs available.
-Nothing in this ADR asserts it has been tested end-to-end for this project's three prototype labs
-(the readiness-probe and selector labs need a Kubernetes API server reachable in-guest; the
-multi-stage-build lab needs a working `docker build`). The Rollout section in
-`docs/architecture/hands-on-labs-isolation.md` is updated to put a smoke test of exactly this ahead
-of any other Phase 2 construction.
+**7. Nested container-runtime support was smoke-tested 2026-11-13, with a mixed, specific
+result — not left as an open assumption.** A throwaway sandbox confirmed Docker itself works fully
+nested inside the guest (`dockerd` starts, `docker run hello-world` pulls and runs end-to-end),
+which is what the multi-stage-build lab needs. `kind create cluster` does not work: its node
+container's own `systemd` fails to acquire a cgroup v2 delegation (`Structure needs cleaning`)
+one level deeper than plain Docker nesting goes. This blocks the readiness-probe and
+Service-selector labs **as specified against `kind`**, not the isolation engine decision itself —
+k3s (no Docker, no nested systemd, runs as a guest process) is the next candidate for those two,
+itself unverified until its own smoke test. See the Rollout section in
+`docs/architecture/hands-on-labs-isolation.md` for the full result and the next step.
 
 ## Consequences
 

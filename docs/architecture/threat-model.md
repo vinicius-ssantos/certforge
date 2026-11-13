@@ -244,17 +244,20 @@ throttling (`IdentityIT`); a capacity ceiling with graceful queuing or rejection
 over-provisioning host resources. Under ADR 0028 this abuse is also a direct cost (billable vCPU
 time, egress, and exposed-port traffic per session), not only a capacity concern.
 
-### Vendor dependency and unverified nested-runtime support
+### Vendor dependency and partially-verified nested-runtime support
 
-Threat: this is not an in-session attack, but a design risk ADR 0028 introduces and must not be
-allowed to go unverified before Phase 2 construction relies on it — a Vercel Sandbox is a real
-Linux microVM, which makes nested containers (a Docker daemon or a `kind`/`k3d` cluster running
-inside it) possible in principle, but nothing has tested this end-to-end for this project's three
-prototype labs, and lab availability now depends on a third party's platform uptime.
+Threat: this is not an in-session attack, but a design risk ADR 0028 introduces — lab availability
+now depends on a third party's platform uptime, and this project's own three prototype labs need
+nested containers (Docker, or a Kubernetes cluster) to work inside that platform's microVM.
 
-Controls: a smoke test of nested container-runtime support is the first Rollout step in
-`docs/architecture/hands-on-labs-isolation.md`, ordered ahead of any orchestrator or `LabSpec`
-construction — a failure here changes the base image strategy, not the isolation decision. The
+Controls: smoke-tested 2026-11-13 in a throwaway, non-persistent sandbox. Result: Docker itself
+nests cleanly (`dockerd` starts, `docker run hello-world` works end-to-end) — the
+multi-stage-build lab's requirement is verified, not assumed. `kind create cluster` fails on a
+cgroup v2 delegation error one level of nesting deeper than plain Docker (its node container's own
+`systemd` cannot acquire `/init.scope`) — the readiness-probe and Service-selector labs are
+**not** cleared yet as specified against `kind`; k3s (no Docker, no nested systemd) is the next
+candidate, itself requiring its own smoke test before either `LabSpec` is built against it. See
+`docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full result. The
 orchestrator holds the only credential to the Sandbox API (ADR 0028 decision 3); no credential
 needed for lab operation is ever placed inside the sandbox, so a Vercel-side compromise of one lab
 session cannot by itself expose this project's own platform credential. Phase 1 (static diagnosis)
