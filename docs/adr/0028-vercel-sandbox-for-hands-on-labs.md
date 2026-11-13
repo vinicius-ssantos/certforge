@@ -111,16 +111,28 @@ the mechanism — the grader is server-side code holding the same `Sandbox` hand
 learner's terminal bridge never has direct access to. The learner's command stream and the grader's
 command stream are issued by different callers against the same API, not by the same process.
 
-**7. Nested container-runtime support was smoke-tested 2026-11-13, with a mixed, specific
-result — not left as an open assumption.** A throwaway sandbox confirmed Docker itself works fully
-nested inside the guest (`dockerd` starts, `docker run hello-world` pulls and runs end-to-end),
-which is what the multi-stage-build lab needs. `kind create cluster` does not work: its node
-container's own `systemd` fails to acquire a cgroup v2 delegation (`Structure needs cleaning`)
-one level deeper than plain Docker nesting goes. This blocks the readiness-probe and
-Service-selector labs **as specified against `kind`**, not the isolation engine decision itself —
-k3s (no Docker, no nested systemd, runs as a guest process) is the next candidate for those two,
-itself unverified until its own smoke test. See the Rollout section in
-`docs/architecture/hands-on-labs-isolation.md` for the full result and the next step.
+**7. Nested container-runtime support was smoke-tested 2026-11-13, in two rounds — not left as an
+open assumption.** A throwaway sandbox confirmed Docker itself works fully nested inside the guest
+(`dockerd` starts, `docker run hello-world` pulls and runs end-to-end), which is what the
+multi-stage-build lab needs. Both ways tried to bring up a Kubernetes node fail, with the same
+underlying cause:
+   - `kind create cluster` fails because its node container's own `systemd` cannot acquire a
+     cgroup v2 delegation (`Structure needs cleaning`) one level deeper than plain Docker nesting
+     goes.
+   - `k3s`, run directly as a guest process specifically to avoid that extra nesting level, fails
+     too: kubelet's `ContainerManager` cannot create its own top-level `kubepods` cgroup v2
+     subtree (`"cannot enter cgroupv2 ... it is in an invalid state"`), after also rejecting both
+     IPv4 addresses the sandbox's interface offers as a node IP (loopback and link-local — nothing
+     else is assigned).
+
+   The same category of cgroup v2 delegation failure blocking both tools, one at a deeper nesting
+   level than the other, looks like a property of this sandbox's root cgroup hierarchy rather than
+   something either tool does wrong. This blocks the readiness-probe and Service-selector labs as
+   currently conceived (a full kubelet-managed node, cold-started inside the session) — **not**
+   the isolation engine decision itself, which the Docker result still supports. It is new,
+   unresolved follow-on work this ADR does not attempt to solve: see the Rollout section in
+   `docs/architecture/hands-on-labs-isolation.md` for the full evidence and the untried directions
+   worth a separately-scoped investigation.
 
 ## Consequences
 

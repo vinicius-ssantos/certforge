@@ -244,24 +244,27 @@ throttling (`IdentityIT`); a capacity ceiling with graceful queuing or rejection
 over-provisioning host resources. Under ADR 0028 this abuse is also a direct cost (billable vCPU
 time, egress, and exposed-port traffic per session), not only a capacity concern.
 
-### Vendor dependency and partially-verified nested-runtime support
+### Vendor dependency and a verified Kubernetes-node limitation
 
 Threat: this is not an in-session attack, but a design risk ADR 0028 introduces — lab availability
 now depends on a third party's platform uptime, and this project's own three prototype labs need
 nested containers (Docker, or a Kubernetes cluster) to work inside that platform's microVM.
 
-Controls: smoke-tested 2026-11-13 in a throwaway, non-persistent sandbox. Result: Docker itself
-nests cleanly (`dockerd` starts, `docker run hello-world` works end-to-end) — the
-multi-stage-build lab's requirement is verified, not assumed. `kind create cluster` fails on a
-cgroup v2 delegation error one level of nesting deeper than plain Docker (its node container's own
-`systemd` cannot acquire `/init.scope`) — the readiness-probe and Service-selector labs are
-**not** cleared yet as specified against `kind`; k3s (no Docker, no nested systemd) is the next
-candidate, itself requiring its own smoke test before either `LabSpec` is built against it. See
-`docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full result. The
-orchestrator holds the only credential to the Sandbox API (ADR 0028 decision 3); no credential
-needed for lab operation is ever placed inside the sandbox, so a Vercel-side compromise of one lab
-session cannot by itself expose this project's own platform credential. Phase 1 (static diagnosis)
-has no dependency on Vercel at all and is unaffected if the platform is unavailable.
+Controls: smoke-tested 2026-11-13 in two throwaway, non-persistent sandboxes. Docker nests cleanly
+(`dockerd` starts, `docker run hello-world` works end-to-end) — the multi-stage-build lab's
+requirement is verified, not assumed. Both `kind` and `k3s` fail to bring up a Kubernetes node,
+with the same underlying cause: a cgroup v2 delegation failure for the node's `ContainerManager`
+subtree, hit one nesting level earlier by `k3s` (which needs no Docker and runs as a guest process
+specifically to avoid `kind`'s extra nesting level) than by `kind` — evidence this is a property
+of the sandbox's root cgroup hierarchy, not a defect in either tool. The readiness-probe and
+Service-selector labs are **not** cleared as currently conceived; see
+`docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full evidence and the
+untried directions (Connect private networking, a pre-booted custom image) a future, separately-
+scoped investigation would need to check. The orchestrator holds the only credential to the
+Sandbox API (ADR 0028 decision 3); no credential needed for lab operation is ever placed inside
+the sandbox, so a Vercel-side compromise of one lab session cannot by itself expose this project's
+own platform credential. Phase 1 (static diagnosis) has no dependency on Vercel at all and is
+unaffected if the platform is unavailable.
 
 ### Unsafe diagnostic output
 

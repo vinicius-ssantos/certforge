@@ -195,13 +195,35 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
        container inside the sandbox's own already-nested Docker), not a failure of nesting itself
        (plain Docker, one level deep, is fine). This blocks the readiness-probe and
        Service-selector labs **as currently specified**, which both assumed `kind`.
-     - **Next step, not yet attempted:** k3s (a single binary with its own embedded containerd,
-       no Docker and no nested systemd required) is a promising alternative for the two
-       Kubernetes labs — it would run as a process directly inside the sandbox rather than as a
-       doubly-nested container, sidestepping the exact failure above. This needs its own smoke
-       test before either Kubernetes `LabSpec` is written against it.
-     - The multi-stage-build lab's isolation choice is unblocked by this result; the other two are
-       not yet, and should not be assumed fixed by switching tools until that is itself verified.
+     - **k3s was tried next (same day) and fails too, with the same root cause.** k3s needs no
+       Docker and no nested systemd — it runs as a single process directly in the sandbox — so it
+       sidesteps the exact failure `kind` hit. It still cannot start: kubelet's own
+       `ContainerManager` fails to create its `kubepods` cgroup v2 subtree —
+       `"cannot enter cgroupv2 \"/sys/fs/cgroup/kubepods\" with domain controllers -- it is in an
+       invalid state"` — immediately after rejecting both IPv4 addresses the sandbox's single
+       network interface offers as a node IP (`127.0.0.1`: "nodeIP can't be loopback address";
+       `169.254.0.2`: "nodeIP can't be a link-local unicast address"; nothing else is assigned).
+       Both failures happen before any pod runs. **This is the same category of problem as
+       `kind`'s, one level earlier**: `kind`'s node container could not get cgroup v2 delegation
+       deep enough for its own nested systemd; k3s's kubelet cannot get it for its *own* top-level
+       `kubepods` subtree, with no nesting involved at all. That makes it look like a property of
+       this sandbox's root cgroup hierarchy, not something specific to how deeply either tool
+       nests containers.
+     - **Conclusion: a full kubelet-managed Kubernetes node could not be brought up in this
+       sandbox by either of the two most common lightweight approaches.** The multi-stage-build
+       lab's isolation choice is unblocked by the Docker result above. The readiness-probe and
+       Service-selector labs are not, and switching tools again on the same assumption
+       (a full kubelet node, started cold inside the sandbox) is not expected to fare differently
+       without first resolving the cgroup v2 delegation and node-IP problems identified here —
+       neither attempted. Untried alternatives worth a future, separately-scoped investigation:
+       whether Vercel Sandbox exposes any cgroup-delegation-affecting configuration; whether a
+       custom image pre-boots the cluster at build time into a snapshot the session resumes from
+       (sidestepping a cold kubelet boot inside the session itself, though the cgroup error
+       suggests the subtree problem is runtime-environmental, not boot-order-related, so this is
+       speculative, not a lead actually confirmed to help); or assigning the sandbox a routable
+       address via a Connect private network (`networkId` in `Sandbox.create`) instead of relying
+       on its default interface, which might also resolve the node-IP rejection independently of
+       the cgroup issue, but was not tested in this session.
   3. Build the orchestrator and Sandbox provisioning for exactly one `LabSpec` (the readiness-probe
      lab, the simplest of the three) as a vertical slice, entirely outside the main application's
      deployment, per ADR 0006's existing "separate restricted runner service" principle.
