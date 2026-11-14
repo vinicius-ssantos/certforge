@@ -177,6 +177,26 @@ Controls: both are forbidden outright by #175's acceptance criteria and by ADR 0
 nested daemon runs only inside the guest microVM's own kernel, which the host does not trust
 regardless of what runs inside it.
 
+### Allowlist bypass via the interactive terminal
+
+Threat: `sandbox.openInteractive()` gives the learner's browser a direct WebSocket connection to a
+real, controller-hosted PTY inside the guest, with this project's backend never in that
+connection's path — so a command this `LabSpec` does not allow could run with nothing to stop it,
+unless enforcement moves somewhere the backend not being on the wire does not weaken it.
+
+Controls: [ADR 0029](../adr/0029-restricted-shell-enforces-the-lab-allowlist.md)'s `lab-shell`,
+the image's default login shell for the user `openInteractive()`'s PTY starts, tokenizes each
+typed line with its own word splitting and execs the result directly — never through a second
+shell (`sh -c`/`eval`) — so `;`, `&&`, backticks and `$()` in a line reach a rejected check's
+error message or an accepted command's own argv as inert text, not as a second command. A bare
+path (`./docker`, `/usr/bin/docker`) is refused outright rather than resolved and re-checked,
+closing a basename-only bypass. `$LAB_ALLOWED_COMMANDS` is baked into the image at build time from
+the `LabSpec` itself, reachable by nothing the learner's session can write. Verified locally
+against the real script and the real custom image (not asserted): an allowed command runs; a
+disallowed one is refused and never executes (confirmed by checking its expected side effect never
+happened); a path-qualified name is refused; a `;`-laden line is treated as one command's literal
+arguments.
+
 ### Kubernetes control-plane or credential leakage
 
 Threat: an ephemeral cluster's kubeconfig or a service-account token leaves the session, or a
@@ -250,17 +270,19 @@ Threat: this is not an in-session attack, but a design risk ADR 0028 introduces 
 now depends on a third party's platform uptime, and this project's own three prototype labs need
 nested containers (Docker, or a Kubernetes cluster) to work inside that platform's microVM.
 
-Controls: smoke-tested 2026-11-13 in two throwaway, non-persistent sandboxes. Docker nests cleanly
-(`dockerd` starts, `docker run hello-world` works end-to-end) — the multi-stage-build lab's
-requirement is verified, not assumed. Both `kind` and `k3s` fail to bring up a Kubernetes node,
-with the same underlying cause: a cgroup v2 delegation failure for the node's `ContainerManager`
-subtree, hit one nesting level earlier by `k3s` (which needs no Docker and runs as a guest process
-specifically to avoid `kind`'s extra nesting level) than by `kind` — evidence this is a property
-of the sandbox's root cgroup hierarchy, not a defect in either tool. The readiness-probe and
-Service-selector labs are **not** cleared as currently conceived; see
-`docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full evidence and the
-untried directions (Connect private networking, a pre-booted custom image) a future, separately-
-scoped investigation would need to check. The orchestrator holds the only credential to the
+Controls: smoke-tested 2026-11-13 in three throwaway, non-persistent sandboxes. Docker nests
+cleanly (`dockerd` starts, `docker run hello-world` works end-to-end) — the multi-stage-build
+lab's requirement is verified, not assumed. Both `kind` and `k3s` fail to bring up a Kubernetes
+node; a third, independent diagnostic found the precise cause: root can delegate `cpuset`/`cpu`/
+`pids` to a child cgroup v2 subtree, but delegating `memory`/`io`/`hugetlb` fails with
+`errno=95` (`ENOTSUP`) even as root. `kind`'s `systemd` and k3s's `kubelet` both hard-require the
+memory controller, which is why both fail — a kernel/guest-init property of the sandbox, not a
+defect in either tool, and not fixable by a different image or boot order (which narrows the
+pre-booted-custom-image idea from "untested" to "unlikely to help," and makes Connect private
+networking irrelevant to this specific blocker — it would only address the separate node-IP
+rejection). The readiness-probe and Service-selector labs are **not** cleared as currently
+conceived; see `docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full
+evidence. The orchestrator holds the only credential to the
 Sandbox API (ADR 0028 decision 3); no credential needed for lab operation is ever placed inside
 the sandbox, so a Vercel-side compromise of one lab session cannot by itself expose this project's
 own platform credential. Phase 1 (static diagnosis) has no dependency on Vercel at all and is

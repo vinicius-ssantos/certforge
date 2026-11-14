@@ -1227,6 +1227,51 @@
         "required" : [ "id", "name", "slug", "topics", "versionId", "versionLabel" ],
         "type" : "object"
       },
+      "LabCheckResult" : {
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "passed" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "description", "passed" ],
+        "type" : "object"
+      },
+      "LabSession" : {
+        "properties" : {
+          "interactiveToken" : {
+            "type" : "string"
+          },
+          "interactiveUrl" : {
+            "type" : "string"
+          },
+          "labId" : {
+            "type" : "string"
+          },
+          "sessionId" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "interactiveToken", "interactiveUrl", "labId", "sessionId" ],
+        "type" : "object"
+      },
+      "LabVerdict" : {
+        "properties" : {
+          "checks" : {
+            "items" : {
+              "$ref" : "#/components/schemas/LabCheckResult"
+            },
+            "type" : "array"
+          },
+          "passed" : {
+            "type" : "boolean"
+          }
+        },
+        "required" : [ "checks", "passed" ],
+        "type" : "object"
+      },
       "LoginRequest" : {
         "properties" : {
           "email" : {
@@ -4198,6 +4243,58 @@
           }
         },
         "tags" : [ "editorial-catalog-controller" ]
+      }
+    },
+    "/api/labs/sessions/{sessionId}/complete" : {
+      "post" : {
+        "operationId" : "complete_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "sessionId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LabVerdict"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "labs-controller" ]
+      }
+    },
+    "/api/labs/{labId}/sessions" : {
+      "post" : {
+        "operationId" : "start_3",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "labId",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/LabSession"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "labs-controller" ]
       }
     },
     "/api/progress/certifications" : {

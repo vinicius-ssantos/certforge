@@ -44,6 +44,13 @@ certforge:
     bootstrap-admin:
       email: ${BOOTSTRAP_ADMIN_EMAIL:}
       password: ${BOOTSTRAP_ADMIN_PASSWORD:}
+  labs:
+    vercel:
+      # Same names the Vercel Sandbox SDK itself reads for external callers (ADR 0028) -- no JVM
+      # SDK exists, so this project's backend calls the REST API directly with these.
+      token: ${VERCEL_TOKEN:}
+      team-id: ${VERCEL_TEAM_ID:}
+      project-id: ${VERCEL_PROJECT_ID:}
 
 management:
   endpoints:

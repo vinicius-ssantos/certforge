@@ -4,15 +4,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import dev.certforge.labs.Egress;
 import dev.certforge.labs.EvaluationType;
-import dev.certforge.labs.Isolation;
 import dev.certforge.labs.LabEvaluation;
 import dev.certforge.labs.LabEvaluationCheck;
 import dev.certforge.labs.LabFilesystem;
 import dev.certforge.labs.LabFixture;
 import dev.certforge.labs.LabImage;
-import dev.certforge.labs.LabLimits;
 import dev.certforge.labs.LabNetwork;
 import dev.certforge.labs.LabObjective;
+import dev.certforge.labs.LabSandbox;
 import dev.certforge.labs.LabSpec;
 import java.util.List;
 import java.util.function.Predicate;
@@ -26,14 +25,13 @@ class LabSpecValidatorTest {
   private static LabSpec golden() {
     return new LabSpec(
         "readiness-probe-wrong-port-v1",
-        Isolation.KATA,
         new LabImage(
             "docker.io/library/busybox@sha256:"
                 + "73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662"),
         new LabFixture("readiness-probe-wrong-port-v1"),
         new LabObjective("Fix a readiness probe", "Edit the manifest so the Pod becomes Ready."),
         List.of("kubectl"),
-        new LabLimits(900, 512, 500, 256, 64),
+        new LabSandbox(1, 900, false),
         new LabNetwork(Egress.NONE),
         new LabFilesystem(64),
         new LabEvaluation(
@@ -54,24 +52,6 @@ class LabSpecValidatorTest {
   void requiresALabId() {
     var spec = withLabId(golden(), "");
     assertThat(violations(spec)).containsExactly("lab_id_missing");
-  }
-
-  @Test
-  void requiresAnIsolationTier() {
-    var g = golden();
-    var spec =
-        new LabSpec(
-            g.labId(),
-            null,
-            g.image(),
-            g.fixture(),
-            g.objective(),
-            g.allowedCommands(),
-            g.limits(),
-            g.network(),
-            g.filesystem(),
-            g.evaluation());
-    assertThat(violations(spec)).containsExactly("isolation_missing");
   }
 
   @Test
@@ -137,18 +117,33 @@ class LabSpecValidatorTest {
   }
 
   @Test
-  void requiresEveryLimitToBePositive() {
+  void requiresAPositiveVcpuCount() {
     var g = golden();
-    assertThat(violations(withLimits(g, new LabLimits(0, 512, 500, 256, 64))))
-        .containsExactly("wall_clock_seconds_invalid");
-    assertThat(violations(withLimits(g, new LabLimits(900, -1, 500, 256, 64))))
-        .containsExactly("memory_mib_invalid");
-    assertThat(violations(withLimits(g, new LabLimits(900, 512, null, 256, 64))))
-        .containsExactly("cpu_millicores_invalid");
-    assertThat(violations(withLimits(g, new LabLimits(900, 512, 500, 0, 64))))
-        .containsExactly("disk_mib_invalid");
-    assertThat(violations(withLimits(g, new LabLimits(900, 512, 500, 256, 0))))
-        .containsExactly("process_count_invalid");
+    assertThat(violations(withSandbox(g, new LabSandbox(0, 900, false))))
+        .containsExactly("vcpus_invalid");
+    assertThat(violations(withSandbox(g, new LabSandbox(null, 900, false))))
+        .containsExactly("vcpus_invalid");
+  }
+
+  @Test
+  void requiresVcpusToBeOneOrEven() {
+    var spec = withSandbox(golden(), new LabSandbox(3, 900, false));
+    assertThat(violations(spec)).containsExactly("vcpus_must_be_one_or_even");
+  }
+
+  @Test
+  void requiresAPositiveTimeout() {
+    var spec = withSandbox(golden(), new LabSandbox(1, 0, false));
+    assertThat(violations(spec)).containsExactly("timeout_seconds_invalid");
+  }
+
+  @Test
+  void requiresPersistentToBeExplicitlyFalse() {
+    var g = golden();
+    assertThat(violations(withSandbox(g, new LabSandbox(1, 900, true))))
+        .containsExactly("persistent_must_be_false");
+    assertThat(violations(withSandbox(g, new LabSandbox(1, 900, null))))
+        .containsExactly("persistent_must_be_false");
   }
 
   @Test
@@ -192,12 +187,11 @@ class LabSpecValidatorTest {
   private static LabSpec withLabId(LabSpec g, String labId) {
     return new LabSpec(
         labId,
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         g.evaluation());
@@ -206,12 +200,11 @@ class LabSpecValidatorTest {
   private static LabSpec withImageRef(LabSpec g, String ref) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         new LabImage(ref),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         g.evaluation());
@@ -220,12 +213,11 @@ class LabSpecValidatorTest {
   private static LabSpec withFixturePath(LabSpec g, String path) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         new LabFixture(path),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         g.evaluation());
@@ -234,12 +226,11 @@ class LabSpecValidatorTest {
   private static LabSpec withObjective(LabSpec g, LabObjective objective) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         objective,
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         g.evaluation());
@@ -248,26 +239,24 @@ class LabSpecValidatorTest {
   private static LabSpec withAllowedCommands(LabSpec g, List<String> commands) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         commands,
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         g.evaluation());
   }
 
-  private static LabSpec withLimits(LabSpec g, LabLimits limits) {
+  private static LabSpec withSandbox(LabSpec g, LabSandbox sandbox) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        limits,
+        sandbox,
         g.network(),
         g.filesystem(),
         g.evaluation());
@@ -276,12 +265,11 @@ class LabSpecValidatorTest {
   private static LabSpec withNetwork(LabSpec g, LabNetwork network) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         network,
         g.filesystem(),
         g.evaluation());
@@ -290,12 +278,11 @@ class LabSpecValidatorTest {
   private static LabSpec withFilesystem(LabSpec g, LabFilesystem filesystem) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         filesystem,
         g.evaluation());
@@ -304,12 +291,11 @@ class LabSpecValidatorTest {
   private static LabSpec withEvaluation(LabSpec g, LabEvaluation evaluation) {
     return new LabSpec(
         g.labId(),
-        g.isolation(),
         g.image(),
         g.fixture(),
         g.objective(),
         g.allowedCommands(),
-        g.limits(),
+        g.sandbox(),
         g.network(),
         g.filesystem(),
         evaluation);
