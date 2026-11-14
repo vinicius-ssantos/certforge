@@ -139,11 +139,11 @@ the concept the lab tests hands-on.
    enforces-the-lab-allowlist.md)'s `lab-shell`, the image's default login shell, checking each
    typed line's first word against `$LAB_ALLOWED_COMMANDS` and executing the result directly
    (never through a second shell), rather than by a backend bridge inspecting the connection —
-   there is no such bridge once the browser holds the Vercel credential directly. **The literal
-   REST contract behind `openInteractive()` is not yet confirmed** — it has no listed REST API
-   documentation page the way create/`cmd`/stop do, and is not wrapped by this project's Vercel
-   MCP tools either; the orchestrator's interactive-session endpoint cannot be written against a
-   guessed contract and is blocked on this confirmation (see Rollout).
+   there is no such bridge once the browser holds the Vercel credential directly. The literal REST
+   contract behind `openInteractive()` has no listed REST API documentation page the way
+   create/`cmd`/stop do and is not wrapped by this project's Vercel MCP tools either; it was found
+   by reading `@vercel/sandbox`'s own shipped source instead of guessed (see Rollout step 4), and
+   `VercelSandboxClient.openInteractive()` now calls it directly.
 3. **Limits, enforced by the platform, not only in-guest.** `timeoutSeconds` and `vcpus` are the
    caps the platform enforces on the microVM itself — the session is stopped and any in-flight
    command rejects at timeout. Disk is capped at the platform's own 64 GB/session ceiling; process
@@ -263,10 +263,27 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
      (`InteractiveSessionResponse` in the SDK's own validators) -- the literal request this
      project's Java backend can now make directly, the same way it already does for
      create/`cmd`/stop.
-  5. Add the grader and destroy-on-exit lifecycle, with tests proving cleanup and failure-safety —
-     #175's own acceptance criterion.
-  6. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
+  5. **Done, same day.** `SandboxLabOrchestrator` (`dev.certforge.labs.internal`) implements
+     `LabOrchestrator`: `start` provisions the sandbox, starts `dockerd` detached when the lab's
+     `allowedCommands` include `docker`, and opens the interactive credential; `complete` runs
+     every `LabEvaluation` check as the orchestrator's own call — never the learner's
+     terminal-bridge session — and calls `sandbox.stop()` in a `finally`, unconditionally, whether
+     grading succeeded, failed, or threw (ADR 0027 decision 5). `SandboxLabOrchestratorTest` proves
+     both the cleanup-always and the never-the-learner's-session properties against a mocked
+     `VercelSandboxClient`; `VercelSandboxClientTest` proves the real HTTP shapes against
+     `MockRestServiceServer` — no CI run touches the real Vercel API.
+  6. **Done, same day.** `LabsController` (`dev.certforge.labs.internal`) exposes this to the
+     learner's client: `POST /api/labs/{labId}/sessions` (start, `STUDY` permission, 201 with the
+     `LabSession`) and `POST /api/labs/sessions/{sessionId}/complete` (grade, 200 with the
+     `LabVerdict`). An unknown lab or session id is translated from the orchestrator's
+     `NoSuchElementException` into a 404 problem response, rather than reaching the generic 500
+     handler — `LabsSessionIT` proves this end-to-end, through the real auth stack, with the
+     Vercel client mocked.
+  7. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
      cgroup delegation problem found in step 2 — not attempted by switching tools again without
      that.
-  6. CI runs only against the fixtures above, never against anything resembling a real learner's
+  8. Publish the Docker lab's custom image to Vercel Container Registry and replace
+     `docker-multistage-bloat-v1.json`'s busybox placeholder digest with the real pinned one — not
+     started (see `src/main/resources/labs/specs/README.md`).
+  9. CI runs only against the fixtures above, never against anything resembling a real learner's
      arbitrary input, per #175's last acceptance criterion.
