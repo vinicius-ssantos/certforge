@@ -302,9 +302,14 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
      can route around. Extending to `readiness-probe-wrong-port-v1` and `service-selector-
      mismatch-v1` needs a product decision on execution strategy (non-kubelet Kubernetes checks,
      or a different platform for just these two labs) before any more engineering here.
-  8. Publish the Docker lab's custom image to Vercel Container Registry and replace
-     `docker-multistage-bloat-v1.json`'s busybox placeholder digest with the real pinned one — not
-     started (see `src/main/resources/labs/specs/README.md`). (In progress on #382, which this
-     branch does not depend on and should not wait for.)
+  8. **Done.** The Docker lab's custom image (`src/main/resources/labs/image/docker-multistage-
+     bloat-v1/Dockerfile`) is built and pushed to Vercel Container Registry with `vercel vcr build
+     docker --push`, and `docker-multistage-bloat-v1.json`'s `image.ref` now pins the real
+     manifest-list digest VCR returned, replacing the busybox placeholder. Along the way, the
+     Dockerfile's base was corrected from `vercel/sandbox/ubuntu` (a managed image name
+     `Sandbox.create()` resolves itself, not a registry ref any `docker build` can pull as a
+     `FROM` — confirmed by the pull itself failing with "repository does not exist") to
+     `ubuntu:24.04`, whose own image already ships the `ubuntu` user this Dockerfile's `usermod`
+     step needs. See `src/main/resources/labs/specs/README.md`.
   9. CI runs only against the fixtures above, never against anything resembling a real learner's
      arbitrary input, per #175's last acceptance criterion.
