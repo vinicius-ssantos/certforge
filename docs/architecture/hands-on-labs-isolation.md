@@ -229,11 +229,28 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
        unlikely to help (the gap is a kernel/guest-init property, not a boot-order one); a Connect
        private network is irrelevant to *this* blocker specifically (it would address the
        separate node-IP rejection, not the memory/io/hugetlb `ENOTSUP`).
-     - Untried, now better-scoped: whether Vercel Sandbox exposes any configuration that changes
-       which controllers are delegated to a guest (not confirmed to exist); whether a Kubernetes
-       distribution that does not require the memory controller for its own control-plane
-       bring-up exists at all (not identified). Absent either, the two Kubernetes-based prototype
-       labs stay blocked on this platform.
+     - **Both remaining directions checked 2026-11-14 — dead ends, not untried anymore.** No
+       kubelet flag skips the requirement: `--cgroups-per-qos=false`/`--enforce-node-allocatable=""`
+       only stop kubelet from writing limits into its own cgroup tree, not its separate startup
+       check that every required controller is mountable -- kubelet aborts on a missing controller
+       regardless of those flags (real-world reports show the identical failure class for a
+       missing `pids` controller). k3s's own embedded containerd/supervisor manages its cgroup
+       hierarchy independently of any `--kubelet-arg` passthrough, and its one documented override
+       (`fail-cgroupv1=false`) is for cgroup v1 fallback, not a v2 controller that won't delegate.
+       k0s's troubleshooting docs confirm the same hard requirement with the same kind of caveat.
+       kind's own rootless-provider fix (`systemd` `Delegate=yes`) assumes the *host* can delegate
+       more controllers to a rootless user; this project is already root and the *host itself*
+       refuses memory/io/hugetlb specifically -- a different, deeper failure no kind doc addresses.
+       And the `ENOTSUP` itself has no documented guest-side cause anywhere: cgroup v2's own docs
+       describe delegation as strictly top-down from whatever the host chooses to expose, and the
+       one related real report of a `subtree_control` write failure in the wild returned `EBUSY`
+       (a user-fixable process-conflict), never `ENOTSUP` -- consistent with this being the
+       sandbox's own kernel/guest-init policy, not a race or ordering bug fixable from inside.
+       **Conclusion: no kubelet/k3s/k0s/kind configuration unblocks a real kubelet-managed node on
+       this platform.** The two Kubernetes-based prototype labs need either a non-kubelet execution
+       strategy (e.g. a real API server plus static manifest/diagnostic checks, no live kubelet)
+       or a different isolation platform for just those two labs -- a product decision, not an
+       engineering one, since it changes what "hands-on" means for those two labs specifically.
   3. **Docker lab vertical slice — in progress, same day.** The `LabSpec` domain model
      (`dev.certforge.labs`) is migrated from this document's original schema to the one above (ADR
      0028): `Isolation`/`LabLimits` removed, `LabSandbox` (`vcpus`, `timeoutSeconds`,
@@ -279,11 +296,15 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
      `NoSuchElementException` into a 404 problem response, rather than reaching the generic 500
      handler — `LabsSessionIT` proves this end-to-end, through the real auth stack, with the
      Vercel client mocked.
-  7. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
-     cgroup delegation problem found in step 2 — not attempted by switching tools again without
-     that.
+  7. **Blocked, confirmed dead end 2026-11-14 (see step 2's full research).** No
+     kubelet/k3s/k0s/kind configuration clears the memory-controller delegation problem; it's the
+     sandbox platform's own kernel/guest-init policy, not something this project's tooling choices
+     can route around. Extending to `readiness-probe-wrong-port-v1` and `service-selector-
+     mismatch-v1` needs a product decision on execution strategy (non-kubelet Kubernetes checks,
+     or a different platform for just these two labs) before any more engineering here.
   8. Publish the Docker lab's custom image to Vercel Container Registry and replace
      `docker-multistage-bloat-v1.json`'s busybox placeholder digest with the real pinned one — not
-     started (see `src/main/resources/labs/specs/README.md`).
+     started (see `src/main/resources/labs/specs/README.md`). (In progress on #382, which this
+     branch does not depend on and should not wait for.)
   9. CI runs only against the fixtures above, never against anything resembling a real learner's
      arbitrary input, per #175's last acceptance criterion.
