@@ -46,6 +46,7 @@ class ContainerLabOrchestratorTest {
   private static final ActorId LEARNER = new ActorId(UUID.randomUUID());
   private static final ActorId OTHER_LEARNER = new ActorId(UUID.randomUUID());
   private static final String LAB_ID = "service-selector-mismatch-v1";
+  private static final String CONTAINER_ID = "a".repeat(64);
 
   private static LabSpec labSpec() {
     return new LabSpec(
@@ -74,10 +75,10 @@ class ContainerLabOrchestratorTest {
   private static DockerCliClient happyPathDocker() {
     DockerCliClient docker = mock(DockerCliClient.class);
     when(docker.imageExists(any())).thenReturn(true);
-    when(docker.run(any(), any())).thenReturn("container_1");
-    when(docker.exec(eq("container_1"), any(), isNull(), eq(List.of("docker", "info"))))
+    when(docker.run(any(), any())).thenReturn(CONTAINER_ID);
+    when(docker.exec(eq(CONTAINER_ID), any(), isNull(), eq(List.of("docker", "info"))))
         .thenReturn(new ExecResult(0, ""));
-    when(docker.exec(eq("container_1"), any(), isNull(), any())).thenReturn(new ExecResult(0, ""));
+    when(docker.exec(eq(CONTAINER_ID), any(), isNull(), any())).thenReturn(new ExecResult(0, ""));
     return docker;
   }
 
@@ -91,13 +92,14 @@ class ContainerLabOrchestratorTest {
 
     LabSession session = orchestrator.start(LAB_ID);
 
-    assertThat(session.sessionId()).isEqualTo("container_1");
+    assertThat(session.sessionId()).isEqualTo(CONTAINER_ID);
     assertThat(session.labId()).isEqualTo(LAB_ID);
-    assertThat(session.interactiveUrl()).isEqualTo("/api/labs/sessions/container_1/terminal");
+    assertThat(session.interactiveUrl())
+        .isEqualTo("/api/labs/sessions/" + CONTAINER_ID + "/terminal");
     assertThat(session.interactiveToken()).isNotBlank();
     verify(docker)
         .exec(
-            eq("container_1"),
+            eq(CONTAINER_ID),
             any(),
             isNull(),
             eq(
@@ -128,15 +130,15 @@ class ContainerLabOrchestratorTest {
     when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec()));
     DockerCliClient docker = mock(DockerCliClient.class);
     when(docker.imageExists(any())).thenReturn(true);
-    when(docker.run(any(), any())).thenReturn("container_1");
-    when(docker.exec(eq("container_1"), any(), isNull(), any()))
+    when(docker.run(any(), any())).thenReturn(CONTAINER_ID);
+    when(docker.exec(eq(CONTAINER_ID), any(), isNull(), any()))
         .thenReturn(new ExecResult(1, "nested dockerd never started"));
     ContainerLabOrchestrator orchestrator =
         new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
 
     assertThatThrownBy(() -> orchestrator.start(LAB_ID)).isInstanceOf(IllegalStateException.class);
 
-    verify(docker).remove("container_1");
+    verify(docker).remove(CONTAINER_ID);
   }
 
   @Test
@@ -145,20 +147,17 @@ class ContainerLabOrchestratorTest {
     when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec()));
     DockerCliClient docker = happyPathDocker();
     when(docker.exec(
-            eq("container_1"),
-            any(),
-            isNull(),
-            eq(List.of("sh", "-c", "test \"true\" = \"true\""))))
+            eq(CONTAINER_ID), any(), isNull(), eq(List.of("sh", "-c", "test \"true\" = \"true\""))))
         .thenReturn(new ExecResult(0, ""));
     ContainerLabOrchestrator orchestrator =
         new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
     orchestrator.start(LAB_ID);
 
-    LabVerdict verdict = orchestrator.complete("container_1");
+    LabVerdict verdict = orchestrator.complete(CONTAINER_ID);
 
     assertThat(verdict.passed()).isTrue();
     assertThat(verdict.checks()).hasSize(1);
-    verify(docker).remove("container_1");
+    verify(docker).remove(CONTAINER_ID);
   }
 
   @Test
@@ -169,9 +168,9 @@ class ContainerLabOrchestratorTest {
     ContainerLabOrchestrator orchestrator =
         new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
     orchestrator.start(LAB_ID);
-    orchestrator.complete("container_1");
+    orchestrator.complete(CONTAINER_ID);
 
-    assertThatThrownBy(() -> orchestrator.complete("container_1"))
+    assertThatThrownBy(() -> orchestrator.complete(CONTAINER_ID))
         .isInstanceOf(NoSuchElementException.class);
   }
 
@@ -188,13 +187,13 @@ class ContainerLabOrchestratorTest {
 
     when(currentActor.require()).thenReturn(OTHER_LEARNER);
 
-    assertThatThrownBy(() -> orchestrator.complete("container_1"))
+    assertThatThrownBy(() -> orchestrator.complete(CONTAINER_ID))
         .isInstanceOf(NoSuchElementException.class);
-    verify(docker, never()).remove("container_1");
+    verify(docker, never()).remove(CONTAINER_ID);
 
     when(currentActor.require()).thenReturn(LEARNER);
-    orchestrator.complete("container_1");
-    verify(docker).remove("container_1");
+    orchestrator.complete(CONTAINER_ID);
+    verify(docker).remove(CONTAINER_ID);
   }
 
   @Test
@@ -208,12 +207,11 @@ class ContainerLabOrchestratorTest {
         new ContainerLabOrchestrator(catalog, docker, currentActor);
     LabSession session = orchestrator.start(LAB_ID);
 
-    assertThat(orchestrator.ownedByCurrentActor("container_1", session.interactiveToken()))
-        .isTrue();
-    assertThat(orchestrator.ownedByCurrentActor("container_1", "wrong-token")).isFalse();
+    assertThat(orchestrator.ownedByCurrentActor(CONTAINER_ID, session.interactiveToken())).isTrue();
+    assertThat(orchestrator.ownedByCurrentActor(CONTAINER_ID, "wrong-token")).isFalse();
 
     when(currentActor.require()).thenReturn(OTHER_LEARNER);
-    assertThat(orchestrator.ownedByCurrentActor("container_1", session.interactiveToken()))
+    assertThat(orchestrator.ownedByCurrentActor(CONTAINER_ID, session.interactiveToken()))
         .isFalse();
   }
 

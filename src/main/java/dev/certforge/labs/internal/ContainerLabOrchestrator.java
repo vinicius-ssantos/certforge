@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -52,6 +53,19 @@ class ContainerLabOrchestrator {
   private static final int PIDS_LIMIT = 2048;
   private static final String KUBECONFIG_PATH = "/home/learner/kubeconfig";
   private static final String LEARNER_USER = "learner";
+
+  /**
+   * The exact shape {@code docker run -d}'s own stdout returns (a full 64-character hex id) --
+   * every caller-supplied {@code sessionId}/{@code containerId} is checked against this before it
+   * can reach a {@code docker} argv this class builds, at the method boundaries below. The
+   * subsequent {@code sessionsById} map lookup already rejects an id nobody started, but a static
+   * analyzer's taint tracking does not model "exact match against a trusted key set" as sanitizing
+   * -- this is the explicit check that does, and it is real defense in depth regardless: an
+   * attacker-chosen string could otherwise reach the `docker` CLI as an argument docker itself
+   * might interpret as a flag rather than a positional id, not just as a map key that simply
+   * misses.
+   */
+  private static final Pattern CONTAINER_ID = Pattern.compile("^[0-9a-f]{64}$");
 
   private static final String KIND_CONFIG =
       """
@@ -108,6 +122,9 @@ class ContainerLabOrchestrator {
    *     SandboxLabOrchestrator#complete}'s anti-enumeration property.
    */
   LabVerdict complete(String sessionId) {
+    if (!CONTAINER_ID.matcher(sessionId).matches()) {
+      throw new NoSuchElementException("no session " + sessionId);
+    }
     StartedSession session = sessionsById.get(sessionId);
     if (session == null || !session.learner().equals(currentActor.require())) {
       throw new NoSuchElementException("no session " + sessionId);
@@ -127,13 +144,25 @@ class ContainerLabOrchestrator {
    * bridge.
    */
   boolean ownedByCurrentActor(String containerId, String token) {
+    if (!CONTAINER_ID.matcher(containerId).matches()) {
+      return false;
+    }
     StartedSession session = sessionsById.get(containerId);
     return session != null
         && session.learner().equals(currentActor.require())
         && session.terminalToken().equals(token);
   }
 
+  /**
+   * @throws IllegalArgumentException if {@code containerId} is not a real container id's shape --
+   *     the handshake interceptor already calls {@link #ownedByCurrentActor} first, so this should
+   *     be unreachable with an invalid id in practice; checked again here anyway, since this is the
+   *     call that actually builds a {@code docker} argv from it.
+   */
   Process openTerminal(String containerId) {
+    if (!CONTAINER_ID.matcher(containerId).matches()) {
+      throw new IllegalArgumentException("not a container id: " + containerId);
+    }
     return docker.execInteractive(containerId, LEARNER_USER, List.of("lab-shell"));
   }
 
