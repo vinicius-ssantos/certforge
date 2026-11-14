@@ -161,9 +161,11 @@ else here.
 Threat: a learner's commands inside a lab exploit a kernel or hypervisor bug to reach the host
 running other learners' sessions or this application's own infrastructure.
 
-Controls: microVM-class isolation (Kata Containers/Firecracker, or gVisor) instead of a plain
-container sharing the host kernel; non-root execution inside the guest; a minimal, audited guest
-base image rebuilt on a patching cadence; no capability ever granted at the host level.
+Controls: microVM-class isolation instead of a plain container sharing the host kernel — one
+Vercel Sandbox (a Firecracker microVM) per session, per [ADR 0028](../adr/0028-vercel-sandbox-for-
+hands-on-labs.md), superseding ADR 0027 decision 1's self-hosted Kata Containers/gVisor; non-root
+execution inside the guest; a minimal, audited guest base image rebuilt on a patching cadence; no
+capability ever granted at the host level.
 
 ### Host Docker socket or privileged-container exposure
 
@@ -190,9 +192,12 @@ beyond that session's own ephemeral cluster.
 Threat: a learner's shell spins unbounded processes, allocates unbounded memory, fills disk, or
 runs a cryptominer.
 
-Controls: hard `wallClockSeconds`/`memoryMiB`/`cpuMillicores`/`diskMiB`/`processCount` limits per
-`LabSpec`, enforced by the orchestrator at the hypervisor level as the primary boundary, with
-in-guest cgroups as defense in depth only; unconditional destroy at timeout.
+Controls: a hard `timeoutSeconds` and `vcpus` per `LabSpec`, enforced by the Vercel Sandbox
+platform as the primary boundary; disk is capped at the platform's 64 GB/session ceiling. There is
+no platform-level process-count cap ([ADR 0028](../adr/0028-vercel-sandbox-for-hands-on-labs.md)
+decision 5) — a fork bomb or unbounded allocation is contained to that one microVM (it cannot
+reach the host or other sessions) but is not stopped short of `timeout` or the disk ceiling.
+In-guest cgroups remain defense in depth only; unconditional destroy at timeout.
 
 ### Network egress and exfiltration
 
@@ -236,7 +241,30 @@ that happens inside any one session.
 
 Controls: per-account rate limiting on lab starts, the same pattern already proven for sign-in
 throttling (`IdentityIT`); a capacity ceiling with graceful queuing or rejection rather than
-over-provisioning host resources.
+over-provisioning host resources. Under ADR 0028 this abuse is also a direct cost (billable vCPU
+time, egress, and exposed-port traffic per session), not only a capacity concern.
+
+### Vendor dependency and a verified Kubernetes-node limitation
+
+Threat: this is not an in-session attack, but a design risk ADR 0028 introduces — lab availability
+now depends on a third party's platform uptime, and this project's own three prototype labs need
+nested containers (Docker, or a Kubernetes cluster) to work inside that platform's microVM.
+
+Controls: smoke-tested 2026-11-13 in two throwaway, non-persistent sandboxes. Docker nests cleanly
+(`dockerd` starts, `docker run hello-world` works end-to-end) — the multi-stage-build lab's
+requirement is verified, not assumed. Both `kind` and `k3s` fail to bring up a Kubernetes node,
+with the same underlying cause: a cgroup v2 delegation failure for the node's `ContainerManager`
+subtree, hit one nesting level earlier by `k3s` (which needs no Docker and runs as a guest process
+specifically to avoid `kind`'s extra nesting level) than by `kind` — evidence this is a property
+of the sandbox's root cgroup hierarchy, not a defect in either tool. The readiness-probe and
+Service-selector labs are **not** cleared as currently conceived; see
+`docs/architecture/hands-on-labs-isolation.md`'s Rollout section for the full evidence and the
+untried directions (Connect private networking, a pre-booted custom image) a future, separately-
+scoped investigation would need to check. The orchestrator holds the only credential to the
+Sandbox API (ADR 0028 decision 3); no credential needed for lab operation is ever placed inside
+the sandbox, so a Vercel-side compromise of one lab session cannot by itself expose this project's
+own platform credential. Phase 1 (static diagnosis) has no dependency on Vercel at all and is
+unaffected if the platform is unavailable.
 
 ### Unsafe diagnostic output
 

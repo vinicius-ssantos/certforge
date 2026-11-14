@@ -6,7 +6,12 @@
   ("Threat model, ADR e plano de isolamento com segurança revisada"). Acceptance covers the
   design only — the isolation tier, the `LabSpec` schema, and the threat enumeration — not any
   implementation, since none exists yet; see the Rollout section of the isolation plan for what
-  Phase 2's actual construction still needs before it ships.
+  Phase 2's actual construction still needs before it ships. **Decision 1 (Kata Containers/
+  Firecracker as the self-hosted engine) is superseded by
+  [ADR 0028](0028-vercel-sandbox-for-hands-on-labs.md)**, which runs the same microVM boundary on
+  Vercel Sandbox instead of infrastructure this project would operate itself. Decisions 2 through 6
+  below — the prohibitions, the `LabSpec` contract's intent, deterministic evaluation outside the
+  learner's reach, destroy-on-exit, and the Phase 1/Phase 2 split — stand as written.
 - Date: 2026-11-08
 - Issue: [#175](https://github.com/vinicius-ssantos/certforge/issues/175) ("Design safe hands-on
   labs for Docker, Kubernetes and IaC"), depends on #164
