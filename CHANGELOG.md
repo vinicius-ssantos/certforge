@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-11-14
+
+Mock Exams and Portuguese. See the [release notes](docs/release/v0.3.0-release-notes.md) for what it does and what it does not.
+
 ### Changed
 
 - **The AI-reviewer fast lane's approval is now final, not provisional

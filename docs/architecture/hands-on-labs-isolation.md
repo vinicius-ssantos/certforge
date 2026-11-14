@@ -243,16 +243,19 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
        `--cgroups-per-qos=false`/`--enforce-node-allocatable=""` only stop kubelet from writing
        limits into its own cgroup tree, not its separate startup check that every required
        controller is mountable -- kubelet aborts on a missing controller regardless of those
-       flags. k3s's own embedded containerd/supervisor manages its cgroup hierarchy independently
-       of any `--kubelet-arg` passthrough, and its one documented override
+       flags (real-world reports show the identical failure class for a missing `pids`
+       controller). k3s's own embedded containerd/supervisor manages its cgroup hierarchy
+       independently of any `--kubelet-arg` passthrough, and its one documented override
        (`fail-cgroupv1=false`) is for cgroup v1 fallback, not a v2 controller that won't delegate.
        k0s's troubleshooting docs confirm the same hard requirement. kind's own rootless-provider
        fix (`systemd` `Delegate=yes`) assumes the *host* can delegate more controllers to a
        rootless *user*; this project is already root, and the *host itself* refuses
        memory/io/hugetlb specifically -- a different, deeper failure no kind doc addresses. The
-       `ENOTSUP` itself has no documented guest-side cause anywhere: cgroup v2 delegation is
-       strictly top-down from whatever the host exposes, consistent with this being the sandbox's
-       own kernel/guest-init policy, not a race or ordering bug fixable from inside.
+       `ENOTSUP` itself has no documented guest-side cause anywhere: cgroup v2's own docs describe
+       delegation as strictly top-down from whatever the host exposes, and the one related real
+       report of a `subtree_control` write failure in the wild returned `EBUSY` (a user-fixable
+       process-conflict), never `ENOTSUP` -- consistent with this being the sandbox's own
+       kernel/guest-init policy, not a race or ordering bug fixable from inside.
        **Conclusion: no kubelet/k3s/k0s/kind configuration unblocks a real kubelet-managed node on
        Vercel Sandbox.** See [ADR 0030](../adr/0030-temporary-container-isolation-for-kubernetes-
        labs.md) for where these two labs run instead, now that this is confirmed closed research
