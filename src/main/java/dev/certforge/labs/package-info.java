@@ -8,7 +8,7 @@
  */
 @ApplicationModule(
     displayName = "labs",
-    allowedDependencies = {})
+    allowedDependencies = {"platform"})
 package dev.certforge.labs;
 
 import org.springframework.modulith.ApplicationModule;
