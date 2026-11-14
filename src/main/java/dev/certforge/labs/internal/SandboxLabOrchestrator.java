@@ -17,14 +17,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 /**
- * {@link LabOrchestrator} over {@link VercelSandboxClient} (ADR 0028). Session-to-lab tracking is
- * in-memory, per application instance -- the same posture {@code IdentityProperties.Throttle}
- * already takes for this project's other per-instance runtime state, and sessions are already
- * bounded in number and lifetime ({@code LabSandbox.timeoutSeconds}), so nothing here needs to
- * survive a restart.
+ * The {@link LabOrchestrator} engine over {@link VercelSandboxClient} (ADR 0028), for every lab
+ * except the two ADR 0030 temporarily moved to {@link ContainerLabOrchestrator}. Not a {@code
+ * LabOrchestrator} itself -- {@code LabOrchestratorRouter} is the only bean implementing that
+ * interface, injecting this class and {@code ContainerLabOrchestrator} by concrete type so Spring
+ * never has two candidates for the same contract. Session-to-lab tracking is in-memory, per
+ * application instance -- the same posture {@code IdentityProperties.Throttle} already takes for
+ * this project's other per-instance runtime state, and sessions are already bounded in number and
+ * lifetime ({@code LabSandbox.timeoutSeconds}), so nothing here needs to survive a restart.
  */
 @Component
-class SandboxLabOrchestrator implements LabOrchestrator {
+class SandboxLabOrchestrator {
 
   private record StartedSession(String labId, ActorId learner) {}
 
@@ -40,8 +43,7 @@ class SandboxLabOrchestrator implements LabOrchestrator {
     this.currentActor = currentActor;
   }
 
-  @Override
-  public LabSession start(String labId) {
+  LabSession start(String labId) {
     LabSpec spec = requireLab(labId);
     String sessionId = client.createSession(spec);
     provision(sessionId, spec);
@@ -55,8 +57,7 @@ class SandboxLabOrchestrator implements LabOrchestrator {
    *     different learner -- the same outcome either way, so a caller probing ids cannot tell one
    *     apart from the other.
    */
-  @Override
-  public LabVerdict complete(String sessionId) {
+  LabVerdict complete(String sessionId) {
     StartedSession session = sessionsById.get(sessionId);
     if (session == null || !session.learner().equals(currentActor.require())) {
       throw new NoSuchElementException("no session " + sessionId);

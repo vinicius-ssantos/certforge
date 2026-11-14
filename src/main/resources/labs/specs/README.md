@@ -18,12 +18,17 @@ accepts as a session's `image` -- that name is a platform-internal identifier Sa
 resolves itself, never a pullable registry ref a local `docker build` (which `vercel vcr build`
 shells out to) can resolve as a `FROM`.
 
-**`readiness-probe-wrong-port-v1` and `service-selector-mismatch-v1` remain placeholders only.**
-Their isolation engine is not verified -- ADR 0028 decision 7 found both `kind` and `k3s` fail to
-bring up a Kubernetes node inside a Vercel Sandbox, with the same cgroup v2 delegation root cause
-at different nesting depths. `image.ref` for these two is still the same placeholder, digest-pinned
-public image
+**`readiness-probe-wrong-port-v1` and `service-selector-mismatch-v1` now have a real orchestrator
+and grader too -- temporarily, over a plain Docker container, not a microVM (ADR 0030).** ADR 0028
+decision 7 found both `kind` and `k3s` fail to bring up a Kubernetes node inside a Vercel Sandbox
+(a cgroup v2 delegation restriction specific to that platform's guest kernel); 2026-11-14 research
+confirmed no kubelet/k3s/k0s/kind configuration works around it. With no microVM-capable platform
+available yet, these two labs run via `ContainerLabOrchestrator` instead: a real `kind` cluster,
+brought up inside a plain, non-`--privileged` Docker container this project's own backend starts
+and destroys. `image.ref` for these two is still the digest-pinned placeholder
 (`docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662`,
-verified against Docker Hub's registry API on 2026-11-09) purely to satisfy the digest-pinning
-rule honestly rather than with a fabricated one. Neither spec is backed by a real, runnable lab
-session.
+verified against Docker Hub's registry API on 2026-11-09) and is simply unused by this engine --
+`ContainerLabOrchestrator` builds and runs its own fixed shared image
+(`src/main/resources/labs/image/k8s-container-lab/Dockerfile`) regardless of what `image.ref` says,
+since `LabSpecValidator` still requires every lab to name a validly-pinned digest even where this
+one goes unread. See ADR 0030 for why this is explicitly temporary, and what replaces it.
