@@ -29,6 +29,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +47,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 class ContainerLabOrchestrator {
+
+  private static final Logger log = LoggerFactory.getLogger(ContainerLabOrchestrator.class);
 
   static final Set<String> SUPPORTED_LAB_IDS =
       Set.of("readiness-probe-wrong-port-v1", "service-selector-mismatch-v1");
@@ -120,13 +124,20 @@ class ContainerLabOrchestrator {
       String token = randomToken();
       ScheduledFuture<?> timeoutReaper =
           reaper.schedule(
-              () -> docker.remove(containerId), spec.sandbox().timeoutSeconds(), TimeUnit.SECONDS);
+              () -> {
+                log.info("lab session timed out labId={} sessionId={}", labId, containerId);
+                docker.remove(containerId);
+              },
+              spec.sandbox().timeoutSeconds(),
+              TimeUnit.SECONDS);
       sessionsById.put(
           containerId,
           new StartedSession(containerId, labId, currentActor.require(), token, timeoutReaper));
+      log.info("lab session started labId={} sessionId={}", labId, containerId);
       return new LabSession(
           containerId, labId, "/api/labs/sessions/" + containerId + "/terminal", token);
     } catch (RuntimeException e) {
+      log.warn("lab session provisioning failed labId={} sessionId={}", labId, containerId, e);
       docker.remove(containerId);
       throw e;
     }
@@ -150,7 +161,15 @@ class ContainerLabOrchestrator {
     String trustedContainerId = session.containerId();
     try {
       LabSpec spec = requireLab(session.labId());
-      return grade(trustedContainerId, spec);
+      LabVerdict verdict = grade(trustedContainerId, spec);
+      log.info(
+          "lab session completed labId={} sessionId={} passed={} checksPassed={}/{}",
+          session.labId(),
+          trustedContainerId,
+          verdict.passed(),
+          verdict.checks().stream().filter(LabCheckResult::passed).count(),
+          verdict.checks().size());
+      return verdict;
     } finally {
       docker.remove(trustedContainerId);
     }

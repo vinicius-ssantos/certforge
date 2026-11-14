@@ -173,12 +173,20 @@ the concept the lab tests hands-on.
 
 ## Observability
 
-Same posture as the application's existing telemetry principle
+**Done.** Same posture as the application's existing telemetry principle
 (`docs/architecture/threat-model.md`'s "Sensitive telemetry" control): structured, allowlisted
-fields only. A lab session logs its `labId`, start/end time, resource usage, and the grader's
-verdict (and which check passed or failed) — never the learner's raw shell transcript. If an abuse
-investigation genuinely needs the transcript, that is a separate, access-controlled, retention-
-bounded capability, not something captured by default.
+fields only. Both orchestrator engines log one line at session start (`labId`, `sessionId`) and
+one at completion (`labId`, `sessionId`, `passed`, `checksPassed=x/y`) — start/end time comes from
+the log line's own timestamp, not a separate field. `ContainerLabOrchestrator` additionally logs a
+timeout reaper firing and a provisioning failure (with its exception, which is this project's own
+diagnostic output from provisioning commands it issued, never the learner's typed input). Never
+the learner's raw shell transcript -- the terminal bridge (`LabTerminalWebSocketHandler`) does not
+log message content at all. Resource limits themselves (`vcpus`/memory/`pids-limit`) are enforced
+at session creation and proven by the orchestrator tests, not separately logged as consumed
+amounts -- that would need per-session `docker stats`/sandbox-metrics polling this document does
+not scope, and nothing here has needed it yet. If an abuse investigation genuinely needs the
+learner's transcript, that is a separate, access-controlled, retention-bounded capability, not
+something captured by default.
 
 ## Abuse controls
 
