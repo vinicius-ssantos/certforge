@@ -1,7 +1,7 @@
 {
   "labId": "docker-multistage-bloat-v1",
   "image": {
-    "ref": "docker.io/library/busybox@sha256:73aaf090f3d85aa34ee199857f03fa3a95c8ede2ffd4cc2cdb5b94e566b11662"
+    "ref": "vcr.vercel.com/viniciusolicveira-4806s-projects/certforge/docker-multistage-bloat-v1@sha256:2a28dfbecf818cb2365cf32a7bbdb9c1adfac64bfb83068a9a3bc088f409348e"
   },
   "fixture": {
     "path": "docker-multistage-bloat-v1"
