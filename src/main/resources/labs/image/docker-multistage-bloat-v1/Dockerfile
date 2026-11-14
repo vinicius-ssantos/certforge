@@ -15,7 +15,14 @@
 # at session start, per the isolation plan) and a restricted login shell in place of bash, so the
 # command allowlist is enforced by the kernel's own exec path, not by anything trusting the
 # learner's typed text (see lab-shell's own comment for why).
-FROM vercel/sandbox/ubuntu
+#
+# Base is `ubuntu:24.04`, not the managed `vercel/sandbox/ubuntu` the Sandbox API accepts as a
+# session's `image` -- that name is a platform-internal identifier Sandbox.create() resolves
+# itself, never a registry ref `docker build`/`vercel vcr build` can pull FROM (confirmed: `docker
+# pull vercel/sandbox/ubuntu` returns "pull access denied ... repository does not exist"). A
+# custom VCR image needs an ordinary pullable base; Ubuntu 24.04's own image already ships the
+# `ubuntu` user this file's `usermod` call needs.
+FROM ubuntu:24.04
 
 RUN apt-get update && apt-get install -y --no-install-recommends docker.io \
     && rm -rf /var/lib/apt/lists/*
