@@ -132,10 +132,18 @@ the concept the lab tests hands-on.
    only — it never exists on the host and is never returned to the learner's browser. The
    orchestrator authenticates to the Sandbox API with its own credential (ADR 0028 decision 3); no
    credential is placed inside the sandbox.
-2. **Bridge.** The learner's browser connects to a terminal bridge that enforces the `LabSpec`'s
-   `allowedCommands` allowlist before issuing anything to the sandbox. Anything not on the list is
-   rejected at the bridge; the bridge does not rely on the fixture, the guest kernel, or the
-   Sandbox API (which has no native per-command allowlist) to enforce this.
+2. **Interactive access.** The orchestrator calls `sandbox.openInteractive()` and hands the
+   resulting `{ url, token }` to the learner's browser, which connects directly to Vercel's
+   controller-hosted PTY — this project's backend is not in that connection's path. The allowlist
+   is still enforced, not merely discouraged, but by [ADR 0029](../adr/0029-restricted-shell-
+   enforces-the-lab-allowlist.md)'s `lab-shell`, the image's default login shell, checking each
+   typed line's first word against `$LAB_ALLOWED_COMMANDS` and executing the result directly
+   (never through a second shell), rather than by a backend bridge inspecting the connection —
+   there is no such bridge once the browser holds the Vercel credential directly. The literal REST
+   contract behind `openInteractive()` has no listed REST API documentation page the way
+   create/`cmd`/stop do and is not wrapped by this project's Vercel MCP tools either; it was found
+   by reading `@vercel/sandbox`'s own shipped source instead of guessed (see Rollout step 4), and
+   `VercelSandboxClient.openInteractive()` now calls it directly.
 3. **Limits, enforced by the platform, not only in-guest.** `timeoutSeconds` and `vcpus` are the
    caps the platform enforces on the microVM itself — the session is stopped and any in-flight
    command rejects at timeout. Disk is capped at the platform's own 64 GB/session ceiling; process
@@ -209,27 +217,73 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
        `kubepods` subtree, with no nesting involved at all. That makes it look like a property of
        this sandbox's root cgroup hierarchy, not something specific to how deeply either tool
        nests containers.
-     - **Conclusion: a full kubelet-managed Kubernetes node could not be brought up in this
-       sandbox by either of the two most common lightweight approaches.** The multi-stage-build
-       lab's isolation choice is unblocked by the Docker result above. The readiness-probe and
-       Service-selector labs are not, and switching tools again on the same assumption
-       (a full kubelet node, started cold inside the sandbox) is not expected to fare differently
-       without first resolving the cgroup v2 delegation and node-IP problems identified here —
-       neither attempted. Untried alternatives worth a future, separately-scoped investigation:
-       whether Vercel Sandbox exposes any cgroup-delegation-affecting configuration; whether a
-       custom image pre-boots the cluster at build time into a snapshot the session resumes from
-       (sidestepping a cold kubelet boot inside the session itself, though the cgroup error
-       suggests the subtree problem is runtime-environmental, not boot-order-related, so this is
-       speculative, not a lead actually confirmed to help); or assigning the sandbox a routable
-       address via a Connect private network (`networkId` in `Sandbox.create`) instead of relying
-       on its default interface, which might also resolve the node-IP rejection independently of
-       the cgroup issue, but was not tested in this session.
-  3. Build the orchestrator and Sandbox provisioning for exactly one `LabSpec` (the readiness-probe
-     lab, the simplest of the three) as a vertical slice, entirely outside the main application's
-     deployment, per ADR 0006's existing "separate restricted runner service" principle.
-  4. Add the grader and destroy-on-exit lifecycle, with tests proving cleanup and failure-safety —
-     #175's own acceptance criterion.
-  5. Extend to the remaining two prototype labs once the first's isolation, evaluation, and cleanup
-     are all independently verified, not before.
-  6. CI runs only against the fixtures above, never against anything resembling a real learner's
+     - **Precise root cause found 2026-11-13 (independent diagnostic, not another kind/k3s
+       attempt).** A second throwaway sandbox tested each of the 6 cgroup v2 controllers
+       individually, writing directly to `cgroup.subtree_control`. Root can delegate `cpuset`,
+       `cpu` and `pids` (confirmed propagating to a child cgroup); writing `memory`, `io` or
+       `hugetlb` fails with `errno=95` (`ENOTSUP`, "Operation not supported") **even as root** —
+       not a permissions problem, not fixable by a different image or a different boot order.
+       Both `kind`'s systemd and k3s's `kubelet` hard-require the memory controller to initialize
+       their own resource-control setup, which is exactly why both failed at the same category of
+       error. This also narrows the untried directions below: a pre-booted custom image is
+       unlikely to help (the gap is a kernel/guest-init property, not a boot-order one); a Connect
+       private network is irrelevant to *this* blocker specifically (it would address the
+       separate node-IP rejection, not the memory/io/hugetlb `ENOTSUP`).
+     - Untried, now better-scoped: whether Vercel Sandbox exposes any configuration that changes
+       which controllers are delegated to a guest (not confirmed to exist); whether a Kubernetes
+       distribution that does not require the memory controller for its own control-plane
+       bring-up exists at all (not identified). Absent either, the two Kubernetes-based prototype
+       labs stay blocked on this platform.
+  3. **Docker lab vertical slice — in progress, same day.** The `LabSpec` domain model
+     (`dev.certforge.labs`) is migrated from this document's original schema to the one above (ADR
+     0028): `Isolation`/`LabLimits` removed, `LabSandbox` (`vcpus`, `timeoutSeconds`,
+     `persistent: false`) added, all three specs and their tests updated, 25/25 passing. The
+     `docker-multistage-bloat-v1` fixture's `Dockerfile` referenced `go.mod`/`go.sum`/`main.go`
+     that did not exist in the committed bundle -- added, then both the buggy fixture and a
+     corrected multi-stage rewrite were built for real with local Docker to verify the `LabSpec`'s
+     own evaluation probes actually discriminate: the buggy image is 1.27 GB and contains `go`
+     (`which go` exits 0 with an explicit `--entrypoint` override, since the image's own
+     `ENTRYPOINT` otherwise swallows `which go` as arguments to itself, not a command to run --
+     the original probe's omission of that override was a real bug, fixed here); a corrected
+     multi-stage build onto `alpine:3.20` is 15.5 MB and does not contain `go`. Both checks and a
+     100 MB size budget are verified against both real images, not asserted. [ADR
+     0029](../adr/0029-restricted-shell-enforces-the-lab-allowlist.md)'s `lab-shell` (restricted
+     login shell enforcing the allowlist at `exec` time) and the lab's custom image Dockerfile
+     (`src/main/resources/labs/image/docker-multistage-bloat-v1/`) are both written and verified
+     end-to-end against a local stand-in base image (`ubuntu:24.04`, since `vercel/sandbox/ubuntu`
+     is not pullable outside Vercel's own build pipeline): the fixture lands in the image, the
+     allowlist environment variable is baked in, and a realistic session (`ls`, `cat`, a rejected
+     `rm`) behaves exactly as `lab-shell`'s own unit-level tests already proved.
+  4. **Unblocked 2026-11-13: `openInteractive()`'s real REST contract, found by reading
+     `@vercel/sandbox`'s own shipped source** (`dist/api-client/api-client.js`), since it has no
+     published REST API page the way create/`cmd`/stop do and is not wrapped by this project's
+     Vercel MCP tools. The SDK itself calls:
+     `POST https://api.vercel.com/v2/sandboxes/sessions/{sessionId}/interactive?teamId={teamId}`,
+     body `{}`, `Authorization: Bearer <token>`, response `{ "url": string, "token": string }`
+     (`InteractiveSessionResponse` in the SDK's own validators) -- the literal request this
+     project's Java backend can now make directly, the same way it already does for
+     create/`cmd`/stop.
+  5. **Done, same day.** `SandboxLabOrchestrator` (`dev.certforge.labs.internal`) implements
+     `LabOrchestrator`: `start` provisions the sandbox, starts `dockerd` detached when the lab's
+     `allowedCommands` include `docker`, and opens the interactive credential; `complete` runs
+     every `LabEvaluation` check as the orchestrator's own call — never the learner's
+     terminal-bridge session — and calls `sandbox.stop()` in a `finally`, unconditionally, whether
+     grading succeeded, failed, or threw (ADR 0027 decision 5). `SandboxLabOrchestratorTest` proves
+     both the cleanup-always and the never-the-learner's-session properties against a mocked
+     `VercelSandboxClient`; `VercelSandboxClientTest` proves the real HTTP shapes against
+     `MockRestServiceServer` — no CI run touches the real Vercel API.
+  6. **Done, same day.** `LabsController` (`dev.certforge.labs.internal`) exposes this to the
+     learner's client: `POST /api/labs/{labId}/sessions` (start, `STUDY` permission, 201 with the
+     `LabSession`) and `POST /api/labs/sessions/{sessionId}/complete` (grade, 200 with the
+     `LabVerdict`). An unknown lab or session id is translated from the orchestrator's
+     `NoSuchElementException` into a 404 problem response, rather than reaching the generic 500
+     handler — `LabsSessionIT` proves this end-to-end, through the real auth stack, with the
+     Vercel client mocked.
+  7. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
+     cgroup delegation problem found in step 2 — not attempted by switching tools again without
+     that.
+  8. Publish the Docker lab's custom image to Vercel Container Registry and replace
+     `docker-multistage-bloat-v1.json`'s busybox placeholder digest with the real pinned one — not
+     started (see `src/main/resources/labs/specs/README.md`).
+  9. CI runs only against the fixtures above, never against anything resembling a real learner's
      arbitrary input, per #175's last acceptance criterion.

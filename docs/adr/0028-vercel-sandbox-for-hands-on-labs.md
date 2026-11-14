@@ -125,14 +125,19 @@ underlying cause:
      IPv4 addresses the sandbox's interface offers as a node IP (loopback and link-local — nothing
      else is assigned).
 
-   The same category of cgroup v2 delegation failure blocking both tools, one at a deeper nesting
-   level than the other, looks like a property of this sandbox's root cgroup hierarchy rather than
-   something either tool does wrong. This blocks the readiness-probe and Service-selector labs as
-   currently conceived (a full kubelet-managed node, cold-started inside the session) — **not**
+   **Root cause confirmed precisely, same day, by an independent diagnostic** (a second throwaway
+   sandbox, not another `kind`/`k3s` attempt): writing directly to `cgroup.subtree_control`, root
+   can delegate `cpuset`, `cpu` and `pids` (confirmed propagating to a child cgroup's own
+   `cgroup.controllers`), but `memory`, `io` and `hugetlb` all fail with `errno=95` (`ENOTSUP`) —
+   **even as root**, not a permissions problem. Both `kind`'s `systemd` and k3s's `kubelet`
+   hard-require the memory controller to initialize their own resource-control setup, which is
+   exactly why both failed one level apart. This is a kernel/guest-init property of the sandbox,
+   not something either tool does wrong, and not fixable by a different image or boot order. It
+   blocks the readiness-probe and Service-selector labs as currently conceived (a full
+   kubelet-managed node needing the memory controller, cold-started inside the session) — **not**
    the isolation engine decision itself, which the Docker result still supports. It is new,
    unresolved follow-on work this ADR does not attempt to solve: see the Rollout section in
-   `docs/architecture/hands-on-labs-isolation.md` for the full evidence and the untried directions
-   worth a separately-scoped investigation.
+   `docs/architecture/hands-on-labs-isolation.md` for the full evidence.
 
 ## Consequences
 

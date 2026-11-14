@@ -629,6 +629,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/labs/sessions/{sessionId}/complete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["complete_2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/labs/{labId}/sessions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["start_3"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/progress/certifications": {
         parameters: {
             query?: never;
@@ -1500,6 +1532,20 @@ export interface components {
             /** Format: uuid */
             versionId: string;
             versionLabel: string;
+        };
+        LabCheckResult: {
+            description: string;
+            passed: boolean;
+        };
+        LabSession: {
+            interactiveToken: string;
+            interactiveUrl: string;
+            labId: string;
+            sessionId: string;
+        };
+        LabVerdict: {
+            checks: components["schemas"]["LabCheckResult"][];
+            passed: boolean;
         };
         LoginRequest: {
             email: string;
@@ -3069,6 +3115,50 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["ObjectiveSourceView"];
+                };
+            };
+        };
+    };
+    complete_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sessionId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LabVerdict"];
+                };
+            };
+        };
+    };
+    start_3: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                labId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["LabSession"];
                 };
             };
         };
