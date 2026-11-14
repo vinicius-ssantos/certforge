@@ -78,8 +78,23 @@ class ContainerLabOrchestrator {
               containerPath: /dev/kmsg
       """;
 
+  /**
+   * {@code containerId} is stored here, not just re-derived from a caller's own parameter at use --
+   * {@code complete}/{@code openTerminal} pass this stored value to {@code DockerCliClient}, never
+   * the raw {@code sessionId}/{@code containerId} parameter they were called with, even though the
+   * two are always equal by construction (this is always put under its own {@code containerId} as
+   * the map key). A static taint analysis (CodeQL's java/command-line-injection query, which
+   * flagged this) does not recognize a map-lookup success as sanitizing a parameter that is then
+   * forwarded unchanged; sourcing the value that actually reaches the {@code docker} CLI from this
+   * record field instead -- itself only ever set from {@code docker.run()}'s own stdout at {@link
+   * #start} -- breaks that taint chain for real, not only at runtime.
+   */
   private record StartedSession(
-      String labId, ActorId learner, String terminalToken, ScheduledFuture<?> timeoutReaper) {}
+      String containerId,
+      String labId,
+      ActorId learner,
+      String terminalToken,
+      ScheduledFuture<?> timeoutReaper) {}
 
   private final LabCatalog catalog;
   private final DockerCliClient docker;
@@ -107,7 +122,8 @@ class ContainerLabOrchestrator {
           reaper.schedule(
               () -> docker.remove(containerId), spec.sandbox().timeoutSeconds(), TimeUnit.SECONDS);
       sessionsById.put(
-          containerId, new StartedSession(labId, currentActor.require(), token, timeoutReaper));
+          containerId,
+          new StartedSession(containerId, labId, currentActor.require(), token, timeoutReaper));
       return new LabSession(
           containerId, labId, "/api/labs/sessions/" + containerId + "/terminal", token);
     } catch (RuntimeException e) {
@@ -123,19 +139,20 @@ class ContainerLabOrchestrator {
    */
   LabVerdict complete(String sessionId) {
     if (!CONTAINER_ID.matcher(sessionId).matches()) {
-      throw new NoSuchElementException("no session " + sessionId);
+      throw noSuchSession(sessionId);
     }
     StartedSession session = sessionsById.get(sessionId);
     if (session == null || !session.learner().equals(currentActor.require())) {
-      throw new NoSuchElementException("no session " + sessionId);
+      throw noSuchSession(sessionId);
     }
     sessionsById.remove(sessionId);
     session.timeoutReaper().cancel(false);
+    String trustedContainerId = session.containerId();
     try {
       LabSpec spec = requireLab(session.labId());
-      return grade(sessionId, spec);
+      return grade(trustedContainerId, spec);
     } finally {
-      docker.remove(sessionId);
+      docker.remove(trustedContainerId);
     }
   }
 
@@ -154,16 +171,21 @@ class ContainerLabOrchestrator {
   }
 
   /**
-   * @throws IllegalArgumentException if {@code containerId} is not a real container id's shape --
-   *     the handshake interceptor already calls {@link #ownedByCurrentActor} first, so this should
-   *     be unreachable with an invalid id in practice; checked again here anyway, since this is the
-   *     call that actually builds a {@code docker} argv from it.
+   * @throws NoSuchElementException if {@code containerId} is not a live session -- the handshake
+   *     interceptor already calls {@link #ownedByCurrentActor} first, so this should be unreachable
+   *     in practice; looked up again here anyway, since the value this passes to {@code
+   *     DockerCliClient} must come from the stored session, not the raw parameter (see {@code
+   *     StartedSession}'s own javadoc for why).
    */
   Process openTerminal(String containerId) {
     if (!CONTAINER_ID.matcher(containerId).matches()) {
-      throw new IllegalArgumentException("not a container id: " + containerId);
+      throw noSuchSession(containerId);
     }
-    return docker.execInteractive(containerId, LEARNER_USER, List.of("lab-shell"));
+    StartedSession session = sessionsById.get(containerId);
+    if (session == null) {
+      throw noSuchSession(containerId);
+    }
+    return docker.execInteractive(session.containerId(), LEARNER_USER, List.of("lab-shell"));
   }
 
   private LabVerdict grade(String containerId, LabSpec spec) {
@@ -355,6 +377,10 @@ class ContainerLabOrchestrator {
     byte[] bytes = new byte[24];
     random.nextBytes(bytes);
     return Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+  }
+
+  private static NoSuchElementException noSuchSession(String id) {
+    return new NoSuchElementException("no session " + id);
   }
 
   private LabSpec requireLab(String labId) {
