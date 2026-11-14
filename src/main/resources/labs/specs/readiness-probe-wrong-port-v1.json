@@ -27,7 +27,7 @@
     "checks": [
       {
         "description": "The web Pod reports Ready",
-        "probe": "kubectl get pod -l app=web -o jsonpath='{.items[0].status.conditions[?(@.type==\"Ready\")].status}'"
+        "probe": "test \"$(kubectl get pod -l app=web -o jsonpath='{.items[0].status.conditions[?(@.type==\"Ready\")].status}')\" = \"True\""
       }
     ]
   }

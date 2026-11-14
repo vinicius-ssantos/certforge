@@ -8,10 +8,11 @@ import java.util.List;
  * means the lab does not ship -- {@code LabSpecValidator} enforces this mechanically, not merely by
  * convention.
  *
- * <p>This type describes a lab; it does not provision one. {@link LabOrchestrator} (backed by
- * Vercel Sandbox, ADR 0028) is what actually runs a session against this spec and grades it; the
- * terminal bridge is Vercel's own controller-hosted PTY, reached directly by the learner's browser
- * (ADR 0029), never by this backend.
+ * <p>This type describes a lab; it does not provision one. {@link LabOrchestrator} is what actually
+ * runs a session against this spec and grades it -- Vercel Sandbox (ADR 0028) for most labs, whose
+ * terminal bridge is its own controller-hosted PTY reached directly by the learner's browser (ADR
+ * 0029), never by this backend; a plain Docker container, temporarily, for the two labs ADR 0030
+ * names, whose terminal bridge is this project's own backend instead.
  */
 public record LabSpec(
     String labId,

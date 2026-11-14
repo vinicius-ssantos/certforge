@@ -27,7 +27,7 @@
     "checks": [
       {
         "description": "The web-backend Service has a serving endpoint",
-        "probe": "kubectl get endpointslice -l kubernetes.io/service-name=web-backend -o jsonpath='{.items[0].endpoints[0].conditions.serving}'"
+        "probe": "test \"$(kubectl get endpointslice -l kubernetes.io/service-name=web-backend -o jsonpath='{.items[0].endpoints[0].conditions.serving}')\" = \"true\""
       }
     ]
   }

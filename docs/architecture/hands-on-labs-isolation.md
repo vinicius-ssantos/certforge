@@ -13,6 +13,15 @@ actually meters; the exact mechanism behind "Provision" and "Destroy" in the ses
 changes too. Everything else on this page (the `LabSpec`'s intent, the three prototype labs,
 evaluation outside the learner's reach, observability, abuse controls) is unchanged.
 
+**Updated 2026-11-14** ([ADR 0030](../adr/0030-temporary-container-isolation-for-kubernetes-labs.md)):
+`readiness-probe-wrong-port-v1` and `service-selector-mismatch-v1` temporarily run over a plain
+Docker container instead -- Vercel Sandbox's guest kernel refuses the cgroup v2 delegation `kind`/
+`k3s` need, confirmed with no workaround (Rollout step 2), and no microVM-capable platform was
+available yet to replace it with. `docker-multistage-bloat-v1` is unaffected: it still runs on
+Vercel Sandbox exactly as ADR 0028 describes. "Why a microVM, not a container" below is still this
+project's governing default; ADR 0030 is a stated, explicit, temporary exception to it for these
+two labs specifically, not a reversal.
+
 ## What this document is not
 
 - It is not Phase 1, which is already built: static-diagnosis questions over already-captured
@@ -229,11 +238,25 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
        unlikely to help (the gap is a kernel/guest-init property, not a boot-order one); a Connect
        private network is irrelevant to *this* blocker specifically (it would address the
        separate node-IP rejection, not the memory/io/hugetlb `ENOTSUP`).
-     - Untried, now better-scoped: whether Vercel Sandbox exposes any configuration that changes
-       which controllers are delegated to a guest (not confirmed to exist); whether a Kubernetes
-       distribution that does not require the memory controller for its own control-plane
-       bring-up exists at all (not identified). Absent either, the two Kubernetes-based prototype
-       labs stay blocked on this platform.
+     - **Both remaining directions checked 2026-11-14 — dead ends on Vercel Sandbox specifically,
+       not untried anymore.** No kubelet flag skips the requirement:
+       `--cgroups-per-qos=false`/`--enforce-node-allocatable=""` only stop kubelet from writing
+       limits into its own cgroup tree, not its separate startup check that every required
+       controller is mountable -- kubelet aborts on a missing controller regardless of those
+       flags. k3s's own embedded containerd/supervisor manages its cgroup hierarchy independently
+       of any `--kubelet-arg` passthrough, and its one documented override
+       (`fail-cgroupv1=false`) is for cgroup v1 fallback, not a v2 controller that won't delegate.
+       k0s's troubleshooting docs confirm the same hard requirement. kind's own rootless-provider
+       fix (`systemd` `Delegate=yes`) assumes the *host* can delegate more controllers to a
+       rootless *user*; this project is already root, and the *host itself* refuses
+       memory/io/hugetlb specifically -- a different, deeper failure no kind doc addresses. The
+       `ENOTSUP` itself has no documented guest-side cause anywhere: cgroup v2 delegation is
+       strictly top-down from whatever the host exposes, consistent with this being the sandbox's
+       own kernel/guest-init policy, not a race or ordering bug fixable from inside.
+       **Conclusion: no kubelet/k3s/k0s/kind configuration unblocks a real kubelet-managed node on
+       Vercel Sandbox.** See [ADR 0030](../adr/0030-temporary-container-isolation-for-kubernetes-
+       labs.md) for where these two labs run instead, now that this is confirmed closed research
+       rather than an open question.
   3. **Docker lab vertical slice — in progress, same day.** The `LabSpec` domain model
      (`dev.certforge.labs`) is migrated from this document's original schema to the one above (ADR
      0028): `Isolation`/`LabLimits` removed, `LabSandbox` (`vcpus`, `timeoutSeconds`,
@@ -279,9 +302,28 @@ time, so an unbounded lab-start loop is a direct cost, not only a capacity probl
      `NoSuchElementException` into a 404 problem response, rather than reaching the generic 500
      handler — `LabsSessionIT` proves this end-to-end, through the real auth stack, with the
      Vercel client mocked.
-  7. Extend to the remaining two prototype labs only once a Kubernetes distribution clears the
-     cgroup delegation problem found in step 2 — not attempted by switching tools again without
-     that.
+  7. **Done, 2026-11-14 — temporarily, over a plain container, not a microVM (ADR 0030).** With
+     step 2's research confirming no tooling change unblocks Vercel Sandbox, and no microVM-
+     capable platform available yet (an Oracle Cloud Always Free account was the preferred next
+     step but had not been created), the product owner chose to unblock
+     `readiness-probe-wrong-port-v1` and `service-selector-mismatch-v1` now, at a knowingly weaker
+     isolation boundary, over waiting indefinitely. `ContainerLabOrchestrator`
+     (`dev.certforge.labs.internal`) runs a real `kind` cluster inside a plain Docker container
+     this project's own backend starts and destroys -- verified by direct prototyping before
+     writing any production code: the `memory`/`io`/`hugetlb`/`cpu`/`cpuset`/`pids` cgroup v2
+     controllers are all available on a normal Docker host (confirming the Vercel restriction was
+     platform-specific, not general), and a full `kind` cluster, including both labs' actual
+     committed fixtures, came up `Ready` end-to-end after three environment-specific fixes: a
+     `docker:27-dind` base image instead of a hand-rolled `dockerd` install (nested overlay mounts
+     need the mount-propagation/cgroup setup `docker:dind`'s own entrypoint does before `dockerd`'s
+     first start, which a plain `apt-get install docker.io` image never gets), kind's documented
+     `/dev/kmsg` `extraMounts` workaround, and an explicit `--sysctl net.ipv6.conf.*.forwarding=1`
+     at container creation. This also found and fixed a real, independent bug: both labs'
+     evaluation probes were bare `kubectl get ... -o jsonpath=...` commands graded by exit code,
+     which is always `0` regardless of the jsonpath value -- neither lab's grading could ever have
+     failed a session, on any platform. Fixed by wrapping each probe in a shell boolean test. See
+     ADR 0030 for the full isolation-boundary discussion and `LabsContainerSessionIT` for the
+     automated end-to-end proof (a real cluster, graded against the real shipped fixture).
   8. **Done.** The Docker lab's custom image (`src/main/resources/labs/image/docker-multistage-
      bloat-v1/Dockerfile`) is built and pushed to Vercel Container Registry with `vercel vcr build
      docker --push`, and `docker-multistage-bloat-v1.json`'s `image.ref` now pins the real

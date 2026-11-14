@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Starts and grades hands-on lab sessions. The learner's own command stream never passes through
- * this backend (ADR 0029): {@link #start} only hands back the one-time credential their browser
- * uses to reach Vercel's controller-hosted terminal directly.
+ * Starts and grades hands-on lab sessions. {@link #start} hands back a credential for the learner's
+ * browser to reach the session's terminal -- for most labs, Vercel's own controller-hosted PTY,
+ * never touching this backend (ADR 0029); for the two labs ADR 0030 temporarily runs over a plain
+ * container, this project's own terminal bridge instead ({@code LabTerminalWebSocketHandler}).
  */
 @RestController
 @RequestMapping("/api/labs")

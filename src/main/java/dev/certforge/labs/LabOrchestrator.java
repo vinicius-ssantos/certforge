@@ -1,10 +1,12 @@
 package dev.certforge.labs;
 
 /**
- * Provisions and grades hands-on lab sessions on Vercel Sandbox (ADR 0028). This is the one surface
- * {@code LabsController} calls -- it owns the Sandbox API credential and the session's lifecycle;
- * nothing about the learner's own command stream passes through it (ADR 0029). A session belongs to
- * the learner who started it; no other authenticated learner can complete or observe it.
+ * Provisions and grades hands-on lab sessions. This is the one surface {@code LabsController}
+ * calls; {@code LabOrchestratorRouter} is its only implementation, dispatching to {@code
+ * SandboxLabOrchestrator} (Vercel Sandbox, ADR 0028) for every lab except the two {@code
+ * ContainerLabOrchestrator} temporarily runs over a plain Docker container instead (ADR 0030). A
+ * session belongs to the learner who started it; no other authenticated learner can complete or
+ * observe it, on either engine.
  */
 public interface LabOrchestrator {
 
