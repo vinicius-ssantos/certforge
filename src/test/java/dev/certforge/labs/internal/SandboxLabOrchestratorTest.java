@@ -11,6 +11,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import dev.certforge.identity.ActorId;
+import dev.certforge.identity.CurrentActor;
 import dev.certforge.labs.Egress;
 import dev.certforge.labs.EvaluationType;
 import dev.certforge.labs.LabCatalog;
@@ -28,15 +30,19 @@ import dev.certforge.labs.LabVerdict;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 /**
  * {@link SandboxLabOrchestrator} against a mocked {@link VercelSandboxClient} -- the real HTTP
  * contract is {@link VercelSandboxClientTest}'s job; this covers provisioning, session tracking,
- * grading, and that a session is always stopped (ADR 0027 decision 5), even when grading itself
- * fails.
+ * grading, that a session is always stopped (ADR 0027 decision 5) even when grading itself fails,
+ * and that a session belongs to the learner who started it.
  */
 class SandboxLabOrchestratorTest {
+
+  private static final ActorId LEARNER = new ActorId(UUID.randomUUID());
+  private static final ActorId OTHER_LEARNER = new ActorId(UUID.randomUUID());
 
   private static LabSpec labWithCommands(String... allowedCommands) {
     return new LabSpec(
@@ -57,6 +63,13 @@ class SandboxLabOrchestratorTest {
                 new LabEvaluationCheck("check two", "false"))));
   }
 
+  /** A {@link CurrentActor} stand-in that always resolves to the given actor. */
+  private static CurrentActor actingAs(ActorId actor) {
+    CurrentActor currentActor = mock(CurrentActor.class);
+    when(currentActor.require()).thenReturn(actor);
+    return currentActor;
+  }
+
   @Test
   void startsASessionAndProvisionsDockerWhenTheLabAllowsIt() {
     LabCatalog catalog = mock(LabCatalog.class);
@@ -66,7 +79,8 @@ class SandboxLabOrchestratorTest {
     when(client.createSession(spec)).thenReturn("sbx_1");
     when(client.openInteractive("sbx_1"))
         .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://x", "tok"));
-    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client);
+    SandboxLabOrchestrator orchestrator =
+        new SandboxLabOrchestrator(catalog, client, actingAs(LEARNER));
 
     LabSession session = orchestrator.start("a-lab");
 
@@ -83,7 +97,8 @@ class SandboxLabOrchestratorTest {
     when(client.createSession(spec)).thenReturn("sbx_1");
     when(client.openInteractive("sbx_1"))
         .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://x", "tok"));
-    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client);
+    SandboxLabOrchestrator orchestrator =
+        new SandboxLabOrchestrator(catalog, client, actingAs(LEARNER));
 
     orchestrator.start("a-lab");
 
@@ -95,7 +110,7 @@ class SandboxLabOrchestratorTest {
     LabCatalog catalog = mock(LabCatalog.class);
     when(catalog.findByLabId("missing")).thenReturn(Optional.empty());
     SandboxLabOrchestrator orchestrator =
-        new SandboxLabOrchestrator(catalog, mock(VercelSandboxClient.class));
+        new SandboxLabOrchestrator(catalog, mock(VercelSandboxClient.class), actingAs(LEARNER));
 
     assertThatThrownBy(() -> orchestrator.start("missing"))
         .isInstanceOf(NoSuchElementException.class);
@@ -116,7 +131,8 @@ class SandboxLabOrchestratorTest {
     when(client.runToCompletion(
             eq("sbx_1"), eq("sh"), eq(List.of("-c", "false")), eq(false), anyLong()))
         .thenReturn(1);
-    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client);
+    SandboxLabOrchestrator orchestrator =
+        new SandboxLabOrchestrator(catalog, client, actingAs(LEARNER));
     orchestrator.start("a-lab");
 
     LabVerdict verdict = orchestrator.complete("sbx_1");
@@ -141,7 +157,8 @@ class SandboxLabOrchestratorTest {
         .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://x", "tok"));
     when(client.runToCompletion(any(), any(), any(), anyBoolean(), anyLong()))
         .thenThrow(new RuntimeException("the sandbox timed out"));
-    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client);
+    SandboxLabOrchestrator orchestrator =
+        new SandboxLabOrchestrator(catalog, client, actingAs(LEARNER));
     orchestrator.start("a-lab");
 
     assertThatThrownBy(() -> orchestrator.complete("sbx_1")).isInstanceOf(RuntimeException.class);
@@ -152,7 +169,8 @@ class SandboxLabOrchestratorTest {
   @Test
   void refusesToCompleteASessionThatWasNeverStarted() {
     SandboxLabOrchestrator orchestrator =
-        new SandboxLabOrchestrator(mock(LabCatalog.class), mock(VercelSandboxClient.class));
+        new SandboxLabOrchestrator(
+            mock(LabCatalog.class), mock(VercelSandboxClient.class), actingAs(LEARNER));
 
     assertThatThrownBy(() -> orchestrator.complete("sbx_never"))
         .isInstanceOf(NoSuchElementException.class);
@@ -167,11 +185,37 @@ class SandboxLabOrchestratorTest {
     when(client.createSession(spec)).thenReturn("sbx_1");
     when(client.openInteractive("sbx_1"))
         .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://x", "tok"));
-    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client);
+    SandboxLabOrchestrator orchestrator =
+        new SandboxLabOrchestrator(catalog, client, actingAs(LEARNER));
     orchestrator.start("a-lab");
     orchestrator.complete("sbx_1");
 
     assertThatThrownBy(() -> orchestrator.complete("sbx_1"))
         .isInstanceOf(NoSuchElementException.class);
+  }
+
+  @Test
+  void refusesToCompleteASessionStartedByAnotherLearnerAndNeverStopsIt() {
+    LabCatalog catalog = mock(LabCatalog.class);
+    VercelSandboxClient client = mock(VercelSandboxClient.class);
+    LabSpec spec = labWithCommands("docker");
+    when(catalog.findByLabId("a-lab")).thenReturn(Optional.of(spec));
+    when(client.createSession(spec)).thenReturn("sbx_1");
+    when(client.openInteractive("sbx_1"))
+        .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://x", "tok"));
+    CurrentActor currentActor = mock(CurrentActor.class);
+    when(currentActor.require()).thenReturn(LEARNER);
+    SandboxLabOrchestrator orchestrator = new SandboxLabOrchestrator(catalog, client, currentActor);
+    orchestrator.start("a-lab");
+
+    when(currentActor.require()).thenReturn(OTHER_LEARNER);
+
+    assertThatThrownBy(() -> orchestrator.complete("sbx_1"))
+        .isInstanceOf(NoSuchElementException.class);
+    verify(client, never()).stop("sbx_1");
+
+    when(currentActor.require()).thenReturn(LEARNER);
+    orchestrator.complete("sbx_1");
+    verify(client).stop("sbx_1");
   }
 }

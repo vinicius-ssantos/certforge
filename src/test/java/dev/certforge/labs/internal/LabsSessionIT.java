@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -108,6 +109,26 @@ class LabsSessionIT {
                 .cookie(learner.session()))
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.code").value("lab_session_not_found"));
+  }
+
+  @Test
+  void refusesToCompleteAnotherLearnersSessionAndNeverStopsIt() throws Exception {
+    Account otherLearner = new EditorialFixtures(mvc, "labs-admin@example.com").user();
+    when(client.createSession(any())).thenReturn("sbx_owned");
+    when(client.openInteractive("sbx_owned"))
+        .thenReturn(new VercelSandboxClient.InteractiveCredential("wss://example.com/pty", "tok"));
+    mvc.perform(
+            post("/api/labs/" + DOCKER_LAB + "/sessions").with(csrf()).cookie(learner.session()))
+        .andExpect(status().isCreated());
+
+    mvc.perform(
+            post("/api/labs/sessions/sbx_owned/complete")
+                .with(csrf())
+                .cookie(otherLearner.session()))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("lab_session_not_found"));
+
+    verify(client, never()).stop("sbx_owned");
   }
 
   @Test

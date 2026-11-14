@@ -1,5 +1,7 @@
 package dev.certforge.labs.internal;
 
+import dev.certforge.identity.ActorId;
+import dev.certforge.identity.CurrentActor;
 import dev.certforge.labs.LabCatalog;
 import dev.certforge.labs.LabCheckResult;
 import dev.certforge.labs.LabEvaluationCheck;
@@ -24,13 +26,18 @@ import org.springframework.stereotype.Component;
 @Component
 class SandboxLabOrchestrator implements LabOrchestrator {
 
+  private record StartedSession(String labId, ActorId learner) {}
+
   private final LabCatalog catalog;
   private final VercelSandboxClient client;
-  private final Map<String, String> labIdBySessionId = new ConcurrentHashMap<>();
+  private final CurrentActor currentActor;
+  private final Map<String, StartedSession> sessionsById = new ConcurrentHashMap<>();
 
-  SandboxLabOrchestrator(LabCatalog catalog, VercelSandboxClient client) {
+  SandboxLabOrchestrator(
+      LabCatalog catalog, VercelSandboxClient client, CurrentActor currentActor) {
     this.catalog = catalog;
     this.client = client;
+    this.currentActor = currentActor;
   }
 
   @Override
@@ -39,17 +46,23 @@ class SandboxLabOrchestrator implements LabOrchestrator {
     String sessionId = client.createSession(spec);
     provision(sessionId, spec);
     VercelSandboxClient.InteractiveCredential credential = client.openInteractive(sessionId);
-    labIdBySessionId.put(sessionId, labId);
+    sessionsById.put(sessionId, new StartedSession(labId, currentActor.require()));
     return new LabSession(sessionId, labId, credential.url(), credential.token());
   }
 
+  /**
+   * @throws NoSuchElementException if no session was started under that id, or it was started by a
+   *     different learner -- the same outcome either way, so a caller probing ids cannot tell one
+   *     apart from the other.
+   */
   @Override
   public LabVerdict complete(String sessionId) {
-    String labId = labIdBySessionId.remove(sessionId);
-    if (labId == null) {
+    StartedSession session = sessionsById.get(sessionId);
+    if (session == null || !session.learner().equals(currentActor.require())) {
       throw new NoSuchElementException("no session " + sessionId);
     }
-    LabSpec spec = requireLab(labId);
+    sessionsById.remove(sessionId);
+    LabSpec spec = requireLab(session.labId());
     try {
       return grade(sessionId, spec);
     } finally {
