@@ -1,0 +1,175 @@
+{
+  "reviewer": null,
+  "reviewerRole": "No named human reviewer recorded for this pack. Every entry below names its own reviewer explicitly -- \"ai-reviewer\" is the disclosed AI identity (ADR 0022-0026) and is never read as a person's.",
+  "method": "Each entry is the AI reviewer's own technical read of the question as it stands: whether the recorded correct option is actually correct, whether distractors are plausible and not accidentally defensible, whether the explanation is complete, and whether the reference is the primary or official source for the claim. This is not a substitute for an independent human reviewer deciding editorial judgement calls a machine cannot settle; it is the same disclosed, final AI_APPROVED tier content/java-se-21 already uses, extended to this pack under ADR 0026.",
+  "questions": {
+    "iv150-abstraction-vs-encapsulation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6051bb6051fa54a1773d89af9fc71886c4c87b99c89937e5c53c097cffcb5942",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-catching-exception-silently-prevents-rollback": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f4f769c3b90b314feb2fdd6d13e72802af32f7f4b84aecef64a3d6675a119372",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-amqp-competing-consumers-vs-kafka-consumer-group": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f03596b232d4993864f781f5f01c7c89939fac1eb6c986e0d0bc7d61bbf73233",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv151-lsp-scenario-rectangle-square": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7b21fe367605a81921a50ec65d5f4fda185b5d2413a8774b8ebdb69ea4a0050e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv151-ocp-refactor-strategy-pattern": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8a53f3a37a671382e2bb9250605a42871993609679b09c9f2838835113c6a91d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv152-yagni-principle-core": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bd8844dcda7441ba34a2afd2d6851591b38acc8f30b12f48c9d56dcd70f65c75",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-hash-lookup-not-always-o1": {
+      "verdict": "APPROVED",
+      "digest": "sha256:58e4f80c03adb64830fee461fb139d3c2775eb2140fb05eff7bcfd5e00c8c013",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-testcontainers-database-testing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:89d59a1fe2ce22b740d9af7ea58628e2ced2980b95a3f026118a3665abcf4da5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-adapter-legacy-gateway": {
+      "verdict": "APPROVED",
+      "digest": "sha256:56df461911fc7aa1467282bc0f238d806e28fb0ef4dee01a867361a8ed53b46c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-aggregate-boundary-decision": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d8b40397f76f98e56ffb0c0e446156cb614210066e935c63c04e32fbbb242cc4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-config-mistake-canary-rollback": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dd02eba1db154b4f4a6f76a9bd002c990162ad54770ea4f736a72f816d0c899c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-ddl-auto-unsafe-production": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1dddb38c96f3557326e29aa343d6a3e4470e8c18c659d0618ad8805982d126b7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-ap-system-partition-scenario": {
+      "verdict": "APPROVED",
+      "digest": "sha256:36740bc17881af7641f422524ebe6abfc17014a692174b332e91d5c2271b3032",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cache-aside-miss-staleness-window": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e1c48851d125c4a7be1f039a71b053b310b6d98b0b748965933559e4fb2cb48d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-15",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    }
+  }
+}
