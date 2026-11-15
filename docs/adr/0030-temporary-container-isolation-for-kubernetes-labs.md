@@ -155,8 +155,8 @@ containers.
   0028 microVM boundary unchanged.
 - **Follow-up tracked separately: migrate both labs off this container-based execution once a
   microVM-capable platform is available** (Oracle Cloud Always Free once the account exists, or
-  any other platform that clears ADR 0028 decision 7's blocker) -- filed as a GitHub issue this ADR
-  links to once opened, not left as a comment in code.
+  any other platform that clears ADR 0028 decision 7's blocker) -- filed as
+  [#388](https://github.com/vinicius-ssantos/certforge/issues/388), not left as a comment in code.
 - **A learner on either of these two labs has a materially larger theoretical blast radius than a
   learner on the Docker lab** -- not through anything `lab-shell` grants them directly (the
   allowlist is identical in kind), but through the weaker container boundary around the whole
