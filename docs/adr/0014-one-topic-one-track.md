@@ -4,10 +4,11 @@
   (`catalog_topic.track_id NOT NULL`), unchanged since this was written. Decision 2 (data
   structures, algorithms, SOLID, design patterns and object-oriented design belong to the
   interview track) is what [ADR 0016](0016-interview-track-taxonomy.md) -- itself accepted
-  2026-10-04 -- builds on directly, and the interview track's own content packs
-  (`content/java-backend-interview-pack`, `content/java-core-concurrency-pack`, etc.) now ship
-  exactly that material. This status line was never updated when that happened; corrected here
-  rather than left to read as still undecided.
+  2026-10-04 -- builds on directly, and `content/java-backend-interview/` now ships exactly that
+  material (e.g. `iv151-srp-conceptual-reasons-to-change`, `iv151-ocp-refactor-strategy-pattern`
+  and the other `iv151-*` SOLID items; `iv154-*` for data structures; `iv156-*` for design
+  patterns; `iv286-*` for concurrency). This status line was never updated when that happened;
+  corrected here rather than left to read as still undecided.
 - Date: 2026-10-02
 
 ## Context
