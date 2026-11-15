@@ -1,6 +1,13 @@
 # ADR 0014: Keep one topic in one track, and put fundamentals in the interview track
 
-- Status: **Proposed.** Nothing is built. It is written as a recommendation with its reasoning so it can be accepted, or changed and then accepted.
+- Status: **Accepted.** Decision 1 (a topic owned by exactly one track) is the schema as it stands
+  (`catalog_topic.track_id NOT NULL`), unchanged since this was written. Decision 2 (data
+  structures, algorithms, SOLID, design patterns and object-oriented design belong to the
+  interview track) is what [ADR 0016](0016-interview-track-taxonomy.md) -- itself accepted
+  2026-10-04 -- builds on directly, and the interview track's own content packs
+  (`content/java-backend-interview-pack`, `content/java-core-concurrency-pack`, etc.) now ship
+  exactly that material. This status line was never updated when that happened; corrected here
+  rather than left to read as still undecided.
 - Date: 2026-10-02
 
 ## Context

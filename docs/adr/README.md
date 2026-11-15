@@ -17,10 +17,10 @@ ADRs capture decisions that are structurally important, costly to reverse, or ne
 | [0011](0011-grade-content-evidence.md) | Grade content evidence, and verify references mechanically | Accepted |
 | [0012](0012-interface-language.md) | Translate the interface, keep the question text in English | Accepted |
 | [0013](0013-derived-review-queue.md) | Derive the review queue from attempt evidence, and say why each item is in it | **Proposed** |
-| [0014](0014-one-topic-one-track.md) | Keep one topic in one track, and put fundamentals in the interview track | **Proposed** |
+| [0014](0014-one-topic-one-track.md) | Keep one topic in one track, and put fundamentals in the interview track | Accepted |
 | [0015](0015-separate-mock-exam-aggregate.md) | Model mock exams as a separate study aggregate | Accepted |
 | [0016](0016-interview-track-taxonomy.md) | Shape the interview track as a versioned taxonomy, and keep it small | Accepted |
-| [0017](0017-infrastructure-certification-tracks.md) | Add infrastructure and general tracks, with verified exam-version snapshots | **Proposed** |
+| [0017](0017-infrastructure-certification-tracks.md) | Add infrastructure and general tracks, with verified exam-version snapshots | Accepted |
 | [0018](0018-maintainer-may-review-their-own-work.md) | Let the maintainer review their own work, and say so in the record | Accepted |
 | [0019](0019-behavioural-preparation-is-guidance-not-grading.md) | Behavioural preparation is reviewed guidance, and nothing about it is scored | Accepted |
 | [0020](0020-interview-sessions-as-a-third-aggregate.md) | Model interview sessions as a third study aggregate | Accepted |
