@@ -1,6 +1,10 @@
 # ADR 0017 — Infrastructure, general knowledge and exam snapshots
 
-Status: Proposed (#165, #166)
+Status: **Accepted.** All four rollout phases are built: `GENERAL` exists as a `TrackKind`
+(`V17__infrastructure_catalog_foundation.sql`, seeded by `V19__seed_infrastructure_general_track.sql`),
+#166's multi-pack manifest/source-policy/review-packet work and #167–173's authorial content packs
+and #176's objective-coverage work are all shipped and closed. This status line was never updated
+when that happened; corrected here rather than left to read as still undecided.
 
 ## Existing foundations
 ADR 0007, migrations V13–V15 and the existing Java Backend interview taxonomy already generalize the track root. Preserve these semantics and the original Java SE 21 IDs.
