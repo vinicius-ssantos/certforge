@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -103,15 +102,26 @@ class ContainerLabOrchestrator {
   private final LabCatalog catalog;
   private final DockerCliClient docker;
   private final CurrentActor currentActor;
+  private final ScheduledExecutorService reaper;
   private final Map<String, StartedSession> sessionsById = new ConcurrentHashMap<>();
-  private final ScheduledExecutorService reaper = Executors.newSingleThreadScheduledExecutor();
   private final SecureRandom random = new SecureRandom();
   private volatile boolean imageBuilt = false;
 
-  ContainerLabOrchestrator(LabCatalog catalog, DockerCliClient docker, CurrentActor currentActor) {
+  /**
+   * {@code reaper} is injected, not created as a field initializer, so a test can observe the
+   * timeout path actually firing (e.g. {@code verify(docker, timeout(millis)).remove(containerId)}
+   * against a real short-lived executor) rather than only that {@code schedule} was called with the
+   * right delay.
+   */
+  ContainerLabOrchestrator(
+      LabCatalog catalog,
+      DockerCliClient docker,
+      CurrentActor currentActor,
+      ScheduledExecutorService reaper) {
     this.catalog = catalog;
     this.docker = docker;
     this.currentActor = currentActor;
+    this.reaper = reaper;
   }
 
   LabSession start(String labId) {
@@ -224,7 +234,11 @@ class ContainerLabOrchestrator {
         containerId, "/tmp/kind-config.yaml", KIND_CONFIG.getBytes(StandardCharsets.UTF_8));
     runRoot(
         containerId,
-        Duration.ofMinutes(3),
+        // Observed taking well over 3 minutes under heavy host contention (many unrelated
+        // containers already running on the same Docker daemon) -- 5 minutes gives real headroom
+        // without masking a genuine hang (kindest/node's own image pull plus control-plane
+        // bring-up has never needed anywhere near this long when the host is otherwise idle).
+        Duration.ofMinutes(5),
         "kind",
         "create",
         "cluster",
