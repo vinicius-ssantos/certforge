@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 class SandboxLabOrchestrator {
+
+  private static final Logger log = LoggerFactory.getLogger(SandboxLabOrchestrator.class);
 
   private record StartedSession(String labId, ActorId learner) {}
 
@@ -49,6 +53,7 @@ class SandboxLabOrchestrator {
     provision(sessionId, spec);
     VercelSandboxClient.InteractiveCredential credential = client.openInteractive(sessionId);
     sessionsById.put(sessionId, new StartedSession(labId, currentActor.require()));
+    log.info("lab session started labId={} sessionId={}", labId, sessionId);
     return new LabSession(sessionId, labId, credential.url(), credential.token());
   }
 
@@ -65,7 +70,15 @@ class SandboxLabOrchestrator {
     sessionsById.remove(sessionId);
     LabSpec spec = requireLab(session.labId());
     try {
-      return grade(sessionId, spec);
+      LabVerdict verdict = grade(sessionId, spec);
+      log.info(
+          "lab session completed labId={} sessionId={} passed={} checksPassed={}/{}",
+          session.labId(),
+          sessionId,
+          verdict.passed(),
+          verdict.checks().stream().filter(LabCheckResult::passed).count(),
+          verdict.checks().size());
+      return verdict;
     } finally {
       client.stop(sessionId);
     }

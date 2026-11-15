@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,6 +33,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -49,6 +52,10 @@ class ContainerLabOrchestratorTest {
   private static final String CONTAINER_ID = "a".repeat(64);
 
   private static LabSpec labSpec() {
+    return labSpec(900);
+  }
+
+  private static LabSpec labSpec(int timeoutSeconds) {
     return new LabSpec(
         LAB_ID,
         new LabImage(
@@ -57,12 +64,20 @@ class ContainerLabOrchestratorTest {
         new LabFixture(LAB_ID),
         new LabObjective("Fix it", "..."),
         List.of("kubectl", "vi", "nano", "cat", "ls"),
-        new LabSandbox(1, 900, false),
+        new LabSandbox(1, timeoutSeconds, false),
         new LabNetwork(Egress.NONE),
         new LabFilesystem(64),
         new LabEvaluation(
             dev.certforge.labs.EvaluationType.DETERMINISTIC_PROBE,
             List.of(new LabEvaluationCheck("has an endpoint", "test \"true\" = \"true\""))));
+  }
+
+  /**
+   * A fresh single-thread executor per test, so the timeout-reaper test actually schedules on a
+   * real clock rather than a mock that would just record the call.
+   */
+  private static ScheduledExecutorService newReaper() {
+    return Executors.newSingleThreadScheduledExecutor();
   }
 
   private static CurrentActor actingAs(ActorId actor) {
@@ -88,7 +103,7 @@ class ContainerLabOrchestratorTest {
     when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec()));
     DockerCliClient docker = happyPathDocker();
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
 
     LabSession session = orchestrator.start(LAB_ID);
 
@@ -118,7 +133,8 @@ class ContainerLabOrchestratorTest {
     LabCatalog catalog = mock(LabCatalog.class);
     when(catalog.findByLabId("missing")).thenReturn(Optional.empty());
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, mock(DockerCliClient.class), actingAs(LEARNER));
+        new ContainerLabOrchestrator(
+            catalog, mock(DockerCliClient.class), actingAs(LEARNER), newReaper());
 
     assertThatThrownBy(() -> orchestrator.start("missing"))
         .isInstanceOf(NoSuchElementException.class);
@@ -134,7 +150,7 @@ class ContainerLabOrchestratorTest {
     when(docker.exec(eq(CONTAINER_ID), any(), isNull(), any()))
         .thenReturn(new ExecResult(1, "nested dockerd never started"));
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
 
     assertThatThrownBy(() -> orchestrator.start(LAB_ID)).isInstanceOf(IllegalStateException.class);
 
@@ -150,7 +166,7 @@ class ContainerLabOrchestratorTest {
             eq(CONTAINER_ID), any(), isNull(), eq(List.of("sh", "-c", "test \"true\" = \"true\""))))
         .thenReturn(new ExecResult(0, ""));
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
     orchestrator.start(LAB_ID);
 
     LabVerdict verdict = orchestrator.complete(CONTAINER_ID);
@@ -166,7 +182,7 @@ class ContainerLabOrchestratorTest {
     when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec()));
     DockerCliClient docker = happyPathDocker();
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
     orchestrator.start(LAB_ID);
     orchestrator.complete(CONTAINER_ID);
 
@@ -182,7 +198,7 @@ class ContainerLabOrchestratorTest {
     CurrentActor currentActor = mock(CurrentActor.class);
     when(currentActor.require()).thenReturn(LEARNER);
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, currentActor);
+        new ContainerLabOrchestrator(catalog, docker, currentActor, newReaper());
     orchestrator.start(LAB_ID);
 
     when(currentActor.require()).thenReturn(OTHER_LEARNER);
@@ -204,7 +220,7 @@ class ContainerLabOrchestratorTest {
     CurrentActor currentActor = mock(CurrentActor.class);
     when(currentActor.require()).thenReturn(LEARNER);
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, currentActor);
+        new ContainerLabOrchestrator(catalog, docker, currentActor, newReaper());
     LabSession session = orchestrator.start(LAB_ID);
 
     assertThat(orchestrator.ownedByCurrentActor(CONTAINER_ID, session.interactiveToken())).isTrue();
@@ -215,6 +231,45 @@ class ContainerLabOrchestratorTest {
         .isFalse();
   }
 
+  /**
+   * A real, short-lived {@link ScheduledExecutorService} -- not a mock recording that {@code
+   * schedule} was called with the right delay, but the timeout actually elapsing and firing the
+   * reaper, exactly as production code depends on (found missing in review of #386/#387: the rest
+   * of this class's tests never let a session outlive its own {@code timeoutSeconds}, so this path
+   * had never actually run under test).
+   */
+  @Test
+  void removesTheContainerWhenTheSessionTimesOutWithoutEverCompleting() {
+    LabCatalog catalog = mock(LabCatalog.class);
+    when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec(1)));
+    DockerCliClient docker = happyPathDocker();
+    ContainerLabOrchestrator orchestrator =
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
+
+    orchestrator.start(LAB_ID);
+
+    verify(docker, timeout(5000)).remove(CONTAINER_ID);
+  }
+
+  @Test
+  void completingBeforeTheTimeoutCancelsTheReaperSoItNeverFiresTwice() {
+    LabCatalog catalog = mock(LabCatalog.class);
+    when(catalog.findByLabId(LAB_ID)).thenReturn(Optional.of(labSpec(1)));
+    DockerCliClient docker = happyPathDocker();
+    when(docker.exec(
+            eq(CONTAINER_ID), any(), isNull(), eq(List.of("sh", "-c", "test \"true\" = \"true\""))))
+        .thenReturn(new ExecResult(0, ""));
+    ContainerLabOrchestrator orchestrator =
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
+    orchestrator.start(LAB_ID);
+
+    orchestrator.complete(CONTAINER_ID);
+
+    // The reaper would otherwise fire ~1s after start(); if cancel(false) did not actually take,
+    // a second remove() would show up here once that elapses.
+    verify(docker, timeout(3000).times(1)).remove(CONTAINER_ID);
+  }
+
   @Test
   void onlyBuildsTheImageWhenItDoesNotAlreadyExist() {
     LabCatalog catalog = mock(LabCatalog.class);
@@ -222,7 +277,7 @@ class ContainerLabOrchestratorTest {
     DockerCliClient docker = happyPathDocker();
     when(docker.imageExists(any())).thenReturn(false);
     ContainerLabOrchestrator orchestrator =
-        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER));
+        new ContainerLabOrchestrator(catalog, docker, actingAs(LEARNER), newReaper());
 
     orchestrator.start(LAB_ID);
 

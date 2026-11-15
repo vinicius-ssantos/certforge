@@ -24,11 +24,12 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +46,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 class ContainerLabOrchestrator {
+
+  private static final Logger log = LoggerFactory.getLogger(ContainerLabOrchestrator.class);
 
   static final Set<String> SUPPORTED_LAB_IDS =
       Set.of("readiness-probe-wrong-port-v1", "service-selector-mismatch-v1");
@@ -99,15 +102,26 @@ class ContainerLabOrchestrator {
   private final LabCatalog catalog;
   private final DockerCliClient docker;
   private final CurrentActor currentActor;
+  private final ScheduledExecutorService reaper;
   private final Map<String, StartedSession> sessionsById = new ConcurrentHashMap<>();
-  private final ScheduledExecutorService reaper = Executors.newSingleThreadScheduledExecutor();
   private final SecureRandom random = new SecureRandom();
   private volatile boolean imageBuilt = false;
 
-  ContainerLabOrchestrator(LabCatalog catalog, DockerCliClient docker, CurrentActor currentActor) {
+  /**
+   * {@code reaper} is injected, not created as a field initializer, so a test can observe the
+   * timeout path actually firing (e.g. {@code verify(docker, timeout(millis)).remove(containerId)}
+   * against a real short-lived executor) rather than only that {@code schedule} was called with the
+   * right delay.
+   */
+  ContainerLabOrchestrator(
+      LabCatalog catalog,
+      DockerCliClient docker,
+      CurrentActor currentActor,
+      ScheduledExecutorService reaper) {
     this.catalog = catalog;
     this.docker = docker;
     this.currentActor = currentActor;
+    this.reaper = reaper;
   }
 
   LabSession start(String labId) {
@@ -120,13 +134,20 @@ class ContainerLabOrchestrator {
       String token = randomToken();
       ScheduledFuture<?> timeoutReaper =
           reaper.schedule(
-              () -> docker.remove(containerId), spec.sandbox().timeoutSeconds(), TimeUnit.SECONDS);
+              () -> {
+                log.info("lab session timed out labId={} sessionId={}", labId, containerId);
+                docker.remove(containerId);
+              },
+              spec.sandbox().timeoutSeconds(),
+              TimeUnit.SECONDS);
       sessionsById.put(
           containerId,
           new StartedSession(containerId, labId, currentActor.require(), token, timeoutReaper));
+      log.info("lab session started labId={} sessionId={}", labId, containerId);
       return new LabSession(
           containerId, labId, "/api/labs/sessions/" + containerId + "/terminal", token);
     } catch (RuntimeException e) {
+      log.warn("lab session provisioning failed labId={} sessionId={}", labId, containerId, e);
       docker.remove(containerId);
       throw e;
     }
@@ -150,7 +171,15 @@ class ContainerLabOrchestrator {
     String trustedContainerId = session.containerId();
     try {
       LabSpec spec = requireLab(session.labId());
-      return grade(trustedContainerId, spec);
+      LabVerdict verdict = grade(trustedContainerId, spec);
+      log.info(
+          "lab session completed labId={} sessionId={} passed={} checksPassed={}/{}",
+          session.labId(),
+          trustedContainerId,
+          verdict.passed(),
+          verdict.checks().stream().filter(LabCheckResult::passed).count(),
+          verdict.checks().size());
+      return verdict;
     } finally {
       docker.remove(trustedContainerId);
     }
@@ -205,7 +234,11 @@ class ContainerLabOrchestrator {
         containerId, "/tmp/kind-config.yaml", KIND_CONFIG.getBytes(StandardCharsets.UTF_8));
     runRoot(
         containerId,
-        Duration.ofMinutes(3),
+        // Observed taking well over 3 minutes under heavy host contention (many unrelated
+        // containers already running on the same Docker daemon) -- 5 minutes gives real headroom
+        // without masking a genuine hang (kindest/node's own image pull plus control-plane
+        // bring-up has never needed anywhere near this long when the host is otherwise idle).
+        Duration.ofMinutes(5),
         "kind",
         "create",
         "cluster",
