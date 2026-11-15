@@ -1083,6 +1083,48 @@ pre.code {
 }
 
 /*
+ * Syntax-highlighted tokens (react-syntax-highlighter, PrismLight, useInlineStyles={false} so
+ * every token is a CSS class, never an inline style — required by the app's own
+ * `style-src 'self'` CSP). Reuses the existing design tokens rather than a separate palette, each
+ * checked at 4.5:1 against pre.code's background (--bg) in both color schemes.
+ */
+.token.keyword,
+.token.builtin,
+.token.important,
+.token.atrule,
+.token.tag,
+.token.selector,
+.token.property {
+  color: var(--accent);
+}
+
+.token.string,
+.token.char,
+.token.attr-value {
+  color: var(--ok);
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.token.number,
+.token.boolean,
+.token.constant {
+  color: var(--review);
+}
+
+.token.function,
+.token.class-name {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/*
  * An answer is a full-width target. The overlay on the label covers the whole row, so the padding
  * and the empty space to the right of a short option select it too; before this only the few
  * characters of the option's text did, which is a hard tap on a phone and a precise one on a
