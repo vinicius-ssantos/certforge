@@ -6,7 +6,10 @@ import { gzipSync } from "node:zlib";
 import { join } from "node:path";
 
 const dir = join(import.meta.dirname, "..", "dist", "assets");
-const BUDGET_KB = { js: 170, css: 12 };
+// js raised from 170 to 190 on 2026-11-14 for react-syntax-highlighter (PrismLight, 4 grammars:
+// java/yaml/dockerfile/hcl) — v0.4.0's syntax-highlighted code presentation, a real, reviewed
+// feature cost, not untracked bloat.
+const BUDGET_KB = { js: 190, css: 12 };
 
 const total = { js: 0, css: 0 };
 for (const file of readdirSync(dir)) {

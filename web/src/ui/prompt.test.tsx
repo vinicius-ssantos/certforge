@@ -5,14 +5,22 @@ import { Prompt, splitFences } from "./Prompt";
 describe("splitFences", () => {
   it("separates prose from fenced code, in order", () => {
     expect(splitFences("Before.\n\n```java\nint x = 1;\n```\n\nAfter.")).toEqual([
-      { kind: "text", value: "Before.\n\n" },
-      { kind: "code", value: "int x = 1;" },
-      { kind: "text", value: "\n\nAfter." },
+      { kind: "text", value: "Before.\n\n", language: "" },
+      { kind: "code", value: "int x = 1;", language: "java" },
+      { kind: "text", value: "\n\nAfter.", language: "" },
     ]);
   });
 
   it("keeps text with no fences as one piece", () => {
-    expect(splitFences("Just words.")).toEqual([{ kind: "text", value: "Just words." }]);
+    expect(splitFences("Just words.")).toEqual([
+      { kind: "text", value: "Just words.", language: "" },
+    ]);
+  });
+
+  it("captures the fence's language tag, and treats an untagged fence as empty", () => {
+    const [java, untagged] = splitFences("```yaml\na: 1\n```\n```\nplain\n```");
+    expect(java).toMatchObject({ language: "yaml" });
+    expect(untagged).toMatchObject({ language: "" });
   });
 
   it("treats an unclosed fence as plain text rather than swallowing the rest", () => {
@@ -43,5 +51,33 @@ describe("Prompt", () => {
     expect(screen.getByLabelText("Code example")).toHaveTextContent('System.out.println("<i>x</i>");');
     expect(screen.getByText("Run <b>this</b>:")).toBeInTheDocument();
     expect(document.querySelector("b, i")).toBeNull();
+  });
+
+  it("highlights a known language via CSS classes, never an inline style", () => {
+    render(<Prompt text={'```java\nSystem.out.println("hi");\n```'} />);
+
+    const pre = screen.getByLabelText("Code example");
+    const tokens = pre.querySelectorAll(".token");
+    expect(tokens.length).toBeGreaterThan(0);
+    for (const token of tokens) {
+      expect(token.getAttribute("style")).toBeNull();
+    }
+    expect(pre).toHaveTextContent('System.out.println("hi");');
+  });
+
+  it("maps the dockerfile content tag onto Prism's docker grammar", () => {
+    render(<Prompt text={"```dockerfile\nFROM ubuntu\n```"} />);
+
+    const pre = screen.getByLabelText("Code example");
+    expect(pre.querySelectorAll(".token").length).toBeGreaterThan(0);
+    expect(pre).toHaveTextContent("FROM ubuntu");
+  });
+
+  it("falls back to plain, unhighlighted text for a language with no registered grammar", () => {
+    render(<Prompt text={"```text\nplain output\n```"} />);
+
+    const pre = screen.getByLabelText("Code example");
+    expect(pre.querySelectorAll(".token")).toHaveLength(0);
+    expect(pre).toHaveTextContent("plain output");
   });
 });
