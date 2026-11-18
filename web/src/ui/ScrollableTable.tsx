@@ -28,7 +28,7 @@ export function ScrollableTable({ label, children, ...tableProps }: ScrollableTa
     <>
       {overflowing ? <p className="hint table-scroll-hint">{t.states.tableMore}</p> : null}
       {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-      <div ref={region} className="table-scroll" role="region" aria-label={label} tabIndex={0}>
+      <div ref={region} className="table-scroll" role="region" aria-label={label} tabIndex={overflowing ? 0 : undefined}>
         <table ref={table} {...tableProps}>{children}</table>
       </div>
     </>
