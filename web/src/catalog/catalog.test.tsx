@@ -6,6 +6,31 @@ import { problem } from "../test/fakeServer";
 import { javaTrack, renderApp } from "../test/render";
 
 describe("browsing tracks", () => {
+  it("uses the real review counts to guide the next step and keeps the catalogue available", async () => {
+    renderApp({
+      "GET /api/catalog/tracks": { body: [javaTrack] },
+      "GET /api/review/queue": { body: { dueNow: 3, waiting: 2, neverAttempted: 1, items: [] } },
+    });
+
+    const action = await screen.findByRole("link", { name: "Start reviewing" });
+    expect(action).toHaveAttribute("href", "/review");
+    const queue = within(screen.getByRole("region", { name: "Review queue" }));
+    expect(queue.getByText("3")).toBeInTheDocument();
+    expect(queue.getByText("2")).toBeInTheDocument();
+    expect(await screen.findByRole("link", { name: "Java Certification" })).toBeInTheDocument();
+  });
+
+  it("keeps study accessible when the review queue is unavailable", async () => {
+    renderApp({
+      "GET /api/catalog/tracks": { body: [javaTrack] },
+      "GET /api/review/queue": problem(503, "internal_error"),
+    });
+
+    expect(await screen.findByText("The review queue is temporarily unavailable.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Browse tracks" })).toHaveAttribute("href", "#track-catalog");
+    expect(screen.queryByRole("link", { name: "Start reviewing" })).not.toBeInTheDocument();
+  });
+
   it("lists the available tracks with a link to each", async () => {
     const { container } = renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
 

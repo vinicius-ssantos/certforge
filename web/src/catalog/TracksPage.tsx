@@ -58,7 +58,13 @@ export function TracksPage() {
     queryKey: ["progress", "topics"],
     queryFn: () => unwrap(api.GET("/api/progress/topics")),
   });
+  const review = useQuery({
+    queryKey: ["review", "queue"],
+    queryFn: () => unwrap(api.GET("/api/review/queue")),
+    select: ({ dueNow, waiting }) => ({ dueNow, waiting }),
+  });
   const standing = standings(progress.data ?? []);
+  const hasReview = (review.data?.dueNow ?? 0) > 0;
 
   const nothingToShow =
     tracks.data && generalTracks.data && tracks.data.length === 0 && generalTracks.data.length === 0;
@@ -66,78 +72,127 @@ export function TracksPage() {
   return (
     <>
       <h1>{t.tracks.title}</h1>
-      {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
-      {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
-      {nothingToShow ? (
-        <EmptyState title={t.tracks.emptyTitle}>
-          <p>{t.tracks.emptyBody}</p>
-        </EmptyState>
-      ) : null}
-      {tracks.data && tracks.data.length > 0 ? (
-        <ul className="cards">
-          {tracks.data.map((track) => (
-            <li key={track.id} className="card">
-              <h2>
-                <Link to={`/tracks/${track.slug}`}>{track.name}</Link>
-              </h2>
-              <p>{track.certificationName}</p>
-              {/* A release is a Java fact; an exam that is not about one carries none (ADR
-                  0017), and the row reads without it rather than with an empty slot. */}
-              <p className="muted">
-                {track.provider} · {track.examVersion.label}
-                {track.examVersion.javaRelease === null
-                  ? null
-                  : ` · ${t.tracks.javaRelease(track.examVersion.javaRelease)}`}
-              </p>
-              <p className="muted">{t.tracks.topicCount(track.topics.length)}</p>
-              {/* Where the learner is on this track, not only what the track is. Absent until
-                  they have answered something on it: two zeroes say less than nothing. */}
-              {standing.has(track.slug) ? (
-                <dl className="stat">
-                  <div>
-                    <dt>{t.progress.attempted}</dt>
-                    <dd>{standing.get(track.slug)!.attempted}</dd>
-                  </div>
-                  <div>
-                    <dt>{t.progress.accuracy}</dt>
-                    <dd>{`${Math.round(standing.get(track.slug)!.accuracy * 100)}%`}</dd>
-                  </div>
-                </dl>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      <div className="study-overview">
+        <section className="study-next" aria-labelledby="study-next-title">
+          <p className="study-next-label">{t.tracks.nextStep}</p>
+          <h2 id="study-next-title">
+            {hasReview ? t.tracks.reviewFirst : t.tracks.chooseTopic}
+          </h2>
+          <p>{hasReview ? t.tracks.reviewFirstBody : t.tracks.chooseTopicBody}</p>
+          {hasReview ? (
+            <Link className="button" to="/review">
+              {t.tracks.openReview} <span aria-hidden="true">→</span>
+            </Link>
+          ) : (
+            <a className="button" href="#track-catalog">
+              {t.tracks.browseTracks} <span aria-hidden="true">↓</span>
+            </a>
+          )}
+        </section>
+        <section className="study-queue" aria-labelledby="study-queue-title">
+          <h2 id="study-queue-title">{t.tracks.reviewQueue}</h2>
+          {review.data ? (
+            <dl className="stat">
+              <div>
+                <dt>{t.tracks.readyNow}</dt>
+                <dd>{review.data.dueNow}</dd>
+              </div>
+              <div>
+                <dt>{t.tracks.waitingForRecall}</dt>
+                <dd>{review.data.waiting}</dd>
+              </div>
+            </dl>
+          ) : (
+            <p className="muted">{review.isError ? t.tracks.reviewUnavailable : t.review.loading}</p>
+          )}
+          <div className="study-queue-links">
+            <Link to="/review">{t.tracks.viewQueue}</Link>
+            <Link to="/progress">{t.tracks.viewProgress}</Link>
+          </div>
+        </section>
+      </div>
 
-      {generalTracks.isError ? (
-        <ErrorState error={generalTracks.error} onRetry={() => void generalTracks.refetch()} />
-      ) : null}
-      {generalTracks.data && generalTracks.data.length > 0 ? (
-        <ul className="cards">
-          {generalTracks.data.map((track) => (
-            <li key={track.id} className="card">
-              <h2>
-                <Link to={`/general-tracks/${track.slug}`}>{track.name}</Link>
-              </h2>
-              <p className="muted">
-                {track.versionLabel} · {t.tracks.topicCount(track.topics.length)}
-              </p>
-              {standing.has(track.slug) ? (
-                <dl className="stat">
-                  <div>
-                    <dt>{t.progress.attempted}</dt>
-                    <dd>{standing.get(track.slug)!.attempted}</dd>
-                  </div>
-                  <div>
-                    <dt>{t.progress.accuracy}</dt>
-                    <dd>{`${Math.round(standing.get(track.slug)!.accuracy * 100)}%`}</dd>
-                  </div>
-                </dl>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      ) : null}
+      <section className="study-catalog" aria-labelledby="track-catalog">
+        <h2 id="track-catalog" tabIndex={-1}>{t.tracks.catalogTitle}</h2>
+        {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
+        {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
+        {nothingToShow ? (
+          <EmptyState title={t.tracks.emptyTitle}>
+            <p>{t.tracks.emptyBody}</p>
+          </EmptyState>
+        ) : null}
+        {tracks.data && tracks.data.length > 0 ? (
+          <section className="study-track-group" aria-labelledby="certification-tracks">
+            <h3 className="section-label" id="certification-tracks">{t.tracks.certificationTracks}</h3>
+            <ul className="cards">
+              {tracks.data.map((track) => (
+                <li key={track.id} className="card">
+                  <h4>
+                    <Link to={`/tracks/${track.slug}`}>{track.name}</Link>
+                  </h4>
+                  <p>{track.certificationName}</p>
+                  {/* A release is a Java fact; an exam that is not about one carries none (ADR
+                      0017), and the row reads without it rather than with an empty slot. */}
+                  <p className="muted">
+                    {track.provider} · {track.examVersion.label}
+                    {track.examVersion.javaRelease === null
+                      ? null
+                      : ` · ${t.tracks.javaRelease(track.examVersion.javaRelease)}`}
+                  </p>
+                  <p className="muted">{t.tracks.topicCount(track.topics.length)}</p>
+                  {/* Where the learner is on this track, not only what the track is. Absent until
+                      they have answered something on it: two zeroes say less than nothing. */}
+                  {standing.has(track.slug) ? (
+                    <dl className="stat">
+                      <div>
+                        <dt>{t.progress.attempted}</dt>
+                        <dd>{standing.get(track.slug)!.attempted}</dd>
+                      </div>
+                      <div>
+                        <dt>{t.progress.accuracy}</dt>
+                        <dd>{`${Math.round(standing.get(track.slug)!.accuracy * 100)}%`}</dd>
+                      </div>
+                    </dl>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        {generalTracks.isError ? (
+          <ErrorState error={generalTracks.error} onRetry={() => void generalTracks.refetch()} />
+        ) : null}
+        {generalTracks.data && generalTracks.data.length > 0 ? (
+          <section className="study-track-group" aria-labelledby="general-tracks">
+            <h3 className="section-label" id="general-tracks">{t.tracks.generalTracks}</h3>
+            <ul className="cards">
+              {generalTracks.data.map((track) => (
+                <li key={track.id} className="card">
+                  <h4>
+                    <Link to={`/general-tracks/${track.slug}`}>{track.name}</Link>
+                  </h4>
+                  <p className="muted">
+                    {track.versionLabel} · {t.tracks.topicCount(track.topics.length)}
+                  </p>
+                  {standing.has(track.slug) ? (
+                    <dl className="stat">
+                      <div>
+                        <dt>{t.progress.attempted}</dt>
+                        <dd>{standing.get(track.slug)!.attempted}</dd>
+                      </div>
+                      <div>
+                        <dt>{t.progress.accuracy}</dt>
+                        <dd>{`${Math.round(standing.get(track.slug)!.accuracy * 100)}%`}</dd>
+                      </div>
+                    </dl>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+      </section>
     </>
   );
 }
