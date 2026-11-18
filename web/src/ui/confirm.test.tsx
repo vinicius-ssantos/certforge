@@ -46,4 +46,35 @@ describe("Confirm", () => {
 
     expect(screen.getByRole("button", { name: "Retire" })).toHaveFocus();
   });
+
+  it("keeps the confirmation visible while an action is in progress", async () => {
+    const user = userEvent.setup();
+    const onConfirm = vi.fn();
+    const { rerender } = render(
+      <Confirm title="Confirm retiring" explain="This cannot be undone." confirmLabel="Yes, retire" onConfirm={onConfirm}>
+        Retire
+      </Confirm>,
+    );
+
+    await user.click(screen.getByRole("button", { name: "Retire" }));
+    await user.click(screen.getByRole("button", { name: "Yes, retire" }));
+    rerender(
+      <Confirm title="Confirm retiring" explain="This cannot be undone." confirmLabel="Yes, retire" onConfirm={onConfirm} busy>
+        Retire
+      </Confirm>,
+    );
+
+    expect(screen.getByRole("button", { name: "Yes, retire" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Cancel" })).toBeDisabled();
+    expect(screen.getByRole("group", { name: "Confirm retiring" })).toBeVisible();
+
+    rerender(
+      <Confirm title="Confirm retiring" explain="This cannot be undone." confirmLabel="Yes, retire" onConfirm={onConfirm}>
+        Retire
+      </Confirm>,
+    );
+    await user.click(screen.getByRole("button", { name: "Cancel" }));
+    expect(screen.getByRole("button", { name: "Retire" })).toHaveFocus();
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
 });

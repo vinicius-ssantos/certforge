@@ -56,7 +56,7 @@ export function Confirm({
       <button ref={confirm} type="button" onClick={onConfirm} disabled={busy}>
         {confirmLabel}
       </button>{" "}
-      <button type="button" className="secondary" onClick={() => setAsking(false)}>
+      <button type="button" className="secondary" onClick={() => setAsking(false)} disabled={busy}>
         {cancelLabel ?? t.confirm.cancel}
       </button>
     </div>
