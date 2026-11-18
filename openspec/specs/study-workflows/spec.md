@@ -1,4 +1,9 @@
-## ADDED Requirements
+# study-workflows Specification
+
+## Purpose
+Help learners resume study, preserve unsubmitted mock choices, and follow up on practice results using authoritative session state and available study opportunities.
+
+## Requirements
 
 ### Requirement: The timed mock shall retain a draft on navigation
 The timed mock SHALL retain a draft on navigation.

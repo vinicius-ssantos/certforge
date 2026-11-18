@@ -1,4 +1,9 @@
-## ADDED Requirements
+# frontend-navigation Specification
+
+## Purpose
+Enable consistent, keyboard-accessible navigation and shareable filtering across learner and editorial screens, including compact layouts and route-aware bundle costs.
+
+## Requirements
 
 ### Requirement: Editorial criteria shall stay consistent with the URL
 Editorial criteria SHALL stay consistent with the URL.

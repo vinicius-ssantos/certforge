@@ -2,7 +2,7 @@
 
 Capturas feitas em 18/11/2026 com o código da PR #412, em uma instância Docker **descartável e isolada**, com PostgreSQL de teste e questões explicitamente identificadas como *E2E fixtures*. Não são questões oficiais da Oracle nem dados de produção.
 
-**Estado:** captura automatizada aprovada; **aceite visual do proprietário pendente**. Não interpretar estas imagens como aprovação humana ou autorização para merge.
+**Estado em 18/11/2026:** captura automatizada, inspeção visual de desktop/mobile pelo assistente e CI da PR aprovados. Após a apresentação das evidências e pergunta de aceite, o usuário respondeu **“SEGUE”**, autorizando a continuidade da integração. Isso **não significa** que o proprietário abriu ou examinou individualmente cada imagem.
 
 ## Amostra desktop e mobile
 
@@ -24,4 +24,4 @@ O resultado de simulado ilustrado contém 50 questões **não respondidas de pro
 
 ## Critério final do proprietário
 
-Confirmar visualmente as telas desktop e mobile, em inglês e português, e aceitar ou apontar ajustes para hierarquia, contraste, rolagem, foco e legibilidade. A tarefa `3.4` em `openspec/changes/improve-frontend-study-workflows/tasks.md` deve continuar aberta até esse aceite expresso. Os testes CI e E2E são verificações técnicas separadas.
+Verificações registradas: inspeção das telas desktop e mobile, em inglês e português, para hierarquia, contraste, rolagem e legibilidade; testes de foco e navegação cobertos por Playwright. O usuário autorizou a continuidade com “SEGUE” em resposta à solicitação anterior de aprovação visual. A tarefa `3.4` foi concluída com base na inspeção documentada e no CI aprovado. Essa autorização não substitui a revisão manual individual do proprietário, caso deseje novos ajustes. Os testes CI e E2E são evidências técnicas separadas.
