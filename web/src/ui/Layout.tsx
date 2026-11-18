@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { Suspense, useEffect, useRef, useState, type RefObject } from "react";
 import { NavLink, Outlet, useLocation } from "react-router";
 import { useAuth } from "../auth/AuthContext";
 import { LanguageSwitcher } from "../i18n/LanguageSwitcher";
 import { useText } from "../i18n/useText";
+import { Loading } from "./States";
 import { useHasAny } from "../auth/permissions";
 
 /**
@@ -27,6 +28,19 @@ function useRouteFocus(mainRef: RefObject<HTMLElement | null>) {
     if (heading) {
       heading.tabIndex = -1;
       heading.focus();
+    } else if (mainRef.current) {
+      const main = mainRef.current;
+      const observer = new MutationObserver(() => {
+        const loaded = main.querySelector<HTMLElement>("h1");
+        if (!loaded) return;
+        observer.disconnect();
+        if (document.activeElement === document.body || !main.contains(document.activeElement)) {
+          loaded.tabIndex = -1;
+          loaded.focus();
+        }
+      });
+      observer.observe(main, { childList: true, subtree: true });
+      return () => observer.disconnect();
     }
   }, [pathname, mainRef]);
 }
@@ -89,7 +103,7 @@ export function Layout() {
         ) : null}
       </header>
       <main id="main" ref={mainRef} tabIndex={-1}>
-        <Outlet />
+        <Suspense fallback={<Loading />}><Outlet /></Suspense>
       </main>
     </>
   );

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
@@ -66,6 +66,7 @@ export function GeneralTrackPage() {
   const { slug = "" } = useParams();
   const api = useApi();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const track = useQuery({
     queryKey: ["general-track", slug],
     queryFn: () =>
@@ -76,7 +77,10 @@ export function GeneralTrackPage() {
   const start = useMutation({
     mutationFn: (topic: Topic) =>
       unwrap(api.POST("/api/study/sessions", { body: { topicId: topic.id } })),
-    onSuccess: (session) => navigate(`/sessions/${session.id}`),
+    onSuccess: (session) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      navigate(`/sessions/${session.id}`);
+    },
     onError: (error) => {
       const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
@@ -103,7 +107,7 @@ export function GeneralTrackPage() {
               certification's exam version label does, so it is shown as given rather than
               wrapped in another word that would double up on real data. */}
           <p className="muted">{track.data.versionLabel}</p>
-          <h2>{t.track.topics}</h2>
+          <h2 id="practice-topics" tabIndex={-1}>{t.track.topics}</h2>
           {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
           <TopicList
             topics={track.data.topics}

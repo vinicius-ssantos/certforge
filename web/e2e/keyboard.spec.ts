@@ -37,6 +37,12 @@ test.describe("using it with the keyboard alone", () => {
 
   test("every control of the learner's screens is reachable and shows the focus", async ({ page }) => {
     await register(page);
+    // The overview fetches review, progress, active sessions and two catalogues in parallel.
+    // Its links can change while those requests settle, invalidating a snapshot of Tab stops.
+    // Walk the settled learner page rather than a transitional loading state.
+    await expect(page.getByRole("link", { name: "Java Certification" })).toBeVisible();
+    await expect(page.getByText("Checking your study activity…")).toHaveCount(0);
+    await page.waitForLoadState("networkidle");
     await expectKeyboardReachable(page, "the tracks page");
 
     await page.getByRole("link", { name: "Java Certification" }).click();

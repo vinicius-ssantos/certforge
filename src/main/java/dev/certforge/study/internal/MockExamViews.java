@@ -32,6 +32,7 @@ interface MockExamViews {
       int questionCount,
       int questionsPerTopic,
       int missingQuestionCount,
+      long durationMinutes,
       List<MockExamTopicAvailability> topics) {}
 
   record MockExamTopicAvailability(TopicId topicId, int required, int available, int missing) {}

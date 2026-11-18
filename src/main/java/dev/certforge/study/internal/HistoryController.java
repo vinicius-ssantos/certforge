@@ -32,18 +32,24 @@ class HistoryController {
 
   @GetMapping("/sessions")
   ResponseEntity<Page<SessionHistoryItem>> sessions(
-      @RequestParam(required = false) String cursor, @RequestParam(required = false) Integer size) {
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false) Integer size,
+      @RequestParam(required = false) UUID trackId,
+      @RequestParam(required = false) String status) {
     return ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .body(service.sessions(cursor, size));
+        .body(service.sessions(cursor, size, trackId, status));
   }
 
   @GetMapping("/mock-exams")
   ResponseEntity<Page<MockExamHistoryItem>> mockExams(
-      @RequestParam(required = false) String cursor, @RequestParam(required = false) Integer size) {
+      @RequestParam(required = false) String cursor,
+      @RequestParam(required = false) Integer size,
+      @RequestParam(required = false) UUID trackId,
+      @RequestParam(required = false) String status) {
     return ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .body(mockExamHistory.list(cursor, size));
+        .body(mockExamHistory.list(cursor, size, trackId, status));
   }
 
   @GetMapping("/attempts")

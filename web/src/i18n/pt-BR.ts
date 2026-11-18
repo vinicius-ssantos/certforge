@@ -43,6 +43,7 @@ export const ptBR: Catalog = {
   },
 
   states: {
+    tableMore: "Role dentro da tabela para ver mais colunas.",
     loading: "Carregando",
     errorTitle: "Não funcionou",
     reference: "Referência:",
@@ -59,6 +60,7 @@ export const ptBR: Catalog = {
   },
 
   prompt: {
+    wrapCode: "Quebrar linhas longas de código",
     codeExample: "Exemplo de código",
   },
 
@@ -111,6 +113,8 @@ export const ptBR: Catalog = {
   },
 
   auth: {
+    accessHelp: "Problemas para entrar?",
+    accessHelpBody: "Peça ao administrador desta instalação ajuda para recuperar o acesso à sua conta.",
     signIn: "Entrar",
     signingIn: "Entrando…",
     createAccount: "Criar conta",
@@ -133,7 +137,25 @@ export const ptBR: Catalog = {
   },
 
   tracks: {
+    resumeStudy: "Retomar estudo",
+    checkingNextStep: "Consultando suas atividades de estudo…",
     title: "Trilhas",
+    nextStep: "Próximo passo",
+    reviewFirst: "Comece pela revisão",
+    reviewFirstBody: "Reveja questões de sessões anteriores antes de começar um novo tópico.",
+    chooseTopic: "O que você vai praticar agora?",
+    chooseTopicBody: "Abra uma trilha e escolha um tópico para estudar.",
+    browseTracks: "Explorar trilhas",
+    openReview: "Começar a revisão",
+    reviewQueue: "Fila de revisão",
+    readyNow: "Para revisar agora",
+    waitingForRecall: "Em intervalo de revisão",
+    reviewUnavailable: "A fila de revisão está temporariamente indisponível.",
+    viewQueue: "Ver a fila",
+    viewProgress: "Ver progresso",
+    catalogTitle: "Catálogo de estudo",
+    certificationTracks: "Trilhas de certificação",
+    generalTracks: "Trilhas de conhecimento geral",
     loading: "Carregando as trilhas",
     emptyTitle: "Nenhuma trilha disponível ainda",
     emptyBody: "Volte em breve. As trilhas aparecem aqui quando são publicadas.",
@@ -143,6 +165,8 @@ export const ptBR: Catalog = {
   },
 
   track: {
+    practiceAvailable: "Praticar os tópicos disponíveis",
+    mockFormat: (count: number, minutes: number) => `${count} questões · ${minutes} minutos`,
     fallbackName: "Trilha",
     loading: "Carregando a trilha",
     backToAll: "Voltar para todas as trilhas",
@@ -251,6 +275,13 @@ export const ptBR: Catalog = {
   },
 
   review: {
+    nextScheduled: "Próxima revisão programada",
+    filterTopic: "Filtrar por tópico",
+    allTopics: "Todos os tópicos",
+    filterReason: "Motivo entre as questões exibidas",
+    allReasons: "Todos os motivos",
+    noFilterMatches: "Nenhuma questão exibida corresponde aos filtros.",
+    showMore: "Mostrar mais questões para revisar",
     title: "Revisão",
     unknownReason: "Revisão necessária",
     unknownReasonExplanation: "Esta questão precisa ser revisitada.",
@@ -311,6 +342,19 @@ export const ptBR: Catalog = {
   },
 
   progress: {
+    compareAttempts: "Comparar tentativas de prática",
+    comparisonScope: "No período selecionado, a comparação usa as duas últimas tentativas carregadas de cada versão de questão. Carregue mais para incluir tentativas anteriores.",
+    fromDate: "Data inicial",
+    untilDate: "Data final",
+    answer: "Resposta escolhida",
+    confidence: "Confiança na resposta",
+    loadedAccuracy: (correct: number, total: number) => `${correct} acertos em ${total} tentativas carregadas no período.`,
+    noComparison: "A comparação exige duas tentativas carregadas na mesma versão da questão.",
+    loadAttempts: "Carregar tentativas anteriores",
+    filterTrack: "Filtrar por trilha de estudo",
+    allTracks: "Todas as trilhas de estudo",
+    noMatches: "Ainda não há progresso nesta trilha.",
+    practiceNext: "Tópico sugerido para praticar",
     title: "Progresso",
     loading: "Carregando seu progresso",
     emptyTitle: "Nenhum progresso ainda",
@@ -353,6 +397,10 @@ export const ptBR: Catalog = {
   },
 
   history: {
+    allTracks: "Todas as trilhas de estudo",
+    allStatuses: "Todas as situações",
+    noMatches: "Nenhuma sessão encontrada com esses filtros",
+    continueActivity: (name: string) => `Continuar ${name}`,
     title: "Histórico",
     loading: "Carregando suas sessões",
     emptyTitle: "Nenhum histórico de estudo ainda",
@@ -406,6 +454,12 @@ export const ptBR: Catalog = {
   },
 
   mock: {
+    filterLabel: "Exibir no navegador de questões",
+    filterAll: "Todas as questões",
+    filterPending: "Não respondidas",
+    filterMarked: "Marcadas",
+    noFilteredQuestions: "Nenhuma questão corresponde ao filtro.",
+    unsavedDraft: "Seleção em edição. Salve para registrar sua resposta.",
     title: "Simulado",
     loading: "Carregando o simulado",
     closed: "Este simulado está fechado. O gabarito já está disponível no resultado.",
@@ -443,6 +497,11 @@ export const ptBR: Catalog = {
   },
 
   mockResult: {
+    filterLabel: "Filtrar resultados por questão",
+    filterAll: (count: number) => `Todas (${count})`,
+    filterIncorrect: (count: number) => `Erradas (${count})`,
+    filterUnanswered: (count: number) => `Não respondidas (${count})`,
+    filterEmpty: "Nenhuma questão corresponde ao resultado escolhido.",
     title: "Resultado do simulado",
     loading: "Carregando o resultado",
     reached: "Meta de prática alcançada",
@@ -482,6 +541,9 @@ export const ptBR: Catalog = {
   },
 
   interview: {
+    practiceByTopic: "Praticar por tema",
+    prepareForRole: "Preparar para uma vaga",
+    pastEvidence: "Evidências da prática",
     title: "Preparação para entrevista",
     loading: "Carregando a preparação para entrevista",
     emptyTitle: "Nenhuma preparação para entrevista está aberta ainda",

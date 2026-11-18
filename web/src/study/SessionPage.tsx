@@ -110,6 +110,7 @@ export function SessionPage() {
         ),
       ),
     onSuccess: (closed) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
       setFeedback(null);
       store(closed);
     },

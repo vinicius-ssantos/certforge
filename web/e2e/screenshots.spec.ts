@@ -81,6 +81,11 @@ async function captureMockResult(page: Page, adminAccount: { email: string; pass
   await expect(page.getByRole("heading", { level: 1, name: "Mock exam result" })).toBeVisible();
   await expectNoA11yViolations(page);
   await shot(page, "10c-mock-result");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual(390);
+  await shot(page, "10d-mock-result-mobile");
+  await page.setViewportSize({ width: 1280, height: 720 });
 }
 
 test("capture the demonstration screens", async ({ page, browser, request }) => {
@@ -104,6 +109,14 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
 
   const learner = await register(page);
   await shot(page, "02-tracks");
+  // Review the redesigned landing screen on both common mobile widths.
+  for (const width of [390, 320]) {
+    await page.setViewportSize({ width, height: 844 });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+      .toBeLessThanOrEqual(width);
+    await shot(page, `02a-tracks-mobile-${width}`);
+  }
+  await page.setViewportSize({ width: 1280, height: 720 });
 
   /*
    * What a new account actually sees first.
@@ -134,6 +147,11 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
    */
   await expect(page.getByText("Checking whether this mock can start")).toHaveCount(0);
   await shot(page, "03-track");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth))
+    .toBeLessThanOrEqual(390);
+  await shot(page, "03a-track-mobile");
+  await page.setViewportSize({ width: 1280, height: 720 });
   await page.getByRole("button", { name: `Practice ${TOPIC_NAME}` }).click();
   await expect(page.getByRole("heading", { level: 2, name: /^Question 1 of/ })).toBeVisible();
   await shot(page, "04-question");
@@ -184,7 +202,7 @@ test("capture the demonstration screens", async ({ page, browser, request }) => 
    */
   await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Review" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Review" })).toBeVisible();
-  await expect(page.getByText("Wrong, and you were sure")).toBeVisible();
+  await expect(page.locator("strong.pill.pill-stop").filter({ hasText: "Wrong, and you were sure" })).toBeVisible();
   await shot(page, "10b-review-queue");
 
   // ---- the editorial desk ----

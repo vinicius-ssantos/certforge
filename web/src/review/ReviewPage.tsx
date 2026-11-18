@@ -1,8 +1,10 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { ReviewQueueItem } from "../api/types";
+import { useTopicNames } from "../history/useTopicNames";
 import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
@@ -32,15 +34,25 @@ export function ReviewPage() {
   useDocumentTitle(t.review.title);
   const api = useApi();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [topicId, setTopicId] = useState("");
+  const [limit, setLimit] = useState(20);
+  const [reasons, setReasons] = useState("");
+  const queueKey = ["review", "queue", { topicId, limit }];
   const queue = useQuery({
-    queryKey: ["review", "queue"],
-    queryFn: () => unwrap(api.GET("/api/review/queue")),
+    queryKey: queueKey,
+    queryFn: () => unwrap(api.GET("/api/review/queue", {
+      params: { query: { limit, ...(topicId ? { topicId } : {}) } },
+    })),
   });
 
   const practise = useMutation({
     mutationFn: ({ topicId, revisionIds }: { topicId: string; revisionIds: string[] }) =>
       unwrap(api.POST("/api/study/sessions", { body: { topicId, revisionIds } })),
-    onSuccess: (session) => navigate(`/sessions/${session.id}`),
+    onSuccess: (session) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      navigate(`/sessions/${session.id}`);
+    },
     onError: (error) => {
       const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
@@ -50,8 +62,11 @@ export function ReviewPage() {
   });
 
   const data = queue.data;
+  const topicNames = useTopicNames();
+  const activeReason = data?.items.length ? reasons : "";
   const byTopic = new Map<string, { name: string; items: ReviewQueueItem[] }>();
   for (const item of data?.items ?? []) {
+    if (activeReason && item.reason !== activeReason) continue;
     const group = byTopic.get(item.topicId) ?? {
       name: item.topicName ?? t.review.fallbackTopic,
       items: [],
@@ -71,7 +86,27 @@ export function ReviewPage() {
         <ErrorState error={queue.error} onRetry={() => void queue.refetch()} />
       ) : null}
 
-      {data && data.items.length === 0 ? (
+      {data?.nextReviewAt ? <p className="notice">
+        {t.review.nextScheduled}{" "}
+        <time dateTime={data.nextReviewAt}>{formatDateTime(data.nextReviewAt, locale)}</time>
+      </p> : null}
+      {topicNames.size > 0 || !!data?.items.length ? <div className="study-filters">
+        <label>{t.review.filterTopic}
+          <select value={topicId} onChange={(event) => { setTopicId(event.target.value); setReasons(""); setLimit(20); }}>
+            <option value="">{t.review.allTopics}</option>
+            {[...topicNames].map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+          </select>
+        </label>
+        {data?.items.length ? <label>{t.review.filterReason}
+          <select value={reasons} onChange={(event) => setReasons(event.target.value)}>
+            <option value="">{t.review.allReasons}</option>
+            {(["WRONG_WHILE_CONFIDENT", "WRONG", "RIGHT_BUT_UNSURE", "DUE_FOR_RECALL"] as const)
+              .map((reason) => <option key={reason} value={reason}>{reasonLabel(reason, t)}</option>)}
+          </select>
+        </label> : null}
+      </div> : null}
+      {data && data.items.length === 0 && topicId ? <p role="status">{t.review.noFilterMatches}</p> : null}
+      {data && data.items.length === 0 && !topicId ? (
         <EmptyState
           title={
             data.waiting > 0
@@ -103,6 +138,7 @@ export function ReviewPage() {
             {data.items.length < data.dueNow ? t.review.showingFirst(data.items.length) : ""}.
             {data.waiting > 0 ? t.review.restingMore(data.waiting) : ""}
           </p>
+          {byTopic.size === 0 ? <p role="status">{t.review.noFilterMatches}</p> : null}
           {[...byTopic].map(([topicId, group]) => (
             <section
               key={topicId}
@@ -155,6 +191,11 @@ export function ReviewPage() {
               </ol>
             </section>
           ))}
+          {data.items.length < data.dueNow && limit < 100 ? (
+            <button type="button" className="secondary" onClick={() => setLimit(Math.min(limit + 20, 100))}>
+              {t.review.showMore}
+            </button>
+          ) : null}
         </>
       ) : null}
 

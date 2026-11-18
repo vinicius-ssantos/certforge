@@ -107,6 +107,7 @@ class MockExamService {
         readiness.blueprint().questionCount(),
         readiness.blueprint().questionsPerTopic(),
         readiness.missingQuestionCount(),
+        readiness.blueprint().timeLimit().toMinutes(),
         topics);
   }
 

@@ -46,6 +46,7 @@ export const en = {
   },
 
   states: {
+    tableMore: "Scroll within the table to see more columns.",
     loading: "Loading",
     errorTitle: "That did not work",
     reference: "Reference:",
@@ -62,6 +63,7 @@ export const en = {
   },
 
   prompt: {
+    wrapCode: "Wrap long code lines",
     codeExample: "Code example",
   },
 
@@ -123,6 +125,8 @@ export const en = {
   },
 
   auth: {
+    accessHelp: "Trouble signing in?",
+    accessHelpBody: "Ask the administrator of this installation to help you recover access to your account.",
     signIn: "Sign in",
     signingIn: "Signing in…",
     createAccount: "Create account",
@@ -149,7 +153,25 @@ export const en = {
     checkingSession: "Checking your session",
   },
   tracks: {
+    resumeStudy: "Resume studying",
+    checkingNextStep: "Checking your study activity…",
     title: "Tracks",
+    nextStep: "Next step",
+    reviewFirst: "Start with a review",
+    reviewFirstBody: "Revisit questions from previous sessions before starting a new topic.",
+    chooseTopic: "What will you practise next?",
+    chooseTopicBody: "Open a track and pick a topic to study.",
+    browseTracks: "Browse tracks",
+    openReview: "Start reviewing",
+    reviewQueue: "Review queue",
+    readyNow: "Ready to review",
+    waitingForRecall: "Waiting for recall",
+    reviewUnavailable: "The review queue is temporarily unavailable.",
+    viewQueue: "See the queue",
+    viewProgress: "View progress",
+    catalogTitle: "Study catalogue",
+    certificationTracks: "Certification tracks",
+    generalTracks: "General knowledge tracks",
     loading: "Loading tracks",
     emptyTitle: "No tracks are available yet",
     emptyBody: "Check back soon. Tracks appear here once they are published.",
@@ -159,6 +181,8 @@ export const en = {
   },
 
   track: {
+    practiceAvailable: "Practise the available topics",
+    mockFormat: (count: number, minutes: number) => `${count} questions · ${minutes} minutes`,
     fallbackName: "Track",
     loading: "Loading track",
     backToAll: "Back to all tracks",
@@ -280,6 +304,13 @@ export const en = {
    * a locale whose plural rules differ from English can decide the whole sentence for itself.
    */
   review: {
+    nextScheduled: "Next scheduled review",
+    filterTopic: "Filter by topic",
+    allTopics: "All topics",
+    filterReason: "Reason among displayed questions",
+    allReasons: "All reasons",
+    noFilterMatches: "No displayed questions match these filters.",
+    showMore: "Show more due questions",
     title: "Review",
     unknownReason: "Review needed",
     unknownReasonExplanation: "This question is due for another look.",
@@ -342,6 +373,19 @@ export const en = {
     expired: "Expired",
   },
   progress: {
+    compareAttempts: "Compare practice attempts",
+    comparisonScope: "For the selected dates, this compares the two latest loaded attempts on each question revision. Load more to include earlier attempts.",
+    fromDate: "From date",
+    untilDate: "Through date",
+    answer: "Selected response",
+    confidence: "Answer confidence",
+    loadedAccuracy: (correct: number, total: number) => `${correct} correct out of ${total} loaded attempts in this period.`,
+    noComparison: "A comparison requires two loaded attempts on the same revision.",
+    loadAttempts: "Load earlier attempts",
+    filterTrack: "Filter by study track",
+    allTracks: "All study tracks",
+    noMatches: "No progress for this track yet.",
+    practiceNext: "Suggested topic to practise",
     title: "Progress",
     loading: "Loading your progress",
     emptyTitle: "No progress yet",
@@ -399,6 +443,10 @@ export const en = {
     reviewThese: "Review these questions",
   },
   history: {
+    allTracks: "All learning tracks",
+    allStatuses: "All statuses",
+    noMatches: "No sessions match these filters",
+    continueActivity: (name: string) => `Continue ${name}`,
     title: "History",
     loading: "Loading your sessions",
     emptyTitle: "No study history yet",
@@ -460,6 +508,12 @@ export const en = {
     showAnswer: "Show the correct answer and explanation",
   },
   mock: {
+    filterLabel: "Show in the question navigator",
+    filterAll: "All questions",
+    filterPending: "Unanswered",
+    filterMarked: "Flagged",
+    noFilteredQuestions: "No questions match this filter.",
+    unsavedDraft: "Selection in progress. Save it to record your answer.",
     title: "Mock exam",
     loading: "Loading mock exam",
     closed: "This mock is closed. The answer key is now available in the result.",
@@ -496,6 +550,11 @@ export const en = {
     saveAnswer: "Save answer",
   },
   mockResult: {
+    filterLabel: "Filter question results",
+    filterAll: (count: number) => `All (${count})`,
+    filterIncorrect: (count: number) => `Incorrect (${count})`,
+    filterUnanswered: (count: number) => `Unanswered (${count})`,
+    filterEmpty: "No questions match the selected result.",
     title: "Mock exam result",
     loading: "Loading result",
     reached: "Practice target reached",
@@ -535,6 +594,9 @@ export const en = {
     tracksLink: "list of tracks",
   },
   interview: {
+    practiceByTopic: "Practise by topic",
+    prepareForRole: "Prepare for a specific role",
+    pastEvidence: "Practice evidence",
     title: "Interview prep",
     loading: "Loading interview preparation",
     emptyTitle: "No interview preparation is open yet",

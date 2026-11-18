@@ -70,8 +70,9 @@ describe("the review queue", () => {
       at,
     );
 
-    expect(await screen.findByText("Wrong, and you were sure")).toBeInTheDocument();
-    expect(screen.getByText("Right, but unsure")).toBeInTheDocument();
+    const topic = within(await screen.findByRole("region", { name: "Working with Java data types" }));
+    expect(topic.getByText("Wrong, and you were sure")).toBeInTheDocument();
+    expect(topic.getByText("Right, but unsure")).toBeInTheDocument();
     // The code itself never reaches the learner.
     expect(screen.queryByText(/WRONG_WHILE_CONFIDENT/)).not.toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();

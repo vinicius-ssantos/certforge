@@ -1,10 +1,10 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
 import dockerfile from "react-syntax-highlighter/dist/esm/languages/prism/docker";
 import hcl from "react-syntax-highlighter/dist/esm/languages/prism/hcl";
 import java from "react-syntax-highlighter/dist/esm/languages/prism/java";
 import yaml from "react-syntax-highlighter/dist/esm/languages/prism/yaml";
-import { useText } from "../i18n/useText";
+import { useLocale, useText } from "../i18n/useText";
 
 // Registered under the content tag content authors actually write (`dockerfile`), not Prism's
 // own module name (`docker`) for that grammar.
@@ -46,6 +46,17 @@ export function splitFences(text: string): Segment[] {
   return segments.filter((segment) => segment.value.trim() !== "");
 }
 
+// Code can be wider than the view. A tab stop lets the keyboard scroll it.
+function CodePre({ children }: { children?: ReactNode }) {
+  const t = useText();
+  return (
+    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
+    <pre className="code" tabIndex={0} aria-label={t.prompt.codeExample}>
+      {children}
+    </pre>
+  );
+}
+
 /**
  * Question text as the learner reads it: prose in the reading face, code in a monospaced block.
  * Nothing else is interpreted, and the text is never inserted as HTML — the highlighter tokenizes
@@ -53,21 +64,20 @@ export function splitFences(text: string): Segment[] {
  */
 export function Prompt({ text }: { text: string }): ReactNode {
   const t = useText();
-
-  // A code block can be wider than the screen. Making it focusable lets keyboard users scroll it,
-  // which is why a non-interactive element takes a tab stop here.
-  const CodePre = ({ children }: { children?: ReactNode }) => (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-    <pre className="code" tabIndex={0} aria-label={t.prompt.codeExample}>
-      {children}
-    </pre>
-  );
-
+  const { locale } = useLocale();
+  const [wrapped, setWrapped] = useState(false);
+  const segments = splitFences(text);
   return (
     // lang="en": question text stays English in every locale, and a screen reader needs to be told
     // so, or it reads English words with the phonetics of the interface language (ADR 0012).
-    <div className="prompt" lang="en">
-      {splitFences(text).map((segment, index) =>
+    <div className={wrapped ? "prompt code-wrap" : "prompt"} lang="en">
+      {segments.some((segment) => segment.kind === "code") ? (
+        <label className="code-wrap-control" lang={locale}>
+          <input type="checkbox" checked={wrapped} onChange={(event) => setWrapped(event.target.checked)} />
+          {t.prompt.wrapCode}
+        </label>
+      ) : null}
+      {segments.map((segment, index) =>
         segment.kind === "code" ? (
           HIGHLIGHTED_LANGUAGES.has(segment.language) ? (
             <SyntaxHighlighter

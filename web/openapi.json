@@ -1365,6 +1365,10 @@
           "contentReady" : {
             "type" : "boolean"
           },
+          "durationMinutes" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
           "missingQuestionCount" : {
             "format" : "int32",
             "type" : "integer"
@@ -1384,7 +1388,7 @@
             "type" : "array"
           }
         },
-        "required" : [ "activeSessionId", "contentReady", "missingQuestionCount", "questionCount", "questionsPerTopic", "topics" ],
+        "required" : [ "activeSessionId", "contentReady", "durationMinutes", "missingQuestionCount", "questionCount", "questionsPerTopic", "topics" ],
         "type" : "object"
       },
       "MockExamHistoryItem" : {
@@ -2123,12 +2127,16 @@
             "format" : "int32",
             "type" : "integer"
           },
+          "nextReviewAt" : {
+            "format" : "date-time",
+            "type" : [ "string", "null" ]
+          },
           "waiting" : {
             "format" : "int32",
             "type" : "integer"
           }
         },
-        "required" : [ "dueNow", "items", "neverAttempted", "waiting" ],
+        "required" : [ "dueNow", "items", "neverAttempted", "nextReviewAt", "waiting" ],
         "type" : "object"
       },
       "QueueItem" : {
@@ -4501,6 +4509,21 @@
             "format" : "int32",
             "type" : "integer"
           }
+        }, {
+          "in" : "query",
+          "name" : "trackId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          }
         } ],
         "responses" : {
           "200" : {
@@ -4534,6 +4557,21 @@
           "schema" : {
             "format" : "int32",
             "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "trackId",
+          "required" : false,
+          "schema" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        }, {
+          "in" : "query",
+          "name" : "status",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
           }
         } ],
         "responses" : {

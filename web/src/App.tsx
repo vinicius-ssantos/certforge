@@ -1,3 +1,4 @@
+import { lazy } from "react";
 import { Route, Routes } from "react-router";
 import { LoginPage } from "./auth/LoginPage";
 import { RegisterPage } from "./auth/RegisterPage";
@@ -5,33 +6,32 @@ import { RequireAuth } from "./auth/RequireAuth";
 import { GeneralTrackPage } from "./catalog/GeneralTrackPage";
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
-import { CatalogPage } from "./editorial/CatalogPage";
-import { CatalogTrackPage } from "./editorial/CatalogTrackPage";
-import { NewQuestionPage } from "./editorial/NewQuestionPage";
-import { QuestionPage } from "./editorial/QuestionPage";
-import { QueuePage } from "./editorial/QueuePage";
-import { ReviewQueuePage } from "./editorial/ReviewQueuePage";
 import { RequireCatalogManage } from "./editorial/RequireCatalogManage";
 import { RequireEditorial } from "./editorial/RequireEditorial";
 import { HistoryPage } from "./history/HistoryPage";
-import {
-  BlueprintPage,
-  BlueprintsPage,
-  NewBlueprintPage,
-} from "./interview/BlueprintPage";
-import { EvidencePage } from "./interview/EvidencePage";
-import { InterviewSessionPage } from "./interview/InterviewSessionPage";
-import { InterviewsPage } from "./interview/InterviewsPage";
 import { useText } from "./i18n/useText";
-import { SessionReviewPage } from "./history/SessionReviewPage";
 import { ProgressPage } from "./progress/ProgressPage";
-import { MockExamPage } from "./mock/MockExamPage";
-import { MockExamResultPage } from "./mock/MockExamResultPage";
 import { ReviewPage } from "./review/ReviewPage";
-import { SessionPage } from "./study/SessionPage";
 import { Layout } from "./ui/Layout";
 import { EmptyState } from "./ui/States";
 import { useDocumentTitle } from "./ui/useDocumentTitle";
+
+const CatalogPage = lazy(() => import("./editorial/CatalogPage").then((module) => ({ default: module.CatalogPage })));
+const CatalogTrackPage = lazy(() => import("./editorial/CatalogTrackPage").then((module) => ({ default: module.CatalogTrackPage })));
+const NewQuestionPage = lazy(() => import("./editorial/NewQuestionPage").then((module) => ({ default: module.NewQuestionPage })));
+const QuestionPage = lazy(() => import("./editorial/QuestionPage").then((module) => ({ default: module.QuestionPage })));
+const QueuePage = lazy(() => import("./editorial/QueuePage").then((module) => ({ default: module.QueuePage })));
+const ReviewQueuePage = lazy(() => import("./editorial/ReviewQueuePage").then((module) => ({ default: module.ReviewQueuePage })));
+const BlueprintPage = lazy(() => import("./interview/BlueprintPage").then((module) => ({ default: module.BlueprintPage })));
+const BlueprintsPage = lazy(() => import("./interview/BlueprintPage").then((module) => ({ default: module.BlueprintsPage })));
+const NewBlueprintPage = lazy(() => import("./interview/BlueprintPage").then((module) => ({ default: module.NewBlueprintPage })));
+const EvidencePage = lazy(() => import("./interview/EvidencePage").then((module) => ({ default: module.EvidencePage })));
+const InterviewSessionPage = lazy(() => import("./interview/InterviewSessionPage").then((module) => ({ default: module.InterviewSessionPage })));
+const InterviewsPage = lazy(() => import("./interview/InterviewsPage").then((module) => ({ default: module.InterviewsPage })));
+const SessionReviewPage = lazy(() => import("./history/SessionReviewPage").then((module) => ({ default: module.SessionReviewPage })));
+const MockExamPage = lazy(() => import("./mock/MockExamPage").then((module) => ({ default: module.MockExamPage })));
+const MockExamResultPage = lazy(() => import("./mock/MockExamResultPage").then((module) => ({ default: module.MockExamResultPage })));
+const SessionPage = lazy(() => import("./study/SessionPage").then((module) => ({ default: module.SessionPage })));
 
 function NotFound() {
   const t = useText();

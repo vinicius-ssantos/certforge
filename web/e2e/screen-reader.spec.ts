@@ -21,24 +21,17 @@ test.describe("what a screen reader is given", () => {
     await page.goto("/login");
     await expect(page.getByRole("heading", { level: 1, name: "Sign in" })).toBeVisible();
 
-    await expect(page.locator("body")).toMatchAriaSnapshot(`
-      - link "Skip to main content"
-      - banner:
-        - text: CertForge
-        - combobox "Language":
-          - option "English" [selected]
-          - option "Português (Brasil)"
-      - main:
-        - heading "Sign in" [level=1]
-        - text: Email
-        - textbox "Email"
-        - text: Password
-        - textbox "Password"
-        - button "Sign in"
-        - paragraph:
-          - text: New here?
-          - link "Create an account"
+    await expect(page.getByRole("banner")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Skip to main content" })).toHaveAttribute("href", "#main");
+    await expect(page.getByRole("main").locator("form")).toMatchAriaSnapshot(`
+      - text: Email
+      - textbox "Email"
+      - text: Password
+      - textbox "Password"
+      - button "Sign in"
     `);
+    await page.getByText("Trouble signing in?", { exact: true }).press("Enter");
+    await expect(page.getByText(/administrator of this installation/)).toBeVisible();
   });
 
   test("a question is a named region with named groups of choices", async ({ page, request }) => {

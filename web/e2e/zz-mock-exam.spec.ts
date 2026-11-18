@@ -93,6 +93,38 @@ test.describe("the mock exam journey", () => {
       page.getByRole("button", { name: /^Question 1,.*flagged for review/ }),
     ).toBeVisible();
 
+    // The blueprint selects from all published questions, so an arbitrary position need not
+    // contain the known-answer fixture used by this test. Find one before checking draft retention.
+    let draftPosition = 0;
+    for (let position = 1; position <= TOTAL_QUESTIONS; position += 1) {
+      await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
+      if (await page.getByLabel(/The expected option/).count() > 0) {
+        draftPosition = position;
+        break;
+      }
+    }
+    expect(draftPosition, "The mock must include a fixture-backed question").toBeGreaterThan(0);
+    const draftAnswer = page.getByLabel(/The expected option/);
+    await draftAnswer.check();
+    for (const width of [320, 360, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+
+    const neighbouringPosition = draftPosition === TOTAL_QUESTIONS ? draftPosition - 1 : draftPosition + 1;
+    const away = draftPosition === TOTAL_QUESTIONS ? "Previous" : "Next";
+    const back = draftPosition === TOTAL_QUESTIONS ? "Next" : "Previous";
+    await page.getByRole("button", { name: away, exact: true }).click();
+    await expect(
+      page.getByRole("heading", { level: 2, name: `Question ${neighbouringPosition} of ${TOTAL_QUESTIONS}` }),
+    ).toBeFocused();
+    await page.getByRole("button", { name: back, exact: true }).click();
+    await expect(draftAnswer).toBeChecked();
+    await page.reload();
+    // Reload starts at the first question; the draft is keyed to its original position.
+    await page.getByRole("button", { name: new RegExp(`^Question ${draftPosition}(?:,|$)`) }).click();
+    await expect(draftAnswer).toBeChecked();
+
     // The blueprint chooses questions from the entire published pool, including questions
     // created by other specs. Position 1 is NOT guaranteed to contain our known-answer fixture.
     // Find two fixture-compatible questions instead of assuming the first two are ours.

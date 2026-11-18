@@ -132,12 +132,15 @@ class MockExamRepository {
   }
 
   /** Mock runs newest first, strictly after the cursor, at most {@code limit} rows. */
-  List<MockExamSession> findByLearner(UUID learnerId, PageCursor after, int limit) {
+  List<MockExamSession> findByLearner(
+      UUID learnerId, PageCursor after, int limit, UUID trackId, String status) {
     String paging = after == null ? "" : " and (created_at, id) < (:cursorAt, :cursorId)";
     var statement =
         jdbc.sql(
                 SELECT_SESSION
                     + " where learner_id = :learner"
+                    + (trackId == null ? "" : " and track_id = :track")
+                    + (status == null ? "" : " and status = :status")
                     + paging
                     + " order by created_at desc, id desc limit :limit")
             .param(LEARNER, learnerId)
@@ -147,6 +150,12 @@ class MockExamRepository {
           statement
               .param("cursorAt", OffsetDateTime.ofInstant(after.at(), ZoneOffset.UTC))
               .param("cursorId", after.id());
+    }
+    if (trackId != null) {
+      statement = statement.param("track", trackId);
+    }
+    if (status != null) {
+      statement = statement.param("status", status);
     }
     return statement.query(MockExamRepository::mapSession).list();
   }

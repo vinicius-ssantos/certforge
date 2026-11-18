@@ -10,6 +10,7 @@ export default defineConfig({
     // Never inline assets as data: URIs. The production Content Security Policy allows fonts only
     // from the app's own origin, and Vite would otherwise embed the small font files in the CSS.
     assetsInlineLimit: 0,
+    manifest: true,
   },
   server: { proxy: { "/api": "http://localhost:8080" } },
   // The built app is served the same way for the end-to-end tests.

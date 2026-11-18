@@ -110,6 +110,7 @@ class ReviewService {
 
     List<QueueItem> due = new ArrayList<>();
     int waiting = 0;
+    Instant nextReviewAt = null;
     for (Map.Entry<QuestionId, List<AttemptFact>> entry : history.entrySet()) {
       PublishedQuestion published = publishedNow.get(entry.getKey());
       if (published == null) {
@@ -122,6 +123,10 @@ class ReviewService {
       Optional<ReviewReason> reason = reasonFor(attempts, now);
       if (reason.isEmpty()) {
         waiting += 1;
+        Instant recallAt = attempts.getLast().submittedAt().plus(recallInterval(attempts));
+        if (nextReviewAt == null || recallAt.isBefore(nextReviewAt)) {
+          nextReviewAt = recallAt;
+        }
         continue;
       }
       due.add(item(published, attempts, reason.get()));
@@ -136,7 +141,7 @@ class ReviewService {
     int publishedInTouchedTopics =
         publishedPerTopic.values().stream().mapToInt(Integer::intValue).sum();
     int neverAttempted = Math.max(0, publishedInTouchedTopics - attemptedQuestions);
-    return new Queue(page, dueNow, waiting, neverAttempted);
+    return new Queue(page, dueNow, waiting, neverAttempted, nextReviewAt);
   }
 
   /**

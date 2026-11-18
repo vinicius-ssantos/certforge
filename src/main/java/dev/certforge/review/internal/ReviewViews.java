@@ -37,7 +37,12 @@ interface ReviewViews {
    * confidently whose recall interval has not elapsed, so an empty queue can say "nothing is due
    * yet" rather than "you have nothing to review".
    */
-  record Queue(List<QueueItem> items, int dueNow, int waiting, int neverAttempted) {}
+  record Queue(
+      List<QueueItem> items,
+      int dueNow,
+      int waiting,
+      int neverAttempted,
+      @Schema(nullable = true) Instant nextReviewAt) {}
 
   /**
    * Where a learner has been wrong while saying they were confident, per topic.

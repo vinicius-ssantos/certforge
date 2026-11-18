@@ -17,7 +17,10 @@ test.describe("the interface in Portuguese", () => {
     await page.getByLabel(en.language.label).selectOption("pt-BR");
 
     await expect(page.getByRole("heading", { level: 1, name: ptBR.tracks.title })).toBeVisible();
-    await expect(page.getByRole("link", { name: ptBR.layout.progress })).toBeVisible();
+    const navigation = page.getByRole("navigation", { name: ptBR.layout.mainNavigation });
+    await expect(navigation.getByRole("link", { name: ptBR.layout.progress, exact: true })).toBeVisible();
+    await expect(page.getByRole("region", { name: ptBR.tracks.reviewQueue })
+      .getByRole("link", { name: ptBR.tracks.viewProgress, exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: ptBR.layout.signOut })).toBeVisible();
     // The English heading is gone, which a missing key would not achieve.
     await expect(page.getByRole("heading", { level: 1, name: en.tracks.title })).toHaveCount(0);

@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useId, type ReactNode } from "react";
 import { ApiError } from "../api/problem";
 import { useText } from "../i18n/useText";
 import { errorMessage } from "./messages";
@@ -14,9 +14,10 @@ export function Loading({ label }: { label?: string }) {
 }
 
 export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
+  const titleId = useId();
   return (
-    <section className="state" aria-labelledby="empty-title">
-      <h2 id="empty-title">{title}</h2>
+    <section className="state" aria-labelledby={titleId}>
+      <h2 id={titleId}>{title}</h2>
       {children}
     </section>
   );

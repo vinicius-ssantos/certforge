@@ -59,11 +59,13 @@ export function InterviewsPage() {
       <h1>{t.interview.title}</h1>
 
       <p className="button-row">
+        <a className="button" href="#interview-topics">{t.interview.practiceByTopic}</a>
+        <Link className="button secondary" to="/interviews/blueprints/new">{t.interview.prepareForRole}</Link>
         <Link className="button secondary" to="/interviews/blueprints">
           {t.interview.blueprintsLink}
         </Link>
         <Link className="button secondary" to="/interviews/evidence">
-          {t.interview.evidenceLink}
+          {t.interview.pastEvidence}
         </Link>
       </p>
 
@@ -83,6 +85,7 @@ export function InterviewsPage() {
         </section>
       ) : null}
 
+      <h2 id="interview-topics" tabIndex={-1}>{t.interview.practiceByTopic}</h2>
       {tracks.isPending ? <Loading label={t.interview.loading} /> : null}
       {tracks.isError ? (
         <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} />

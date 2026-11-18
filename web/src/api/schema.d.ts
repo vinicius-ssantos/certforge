@@ -1582,6 +1582,8 @@ export interface components {
             /** Format: uuid */
             activeSessionId: string | null;
             contentReady: boolean;
+            /** Format: int64 */
+            durationMinutes: number;
             /** Format: int32 */
             missingQuestionCount: number;
             /** Format: int32 */
@@ -1853,6 +1855,8 @@ export interface components {
             items: components["schemas"]["QueueItem"][];
             /** Format: int32 */
             neverAttempted: number;
+            /** Format: date-time */
+            nextReviewAt: string | null;
             /** Format: int32 */
             waiting: number;
         };
@@ -3316,6 +3320,8 @@ export interface operations {
             query?: {
                 cursor?: string;
                 size?: number;
+                trackId?: string;
+                status?: string;
             };
             header?: never;
             path?: never;
@@ -3339,6 +3345,8 @@ export interface operations {
             query?: {
                 cursor?: string;
                 size?: number;
+                trackId?: string;
+                status?: string;
             };
             header?: never;
             path?: never;

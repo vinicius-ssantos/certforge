@@ -190,6 +190,22 @@ describe("the queue", () => {
     expect(router.state.location.search).toContain("q=boxing");
   });
 
+  it("keeps the query across status changes, clearing, and browser history", async () => {
+    const user = userEvent.setup();
+    const { router } = renderApp(
+      { ...tracks, "GET /api/admin/questions": { body: queuePage(summaries, { all: 2, draft: 1 }) } },
+      { as: editor, path: "/editorial?q=foreach&page=2" },
+    );
+    await user.click(await screen.findByRole("link", { name: /^Drafts/ }));
+    expect(new URLSearchParams(router.state.location.search).get("q")).toBe("foreach");
+    expect(new URLSearchParams(router.state.location.search).get("page")).toBeNull();
+    expect(screen.getByRole("textbox", { name: "Search the prompts" })).toHaveValue("foreach");
+    await user.click(screen.getByRole("button", { name: "Clear" }));
+    expect(screen.getByRole("textbox", { name: "Search the prompts" })).toHaveValue("");
+    await router.navigate(-1);
+    await waitFor(() => expect(screen.getByRole("textbox", { name: "Search the prompts" })).toHaveValue("foreach"));
+  });
+
   it("says a search found nothing rather than that the bank is empty", async () => {
     renderApp(
       { ...tracks, "GET /api/admin/questions": { body: queuePage([], { all: 0 }) } },

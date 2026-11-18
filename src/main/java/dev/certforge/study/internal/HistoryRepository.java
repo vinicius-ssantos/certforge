@@ -54,7 +54,8 @@ class HistoryRepository {
   }
 
   /** Sessions newest first, strictly after the cursor, at most {@code limit} rows. */
-  List<SessionRow> sessions(UUID learnerId, PageCursor after, int limit) {
+  List<SessionRow> sessions(
+      UUID learnerId, PageCursor after, int limit, UUID trackId, String status) {
     String paging = after == null ? "" : " and (s.created_at, s.id) < (:cursorAt, :cursorId)";
     var statement =
         jdbc.sql(
@@ -64,12 +65,23 @@ class HistoryRepository {
                     + " (select count(*) from certforge.study_attempt a"
                     + " where a.session_id = s.id and a.correct) as correct"
                     + " from certforge.study_session s where s.learner_id = :learner"
+                    + (trackId == null
+                        ? ""
+                        : " and s.topic_id in (select id from certforge.catalog_topic where"
+                            + " track_id = :track)")
+                    + (status == null ? "" : " and s.status = :status")
                     + paging
                     + " order by s.created_at desc, s.id desc limit :limit")
             .param(LEARNER, learnerId)
             .param(LIMIT, limit);
     if (after != null) {
       statement = statement.param(CURSOR_AT, utc(after)).param(CURSOR_ID, after.id());
+    }
+    if (trackId != null) {
+      statement = statement.param("track", trackId);
+    }
+    if (status != null) {
+      statement = statement.param("status", status);
     }
     return statement
         .query(
