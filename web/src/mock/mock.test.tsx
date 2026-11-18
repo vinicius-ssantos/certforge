@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
@@ -288,6 +288,32 @@ describe("mock exam entry", () => {
 });
 
 describe("active mock exam", () => {
+  it("allows flagging and submitting when browser storage is unavailable", async () => {
+    const setItem = vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => { throw new Error("Unavailable"); });
+    const removeItem = vi.spyOn(Storage.prototype, "removeItem").mockImplementation(() => { throw new Error("Unavailable"); });
+    try {
+      const user = userEvent.setup();
+      renderApp(
+        {
+          [`GET /api/study/mock-exams/${SESSION_ID}`]: { body: mockExam() },
+          [`POST /api/study/mock-exams/${SESSION_ID}/finish`]: { body: mockExam({ status: "COMPLETED" }) },
+          [`GET /api/study/mock-exams/${SESSION_ID}/result`]: { body: result() },
+          "GET /api/catalog/tracks": { body: [javaTrack] },
+        },
+        { path: `/mock-exams/${SESSION_ID}` },
+      );
+      await screen.findByText("Which option compiles?");
+      await user.click(screen.getByRole("button", { name: "Flag for review" }));
+      expect(screen.getByRole("button", { name: "Question 1, flagged for review" })).toBeInTheDocument();
+      await user.click(screen.getByRole("button", { name: "Finish and score mock" }));
+      await user.click(within(screen.getByRole("group", { name: "Submit mock exam" })).getByRole("button", { name: "Submit mock exam" }));
+      expect(await screen.findByRole("heading", { level: 1, name: "Mock exam result" })).toBeInTheDocument();
+    } finally {
+      setItem.mockRestore();
+      removeItem.mockRestore();
+    }
+  });
+
   it("shows no answer material, persists review flags and has no accessibility violations", async () => {
     const user = userEvent.setup();
     const { container } = renderApp(
