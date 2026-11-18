@@ -1,24 +1,36 @@
-import type { ComponentPropsWithoutRef } from "react";
+import { useEffect, useRef, useState, type ComponentPropsWithoutRef } from "react";
+import { useText } from "../i18n/useText";
 
 interface ScrollableTableProps extends ComponentPropsWithoutRef<"table"> {
   label: string;
 }
 
-/**
- * Keeps wide data tables inside the page on narrow viewports.
- *
- * WCAG requires a horizontally scrollable region to be keyboard-focusable, so the wrapper is a
- * named region and a Tab stop. The jsx-a11y rule is intentionally suppressed here because it
- * treats every non-interactive tab stop as invalid and does not model this scroll-container case.
- */
 export function ScrollableTable({ label, children, ...tableProps }: ScrollableTableProps) {
+  const t = useText();
+  const region = useRef<HTMLDivElement>(null);
+  const table = useRef<HTMLTableElement>(null);
+  const [overflowing, setOverflowing] = useState(false);
+
+  useEffect(() => {
+    const update = () => {
+      const node = region.current;
+      if (node) setOverflowing(node.scrollWidth > node.clientWidth + 1);
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(update);
+    if (region.current) observer.observe(region.current);
+    if (table.current) observer.observe(table.current);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <>
-      {/* eslint-disable jsx-a11y/no-noninteractive-tabindex */}
-      <div className="table-scroll" role="region" aria-label={label} tabIndex={0}>
-        <table {...tableProps}>{children}</table>
+      {overflowing ? <p className="hint table-scroll-hint">{t.states.tableMore}</p> : null}
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <div ref={region} className="table-scroll" role="region" aria-label={label} tabIndex={0}>
+        <table ref={table} {...tableProps}>{children}</table>
       </div>
-      {/* eslint-enable jsx-a11y/no-noninteractive-tabindex */}
     </>
   );
 }

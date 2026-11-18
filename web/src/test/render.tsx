@@ -188,6 +188,9 @@ export function renderApp(
     "GET /api/catalog/general-tracks": { body: [] },
     // Empty by default (#176): only the progress page's own tests care about this call's shape.
     "GET /api/progress/certifications": { body: [] },
+    "GET /api/study/history/sessions": { body: { items: [], nextCursor: null } },
+    "GET /api/study/history/mock-exams": { body: { items: [], nextCursor: null } },
+    "GET /api/review/queue": { body: { dueNow: 0, waiting: 0, neverAttempted: 0, items: [] } },
     "GET /api/study/mock-exams/availability": {
       body: {
         activeSessionId: null,

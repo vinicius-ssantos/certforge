@@ -50,12 +50,13 @@ class MockExamHistoryService {
   }
 
   @Transactional
-  Page<MockExamHistoryItem> list(String cursor, Integer size) {
+  Page<MockExamHistoryItem> list(String cursor, Integer size, UUID trackId, String status) {
     UUID learner = currentActor.require().value();
     repository.expireDue(learner, clock.instant());
     int limit = Page.size(size);
     List<MockExamSession> rows =
-        repository.findByLearner(learner, PageCursor.decodeOrNull(cursor), limit + 1);
+        repository.findByLearner(
+            learner, PageCursor.decodeOrNull(cursor), limit + 1, trackId, status);
     List<MockExamSession> visible = rows.size() > limit ? rows.subList(0, limit) : rows;
 
     Map<UUID, List<SnapshotQuestion>> snapshots = new HashMap<>();

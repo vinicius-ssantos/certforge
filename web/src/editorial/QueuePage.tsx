@@ -37,7 +37,7 @@ export function QueuePage() {
   const [params, setParams] = useSearchParams();
   const requested = params.get("status");
   const search = params.get("q") ?? "";
-  const page = Number.parseInt(params.get("page") ?? "0", 10) || 0;
+  const page = Math.max(0, Number.parseInt(params.get("page") ?? "0", 10) || 0);
   const tabs = filters(t);
   const status = FILTER_STATUSES.find((candidate) => candidate === requested) ?? null;
   const tableCaption = t.editorial.queue.tableCaption(
@@ -149,16 +149,22 @@ export function QueuePage() {
         </div>
       </div>
       <nav className="tabs" aria-label={t.editorial.queue.filterLabel}>
-        {tabs.map((filter) => (
-          <Link
-            key={filter.label}
-            to={filter.status ? `/editorial?status=${filter.status}` : "/editorial"}
-            aria-current={filter.status === status ? "page" : undefined}
-          >
-            {filter.label}{" "}
-            {questions.data ? <span className="tab-count">{count(filter.status)}</span> : null}
-          </Link>
-        ))}
+        {tabs.map((filter) => {
+          const next = new URLSearchParams(params);
+          next.delete("page");
+          if (filter.status) next.set("status", filter.status);
+          else next.delete("status");
+          return (
+            <Link
+              key={filter.label}
+              to={{ pathname: "/editorial", search: next.toString() }}
+              aria-current={filter.status === status ? "page" : undefined}
+            >
+              {filter.label}{" "}
+              {questions.data ? <span className="tab-count">{count(filter.status)}</span> : null}
+            </Link>
+          );
+        })}
       </nav>
       {awaiting ? <Loading label={t.editorial.queue.loading} /> : null}
       {/* Finding one question among a hundred and thirty is the thing this screen was worst
@@ -175,7 +181,7 @@ export function QueuePage() {
       >
         <label htmlFor="queue-search">{t.editorial.queue.searchLabel}</label>
         <div className="button-row">
-          <input id="queue-search" name="q" type="text" defaultValue={search} />
+          <input key={search} id="queue-search" name="q" type="text" defaultValue={search} />
           <button type="submit" className="secondary">
             {t.editorial.queue.searchSubmit}
           </button>

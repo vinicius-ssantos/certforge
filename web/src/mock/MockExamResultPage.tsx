@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-import { Link, useParams } from "react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
-import { unwrap } from "../api/problem";
+import { ApiError, unwrap } from "../api/problem";
 import type { MockExamQuestionResult } from "../api/types";
 import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
@@ -27,6 +28,21 @@ export function MockExamResultPage() {
   const { sessionId = "" } = useParams();
   const api = useApi();
   const topicNames = useTopicNames();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const [filter, setFilter] = useState("all");
+  const practice = useMutation({
+    mutationFn: (topicId: string) => unwrap(api.POST("/api/study/sessions", { body: { topicId } })),
+    onSuccess: (session) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      navigate(`/sessions/${session.id}`);
+    },
+    onError: (error) => {
+      const existing = error instanceof ApiError && error.code === "active_session_exists"
+        ? error.details["sessionId"] : undefined;
+      if (typeof existing === "string") navigate(`/sessions/${existing}`, { state: { resumed: true } });
+    },
+  });
   useDocumentTitle(t.mockResult.title);
   const result = useQuery({
     queryKey: ["mock-exam-result", sessionId],
@@ -45,6 +61,10 @@ export function MockExamResultPage() {
   if (result.isError) return <>{heading}<ErrorState error={result.error} onRetry={() => void result.refetch()} /></>;
 
   const data = result.data;
+  const ordered = [...data.questions].sort((a, b) => a.position - b.position);
+  const incorrect = ordered.filter((question) => question.answered && !question.correct);
+  const unanswered = ordered.filter((question) => !question.answered);
+  const questions = filter === "incorrect" ? incorrect : filter === "unanswered" ? unanswered : ordered;
   return (
     <>
       {heading}
@@ -70,6 +90,7 @@ export function MockExamResultPage() {
       </section>
 
       <h2>{t.mockResult.breakdown}</h2>
+      {practice.isError ? <ErrorState error={practice.error} /> : null}
       <ScrollableTable label={t.mockResult.breakdown}>
         <thead>
           <tr>
@@ -78,6 +99,7 @@ export function MockExamResultPage() {
             <th>{t.mockResult.answered}</th>
             <th>{t.mockResult.score}</th>
             <th>{t.progress.situation}</th>
+            <th>{t.track.practice}</th>
           </tr>
         </thead>
         <tbody>
@@ -104,14 +126,26 @@ export function MockExamResultPage() {
                   <span className="pill pill-hold">{t.progress.needsReview}</span>
                 )}
               </td>
+              <td><button type="button" className="secondary" disabled={practice.isPending}
+                aria-label={t.track.practiceTopic(topicNames.get(topic.topicId) ?? t.mockResult.fallbackTopic)}
+                onClick={() => practice.mutate(topic.topicId)}>{t.track.practice}</button></td>
             </tr>
           ))}
         </tbody>
       </ScrollableTable>
 
       <h2>{t.mockResult.questionReview}</h2>
+      <label className="compact-filter">
+        {t.mockResult.filterLabel}
+        <select value={filter} onChange={(event) => setFilter(event.target.value)}>
+          <option value="all">{t.mockResult.filterAll(ordered.length)}</option>
+          <option value="incorrect">{t.mockResult.filterIncorrect(incorrect.length)}</option>
+          <option value="unanswered">{t.mockResult.filterUnanswered(unanswered.length)}</option>
+        </select>
+      </label>
+      {questions.length === 0 ? <p role="status">{t.mockResult.filterEmpty}</p> : null}
       <ol className="review">
-        {[...data.questions].sort((a, b) => a.position - b.position).map((question) => (
+        {questions.map((question) => (
           <li key={question.position}>
             <QuestionReview item={question} />
           </li>

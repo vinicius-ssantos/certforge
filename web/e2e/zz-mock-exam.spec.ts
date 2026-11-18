@@ -93,6 +93,19 @@ test.describe("the mock exam journey", () => {
       page.getByRole("button", { name: /^Question 1,.*flagged for review/ }),
     ).toBeVisible();
 
+    const firstAnswer = page.getByLabel(/The expected option/);
+    await firstAnswer.check();
+    for (const width of [320, 360, 390]) {
+      await page.setViewportSize({ width, height: 800 });
+      await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
+    }
+    await page.getByRole("button", { name: "Next", exact: true }).click();
+    await expect(page.getByRole("heading", { name: `Question 2 of ${TOTAL_QUESTIONS}` })).toBeFocused();
+    await page.getByRole("button", { name: "Previous", exact: true }).click();
+    await expect(firstAnswer).toBeChecked();
+    await page.reload();
+    await expect(firstAnswer).toBeChecked();
+
     // Two questions answered, deliberately leaving the other forty-eight unanswered — the shape
     // the acceptance criteria describe: "unanswered items count as misses rather than disappearing".
     // Saving an answer auto-advances to the next unanswered question in the same update, so the

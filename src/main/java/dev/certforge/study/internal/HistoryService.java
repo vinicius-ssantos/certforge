@@ -55,11 +55,12 @@ class HistoryService implements StudyEvidence {
 
   /** Sessions newest first. In-progress sessions past their time are expired first. */
   @Transactional
-  Page<SessionHistoryItem> sessions(String cursor, Integer size) {
+  Page<SessionHistoryItem> sessions(String cursor, Integer size, UUID trackId, String status) {
     UUID learner = currentActor.require().value();
     sessionStore.expireDue(learner, clock.instant());
     int limit = Page.size(size);
-    List<SessionRow> rows = history.sessions(learner, PageCursor.decodeOrNull(cursor), limit + 1);
+    List<SessionRow> rows =
+        history.sessions(learner, PageCursor.decodeOrNull(cursor), limit + 1, trackId, status);
     return Page.of(
         rows,
         limit,

@@ -76,6 +76,10 @@ export function LoginPage() {
           {submitting ? t.auth.signingIn : t.auth.signIn}
         </button>
       </form>
+      <details className="access-help">
+        <summary>{t.auth.accessHelp}</summary>
+        <p>{t.auth.accessHelpBody}</p>
+      </details>
       <p>
         {t.auth.newHere} <Link to="/register">{t.auth.createOne}</Link>
       </p>

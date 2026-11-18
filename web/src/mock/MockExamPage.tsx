@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
@@ -41,25 +41,35 @@ function loadFlags(sessionId: string): number[] {
   }
 }
 
-function saveFlags(sessionId: string, flags: number[]) {
-  try {
-    localStorage.setItem(flagKey(sessionId), JSON.stringify(flags));
-  } catch {
-    // Flags are optional browser-local notes; the exam must remain usable without storage.
-  }
+type Draft = { selected: string[]; key: string; revisionId: string };
+type Drafts = Record<number, Draft>;
+
+function draftKey(sessionId: string) {
+  return `certforge.mock.drafts.${sessionId}`;
 }
 
-function clearFlags(sessionId: string) {
+function loadDrafts(sessionId: string): Drafts {
   try {
-    localStorage.removeItem(flagKey(sessionId));
+    const raw = sessionStorage.getItem(draftKey(sessionId));
+    const value: unknown = raw ? JSON.parse(raw) : {};
+    if (!value || typeof value !== "object" || Array.isArray(value)) return {};
+    return Object.fromEntries(Object.entries(value).filter(([position, draft]) =>
+      /^\d+$/.test(position) && draft && Array.isArray(draft.selected) &&
+      draft.selected.every((option: unknown) => typeof option === "string") &&
+      typeof draft.key === "string" && typeof draft.revisionId === "string"
+    ));
   } catch {
-    // Storage can be unavailable even after the exam has been submitted successfully.
+    return {};
   }
 }
 
 export function MockExamPage() {
-  const t = useText();
   const { sessionId = "" } = useParams();
+  return <MockExamSession key={sessionId} sessionId={sessionId} />;
+}
+
+function MockExamSession({ sessionId }: { sessionId: string }) {
+  const t = useText();
   const api = useApi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -71,9 +81,35 @@ export function MockExamPage() {
     queryFn: () =>
       unwrap(api.GET("/api/study/mock-exams/{sessionId}", { params: { path: { sessionId } } })),
   });
+  const { data: examData, isFetching, isRefetchError, refetch } = exam;
   const [position, setPosition] = useState(0);
   const [flags, setFlags] = useState<number[]>(() => loadFlags(sessionId));
   const [now, setNow] = useState(() => Date.now());
+  const [drafts, setDrafts] = useState(() => loadDrafts(sessionId));
+  const [filter, setFilter] = useState("all");
+  const questionHeading = useRef<HTMLHeadingElement>(null);
+  const canFocusQuestion = useRef(false);
+
+  function goToQuestion(next: number) {
+    if (next === position) {
+      questionHeading.current?.focus();
+      return;
+    }
+    canFocusQuestion.current = true;
+    setPosition(next);
+  }
+
+  useEffect(() => {
+    if (canFocusQuestion.current) questionHeading.current?.focus();
+  }, [position]);
+
+  function discardDraft(at: number) {
+    setDrafts((current) => {
+      const remaining = { ...current };
+      delete remaining[at];
+      return remaining;
+    });
+  }
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
@@ -81,24 +117,41 @@ export function MockExamPage() {
   }, []);
 
   useEffect(() => {
-    saveFlags(sessionId, flags);
-  }, [flags, sessionId]);
+    if (!examData) return;
+    try {
+      if (examData.status === "IN_PROGRESS") {
+        sessionStorage.setItem(draftKey(sessionId), JSON.stringify(drafts));
+      } else {
+        sessionStorage.removeItem(draftKey(sessionId));
+      }
+    } catch {
+      // A blocked session store still leaves this visit's in-memory drafts usable.
+    }
+  }, [drafts, examData, sessionId]);
+
+  useEffect(() => {
+    if (!examData) return;
+    try {
+      if (examData.status === "IN_PROGRESS") {
+        localStorage.setItem(flagKey(sessionId), JSON.stringify(flags));
+      } else {
+        localStorage.removeItem(flagKey(sessionId));
+      }
+    } catch {
+      // Flags are optional when storage is unavailable.
+    }
+  }, [examData, flags, sessionId]);
 
   useEffect(() => {
     if (
-      exam.data?.status === "IN_PROGRESS"
-      && Date.parse(exam.data.expiresAt) <= now
-      && !exam.isFetching
+      examData?.status === "IN_PROGRESS"
+      && Date.parse(examData.expiresAt) <= now
+      && !isFetching
+      && !isRefetchError
     ) {
-      void exam.refetch();
+      void refetch();
     }
-  }, [exam.data?.expiresAt, exam.data?.status, exam.isFetching, exam.refetch, now]);
-
-  useEffect(() => {
-    if (exam.data && exam.data.status !== "IN_PROGRESS") {
-      clearFlags(sessionId);
-    }
-  }, [exam.data, sessionId]);
+  }, [examData, isFetching, isRefetchError, refetch, now]);
 
   const respond = useMutation({
     mutationFn: ({ at, selected, key }: { at: number; selected: string[]; key: string }) =>
@@ -121,9 +174,12 @@ export function MockExamPage() {
         ),
       };
       queryClient.setQueryData(examKey(sessionId), updated);
+      discardDraft(variables.at);
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
       const next = updated.questions.find((q) => !q.answered && q.position > variables.at)
         ?? updated.questions.find((q) => !q.answered);
-      if (next) setPosition(next.position);
+      if (next) goToQuestion(next.position);
+      else questionHeading.current?.focus();
     },
     onError: (error) => {
       if (error instanceof ApiError && CHANGED.has(error.code)) {
@@ -136,7 +192,19 @@ export function MockExamPage() {
     mutationFn: () =>
       unwrap(api.POST("/api/study/mock-exams/{sessionId}/finish", { params: { path: { sessionId } } })),
     onSuccess: () => {
-      clearFlags(sessionId);
+      try {
+        sessionStorage.removeItem(draftKey(sessionId));
+      } catch {
+        // Storage is optional.
+      }
+      try {
+        localStorage.removeItem(flagKey(sessionId));
+      } catch {
+        // Storage is optional.
+      }
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      void queryClient.invalidateQueries({ queryKey: ["mock-exam-availability"] });
+      void queryClient.invalidateQueries({ queryKey: examKey(sessionId) });
       navigate(`/mock-exams/${sessionId}/result`);
     },
     onError: (error) => {
@@ -155,6 +223,14 @@ export function MockExamPage() {
   const current = ordered.find((entry) => entry.position === position) ?? ordered[0];
   const remaining = live ? formatRemaining(live.expiresAt, now) : null;
   const flagged = current ? flags.includes(current.position) : false;
+  const currentIndex = current ? ordered.indexOf(current) : -1;
+  const previous = ordered[currentIndex - 1];
+  const following = ordered[currentIndex + 1];
+  const savedDraft = current ? drafts[current.position] : undefined;
+  const draft = savedDraft?.revisionId === current?.question.revisionId ? savedDraft : undefined;
+  const visible = ordered.filter((entry) => filter === "all" ||
+    (filter === "pending" && !entry.answered) ||
+    (filter === "marked" && flags.includes(entry.position)));
 
   let body;
   if (exam.isPending) {
@@ -173,14 +249,22 @@ export function MockExamPage() {
   } else {
     body = (
       <>
-        {respond.isError ? <ErrorState error={respond.error} /> : null}
         {finish.isError ? <ErrorState error={finish.error} /> : null}
 
         <div className="mock-layout">
           <aside aria-label={t.mock.navigationLabel}>
             <h2>{t.mock.questions}</h2>
+            <label className="mock-nav-filter">
+              {t.mock.filterLabel}
+              <select value={filter} onChange={(event) => setFilter(event.target.value)}>
+                <option value="all">{t.mock.filterAll}</option>
+                <option value="pending">{t.mock.filterPending}</option>
+                <option value="marked">{t.mock.filterMarked}</option>
+              </select>
+            </label>
+            {visible.length === 0 ? <p role="status">{t.mock.noFilteredQuestions}</p> : null}
             <ol className="mock-nav">
-              {ordered.map((entry) => (
+              {visible.map((entry) => (
                 <li key={entry.position}>
                   <button
                     type="button"
@@ -196,7 +280,8 @@ export function MockExamPage() {
                       entry.answered,
                       flags.includes(entry.position),
                     )}
-                    onClick={() => setPosition(entry.position)}
+                    disabled={respond.isPending}
+                    onClick={() => goToQuestion(entry.position)}
                   >
                     {entry.position + 1}
                   </button>
@@ -220,7 +305,7 @@ export function MockExamPage() {
           </aside>
 
           <section className="mock-question" aria-labelledby="mock-question-heading">
-            <h2 id="mock-question-heading">{t.mock.questionHeading(current.position + 1, ordered.length)}</h2>
+            <h2 id="mock-question-heading" tabIndex={-1} ref={questionHeading}>{t.mock.questionHeading(current.position + 1, ordered.length)}</h2>
             <button
               type="button"
               className="secondary"
@@ -236,15 +321,26 @@ export function MockExamPage() {
               key={current.position}
               question={current.question}
               answered={current.answered}
-              submitting={respond.isPending}
-              failure={respond.isError ? errorMessage(respond.error, t) : null}
-              onSubmit={(selected, key) => respond.mutate({ at: current.position, selected, key })}
+              submitting={respond.isPending || finish.isPending}
+              selected={draft?.selected ?? []}
+              onSelect={(selected) => {
+                respond.reset();
+                setDrafts((drafts) => ({
+                  ...drafts,
+                  [current.position]: { selected, key: crypto.randomUUID(), revisionId: current.question.revisionId },
+                }));
+              }}
+              failure={respond.isError && respond.variables?.at === current.position
+                ? errorMessage(respond.error, t) : null}
+              onSubmit={() => {
+                if (draft) respond.mutate({ at: current.position, selected: draft.selected, key: draft.key });
+              }}
             />
             <div className="mock-question-actions">
-              <button type="button" className="secondary" disabled={current.position === 0}
-                onClick={() => setPosition(Math.max(0, current.position - 1))}>{t.mock.previous}</button>
-              <button type="button" className="secondary" disabled={current.position === ordered.length - 1}
-                onClick={() => setPosition(Math.min(ordered.length - 1, current.position + 1))}>{t.mock.next}</button>
+              <button type="button" className="secondary" disabled={respond.isPending || !previous}
+                onClick={() => previous && goToQuestion(previous.position)}>{t.mock.previous}</button>
+              <button type="button" className="secondary" disabled={respond.isPending || !following}
+                onClick={() => following && goToQuestion(following.position)}>{t.mock.next}</button>
             </div>
           </section>
         </div>
@@ -255,7 +351,7 @@ export function MockExamPage() {
             explain={t.mock.submitExplain(live.questionCount - live.answeredCount)}
             confirmLabel={t.mock.submitConfirm}
             cancelLabel={t.mock.submitCancel}
-            busy={finish.isPending}
+            busy={finish.isPending || respond.isPending}
             onConfirm={() => finish.mutate()}
           >
             {t.mock.submitTrigger}
@@ -298,30 +394,30 @@ function MockQuestion({
   answered,
   submitting,
   failure,
+  selected,
+  onSelect,
   onSubmit,
 }: {
   question: Question;
   answered: boolean;
   submitting: boolean;
   failure: string | null;
-  onSubmit: (selected: string[], key: string) => void;
+  selected: string[];
+  onSelect: (selected: string[]) => void;
+  onSubmit: () => void;
 }) {
   const t = useText();
-  const [selected, setSelected] = useState<string[]>([]);
-  const [key] = useState(() => crypto.randomUUID());
   const [problem, setProblem] = useState<string | null>(null);
   const multiple = question.type === "MULTIPLE_CHOICE";
-  const shownProblems = useMemo(
-    () => [problem, failure].filter((value): value is string => Boolean(value)).map((message) => ({ message })),
-    [problem, failure],
-  );
+  const shownProblems = [problem, failure]
+    .filter((value): value is string => Boolean(value))
+    .map((message) => ({ message }));
 
   function toggle(option: string) {
-    setSelected((current) =>
-      multiple
-        ? current.includes(option) ? current.filter((value) => value !== option) : [...current, option]
-        : [option],
-    );
+    setProblem(null);
+    onSelect(multiple
+      ? selected.includes(option) ? selected.filter((value) => value !== option) : [...selected, option]
+      : [option]);
   }
 
   function submit(event: FormEvent) {
@@ -331,7 +427,7 @@ function MockQuestion({
       return;
     }
     setProblem(null);
-    onSubmit(selected, key);
+    onSubmit();
   }
 
   return (
@@ -343,7 +439,7 @@ function MockQuestion({
         <p role="status" className="notice">{t.mock.answerSubmitted}</p>
       ) : (
         <form onSubmit={submit} noValidate>
-          <fieldset>
+          <fieldset disabled={submitting}>
             <legend>{multiple ? t.mock.chooseAllThatApply : t.mock.chooseOneAnswer}</legend>
             {question.options.map((option, index) => (
               <div key={option.key} className="choice">
@@ -360,6 +456,7 @@ function MockQuestion({
               </div>
             ))}
           </fieldset>
+          {selected.length > 0 && !submitting ? <p className="hint">{t.mock.unsavedDraft}</p> : null}
           <button type="submit" disabled={submitting}>{submitting ? t.mock.saving : t.mock.saveAnswer}</button>
         </form>
       )}

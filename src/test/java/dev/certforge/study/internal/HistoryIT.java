@@ -19,6 +19,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -222,6 +223,18 @@ class HistoryIT {
     assertThat(
             JsonPath.<List<String>>read(body, "$.items[?(@.id=='" + running.id() + "')].closedAt"))
         .containsNull();
+  }
+
+  @Test
+  void sessionFiltersSelectActiveSessionsBeforePagination() throws Exception {
+    Started active = study.start(learner, TOPIC_A, 2);
+    clock.advance(Duration.ofMinutes(1));
+    Started newer = study.start(learner, TOPIC_B, 2);
+    study.abandon(learner, newer);
+
+    String query = "/api/study/history/sessions?size=1&status=IN_PROGRESS";
+    assertThat(ids(page(learner, query))).containsExactly(active.id());
+    assertThat(ids(page(learner, query + "&trackId=" + UUID.randomUUID()))).isEmpty();
   }
 
   @Test

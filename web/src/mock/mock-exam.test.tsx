@@ -171,6 +171,28 @@ describe("mock exam flow", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
+  it("retains unsaved selections across questions and a tab reload", async () => {
+    const user = userEvent.setup();
+    const path = `/mock-exams/${MOCK_ID}`;
+    const routes = { [`GET /api/study/mock-exams/${MOCK_ID}`]: { body: mock() } };
+    const first = renderApp(routes, { path });
+    await user.click(await screen.findByRole("radio", { name: /First option/ }));
+    await user.click(screen.getByRole("button", { name: "Next" }));
+    expect(screen.getByRole("heading", { name: "Question 2 of 2" })).toHaveFocus();
+    await user.click(screen.getByRole("button", { name: "Previous" }));
+    expect(screen.getByRole("radio", { name: /First option/ })).toBeChecked();
+    first.rendered.unmount();
+
+    const second = renderApp(routes, { path });
+    expect(await screen.findByRole("radio", { name: /First option/ })).toBeChecked();
+    second.rendered.unmount();
+    renderApp({
+      [`GET /api/study/mock-exams/${MOCK_ID}`]: { body: mock({ status: "EXPIRED" }) },
+    }, { path });
+    await screen.findByRole("link", { name: /result/i });
+    expect(sessionStorage.getItem(`certforge.mock.drafts.${MOCK_ID}`)).toBeNull();
+  });
+
   it("shows scoring and answer review only on the terminal result page", async () => {
     renderApp(
       {
@@ -186,5 +208,9 @@ describe("mock exam flow", () => {
     await userEvent.setup().click(screen.getByText(/Question 1: Correct/));
     expect(screen.getByText("A is correct because the specification says so.")).toBeInTheDocument();
     expect(screen.getByText(/Your answer\. Correct answer\./)).toBeInTheDocument();
+    const filter = screen.getByRole("combobox", { name: "Filter question results" });
+    await userEvent.setup().selectOptions(filter, "unanswered");
+    expect(screen.queryByText(/Question 1: Correct/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Question 2: Unanswered/)).toBeVisible();
   });
 });

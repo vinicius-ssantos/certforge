@@ -52,10 +52,10 @@ class MockExamHistoryServiceTest {
   void activeHistoryExposesParticipationButNoCorrectnessOrTopicScores() {
     MockExamSession active =
         session(MockExamStatus.IN_PROGRESS, now.minusSeconds(600), null, 50, 68, 5);
-    when(repository.findByLearner(learner, null, 21)).thenReturn(List.of(active));
+    when(repository.findByLearner(learner, null, 21, null, null)).thenReturn(List.of(active));
     when(repository.answeredCount(active.id())).thenReturn(7);
 
-    Page<MockExamHistoryItem> page = service.list(null, 20);
+    Page<MockExamHistoryItem> page = service.list(null, 20, null, null);
 
     assertThat(page.items()).hasSize(1);
     MockExamHistoryItem item = page.items().getFirst();
@@ -91,7 +91,7 @@ class MockExamHistoryServiceTest {
             response(completed.id(), 1, q1.revisionId(), "B"),
             response(completed.id(), 2, q2.revisionId(), "B"));
 
-    when(repository.findByLearner(learner, null, 21)).thenReturn(List.of(completed));
+    when(repository.findByLearner(learner, null, 21, null, null)).thenReturn(List.of(completed));
     when(repository.snapshot(completed.id())).thenReturn(snapshot);
     when(repository.responses(completed.id())).thenReturn(responses);
     Set<QuestionRevisionId> requested =
@@ -108,7 +108,7 @@ class MockExamHistoryServiceTest {
                 new QuestionRevisionId(q2.revisionId()), q2.evidence(),
                 new QuestionRevisionId(q3.revisionId()), q3.evidence()));
 
-    MockExamHistoryItem item = service.list(null, 20).items().getFirst();
+    MockExamHistoryItem item = service.list(null, 20, null, null).items().getFirst();
 
     assertThat(item.answeredCount()).isEqualTo(3);
     assertThat(item.correctCount()).isEqualTo(2);

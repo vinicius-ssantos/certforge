@@ -39,7 +39,7 @@ export function useTopicNames(): Map<string, string> {
 }
 
 /** Track names by id, from the same cached catalog requests used for topic labels. */
-export function useTrackNames(): Map<string, string> {
+export function useTrackOptions() {
   const api = useApi();
   const tracks = useQuery({
     queryKey: ["tracks"],
@@ -49,8 +49,9 @@ export function useTrackNames(): Map<string, string> {
     queryKey: ["general-tracks"],
     queryFn: () => unwrap(api.GET("/api/catalog/general-tracks")),
   });
-  return new Map([
-    ...(tracks.data ?? []).map((track): [string, string] => [track.id, track.name]),
-    ...(generalTracks.data ?? []).map((track): [string, string] => [track.id, track.name]),
-  ]);
+  return [...(tracks.data ?? []), ...(generalTracks.data ?? [])];
+}
+
+export function useTrackNames(): Map<string, string> {
+  return new Map(useTrackOptions().map((track) => [track.id, track.name]));
 }

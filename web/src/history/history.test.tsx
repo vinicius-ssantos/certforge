@@ -179,7 +179,7 @@ describe("history", () => {
     await within(await screen.findByRole("table")).findAllByRole("link");
     expect(screen.getAllByRole("row")).toHaveLength(3);
     expect(screen.queryByRole("button", { name: "Load more sessions" })).not.toBeInTheDocument();
-    expect(fetch.calls.filter((call) => call.path === "/api/study/history/sessions")).toHaveLength(2);
+    expect(fetch.calls.filter((call) => call.path === "/api/study/history/sessions" && !call.query.has("status"))).toHaveLength(2);
   });
 
   it("says so when there is nothing yet", async () => {
@@ -197,8 +197,10 @@ describe("history", () => {
     renderApp(
       {
         ...tracks,
-        "GET /api/study/history/sessions": () =>
-          ++calls === 1 ? problem(500, "internal_error") : { body: { items: [sessionItem("s1")], nextCursor: null } },
+        "GET /api/study/history/sessions": (request) => {
+          if (request.query.get("status") === "IN_PROGRESS") return { body: { items: [], nextCursor: null } };
+          return ++calls === 1 ? problem(500, "internal_error") : { body: { items: [sessionItem("s1")], nextCursor: null } };
+        },
       },
       { path: "/history" },
     );

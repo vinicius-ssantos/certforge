@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import { useLocale, useText } from "../i18n/useText";
@@ -7,6 +7,7 @@ import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { formatDateTime, statusLabel, statusTone } from "./format";
+import { useActiveStudy } from "./useActiveStudy";
 import { useTopicNames, useTrackNames } from "./useTopicNames";
 
 export function HistoryPage() {
@@ -16,26 +17,39 @@ export function HistoryPage() {
   const api = useApi();
   const topicNames = useTopicNames();
   const trackNames = useTrackNames();
+  const active = useActiveStudy();
+  const [params, setParams] = useSearchParams();
+  const trackId = params.get("track") ?? "";
+  const status = params.get("status") ?? "";
+  const criteria = { ...(trackId ? { trackId } : {}), ...(status ? { status } : {}) };
+  function updateFilter(key: string, value: string) {
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      if (value) next.set(key, value);
+      else next.delete(key);
+      return next;
+    });
+  }
 
   const sessions = useInfiniteQuery({
-    queryKey: ["history", "sessions"],
+    queryKey: ["history", "sessions", criteria],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }) =>
       unwrap(
         api.GET("/api/study/history/sessions", {
-          params: { query: { size: 20, ...(pageParam ? { cursor: pageParam } : {}) } },
+          params: { query: { ...criteria, size: 20, ...(pageParam ? { cursor: pageParam } : {}) } },
         }),
       ),
     getNextPageParam: (last) => last.nextCursor ?? undefined,
   });
 
   const mocks = useInfiniteQuery({
-    queryKey: ["history", "mock-exams"],
+    queryKey: ["history", "mock-exams", criteria],
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam }) =>
       unwrap(
         api.GET("/api/study/history/mock-exams", {
-          params: { query: { size: 20, ...(pageParam ? { cursor: pageParam } : {}) } },
+          params: { query: { ...criteria, size: 20, ...(pageParam ? { cursor: pageParam } : {}) } },
         }),
       ),
     getNextPageParam: (last) => last.nextCursor ?? undefined,
@@ -52,13 +66,43 @@ export function HistoryPage() {
   return (
     <>
       <h1>{t.history.title}</h1>
+      {active.activities.length > 0 ? (
+        <section className="panel" aria-labelledby="history-active">
+          <h2 id="history-active">{t.sessionStatus.inProgress}</h2>
+          <ul className="active-study">
+            {active.activities.map((activity) => (
+              <li key={activity.id}>
+                <Link to={activity.href}>{t.history.continueActivity(activity.name)}</Link>
+                <span className="muted">{activity.kind} · {activity.answered}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+      <div className="study-filters">
+        <label>
+          {t.history.track}
+          <select value={trackId} onChange={(event) => updateFilter("track", event.target.value)}>
+            <option value="">{t.history.allTracks}</option>
+            {[...trackNames].map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+          </select>
+        </label>
+        <label>
+          {t.history.status}
+          <select value={status} onChange={(event) => updateFilter("status", event.target.value)}>
+            <option value="">{t.history.allStatuses}</option>
+            {["IN_PROGRESS", "COMPLETED", "ABANDONED", "EXPIRED"].map((value) =>
+              <option key={value} value={value}>{statusLabel(value, t)}</option>)}
+          </select>
+        </label>
+      </div>
 
       {empty ? (
-        <EmptyState title={t.history.emptyTitle}>
-          <p>
+        <EmptyState title={trackId || status ? t.history.noMatches : t.history.emptyTitle}>
+          {trackId || status ? null : <p>
             {t.history.emptyBodyStart}
             <Link to="/">{t.history.tracksPageLink}</Link>.
-          </p>
+          </p>}
         </EmptyState>
       ) : null}
 

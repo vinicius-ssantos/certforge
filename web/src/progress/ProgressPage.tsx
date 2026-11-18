@@ -1,5 +1,6 @@
+import { lazy, Suspense, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
 import type { CertificationProgress, Misconception } from "../api/types";
@@ -7,8 +8,11 @@ import { formatDateTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { EmptyState, ErrorState, Loading } from "../ui/States";
+import { useTrackOptions } from "../history/useTopicNames";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
 import { PRACTICE_TARGET_PERCENT, meetsTarget } from "./target";
+
+const AttemptComparison = lazy(() => import("./AttemptComparison").then((module) => ({ default: module.AttemptComparison })));
 
 function percent(accuracy: number | null, noValue: string): string {
   return accuracy === null ? noValue : `${Math.round(accuracy * 100)}%`;
@@ -147,50 +151,74 @@ export function ProgressPage() {
     queryFn: () => unwrap(api.GET("/api/review/misconceptions")),
   });
 
+  const [params, setParams] = useSearchParams();
+  const [compareOpen, setCompareOpen] = useState(false);
+  const slug = params.get("track") ?? "";
+  const tracks = useTrackOptions();
+  const cataloguedTrack = tracks.find((track) => track.slug === slug);
+  const rows = (progress.data ?? []).filter((row) => !slug || row.trackSlug === slug);
+  const topics = new Set(rows.map((row) => row.topicId));
+  const next = rows.find((row) => row.accuracy !== null && !meetsTarget(row.accuracy));
+  const nextTrack = next ? tracks.find((track) => track.slug === next.trackSlug) : undefined;
+  const trackHref = (track: (typeof tracks)[number]) =>
+    `/${"examVersion" in track ? "tracks" : "general-tracks"}/${track.slug}`;
+  const paths = new Map(tracks.map((track) => [track.slug, trackHref(track)]));
+
   return (
     <>
       <h1>{t.progress.title}</h1>
+      {tracks.length > 0 ? <label className="compact-filter">
+        {t.progress.filterTrack}
+        <select value={slug} onChange={(event) => {
+          const value = event.target.value;
+          setParams(value ? { track: value } : {});
+        }}>
+          <option value="">{t.progress.allTracks}</option>
+          {tracks.map((track) => <option key={track.id} value={track.slug}>{track.name}</option>)}
+        </select>
+      </label> : null}
+      {next && nextTrack ? <section className="panel" aria-labelledby="progress-next">
+        <h2 id="progress-next">{t.progress.practiceNext}</h2>
+        <Link to={trackHref(nextTrack) + "#practice-topics"}>{next.topicName ?? t.progress.fallbackTopic}</Link>
+      </section> : null}
       {progress.isPending ? <Loading label={t.progress.loading} /> : null}
       {progress.isError ? (
         <ErrorState error={progress.error} onRetry={() => void progress.refetch()} />
       ) : null}
-      {progress.data && progress.data.length === 0 ? (
-        <EmptyState title={t.progress.emptyTitle}>
+      {progress.data && rows.length === 0 ? (
+        <EmptyState title={slug ? t.progress.noMatches : t.progress.emptyTitle}>
           <p>
             {t.progress.emptyBody}
-            <Link to="/">{t.progress.tracksPageLink}</Link>.
+            <Link to={cataloguedTrack ? trackHref(cataloguedTrack) : "/"}>{cataloguedTrack?.name ?? t.progress.tracksPageLink}</Link>.
           </p>
         </EmptyState>
       ) : null}
-      {progress.data && progress.data.length > 0 ? (
+      {rows.length > 0 ? (
         <ScrollableTable label={t.progress.tableCaption}>
           <caption className="visually-hidden">{t.progress.tableCaption}</caption>
           <thead>
             <tr>
               <th scope="col">{t.progress.topic}</th>
+              <th scope="col">{t.progress.accuracy}</th>
+              <th scope="col">{t.progress.situation}</th>
               <th scope="col">{t.progress.attempted}</th>
               <th scope="col">{t.progress.correct}</th>
               <th scope="col">{t.progress.incorrect}</th>
-              <th scope="col">{t.progress.accuracy}</th>
-              <th scope="col">{t.progress.situation}</th>
               <th scope="col">{t.progress.lastActivity}</th>
             </tr>
           </thead>
           <tbody>
-            {progress.data.map((topic) => (
+            {rows.map((topic) => (
               <tr key={topic.topicId}>
                 <th scope="row">
                   {topic.trackSlug ? (
-                    <Link to={`/tracks/${topic.trackSlug}`}>
+                    <Link to={paths.get(topic.trackSlug) ?? `/tracks/${topic.trackSlug}`}>
                       {topic.topicName ?? t.progress.fallbackTopic}
                     </Link>
                   ) : (
                     (topic.topicName ?? t.progress.fallbackTopic)
                   )}
                 </th>
-                <td className="numeric">{topic.attempted}</td>
-                <td className="numeric">{topic.correct}</td>
-                <td className="numeric">{topic.incorrect}</td>
                 <td>
                   {topic.accuracy === null ? (
                     <span className="pill pill-new">{t.progress.notStarted}</span>
@@ -217,6 +245,9 @@ export function ProgressPage() {
                     <span className="pill pill-hold">{t.progress.needsReview}</span>
                   )}
                 </td>
+                <td className="numeric">{topic.attempted}</td>
+                <td className="numeric">{topic.correct}</td>
+                <td className="numeric">{topic.incorrect}</td>
                 <td>
                   {topic.lastActivityAt ? (
                     <time dateTime={topic.lastActivityAt}>
@@ -231,7 +262,7 @@ export function ProgressPage() {
           </tbody>
         </ScrollableTable>
       ) : null}
-      {progress.data && progress.data.length > 0 ? (
+      {rows.length > 0 ? (
         <p className="hint">{t.progress.targetNote(PRACTICE_TARGET_PERCENT)}</p>
       ) : null}
       {/* Same "secondary request says so rather than vanishing" contract as misconceptions below. */}
@@ -239,7 +270,7 @@ export function ProgressPage() {
       {certifications.isError ? (
         <ErrorState error={certifications.error} onRetry={() => void certifications.refetch()} />
       ) : null}
-      {certifications.data ? <Certifications rows={certifications.data} /> : null}
+      {certifications.data ? <Certifications rows={certifications.data.filter((row) => !slug || row.trackSlug === slug)} /> : null}
       {/*
        * A section that renders nothing when there is nothing to show cannot also render
        * nothing when it failed to load: a learner with real confidently-wrong answers would
@@ -251,7 +282,11 @@ export function ProgressPage() {
       {misconceptions.isError ? (
         <ErrorState error={misconceptions.error} onRetry={() => void misconceptions.refetch()} />
       ) : null}
-      {misconceptions.data ? <Misconceptions rows={misconceptions.data} /> : null}
+      {misconceptions.data ? <Misconceptions rows={misconceptions.data.filter((row) => !slug || topics.has(row.topicId))} /> : null}
+      <details className="panel" onToggle={(event) => setCompareOpen(event.currentTarget.open)}>
+        <summary>{t.progress.compareAttempts}</summary>
+        {compareOpen ? <Suspense fallback={<Loading />}><AttemptComparison topicIds={slug ? topics : null} /></Suspense> : null}
+      </details>
     </>
   );
 }

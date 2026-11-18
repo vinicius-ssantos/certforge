@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
@@ -63,6 +63,7 @@ export function TrackPage() {
   const { locale } = useLocale();
   const { slug = "" } = useParams();
   const api = useApi();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const track = useQuery({
     queryKey: ["track", slug],
@@ -85,7 +86,10 @@ export function TrackPage() {
   const start = useMutation({
     mutationFn: (topic: Topic) =>
       unwrap(api.POST("/api/study/sessions", { body: { topicId: topic.id } })),
-    onSuccess: (session) => navigate(`/sessions/${session.id}`),
+    onSuccess: (session) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      navigate(`/sessions/${session.id}`);
+    },
     onError: (error) => {
       const existing = isActiveSession(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
@@ -97,7 +101,10 @@ export function TrackPage() {
   const startMock = useMutation({
     mutationFn: () =>
       unwrap(api.POST("/api/study/mock-exams", { body: { trackSlug: slug } })),
-    onSuccess: (mock) => navigate(`/mock-exams/${mock.id}`),
+    onSuccess: (mock) => {
+      void queryClient.invalidateQueries({ queryKey: ["history"] });
+      navigate(`/mock-exams/${mock.id}`);
+    },
     onError: (error) => {
       const existing = isActiveMock(error) ? error.details["sessionId"] : undefined;
       if (typeof existing === "string") {
@@ -215,6 +222,18 @@ export function TrackPage() {
               ) : null}
             </section>
           ) : null}
+          {mockAvailability.data?.activeSessionId ? <p>
+            <Link to={`/mock-exams/${mockAvailability.data.activeSessionId}`} state={{ resumed: true }}>
+              {t.tracks.resumeStudy}
+            </Link>
+          </p> : null}
+          <h2 id="practice-topics" tabIndex={-1}>{t.track.topics}</h2>
+          {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
+          <TopicList
+            topics={track.data.topics}
+            onStart={(topic) => start.mutate(topic)}
+            busy={start.isPending}
+          />
           {track.data.kind === "CERTIFICATION" ? (
             <section
               className={
@@ -248,11 +267,16 @@ export function TrackPage() {
                   {t.track.continueMock}
                 </button>
               ) : mockAvailability.data?.contentReady ? (
-                <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
-                  {startMock.isPending
-                    ? t.track.startingMock
-                    : t.track.startMock(track.data.examVersion.examCode)}
-                </button>
+                <>
+                  {mockAvailability.data.durationMinutes > 0 ? <p>
+                    {t.track.mockFormat(mockAvailability.data.questionCount, mockAvailability.data.durationMinutes)}
+                  </p> : null}
+                  <button type="button" onClick={() => startMock.mutate()} disabled={startMock.isPending}>
+                    {startMock.isPending
+                      ? t.track.startingMock
+                      : t.track.startMock(track.data.examVersion.examCode)}
+                  </button>
+                </>
               ) : mockAvailability.data ? (
                 <>
                   <p role="status">
@@ -267,7 +291,10 @@ export function TrackPage() {
                    * work list for whoever reviews content, and without it the shortfall is a
                    * number nobody can act on. See #138.
                    */}
-                  <ScrollableTable label={t.track.mockMissingCaption}>
+                  <p><a href="#practice-topics">{t.track.practiceAvailable}</a></p>
+                  <details className="mock-coverage">
+                    <summary>{t.track.mockMissingCaption}</summary>
+                    <ScrollableTable label={t.track.mockMissingCaption}>
                     <caption className="visually-hidden">{t.track.mockMissingCaption}</caption>
                     <thead>
                       <tr>
@@ -297,18 +324,12 @@ export function TrackPage() {
                           </tr>
                         ))}
                     </tbody>
-                  </ScrollableTable>
+                    </ScrollableTable>
+                  </details>
                 </>
               ) : null}
             </section>
           ) : null}
-          <h2>{t.track.topics}</h2>
-          {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
-          <TopicList
-            topics={track.data.topics}
-            onStart={(topic) => start.mutate(topic)}
-            busy={start.isPending}
-          />
           <p className="back">
             <Link to="/">{t.track.allTracks}</Link>
           </p>
