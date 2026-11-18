@@ -1,7 +1,7 @@
 ## 1. Verify baseline and approve scope
 
-- [ ] 1.1 Audit representative fixed Java SE 21 questions: compile success, expected failure, runtime output, modules and concurrency; compare authored explanations with observed feedback.
-- [ ] 1.2 Record reproducible gaps in practice and finalized mock review, including accessibility and answer-disclosure timing. Confirm what is already met by `Prompt.tsx`.
+- [x] 1.1 Audit representative fixed Java SE 21 questions: compile success, expected failure, runtime output, modules and concurrency; compare authored explanations with observed feedback. Evidence: `docs/release/v0.4.0-gap-audit.md` (six named samples, no editorial approval implied).
+- [x] 1.2 Record reproducible gaps in practice and finalized mock review, including accessibility and answer-disclosure timing. Confirm what is already met by `Prompt.tsx`. Evidence: `docs/release/v0.4.0-gap-audit.md`; terminal mock omits existing verification evidence, and repeated fixed heading IDs require care.
 - [ ] 1.3 Obtain explicit owner approval of the minimal v0.4.0 outcome and pilot acceptance criteria; decide whether existing fields/components suffice.
 
 ## 2. Deliver only approved gaps

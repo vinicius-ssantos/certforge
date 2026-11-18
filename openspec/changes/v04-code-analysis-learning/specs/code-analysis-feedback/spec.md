@@ -28,6 +28,21 @@ Correct options, compiler diagnostics, expected results and explanatory rational
 - **WHEN** the server finalizes or expires the timed mock
 - **THEN** the learner can inspect reviewed feedback and expected behavior without changing the recorded submission
 
+### Requirement: Verified source evidence shall be available after terminal mock completion
+The finalized mock review SHALL display already-recorded fixed verification source files and expected output when provided by the terminal answer API, consistent with practice feedback. It SHALL NOT compile or run code in the browser, and SHALL omit the evidence section when absent.
+
+#### Scenario: Completed mock includes deterministic code evidence
+- **WHEN** the learner expands a terminal mock question whose answer includes verification files and expected output
+- **THEN** the review presents the named source files and recorded output with the authored explanation, without initiating code execution
+
+#### Scenario: Multiple verified mock questions are expanded
+- **WHEN** the learner expands two or more terminal question reviews containing verification evidence
+- **THEN** every evidence region retains an independently associated, uniquely identified heading
+
+#### Scenario: Question does not carry verification
+- **WHEN** a terminal mock answer has no verification evidence
+- **THEN** the review does not show an empty or misleading verified-code section
+
 ### Requirement: Fixed code evidence shall not bypass editorial review
 Questions treated as verified code examples SHALL have deterministic evidence for their fixed source and outcome, and published explanatory content SHALL still require explicit human editorial acceptance.
 
