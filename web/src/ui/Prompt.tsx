@@ -25,6 +25,7 @@ const FENCE = /```(\w*)\n([\s\S]*?)```/g;
 
 /** Splits authored text into prose and fenced code blocks (```lang), the only markup questions use. */
 export function splitFences(text: string): Segment[] {
+  text = text.replace(/\r\n/g, "\n");
   const segments: Segment[] = [];
   let last = 0;
   for (const match of text.matchAll(FENCE)) {
@@ -93,3 +94,4 @@ export function Prompt({ text }: { text: string }): ReactNode {
     </div>
   );
 }
+
