@@ -99,7 +99,7 @@ test.describe("the mock exam journey", () => {
     // Leave the remaining forty-eight unanswered so the denominator and delayed feedback are tested.
     const answeredPositions: number[] = [];
     for (let position = 1; position <= TOTAL_QUESTIONS && answeredPositions.length < 2; position += 1) {
-      await page.getByRole("button", { name: new RegExp(`^Question ${position},`) }).click();
+      await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
       await expect(
         page.getByRole("heading", { level: 2, name: `Question ${position} of ${TOTAL_QUESTIONS}` }),
       ).toBeVisible();
@@ -127,7 +127,7 @@ test.describe("the mock exam journey", () => {
 
     // Revisiting an answered question through the navigation shows that it was saved, and still
     // without revealing which option was right — the boundary stays in place after navigating back.
-    await page.getByRole("button", { name: new RegExp(`^Question ${answeredPositions[0]},`) }).click();
+    await page.getByRole("button", { name: new RegExp(`^Question ${answeredPositions[0]}(?:,|$)`) }).click();
     await expect(
       page.getByText("Answer submitted. Feedback stays hidden until the mock is finished."),
     ).toBeVisible();
