@@ -93,18 +93,32 @@ test.describe("the mock exam journey", () => {
       page.getByRole("button", { name: /^Question 1,.*flagged for review/ }),
     ).toBeVisible();
 
-    // Two questions answered, deliberately leaving the other forty-eight unanswered — the shape
-    // the acceptance criteria describe: "unanswered items count as misses rather than disappearing".
-    // Saving an answer auto-advances to the next unanswered question in the same update, so the
-    // view never lingers on the one just saved; revisiting it afterwards is its own check below.
-    for (let number = 1; number <= 2; number += 1) {
+    // The blueprint chooses questions from the entire published pool, including questions
+    // created by other specs. Position 1 is NOT guaranteed to contain our known-answer fixture.
+    // Find two fixture-compatible questions instead of assuming the first two are ours.
+    // Leave the remaining forty-eight unanswered so the denominator and delayed feedback are tested.
+    const answeredPositions: number[] = [];
+    for (let position = 1; position <= TOTAL_QUESTIONS && answeredPositions.length < 2; position += 1) {
+      await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
       await expect(
-        page.getByRole("heading", { level: 2, name: `Question ${number} of ${TOTAL_QUESTIONS}` }),
+        page.getByRole("heading", { level: 2, name: `Question ${position} of ${TOTAL_QUESTIONS}` }),
       ).toBeVisible();
-      await page.getByLabel(/The expected option/).check();
+
+      const expected = page.getByLabel(/The expected option/);
+      if (await expected.count() === 0) continue;
+
+      await expected.check();
+      // Two of the seed fixtures require multiple selections, not only option A.
+      const alsoExpected = page.getByLabel(/Another expected option/);
+      if (await alsoExpected.count() > 0) await alsoExpected.check();
+
       await page.getByRole("button", { name: "Save answer" }).click();
-      await expect(page.getByText(new RegExp(`${number} of ${TOTAL_QUESTIONS} answered`))).toBeVisible();
+      answeredPositions.push(position);
+      await expect(
+        page.getByText(new RegExp(`${answeredPositions.length} of ${TOTAL_QUESTIONS} answered`)),
+      ).toBeVisible();
     }
+    expect(answeredPositions, "The mock must select two questions with known fixture answers").toHaveLength(2);
 
     // Delayed feedback: nothing on screen or in the markup has said which option is correct yet.
     const inProgressHtml = await page.content();
@@ -113,7 +127,7 @@ test.describe("the mock exam journey", () => {
 
     // Revisiting an answered question through the navigation shows that it was saved, and still
     // without revealing which option was right — the boundary stays in place after navigating back.
-    await page.getByRole("button", { name: /^Question 1,/ }).click();
+    await page.getByRole("button", { name: new RegExp(`^Question ${answeredPositions[0]}(?:,|$)`) }).click();
     await expect(
       page.getByText("Answer submitted. Feedback stays hidden until the mock is finished."),
     ).toBeVisible();
@@ -129,8 +143,8 @@ test.describe("the mock exam journey", () => {
     await confirmation.getByRole("button", { name: "Submit mock exam" }).click();
 
     await expect(page.getByRole("heading", { level: 1, name: "Mock exam result" })).toBeVisible();
-    // The score denominator is the blueprint's full question count, not the answered subset, and
-    // the two correct answers (the fixtures' only correct option, picked deliberately) are counted.
+    // The score denominator is the blueprint's full question count, not the answered subset.
+    // Both answered fixture questions were selected with their complete correct-option set.
     await expect(page.getByText(`2 correct of ${TOTAL_QUESTIONS} questions; 2 answered.`)).toBeVisible();
     await expect(page.getByText("Practice target not reached")).toBeVisible();
     await expect(
@@ -144,7 +158,9 @@ test.describe("the mock exam journey", () => {
     await expectReflows(page);
 
     // The close releases the full answer key for every question, not only the ones answered.
-    await expect(page.getByText("Question 1: Correct")).toBeVisible();
+    for (const position of answeredPositions) {
+      await expect(page.getByText(`Question ${position}: Correct`)).toBeVisible();
+    }
     // Scoped to one of this fixture's own questions (by its marked prompt) and to the "Unanswered"
     // entry specifically, rather than a fixed position — other topics may draw from a shared pool
     // with other fixtures, and only this one's own explanation text is known here.

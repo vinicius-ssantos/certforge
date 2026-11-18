@@ -35,6 +35,23 @@ describe("splitFences", () => {
 });
 
 describe("Prompt", () => {
+  it("renders CRLF and mixed line endings like LF, preserving code and paragraph structure", () => {
+    const lf = "First.\n\nSecond.\n\n```java\nclass Example {\n\n  int value = 1;\n}\n```\n\n```\n  plain\n\n  text\n```";
+    const { container, rerender } = render(<Prompt text={lf} />);
+    const expected = container.innerHTML;
+
+    for (const text of [lf.replace(/\n/g, "\r\n"), lf.replace(/\n/g, (_, offset: number) => offset % 2 ? "\r\n" : "\n")]) {
+      rerender(<Prompt text={text} />);
+      expect(container.innerHTML).toBe(expected);
+      expect(container.querySelectorAll("p")).toHaveLength(2);
+      const blocks = screen.getAllByLabelText("Code example");
+      expect(blocks[0]).toHaveAttribute("tabindex", "0");
+      expect(blocks[0]?.querySelectorAll(".token").length).toBeGreaterThan(0);
+      expect(blocks[0]?.textContent).toContain("\n\n  int value = 1;");
+      expect(blocks[1]?.textContent).toBe("  plain\n\n  text");
+    }
+  });
+
   it("makes a paragraph of each block of text and keeps single line breaks inside one", () => {
     const { container } = render(<Prompt text={"First paragraph.\nStill the first.\n\nSecond paragraph."} />);
 
@@ -81,3 +98,4 @@ describe("Prompt", () => {
     expect(pre).toHaveTextContent("plain output");
   });
 });
+
