@@ -72,6 +72,7 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 - [Operations and incident triage](docs/engineering/operations.md)
 - [Release environment](docs/engineering/release-environment.md)
 - [Web interface guidelines](docs/engineering/web-ui-guidelines.md)
+- [OpenSpec change workflow](docs/engineering/openspec-workflow.md)
 - [`v0.1.0` demonstration scripts](docs/release/demo-scripts.md)
 - [`v0.1.0` release notes (draft)](docs/release/v0.1.0-release-notes.md)
 - [`v0.1.0` readiness review](docs/release/v0.1.0-readiness.md)
