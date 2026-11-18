@@ -85,6 +85,22 @@ async function captureMockResult(page: Page, adminAccount: { email: string; pass
   await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth))
     .toBeLessThanOrEqual(390);
   await shot(page, "10d-mock-result-mobile");
+  // The same fixed source evidence that appears in practice must be visible on a
+  // *terminal* mock review, including at a 390px viewport. Capture only this
+  // fixture's review card rather than a 50-question full-page image.
+  const fixtureReview = page.locator("details").filter({ hasText: "E2E mock fixture for" }).first();
+  await expect(fixtureReview).toBeVisible();
+  await fixtureReview.locator("summary").click();
+  const verifiedPanel = fixtureReview.getByRole("region", {
+    name: "What the build ran, and what it printed",
+  });
+  await expect(verifiedPanel).toBeVisible();
+  await expect(verifiedPanel.getByText("Main.java")).toBeVisible();
+  await expect(verifiedPanel.locator('pre[aria-label="Output"]')).toHaveText("fixtureVerifiedOutput=A");
+  await fixtureReview.screenshot({
+    path: join(DIRECTORY, "10e-mock-verified-evidence-mobile.png"),
+    animations: "disabled",
+  });
   await page.setViewportSize({ width: 1280, height: 720 });
 }
 
