@@ -41,6 +41,22 @@ function loadFlags(sessionId: string): number[] {
   }
 }
 
+function saveFlags(sessionId: string, flags: number[]) {
+  try {
+    localStorage.setItem(flagKey(sessionId), JSON.stringify(flags));
+  } catch {
+    // Flags are optional browser-local notes; the exam must remain usable without storage.
+  }
+}
+
+function clearFlags(sessionId: string) {
+  try {
+    localStorage.removeItem(flagKey(sessionId));
+  } catch {
+    // Storage can be unavailable even after the exam has been submitted successfully.
+  }
+}
+
 export function MockExamPage() {
   const t = useText();
   const { sessionId = "" } = useParams();
@@ -65,7 +81,7 @@ export function MockExamPage() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(flagKey(sessionId), JSON.stringify(flags));
+    saveFlags(sessionId, flags);
   }, [flags, sessionId]);
 
   useEffect(() => {
@@ -80,7 +96,7 @@ export function MockExamPage() {
 
   useEffect(() => {
     if (exam.data && exam.data.status !== "IN_PROGRESS") {
-      localStorage.removeItem(flagKey(sessionId));
+      clearFlags(sessionId);
     }
   }, [exam.data, sessionId]);
 
@@ -120,7 +136,7 @@ export function MockExamPage() {
     mutationFn: () =>
       unwrap(api.POST("/api/study/mock-exams/{sessionId}/finish", { params: { path: { sessionId } } })),
     onSuccess: () => {
-      localStorage.removeItem(flagKey(sessionId));
+      clearFlags(sessionId);
       navigate(`/mock-exams/${sessionId}/result`);
     },
     onError: (error) => {
