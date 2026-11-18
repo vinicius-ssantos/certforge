@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useText } from "../i18n/useText";
 
 /** One source the build compiles for a question. */
@@ -25,6 +26,7 @@ export function VerificationEvidence({
   verification: { files: VerificationSource[]; output: string } | null | undefined;
 }) {
   const t = useText();
+  const headingId = useId();
   if (!verification) {
     return null;
   }
@@ -34,8 +36,8 @@ export function VerificationEvidence({
   }
 
   return (
-    <section className="verified" aria-labelledby="verified-heading">
-      <h3 id="verified-heading">{t.feedback.verifiedHeading}</h3>
+    <section className="verified" aria-labelledby={headingId}>
+      <h3 id={headingId}>{t.feedback.verifiedHeading}</h3>
       <p className="hint">{t.feedback.verifiedNote}</p>
       {files.map((file) => (
         <div key={file.path}>

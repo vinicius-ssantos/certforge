@@ -8,6 +8,7 @@ import type { Catalog } from "../i18n/en";
 import { useText } from "../i18n/useText";
 import { meetsTarget } from "../progress/target";
 import { AnswerList } from "../ui/AnswerList";
+import { VerificationEvidence } from "../ui/VerificationEvidence";
 import { Prompt } from "../ui/Prompt";
 import { ScrollableTable } from "../ui/ScrollableTable";
 import { ErrorState, Loading } from "../ui/States";
@@ -169,6 +170,7 @@ function QuestionReview({ item }: { item: MockExamQuestionResult }) {
       </summary>
       <Prompt text={item.question.prompt} />
       <AnswerList options={item.answer.options} chosen={selected} />
+      <VerificationEvidence verification={item.answer.verification} />
       <h3>{t.feedback.explanation}</h3>
       <Prompt text={item.answer.explanation} />
       {item.answer.references.length > 0 ? (
