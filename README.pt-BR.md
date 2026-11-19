@@ -4,7 +4,7 @@
 
 > Preparação adaptativa e verificável para certificações Java e entrevistas técnicas.
 
-> Esta é uma tradução do [README em inglês](README.md), que é a fonte canônica. Em caso de divergência, vale a versão em inglês. Baseada no commit `c070ea6`.
+> Esta é uma tradução do [README em inglês](README.md), que é a fonte canônica. Em caso de divergência, vale a versão em inglês.
 
 O CertForge é uma plataforma de aprendizado open-source para engenheiros de software que buscam prática deliberada, conteúdo técnico revisado, progresso explicável e preparação baseada em evidências.
 
@@ -28,13 +28,13 @@ O produto é guiado por cinco princípios:
 |---|---|---|
 | `v0.1.0` | Study Core | Estudar questões curadas e acompanhar o progresso por tópico |
 | `v0.2.0` | Adaptive Review | Revisitar erros por meio de uma fila de revisão que considera a confiança |
-| `v0.3.0` | Mock Exams | Fazer simulados cronometrados e receber relatórios de pontos fracos |
+| `v0.3.0` | Mock Exams and Portuguese | Fazer simulados cronometrados e receber relatórios de pontos fracos |
 | `v0.4.0` | Code Analysis | Praticar questões de compilação, execução e raciocínio sobre saída |
 | `v0.5.0` | Secure Java Runner | Compilar e executar trechos de código em um serviço isolado |
 | `v0.6.0` | Study Planner | Receber planos de estudo e previsões de prontidão baseados em evidências |
 | `v0.7.0` | AI Study Assistant | Usar IA para explicações complementares e geração de prática |
 
-Apenas a `v0.1.0` é escopo comprometido. As releases seguintes expressam direção de produto e podem mudar conforme evidências forem coletadas.
+As versões até a `v0.3.0` foram publicadas; a `v0.4.0` está em revisão de release candidate. As versões posteriores permanecem hipóteses de produto.
 
 O Interview Prep é uma direção de produto futura e paralela. Não faz parte da `v0.1.0` e não está automaticamente atribuído a uma das releases numeradas acima. Seu desenho deve reaproveitar primitivas de estudo já comprovadas, sem enfraquecer a correção específica das certificações nem a disciplina de escopo.
 
@@ -83,7 +83,10 @@ A documentação completa está disponível em português em [`docs-pt-br/`](doc
 
 ## Status do projeto
 
-**A `v0.3.0` Mock Exams and Portuguese está lançada**, sobre a `v0.2.0` Adaptive Review e a `v0.1.0` Study Core. O aluno agora pode ensaiar um mock exam cronometrado, baseado no blueprint, que pontua como o 1Z0-830 real vai pontuar, e a interface inteira — não só o mock — lê em português brasileiro além de inglês. O backend (Java 25, Spring Boot, PostgreSQL), o app web do aluno, a mesa editorial e o ambiente de release são testados de ponta a ponta no CI, o pacote de questões passou pela [revisão técnica](content/java-se-21/review.json), e as passadas que uma máquina não faz — o passeio pelas telas do mock só com teclado e com leitor de tela, nas duas línguas — foram feitas em 2026-11-14. A [revisão de prontidão](docs-pt-br/release/v0.3.0-readiness.md) registra cada barreira, o que uma pessoa conferiu à mão, e a que isso não equivale. As [notas de release](docs-pt-br/release/v0.3.0-release-notes.md) listam as limitações conhecidas.
+**A `v0.4.0` Code Analysis está em preparação para release; a última versão publicada é a `v0.3.0`.** Depois de finalizar um simulado, o aluno pode consultar código Java fixo e a saída verificada com as explicações. Durante o simulado ativo, o gabarito permanece protegido. Melhoramos também a navegação, a acessibilidade por teclado e as telas móveis.
+
+Consulte a [revisão de prontidão](docs/release/v0.4.0-readiness.md) e as [notas em preparação](docs/release/v0.4.0-release-notes.md). **Ainda não foram criados a tag v0.4.0, uma GitHub Release ou um deploy de produção.**
+
 
 ### Experimente
 
