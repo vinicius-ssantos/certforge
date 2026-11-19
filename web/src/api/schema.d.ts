@@ -1854,6 +1854,8 @@ export interface components {
             dueNow: number;
             items: components["schemas"]["QueueItem"][];
             /** Format: int32 */
+            maxSessionQuestions: number;
+            /** Format: int32 */
             neverAttempted: number;
             /** Format: date-time */
             nextReviewAt: string | null;

@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Fixed
+
+- Review practice now respects the configured session size when the queue is expanded, submits the first matching batch in priority order, and labels the action with the submitted count (#421).
+
 ### Candidate v0.4.0 — Code Analysis (not tagged)
 
 - Terminal mock-review questions now show fixed Java source and recorded output beside authored option explanations; active mock solution data remains withheld (PR #416).

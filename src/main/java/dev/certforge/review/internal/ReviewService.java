@@ -15,6 +15,7 @@ import dev.certforge.review.internal.ReviewViews.QueueItem;
 import dev.certforge.study.AttemptFact;
 import dev.certforge.study.Confidence;
 import dev.certforge.study.StudyEvidence;
+import dev.certforge.study.StudyLimits;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
@@ -48,6 +49,7 @@ class ReviewService {
   static final Duration LONGEST_RECALL = Duration.ofDays(64);
 
   private final StudyEvidence evidence;
+  private final StudyLimits studyLimits;
   private final QuestionBank questions;
   private final PreparationCatalog catalog;
   private final CurrentActor currentActor;
@@ -55,11 +57,13 @@ class ReviewService {
 
   ReviewService(
       StudyEvidence evidence,
+      StudyLimits studyLimits,
       QuestionBank questions,
       PreparationCatalog catalog,
       CurrentActor currentActor,
       Clock clock) {
     this.evidence = evidence;
+    this.studyLimits = studyLimits;
     this.questions = questions;
     this.catalog = catalog;
     this.currentActor = currentActor;
@@ -141,7 +145,8 @@ class ReviewService {
     int publishedInTouchedTopics =
         publishedPerTopic.values().stream().mapToInt(Integer::intValue).sum();
     int neverAttempted = Math.max(0, publishedInTouchedTopics - attemptedQuestions);
-    return new Queue(page, dueNow, waiting, neverAttempted, nextReviewAt);
+    return new Queue(
+        page, dueNow, waiting, neverAttempted, nextReviewAt, studyLimits.maxQuestionCount());
   }
 
   /**

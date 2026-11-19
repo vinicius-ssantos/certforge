@@ -43,7 +43,8 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 @SpringBootTest(
     properties = {
       "certforge.identity.bootstrap-admin.email=review-admin@example.com",
-      "certforge.identity.bootstrap-admin.password=correct horse battery"
+      "certforge.identity.bootstrap-admin.password=correct horse battery",
+      "certforge.study.max-question-count=3"
     })
 @AutoConfigureMockMvc
 @Testcontainers
@@ -159,6 +160,11 @@ class ReviewQueueIT {
   }
 
   // ---- what the queue is for -----------------------------------------------------------------
+
+  @Test
+  void theQueueAdvertisesTheConfiguredSessionLimitEvenWhenEmpty() throws Exception {
+    assertThat(count(learner, "maxSessionQuestions")).isEqualTo(3);
+  }
 
   @Test
   void theOrderIsWhatTheReasonsMeanRatherThanWhenTheyHappened() throws Exception {
