@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { InterviewTrack, Topic } from "../api/types";
@@ -137,7 +137,8 @@ function TrackSection({ track }: { track: InterviewTrack }) {
   const api = useApi();
   const navigate = useNavigate();
   const flat = flatten(track.topics);
-  const [chosen, setChosen] = useState<string[]>([]);
+  const [params] = useSearchParams();
+  const [chosen, setChosen] = useState<string[]>(() => flat.some(({ topic }) => topic.id === params.get("topic")) ? [params.get("topic")!] : []);
   const [count, setCount] = useState(5);
   const [problems, setProblems] = useState<{ fieldId?: string; message: string }[]>([]);
 
@@ -218,11 +219,13 @@ function TrackSection({ track }: { track: InterviewTrack }) {
           <input
             id={`count-${track.id}`}
             type="number"
+            aria-describedby={`count-hint-${track.id}`}
             min={1}
             max={30}
             value={count}
             onChange={(event) => setCount(Number(event.target.value))}
           />
+          <p id={`count-hint-${track.id}`} className="hint">{t.interview.countRange(1, 30)}</p>
         </div>
 
         {/* Nothing but the conflict it has already acted on: a 500, or a taxonomy whose topics

@@ -427,7 +427,7 @@ describe("writing a draft", () => {
 
     await user.click(screen.getByRole("button", { name: "Save draft" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /Revision 1$/ })).toBeInTheDocument();
     const saved = await screen.findByText("Draft saved.");
     await waitFor(() => expect(saved).toHaveFocus());
     const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === "/api/admin/questions");
@@ -575,7 +575,7 @@ describe("writing a draft", () => {
     expect(screen.queryByLabelText("Explanation")).not.toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Save draft" }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /Revision 1$/ })).toBeInTheDocument();
     const call = fetch.calls.find((entry) => entry.method === "POST" && entry.path === "/api/admin/questions");
     expect(call?.body).toMatchObject({
       type: "GUIDED_RESPONSE",
@@ -658,7 +658,7 @@ describe("editing and sending", () => {
     expect(within(list).getByRole("link", { name: "Write the explanation." })).toHaveAttribute("href", "#field-explanation");
     expect(within(list).getByRole("link", { name: /Every option needs a reason/ })).toHaveAttribute("href", "#options");
     expect(fetch.calls.some((call) => call.method === "PUT")).toBe(true);
-    expect(screen.getByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: /Revision 1$/ })).toBeInTheDocument();
     expect(await axe(container)).toHaveNoViolations();
   });
 
@@ -800,10 +800,10 @@ describe("reading a revision", () => {
     };
     renderApp({ ...tracks, [`GET ${QUESTION_URL}`]: { body: both } }, { as: reviewer, path: `/editorial/questions/${QUESTION_ID}` });
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Revision 2" })).toBeInTheDocument();
-    await user.click(screen.getByRole("link", { name: "Revision 1" }));
+    expect(await screen.findByRole("heading", { level: 1, name: /Revision 2$/ })).toBeInTheDocument();
+    await user.click(screen.getByRole("link", { name: /Revision 1$/ }));
 
-    expect(await screen.findByRole("heading", { level: 1, name: "Revision 1" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /Revision 1$/ })).toBeInTheDocument();
     expect(screen.getByText("The old wording.")).toBeInTheDocument();
   });
 
@@ -860,4 +860,13 @@ describe("who and what, in a revision's history", () => {
     const notes = await screen.findByRole("region", { name: "Review notes" });
     expect(within(notes).queryByText(/^Checked:/)).not.toBeInTheDocument();
   });
+});
+
+it("previews unsaved prompt code locally without creating a revision", async () => {
+  const { fetch } = renderApp(tracks, { path: "/editorial/new", as: editor });
+  const input = await screen.findByLabelText("Question");
+  await userEvent.type(input, "Unsaved prompt");
+  await userEvent.click(screen.getByText("Local prompt preview", { selector: "summary" }));
+  expect(screen.getByText("Unsaved prompt", { selector: ".prompt p" })).toBeVisible();
+  expect(fetch.calls.filter((call) => call.method === "POST")).toHaveLength(0);
 });

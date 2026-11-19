@@ -13,7 +13,7 @@ function setup(onConfirm = vi.fn()) {
 }
 
 describe("Confirm", () => {
-  it("does nothing until the second step, and moves focus to the confirming button", async () => {
+  it("does nothing until the second step, and moves focus to cancellation", async () => {
     const user = userEvent.setup();
     const onConfirm = setup();
 
@@ -21,7 +21,7 @@ describe("Confirm", () => {
 
     expect(onConfirm).not.toHaveBeenCalled();
     expect(screen.getByRole("group", { name: "Confirm retiring" })).toHaveTextContent("This cannot be undone.");
-    expect(screen.getByRole("button", { name: "Yes, retire" })).toHaveFocus();
+    expect(screen.getByRole("button", { name: "Cancel" })).toHaveFocus();
     await user.click(screen.getByRole("button", { name: "Yes, retire" }));
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -42,7 +42,7 @@ describe("Confirm", () => {
     setup();
 
     await user.click(screen.getByRole("button", { name: "Retire" }));
-    await user.keyboard("{Tab}{Enter}");
+    await user.keyboard("{Enter}");
 
     expect(screen.getByRole("button", { name: "Retire" })).toHaveFocus();
   });

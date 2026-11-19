@@ -107,7 +107,7 @@ test.describe("using it with the keyboard alone", () => {
 
     const confirm = page.getByRole("group", { name: "Confirm ending the session" });
     const yes = confirm.getByRole("button", { name: "Yes, end the session" });
-    await expect(yes).toBeFocused();
+    await expect(confirm.getByRole("button", { name: "Keep practising" })).toBeFocused();
     await expectKeyboardReachable(page, "the confirmation");
 
     // The walk above left the focus wherever it ended; put it back where the person was.

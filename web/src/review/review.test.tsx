@@ -276,3 +276,16 @@ describe("the review queue", () => {
     expect(await screen.findByRole("heading", { name: "Nothing here yet" })).toBeInTheDocument();
   });
 });
+
+it("keeps the diagnostic topic and reason in the URL and can change topics", async () => {
+  const { fetch, router } = renderApp({
+    "GET /api/review/queue": { body: queue({ items: [item(), item({ questionId: "q2", reason: "WRONG", prompt: "Another prompt" })] }) },
+    "GET /api/catalog/tracks": { body: [] },
+    "GET /api/catalog/interview-tracks": { body: [] },
+  }, { path: `/review?topic=${TOPIC}&reason=WRONG_WHILE_CONFIDENT` });
+  expect(await screen.findByText("What does this print?")).toBeVisible();
+  expect(screen.queryByText("Another prompt")).not.toBeInTheDocument();
+  expect(fetch.calls.find((call) => call.path === "/api/review/queue")?.query.get("topicId")).toBe(TOPIC);
+  await userEvent.selectOptions(screen.getByLabelText("Filter by topic"), "");
+  await waitFor(() => expect(router.state.location.search).toBe(""));
+});

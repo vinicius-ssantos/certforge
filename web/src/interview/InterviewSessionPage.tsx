@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useBlocker, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type {
@@ -43,8 +43,12 @@ interface Answered {
 }
 
 export function InterviewSessionPage() {
-  const t = useText();
   const { sessionId = "" } = useParams();
+  return <InterviewSession key={sessionId} sessionId={sessionId} />;
+}
+
+function InterviewSession({ sessionId }: { sessionId: string }) {
+  const t = useText();
   const api = useApi();
   const queryClient = useQueryClient();
   useDocumentTitle(t.interview.session.title);
@@ -56,6 +60,29 @@ export function InterviewSessionPage() {
         api.GET("/api/study/interviews/{sessionId}", { params: { path: { sessionId } } }),
       ),
   });
+
+  const [draft, setDraft] = useState("");
+  const keepDraft = useRef<HTMLButtonElement>(null);
+  const closed = session.data !== undefined && session.data.status !== "IN_PROGRESS";
+  useEffect(() => {
+    if (closed) {
+      // Privacy cleanup on an externally closed/expired session, including background refetch.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDraft("");
+    }
+  }, [closed]);
+  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+    Boolean(draft.trim()) && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search),
+  );
+  useEffect(() => {
+    if (!draft.trim()) return;
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [draft]);
+  useEffect(() => {
+    if (blocker.state === "blocked") keepDraft.current?.focus();
+  }, [blocker.state]);
 
   const [answered, setAnswered] = useState<Answered | null>(null);
   const [marks, setMarks] = useState<Record<number, boolean>>({});
@@ -136,6 +163,7 @@ export function InterviewSessionPage() {
       ),
     onSuccess: (closed) => {
       setAnswered(null);
+      setDraft("");
       store(closed);
     },
     onError: (error) => {
@@ -197,6 +225,7 @@ export function InterviewSessionPage() {
       }
     }
     if (next) {
+      setDraft("");
       setAnswered(null);
       setMarks({});
     } else {
@@ -218,6 +247,7 @@ export function InterviewSessionPage() {
         <GuidedOutcomePanel
           key={answered.position}
           outcome={answered.answer.guided}
+          draft={draft}
           marks={marks}
           onMark={(position, covered) =>
             setMarks((current) => ({ ...current, [position]: covered }))
@@ -230,6 +260,8 @@ export function InterviewSessionPage() {
       <GuidedItem
         key={next.position}
         question={next.question}
+        draft={draft}
+        onDraft={setDraft}
         number={next.position + 1}
         total={ordered.length}
         failure={failure}
@@ -286,6 +318,18 @@ export function InterviewSessionPage() {
       {/* A failed mark must not be silent: the learner said something about their own answer and
           has a right to know it was not recorded. The session itself is unaffected. */}
       {mark.isError ? <ErrorState error={mark.error} /> : null}
+      {blocker.state === "blocked" ? (
+        <div role="group" aria-label={t.ux.discardTitle} className="confirm">
+          <p>{t.ux.discardBody}</p>
+          <button ref={keepDraft} type="button" onClick={() => {
+            blocker.reset();
+            document.getElementById("guided-draft")?.focus();
+          }}>{t.ux.keepDraft}</button>{" "}
+          <button type="button" className="secondary" onClick={() => blocker.proceed()}>
+            {t.ux.discardDraft}
+          </button>
+        </div>
+      ) : null}
       {body}
       <div className="session-actions">
         <Confirm

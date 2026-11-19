@@ -402,7 +402,7 @@ describe("publishing", () => {
     const confirm = screen.getByRole("group", { name: "Confirm publishing revision 1" });
     expect(confirm).toHaveTextContent("Publishing is final");
     const yes = within(confirm).getByRole("button", { name: "Yes, publish revision 1" });
-    expect(yes).toHaveFocus();
+    expect(within(confirm).getByRole("button", { name: "Cancel" })).toHaveFocus();
     await user.click(yes);
 
     const publishedNotice = await screen.findByText(/^Published\./);
@@ -489,7 +489,7 @@ describe("correcting a published question", () => {
     await user.click(await screen.findByRole("button", { name: "Start a new revision" }));
 
     expect(await screen.findByText(/New revision started/)).toBeInTheDocument();
-    expect(await screen.findByRole("heading", { level: 1, name: "Revision 2" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { level: 1, name: /Revision 2$/ })).toBeInTheDocument();
     expect(await screen.findByLabelText("Question", { selector: "textarea" })).toHaveValue("What is 1 + 1?");
   });
 
@@ -500,7 +500,7 @@ describe("correcting a published question", () => {
       { as: reviewer, path: `/editorial/questions/${QUESTION_ID}?revision=1` },
     );
 
-    await screen.findByRole("heading", { level: 1, name: "Revision 1" });
+    await screen.findByRole("heading", { level: 1, name: /Revision 1$/ });
     expect(screen.queryByRole("button", { name: "Start a new revision" })).not.toBeInTheDocument();
   });
 

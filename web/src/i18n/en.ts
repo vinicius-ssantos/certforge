@@ -24,6 +24,29 @@ export const en = {
     label: "Language",
   },
 
+  ux: {
+    practiceTopic: "Practise this topic",
+    evidenceLimitation: "This summary cannot reopen the original answer. Start a new practice on this topic to review it.",
+    discardTitle: "Discard private writing?",
+    discardBody: "Your writing is kept only in memory. Leaving this page discards it.",
+    keepDraft: "Stay on this page",
+    discardDraft: "Discard and leave",
+    map: "Question map",
+    pendingDrafts: "Selections still being edited",
+    returnDrafts: "Return to pending selections",
+    preview: "Local prompt preview",
+    sections: "Form sections",
+    metadata: "Question details",
+    prompt: "Prompt",
+    answers: "Answers and explanation",
+    references: "References",
+    support: "Contact installation support",
+    noSupport: "This installation has no support channel configured. Reply to the invitation or message that gave you this address, or contact the person who shared it.",
+    search: "Find a track by name or provider",
+    noMatches: "No tracks match this search.",
+    clear: "Clear search",
+    practiceCounts: (correct: number, attempted: number) => `${correct} of ${attempted} correct`,
+  },
   layout: {
     skipToMain: "Skip to main content",
     brand: "CertForge",
@@ -194,7 +217,7 @@ export const en = {
     topics: "Topics",
     mockHeading: "Full mock exam",
     mockBody:
-      "Run a timed full mock with a server-enforced deadline, delayed feedback and a final topic breakdown. The current CertForge blueprint controls the question count, duration and practice target.",
+      "Answer a timed mock and see explanations and results by topic after submission. Check the question count, duration and practice target below.",
     mockCaveat: (provider: string) =>
       `This is CertForge's own practice exam, not an official ${provider} exam, and the practice target is for study guidance only -- not a score prediction.`,
     performanceBasedNotice:
@@ -409,7 +432,7 @@ export const en = {
     /** The column that names where a topic stands, rather than leaving the reader to infer it. */
     situation: "Situation",
     /** At or above the practice target. */
-    solid: "Solid",
+    solid: "At or above practice target",
     /** Below the practice target. The word is an instruction, not a verdict on the learner. */
     needsReview: "Review",
     /**
@@ -417,7 +440,7 @@ export const en = {
      * see the line they are being measured against, and see where it came from.
      */
     targetNote: (percent: number) =>
-      `“Solid” means ${percent}% or better, the mock exam's pass mark. It describes your practice so far, not a prediction about the exam.`,
+      `The practice target is ${percent}%. Read accuracy together with the number of answers; it does not establish mastery or predict exam results.`,
     fallbackTopic: "Topic",
     certificationsHeading: "Progress by certification",
     certificationsCaption: "Your topic coverage and accuracy by certification",
@@ -601,10 +624,10 @@ export const en = {
     loading: "Loading interview preparation",
     emptyTitle: "No interview preparation is open yet",
     emptyBody:
-      "An interview taxonomy becomes available once it is published. Certification tracks are on the home page.",
+      "Interview topics will appear here when published. You can also explore certification tracks from the home page.",
     topicCount: (count: number) =>
       `${count} ${plural(TAG, count, { one: "topic", other: "topics" })}`,
-    browseHeading: "Topics in this taxonomy",
+    browseHeading: "Interview topics",
     weightLabel: (weight: number) => `Asked in interviews: ${weight} of 5`,
     startHeading: "Start a session",
     startFromTopics: "Choose topics yourself",
@@ -636,7 +659,7 @@ export const en = {
         "Nothing grades this answer. Say it out loud or write it here for yourself, then read what a reviewer expected.",
       yourAnswer: "Your answer (kept in this browser, never sent)",
       yourAnswerHint:
-        "This stays on your device. It is not uploaded, not stored and not read by anything.",
+        "Kept only in memory, including beside the reference. Never sent or stored. Discarded on the next item, session closure or confirmed exit.",
       reveal: "Show what a reviewer expected",
       revealing: "Opening…",
       referenceAnswer: "Reference answer",
@@ -656,10 +679,10 @@ export const en = {
       allAnsweredBody: "Close the session to keep it in your history.",
       ended: "This session is closed.",
       endedBody: "What it recorded is in your interview evidence.",
-      endTrigger: "End session",
+      endTrigger: "Abandon session",
       endTitle: "End this session?",
       endExplain: "Items you have answered stay recorded. The rest are not kept.",
-      endConfirm: "End session",
+      endConfirm: "Abandon session",
       endCancel: "Keep going",
       backToInterviews: "Back to interview prep",
       correct: "Correct",
@@ -670,11 +693,11 @@ export const en = {
 
     blueprint: {
       title: "From a job description",
-      loading: "Loading blueprint",
+      loading: "Loading study plan",
       intro:
         "Paste the advert. Each topic it talks about is weighed by the words it used, and every weight shows the words behind it.",
       noAi:
-        "No model reads this and no model decides the weights. The terms come from a reviewed dictionary, so you can see exactly why a topic is weighted and disagree with it.",
+        "No model reads this and no model decides the weights. The terms come from a reviewed dictionary, so you can see why a topic is weighted. This screen does not edit weights; choose topics directly in interview practice for a different focus.",
       jobTitle: "Role (optional)",
       sourceText: "The job description",
       sourceTextHint: "Pasted as it is. Nothing is inferred about you from it.",
@@ -692,9 +715,9 @@ export const en = {
       changeWeight: (topic: string) => `Weight for ${topic}`,
       unrecognisedHeading: "Not recognised",
       unrecognisedBody:
-        "These were not in the dictionary, so nothing was guessed from them. Weigh them yourself if they matter.",
+        "These were not in the dictionary, so nothing was guessed from them. They are not covered by this plan. Choose available topics in interview practice; requirements without a matching topic need study outside this plan.",
       notAVerdict:
-        "This weighs topics. It says nothing about you: no fit, no readiness for the role, no chance of an offer.",
+        "This plan organizes study topics; it does not assess job suitability or predict hiring.",
       startFrom: "Practise from this",
       emptyTitle: "No job descriptions yet",
       emptyBody: "Read one and it will be kept here, with the words behind every weight.",
@@ -707,7 +730,7 @@ export const en = {
       title: "What practice has shown",
       loading: "Loading evidence",
       intro:
-        "Counts of what you answered, and the two things an accuracy figure hides. Nothing here is a score and nothing here is a verdict on you.",
+        "Review your practice by topic and choose what to work on next.",
       notAVerdict:
         "Guided answers are not graded by anything, so they are counted separately and never added to the objective ones.",
       emptyTitle: "Nothing practised yet",

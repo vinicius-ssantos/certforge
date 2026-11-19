@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
@@ -19,10 +20,13 @@ function TopicList({
   busy: boolean;
 }) {
   const t = useText();
+  useEffect(() => {
+    if (window.location.hash.startsWith("#topic-")) document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.focus();
+  }, [topics]);
   return (
     <ol className="topics">
       {topics.map((topic) => (
-        <li key={topic.id}>
+        <li key={topic.id} id={`topic-${topic.id}`} tabIndex={-1}>
           <div className="topic-row">
             <div className="topic-copy">
               <strong>{topic.name}</strong>
