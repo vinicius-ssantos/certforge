@@ -7,8 +7,8 @@
 ## 2. Deliver only approved gaps
 
 - [x] 2.1 Select a bounded, representative content pilot; retain deterministic Java 21 proof and require human technical/editorial approval for authored explanations. Six named Java SE 21 examples and their pending acceptance checklist are recorded in `docs/review/v04-code-analysis-pilot-20261118.md`; none is editorially approved by the owner's scope approval.
-- [ ] 2.2 Implement only necessary code-behavior feedback improvements using existing contracts first. Keep active mock feedback concealed.
-- [ ] 2.3 Verify mobile/desktop accessibility, semantic code and safe CSP-compatible rendering; no arbitrary execution or secret-bearing endpoints.
+- [x] 2.2 Implement only necessary code-behavior feedback improvements using existing contracts first. Keep active mock feedback concealed. PR #416 uses the existing `VerificationEvidence` and `answer.verification` exclusively in terminal mock review; active mock remains unchanged. Covered by unit and browser E2E.
+- [x] 2.3 Verify mobile/desktop accessibility, semantic code and safe CSP-compatible rendering; no arbitrary execution or secret-bearing endpoints. PR #416 uses `useId()` for unique accessible evidence headings; Playwright desktop/mobile and 390px visual fixture were checked, with no API, schema or execution endpoint change.
 
 ## 3. Quality and release readiness
 
