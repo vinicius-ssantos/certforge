@@ -18,6 +18,12 @@ The existing question pack compiles/executes fixed Java 21 examples in CI throug
 5. **Accessibility and security:** reuse the existing class-based, CSP-compatible code renderer; validate mobile wrapping/scrolling, screen-reader labeling and no interpretation of source as HTML.
 6. **Incremental delivery:** complete a small approved pilot and observable acceptance checks, rather than promise an entire corpus transformation.
 
+## Owner decision (18 November 2026)
+
+The owner explicitly approved the **minimal pilot scope**: show already-recorded Java source/output on *finalized* mock-review questions (reuse existing server fields and `VerificationEvidence`, PR #416) and conduct individual human editorial review of six representative Java SE 21 explanations/distractors. Do not add a new runner or alter the content/publication state without its separate review acceptance. The pilot list and audit instructions are tracked in `docs/review/v04-code-analysis-pilot-20261118.md`.
+
+This approval authorizes the planning/implementation workflow and review; it does **not** constitute approval of those six existing gabaritos, a blanket v0.4.0 release acceptance, or permission to publish unreviewed content.
+
 ## Alternatives
 
 - **New code runner:** rejected for v0.4.0; belongs to the separately security-reviewed v0.5.0.
