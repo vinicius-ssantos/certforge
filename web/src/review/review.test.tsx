@@ -28,7 +28,7 @@ function item(overrides: Record<string, unknown> = {}) {
 }
 
 function queue(overrides: Record<string, unknown> = {}) {
-  return { items: [], dueNow: 0, waiting: 0, neverAttempted: 0, ...overrides };
+  return { items: [], dueNow: 0, waiting: 0, neverAttempted: 0, maxSessionQuestions: 20, ...overrides };
 }
 
 const at = { path: "/review" };
@@ -153,6 +153,62 @@ describe("the review queue", () => {
       // Only this topic's questions, and not the one belonging to another topic.
       expect(call?.body).toEqual({ topicId: TOPIC, revisionIds: ["r1", "r2"] });
     });
+  });
+
+  it.each([20, 7, 50])("starts only the permitted batch after expanding a queue (maximum %i)", async (maximum) => {
+    const user = userEvent.setup();
+    const items = Array.from({ length: 60 }, (_, i) => item({
+      questionId: `q${i}`, revisionId: `r${i}`, prompt: `Review question ${i}`,
+    }));
+    const { fetch } = renderApp({
+      "GET /api/review/queue": ({ query }) => ({ body: queue({
+        items: items.slice(0, Number(query.get("limit"))), dueNow: 60,
+        maxSessionQuestions: maximum,
+      }) }),
+      "POST /api/study/sessions": { status: 201, body: { id: "session-1" } },
+    }, at);
+    await user.click(await screen.findByRole("button", { name: "Show more due questions" }));
+    await screen.findByText("Review question 39");
+    await user.click(screen.getByRole("button", { name: "Show more due questions" }));
+    await screen.findByText("Review question 59");
+    expect(screen.getAllByRole("listitem")).toHaveLength(60);
+    const button = screen.getByRole("button", { name: `Practise ${maximum} questions in Working with Java data types` });
+    expect(button).toHaveTextContent(`Practise ${maximum}`);
+    await user.click(button);
+    await waitFor(() => expect(fetch.calls.find((call) => call.path === "/api/study/sessions")?.body)
+      .toEqual({ topicId: TOPIC, revisionIds: items.slice(0, maximum).map((entry) => entry.revisionId) }));
+  });
+
+  it("batches after applying the reason filter and preserves matching order", async () => {
+    const user = userEvent.setup();
+    const items = Array.from({ length: 20 }, (_, i) => item({
+      questionId: `q${i}`, revisionId: `r${i}`,
+      reason: i % 2 ? "WRONG" : "RIGHT_BUT_UNSURE",
+    }));
+    const { fetch } = renderApp({
+      "GET /api/review/queue": { body: queue({ items, dueNow: 20, maxSessionQuestions: 7 }) },
+      "POST /api/study/sessions": { status: 201, body: { id: "session-1" } },
+    }, at);
+    await screen.findByRole("button", { name: /Practise 7 questions/ });
+    await user.selectOptions(screen.getByRole("combobox", { name: en.review.filterReason }), "WRONG");
+    expect(screen.getAllByRole("listitem")).toHaveLength(10);
+    await user.click(screen.getByRole("button", { name: /Practise 7 questions/ }));
+    await waitFor(() => expect(fetch.calls.find((call) => call.path === "/api/study/sessions")?.body)
+      .toEqual({ topicId: TOPIC, revisionIds: ["r1", "r3", "r5", "r7", "r9", "r11", "r13"] }));
+  });
+
+  it("uses a single-question batch with an older cached queue response", async () => {
+    const user = userEvent.setup();
+    const { fetch } = renderApp({
+      "GET /api/review/queue": { body: queue({
+        items: [item(), item({ questionId: "q2", revisionId: "r2" })],
+        dueNow: 2, maxSessionQuestions: undefined,
+      }) },
+      "POST /api/study/sessions": { status: 201, body: { id: "session-1" } },
+    }, at);
+    await user.click(await screen.findByRole("button", { name: /Practise 1 question in/ }));
+    await waitFor(() => expect(fetch.calls.find((call) => call.path === "/api/study/sessions")?.body)
+      .toEqual({ topicId: TOPIC, revisionIds: ["r1"] }));
   });
 
   it("distinguishes nothing due yet from nothing attempted yet", async () => {

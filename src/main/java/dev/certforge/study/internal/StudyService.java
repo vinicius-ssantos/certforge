@@ -8,6 +8,7 @@ import dev.certforge.preparationcatalog.TopicId;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionRevisionId;
+import dev.certforge.study.StudyLimits;
 import dev.certforge.study.internal.SessionViews.SessionQuestionView;
 import dev.certforge.study.internal.SessionViews.SessionSummary;
 import dev.certforge.study.internal.SessionViews.SessionView;
@@ -38,7 +39,7 @@ import org.springframework.transaction.support.TransactionTemplate;
  * also frees the learner's slot for that topic.
  */
 @Service
-class StudyService {
+class StudyService implements StudyLimits {
 
   private final StudyRepository repository;
   private final AttemptRepository attempts;
@@ -84,7 +85,8 @@ class StudyService {
     return properties.defaultQuestionCount();
   }
 
-  int maxQuestionCount() {
+  @Override
+  public int maxQuestionCount() {
     return properties.maxQuestionCount();
   }
 

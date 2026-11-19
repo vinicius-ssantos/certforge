@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Fixed
+
+- Review practice now respects the configured session size when the queue is expanded, submits the first matching batch in priority order, and labels the action with the submitted count (#421).
+
 ## [0.3.0] - 2026-11-14
 
 Mock Exams and Portuguese. See the [release notes](docs/release/v0.3.0-release-notes.md) for what it does and what it does not.

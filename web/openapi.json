@@ -2123,6 +2123,10 @@
             },
             "type" : "array"
           },
+          "maxSessionQuestions" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
           "neverAttempted" : {
             "format" : "int32",
             "type" : "integer"
@@ -2136,7 +2140,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "dueNow", "items", "neverAttempted", "nextReviewAt", "waiting" ],
+        "required" : [ "dueNow", "items", "maxSessionQuestions", "neverAttempted", "nextReviewAt", "waiting" ],
         "type" : "object"
       },
       "QueueItem" : {

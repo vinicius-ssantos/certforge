@@ -42,7 +42,8 @@ interface ReviewViews {
       int dueNow,
       int waiting,
       int neverAttempted,
-      @Schema(nullable = true) Instant nextReviewAt) {}
+      @Schema(nullable = true) Instant nextReviewAt,
+      int maxSessionQuestions) {}
 
   /**
    * Where a learner has been wrong while saying they were confident, per topic.
