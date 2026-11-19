@@ -205,6 +205,14 @@ test.describe("the mock exam journey", () => {
     await unansweredReview.locator("summary").click();
     await expect(unansweredReview.getByRole("heading", { level: 3, name: "Explanation" })).toBeVisible();
     await expect(unansweredReview.getByText("Test data: the first option is expected.")).toBeVisible();
+    // Unlike an active mock, a terminal review must expose the fixed, verified source and
+    // recorded output already returned by the server, without executing code in the browser.
+    const evidence = unansweredReview.getByRole("region", {
+      name: "What the build ran, and what it printed",
+    });
+    await expect(evidence).toBeVisible();
+    await expect(evidence.getByText("Main.java")).toBeVisible();
+    await expect(evidence.locator('pre[aria-label="Output"]')).toHaveText("fixtureVerifiedOutput=A");
 
     // The session that was practised is closed; its own page says so and points at the result.
     const sessionUrl = new URL(page.url()).pathname.replace(/\/result$/, "");

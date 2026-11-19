@@ -75,6 +75,10 @@ function result() {
             { key: "B", text: "Second option", correct: false, explanation: "Incorrect." },
           ],
           references: [{ title: "Java SE 21 specification", url: "https://docs.oracle.com/javase/specs/jls/se21/html/" }],
+          verification: {
+            files: [{ path: "Main.java", body: 'class Main { public static void main(String[] args) { System.out.println(42); } }' }],
+            output: "proof-recorded-result",
+          },
         },
       },
       {
@@ -92,6 +96,7 @@ function result() {
             { key: "B", text: "Second option", correct: true, explanation: "Correct." },
           ],
           references: [],
+          verification: null,
         },
       },
     ],
@@ -158,6 +163,8 @@ describe("mock exam flow", () => {
     expect(await screen.findByText("Mock question 1?")).toBeInTheDocument();
     expect(screen.queryByText(/correct answer/i)).not.toBeInTheDocument();
     expect(screen.queryByText(/explanation/i)).not.toBeInTheDocument();
+    expect(screen.queryByText("proof-recorded-result")).not.toBeInTheDocument();
+    expect(screen.queryByRole("region", { name: "What the build ran, and what it printed" })).not.toBeInTheDocument();
 
     await user.click(screen.getByRole("radio", { name: /First option/ }));
     await user.click(screen.getByRole("button", { name: "Save answer" }));
@@ -205,12 +212,46 @@ describe("mock exam flow", () => {
     expect(await screen.findByRole("heading", { name: "Practice target not reached" })).toBeInTheDocument();
     expect(screen.getAllByText("50%")).toHaveLength(2);
     expect(screen.getByRole("row", { name: /Handling exceptions/ })).toBeInTheDocument();
+    // Closed <details> elements remain in the DOM but are not visible to the learner.
+    expect(screen.getByText("proof-recorded-result")).not.toBeVisible();
     await userEvent.setup().click(screen.getByText(/Question 1: Correct/));
+    expect(screen.getByText("proof-recorded-result")).toBeInTheDocument();
+    expect(screen.getByText("Main.java")).toBeInTheDocument();
     expect(screen.getByText("A is correct because the specification says so.")).toBeInTheDocument();
     expect(screen.getByText(/Your answer\. Correct answer\./)).toBeInTheDocument();
     const filter = screen.getByRole("combobox", { name: "Filter question results" });
     await userEvent.setup().selectOptions(filter, "unanswered");
     expect(screen.queryByText(/Question 1: Correct/)).not.toBeInTheDocument();
     expect(screen.getByText(/Question 2: Unanswered/)).toBeVisible();
+    await userEvent.setup().click(screen.getByText(/Question 2: Unanswered/));
+    expect(screen.queryByRole("region", { name: "What the build ran, and what it printed" }))
+      .not.toBeInTheDocument();
+  });
+
+  it("uses unique, accessible headings for multiple terminal verification panels", async () => {
+    const completed = result();
+    completed.questions[1]!.answer.verification = completed.questions[0]!.answer.verification;
+    renderApp(
+      {
+        "GET /api/catalog/tracks": { body: [javaTrack] },
+        [`GET /api/study/mock-exams/${MOCK_ID}/result`]: { body: completed },
+      },
+      { path: `/mock-exams/${MOCK_ID}/result` },
+    );
+
+    expect(await screen.findByRole("heading", { name: "Practice target not reached" })).toBeInTheDocument();
+    const user = userEvent.setup();
+    await user.click(screen.getByText(/Question 1: Correct/));
+    await user.click(screen.getByText(/Question 2: Unanswered/));
+
+    const panels = screen.getAllByRole("region", { name: "What the build ran, and what it printed" });
+    expect(panels).toHaveLength(2);
+    const ids = panels.map((panel) => panel.getAttribute("aria-labelledby"));
+    expect(ids.every(Boolean)).toBe(true);
+    expect(new Set(ids).size).toBe(2);
+    for (const [index, panel] of panels.entries()) {
+      expect(panel.querySelector("h3")?.id).toBe(ids[index]);
+      expect(panel.querySelector('pre[tabindex="0"]')).toBeInTheDocument();
+    }
   });
 });
