@@ -10,9 +10,9 @@ This section exists because the roadmap and the issue tracker said different thi
 the project is building, and neither could be read as the plan (#200). The questions it raised were
 answered on 2026-10-23 and are recorded below.
 
-`v0.4.0` through `v0.7.0` carry no issues at all, which is this policy working as written: they
-are hypotheses, and filing issues against them now would be planning scope the policy says not to
-plan yet.
+`v0.4.0` has completed its owner-approved Code Analysis pilot (#413, #415, #417) and is in
+release-candidate review, not yet tagged. `v0.5.0` through `v0.7.0` remain future hypotheses
+whose scopes should be decided after earlier release outcomes are reviewed.
 
 Two directions carry issues and **neither will carry a release number**, decided by the owner on
 2026-10-23 (#200):
@@ -71,7 +71,8 @@ Candidate capabilities: timed assessments, question flagging, final submission, 
 
 **Outcome:** A learner practices questions about compilation, runtime behavior, and program output with high-quality code presentation.
 
-This release still uses prevalidated content and does not require arbitrary execution.
+This release uses prevalidated content and no arbitrary execution. Its completion evidence
+and pending release gates are in the [v0.4.0 readiness review](../release/v0.4.0-readiness.md).
 
 ## `v0.5.0` — Secure Java Runner
 

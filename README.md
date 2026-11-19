@@ -26,13 +26,13 @@ The product is guided by five principles:
 |---|---|---|
 | `v0.1.0` | Study Core | Study curated questions and track progress by topic |
 | `v0.2.0` | Adaptive Review | Revisit mistakes through a confidence-aware review queue |
-| `v0.3.0` | Mock Exams | Complete timed simulations and receive weakness reports |
+| `v0.3.0` | Mock Exams and Portuguese | Complete timed simulations and receive weakness reports |
 | `v0.4.0` | Code Analysis | Practice compilation, runtime, and output reasoning questions |
 | `v0.5.0` | Secure Java Runner | Compile and execute snippets in an isolated service |
 | `v0.6.0` | Study Planner | Receive evidence-based study plans and readiness forecasts |
 | `v0.7.0` | AI Study Assistant | Use AI for supplementary explanations and practice generation |
 
-Only `v0.1.0` is committed scope. Later releases express product direction and may change as evidence is collected.
+Releases through `v0.3.0` are published; `v0.4.0` is in release-candidate review. Later releases remain product hypotheses.
 
 Interview Prep is a parallel future product direction, not part of `v0.1.0` and not automatically assigned to one of the numbered releases above. Its design must reuse proven study primitives without weakening certification-specific correctness or scope discipline.
 
@@ -81,7 +81,10 @@ The initial source of truth will be PostgreSQL. A future Java runner will be dep
 
 ## Project status
 
-**`v0.3.0` Mock Exams and Portuguese is released**, on top of `v0.2.0` Adaptive Review and `v0.1.0` Study Core. A learner can now rehearse a timed, blueprint-based mock exam that scores like the real 1Z0-830 will, and the whole interface — not only the mock — reads in Brazilian Portuguese as well as English. The backend (Java 25, Spring Boot, PostgreSQL), the learner web app, the editorial desk and the release environment are tested end to end in CI, the question pack had its [technical review](content/java-se-21/review.json), and the manual passes a machine cannot do — the keyboard-only and screen-reader walk of the mock screens, in both languages — were done on 2026-11-14. The [readiness review](docs/release/v0.3.0-readiness.md) records each gate, what a person checked by hand, and what that does not amount to. The [release notes](docs/release/v0.3.0-release-notes.md) list the known limitations.
+**`v0.4.0` Code Analysis is a release candidate; the last published version remains `v0.3.0`.** Completed timed mock reviews now show prevalidated Java source and recorded output beside authored explanations. Active mocks still conceal solution material. Navigation, mobile presentation and keyboard accessibility have also improved.
+
+See the [readiness review](docs/release/v0.4.0-readiness.md) and [draft release notes](docs/release/v0.4.0-release-notes.md). **No `v0.4.0` tag, public GitHub Release or production deployment has occurred.**
+
 
 ### Try it
 
