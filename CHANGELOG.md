@@ -10,6 +10,14 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 - Review practice now respects the configured session size when the queue is expanded, submits the first matching batch in priority order, and labels the action with the submitted count (#421).
 
+### Candidate v0.4.0 — Code Analysis (not tagged)
+
+- Terminal mock-review questions now show fixed Java source and recorded output beside authored option explanations; active mock solution data remains withheld (PR #416).
+- Improved responsive learning navigation, review continuation, accessible code and keyboard focus behavior (PR #412).
+- Audited the existing 150 fixed Java SE 21 examples and recorded six expressly human-approved pilot questions and unchanged file hashes (#417).
+- Archived OpenSpec changes and synchronized permanent behavior contracts (PRs #408, #414, #419).
+- Draft [release notes](docs/release/v0.4.0-release-notes.md) and [readiness review](docs/release/v0.4.0-readiness.md); not yet tagged or deployed.
+
 ## [0.3.0] - 2026-11-14
 
 Mock Exams and Portuguese. See the [release notes](docs/release/v0.3.0-release-notes.md) for what it does and what it does not.
