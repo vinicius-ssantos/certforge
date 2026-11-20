@@ -406,6 +406,33 @@ describe("audit dependency and draft recovery", () => {
     await userEvent.click(screen.getByRole("button", { name: "Stay on this page" }));
     expect(screen.getByLabelText(/Your answer/)).toHaveValue("Private reasoning");
   });
+  it("discards private writing when another tab advances to a different guided item", async () => {
+    const route = `GET /api/study/interviews/${SESSION}`;
+    const { fetch } = renderApp(
+      {
+        ...catalog,
+        ...noSessions,
+        [route]: { body: session([guidedItem(0), guidedItem(1)]) },
+        [`POST /api/study/interviews/${SESSION}/items/0/answer`]: {
+          status: 409,
+          body: { status: 409, code: "question_already_answered", title: "Already answered" },
+        },
+      },
+      { path: `/interviews/${SESSION}` },
+    );
+
+    await userEvent.type(await screen.findByLabelText(/Your answer/), "Private first-item draft");
+    // Another tab submits item 0 before this one's request. The 409 refetch moves to item 1.
+    fetch.on(route, {
+      body: session([{ ...guidedItem(0), answered: true }, guidedItem(1)]),
+    });
+    await userEvent.click(screen.getByLabelText("Low – I am guessing"));
+    await userEvent.click(screen.getByRole("button", { name: /Show what a reviewer expected/ }));
+
+    expect(await screen.findByRole("heading", { name: "Item 2 of 2" })).toBeVisible();
+    expect(screen.getByLabelText(/Your answer/)).toHaveValue("");
+  });
+
   it("preselects the topic carried by an evidence action", async () => {
     renderApp({ ...catalog, ...noSessions }, { path: `/interviews?topic=${CONCURRENCY}` });
     expect(await screen.findByRole("checkbox", { name: "Concurrency" })).toBeChecked();
