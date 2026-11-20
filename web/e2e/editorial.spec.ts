@@ -50,7 +50,7 @@ test.describe("the editorial desk", () => {
     await page.getByLabel("Topic", { exact: true }).selectOption({ label: TOPIC_NAME });
     await page.getByLabel("Question", { exact: true }).fill(label);
     await page.getByRole("button", { name: "Save draft" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Revision 1" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Revision 1$/ })).toBeVisible();
     await expect(page.getByText("Draft saved.")).toBeFocused();
 
     // Sending an incomplete draft lists what is missing, each item leading to its field.
@@ -115,7 +115,7 @@ test.describe("the editorial desk", () => {
     await expect(notes).toContainText("The code compiles and prints what the question says");
     await adminPage.getByRole("button", { name: "Publish revision 1" }).click();
     const confirm = adminPage.getByRole("group", { name: "Confirm publishing revision 1" });
-    await expect(confirm.getByRole("button", { name: "Yes, publish revision 1" })).toBeFocused();
+    await expect(confirm.getByRole("button", { name: "Cancel" })).toBeFocused();
     await expectNoA11yViolations(adminPage);
     await confirm.getByRole("button", { name: "Yes, publish revision 1" }).click();
     await expect(adminPage.getByRole("status").filter({ hasText: /^Published./ })).toBeFocused();
@@ -128,9 +128,9 @@ test.describe("the editorial desk", () => {
 
     // The author can now correct it by starting a new revision, copied from the published one.
     await openQuestion(page, "Published", label);
-    await expect(page.getByRole("heading", { level: 1, name: "Revision 1" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Revision 1$/ })).toBeVisible();
     await page.getByRole("button", { name: "Start a new revision" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Revision 2" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: /Revision 2$/ })).toBeVisible();
     await expect(page.getByLabel("Question", { exact: true })).toHaveValue(new RegExp(label));
     await expect(page.getByRole("list", { name: "Revision status" }).locator("li[aria-current=step]")).toContainText("Draft");
 

@@ -70,7 +70,7 @@ export function MockExamResultPage() {
     <>
       {heading}
       <section className="mock-score" aria-labelledby="score-heading">
-        <div className="page-head">
+        <div className="score-summary">
           <div>
             <p className="section-label">{t.mockResult.scoreLabel}</p>
             <p className="mock-score-value">{t.mockResult.percentage(data.percentage)}</p>
@@ -88,28 +88,29 @@ export function MockExamResultPage() {
         </div>
         <p className="muted">{t.mockResult.target(data.passingPercentage, data.passingCorrectCount)}</p>
         <p className="muted">{t.mockResult.caveat}</p>
+        <a className="button secondary" href="#result-topics">{t.mockResult.breakdown}</a>
       </section>
 
-      <h2>{t.mockResult.breakdown}</h2>
+      <h2 id="result-topics" tabIndex={-1}>{t.mockResult.breakdown}</h2>
       {practice.isError ? <ErrorState error={practice.error} /> : null}
-      <ScrollableTable label={t.mockResult.breakdown}>
+      <ScrollableTable className="decision-table" role="table" label={t.mockResult.breakdown}>
         <thead>
-          <tr>
-            <th>{t.mockResult.topic}</th>
-            <th>{t.mockResult.correct}</th>
-            <th>{t.mockResult.answered}</th>
-            <th>{t.mockResult.score}</th>
-            <th>{t.progress.situation}</th>
-            <th>{t.track.practice}</th>
+          <tr role="row">
+            <th role="columnheader" scope="col">{t.mockResult.topic}</th>
+            <th role="columnheader" scope="col">{t.mockResult.correct}</th>
+            <th role="columnheader" scope="col">{t.mockResult.answered}</th>
+            <th role="columnheader" scope="col">{t.mockResult.score}</th>
+            <th role="columnheader" scope="col">{t.progress.situation}</th>
+            <th role="columnheader" scope="col">{t.track.practice}</th>
           </tr>
         </thead>
         <tbody>
           {data.topics.map((topic) => (
-            <tr key={topic.topicId}>
-              <th scope="row">{topicNames.get(topic.topicId) ?? t.mockResult.fallbackTopic}</th>
-              <td>{t.mockResult.outOf(topic.correct, topic.total)}</td>
-              <td>{t.mockResult.outOf(topic.answered, topic.total)}</td>
-              <td>
+            <tr role="row" key={topic.topicId}>
+              <th role="rowheader" scope="row">{topicNames.get(topic.topicId) ?? t.mockResult.fallbackTopic}</th>
+              <td data-label={t.mockResult.correct}>{t.mockResult.outOf(topic.correct, topic.total)}</td>
+              <td data-label={t.mockResult.answered}>{t.mockResult.outOf(topic.answered, topic.total)}</td>
+              <td data-label={t.mockResult.score}>
                 <span className="bar-cell">
                   <span className="mini" aria-hidden="true">
                     <i
@@ -120,14 +121,14 @@ export function MockExamResultPage() {
                   {t.mockResult.percentage(topic.percentage)}
                 </span>
               </td>
-              <td>
+              <td data-label={t.progress.situation}>
                 {meetsTarget(topic.percentage / 100) ? (
                   <span className="pill pill-ok">{t.progress.solid}</span>
                 ) : (
                   <span className="pill pill-hold">{t.progress.needsReview}</span>
                 )}
               </td>
-              <td><button type="button" className="secondary" disabled={practice.isPending}
+              <td data-label={t.track.practice}><button type="button" className="secondary" disabled={practice.isPending}
                 aria-label={t.track.practiceTopic(topicNames.get(topic.topicId) ?? t.mockResult.fallbackTopic)}
                 onClick={() => practice.mutate(topic.topicId)}>{t.track.practice}</button></td>
             </tr>

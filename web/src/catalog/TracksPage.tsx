@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { Link } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { unwrap } from "../api/problem";
@@ -38,6 +39,8 @@ export function TracksPage() {
   const t = useText();
   useDocumentTitle(t.tracks.title);
   const api = useApi();
+  const [search, setSearch] = useState("");
+  const matches = (name: string, provider = "") => `${name} ${provider}`.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase());
   const tracks = useQuery({
     queryKey: ["tracks"],
     queryFn: () => unwrap(api.GET("/api/catalog/tracks")),
@@ -76,22 +79,23 @@ export function TracksPage() {
   return (
     <>
       <h1>{t.tracks.title}</h1>
-      <div className="study-overview">
+      {nothingToShow ? <EmptyState title={t.tracks.emptyTitle}><p>{t.tracks.emptyBody}</p></EmptyState> : null}
+      {!nothingToShow || nextActivity || hasReview ? <div className="study-overview">
         <section className="study-next" aria-labelledby="study-next-title">
           <p className="study-next-label">{t.tracks.nextStep}</p>
           <h2 id="study-next-title">
             {nextActivity ? t.tracks.resumeStudy : resolvingNextStep ? t.tracks.nextStep
-              : hasReview ? t.tracks.reviewFirst : t.tracks.chooseTopic}
+              : hasReview ? t.tracks.reviewFirst : nothingToShow ? t.tracks.emptyTitle : t.tracks.chooseTopic}
           </h2>
           <p>{nextActivity ? `${nextActivity.kind} · ${nextActivity.name} · ${nextActivity.answered}`
-            : resolvingNextStep ? t.tracks.checkingNextStep : hasReview ? t.tracks.reviewFirstBody : t.tracks.chooseTopicBody}</p>
+            : resolvingNextStep ? t.tracks.checkingNextStep : hasReview ? t.tracks.reviewFirstBody : nothingToShow ? t.tracks.emptyBody : t.tracks.chooseTopicBody}</p>
           {nextActivity ? (
             <Link className="button" to={nextActivity.href}>{t.tracks.resumeStudy}</Link>
           ) : resolvingNextStep ? null : hasReview ? (
             <Link className="button" to="/review">
               {t.tracks.openReview} <span aria-hidden="true">→</span>
             </Link>
-          ) : (
+          ) : nothingToShow ? null : (
             <a className="button" href="#track-catalog">
               {t.tracks.browseTracks} <span aria-hidden="true">↓</span>
             </a>
@@ -118,22 +122,19 @@ export function TracksPage() {
             <Link to="/progress">{t.tracks.viewProgress}</Link>
           </div>
         </section>
-      </div>
+      </div> : null}
 
       <section className="study-catalog" aria-labelledby="track-catalog">
         <h2 id="track-catalog" tabIndex={-1}>{t.tracks.catalogTitle}</h2>
         {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
         {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
-        {nothingToShow ? (
-          <EmptyState title={t.tracks.emptyTitle}>
-            <p>{t.tracks.emptyBody}</p>
-          </EmptyState>
-        ) : null}
+        {!nothingToShow && ((tracks.data?.length ?? 0) + (generalTracks.data?.length ?? 0) > 0) ? <details className="catalog-search"><summary>{t.ux.search}</summary><label htmlFor="track-search">{t.ux.search}</label><input id="track-search" type="search" value={search} onChange={(event) => setSearch(event.target.value)} />{search ? <button type="button" className="secondary" onClick={() => setSearch("")}>{t.ux.clear}</button> : null}</details> : null}
+        {search && !(tracks.data ?? []).some((track) => matches(track.name, track.provider)) && !(generalTracks.data ?? []).some((track) => matches(track.name)) ? <p role="status">{t.ux.noMatches}</p> : null}
         {tracks.data && tracks.data.length > 0 ? (
           <section className="study-track-group" aria-labelledby="certification-tracks">
             <h3 className="section-label" id="certification-tracks">{t.tracks.certificationTracks}</h3>
             <ul className="cards">
-              {tracks.data.map((track) => (
+              {tracks.data.filter((track) => matches(track.name, track.provider)).map((track) => (
                 <li key={track.id} className="card">
                   <h4>
                     <Link to={`/tracks/${track.slug}`}>{track.name}</Link>
@@ -175,7 +176,7 @@ export function TracksPage() {
           <section className="study-track-group" aria-labelledby="general-tracks">
             <h3 className="section-label" id="general-tracks">{t.tracks.generalTracks}</h3>
             <ul className="cards">
-              {generalTracks.data.map((track) => (
+              {generalTracks.data.filter((track) => matches(track.name)).map((track) => (
                 <li key={track.id} className="card">
                   <h4>
                     <Link to={`/general-tracks/${track.slug}`}>{track.name}</Link>

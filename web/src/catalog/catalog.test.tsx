@@ -196,3 +196,23 @@ describe("a certification that is not about a Java release", () => {
     expect(screen.queryByText(/Java/)).not.toBeInTheDocument();
   });
 });
+
+it("does not offer an empty catalogue as the next study action", async () => {
+  renderApp({ "GET /api/catalog/tracks": { body: [] }, "GET /api/catalog/general-tracks": { body: [] } });
+  expect(await screen.findByText("No tracks are available yet")).toBeVisible();
+  expect(screen.queryByRole("link", { name: /Explore tracks/ })).not.toBeInTheDocument();
+});
+
+it("finds tracks by provider and clears a no-match search", async () => {
+  renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
+  await screen.findByRole("link", { name: "Java Certification" });
+  await userEvent.click(screen.getByText("Find a track by name or provider", { selector: "summary" }));
+  await userEvent.type(screen.getByRole("searchbox"), javaTrack.provider);
+  expect(screen.getByRole("link", { name: "Java Certification" })).toBeVisible();
+  await userEvent.clear(screen.getByRole("searchbox"));
+  await userEvent.type(screen.getByRole("searchbox"), "No such provider");
+  expect(screen.getByRole("status")).toHaveTextContent("No tracks match this search.");
+  expect(screen.queryByRole("link", { name: "Java Certification" })).not.toBeInTheDocument();
+  await userEvent.click(screen.getByRole("button", { name: "Clear search" }));
+  expect(screen.getByRole("link", { name: "Java Certification" })).toBeVisible();
+});

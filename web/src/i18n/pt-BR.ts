@@ -27,6 +27,29 @@ export const ptBR: Catalog = {
     label: "Idioma",
   },
 
+  ux: {
+    practiceTopic: "Praticar este tópico",
+    evidenceLimitation: "Este resumo não reabre a resposta original. Inicie uma nova prática neste tópico para revisá-lo.",
+    discardTitle: "Descartar sua resposta?",
+    discardBody: "Sua resposta fica apenas na memória. Sair desta página descarta o texto.",
+    keepDraft: "Ficar nesta página",
+    discardDraft: "Descartar e sair",
+    map: "Mapa de questões",
+    pendingDrafts: "Seleções ainda em edição",
+    returnDrafts: "Voltar às seleções em edição",
+    preview: "Prévia local do enunciado",
+    sections: "Seções do formulário",
+    metadata: "Dados da questão",
+    prompt: "Enunciado",
+    answers: "Respostas e explicação",
+    references: "Referências",
+    support: "Contatar suporte da instalação",
+    noSupport: "Esta instalação não tem canal de suporte configurado. Responda ao convite ou à mensagem que trouxe este endereço, ou procure a pessoa que o compartilhou.",
+    search: "Encontrar trilha por nome ou provedor",
+    noMatches: "Nenhuma trilha corresponde à busca.",
+    clear: "Limpar busca",
+    practiceCounts: (correct: number, attempted: number) => `${correct} de ${attempted} corretas`,
+  },
   layout: {
     skipToMain: "Ir para o conteúdo principal",
     brand: "CertForge",
@@ -178,7 +201,7 @@ export const ptBR: Catalog = {
     topics: "Tópicos",
     mockHeading: "Simulado completo",
     mockBody:
-      "Faça um simulado completo cronometrado, com prazo imposto pelo servidor, feedback adiado e um balanço final por tópico. O blueprint atual do CertForge define a quantidade de questões, a duração e a meta de prática.",
+      "Responda um simulado com tempo limitado e veja explicações e resultados por tópico após a entrega. Confira abaixo a quantidade de questões, a duração e a meta de prática.",
     mockCaveat: (provider: string) =>
       `Este é um simulado autoral do CertForge, não uma prova oficial da ${provider}, e a meta de prática serve apenas de orientação para o estudo -- não é uma previsão de nota.`,
     performanceBasedNotice:
@@ -370,10 +393,10 @@ export const ptBR: Catalog = {
     noValue: "–",
     notStarted: "Não começou",
     situation: "Situação",
-    solid: "Firme",
+    solid: "Na meta de prática ou acima",
     needsReview: "Revisar",
     targetNote: (percent: number) =>
-      `“Firme” significa ${percent}% ou mais, a nota de corte do simulado. Descreve sua prática até aqui, não uma previsão sobre o exame.`,
+      `A meta de prática é ${percent}%. Leia a precisão junto da quantidade de respostas; ela não comprova domínio nem prevê resultados no exame.`,
     fallbackTopic: "Tópico",
     certificationsHeading: "Progresso por certificação",
     certificationsCaption: "Sua cobertura de tópicos e precisão por certificação",
@@ -548,10 +571,10 @@ export const ptBR: Catalog = {
     loading: "Carregando a preparação para entrevista",
     emptyTitle: "Nenhuma preparação para entrevista está aberta ainda",
     emptyBody:
-      "Uma taxonomia de entrevista fica disponível quando é publicada. As trilhas de certificação estão na página inicial.",
+      "Os temas de entrevista aparecem aqui quando publicados. Você também pode explorar as trilhas de certificação na página inicial.",
     topicCount: (count: number) =>
       `${count} ${plural(TAG, count, { one: "tópico", other: "tópicos" })}`,
-    browseHeading: "Tópicos desta taxonomia",
+    browseHeading: "Temas de entrevista",
     weightLabel: (weight: number) => `Cobrado em entrevistas: ${weight} de 5`,
     startHeading: "Começar uma sessão",
     startFromTopics: "Escolher os tópicos",
@@ -582,7 +605,7 @@ export const ptBR: Catalog = {
       guidedKindExplain:
         "Nada corrige esta resposta. Fale em voz alta ou escreva aqui para você mesmo, e depois leia o que um revisor esperava.",
       yourAnswer: "Sua resposta (fica neste navegador, nunca é enviada)",
-      yourAnswerHint: "Isto fica no seu dispositivo. Não é enviado, não é armazenado e nada o lê.",
+      yourAnswerHint: "Fica só na memória, inclusive ao lado da referência. Nunca é enviado ou armazenado. É descartado no próximo item, ao encerrar a sessão ou ao confirmar a saída.",
       reveal: "Mostrar o que um revisor esperava",
       revealing: "Abrindo…",
       referenceAnswer: "Resposta de referência",
@@ -597,15 +620,15 @@ export const ptBR: Catalog = {
       commonMistakes: "Erros comuns",
       followUps: "Perguntas de acompanhamento",
       next: "Próximo item",
-      finish: "Encerrar a sessão",
+      finish: "Concluir sessão",
       allAnswered: "Todos os itens respondidos",
       allAnsweredBody: "Encerre a sessão para guardá-la no seu histórico.",
       ended: "Esta sessão está encerrada.",
       endedBody: "O que ela registrou está na sua evidência de entrevista.",
-      endTrigger: "Encerrar sessão",
+      endTrigger: "Abandonar sessão",
       endTitle: "Encerrar esta sessão?",
       endExplain: "Os itens que você respondeu continuam registrados. O resto não é guardado.",
-      endConfirm: "Encerrar sessão",
+      endConfirm: "Abandonar sessão",
       endCancel: "Continuar",
       backToInterviews: "Voltar para a preparação para entrevista",
       correct: "Correta",
@@ -616,11 +639,11 @@ export const ptBR: Catalog = {
 
     blueprint: {
       title: "A partir de uma descrição de vaga",
-      loading: "Carregando o blueprint",
+      loading: "Carregando o plano de estudo",
       intro:
         "Cole o anúncio. Cada tópico sobre o qual ele fala é pesado pelas palavras que ele usou, e cada peso mostra as palavras que estão por trás.",
       noAi:
-        "Nenhum modelo lê isto e nenhum modelo decide os pesos. Os termos vêm de um dicionário revisado, então você vê exatamente por que um tópico está pesado — e pode discordar.",
+        "Nenhum modelo lê isto e nenhum modelo decide os pesos. Os termos vêm de um dicionário revisado, então você vê por que um tópico recebe cada peso. Esta tela não edita pesos; para mudar o foco, escolha tópicos diretamente na prática de entrevistas.",
       jobTitle: "Vaga (opcional)",
       sourceText: "A descrição da vaga",
       sourceTextHint: "Colada como está. Nada é inferido sobre você a partir dela.",
@@ -638,9 +661,9 @@ export const ptBR: Catalog = {
       changeWeight: (topic: string) => `Peso de ${topic}`,
       unrecognisedHeading: "Não reconhecidos",
       unrecognisedBody:
-        "Estes não estavam no dicionário, então nada foi adivinhado a partir deles. Pese você mesmo, se importarem.",
+        "Estes não estavam no dicionário, então nada foi adivinhado a partir deles. Eles não estão cobertos por este plano. Escolha os tópicos disponíveis na prática de entrevistas; requisitos sem tópico correspondente precisam de estudo fora deste plano.",
       notAVerdict:
-        "Isto pesa tópicos. Não diz nada sobre você: nenhum fit, nenhuma prontidão para a vaga, nenhuma chance de proposta.",
+        "Este plano organiza temas de estudo; não avalia sua adequação à vaga nem prevê contratação.",
       startFrom: "Praticar a partir disto",
       emptyTitle: "Nenhuma descrição de vaga ainda",
       emptyBody: "Leia uma e ela ficará guardada aqui, com as palavras por trás de cada peso.",
@@ -653,7 +676,7 @@ export const ptBR: Catalog = {
       title: "O que a prática mostrou",
       loading: "Carregando a evidência",
       intro:
-        "Contagens do que você respondeu, e as duas coisas que um índice de acerto esconde. Nada aqui é nota e nada aqui é um veredito sobre você.",
+        "Veja sua prática por tema e escolha o que estudar a seguir.",
       notAVerdict:
         "Respostas guiadas não são corrigidas por nada, então são contadas separadamente e nunca somadas às objetivas.",
       emptyTitle: "Nada praticado ainda",

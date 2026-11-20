@@ -243,6 +243,9 @@ describe("interview preparation", () => {
 
     expect(await screen.findByText(/Use a stable key/)).toBeTruthy();
 
+    expect(screen.getByText(secret)).toBeVisible();
+    expect(sessionStorage.length).toBe(0);
+
     // The whole point of ADR 0019: the product never receives the answer, so no request may
     // carry it. Checked against every call the page made, not only the answer.
     for (const call of fetch.calls) {
@@ -304,7 +307,7 @@ describe("interview preparation", () => {
     expect(within(learnerRow).getByText(/Your own weight/)).toBeTruthy();
 
     expect(screen.getByText(/Our in-house FooBar framework/)).toBeTruthy();
-    expect(screen.getByText(/no fit, no readiness for the role/)).toBeTruthy();
+    expect(screen.getByText(/does not assess job suitability or predict hiring/)).toBeTruthy();
   });
 
   it("says what the evidence says in the reader's language, not in the server's", async () => {
@@ -373,5 +376,66 @@ describe("interview preparation", () => {
       expect(await axe(container)).toHaveNoViolations();
       rendered.unmount();
     }
+  });
+});
+
+describe("audit dependency and draft recovery", () => {
+  for (const path of ["/interviews/evidence", "/interviews/blueprints/new"]) {
+    it(`settles an empty prerequisite at ${path}`, async () => {
+      const { fetch } = renderApp({ ...catalog, ...noSessions, "GET /api/catalog/interview-tracks": { body: [] } }, { path });
+      expect(await screen.findByText(/No interview preparation is open yet/)).toBeVisible();
+      expect(screen.queryByText(/Loading evidence/)).not.toBeInTheDocument();
+      expect(fetch.calls.some((call) => call.path === "/api/study/interviews/evidence")).toBe(false);
+    });
+    it(`offers retry after a failed prerequisite at ${path}`, async () => {
+      const { fetch } = renderApp({ ...catalog, ...noSessions, "GET /api/catalog/interview-tracks": { status: 503, body: { status: 503, code: "service_unavailable", title: "Unavailable" } } }, { path });
+      const retry = await screen.findByRole("button", { name: /Try again/ });
+      fetch.on("GET /api/catalog/interview-tracks", { body: [interviewTrack] });
+      fetch.on("GET /api/study/interviews/evidence", { body: { topics: [] } });
+      await userEvent.click(retry);
+      if (path.includes("new")) expect(await screen.findByLabelText("The job description")).toBeVisible();
+      else expect(await screen.findByText(/Nothing practised yet/)).toBeVisible();
+    });
+  }
+  it("warns before leaving private writing and can keep it", async () => {
+    renderApp({ ...catalog, ...noSessions, [`GET /api/study/interviews/${SESSION}`]: { body: session([guidedItem(0)]) } }, { path: `/interviews/${SESSION}` });
+    await userEvent.type(await screen.findByLabelText(/Your answer/), "Private reasoning");
+    await userEvent.click(screen.getByRole("link", { name: "Interviews" }));
+    expect(await screen.findByRole("group", { name: "Discard private writing?" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Stay on this page" })).toHaveFocus();
+    await userEvent.click(screen.getByRole("button", { name: "Stay on this page" }));
+    expect(screen.getByLabelText(/Your answer/)).toHaveValue("Private reasoning");
+  });
+  it("discards private writing when another tab advances to a different guided item", async () => {
+    const route = `GET /api/study/interviews/${SESSION}`;
+    const { fetch } = renderApp(
+      {
+        ...catalog,
+        ...noSessions,
+        [route]: { body: session([guidedItem(0), guidedItem(1)]) },
+        [`POST /api/study/interviews/${SESSION}/items/0/answer`]: {
+          status: 409,
+          body: { status: 409, code: "question_already_answered", title: "Already answered" },
+        },
+      },
+      { path: `/interviews/${SESSION}` },
+    );
+
+    await userEvent.type(await screen.findByLabelText(/Your answer/), "Private first-item draft");
+    // Another tab submits item 0 before this one's request. The 409 refetch moves to item 1.
+    fetch.on(route, {
+      body: session([{ ...guidedItem(0), answered: true }, guidedItem(1)]),
+    });
+    await userEvent.click(screen.getByLabelText("Low – I am guessing"));
+    await userEvent.click(screen.getByRole("button", { name: /Show what a reviewer expected/ }));
+
+    expect(await screen.findByRole("heading", { name: "Item 2 of 2" })).toBeVisible();
+    expect(screen.getByLabelText(/Your answer/)).toHaveValue("");
+  });
+
+  it("preselects the topic carried by an evidence action", async () => {
+    renderApp({ ...catalog, ...noSessions }, { path: `/interviews?topic=${CONCURRENCY}` });
+    expect(await screen.findByRole("checkbox", { name: "Concurrency" })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: "Messaging" })).not.toBeChecked();
   });
 });

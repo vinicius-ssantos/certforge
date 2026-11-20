@@ -8,6 +8,8 @@ import { useAuth } from "./AuthContext";
 
 export function LoginPage() {
   const t = useText();
+  const configuredSupport = import.meta.env.VITE_SUPPORT_URL as string | undefined;
+  const support = configuredSupport && /^(https:\/\/|mailto:)/i.test(configuredSupport) ? configuredSupport : null;
   useDocumentTitle(t.auth.signIn);
   const { state, login } = useAuth();
   const location = useLocation();
@@ -78,7 +80,7 @@ export function LoginPage() {
       </form>
       <details className="access-help">
         <summary>{t.auth.accessHelp}</summary>
-        <p>{t.auth.accessHelpBody}</p>
+        {support ? <><p>{t.auth.accessHelpBody}</p><a href={support}>{t.ux.support}</a></> : <p>{t.ux.noSupport}</p>}
       </details>
       <p>
         {t.auth.newHere} <Link to="/register">{t.auth.createOne}</Link>

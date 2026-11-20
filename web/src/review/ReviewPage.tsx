@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate, useSearchParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type { ReviewQueueItem } from "../api/types";
@@ -35,9 +35,12 @@ export function ReviewPage() {
   const api = useApi();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [topicId, setTopicId] = useState("");
+  const [params, setParams] = useSearchParams();
+  const topicId = params.get("topic") ?? "";
+  const setTopicId = (topic: string) => setParams(topic ? { topic } : {});
   const [limit, setLimit] = useState(20);
-  const [reasons, setReasons] = useState("");
+  const reasons = params.get("reason") ?? "";
+  const setReasons = (reason: string) => setParams((current) => { const next = new URLSearchParams(current); if (reason) next.set("reason", reason); else next.delete("reason"); return next; });
   const queueKey = ["review", "queue", { topicId, limit }];
   const queue = useQuery({
     queryKey: queueKey,
@@ -92,7 +95,7 @@ export function ReviewPage() {
       </p> : null}
       {topicNames.size > 0 || !!data?.items.length ? <div className="study-filters">
         <label>{t.review.filterTopic}
-          <select value={topicId} onChange={(event) => { setTopicId(event.target.value); setReasons(""); setLimit(20); }}>
+          <select value={topicId} onChange={(event) => { setTopicId(event.target.value); setLimit(20); }}>
             <option value="">{t.review.allTopics}</option>
             {[...topicNames].map(([id, name]) => <option key={id} value={id}>{name}</option>)}
           </select>

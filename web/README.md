@@ -55,3 +55,12 @@ npm run api:generate                                        # from web/
 ```
 
 Commit both files. CI fails when they are stale.
+
+### Installation support link
+
+Set `VITE_SUPPORT_URL` at frontend build time to an installation-owned `https://`
+URL or `mailto:` address. The sign-in help exposes this public contact link; do
+not put credentials or private tokens in it. Unsupported schemes are ignored.
+When unset, help explicitly says that no support channel is configured and directs
+visitors to reply to the invitation/message containing the installation address.
+This setting does not add a password-reset service or disclose account details.

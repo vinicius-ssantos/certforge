@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useRef, useState, type RefObject } from "react";
-import { NavLink, Outlet, useLocation } from "react-router";
+import { Link, NavLink, Outlet, useLocation } from "react-router";
 import { useAuth } from "../auth/AuthContext";
 import { LanguageSwitcher } from "../i18n/LanguageSwitcher";
 import { useText } from "../i18n/useText";
@@ -50,6 +50,7 @@ export function Layout() {
   const [failed, setFailed] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const t = useText();
+  const { pathname } = useLocation();
   const { state, logout } = useAuth();
   const editorial = useHasAny("CONTENT_AUTHOR", "CONTENT_REVIEW", "CONTENT_PUBLISH", "CONTENT_AI_REVIEW");
   useRouteFocus(mainRef);
@@ -59,9 +60,9 @@ export function Layout() {
       <a className="skip-link" href="#main">
         {t.layout.skipToMain}
       </a>
-      <header className="site-header">
+      <header className={`site-header${/^\/mock-exams\/[^/]+$/.test(pathname) ? " activity-header" : ""}`}>
         <div className="bar">
-          <span className="brand">{t.layout.brand}</span>
+          <Link className="brand" to={state.status === "authenticated" ? "/" : "/login"}>{t.layout.brand}</Link>
           {state.status === "authenticated" ? (
             <nav aria-label={t.layout.mainNavigation}>
               <NavLink to="/" end>

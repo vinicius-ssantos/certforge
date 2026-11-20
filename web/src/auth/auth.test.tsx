@@ -224,3 +224,10 @@ describe("session handling", () => {
     expect(screen.getByRole("button", { name: "Sign out" })).toBeEnabled();
   });
 });
+
+it("explains the installation contact route when no support is configured", async () => {
+  renderApp({}, { signedIn: false, path: "/login" });
+  await userEvent.click(await screen.findByText("Trouble signing in?"));
+  expect(screen.getByText(/no support channel configured/)).toBeVisible();
+  expect(screen.getByRole("link", { name: "CertForge" })).toHaveAttribute("href", "/login");
+});

@@ -21,8 +21,8 @@ function confidenceLevels(t: Catalog): { value: Confidence; label: string }[] {
 /**
  * A guided item: the learner answers in their own words and nothing grades it (ADR 0019).
  *
- * The text area is deliberately a dead end. What is typed stays in this component's state, is
- * never put in the request, and is gone when the page is left — the field exists because writing
+ * What is typed stays in the parent session memory, is
+ * never put in the request, and is discarded on advancement or confirmed exit — the field exists because writing
  * an answer out is how a candidate rehearses one, not because the product wants the answer. The
  * request carries only that the item was answered, how sure they were, and how long it took.
  */
@@ -33,7 +33,11 @@ export function GuidedItem({
   failure,
   submitting,
   onSubmit,
+  draft,
+  onDraft,
 }: {
+  draft: string;
+  onDraft: (value: string) => void;
   question: Question;
   number: number;
   total: number;
@@ -48,7 +52,6 @@ export function GuidedItem({
   const heading = useFocusOnMount<HTMLHeadingElement>();
   const [shownAt] = useState(() => performance.now());
   const [idempotencyKey] = useState(() => crypto.randomUUID());
-  const [draft, setDraft] = useState("");
   const [confidence, setConfidence] = useState<Confidence | null>(null);
   const [problems, setProblems] = useState<{ fieldId?: string; message: string }[]>([]);
 
@@ -99,7 +102,7 @@ export function GuidedItem({
             aria-describedby="guided-draft-hint"
             rows={8}
             value={draft}
-            onChange={(event) => setDraft(event.target.value)}
+            onChange={(event) => onDraft(event.target.value)}
           />
         </div>
 
@@ -136,11 +139,13 @@ export function GuidedItem({
  */
 export function GuidedOutcomePanel({
   outcome,
+  draft,
   marks,
   onMark,
   action,
 }: {
   outcome: GuidedOutcome;
+  draft: string;
   marks: Record<number, boolean>;
   onMark: (position: number, covered: boolean) => void;
   action: { label: string; busy: boolean; onClick: () => void };
@@ -153,6 +158,7 @@ export function GuidedOutcomePanel({
       <h2 id="guided-outcome" ref={heading} tabIndex={-1}>
         {t.interview.session.referenceAnswer}
       </h2>
+      {draft.trim() ? <section aria-label={t.interview.session.yourAnswer}><h3>{t.interview.session.yourAnswer}</h3><p className="private-draft">{draft}</p><p className="hint">{t.interview.session.yourAnswerHint}</p></section> : null}
       {/* Reviewed content, so it stays in English in every locale (ADR 0012 decision 2). */}
       <p>
         <English>{outcome.referenceAnswer}</English>

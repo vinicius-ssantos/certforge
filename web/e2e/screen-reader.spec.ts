@@ -31,7 +31,7 @@ test.describe("what a screen reader is given", () => {
       - button "Sign in"
     `);
     await page.getByText("Trouble signing in?", { exact: true }).press("Enter");
-    await expect(page.getByText(/administrator of this installation/)).toBeVisible();
+    await expect(page.getByText(/This installation has no support channel configured/)).toBeVisible();
   });
 
   test("a question is a named region with named groups of choices", async ({ page, request }) => {

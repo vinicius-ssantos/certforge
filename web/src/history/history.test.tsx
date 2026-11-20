@@ -290,7 +290,7 @@ describe("progress", () => {
     const rows = within(table).getAllByRole("row");
     expect(within(rows[1]!).getByRole("link", { name: "Handling exceptions" })).toHaveAttribute(
       "href",
-      "/tracks/java-certification",
+      `/tracks/java-certification#topic-${javaTrack.topics[0]!.id}`,
     );
     expect(rows[1]).toHaveTextContent("75%");
     expect(rows[2]).toHaveTextContent("–");

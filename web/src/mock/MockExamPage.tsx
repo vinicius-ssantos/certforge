@@ -87,10 +87,12 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
   const [now, setNow] = useState(() => Date.now());
   const [drafts, setDrafts] = useState(() => loadDrafts(sessionId));
   const [filter, setFilter] = useState("all");
+  const [mapOpen, setMapOpen] = useState(false);
   const questionHeading = useRef<HTMLHeadingElement>(null);
   const canFocusQuestion = useRef(false);
 
   function goToQuestion(next: number) {
+    setMapOpen(false);
     if (next === position) {
       questionHeading.current?.focus();
       return;
@@ -228,6 +230,7 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
   const following = ordered[currentIndex + 1];
   const savedDraft = current ? drafts[current.position] : undefined;
   const draft = savedDraft?.revisionId === current?.question.revisionId ? savedDraft : undefined;
+  const pendingDrafts = ordered.filter((entry) => !entry.answered && drafts[entry.position]?.revisionId === entry.question.revisionId && (drafts[entry.position]?.selected.length ?? 0) > 0);
   const visible = ordered.filter((entry) => filter === "all" ||
     (filter === "pending" && !entry.answered) ||
     (filter === "marked" && flags.includes(entry.position)));
@@ -251,8 +254,9 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
       <>
         {finish.isError ? <ErrorState error={finish.error} /> : null}
 
+        <button type="button" className="secondary mock-map-toggle" aria-expanded={mapOpen} aria-controls="mock-map" onClick={() => setMapOpen((open) => !open)}>{t.ux.map} · {t.mock.questionHeading(current.position + 1, ordered.length)}</button>
         <div className="mock-layout">
-          <aside aria-label={t.mock.navigationLabel}>
+          <aside id="mock-map" className={mapOpen ? "map-open" : "map-closed"} aria-label={t.mock.navigationLabel}>
             <h2>{t.mock.questions}</h2>
             <label className="mock-nav-filter">
               {t.mock.filterLabel}
@@ -348,7 +352,8 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
         <div className="session-actions">
           <Confirm
             title={t.mock.submitTitle}
-            explain={t.mock.submitExplain(live.questionCount - live.answeredCount)}
+            explain={`${t.mock.submitExplain(live.questionCount - live.answeredCount)} ${t.ux.pendingDrafts}: ${pendingDrafts.length}.`}
+            recovery={pendingDrafts[0] ? { label: t.ux.returnDrafts, onClick: () => goToQuestion(pendingDrafts[0]!.position) } : undefined}
             confirmLabel={t.mock.submitConfirm}
             cancelLabel={t.mock.submitCancel}
             busy={finish.isPending || respond.isPending}
