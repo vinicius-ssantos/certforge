@@ -51,18 +51,6 @@
         "reference-is-primary"
       ]
     },
-    "iv151-ocp-refactor-strategy-pattern": {
-      "verdict": "APPROVED",
-      "digest": "sha256:8a53f3a37a671382e2bb9250605a42871993609679b09c9f2838835113c6a91d",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-15",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
     "iv152-yagni-principle-core": {
       "verdict": "APPROVED",
       "digest": "sha256:bd8844dcda7441ba34a2afd2d6851591b38acc8f30b12f48c9d56dcd70f65c75",
