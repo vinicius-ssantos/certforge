@@ -61,30 +61,45 @@ function InterviewSession({ sessionId }: { sessionId: string }) {
       ),
   });
 
-  const [draft, setDraft] = useState("");
+  const [answered, setAnswered] = useState<Answered | null>(null);
+  // A private draft belongs to one snapshot item, not to the entire session. An external
+  // tab can advance the interview while this page is open; never display old writing on
+  // the next guided question after the session query refreshes.
+  const [draft, setDraft] = useState<{ owner: string; text: string } | null>(null);
   const keepDraft = useRef<HTMLButtonElement>(null);
   const closed = session.data !== undefined && session.data.status !== "IN_PROGRESS";
+  const currentItem = session.data?.status === "IN_PROGRESS"
+    ? [...session.data.items].sort((a, b) => a.position - b.position).find((item) => !item.answered)
+    : undefined;
+  const draftOwner = answered
+    ? `${answered.position}:${answered.question.revisionId}`
+    : currentItem && isGuided(currentItem.question)
+      ? `${currentItem.position}:${currentItem.question.revisionId}`
+      : null;
+  const activeDraft = draft?.owner === draftOwner ? draft.text : "";
+  const updateDraft = (text: string) => {
+    if (draftOwner !== null) setDraft({ owner: draftOwner, text });
+  };
   useEffect(() => {
-    if (closed) {
-      // Privacy cleanup on an externally closed/expired session, including background refetch.
+    if (draft !== null && (closed || draft.owner !== draftOwner)) {
+      // Privacy cleanup when a second tab advances or closes the current item.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDraft("");
+      setDraft(null);
     }
-  }, [closed]);
+  }, [closed, draft, draftOwner]);
   const blocker = useBlocker(({ currentLocation, nextLocation }) =>
-    Boolean(draft.trim()) && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search),
+    Boolean(activeDraft.trim()) && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search),
   );
   useEffect(() => {
-    if (!draft.trim()) return;
+    if (!activeDraft.trim()) return;
     const warn = (event: BeforeUnloadEvent) => event.preventDefault();
     window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
-  }, [draft]);
+  }, [activeDraft]);
   useEffect(() => {
     if (blocker.state === "blocked") keepDraft.current?.focus();
   }, [blocker.state]);
 
-  const [answered, setAnswered] = useState<Answered | null>(null);
   const [marks, setMarks] = useState<Record<number, boolean>>({});
   const [failure, setFailure] = useState<string | null>(null);
 
@@ -163,7 +178,7 @@ function InterviewSession({ sessionId }: { sessionId: string }) {
       ),
     onSuccess: (closed) => {
       setAnswered(null);
-      setDraft("");
+      setDraft(null);
       store(closed);
     },
     onError: (error) => {
@@ -225,7 +240,7 @@ function InterviewSession({ sessionId }: { sessionId: string }) {
       }
     }
     if (next) {
-      setDraft("");
+      setDraft(null);
       setAnswered(null);
       setMarks({});
     } else {
@@ -247,7 +262,7 @@ function InterviewSession({ sessionId }: { sessionId: string }) {
         <GuidedOutcomePanel
           key={answered.position}
           outcome={answered.answer.guided}
-          draft={draft}
+          draft={activeDraft}
           marks={marks}
           onMark={(position, covered) =>
             setMarks((current) => ({ ...current, [position]: covered }))
@@ -260,8 +275,8 @@ function InterviewSession({ sessionId }: { sessionId: string }) {
       <GuidedItem
         key={next.position}
         question={next.question}
-        draft={draft}
-        onDraft={setDraft}
+        draft={activeDraft}
+        onDraft={updateDraft}
         number={next.position + 1}
         total={ordered.length}
         failure={failure}
