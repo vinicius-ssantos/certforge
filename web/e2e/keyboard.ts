@@ -19,6 +19,10 @@ async function markStops(page: Page): Promise<string[]> {
       const style = getComputedStyle(element);
       // A skip link sits off-screen until focused; it is still a real stop.
       const offScreenButReachable = style.position === "absolute" && style.visibility !== "hidden";
+      // Descendants of a closed disclosure are rendered but are not sequential
+      // keyboard stops. Its summary is the exception, and remains tabbable.
+      const closed = element.closest("details:not([open])");
+      if (closed && !closed.querySelector(":scope > summary")?.contains(element)) return false;
       return (
         style.display !== "none" &&
         style.visibility !== "hidden" &&

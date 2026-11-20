@@ -31,7 +31,13 @@ async function openQuestionMap(page: Page) {
 
 async function goToMockQuestion(page: Page, position: number) {
   await openQuestionMap(page);
-  await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
+  // Scope the navigation to the actual question map: its toggle also names the
+  // current question. Verify the accessible position before navigating.
+  const map = page.locator("#mock-map");
+  await expect(map).toBeVisible();
+  const button = map.locator(".mock-nav-button").nth(position - 1);
+  await expect(button).toHaveAttribute("aria-label", new RegExp(`^Question ${position}(?:,|$)`));
+  await button.click();
 }
 
 const MARKER = "E2E mock-exam fixture";
