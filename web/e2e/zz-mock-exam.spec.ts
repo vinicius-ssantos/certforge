@@ -23,6 +23,9 @@ const QUESTIONS_PER_TOPIC = 5;
 const TOTAL_QUESTIONS = 50;
 
 async function openQuestionMap(page: Page) {
+  // After a reload, the mock may still be in the async loading state. Wait for
+  // its actual question before deciding whether the mobile map needs opening.
+  await expect(page.getByRole("heading", { level: 2, name: /^Question \d+ of \d+$/ })).toBeVisible();
   const toggle = page.getByRole("button", { name: /^Question map/ });
   if (await toggle.isVisible() && await toggle.getAttribute("aria-expanded") === "false") {
     await toggle.click();
