@@ -103,9 +103,11 @@ describe("starting a practice session", () => {
     const user = userEvent.setup();
     renderApp(
       {
+        "GET /api/catalog/tracks": { body: [javaTrack] },
         "GET /api/catalog/tracks/java-certification": { body: javaTrack },
         "POST /api/study/sessions": problem(409, "active_session_exists", { sessionId: SESSION_ID }),
         [`GET /api/study/sessions/${SESSION_ID}`]: { body: session() },
+        [`POST ${ATTEMPT}`]: { body: result(0, true, ["A"]) },
       },
       { path: "/tracks/java-certification" },
     );
@@ -114,6 +116,15 @@ describe("starting a practice session", () => {
 
     expect(await screen.findByRole("heading", { level: 2, name: "Question 1 of 2" })).toBeInTheDocument();
     expect(screen.getByRole("status")).toHaveTextContent("continuing it");
+    const context = within(screen.getByRole("navigation", { name: "Study context" }));
+    expect(context.getByRole("link", { name: "Java Certification" })).toHaveAttribute("href", "/tracks/java-certification");
+    expect(context.getByText("Topic: Handling exceptions")).toBeVisible();
+
+    await user.click(screen.getByRole("radio", { name: /First option/ }));
+    await user.click(screen.getByRole("radio", { name: /Medium/ }));
+    await user.click(screen.getByRole("button", { name: "Submit answer" }));
+    expect(await screen.findByRole("heading", { level: 2, name: "Correct" })).toBeVisible();
+    expect(screen.queryByText(/already had a session in progress/)).not.toBeInTheDocument();
   });
 
   it("explains when a topic has too few published questions", async () => {

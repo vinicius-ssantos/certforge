@@ -90,6 +90,11 @@ See the [readiness review](docs/release/v0.4.0-readiness.md) and [draft release 
 
 You need Docker, and [just](https://github.com/casey/just) if you want the short form.
 
+For **review without fictional fixtures**, run `just review` and open `http://127.0.0.1:8082`. This uses a distinct empty-on-first-run project/volume, leaving the existing `:8081` release data untouched; no questions are seeded automatically. Use the editorial workflow with `WEB_URL=http://127.0.0.1:8082` to publish **only content with recorded approval**. Stop it with `just review-down` (the review data remains).
+
+Never run browser E2E tests against the learner's release/review databases. `just e2e-release` uses a distinct test volume and `http://127.0.0.1:8083`. `just up` preserves whatever data, including old E2E fixtures, already exists in the `:8081` volume. Changing the UI locale does not translate authored question text.
+
+
 ```sh
 just demo          # builds, starts, and publishes ten clearly labelled demo questions
 ```

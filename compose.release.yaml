@@ -41,7 +41,7 @@ services:
       SERVER_FORWARD_HEADERS_STRATEGY: framework
     # The backend is reachable from the host only, for health checks and operations.
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:${APP_PORT:-8080}:8080"
 
   web:
     build: ./web

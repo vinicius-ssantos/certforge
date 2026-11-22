@@ -1,13 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
-import type { AttemptRequest, AttemptResult, Question, Session } from "../api/types";
+import type { AttemptRequest, AttemptResult, Question, Session, Topic } from "../api/types";
 import type { Catalog } from "../i18n/en";
 import { useLocale, useText } from "../i18n/useText";
 import { formatDateTime } from "../history/format";
-import { useTopicNames } from "../history/useTopicNames";
+import { useTopicNames, useTrackOptions } from "../history/useTopicNames";
 import { Confirm } from "../ui/Confirm";
 import { ErrorState, Loading } from "../ui/States";
 import { errorMessage } from "../ui/messages";
@@ -34,12 +34,29 @@ function sessionKey(sessionId: string) {
   return ["session", sessionId] as const;
 }
 
+/** Find the human-readable topic, including nested catalogue topics. */
+function findTopicName(topics: Topic[], id: string): string | null {
+  for (const topic of topics) {
+    if (topic.id === id) return topic.name;
+    const nested = findTopicName(topic.subtopics, id);
+    if (nested) return nested;
+  }
+  return null;
+}
+
 export function SessionPage() {
   const t = useText();
   const { sessionId = "" } = useParams();
   const api = useApi();
   const queryClient = useQueryClient();
   const resumed = (useLocation().state as { resumed?: boolean } | null)?.resumed === true;
+  const [showResumeNotice, setShowResumeNotice] = useState(resumed);
+  const trackOptions = useTrackOptions();
+  useEffect(() => {
+    if (!showResumeNotice) return;
+    const timer = window.setTimeout(() => setShowResumeNotice(false), 5000);
+    return () => window.clearTimeout(timer);
+  }, [showResumeNotice]);
   useDocumentTitle(t.session.title);
 
   const session = useQuery({
@@ -72,6 +89,7 @@ export function SessionPage() {
         }),
       ),
     onSuccess: (result, { position, question }) => {
+      setShowResumeNotice(false);
       setFailure(null);
       setFeedback({ position, question, result });
       // An attempt is the evidence the review queue, the misconception counts, progress and
@@ -150,6 +168,9 @@ export function SessionPage() {
   const next = ordered.find((entry) => !entry.answered);
   const answered = ordered.filter((entry) => entry.answered).length;
   const closing = finish.isPending;
+  const track = trackOptions.find((candidate) => findTopicName(candidate.topics, data.topicId) !== null);
+  const topicName = track ? findTopicName(track.topics, data.topicId) : null;
+  const trackUrl = track ? (("examVersion" in track) ? `/tracks/${track.slug}` : `/general-tracks/${track.slug}`) : null;
 
   let body;
   if (feedback) {
@@ -186,7 +207,16 @@ export function SessionPage() {
 
   return (
     <>
-      {resumed ? <p role="status">{t.session.resumed}</p> : null}
+      {showResumeNotice ? <p role="status">{t.session.resumed}</p> : null}
+      {track && trackUrl && topicName ? (
+        <nav className="session-context" aria-label={t.session.contextLabel}>
+          <Link to="/">{t.tracks.title}</Link>
+          <span aria-hidden="true">/</span>
+          <Link to={trackUrl}>{track.name}</Link>
+          <span aria-hidden="true">/</span>
+          <span>{t.session.topicLabel}: {topicName}</span>
+        </nav>
+      ) : null}
       {/* The page's name and how far through it the learner is share one line: both are furniture
           for the question below, and stacking them pushed the question off the first screen. */}
       <div className="session-progress">

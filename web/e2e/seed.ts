@@ -55,6 +55,16 @@ function fixture(number: number) {
 }
 
 export default async function seed() {
+  // This suite writes E2E fixtures and objectives. Local runs require an explicit disposable DB.
+  const githubActions = process.env["CI"] === "true" && process.env["GITHUB_ACTIONS"] === "true";
+  if (!githubActions) {
+    const disposable = process.env["CERTFORGE_E2E_DISPOSABLE"] === "1";
+    const apiPort = new URL(API_URL).port;
+    // 8080 is the persistent release backend, 8085 the clean review backend.
+    if (!disposable || !process.env["E2E_API_URL"] || ["8080", "8085"].includes(apiPort)) {
+      throw new Error("E2E writes test fixtures: use just e2e-release (separate API :8086), not the persistent release/review API. Explicit disposable opt-in and E2E_API_URL are required.");
+    }
+  }
   const api = await request.newContext({ baseURL: API_URL });
   try {
     await post(api, "/api/auth/login", { email: ADMIN_EMAIL, password: ADMIN_PASSWORD });

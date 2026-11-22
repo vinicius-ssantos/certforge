@@ -2666,7 +2666,15 @@ input[type="number"], input[type="search"] {
 .editor-sections { display: flex; flex-wrap: wrap; gap: var(--s3); margin-bottom: var(--s4); }
 .editor-sections a, .catalog-search summary { min-height: var(--touch); display: inline-flex; align-items: center; }
 .catalog-search { margin-block: var(--s3); }
+.catalog-search summary { gap: var(--s2); cursor: pointer; color: var(--accent); font-weight: 600; }
+.catalog-search summary:hover { text-decoration: underline; }
+.catalog-search summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.catalog-search summary::marker { color: var(--accent); }
+.catalog-search-chevron { display: inline-block; font-size: 1.25em; line-height: 1; transition: transform 0.15s ease; }
+.catalog-search[open] .catalog-search-chevron { transform: rotate(180deg); }
 .catalog-search label { display: block; }
+.session-context { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s2); font-size: var(--t-sm); margin-block: var(--s2) var(--s3); }
+.session-context > span[aria-hidden="true"] { color: var(--muted); }
 .score-summary { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s2); }
 .mock-score { padding: var(--s4); }
 .mock-score-value { margin-block: var(--s1); }

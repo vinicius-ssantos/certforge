@@ -14,10 +14,12 @@ function TopicList({
   topics,
   onStart,
   busy,
+  availableByTopic,
 }: {
   topics: Topic[];
   onStart: (topic: Topic) => void;
   busy: boolean;
+  availableByTopic?: Map<string, number>;
 }) {
   const t = useText();
   useEffect(() => {
@@ -31,6 +33,7 @@ function TopicList({
             <div className="topic-copy">
               <strong>{topic.name}</strong>
               {topic.objectiveRef ? <span className="muted">{topic.objectiveRef}</span> : null}
+              {availableByTopic?.get(topic.id) === 0 ? <span className="muted">{t.track.noPublishedQuestions}</span> : null}
             </div>
             {/* Outlined, not filled. Ten topics means ten of these, and ten filled buttons down
                 one edge read as ten primary actions competing with each other and with the mock
@@ -39,14 +42,14 @@ function TopicList({
               type="button"
               className="small secondary"
               aria-label={t.track.practiceTopic(topic.name)}
-              disabled={busy}
+              disabled={busy || availableByTopic?.get(topic.id) === 0}
               onClick={() => onStart(topic)}
             >
               {t.track.practice}
             </button>
           </div>
           {topic.subtopics.length > 0 ? (
-            <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} />
+            <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} availableByTopic={availableByTopic} />
           ) : null}
         </li>
       ))}
@@ -119,6 +122,9 @@ export function TrackPage() {
 
   const unavailableTopics =
     mockAvailability.data?.topics.filter((topic) => topic.missing > 0).length ?? 0;
+  const availableByTopic = mockAvailability.data
+    ? new Map(mockAvailability.data.topics.map((topic) => [topic.topicId, topic.available]))
+    : undefined;
 
   /*
    * The availability endpoint names topics by id; the track carries their names. Flattened
@@ -237,6 +243,7 @@ export function TrackPage() {
             topics={track.data.topics}
             onStart={(topic) => start.mutate(topic)}
             busy={start.isPending}
+            availableByTopic={availableByTopic}
           />
           {track.data.kind === "CERTIFICATION" ? (
             <section

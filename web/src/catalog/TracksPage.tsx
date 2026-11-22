@@ -128,7 +128,7 @@ export function TracksPage() {
         <h2 id="track-catalog" tabIndex={-1}>{t.tracks.catalogTitle}</h2>
         {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
         {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
-        {!nothingToShow && ((tracks.data?.length ?? 0) + (generalTracks.data?.length ?? 0) > 0) ? <details className="catalog-search"><summary>{t.ux.search}</summary><label htmlFor="track-search">{t.ux.search}</label><input id="track-search" type="search" value={search} onChange={(event) => setSearch(event.target.value)} />{search ? <button type="button" className="secondary" onClick={() => setSearch("")}>{t.ux.clear}</button> : null}</details> : null}
+        {!nothingToShow && ((tracks.data?.length ?? 0) + (generalTracks.data?.length ?? 0) > 0) ? <details className="catalog-search"><summary>{t.ux.search}<span className="catalog-search-chevron" aria-hidden="true">⌄</span></summary><label htmlFor="track-search">{t.ux.search}</label><input id="track-search" type="search" value={search} onChange={(event) => setSearch(event.target.value)} />{search ? <button type="button" className="secondary" onClick={() => setSearch("")}>{t.ux.clear}</button> : null}</details> : null}
         {search && !(tracks.data ?? []).some((track) => matches(track.name, track.provider)) && !(generalTracks.data ?? []).some((track) => matches(track.name)) ? <p role="status">{t.ux.noMatches}</p> : null}
         {tracks.data && tracks.data.length > 0 ? (
           <section className="study-track-group" aria-labelledby="certification-tracks">

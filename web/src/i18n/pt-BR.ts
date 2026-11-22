@@ -198,6 +198,7 @@ export const ptBR: Catalog = {
     objectives: "Objetivos oficiais do exame (abre em uma nova aba)",
     practice: "Praticar",
     practiceTopic: (topic: string) => `Praticar ${topic}`,
+    noPublishedQuestions: "Ainda não há questões publicadas neste tópico.",
     topics: "Tópicos",
     mockHeading: "Simulado completo",
     mockBody:
@@ -260,6 +261,8 @@ export const ptBR: Catalog = {
 
   session: {
     title: "Sessão de prática",
+    contextLabel: "Contexto do estudo",
+    topicLabel: "Tópico",
     loading: "Carregando a sessão",
     backToAll: "Voltar para todas as trilhas",
     resumed: "Você já tinha uma sessão em andamento neste tópico, então está continuando ela.",

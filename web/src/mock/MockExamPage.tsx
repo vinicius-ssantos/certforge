@@ -74,6 +74,12 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const resumed = (useLocation().state as { resumed?: boolean } | null)?.resumed === true;
+  const [showResumeNotice, setShowResumeNotice] = useState(resumed);
+  useEffect(() => {
+    if (!showResumeNotice) return;
+    const timer = window.setTimeout(() => setShowResumeNotice(false), 5000);
+    return () => window.clearTimeout(timer);
+  }, [showResumeNotice]);
   useDocumentTitle(t.mock.title);
 
   const exam = useQuery({
@@ -371,7 +377,7 @@ function MockExamSession({ sessionId }: { sessionId: string }) {
       <div className="mock-head">
         <div>
           <h1>{t.mock.title}</h1>
-          {resumed && live ? <p role="status">{t.mock.resumed}</p> : null}
+          {showResumeNotice && live ? <p role="status">{t.mock.resumed}</p> : null}
           {live ? (
             <p className="muted">
               {t.mock.answeredAndTarget(

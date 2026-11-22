@@ -214,6 +214,7 @@ export const en = {
     objectives: "Official exam objectives (opens in a new tab)",
     practice: "Practice",
     practiceTopic: (topic: string) => `Practice ${topic}`,
+    noPublishedQuestions: "No published questions for this topic yet.",
     topics: "Topics",
     mockHeading: "Full mock exam",
     mockBody:
@@ -280,6 +281,8 @@ export const en = {
   },
   session: {
     title: "Practice session",
+    contextLabel: "Study context",
+    topicLabel: "Topic",
     loading: "Loading session",
     backToAll: "Back to all tracks",
     resumed: "You already had a session in progress for this topic, so you are continuing it.",
