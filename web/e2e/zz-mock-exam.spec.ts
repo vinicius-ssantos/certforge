@@ -1,4 +1,4 @@
-import type { APIRequestContext } from "@playwright/test";
+import type { APIRequestContext, Page } from "@playwright/test";
 import { adminApi, listQuestions, publishNewQuestion } from "./api";
 import { expectNoA11yViolations, expectReflows, register } from "./helpers";
 import { expect, test } from "./test";
@@ -21,6 +21,28 @@ import { expect, test } from "./test";
 const TRACK_SLUG = "java-certification";
 const QUESTIONS_PER_TOPIC = 5;
 const TOTAL_QUESTIONS = 50;
+
+async function openQuestionMap(page: Page) {
+  // After a reload, the mock may still be in the async loading state. Wait for
+  // its actual question before deciding whether the mobile map needs opening.
+  await expect(page.getByRole("heading", { level: 2, name: /^Question \d+ of \d+$/ })).toBeVisible();
+  const toggle = page.getByRole("button", { name: /^Question map/ });
+  if (await toggle.isVisible() && await toggle.getAttribute("aria-expanded") === "false") {
+    await toggle.click();
+  }
+}
+
+async function goToMockQuestion(page: Page, position: number) {
+  await openQuestionMap(page);
+  // Scope the navigation to the actual question map: its toggle also names the
+  // current question. Verify the accessible position before navigating.
+  const map = page.locator("#mock-map");
+  await expect(map).toBeVisible();
+  const button = map.locator(".mock-nav-button").nth(position - 1);
+  await expect(button).toHaveAttribute("aria-label", new RegExp(`^Question ${position}(?:,|$)`));
+  await button.click();
+}
+
 const MARKER = "E2E mock-exam fixture";
 
 /**
@@ -86,9 +108,15 @@ test.describe("the mock exam journey", () => {
     }
     await expectReflows(page);
 
+    if (isMobile) {
+      await expect(page.getByRole("button", { name: /^Question map/ })).toHaveAttribute("aria-expanded", "false");
+      await expect(page.getByRole("heading", { level: 2, name: `Question 1 of ${TOTAL_QUESTIONS}` })).toBeInViewport();
+    }
+
     // Flagging is a learner note to self: it neither answers the question nor reveals anything.
     await page.getByRole("button", { name: "Flag for review" }).click();
     await expect(page.getByRole("button", { name: "Remove review flag" })).toBeVisible();
+    await openQuestionMap(page);
     await expect(
       page.getByRole("button", { name: /^Question 1,.*flagged for review/ }),
     ).toBeVisible();
@@ -97,7 +125,7 @@ test.describe("the mock exam journey", () => {
     // contain the known-answer fixture used by this test. Find one before checking draft retention.
     let draftPosition = 0;
     for (let position = 1; position <= TOTAL_QUESTIONS; position += 1) {
-      await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
+      await goToMockQuestion(page, position);
       if (await page.getByLabel(/The expected option/).count() > 0) {
         draftPosition = position;
         break;
@@ -122,7 +150,7 @@ test.describe("the mock exam journey", () => {
     await expect(draftAnswer).toBeChecked();
     await page.reload();
     // Reload starts at the first question; the draft is keyed to its original position.
-    await page.getByRole("button", { name: new RegExp(`^Question ${draftPosition}(?:,|$)`) }).click();
+    await goToMockQuestion(page, draftPosition);
     await expect(draftAnswer).toBeChecked();
 
     // The blueprint chooses questions from the entire published pool, including questions
@@ -131,7 +159,7 @@ test.describe("the mock exam journey", () => {
     // Leave the remaining forty-eight unanswered so the denominator and delayed feedback are tested.
     const answeredPositions: number[] = [];
     for (let position = 1; position <= TOTAL_QUESTIONS && answeredPositions.length < 2; position += 1) {
-      await page.getByRole("button", { name: new RegExp(`^Question ${position}(?:,|$)`) }).click();
+      await goToMockQuestion(page, position);
       await expect(
         page.getByRole("heading", { level: 2, name: `Question ${position} of ${TOTAL_QUESTIONS}` }),
       ).toBeVisible();
@@ -159,7 +187,7 @@ test.describe("the mock exam journey", () => {
 
     // Revisiting an answered question through the navigation shows that it was saved, and still
     // without revealing which option was right — the boundary stays in place after navigating back.
-    await page.getByRole("button", { name: new RegExp(`^Question ${answeredPositions[0]}(?:,|$)`) }).click();
+    await goToMockQuestion(page, answeredPositions[0]!);
     await expect(
       page.getByText("Answer submitted. Feedback stays hidden until the mock is finished."),
     ).toBeVisible();

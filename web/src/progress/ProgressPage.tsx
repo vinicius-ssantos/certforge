@@ -31,24 +31,24 @@ function Certifications({ rows }: { rows: CertificationProgress[] }) {
   return (
     <section aria-labelledby="certifications-heading">
       <h2 id="certifications-heading">{t.progress.certificationsHeading}</h2>
-      <ScrollableTable label={t.progress.certificationsCaption}>
+      <ScrollableTable className="decision-table" role="table" label={t.progress.certificationsCaption}>
         <caption className="visually-hidden">{t.progress.certificationsCaption}</caption>
         <thead>
-          <tr>
-            <th scope="col">{t.progress.certificationName}</th>
-            <th scope="col">{t.progress.topic}</th>
-            <th scope="col">{t.progress.accuracy}</th>
+          <tr role="row">
+            <th role="columnheader" scope="col">{t.progress.certificationName}</th>
+            <th role="columnheader" scope="col">{t.progress.topic}</th>
+            <th role="columnheader" scope="col">{t.progress.accuracy}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.trackSlug}>
-              <th scope="row">
+            <tr role="row" key={row.trackSlug}>
+              <th role="rowheader" scope="row">
                 <Link to={`/tracks/${row.trackSlug}`}>
                   {row.trackName ?? t.progress.fallbackCertificationName}
                 </Link>
               </th>
-              <td>
+              <td data-label={t.progress.topic}>
                 <span className="bar-cell">
                   <span className="mini" aria-hidden="true">
                     <i style={{ width: `${(row.topicsAttempted / row.topicsTotal) * 100}%` }} />
@@ -56,7 +56,7 @@ function Certifications({ rows }: { rows: CertificationProgress[] }) {
                   {t.progress.topicsPracticed(row.topicsAttempted, row.topicsTotal)}
                 </span>
               </td>
-              <td>
+              <td data-label={t.progress.accuracy}>
                 {row.accuracy === null ? (
                   <span className="pill pill-new">{t.progress.notStarted}</span>
                 ) : (
@@ -103,23 +103,23 @@ function Misconceptions({ rows }: { rows: Misconception[] }) {
         <strong>{t.progress.misconceptionsBodyNot}</strong>
         {t.progress.misconceptionsBodyEnd}
       </p>
-      <ScrollableTable label={t.progress.misconceptionsCaption}>
+      <ScrollableTable className="decision-table" role="table" label={t.progress.misconceptionsCaption}>
         <caption className="visually-hidden">{t.progress.misconceptionsCaption}</caption>
         <thead>
-          <tr>
-            <th scope="col">{t.progress.topic}</th>
-            <th scope="col">{t.progress.wrongWhileSure}</th>
-            <th scope="col">{t.progress.acrossQuestions}</th>
-            <th scope="col">{t.progress.mostRecent}</th>
+          <tr role="row">
+            <th role="columnheader" scope="col">{t.progress.topic}</th>
+            <th role="columnheader" scope="col">{t.progress.wrongWhileSure}</th>
+            <th role="columnheader" scope="col">{t.progress.acrossQuestions}</th>
+            <th role="columnheader" scope="col">{t.progress.mostRecent}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => (
-            <tr key={row.topicId}>
-              <th scope="row">{row.topicName ?? t.progress.fallbackTopic}</th>
-              <td className="numeric">{row.attempts}</td>
-              <td className="numeric">{row.questions}</td>
-              <td>
+            <tr role="row" key={row.topicId}>
+              <th role="rowheader" scope="row"><Link to={`/review?topic=${encodeURIComponent(row.topicId)}&reason=WRONG_WHILE_CONFIDENT`}>{row.topicName ?? t.progress.fallbackTopic}</Link></th>
+              <td className="numeric" data-label={t.progress.wrongWhileSure}>{row.attempts}</td>
+              <td className="numeric" data-label={t.progress.acrossQuestions}>{row.questions}</td>
+              <td data-label={t.progress.mostRecent}>
                 <time dateTime={row.lastAt}>{formatDateTime(row.lastAt, locale)}</time>
               </td>
             </tr>
@@ -179,7 +179,7 @@ export function ProgressPage() {
       </label> : null}
       {next && nextTrack ? <section className="panel" aria-labelledby="progress-next">
         <h2 id="progress-next">{t.progress.practiceNext}</h2>
-        <Link to={trackHref(nextTrack) + "#practice-topics"}>{next.topicName ?? t.progress.fallbackTopic}</Link>
+        <Link to={trackHref(nextTrack) + `#topic-${next.topicId}`}>{next.topicName ?? t.progress.fallbackTopic}</Link>
       </section> : null}
       {progress.isPending ? <Loading label={t.progress.loading} /> : null}
       {progress.isError ? (
@@ -194,32 +194,32 @@ export function ProgressPage() {
         </EmptyState>
       ) : null}
       {rows.length > 0 ? (
-        <ScrollableTable label={t.progress.tableCaption}>
+        <ScrollableTable className="decision-table" role="table" label={t.progress.tableCaption}>
           <caption className="visually-hidden">{t.progress.tableCaption}</caption>
           <thead>
-            <tr>
-              <th scope="col">{t.progress.topic}</th>
-              <th scope="col">{t.progress.accuracy}</th>
-              <th scope="col">{t.progress.situation}</th>
-              <th scope="col">{t.progress.attempted}</th>
-              <th scope="col">{t.progress.correct}</th>
-              <th scope="col">{t.progress.incorrect}</th>
-              <th scope="col">{t.progress.lastActivity}</th>
+            <tr role="row">
+              <th role="columnheader" scope="col">{t.progress.topic}</th>
+              <th role="columnheader" scope="col">{t.progress.accuracy}</th>
+              <th role="columnheader" scope="col">{t.progress.situation}</th>
+              <th role="columnheader" scope="col">{t.progress.attempted}</th>
+              <th role="columnheader" scope="col">{t.progress.correct}</th>
+              <th role="columnheader" scope="col">{t.progress.incorrect}</th>
+              <th role="columnheader" scope="col">{t.progress.lastActivity}</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((topic) => (
-              <tr key={topic.topicId}>
-                <th scope="row">
+              <tr role="row" key={topic.topicId}>
+                <th role="rowheader" scope="row">
                   {topic.trackSlug ? (
-                    <Link to={paths.get(topic.trackSlug) ?? `/tracks/${topic.trackSlug}`}>
+                    <Link to={`${paths.get(topic.trackSlug) ?? `/tracks/${topic.trackSlug}`}#topic-${topic.topicId}`}>
                       {topic.topicName ?? t.progress.fallbackTopic}
                     </Link>
                   ) : (
                     (topic.topicName ?? t.progress.fallbackTopic)
                   )}
                 </th>
-                <td>
+                <td data-label={t.progress.accuracy}>
                   {topic.accuracy === null ? (
                     <span className="pill pill-new">{t.progress.notStarted}</span>
                   ) : (
@@ -232,11 +232,11 @@ export function ProgressPage() {
                           style={{ width: `${Math.round(topic.accuracy * 100)}%` }}
                         />
                       </span>
-                      {percent(topic.accuracy, t.progress.noValue)}
+                      {percent(topic.accuracy, t.progress.noValue)} <span className="hint">{t.ux.practiceCounts(topic.correct, topic.attempted)}</span>
                     </span>
                   )}
                 </td>
-                <td>
+                <td data-label={t.progress.situation}>
                   {topic.accuracy === null ? (
                     t.progress.noValue
                   ) : meetsTarget(topic.accuracy) ? (
@@ -245,10 +245,10 @@ export function ProgressPage() {
                     <span className="pill pill-hold">{t.progress.needsReview}</span>
                   )}
                 </td>
-                <td className="numeric">{topic.attempted}</td>
-                <td className="numeric">{topic.correct}</td>
-                <td className="numeric">{topic.incorrect}</td>
-                <td>
+                <td className="numeric" data-label={t.progress.attempted}>{topic.attempted}</td>
+                <td className="numeric" data-label={t.progress.correct}>{topic.correct}</td>
+                <td className="numeric" data-label={t.progress.incorrect}>{topic.incorrect}</td>
+                <td data-label={t.progress.lastActivity}>
                   {topic.lastActivityAt ? (
                     <time dateTime={topic.lastActivityAt}>
                       {formatDateTime(topic.lastActivityAt, locale)}

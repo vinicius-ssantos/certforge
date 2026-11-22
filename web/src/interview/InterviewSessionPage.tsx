@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
-import { Link, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { Link, useBlocker, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
 import { ApiError, unwrap } from "../api/problem";
 import type {
@@ -43,8 +43,12 @@ interface Answered {
 }
 
 export function InterviewSessionPage() {
-  const t = useText();
   const { sessionId = "" } = useParams();
+  return <InterviewSession key={sessionId} sessionId={sessionId} />;
+}
+
+function InterviewSession({ sessionId }: { sessionId: string }) {
+  const t = useText();
   const api = useApi();
   const queryClient = useQueryClient();
   useDocumentTitle(t.interview.session.title);
@@ -58,6 +62,44 @@ export function InterviewSessionPage() {
   });
 
   const [answered, setAnswered] = useState<Answered | null>(null);
+  // A private draft belongs to one snapshot item, not to the entire session. An external
+  // tab can advance the interview while this page is open; never display old writing on
+  // the next guided question after the session query refreshes.
+  const [draft, setDraft] = useState<{ owner: string; text: string } | null>(null);
+  const keepDraft = useRef<HTMLButtonElement>(null);
+  const closed = session.data !== undefined && session.data.status !== "IN_PROGRESS";
+  const currentItem = session.data?.status === "IN_PROGRESS"
+    ? [...session.data.items].sort((a, b) => a.position - b.position).find((item) => !item.answered)
+    : undefined;
+  const draftOwner = answered
+    ? `${answered.position}:${answered.question.revisionId}`
+    : currentItem && isGuided(currentItem.question)
+      ? `${currentItem.position}:${currentItem.question.revisionId}`
+      : null;
+  const activeDraft = draft?.owner === draftOwner ? draft.text : "";
+  const updateDraft = (text: string) => {
+    if (draftOwner !== null) setDraft({ owner: draftOwner, text });
+  };
+  useEffect(() => {
+    if (draft !== null && (closed || draft.owner !== draftOwner)) {
+      // Privacy cleanup when a second tab advances or closes the current item.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDraft(null);
+    }
+  }, [closed, draft, draftOwner]);
+  const blocker = useBlocker(({ currentLocation, nextLocation }) =>
+    Boolean(activeDraft.trim()) && (currentLocation.pathname !== nextLocation.pathname || currentLocation.search !== nextLocation.search),
+  );
+  useEffect(() => {
+    if (!activeDraft.trim()) return;
+    const warn = (event: BeforeUnloadEvent) => event.preventDefault();
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [activeDraft]);
+  useEffect(() => {
+    if (blocker.state === "blocked") keepDraft.current?.focus();
+  }, [blocker.state]);
+
   const [marks, setMarks] = useState<Record<number, boolean>>({});
   const [failure, setFailure] = useState<string | null>(null);
 
@@ -136,6 +178,7 @@ export function InterviewSessionPage() {
       ),
     onSuccess: (closed) => {
       setAnswered(null);
+      setDraft(null);
       store(closed);
     },
     onError: (error) => {
@@ -197,6 +240,7 @@ export function InterviewSessionPage() {
       }
     }
     if (next) {
+      setDraft(null);
       setAnswered(null);
       setMarks({});
     } else {
@@ -218,6 +262,7 @@ export function InterviewSessionPage() {
         <GuidedOutcomePanel
           key={answered.position}
           outcome={answered.answer.guided}
+          draft={activeDraft}
           marks={marks}
           onMark={(position, covered) =>
             setMarks((current) => ({ ...current, [position]: covered }))
@@ -230,6 +275,8 @@ export function InterviewSessionPage() {
       <GuidedItem
         key={next.position}
         question={next.question}
+        draft={activeDraft}
+        onDraft={updateDraft}
         number={next.position + 1}
         total={ordered.length}
         failure={failure}
@@ -286,6 +333,18 @@ export function InterviewSessionPage() {
       {/* A failed mark must not be silent: the learner said something about their own answer and
           has a right to know it was not recorded. The session itself is unaffected. */}
       {mark.isError ? <ErrorState error={mark.error} /> : null}
+      {blocker.state === "blocked" ? (
+        <div role="group" aria-label={t.ux.discardTitle} className="confirm">
+          <p>{t.ux.discardBody}</p>
+          <button ref={keepDraft} type="button" onClick={() => {
+            blocker.reset();
+            document.getElementById("guided-draft")?.focus();
+          }}>{t.ux.keepDraft}</button>{" "}
+          <button type="button" className="secondary" onClick={() => blocker.proceed()}>
+            {t.ux.discardDraft}
+          </button>
+        </div>
+      ) : null}
       {body}
       <div className="session-actions">
         <Confirm

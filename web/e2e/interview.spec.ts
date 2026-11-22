@@ -115,6 +115,8 @@ test.describe("interview preparation", () => {
         await page.getByLabel("Low – I am guessing").check();
         await page.getByRole("button", { name: /Show what a reviewer expected/ }).click();
 
+        // Private writing remains available for comparison, without becoming submitted content.
+        await expect(page.getByText("Fixture answer typed by the test.", { exact: true })).toBeVisible();
         // The reviewed material, and the learner's own marks about their own answer.
         await expect(page.getByText("Fixture reference answer. This text is test data.")).toBeVisible();
         await expect(page.getByText("Fixture common mistake.")).toBeVisible();
@@ -168,7 +170,7 @@ test.describe("interview preparation", () => {
 
     // And what the dictionary did not recognise is named back rather than guessed at.
     await expect(page.getByText("Our in-house FooBar framework")).toBeVisible();
-    await expect(page.getByText(/no fit, no readiness for the role/)).toBeVisible();
+    await expect(page.getByText(/does not assess job suitability or predict hiring/)).toBeVisible();
     await expectNoA11yViolations(page);
   });
 

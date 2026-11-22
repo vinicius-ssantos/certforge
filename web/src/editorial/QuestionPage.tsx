@@ -112,7 +112,7 @@ export function QuestionPage() {
   const wanted = Number(params.get("revision"));
   const revision =
     revisions.find((candidate) => candidate.number === wanted) ?? revisions[revisions.length - 1];
-  const title = revision ? page.revisionTitle(revision.number) : page.fallbackTitle;
+  const title = revision ? `${(revision.prompt ?? "").split(/\r?\n/).find((line) => line.trim())?.slice(0, 90) ?? page.fallbackTitle} · ${page.revisionTitle(revision.number)}` : page.fallbackTitle;
   useDocumentTitle(title);
 
   // The heading is always the first element and never replaced as data arrives, so focus placed on

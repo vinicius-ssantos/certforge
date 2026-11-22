@@ -119,6 +119,7 @@ export function NewBlueprintPage() {
       <p className="notice">{t.interview.blueprint.noAi}</p>
 
       {tracks.isPending ? <Loading label={t.interview.loading} /> : null}
+      {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
       {tracks.data && tracks.data.length === 0 ? (
         <EmptyState title={t.interview.emptyTitle}>
           <p>{t.interview.emptyBody}</p>
@@ -257,6 +258,7 @@ export function BlueprintPage() {
           experience, and a learner is told that in as many words. */}
       <p className="notice">{t.interview.blueprint.notAVerdict}</p>
 
+      <p><Link to="/interviews#interview-topics">{t.interview.practiceByTopic}</Link></p>
       <h2>{t.interview.blueprint.resultHeading}</h2>
       {sorted.length === 0 ? (
         <p>{t.interview.blueprint.noTopics}</p>
@@ -291,6 +293,9 @@ export function BlueprintPage() {
         </section>
       ) : null}
 
+      {tracks.isPending ? <Loading label={t.interview.loading} /> : null}
+      {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
+      {tracks.isSuccess && !slug ? <p role="status">{t.interview.emptyBody}</p> : null}
       {start.isError ? <ErrorState error={start.error} /> : null}
 
       <div className="button-row">

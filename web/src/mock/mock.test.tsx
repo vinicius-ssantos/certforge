@@ -419,3 +419,24 @@ describe("mock result", () => {
     }
   });
 });
+
+it("counts pending choices at delivery and returns to the first without saving", async () => {
+  const { fetch } = renderApp({ [`GET /api/study/mock-exams/${SESSION_ID}`]: { body: mockExam() } }, { path: `/mock-exams/${SESSION_ID}` });
+  await userEvent.click(await screen.findByRole("radio", { name: /First option/ }));
+  await userEvent.click(screen.getByRole("button", { name: "Next" }));
+  const trigger = screen.getByRole("button", { name: /Finish and score/ });
+  await userEvent.click(trigger);
+  expect(screen.getByText(/Selections still being edited: 1/)).toBeVisible();
+  await userEvent.click(screen.getByRole("button", { name: "Return to pending selections" }));
+  expect(screen.getByRole("heading", { name: "Question 1 of 2" })).toHaveFocus();
+  expect(screen.getByRole("radio", { name: /First option/ })).toBeChecked();
+  expect(fetch.calls.filter((call) => call.method === "POST")).toHaveLength(0);
+});
+
+it("returns focus to the current pending question when recovering delivery", async () => {
+  renderApp({ [`GET /api/study/mock-exams/${SESSION_ID}`]: { body: mockExam() } }, { path: `/mock-exams/${SESSION_ID}` });
+  await userEvent.click(await screen.findByRole("radio", { name: /First option/ }));
+  await userEvent.click(screen.getByRole("button", { name: /Finish and score/ }));
+  await userEvent.click(screen.getByRole("button", { name: "Return to pending selections" }));
+  expect(screen.getByRole("heading", { name: "Question 1 of 2" })).toHaveFocus();
+});

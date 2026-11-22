@@ -120,9 +120,10 @@ test.describe("the review loop", () => {
     const misconceptions = page.getByRole("region", { name: "Where you were sure and wrong" });
     await expect(misconceptions).toBeVisible();
     await expect(misconceptions).toContainText(TOPIC_NAME);
-    // Evidence, never a prediction: the page says so and claims nothing about readiness.
+    // Evidence, not an exam prediction. The explicit negative disclaimer is
+    // correct, and should not fail only because it contains the word "mastery".
     await expect(misconceptions).toContainText("not");
-    await expect(page.getByText(/readiness|mastery/i)).toHaveCount(0);
+    await expect(page.getByText(/does not establish mastery or predict exam results/i)).toBeVisible();
     await expectNoA11yViolations(page);
   });
 

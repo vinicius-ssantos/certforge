@@ -93,9 +93,11 @@ export function EvidencePage() {
         </Link>
       </p>
 
-      {tracks.isPending || evidence.isPending ? (
+      {tracks.isPending || (Boolean(trackSlug) && evidence.isPending) ? (
         <Loading label={t.interview.evidence.loading} />
       ) : null}
+      {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
+      {tracks.data?.length === 0 ? <EmptyState title={t.interview.emptyTitle}><p>{t.interview.emptyBody}</p></EmptyState> : null}
       {evidence.isError ? (
         <ErrorState error={evidence.error} onRetry={() => void evidence.refetch()} />
       ) : null}
@@ -136,6 +138,8 @@ function TopicEvidenceSection({
         {name ? <English>{name}</English> : t.history.fallbackTopic}
       </h2>
 
+      <p><Link to={`/interviews?topic=${encodeURIComponent(topic.topicId)}`}>{t.ux.practiceTopic}</Link></p>
+      <p className="hint">{t.ux.evidenceLimitation}</p>
       <h3>{t.interview.evidence.objectiveHeading}</h3>
       <dl className="stat">
         <div>

@@ -32,10 +32,9 @@ export function AnswerFeedback({
 
       <AnswerList options={result.answer.options} chosen={chosen} chosenFirst />
 
-      <VerificationEvidence verification={result.answer.verification} />
-
       <h3>{t.feedback.explanation}</h3>
-      <Prompt text={result.answer.explanation} />
+      <div className="explanation"><Prompt text={result.answer.explanation} /></div>
+      {result.answer.verification && (result.answer.verification.files.length > 0 || result.answer.verification.output) ? <details className="panel"><summary>{t.feedback.verifiedHeading}</summary><VerificationEvidence verification={result.answer.verification} /></details> : null}
 
       {result.answer.references.length > 0 ? (
         <>

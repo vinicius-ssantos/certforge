@@ -9,6 +9,7 @@ import { formatTime } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { ErrorSummary } from "../ui/Form";
 import { errorMessage } from "../ui/messages";
+import { Prompt } from "../ui/Prompt";
 import { ErrorState } from "../ui/States";
 import {
   draftFrom,
@@ -257,6 +258,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
   return (
     <div className="with-aside">
       <form className="stage" onSubmit={submit} noValidate>
+        <nav className="editor-sections" aria-label={t.ux.sections}><a href="#field-prompt">{t.ux.prompt}</a><a href={guided ? "#guided-response" : "#options"}>{t.ux.answers}</a><a href="#references">{t.ux.references}</a></nav>
         {blocker.state === "blocked" ? (
           <div role="group" aria-label={ed.unsavedLabel} className="confirm">
             <p>{ed.unsavedWarning}</p>
@@ -414,6 +416,7 @@ export function RevisionEditor({ revision }: { revision?: Revision }) {
           />
         </Field>
 
+        <details className="panel"><summary>{t.ux.preview}</summary><Prompt text={draft.prompt} /></details>
         {guided ? (
           <section id="guided-response" className="field" aria-labelledby="guided-response-heading">
             <h2 id="guided-response-heading">{ed.guidedLegend}</h2>
