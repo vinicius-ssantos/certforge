@@ -6,6 +6,9 @@ The local release :8081 database contains automated E2E question fixtures and sy
 - Require explicit opt-in to local E2E fixture seeding.
 - Show catalogue search chevron, study track/topic breadcrumb and transient resume notices.
 - Preserve reviewed technical text, approval digests and language; document that changing interface locale does not translate source content.
+- Replace misleading empty-study calls to action with accurate catalogue guidance, display one unavailable-track notice instead of ten repeats, and disclose source language.
+- Expose published-question counts for active general taxonomies so unavailable practice cannot be offered by mistake.
+- Allow an explicit review-only activation of the already migrated DevOps taxonomy and publication through existing digest-verified editorial commands; no automatic approval of human sign-offs.
 
 ## Capabilities
 ### Modified Capabilities
@@ -13,4 +16,4 @@ The local release :8081 database contains automated E2E question fixtures and sy
 - `study-workflows`: transient resume status and data source separation.
 
 ## Impact
-Compose, justfile, E2E seed guard, React frontend, tests and documentation; no migration, data deletion, publication or deployment.
+Compose, justfile, E2E guard, a learner-safe study availability API, frontend, tests and docs. No migration, data deletion, automatic question publication or production deployment. In the isolated local :8082 installation, existing AI-reviewed approvals were explicitly published by the maintainer workflow, leaving human-reviewed sign-offs pending their own account-level editorial decisions.

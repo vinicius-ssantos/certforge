@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { axe } from "vitest-axe";
 import { describe, expect, it } from "vitest";
@@ -46,10 +46,40 @@ describe("browsing general tracks, beside certification tracks (#176)", () => {
     ).toBeInTheDocument();
   });
 
+  it("blocks only general topics without published questions", async () => {
+    renderApp({
+      "GET /api/catalog/general-tracks/infrastructure-devops-foundations": { body: infraTrack },
+      "GET /api/study/sessions/topic-availability": { body: [
+        { topicId: infraTrack.topics[0]!.id, available: 3 },
+        { topicId: infraTrack.topics[1]!.id, available: 0 },
+      ] },
+    }, { path: "/general-tracks/infrastructure-devops-foundations" });
+
+    const docker = await screen.findByRole("button", { name: "Practice Docker and Containers" });
+    const kubernetes = screen.getByRole("button", { name: "Practice Kubernetes Core" });
+    await waitFor(() => expect(docker).toBeEnabled());
+    expect(kubernetes).toBeDisabled();
+    expect(screen.getByText("No questions published.")).toBeVisible();
+    expect(screen.queryByText("No questions available in this track.")).not.toBeInTheDocument();
+  });
+
+  it("announces empty general tracks once, without repeating the warning for every topic", async () => {
+    renderApp({
+      "GET /api/catalog/general-tracks/infrastructure-devops-foundations": { body: infraTrack },
+      "GET /api/study/sessions/topic-availability": { body: infraTrack.topics.map((topic) => ({ topicId: topic.id, available: 0 })) },
+    }, { path: "/general-tracks/infrastructure-devops-foundations" });
+
+    expect(await screen.findByText(/No questions available in this track\./)).toBeVisible();
+    expect(screen.queryByText("No questions published.")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Practice Docker and Containers" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Practice Kubernetes Core" })).toBeDisabled();
+  });
+
   it("starts a session on a general track's topic through the same endpoint a certification track uses", async () => {
     const { fetch } = renderApp(
       {
         "GET /api/catalog/general-tracks/infrastructure-devops-foundations": { body: infraTrack },
+        "GET /api/study/sessions/topic-availability": { body: infraTrack.topics.map((topic) => ({ topicId: topic.id, available: 5 })) },
         "POST /api/study/sessions": {
           status: 201,
           body: {

@@ -20,3 +20,14 @@ When per-topic published-question counts are available, the certification catalo
 #### Scenario: An approved but empty certification catalogue
 - **WHEN** no questions have been published for the selected certification topic
 - **THEN** the learner sees an unavailable practice control and a reason, rather than starting an empty session
+
+### Requirement: Empty catalogue states shall guide rather than mislead
+The study home SHALL guide learners to inspect available content. An all-empty track SHALL show one clear notice instead of repeated per-topic messages. A partially available track SHALL disable individual unavailable topics and explain their status. The catalogue SHALL clarify that UI language does not translate authored content.
+
+#### Scenario: Certification topics without questions
+- **WHEN** all certification topics have zero published questions
+- **THEN** one track-level status explains unavailable study and all zero-content practice actions remain disabled
+
+#### Scenario: Partially available general knowledge track
+- **WHEN** some general topics have published questions and others do not
+- **THEN** only the unavailable actions are disabled and learners can still start eligible topics

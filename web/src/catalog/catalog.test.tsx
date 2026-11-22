@@ -135,7 +135,8 @@ describe("a track", () => {
 
     const practice = await screen.findByRole("button", { name: "Practice Handling exceptions" });
     await waitFor(() => expect(practice).toBeDisabled());
-    expect(screen.getAllByText("No published questions for this topic yet.")).toHaveLength(2);
+    expect(await screen.findByText(/No questions available in this track\./)).toBeVisible();
+    expect(screen.queryByText("No questions published.")).not.toBeInTheDocument();
   });
 
   it("explains an unknown track and offers a way back", async () => {

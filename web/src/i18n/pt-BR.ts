@@ -166,8 +166,8 @@ export const ptBR: Catalog = {
     nextStep: "Próximo passo",
     reviewFirst: "Comece pela revisão",
     reviewFirstBody: "Reveja questões de sessões anteriores antes de começar um novo tópico.",
-    chooseTopic: "O que você vai praticar agora?",
-    chooseTopicBody: "Abra uma trilha e escolha um tópico para estudar.",
+    chooseTopic: "Explore as trilhas de estudo",
+    chooseTopicBody: "Veja as questões disponíveis por trilha.",
     browseTracks: "Explorar trilhas",
     openReview: "Começar a revisão",
     reviewQueue: "Fila de revisão",
@@ -177,6 +177,7 @@ export const ptBR: Catalog = {
     viewQueue: "Ver a fila",
     viewProgress: "Ver progresso",
     catalogTitle: "Catálogo de estudo",
+    languageNote: "Conteúdo no idioma original.",
     certificationTracks: "Trilhas de certificação",
     generalTracks: "Trilhas de conhecimento geral",
     loading: "Carregando as trilhas",
@@ -188,7 +189,6 @@ export const ptBR: Catalog = {
   },
 
   track: {
-    practiceAvailable: "Praticar os tópicos disponíveis",
     mockFormat: (count: number, minutes: number) => `${count} questões · ${minutes} minutos`,
     fallbackName: "Trilha",
     loading: "Carregando a trilha",
@@ -198,7 +198,8 @@ export const ptBR: Catalog = {
     objectives: "Objetivos oficiais do exame (abre em uma nova aba)",
     practice: "Praticar",
     practiceTopic: (topic: string) => `Praticar ${topic}`,
-    noPublishedQuestions: "Ainda não há questões publicadas neste tópico.",
+    noPublishedQuestions: "Sem questões publicadas.",
+    noPublishedTrack: "Esta trilha ainda não tem questões.",
     topics: "Tópicos",
     mockHeading: "Simulado completo",
     mockBody:

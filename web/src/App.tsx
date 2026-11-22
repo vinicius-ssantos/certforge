@@ -2,8 +2,9 @@ import { lazy } from "react";
 import { Route, Routes } from "react-router";
 import { LoginPage } from "./auth/LoginPage";
 import { RegisterPage } from "./auth/RegisterPage";
-import { RequireAuth } from "./auth/RequireAuth";
 import { GeneralTrackPage } from "./catalog/GeneralTrackPage";
+import { RequireAuth } from "./auth/RequireAuth";
+
 import { TrackPage } from "./catalog/TrackPage";
 import { TracksPage } from "./catalog/TracksPage";
 import { RequireCatalogManage } from "./editorial/RequireCatalogManage";

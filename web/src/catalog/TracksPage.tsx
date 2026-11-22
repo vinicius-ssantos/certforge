@@ -126,6 +126,7 @@ export function TracksPage() {
 
       <section className="study-catalog" aria-labelledby="track-catalog">
         <h2 id="track-catalog" tabIndex={-1}>{t.tracks.catalogTitle}</h2>
+        <p className="content-language-note muted">{t.tracks.languageNote}</p>
         {tracks.isPending ? <Loading label={t.tracks.loading} /> : null}
         {tracks.isError ? <ErrorState error={tracks.error} onRetry={() => void tracks.refetch()} /> : null}
         {!nothingToShow && ((tracks.data?.length ?? 0) + (generalTracks.data?.length ?? 0) > 0) ? <details className="catalog-search"><summary>{t.ux.search}<span className="catalog-search-chevron" aria-hidden="true">⌄</span></summary><label htmlFor="track-search">{t.ux.search}</label><input id="track-search" type="search" value={search} onChange={(event) => setSearch(event.target.value)} />{search ? <button type="button" className="secondary" onClick={() => setSearch("")}>{t.ux.clear}</button> : null}</details> : null}

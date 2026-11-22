@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
@@ -7,56 +6,10 @@ import type { Topic } from "../api/types";
 import { useText } from "../i18n/useText";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
+import { TopicList } from "./TopicList";
 
 function isActiveSession(error: unknown): error is ApiError {
   return error instanceof ApiError && error.code === "active_session_exists";
-}
-
-/**
- * A general track's topics, and the same practice button a certification track offers.
- *
- * A trimmed copy of `TrackPage`'s topic list, not a shared one: `Topic.objectiveRef` exists for
- * an exam objective, and a general taxonomy cites none (#176), so there is nothing to show beside
- * the topic name here. Kept separate rather than made to tolerate a field it will never have.
- */
-function TopicList({
-  topics,
-  onStart,
-  busy,
-}: {
-  topics: Topic[];
-  onStart: (topic: Topic) => void;
-  busy: boolean;
-}) {
-  const t = useText();
-  useEffect(() => {
-    if (window.location.hash.startsWith("#topic-")) document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.focus();
-  }, [topics]);
-  return (
-    <ol className="topics">
-      {topics.map((topic) => (
-        <li key={topic.id} id={`topic-${topic.id}`} tabIndex={-1}>
-          <div className="topic-row">
-            <div className="topic-copy">
-              <strong>{topic.name}</strong>
-            </div>
-            <button
-              type="button"
-              className="small secondary"
-              aria-label={t.track.practiceTopic(topic.name)}
-              disabled={busy}
-              onClick={() => onStart(topic)}
-            >
-              {t.track.practice}
-            </button>
-          </div>
-          {topic.subtopics.length > 0 ? (
-            <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} />
-          ) : null}
-        </li>
-      ))}
-    </ol>
-  );
 }
 
 /**
@@ -76,6 +29,15 @@ export function GeneralTrackPage() {
     queryFn: () =>
       unwrap(api.GET("/api/catalog/general-tracks/{slug}", { params: { path: { slug } } })),
   });
+  const availability = useQuery({
+    queryKey: ["general-topic-availability", slug],
+    queryFn: () => unwrap(api.GET("/api/study/sessions/topic-availability", { params: { query: { trackSlug: slug } } })),
+    enabled: Boolean(track.data),
+  });
+  const availableByTopic = availability.data
+    ? new Map(availability.data.map((topic) => [topic.topicId, topic.available]))
+    : undefined;
+  const noQuestionsInTrack = Boolean(availability.data?.length && availability.data.every((topic) => topic.available === 0));
   useDocumentTitle(track.data?.name ?? t.track.fallbackName);
 
   const start = useMutation({
@@ -112,11 +74,14 @@ export function GeneralTrackPage() {
               wrapped in another word that would double up on real data. */}
           <p className="muted">{track.data.versionLabel}</p>
           <h2 id="practice-topics" tabIndex={-1}>{t.track.topics}</h2>
+          {availability.isError ? <ErrorState error={availability.error} onRetry={() => void availability.refetch()} /> : null}
+          {noQuestionsInTrack ? <p className="content-empty-note" role="status">{t.track.noPublishedTrack}</p> : null}
           {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
           <TopicList
             topics={track.data.topics}
             onStart={(topic) => start.mutate(topic)}
-            busy={start.isPending}
+            busy={start.isPending || availability.isPending}
+            availableByTopic={availableByTopic}
           />
           <p className="back">
             <Link to="/">{t.track.allTracks}</Link>

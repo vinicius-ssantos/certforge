@@ -1061,6 +1061,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/study/sessions/topic-availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["topicAvailability"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/study/sessions/{sessionId}": {
         parameters: {
             query?: never;
@@ -2098,6 +2114,12 @@ export interface components {
             published: number;
             /** Format: int32 */
             technicalReview: number;
+        };
+        TopicAvailability: {
+            /** Format: int32 */
+            available: number;
+            /** Format: uuid */
+            topicId: string;
         };
         TopicCoverage: {
             /** Format: int32 */
@@ -3806,6 +3828,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["SessionView"];
+                };
+            };
+        };
+    };
+    topicAvailability: {
+        parameters: {
+            query: {
+                trackSlug: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["TopicAvailability"][];
                 };
             };
         };

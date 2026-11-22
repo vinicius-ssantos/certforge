@@ -510,6 +510,52 @@ class StudySessionIT {
         .andExpect(jsonPath("$[0].questionCount").value(2));
   }
 
+  @Test
+  void generalTopicAvailabilityShowsOnlyPublishedCountsToAuthenticatedLearners() throws Exception {
+    String slug = "general-availability-" + UUID.randomUUID();
+    UUID trackId = UUID.randomUUID();
+    UUID versionId = UUID.randomUUID();
+    UUID topicId = UUID.randomUUID();
+    jdbc.update(
+        "insert into certforge.catalog_track (id, slug, name, kind, status)"
+            + " values (?, ?, 'General study', 'GENERAL', 'ACTIVE')",
+        trackId,
+        slug);
+    jdbc.update(
+        "insert into certforge.catalog_track_version (id, track_id, label, status)"
+            + " values (?, ?, 'Taxonomy 1', 'ACTIVE')",
+        versionId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_topic (id, track_id, slug, name)"
+            + " values (?, ?, 'topic-one', 'Topic one')",
+        topicId,
+        trackId);
+    jdbc.update(
+        "insert into certforge.catalog_track_version_topic"
+            + " (track_version_id, topic_id, objective_ref, position, weight)"
+            + " values (?, ?, null, 0, 1)",
+        versionId,
+        topicId);
+
+    mvc.perform(
+            get("/api/study/sessions/topic-availability")
+                .param("trackSlug", slug)
+                .cookie(learner.session()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.length()").value(1))
+        .andExpect(jsonPath("$[0].topicId").value(topicId.toString()))
+        .andExpect(jsonPath("$[0].available").value(0));
+    mvc.perform(get("/api/study/sessions/topic-availability").param("trackSlug", slug))
+        .andExpect(status().isUnauthorized());
+    mvc.perform(
+            get("/api/study/sessions/topic-availability")
+                .param("trackSlug", "missing-general-track")
+                .cookie(learner.session()))
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.code").value("general_track_not_found"));
+  }
+
   // ---- privacy -------------------------------------------------------------------------------
 
   @Test

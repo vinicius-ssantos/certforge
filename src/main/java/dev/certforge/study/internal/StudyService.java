@@ -2,9 +2,11 @@ package dev.certforge.study.internal;
 
 import dev.certforge.identity.ActorId;
 import dev.certforge.identity.CurrentActor;
+import dev.certforge.preparationcatalog.GeneralTrackView;
 import dev.certforge.preparationcatalog.PreparationCatalog;
 import dev.certforge.preparationcatalog.TopicContext;
 import dev.certforge.preparationcatalog.TopicId;
+import dev.certforge.preparationcatalog.TopicView;
 import dev.certforge.questionbank.PublishedQuestion;
 import dev.certforge.questionbank.QuestionBank;
 import dev.certforge.questionbank.QuestionRevisionId;
@@ -12,6 +14,7 @@ import dev.certforge.study.StudyLimits;
 import dev.certforge.study.internal.SessionViews.SessionQuestionView;
 import dev.certforge.study.internal.SessionViews.SessionSummary;
 import dev.certforge.study.internal.SessionViews.SessionView;
+import dev.certforge.study.internal.SessionViews.TopicAvailability;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -206,6 +209,31 @@ class StudyService implements StudyLimits {
   }
 
   // ---- reads ---------------------------------------------------------------------------------
+
+  /** Count only eligible published questions from the current active general taxonomy. */
+  List<TopicAvailability> topicAvailability(String trackSlug) {
+    GeneralTrackView track =
+        catalog
+            .activeGeneralTrack(trackSlug)
+            .orElseThrow(
+                () ->
+                    StudyException.notFound(
+                        "general_track_not_found", "No active general track with that slug"));
+    List<TopicAvailability> items = new ArrayList<>();
+    for (TopicView topic : track.topics()) {
+      addTopicAvailability(topic, items);
+    }
+    return List.copyOf(items);
+  }
+
+  private void addTopicAvailability(TopicView topic, List<TopicAvailability> items) {
+    items.add(
+        new TopicAvailability(
+            topic.id().value(), questionBank.eligibleForTopic(topic.id()).size()));
+    for (TopicView child : topic.subtopics()) {
+      addTopicAvailability(child, items);
+    }
+  }
 
   SessionView get(UUID sessionId) {
     StudySession session = owned(sessionId);

@@ -182,8 +182,8 @@ export const en = {
     nextStep: "Next step",
     reviewFirst: "Start with a review",
     reviewFirstBody: "Revisit questions from previous sessions before starting a new topic.",
-    chooseTopic: "What will you practise next?",
-    chooseTopicBody: "Open a track and pick a topic to study.",
+    chooseTopic: "Explore the study tracks",
+    chooseTopicBody: "See published questions by track.",
     browseTracks: "Browse tracks",
     openReview: "Start reviewing",
     reviewQueue: "Review queue",
@@ -193,6 +193,7 @@ export const en = {
     viewQueue: "See the queue",
     viewProgress: "View progress",
     catalogTitle: "Study catalogue",
+    languageNote: "Content keeps its original language.",
     certificationTracks: "Certification tracks",
     generalTracks: "General knowledge tracks",
     loading: "Loading tracks",
@@ -204,7 +205,6 @@ export const en = {
   },
 
   track: {
-    practiceAvailable: "Practise the available topics",
     mockFormat: (count: number, minutes: number) => `${count} questions · ${minutes} minutes`,
     fallbackName: "Track",
     loading: "Loading track",
@@ -214,7 +214,8 @@ export const en = {
     objectives: "Official exam objectives (opens in a new tab)",
     practice: "Practice",
     practiceTopic: (topic: string) => `Practice ${topic}`,
-    noPublishedQuestions: "No published questions for this topic yet.",
+    noPublishedQuestions: "No questions published.",
+    noPublishedTrack: "No questions available in this track.",
     topics: "Topics",
     mockHeading: "Full mock exam",
     mockBody:

@@ -8,6 +8,8 @@
 //
 // Usage: node deploy/grant-ai-reviewer.mjs --email ... --password ... [--url http://localhost:8081]
 //        BOOTSTRAP_ADMIN_EMAIL and BOOTSTRAP_ADMIN_PASSWORD must be the administrator's.
+//        Email and password may alternatively come from CERTFORGE_AI_REVIEWER_EMAIL/PASSWORD
+//        to avoid exposing the reviewer password in the process command line.
 import { Session, signInAdmin } from "./lib/session.mjs";
 
 const args = process.argv.slice(2);
@@ -17,8 +19,8 @@ const option = (name, fallback) => {
 };
 
 const url = option("url", process.env.E2E_BASE_URL ?? "http://localhost:8081");
-const email = option("email");
-const password = option("password");
+const email = option("email", process.env.CERTFORGE_AI_REVIEWER_EMAIL);
+const password = option("password", process.env.CERTFORGE_AI_REVIEWER_PASSWORD);
 const adminEmail = process.env.BOOTSTRAP_ADMIN_EMAIL;
 const adminPassword = process.env.BOOTSTRAP_ADMIN_PASSWORD;
 

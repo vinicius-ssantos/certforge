@@ -23,6 +23,9 @@ interface SessionViews {
       @Schema(nullable = true) Instant closedAt,
       List<SessionQuestionView> questions) {}
 
+  /** Counts only learner-eligible, published objective questions in the active general taxonomy. */
+  record TopicAvailability(UUID topicId, int available) {}
+
   record SessionQuestionView(int position, PublishedQuestion question, boolean answered) {}
 
   record SessionSummary(

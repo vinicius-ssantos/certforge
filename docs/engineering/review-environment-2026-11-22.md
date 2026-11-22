@@ -29,3 +29,15 @@ Screenshots of the old localhost:8081 installation showed `E2E fixture question`
 
 ## Rollback
 Stop the review stack with `just review-down` without `-v`; the release project and its volume are unchanged. No production deployment or migration is included in this change.
+
+## Explicit review-only publication, 2026-11-22
+The seeded Infrastructure & DevOps Foundations taxonomy was DRAFT in the isolated review database and was explicitly activated using the authenticated catalog administrative API (`deploy/activate-review-track.mjs` restricted to local :8082). No fake taxonomy was copied from E2E. A separate named `ai-reviewer@certforge.local` account was created with `AI_REVIEWER` permission and a high-entropy password stored encrypted using Windows DPAPI in the user's profile outside the repository; no human identity or approval was invented.
+
+The existing `deploy/publish-pack.mjs` and `deploy/publish-manifest-pack.mjs` editorial workflows confirmed digest-linked approval and published **104 Java SE 21** and **30 Infrastructure/DevOps** AI-reviewed questions, all PUBLISHED, total **134**. The 46 human-reviewed Java and 70 human-signed DevOps questions were held back because a Git review record does not automatically constitute a separate actor's server-side editorial decision. They require an authorized genuine reviewer account under the existing governance. Original :8081 and E2E data remain separate.
+
+The learner home now uses actionable but non-promissory catalogue guidance, one original-language notice, and a shared accessible topic list for both general and certification tracks. An authenticated learner-safe API reports the published counts per topic for active general tracks; the backend counts eligible current published revisions, not drafts or leaked answers. It disables zero-count practice without hiding available content. An all-zero track shows one global message rather than 10 repeated warnings. The existing publication logic and editorial approvals are not weakened.
+
+The latest backend Java verification passed with `just test-backend` including the new access-control test and OpenAPI regeneration. The frontend size gate remains at 212 KB total gzip; it was met without raising limits.
+
+## Live browser confirmation after rebuild
+A Chromium review smoke test (Pt-BR, mobile 390px) on the rebuilt :8082 stack confirmed both active catalogue entries, all 10 Java topics available for practice, five DevOps topics eligible and five correctly disabled. The final browser run found no axe violations on the learner home or the DevOps page and no horizontal overflow (document width 390px). Local screenshots and JSON evidence are retained outside the repo at `C:\Users\vinicius\Documents\workspace\certforge-review-qa-20261122`.
