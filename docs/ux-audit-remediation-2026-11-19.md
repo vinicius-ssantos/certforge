@@ -31,9 +31,9 @@ Implements the 22 findings from `CertForge_Auditoria_UX_UI_2026-11-19.pdf`, audi
 
 ## Validation
 
-- Frontend suite: 314 tests, 28 files passed. Added 13 regression cases beyond the audited 301-test baseline.
-- Lint, TypeScript including E2E sources, production build, API type drift and existing bundle budgets pass. No dependency or budget increases. Final measured gzip: initial JS 152.6KB / 155KB, total JS 211.4KB / 212KB, CSS 8.2KB / 12KB.
-- OpenSpec strict validation passes. Deltas remain active for review; no archival or human acceptance is claimed.
+- Frontend suite: 315 tests, 28 files passed. Added 14 regression cases beyond the audited 301-test baseline.
+- Lint, TypeScript including E2E sources, production build, API type drift and existing bundle budgets pass. No dependency or budget increases. Final measured gzip: initial JS 152.6KB / 155KB, total JS 211.5KB / 212KB, CSS 8.2KB / 12KB.
+- OpenSpec strict validation passes. All 25 tasks are complete following explicit owner acceptance on 2026-11-22; the three capability deltas are synchronized and the change is archived.
 - Browser QA used the production build with an isolated synthetic API, never production learner data. The mock question heading began at y=447px in the 390px frame and y=497px in the 320px frame, within the 844px first viewport. Native scrollbars leave 375/305px content widths respectively.
 - Map navigation returned focus to the question and retained its selection. Guided comparison displayed the original writing and reference together; attempting to leave focused the safe stay action. Evidence 503 ended in retry; empty catalogue ended in an explicit empty state.
 - At 390px, progress and result documents had equal scroll/client width (375px). The result practice action was entirely visible horizontally (x=234..345px). The score interpretation and topic follow-up are grouped.
@@ -43,8 +43,12 @@ Implements the 22 findings from `CertForge_Auditoria_UX_UI_2026-11-19.pdf`, audi
 
 Weight editing/mapping (UX-05) is resolved using the audit's permitted alternative: honest copy and the existing topic-practice path, not a new editor. Evidence cannot retrieve original guided writing (UX-06), which has never been sent; the interface states this limitation. Support configuration is public build-time configuration, not a password reset endpoint.
 
-The 320/390 checks use real browser iframe CSS viewports, not physical phones. Screen-reader, operating-system forced-colors and full device/browser-matrix acceptance remain human review items. Existing backend-integrated E2E scenarios were updated where wording/focus changed; their execution belongs to CI and is not claimed by the local component suite. Human visual acceptance remains unchecked in OpenSpec. No content publication, merge, release or deployment is performed by this change.
+The 320/390 checks use real browser iframe CSS viewports, not physical phones. The owner explicitly accepted the 22 corrections on 2026-11-22 (see the archived `acceptance.md`); no individual device/browser or assistive-technology transcript was supplied. Backend-integrated and release-image CI runs each passed 55 E2E tests with 17 skipped; all five CI jobs and both CodeQL languages passed on the approved implementation head. PR #424 was integrated as `80349a0`. This closeout records acceptance and synchronizes documentation; it does not publish content or deploy the application.
 
 ## Rollback
 
 Revert the frontend remediation commit and its documentation. There is no database migration, new persisted data or API change to reverse.
+
+## Acceptance and archive
+
+Owner statement: “REVISEI E TUDO APROVADO” (2026-11-22), after the complete UX-01–UX-22 recap. Evidence: `openspec/changes/archive/2026-11-22-remediate-ux-audit/acceptance.md`. The acceptance follow-up is tracked by #428.

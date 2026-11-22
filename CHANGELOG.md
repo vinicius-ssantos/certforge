@@ -8,6 +8,8 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ### Fixed
 
+- Recorded explicit owner acceptance of UX-01–UX-22, synchronized the three capability specifications and archived OpenSpec `remediate-ux-audit` after PR #424 was integrated.
+
 - Addressed the 22 UX/UI audit findings: recoverable interview dependencies, private guided comparison, explicit selections and submission, contextual practice, responsive decision rows, local editorial preview and clearer access/navigation copy (OpenSpec `remediate-ux-audit`).
 
 - Review practice now respects the configured session size when the queue is expanded, submits the first matching batch in priority order, and labels the action with the submitted count (#421).
