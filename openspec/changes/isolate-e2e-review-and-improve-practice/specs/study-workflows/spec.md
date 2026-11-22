@@ -28,3 +28,10 @@ An authenticated learner SHALL be able to obtain learner-eligible published ques
 #### Scenario: Unknown or inactive general track
 - **WHEN** an authenticated learner requests its topic availability
 - **THEN** the endpoint reports not found without disclosing any unpublished content
+
+### Requirement: Previously approved local owner-review content is imported with truthful attribution
+Importing previously recorded owner-approved questions into the isolated local review stack SHALL verify the current approval digests, use the existing authenticated editorial commands, and identify self-review as such. The importer SHALL refuse external and release deployments and SHALL not create or impersonate an independent reviewer.
+
+#### Scenario: Restore approved Java t01 and t02 content
+- **WHEN** the isolated review database lacks t01/t02 questions with intact owner approvals
+- **THEN** an explicit review-only import publishes exactly those eligible questions under a disclosed administrator self-review, enabling their study topics without weakening publication rules

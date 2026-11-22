@@ -41,3 +41,11 @@ The latest backend Java verification passed with `just test-backend` including t
 
 ## Live browser confirmation after rebuild
 A Chromium review smoke test (Pt-BR, mobile 390px) on the rebuilt :8082 stack confirmed both active catalogue entries, all 10 Java topics available for practice, five DevOps topics eligible and five correctly disabled. The final browser run found no axe violations on the learner home or the DevOps page and no horizontal overflow (document width 390px). Local screenshots and JSON evidence are retained outside the repo at `C:\Users\vinicius\Documents\workspace\certforge-review-qa-20261122`.
+
+## Restoring the two previously owner-reviewed Java topics
+
+On 2026-11-22, the learner noticed that **Date, time, text, numeric and boolean values** and **Controlling program flow** showed disabled practice buttons on the review site even though the Git packet recorded 15 owner-approved questions in each. The original publication only imported the AI-reviewed entries, leaving these 30 human-reviewed entries out of the isolated review database.
+
+To repair only that omission, `deploy/publish-owner-reviewed-local.mjs` validates all 30 current content/review digests and the original `vinicius-ssantos` APPROVED records, then uses the real editorial API on **localhost:8082 only**. The local `ADMINISTRATOR` acts as both author and reviewer, a self-review explicitly permitted by the existing `CONTENT_SELF_REVIEW` policy. The comment on each revision discloses this; no independent reviewer is invented. The script is dry-run by default, requires `--apply`, uses the existing bootstrap administrator's environment credentials, and refuses release or external targets. If a question already exists, reruns only skip it when the latest revision is `PUBLISHED`; it will not silently duplicate an unpublished draft.
+
+After the targeted import: **164 total PUBLISHED** in the isolated review DB; **15 in t01** and **15 in t02**, plus the existing 104 AI-approved Java and 30 AI-approved DevOps questions. Authenticated Playwright on the review site verified both practice actions enabled, no horizontal overflow at 390px, and zero axe violations. The remaining 16 human-reviewed Java questions and 70 human-signed DevOps questions are still outside this targeted publication. No change to the historical :8081 release volume or production service.

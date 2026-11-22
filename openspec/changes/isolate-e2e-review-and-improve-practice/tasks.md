@@ -16,3 +16,10 @@
 - [x] 2.2 Review stack starts separately with zero questions and distinct volume; release data remains intact.
 - [x] 2.3 Browser inspection at 320px, 390px and desktop, including the published Java and DevOps track (10 Java topics enabled, 5 DevOps topics enabled, 5 unavailable) with 0 axe violations and no 390px overflow; physical phone and real screen reader acceptance remains separate under #428.
 - [ ] 2.4 Latest CI and reviewer acceptance; sync and archive only afterward.
+
+## Follow-up: owner-reviewed topic availability (2026-11-22)
+- [x] 3.1 Confirm the two disabled Java topics have 15 current, digest-matched owner APPROVED questions each and are genuinely absent from :8082.
+- [x] 3.2 Import just t01/t02 through the restricted, opt-in, audit-disclosed ADMINISTRATOR self-review flow; do not invent another reviewer or relax domain approval checks.
+- [x] 3.3 Verify 164 PUBLISHED total, 15 each in t01/t02, idempotent repeated importer runs, and both buttons enabled via authenticated browser at 390px.
+- [x] 3.4 Add content tests to the CI-tested content/*.test.mjs group and record exact provenance in the review environment handoff.
+- [ ] 3.5 Confirm latest PR #430 CI and human acceptance before OpenSpec archive.
