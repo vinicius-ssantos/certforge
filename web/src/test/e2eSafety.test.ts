@@ -13,10 +13,10 @@ describe("E2E target isolation", () => {
     })).toEqual({ apiUrl: "http://127.0.0.1:8086", browserUrl: "http://localhost:8083" });
   });
 
-  it("permits a custom disposable API only with a dedicated local preview", () => {
+  it("permits only the dedicated disposable API when Playwright starts its own preview", () => {
     expect(assertSafeE2eEnvironment({
-      CERTFORGE_E2E_DISPOSABLE: "1", E2E_API_URL: "http://localhost:8099",
-    })).toEqual({ apiUrl: "http://localhost:8099", browserUrl: null });
+      CERTFORGE_E2E_DISPOSABLE: "1", E2E_API_URL: "http://localhost:8086",
+    })).toEqual({ apiUrl: "http://localhost:8086", browserUrl: null });
   });
 
   it.each([
@@ -29,7 +29,7 @@ describe("E2E target isolation", () => {
     expect(() => assertSafeE2eEnvironment(env)).toThrow(/disposable|synthetic/i);
   });
 
-  it.each(["8080", "8081", "8082", "8085", "4173"])(
+  it.each(["8080", "8081", "8082", "8085", "4173", "5173", "5174", "3000", "8099"])(
     "rejects reserved E2E_API_URL port %s before seeding", (port) => {
       expect(() => assertSafeE2eEnvironment({
         ...safeLocal, E2E_API_URL: `http://127.0.0.1:${port}`,
@@ -65,10 +65,10 @@ describe("E2E target isolation", () => {
     })).toThrow(/Unsafe E2E/);
   });
 
-  it("rejects a mismatched external browser and API pair", () => {
+  it("rejects dev-proxy API targets even with an allowed external browser URL", () => {
     expect(() => assertSafeE2eEnvironment({
-      ...safeLocal, E2E_API_URL: "http://localhost:8099", E2E_BASE_URL: "http://localhost:8083",
-    })).toThrow(/browser\/API pair/);
+      ...safeLocal, E2E_API_URL: "http://localhost:5173", E2E_BASE_URL: "http://localhost:8083",
+    })).toThrow(/Unsafe E2E_API_URL/);
   });
 
   it("permits GitHub Actions' ephemeral :8080 API and release :8081 browser", () => {

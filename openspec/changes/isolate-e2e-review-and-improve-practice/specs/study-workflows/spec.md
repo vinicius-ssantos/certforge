@@ -37,7 +37,7 @@ Importing previously recorded owner-approved questions into the isolated local r
 - **THEN** an explicit review-only import publishes exactly those eligible questions under a disclosed administrator self-review, enabling their study topics without weakening publication rules
 
 ### Requirement: Browser and seeder must use the same isolated test backend
-Locally invoked E2E tests SHALL validate the disposable API and browser targets before writes. When Playwright launches a local preview, that preview SHALL proxy API requests to the validated seeding backend and SHALL refuse to attach to an unknown existing preview. An external browser URL SHALL be accepted locally only for the dedicated disposable Compose pair. Hosted GitHub Actions with ephemeral databases MAY use their own ports.
+Local E2E runs SHALL allow only the disposable API on loopback port 8086 and validate the browser target before writes. A Playwright-managed preview SHALL proxy API calls to that API and refuse to reuse unknown listeners. External browser URLs SHALL be accepted only for the dedicated disposable Compose pair. Hosted GitHub Actions with ephemeral databases MAY use their own ports.
 
 #### Scenario: Run local E2E with a custom disposable API and no browser URL
 - **WHEN** an opted-in developer supplies a loopback disposable `E2E_API_URL` but no `E2E_BASE_URL`

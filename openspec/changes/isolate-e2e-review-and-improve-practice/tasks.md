@@ -37,3 +37,10 @@
 - [x] 5.3 Add safety tests and document the supported isolated run commands.
 - [x] 5.4 Run 29 safety regression cases, reject unqualified CLI before setup, verify manual preview without E2E_BASE_URL on disposable :8086 (2 desktop/mobile passes), and run the full isolated E2E suite (57 passed, 17 skipped); TypeScript, ESLint, 349 web tests, build/budgets and strict OpenSpec pass.
 - [ ] 5.5 Verify GitHub CI/CodeQL on the new head, respond to/resolve the P2 review thread and obtain separate human UX acceptance before OpenSpec archive.
+
+## Follow-up: reject frontend dev proxy as E2E API (Codex P2)
+- [x] 6.1 Replace the unsafe local API-port denylist with an allowlist requiring the disposable Compose API :8086.
+- [x] 6.2 Add regression cases for Vite dev proxies :5173/:5174 and arbitrary alternate ports, even when the browser uses the permitted :8083 stack.
+- [x] 6.3 Update run documentation and OpenSpec to prohibit arbitrary local API ports; continue to distinguish port validation from verifying the underlying backend identity.
+- [x] 6.4 Validate the developer proxy :5173 rejection, approved :8086 browser smoke (desktop/mobile), 353 web tests, TypeScript, ESLint, bundle budgets and strict OpenSpec locally.
+- [ ] 6.5 Confirm latest GitHub CI/CodeQL, respond to the second P2 review thread and obtain separate human UX acceptance before merge/archive.

@@ -41,20 +41,21 @@ export function assertSafeE2eEnvironment(env: Environment): { apiUrl: string; br
   }
 
   const api = localOrigin(env["E2E_API_URL"], "E2E_API_URL");
-  // :8080/:8081 are the persistent release installation, :8082/:8085 the review.
-  // :4173 is the preview frontend; it must never be mistaken for the backend.
-  if (["8080", "8081", "8082", "8085", "4173"].includes(api.port)) {
-    throw new Error("Unsafe E2E_API_URL: release/review/preview ports cannot receive test fixtures.");
+  // Strict positive allowlist: arbitrary loopback ports can themselves be Vite
+  // development proxies forwarding /api to persistent :8080 (e.g. :5173).
+  // Only our dedicated disposable Compose API port can receive local E2E writes.
+  if (api.port !== "8086") {
+    throw new Error("Unsafe E2E_API_URL: local tests require the dedicated disposable API on :8086; arbitrary ports may proxy persistent data.");
   }
 
   const external = env["E2E_BASE_URL"];
   if (external) {
     const browser = localOrigin(external, "E2E_BASE_URL");
-    // Only the repository-controlled disposable Compose pair is trusted with a
-    // pre-existing external browser endpoint. For custom APIs, omit E2E_BASE_URL:
-    // Playwright starts a dedicated preview proxy bound to the validated API.
-    if (browser.port !== "8083" || api.port !== "8086") {
-      throw new Error("Unsafe E2E browser/API pair: external browser runs require the disposable web :8083 and API :8086. For another disposable API, omit E2E_BASE_URL and let Playwright start its isolated preview.");
+    // Only the repository-controlled disposable Compose frontend is trusted
+    // when an external browser endpoint is supplied. Otherwise start a fresh
+    // local preview, also bound to the single allowlisted disposable API.
+    if (browser.port !== "8083") {
+      throw new Error("Unsafe E2E browser/API pair: external browser runs require the disposable web :8083 and API :8086.");
     }
   }
 
