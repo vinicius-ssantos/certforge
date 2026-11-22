@@ -29,10 +29,10 @@
 
 - [x] 2.1 Run frontend tests, lint, typecheck, build, API drift and bundle budgets; record actual results.
 - [x] 2.2 Inspect responsive browser flows with isolated fixtures and record limitations.
-- [ ] 2.3 Obtain human visual acceptance of the PR; do not infer it from automated checks.
+- [x] 2.3 Obtain human visual acceptance of the PR; do not infer it from automated checks.
 
 ## Workflow follow-up
 
 - Sync accepted deltas and archive only after review requirements are met.
 
-Implementation and executable checks are recorded in `docs/ux-audit-remediation-2026-11-19.md`. Checklist completion for implementation does not substitute for the human visual/assistive-technology acceptance in 2.3.
+Implementation and executable checks are recorded in `docs/ux-audit-remediation-2026-11-19.md`. Checklist completion for implementation does not substitute for the human visual/assistive-technology acceptance in 2.3; see `acceptance.md` for the explicit owner acceptance recorded on 2026-11-22.
