@@ -70,11 +70,10 @@ export function TracksPage() {
     select: ({ dueNow, waiting }) => ({ dueNow, waiting }),
   });
   const standing = standings(progress.data ?? []);
-  const hasReview = (review.data?.dueNow ?? 0) > 0;
+  const hasReview = !!review.data?.dueNow;
   const resolvingNextStep = !nextActivity && (active.loading || review.isPending);
 
-  const nothingToShow =
-    tracks.data && generalTracks.data && tracks.data.length === 0 && generalTracks.data.length === 0;
+  const nothingToShow = tracks.data?.length === 0 && generalTracks.data?.length === 0;
 
   return (
     <>

@@ -2557,10 +2557,16 @@ button.mock-nav-button.current {
 }
 
 :is(.study-queue-links a, .active-study li > a)::after {
-  content: "→";
+  /* Shape-only chevron: decorative, never part of the accessible link name. */
+  content: "";
+  display: block;
   flex: 0 0 auto;
-  font-size: var(--t-md);
-  text-decoration: none;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.15rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
 }
 
 @media (forced-colors: active) {
@@ -2639,7 +2645,8 @@ button.mock-nav-button.current {
   padding-top: var(--s2);
 }
 
-.active-study li > .muted {
+.active-study li > small {
+  color: var(--muted);
   font-size: var(--t-sm);
 }
 

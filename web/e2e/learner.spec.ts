@@ -27,8 +27,8 @@ async function answer(page: Page) {
 test.describe("the learner journey", () => {
   test("tertiary actions look like controls and keep link semantics in light and dark modes", async ({ page }) => {
     await register(page);
-    const queue = page.getByRole("link", { name: "See the queue" });
-    const progress = page.getByRole("link", { name: "View progress" });
+    const queue = page.getByRole("link", { name: "See the queue", exact: true });
+    const progress = page.getByRole("link", { name: "View progress", exact: true });
     await expect(queue).toHaveAttribute("href", "/review");
     await expect(progress).toHaveAttribute("href", "/progress");
 
@@ -43,14 +43,16 @@ test.describe("the learner journey", () => {
           decoration: computed.textDecorationLine,
           height: node.getBoundingClientRect().height,
           border: computed.borderTopStyle,
-          arrow: getComputedStyle(node, "::after").content,
+          chevronContent: getComputedStyle(node, "::after").content,
+          chevronBorder: getComputedStyle(node, "::after").borderTopStyle,
         };
       });
       expect(styles.color).toBe(styles.ink);
       expect(styles.decoration).toBe("none");
       expect(styles.height).toBeGreaterThanOrEqual(44);
       expect(styles.border).toBe("solid");
-      expect(styles.arrow).toContain("→");
+      expect(styles.chevronContent).toBe('""');
+      expect(styles.chevronBorder).toBe("solid");
     }
 
     for (const scheme of ["light", "dark"] as const) {
@@ -61,7 +63,7 @@ test.describe("the learner journey", () => {
 
     await startPractice(page);
     await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "History" }).click();
-    const continueLink = page.getByRole("link", { name: `Continue ${TOPIC_NAME}` });
+    const continueLink = page.getByRole("link", { name: `Continue ${TOPIC_NAME}`, exact: true });
     await expect(continueLink).toHaveAttribute("href", /sessions/);
     for (const scheme of ["light", "dark"] as const) {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
