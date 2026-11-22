@@ -23,3 +23,10 @@
 - [x] 3.3 Verify 164 PUBLISHED total, 15 each in t01/t02, idempotent repeated importer runs, and both buttons enabled via authenticated browser at 390px.
 - [x] 3.4 Add content tests to the CI-tested content/*.test.mjs group and record exact provenance in the review environment handoff.
 - [ ] 3.5 Confirm latest PR #430 CI and human acceptance before OpenSpec archive.
+
+## Follow-up: cohesive tertiary navigation (2026-11-22)
+- [x] 4.1 Style dashboard queue/progress and History active-session links as neutral tertiary product actions using existing design tokens and 44px targets.
+- [x] 4.2 Preserve native anchor semantics, accessible names and visible keyboard focus; use subdued hover and forced-colors contrast.
+- [x] 4.3 Add regression tests for original destinations, link semantics and visual-action grouping.
+- [x] 4.4 Verify light/dark mobile and desktop screenshots and local web quality gates; no horizontal overflow, 0 axe violations, computed 44px targets and neutral ink colors.
+- [ ] 4.5 E2E/CI and human review gate before sync/archive.

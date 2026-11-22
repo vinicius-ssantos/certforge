@@ -27,6 +27,25 @@ const tracks = {
 };
 
 describe("history", () => {
+  it("presents active sessions as accessible tertiary actions without changing navigation", async () => {
+    renderApp({
+      ...tracks,
+      "GET /api/study/history/sessions": {
+        body: {
+          items: [sessionItem("active1", {
+            status: "IN_PROGRESS", answeredCount: 1, correctCount: 0, closedAt: null,
+          })],
+          nextCursor: null,
+        },
+      },
+    }, { path: "/history" });
+
+    const ongoing = await screen.findByRole("link", { name: "Continue Handling exceptions" });
+    expect(ongoing.closest(".active-study")).toBeInTheDocument();
+    expect(ongoing).toHaveAttribute("href", "/sessions/active1");
+    expect(ongoing.closest("li")).toHaveTextContent("1 of 10");
+  });
+
   it("lists sessions with topic names, results and a link to review each", async () => {
     const { container } = renderApp(
       {

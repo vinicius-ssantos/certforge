@@ -31,3 +31,14 @@ The study home SHALL guide learners to inspect available content. An all-empty t
 #### Scenario: Partially available general knowledge track
 - **WHEN** some general topics have published questions and others do not
 - **THEN** only the unavailable actions are disabled and learners can still start eligible topics
+
+### Requirement: Secondary study navigation shall use the product-action visual language
+Navigation to the review queue, learner progress, and in-progress study sessions SHALL remain native links with their original destination and accessible name, but SHALL be visually distinguished from inline editorial hyperlinks. These actions SHALL use neutral text, a subtle control outline, a consistent minimum touch target, a navigation arrow and clear hover and keyboard focus cues; the shared styling SHALL work in dark mode and forced-colors mode.
+
+#### Scenario: Study dashboard secondary actions
+- **WHEN** a learner views the queue and progress actions on the study dashboard
+- **THEN** those links use the tertiary product-action appearance and still navigate to their original routes
+
+#### Scenario: Resume a session from history
+- **WHEN** a learner opens History with an ongoing practice or mock session
+- **THEN** a distinct tertiary action offers continuation while preserving its link destination, keyboard support and the accessible session name

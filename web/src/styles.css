@@ -2515,11 +2515,59 @@ button.mock-nav-button.current {
 .study-queue-links {
   display: flex;
   flex-wrap: wrap;
-  column-gap: var(--s4);
+  gap: var(--s2);
+  padding-top: var(--s2);
   border-top: 1px solid var(--border);
 }
 
-.study-queue-links a,
+/*
+ * Tertiary product actions are navigation, not prose links: understated ink and a
+ * quiet outline rather than default link blue. Keep a tangible 44px target, a
+ * visible arrow and the global keyboard focus ring. Do not affect links in copy.
+ */
+:is(.study-queue-links a, .active-study li > a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  min-height: var(--touch);
+  max-width: 100%;
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+:is(.study-queue-links a, .active-study li > a):hover {
+  background: var(--accent-bg);
+  border-color: var(--border-strong);
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+:is(.study-queue-links a, .active-study li > a):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+:is(.study-queue-links a, .active-study li > a)::after {
+  content: "→";
+  flex: 0 0 auto;
+  font-size: var(--t-md);
+  text-decoration: none;
+}
+
+@media (forced-colors: active) {
+  :is(.study-queue-links a, .active-study li > a) { border-color: ButtonBorder; color: LinkText; }
+  :is(.study-queue-links a, .active-study li > a):hover { border-color: Highlight; color: LinkText; }
+}
+
 .study-catalog .card h4 > a {
   display: inline-flex;
   align-items: center;
@@ -2582,8 +2630,17 @@ button.mock-nav-button.current {
 .active-study li {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s1) var(--s3);
+}
+
+.active-study li + li {
+  border-top: 1px solid var(--border);
+  padding-top: var(--s2);
+}
+
+.active-study li > .muted {
+  font-size: var(--t-sm);
 }
 
 .active-study a,

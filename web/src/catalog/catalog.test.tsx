@@ -225,6 +225,19 @@ it("does not offer an empty catalogue as the next study action", async () => {
   expect(screen.queryByRole("link", { name: /Explore tracks/ })).not.toBeInTheDocument();
 });
 
+it("renders review and progress as accessible tertiary product actions", async () => {
+  renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
+
+  const queue = await screen.findByRole("link", { name: "See the queue" });
+  const progress = screen.getByRole("link", { name: "View progress" });
+  expect(queue.closest(".study-queue-links")).toBeInTheDocument();
+  expect(queue).toHaveAttribute("href", "/review");
+  expect(progress.closest(".study-queue-links")).toBeInTheDocument();
+  expect(progress).toHaveAttribute("href", "/progress");
+  expect(queue).toHaveTextContent("See the queue");
+  expect(progress).toHaveTextContent("View progress");
+});
+
 it("finds tracks by provider and clears a no-match search", async () => {
   renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
   await screen.findByRole("link", { name: "Java Certification" });

@@ -72,7 +72,9 @@ export function HistoryPage() {
           <ul className="active-study">
             {active.activities.map((activity) => (
               <li key={activity.id}>
-                <Link to={activity.href}>{t.history.continueActivity(activity.name)}</Link>
+                <Link to={activity.href}>
+                  {t.history.continueActivity(activity.name)}
+                </Link>
                 <span className="muted">{activity.kind} · {activity.answered}</span>
               </li>
             ))}

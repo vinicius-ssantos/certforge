@@ -25,6 +25,52 @@ async function answer(page: Page) {
 }
 
 test.describe("the learner journey", () => {
+  test("tertiary actions look like controls and keep link semantics in light and dark modes", async ({ page }) => {
+    await register(page);
+    const queue = page.getByRole("link", { name: "See the queue" });
+    const progress = page.getByRole("link", { name: "View progress" });
+    await expect(queue).toHaveAttribute("href", "/review");
+    await expect(progress).toHaveAttribute("href", "/progress");
+
+    // Computed styles catch cascade regressions that component tests cannot:
+    // the old screen inherited blue, underlined browser links despite having an arrow.
+    async function expectTertiaryStyle(link: typeof queue) {
+      const styles = await link.evaluate((node) => {
+        const computed = getComputedStyle(node);
+        return {
+          color: computed.color,
+          ink: getComputedStyle(document.body).color,
+          decoration: computed.textDecorationLine,
+          height: node.getBoundingClientRect().height,
+          border: computed.borderTopStyle,
+          arrow: getComputedStyle(node, "::after").content,
+        };
+      });
+      expect(styles.color).toBe(styles.ink);
+      expect(styles.decoration).toBe("none");
+      expect(styles.height).toBeGreaterThanOrEqual(44);
+      expect(styles.border).toBe("solid");
+      expect(styles.arrow).toContain("→");
+    }
+
+    for (const scheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      await expectTertiaryStyle(queue);
+      await expectTertiaryStyle(progress);
+    }
+
+    await startPractice(page);
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "History" }).click();
+    const continueLink = page.getByRole("link", { name: `Continue ${TOPIC_NAME}` });
+    await expect(continueLink).toHaveAttribute("href", /sessions/);
+    for (const scheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      await expectTertiaryStyle(continueLink);
+    }
+    await expectNoA11yViolations(page);
+    await expectReflows(page);
+  });
+
   test("register, practise a topic, finish, then review history and progress", async ({ page }) => {
     await register(page);
     await expectNoA11yViolations(page);
