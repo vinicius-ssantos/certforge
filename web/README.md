@@ -34,7 +34,7 @@ For local runs use a **disposable and isolated** stack, never the app/database s
 just e2e       # alias for just e2e-release; dedicated web :8083, API :8086
 ```
 
-If Playwright browsers are not yet installed, run `cd web && npx playwright install chromium` once. To drive another intentionally disposable stack manually, set both `CERTFORGE_E2E_DISPOSABLE=1` and an explicit `E2E_API_URL` on a dedicated backend port before running `npm run e2e`. The global setup refuses the persistent :8080 release backend and the :8085 review backend during local runs. CI manages a separate ephemeral database.
+If Playwright browsers are not yet installed, run `cd web && npx playwright install chromium` once. To drive another intentionally disposable backend manually, set `CERTFORGE_E2E_DISPOSABLE=1` and an explicit loopback `E2E_API_URL` on a dedicated backend port, then run `npm run e2e` **without** `E2E_BASE_URL`. Playwright starts its own Vite preview on :4173 and explicitly proxies browser `/api` traffic to that same disposable `E2E_API_URL`. The preview never reuses an unknown listener on :4173. For an existing web stack, `E2E_BASE_URL` is allowed locally only for the repository's dedicated :8083 frontend paired with the :8086 backend (as in `just e2e-release`). The E2E safeguards reject non-loopback endpoints and reserved release/review ports before any writes. CI manages a separate ephemeral database.
 
 The fixtures are test data. The Java SE 21 content pack awaits human review and is never published by automation.
 

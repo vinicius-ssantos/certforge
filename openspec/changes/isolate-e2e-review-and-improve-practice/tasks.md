@@ -30,3 +30,10 @@
 - [x] 4.3 Add regression tests for original destinations, link semantics and visual-action grouping.
 - [x] 4.4 Verify light/dark mobile and desktop screenshots and local web quality gates; no horizontal overflow, 0 axe violations, computed 44px targets and neutral ink colors.
 - [ ] 4.5 E2E/CI and human review gate before sync/archive.
+
+## Follow-up: eliminate manual E2E browser/API cross-target (Codex P2)
+- [x] 5.1 Use one validated disposable E2E API target for seeding and local preview proxy, with no implicit release proxy fallback under opt-in.
+- [x] 5.2 Refuse release/review/remote endpoints, mismatched external browser/API ports and unknown existing preview listeners before writes; retain GitHub Actions' ephemeral stack behavior.
+- [x] 5.3 Add safety tests and document the supported isolated run commands.
+- [x] 5.4 Run 29 safety regression cases, reject unqualified CLI before setup, verify manual preview without E2E_BASE_URL on disposable :8086 (2 desktop/mobile passes), and run the full isolated E2E suite (57 passed, 17 skipped); TypeScript, ESLint, 349 web tests, build/budgets and strict OpenSpec pass.
+- [ ] 5.5 Verify GitHub CI/CodeQL on the new head, respond to/resolve the P2 review thread and obtain separate human UX acceptance before OpenSpec archive.
