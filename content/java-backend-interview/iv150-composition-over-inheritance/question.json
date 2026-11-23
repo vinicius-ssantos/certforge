@@ -4,13 +4,13 @@
   "difficulty": "HARD",
   "difficultyRationale": "Tests the classic fragile-base-class problem: recognizing that patching individual overridden methods is a symptom-level fix, while switching to delegation addresses the root cause.",
   "prompt": "A codebase has `class EventLoggingList<T> extends ArrayList<T>` which overrides add(T) to log every addition, so that logging is reused wherever a List is needed. A bug is later found: calling addAll(Collection) on an EventLoggingList does not log anything, because ArrayList's internal addAll implementation does not call the overridden add() for each element. What change best fixes the root design problem, not just this one bug?",
-  "explanation": "The root problem is that EventLoggingList depends on undocumented details of how ArrayList's own methods call each other internally — a classic fragile base class issue. Switching to composition (a private List<T> delegate wrapped by a class that implements the List interface, adding logging only at the specific methods that actually add elements) decouples the logging behavior from ArrayList's internals, which is exactly the approach the JDK's own Collections wrapper implementations (e.g., Collections.synchronizedList) use to add behavior to a collection without subclassing it.",
+  "explanation": "Subclassing ArrayList couples logging to unspecified internal self-calls: the inherited addAll implementation need not invoke an override of add. Prefer composition with a private List<T> delegate and an explicitly controlled wrapper API. To guarantee logging for every insertion, the wrapper must consistently handle add, add(int, E), both addAll overloads, ListIterator.add, and any writable subList views, or disallow unsupported mutation routes. Returning a raw mutable iterator or sublist from the delegate would bypass logging. This avoids fragile subclassing while respecting the List mutator contract.",
   "options": [
     {
       "key": "A",
-      "text": "Switch to composition: have EventLoggingList hold a private List<T> delegate and implement the List interface by forwarding calls to it, inserting logging only at the methods that actually add elements (add, addAll) — this decouples the logging behavior from ArrayList's internal implementation details.",
+      "text": "Switch to composition: have EventLoggingList hold a private List<T> delegate and expose a List wrapper that logs insertions through every supported mutation path (including indexed add/addAll, ListIterator.add, and mutable subList views) rather than relying on ArrayList's internal method calls.",
       "correct": true,
-      "explanation": "By delegating instead of inheriting, the logging class controls every entry point itself rather than depending on which internal method ArrayList happens to call; this is the same decorator-style approach the JDK uses for its own collection wrappers, such as Collections.synchronizedList."
+      "explanation": "A carefully implemented delegating wrapper controls additions without depending on which internal ArrayList methods call each other. It must wrap, intercept, or disallow every insertion route it exposes, including list iterators and sublist views; delegating those views directly would allow additions without logging."
     },
     {
       "key": "B",
@@ -39,6 +39,14 @@
     {
       "title": "Inheritance (The Java Tutorials)",
       "url": "https://docs.oracle.com/javase/tutorial/java/IandI/subclasses.html"
+    },
+    {
+      "title": "List (Java SE 21 API — insertion operations and backed views)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html"
+    },
+    {
+      "title": "ListIterator (Java SE 21 API — add method)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ListIterator.html"
     }
   ],
   "evidence": {
