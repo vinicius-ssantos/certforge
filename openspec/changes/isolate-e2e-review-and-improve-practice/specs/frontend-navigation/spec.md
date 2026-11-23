@@ -42,3 +42,15 @@ Navigation to the review queue, learner progress, and in-progress study sessions
 #### Scenario: Resume a session from history
 - **WHEN** a learner opens History with an ongoing practice or mock session
 - **THEN** a distinct tertiary action offers continuation while preserving its link destination, keyboard support and the accessible session name
+
+### Requirement: Touch-friendly links in study data tables and return navigation
+Navigational row headings in study history and progress tables, and stand-alone
+return links SHALL have a minimum 44 CSS px clickable height without changing
+their original URL, accessible name, semantic anchor element or table header
+association. Their visual presentation SHALL align with the existing neutral
+tertiary-action system; inline editorial references SHALL remain ordinary links.
+
+#### Scenario: History table on desktop and small screens
+- **WHEN** a learner navigates a recorded study session using a linked row title
+- **THEN** the link has a touch-friendly target and keyboard-visible focus
+- **AND** the destination and accessible name remain unchanged

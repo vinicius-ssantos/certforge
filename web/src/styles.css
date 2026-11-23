@@ -2574,6 +2574,56 @@ button.mock-nav-button.current {
   :is(.study-queue-links a, .active-study li > a):hover { border-color: Highlight; color: LinkText; }
 }
 
+
+/*
+ * Table row-title links and in-product back navigation are touch controls,
+ * not prose hyperlinks. Keep the link semantics while enlarging their
+ * interactive boxes; leave actual inline/editorial references unchanged.
+ */
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a) {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  max-width: 100%;
+  padding: var(--s1) var(--s2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a):hover {
+  color: var(--text);
+  background: var(--accent-bg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+/* Direction cues distinguish navigation from plain text, but add no spoken text. */
+:is(.table-scroll tbody th[scope="row"] > a, section[aria-labelledby="misconceptions"] > p:last-child > a)::after,
+.back > a::before {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+:is(.table-scroll tbody th[scope="row"] > a, section[aria-labelledby="misconceptions"] > p:last-child > a)::after {
+  transform: rotate(45deg);
+  margin-left: var(--s3);
+}
+.back > a::before {
+  transform: rotate(225deg);
+  margin-right: var(--s3);
+}
+@media (forced-colors: active) {
+  :is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a) { color: LinkText; }
+}
+
 .study-catalog .card h4 > a {
   display: inline-flex;
   align-items: center;

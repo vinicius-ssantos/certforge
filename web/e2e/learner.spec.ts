@@ -69,6 +69,24 @@ test.describe("the learner journey", () => {
       await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
       await expectTertiaryStyle(continueLink);
     }
+    // Row-title navigation inside a dense table must not remain a tiny
+    // 20px-tall anchor. Preserve focus and destination across color schemes.
+    const tableLink = page.locator('.table-scroll tbody th[scope="row"] > a').first();
+    await expect(tableLink).toHaveAttribute("href", /sessions/);
+    for (const scheme of ["light", "dark"] as const) {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      const rowStyle = await tableLink.evaluate((node) => ({
+        height: node.getBoundingClientRect().height,
+        color: getComputedStyle(node).color,
+        ink: getComputedStyle(document.body).color,
+        decoration: getComputedStyle(node, "::after").content,
+        chevronBorder: getComputedStyle(node, "::after").borderTopStyle,
+      }));
+      expect(rowStyle.height).toBeGreaterThanOrEqual(44);
+      expect(rowStyle.color).toBe(rowStyle.ink);
+      expect(rowStyle.decoration).toBe('""');
+      expect(rowStyle.chevronBorder).toBe("solid");
+    }
     await expectNoA11yViolations(page);
     await expectReflows(page);
   });

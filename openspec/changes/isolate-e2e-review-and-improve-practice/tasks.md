@@ -44,3 +44,9 @@
 - [x] 6.3 Update run documentation and OpenSpec to prohibit arbitrary local API ports; continue to distinguish port validation from verifying the underlying backend identity.
 - [x] 6.4 Validate the developer proxy :5173 rejection, approved :8086 browser smoke (desktop/mobile), 353 web tests, TypeScript, ESLint, bundle budgets and strict OpenSpec locally.
 - [ ] 6.5 Confirm latest GitHub CI/CodeQL, respond to the second P2 review thread and obtain separate human UX acceptance before merge/archive.
+
+## Follow-up: touch targets in table navigation
+- [x] 7.1 Review 39 authenticated route/viewport samples; distinguish unconfirmed contrast on gradients/overlaps from actual violations.
+- [x] 7.2 Improve hit areas of table-heading, back-navigation and progress-review anchors without affecting inline prose links or routes.
+- [x] 7.3 Add a computed-height/color Playwright regression for history row links.
+- [ ] 7.4 Validate updated review browser, build/CI and human acceptance for actual devices, screen readers and native forced colors.
