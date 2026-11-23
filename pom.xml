@@ -32,7 +32,7 @@
         <jackson-2-bom.version>2.21.7</jackson-2-bom.version>
         <maven-enforcer-plugin.version>3.7.0</maven-enforcer-plugin.version>
         <maven-pmd-plugin.version>3.28.0</maven-pmd-plugin.version>
-        <spotless-maven-plugin.version>3.10.4</spotless-maven-plugin.version>
+        <spotless-maven-plugin.version>3.11.0</spotless-maven-plugin.version>
         <maven-failsafe-plugin.version>3.6.1</maven-failsafe-plugin.version>
     </properties>
 
@@ -179,7 +179,13 @@
                 <version>${spotless-maven-plugin.version}</version>
                 <configuration>
                     <java>
-                        <googleJavaFormat/>
+                        <!-- Preserve the reviewed 1.36.1 formatting baseline when upgrading
+                             Spotless. Maven plugin 3.11.0 otherwise defaults to
+                             google-java-format 2.0.0; migrate the formatter only
+                             in a separate, explicitly reviewed change. -->
+                        <googleJavaFormat>
+                            <version>1.36.1</version>
+                        </googleJavaFormat>
                         <removeUnusedImports/>
                         <trimTrailingWhitespace/>
                         <endWithNewline/>
