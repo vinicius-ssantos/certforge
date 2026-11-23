@@ -16,7 +16,7 @@ active change deltas and canonical specs.
 
 A CI-only negative control creates an intentionally malformed spec under a
 temporary root-relative path, expects the strict validator to reject it, and
-verifies the failure names the malformed spec. A shell trap removes the file
+parses its JSON report to confirm exactly that fixture has valid=false with an ERROR about requirement/scenario structure. This avoids unrelated bulk-validation failures and CLI errors counting as a pass. A shell trap removes the file
 whether the negative test passes or fails. This prevents a missing CLI or a
 generic runtime error from accidentally counting as a successful rejection.
 
