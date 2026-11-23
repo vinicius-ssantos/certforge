@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000103",
   "difficulty": "EASY",
   "difficultyRationale": "Tests whether candidates distinguish a class's shared blueprint from an object's independent per-instance state, a baseline OOP distinction rather than a trick question.",
-  "prompt": "A team lead reviews this code:\n\n```java\npublic class Counter {\n    private int value;\n    public void increment() { value++; }\n    public int get() { return value; }\n}\n\nCounter c1 = new Counter();\nCounter c2 = new Counter();\nc1.increment();\nc1.increment();\nc2.increment();\nSystem.out.println(c1.get() + \" \" + c2.get());\n```\n\nWhat does this print, and what does it reveal about the relationship between the `Counter` class and the `c1`/`c2` objects?",
+  "prompt": "A team lead reviews this complete Java program:\n\n```java\npublic class Counter {\n    private int value;\n    public void increment() { value++; }\n    public int get() { return value; }\n\n    public static void main(String[] args) {\n        Counter c1 = new Counter();\n        Counter c2 = new Counter();\n        c1.increment();\n        c1.increment();\n        c2.increment();\n        System.out.println(c1.get() + \" \" + c2.get());\n    }\n}\n```\n\nWhat does this print, and what does it reveal about the relationship between the `Counter` class and the `c1`/`c2` objects?",
   "explanation": "Each `new Counter()` call allocates a distinct object with its own copy of the `value` field. The class is only the shared blueprint describing what fields and methods every Counter has; the field values themselves are per-object state, so c1 and c2 evolve independently.",
   "options": [
     {
