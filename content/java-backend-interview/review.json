@@ -158,6 +158,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv151-ocp-refactor-strategy-pattern": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b275100ad9c07ddf684853a6ee8a6b467340a31187704d3f2f00732b9731fb59",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-23",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
