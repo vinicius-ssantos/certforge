@@ -14,9 +14,9 @@ Running in the repository root is mandatory because the existing job
 defaults run.working-directory to web.
 
 A negative smoke fixture in openspec/specs/ci-invalid-spec-smoke is created
-only during the CI job and removed via trap. The command MUST exit with an
-error and mention the fixture in its diagnostic output, so a missing CLI or
-other unrelated failure cannot produce a false green test.
+only during the CI job and removed via trap. A direct, JSON-formatted fixture validation MUST exit nonzero and report
+exactly one spec item with valid=false and a structural ERROR about its
+requirement/scenario. Aggregate or unrelated CLI failures cannot count as a pass.
 
 The gate is a structural policy. It cannot verify human device/AT testing or
 technical correctness of a question, and SHALL NOT be used to close issue #428.
