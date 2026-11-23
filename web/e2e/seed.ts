@@ -1,5 +1,6 @@
 import { request } from "@playwright/test";
-import { ADMIN_EMAIL, ADMIN_PASSWORD, API_URL, listQuestions, post } from "./api";
+import { ADMIN_EMAIL, ADMIN_PASSWORD, listQuestions, post } from "./api";
+import { assertSafeE2eEnvironment } from "../src/e2eIsolation";
 
 /**
  * Publishes a small set of clearly labelled fixture questions so a learner session can run.
@@ -55,7 +56,9 @@ function fixture(number: number) {
 }
 
 export default async function seed() {
-  const api = await request.newContext({ baseURL: API_URL });
+  // Run this *before* any API request or fixture write, including when setup runs alone.
+  const targets = assertSafeE2eEnvironment(process.env);
+  const api = await request.newContext({ baseURL: targets.apiUrl });
   try {
     await post(api, "/api/auth/login", { email: ADMIN_EMAIL, password: ADMIN_PASSWORD });
 

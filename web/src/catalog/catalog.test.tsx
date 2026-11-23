@@ -117,6 +117,28 @@ describe("a track", () => {
     expect(await axe(container)).toHaveNoViolations();
   });
 
+  it("does not offer practice without a published question in a certification topic", async () => {
+    const availability = {
+      activeSessionId: null,
+      contentReady: false,
+      missingQuestionCount: 10,
+      questionCount: 10,
+      questionsPerTopic: 5,
+      topics: javaTrack.topics.map((topic) => ({
+        topicId: topic.id, available: 0, required: 5, missing: 5,
+      })),
+    };
+    renderApp({
+      "GET /api/catalog/tracks/java-certification": { body: javaTrack },
+      "GET /api/study/mock-exams/availability": { body: availability },
+    }, { path: "/tracks/java-certification" });
+
+    const practice = await screen.findByRole("button", { name: "Practice Handling exceptions" });
+    await waitFor(() => expect(practice).toBeDisabled());
+    expect(await screen.findByText(/No questions available in this track\./)).toBeVisible();
+    expect(screen.queryByText("No questions published.")).not.toBeInTheDocument();
+  });
+
   it("explains an unknown track and offers a way back", async () => {
     renderApp(
       { "GET /api/catalog/tracks/nope": problem(404, "track_not_found") },
@@ -203,10 +225,25 @@ it("does not offer an empty catalogue as the next study action", async () => {
   expect(screen.queryByRole("link", { name: /Explore tracks/ })).not.toBeInTheDocument();
 });
 
+it("renders review and progress as accessible tertiary product actions", async () => {
+  renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
+
+  const queue = await screen.findByRole("link", { name: "See the queue" });
+  const progress = screen.getByRole("link", { name: "View progress" });
+  expect(queue.closest(".study-queue-links")).toBeInTheDocument();
+  expect(queue).toHaveAttribute("href", "/review");
+  expect(progress.closest(".study-queue-links")).toBeInTheDocument();
+  expect(progress).toHaveAttribute("href", "/progress");
+  expect(queue).toHaveTextContent("See the queue");
+  expect(progress).toHaveTextContent("View progress");
+});
+
 it("finds tracks by provider and clears a no-match search", async () => {
   renderApp({ "GET /api/catalog/tracks": { body: [javaTrack] } });
   await screen.findByRole("link", { name: "Java Certification" });
-  await userEvent.click(screen.getByText("Find a track by name or provider", { selector: "summary" }));
+  const searchDisclosure = screen.getByText("Find a track by name or provider", { selector: "summary" });
+  expect(within(searchDisclosure).getByText("⌄")).toHaveAttribute("aria-hidden", "true");
+  await userEvent.click(searchDisclosure);
   await userEvent.type(screen.getByRole("searchbox"), javaTrack.provider);
   expect(screen.getByRole("link", { name: "Java Certification" })).toBeVisible();
   await userEvent.clear(screen.getByRole("searchbox"));

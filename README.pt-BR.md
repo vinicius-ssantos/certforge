@@ -92,6 +92,11 @@ Consulte a [revisão de prontidão](docs/release/v0.4.0-readiness.md) e as [nota
 
 Você precisa do Docker e, para a forma curta, do [just](https://github.com/casey/just).
 
+**Para revisar a interface sem dados fictícios**, use `just review` e abra `http://127.0.0.1:8082`. Esse ambiente possui um **banco próprio e vazio** na primeira execução; ele não modifica as sessões e questões da instalação em `http://localhost:8081`. O comando não importa nem publica questões por conta própria. Para disponibilizar questões reais, use o fluxo editorial de publicação *somente* sobre conteúdos efetivamente revisados, configurando `WEB_URL=http://127.0.0.1:8082`. Para interromper preservando os dados da revisão: `just review-down`.
+
+**Não execute E2E contra o banco de estudos.** `just e2e-release` cria outro projeto/volume exclusivo para testes em `http://127.0.0.1:8083`; as questões e objetivos E2E nunca são material de certificação. `just up` mantém o banco existente em `:8081` e, portanto, **não apaga fixtures anteriormente gravadas**. Mudar o idioma da interface não traduz automaticamente o texto técnico autoral das questões aprovadas.
+
+
 ```sh
 just demo          # constrói, sobe e publica dez questões de demonstração claramente identificadas
 ```

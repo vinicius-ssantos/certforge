@@ -2,6 +2,7 @@ package dev.certforge.study.internal;
 
 import dev.certforge.study.internal.SessionViews.SessionSummary;
 import dev.certforge.study.internal.SessionViews.SessionView;
+import dev.certforge.study.internal.SessionViews.TopicAvailability;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -38,6 +39,12 @@ class StudyController {
   @GetMapping
   List<SessionSummary> list(@RequestParam(required = false) SessionStatus status) {
     return service.list(status);
+  }
+
+  /** Learner-safe number of eligible published questions per topic in a general track. */
+  @GetMapping("/topic-availability")
+  List<TopicAvailability> topicAvailability(@RequestParam String trackSlug) {
+    return service.topicAvailability(trackSlug);
   }
 
   @GetMapping("/{sessionId}")

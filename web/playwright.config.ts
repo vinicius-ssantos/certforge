@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { assertSafeE2eEnvironment } from "./src/e2eIsolation";
 
 /**
  * End-to-end tests run the real application: the built web app served on one origin together with
@@ -11,7 +12,8 @@ const WEB_PORT = 4173;
  * Set E2E_BASE_URL to run against an environment that is already up, such as the release images
  * (compose.release.yaml), instead of the built app served by Vite.
  */
-const EXTERNAL = process.env["E2E_BASE_URL"];
+const targets = assertSafeE2eEnvironment(process.env);
+const EXTERNAL = targets.browserUrl;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -41,7 +43,8 @@ export default defineConfig({
         webServer: {
           command: `npm run preview -- --port ${WEB_PORT} --strictPort`,
           url: `http://localhost:${WEB_PORT}`,
-          reuseExistingServer: !process.env["CI"],
+          // Never attach to an unknown preview on :4173: it may proxy /api to the release.
+          reuseExistingServer: false,
         },
       }),
 });

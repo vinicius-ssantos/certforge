@@ -57,11 +57,7 @@ export function HistoryPage() {
 
   const sessionItems = sessions.data?.pages.flatMap((page) => page.items) ?? [];
   const mockItems = mocks.data?.pages.flatMap((page) => page.items) ?? [];
-  const empty =
-    sessions.data !== undefined &&
-    mocks.data !== undefined &&
-    sessionItems.length === 0 &&
-    mockItems.length === 0;
+  const empty = !!sessions.data && !!mocks.data && !sessionItems.length && !mockItems.length;
 
   return (
     <>
@@ -72,8 +68,10 @@ export function HistoryPage() {
           <ul className="active-study">
             {active.activities.map((activity) => (
               <li key={activity.id}>
-                <Link to={activity.href}>{t.history.continueActivity(activity.name)}</Link>
-                <span className="muted">{activity.kind} · {activity.answered}</span>
+                <Link to={activity.href}>
+                  {t.history.continueActivity(activity.name)}
+                </Link>
+                <small>{activity.kind} · {activity.answered}</small>
               </li>
             ))}
           </ul>

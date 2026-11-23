@@ -23,25 +23,18 @@ npm run build
 
 ## End-to-end tests
 
+**Warning:** The test suite writes and publishes fake questions and synthetic exam objectives. It must never run against the persistent learner installation at `:8081` or the clean review installation at `:8082`. Use `just e2e-release` (separate project, ports and volume; test frontend on `http://127.0.0.1:8083`). Local manual E2E runs require `CERTFORGE_E2E_DISPOSABLE=1` and `E2E_API_URL=http://127.0.0.1:8086` on the dedicated disposable Compose backend; the guard rejects all other API ports (including Vite dev proxy :5173) and unqualified runs. CI uses disposable services.
+
 Playwright drives the real application (built web app, Spring Boot backend, PostgreSQL) on desktop and mobile viewports, and runs axe on every page it visits. CI does this in the `e2e` job.
 
-To run them locally, start PostgreSQL and the backend from the repository root (the tests publish a few clearly labelled fixture questions through the editorial API, so the backend needs an administrator and relaxed reviewer separation, **for a throwaway database only**):
+For local runs use a **disposable and isolated** stack, never the app/database serving your own study history:
 
 ```sh
-docker compose up -d postgres
-./mvnw -DskipTests package
-BOOTSTRAP_ADMIN_EMAIL=e2e-admin@example.com BOOTSTRAP_ADMIN_PASSWORD=e2e-admin-password-123 \
-  java -jar target/certforge-*.jar \
-  --certforge.identity.throttle.registrations-per-ip=1000
+# from the repository root
+just e2e       # alias for just e2e-release; dedicated web :8083, API :8086
 ```
 
-Then, from `web/`:
-
-```sh
-npx playwright install chromium   # once
-npm run build
-npm run e2e
-```
+If Playwright browsers are not yet installed, run `cd web && npx playwright install chromium` once. To drive the isolated Compose API manually, start the `certforge-e2e` stack and set `CERTFORGE_E2E_DISPOSABLE=1` and `E2E_API_URL=http://127.0.0.1:8086`, then run `npm run e2e` **without** `E2E_BASE_URL`. Playwright starts its own Vite preview on :4173 and explicitly proxies browser `/api` traffic to that same disposable `E2E_API_URL`. The preview never reuses an unknown listener on :4173. For an existing web stack, `E2E_BASE_URL` is allowed locally only for the repository's dedicated :8083 frontend paired with the :8086 backend (as in `just e2e-release`). The E2E safeguards use an allowlist for the sole local API port `:8086`, rejecting every other port, including frontend development proxies that redirect `/api` to a persistent database. This policy intentionally does not permit arbitrary custom local API ports. It validates the configured port, not the underlying process or database identity; always launch the dedicated `certforge-e2e` Compose project first. CI manages a separate ephemeral database.
 
 The fixtures are test data. The Java SE 21 content pack awaits human review and is never published by automation.
 

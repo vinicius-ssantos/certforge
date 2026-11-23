@@ -26,6 +26,9 @@ dev := "docker compose -p certforge-dev"
 release := "docker compose -p certforge-release -f compose.release.yaml"
 # Relaxes reviewer separation and the registration throttle, for the test suite only.
 release_test := release + " -f compose.e2e.yaml"
+# Separate named projects and volumes: E2E fixtures never reach release/review data.
+review_stack := "WEB_PORT=8082 APP_PORT=8085 docker compose -p certforge-review -f compose.release.yaml"
+e2e_stack := "WEB_PORT=8083 APP_PORT=8086 docker compose -p certforge-e2e -f compose.release.yaml -f compose.e2e.yaml"
 
 _default:
     @just --list --unsorted
@@ -38,6 +41,18 @@ up:
     {{release}} up --build -d
     @just _wait
     @echo "CertForge is at {{web_url}} — if it has no questions yet, run: just demo"
+
+# An isolated, clean review installation with its own volume on :8082 (not :8081).
+# No demo questions or E2E fixtures are seeded. Existing release data stays untouched.
+[group('run')]
+review:
+    {{review_stack}} up --build -d
+    @just _wait http://127.0.0.1:8085
+    @echo "Isolated review environment: http://localhost:8082 (no sample content seeded)"
+
+[group('run')]
+review-down:
+    {{review_stack}} down
 
 # Start it and publish ten clearly labelled demo questions, so there is something to practise on.
 [group('run')]
@@ -157,7 +172,7 @@ typecheck:
 budget:
     cd web && npm run build && npm run budget
 
-# The browser tests against a dev server. Needs `npx playwright install chromium` once.
+# Local browser tests use only the dedicated disposable E2E project. Never seed the release volume.
 #
 # The suite signs in as an administrator to write the questions it then practises on, and it takes
 # that account from E2E_ADMIN_EMAIL and E2E_ADMIN_PASSWORD, falling back to an account of its own
@@ -167,15 +182,14 @@ budget:
 # directly, so the recipe that exists to run what CI runs could not run at all. These now tell the
 # suite which administrator the stack has, whichever one you chose.
 [group('check')]
-e2e:
-    cd web && E2E_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" npm run e2e
+e2e: e2e-release
 
 # The browser tests against the release images, which is what CI does.
 [group('check')]
 e2e-release:
-    {{release_test}} up --build -d
-    @just _wait
-    cd web && npm run build && E2E_BASE_URL={{web_url}} \
+    {{e2e_stack}} up --build -d
+    @just _wait http://127.0.0.1:8086
+    cd web && npm run build && E2E_BASE_URL=http://127.0.0.1:8083 E2E_API_URL=http://127.0.0.1:8086 CERTFORGE_E2E_DISPOSABLE=1 \
         E2E_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
         npm run e2e
 
@@ -305,7 +319,11 @@ contract:
 # Recapture the screenshots in the demonstration scripts, against a running test stack.
 [group('content')]
 screenshots:
-    cd web && CAPTURE=1 E2E_BASE_URL={{web_url}} npx playwright test e2e/screenshots.spec.ts --project desktop
+    {{e2e_stack}} up --build -d
+    @just _wait http://127.0.0.1:8086
+    cd web && CAPTURE=1 E2E_BASE_URL=http://127.0.0.1:8083 E2E_API_URL=http://127.0.0.1:8086 CERTFORGE_E2E_DISPOSABLE=1 \
+        E2E_ADMIN_EMAIL="$BOOTSTRAP_ADMIN_EMAIL" E2E_ADMIN_PASSWORD="$BOOTSTRAP_ADMIN_PASSWORD" \
+        npx playwright test e2e/screenshots.spec.ts --project desktop
 
 # Format the Java sources, as the build requires.
 [group('content')]

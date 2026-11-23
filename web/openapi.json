@@ -2840,6 +2840,20 @@
         "required" : [ "all", "approved", "deprecated", "draft", "published", "technicalReview" ],
         "type" : "object"
       },
+      "TopicAvailability" : {
+        "properties" : {
+          "available" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "topicId" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "required" : [ "available", "topicId" ],
+        "type" : "object"
+      },
       "TopicCoverage" : {
         "properties" : {
           "published" : {
@@ -5165,6 +5179,35 @@
               }
             },
             "description" : "Created"
+          }
+        },
+        "tags" : [ "study-controller" ]
+      }
+    },
+    "/api/study/sessions/topic-availability" : {
+      "get" : {
+        "operationId" : "topicAvailability",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "trackSlug",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/TopicAvailability"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
           }
         },
         "tags" : [ "study-controller" ]

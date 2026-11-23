@@ -1,9 +1,14 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
+import { assertSafeE2eEnvironment } from "./src/e2eIsolation.ts";
 
 // In development the API is on another port; the proxy keeps the browser on one origin, which is
 // what the production deployment does too. The session cookie is therefore same-origin and the
 // application never handles an authentication token.
+const previewApi = process.env["CERTFORGE_E2E_DISPOSABLE"] === "1"
+  ? assertSafeE2eEnvironment(process.env).apiUrl
+  : "http://localhost:8080";
+
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -14,7 +19,8 @@ export default defineConfig({
   },
   server: { proxy: { "/api": "http://localhost:8080" } },
   // The built app is served the same way for the end-to-end tests.
-  preview: { proxy: { "/api": "http://localhost:8080" } },
+  // The manual E2E preview MUST use the exact disposable backend seeded by Playwright.
+  preview: { proxy: { "/api": previewApi } },
   test: {
     environment: "jsdom",
     globals: true,

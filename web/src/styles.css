@@ -2515,11 +2515,115 @@ button.mock-nav-button.current {
 .study-queue-links {
   display: flex;
   flex-wrap: wrap;
-  column-gap: var(--s4);
+  gap: var(--s2);
+  padding-top: var(--s2);
   border-top: 1px solid var(--border);
 }
 
-.study-queue-links a,
+/*
+ * Tertiary product actions are navigation, not prose links: understated ink and a
+ * quiet outline rather than default link blue. Keep a tangible 44px target, a
+ * visible arrow and the global keyboard focus ring. Do not affect links in copy.
+ */
+:is(.study-queue-links a, .active-study li > a) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  min-height: var(--touch);
+  max-width: 100%;
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+:is(.study-queue-links a, .active-study li > a):hover {
+  background: var(--accent-bg);
+  border-color: var(--border-strong);
+  color: var(--text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+:is(.study-queue-links a, .active-study li > a):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+:is(.study-queue-links a, .active-study li > a)::after {
+  /* Shape-only chevron: decorative, never part of the accessible link name. */
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin-right: 0.15rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+@media (forced-colors: active) {
+  :is(.study-queue-links a, .active-study li > a) { border-color: ButtonBorder; color: LinkText; }
+  :is(.study-queue-links a, .active-study li > a):hover { border-color: Highlight; color: LinkText; }
+}
+
+
+/*
+ * Table row-title links and in-product back navigation are touch controls,
+ * not prose hyperlinks. Keep the link semantics while enlarging their
+ * interactive boxes; leave actual inline/editorial references unchanged.
+ */
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a) {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch);
+  max-width: 100%;
+  padding: var(--s1) var(--s2);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a):hover {
+  color: var(--text);
+  background: var(--accent-bg);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+:is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+/* Direction cues distinguish navigation from plain text, but add no spoken text. */
+:is(.table-scroll tbody th[scope="row"] > a, section[aria-labelledby="misconceptions"] > p:last-child > a)::after,
+.back > a::before {
+  content: "";
+  display: block;
+  flex: 0 0 auto;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+}
+:is(.table-scroll tbody th[scope="row"] > a, section[aria-labelledby="misconceptions"] > p:last-child > a)::after {
+  transform: rotate(45deg);
+  margin-left: var(--s3);
+}
+.back > a::before {
+  transform: rotate(225deg);
+  margin-right: var(--s3);
+}
+@media (forced-colors: active) {
+  :is(.table-scroll tbody th[scope="row"] > a, .back > a, section[aria-labelledby="misconceptions"] > p:last-child > a) { color: LinkText; }
+}
+
 .study-catalog .card h4 > a {
   display: inline-flex;
   align-items: center;
@@ -2582,8 +2686,18 @@ button.mock-nav-button.current {
 .active-study li {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
   gap: var(--s1) var(--s3);
+}
+
+.active-study li + li {
+  border-top: 1px solid var(--border);
+  padding-top: var(--s2);
+}
+
+.active-study li > small {
+  color: var(--muted);
+  font-size: var(--t-sm);
 }
 
 .active-study a,
@@ -2666,7 +2780,17 @@ input[type="number"], input[type="search"] {
 .editor-sections { display: flex; flex-wrap: wrap; gap: var(--s3); margin-bottom: var(--s4); }
 .editor-sections a, .catalog-search summary { min-height: var(--touch); display: inline-flex; align-items: center; }
 .catalog-search { margin-block: var(--s3); }
+.content-language-note { font-size: var(--t-sm); max-width: var(--measure); margin-block: var(--s2) var(--s4); }
+.content-empty-note { border-left: 3px solid var(--accent); padding: var(--s3) var(--s4); background: var(--accent-bg); border-radius: var(--radius-sm); }
+.catalog-search summary { gap: var(--s2); cursor: pointer; color: var(--accent); font-weight: 600; }
+.catalog-search summary:hover { text-decoration: underline; }
+.catalog-search summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.catalog-search summary::marker { color: var(--accent); }
+.catalog-search-chevron { display: inline-block; font-size: 1.25em; line-height: 1; transition: transform 0.15s ease; }
+.catalog-search[open] .catalog-search-chevron { transform: rotate(180deg); }
 .catalog-search label { display: block; }
+.session-context { display: flex; align-items: baseline; flex-wrap: wrap; gap: var(--s2); font-size: var(--t-sm); margin-block: var(--s2) var(--s3); }
+.session-context > span[aria-hidden="true"] { color: var(--muted); }
 .score-summary { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s2); }
 .mock-score { padding: var(--s4); }
 .mock-score-value { margin-block: var(--s1); }

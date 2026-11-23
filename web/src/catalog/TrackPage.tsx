@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Link, useNavigate, useParams } from "react-router";
 import { useApi } from "../api/ApiProvider";
@@ -7,52 +6,9 @@ import type { Topic } from "../api/types";
 import { formatDate } from "../history/format";
 import { useLocale, useText } from "../i18n/useText";
 import { ScrollableTable } from "../ui/ScrollableTable";
+import { TopicList } from "./TopicList";
 import { ErrorState, Loading } from "../ui/States";
 import { useDocumentTitle } from "../ui/useDocumentTitle";
-
-function TopicList({
-  topics,
-  onStart,
-  busy,
-}: {
-  topics: Topic[];
-  onStart: (topic: Topic) => void;
-  busy: boolean;
-}) {
-  const t = useText();
-  useEffect(() => {
-    if (window.location.hash.startsWith("#topic-")) document.getElementById(decodeURIComponent(window.location.hash.slice(1)))?.focus();
-  }, [topics]);
-  return (
-    <ol className="topics">
-      {topics.map((topic) => (
-        <li key={topic.id} id={`topic-${topic.id}`} tabIndex={-1}>
-          <div className="topic-row">
-            <div className="topic-copy">
-              <strong>{topic.name}</strong>
-              {topic.objectiveRef ? <span className="muted">{topic.objectiveRef}</span> : null}
-            </div>
-            {/* Outlined, not filled. Ten topics means ten of these, and ten filled buttons down
-                one edge read as ten primary actions competing with each other and with the mock
-                above them. The row's subject is the topic; starting it is the offer. */}
-            <button
-              type="button"
-              className="small secondary"
-              aria-label={t.track.practiceTopic(topic.name)}
-              disabled={busy}
-              onClick={() => onStart(topic)}
-            >
-              {t.track.practice}
-            </button>
-          </div>
-          {topic.subtopics.length > 0 ? (
-            <TopicList topics={topic.subtopics} onStart={onStart} busy={busy} />
-          ) : null}
-        </li>
-      ))}
-    </ol>
-  );
-}
 
 function isActiveSession(error: unknown): error is ApiError {
   return error instanceof ApiError && error.code === "active_session_exists";
@@ -119,6 +75,13 @@ export function TrackPage() {
 
   const unavailableTopics =
     mockAvailability.data?.topics.filter((topic) => topic.missing > 0).length ?? 0;
+  const availableByTopic = mockAvailability.data
+    ? new Map(mockAvailability.data.topics.map((topic) => [topic.topicId, topic.available]))
+    : undefined;
+  const noQuestionsInTrack = Boolean(
+    mockAvailability.data && mockAvailability.data.topics.length > 0
+      && mockAvailability.data.topics.every((topic) => topic.available === 0),
+  );
 
   /*
    * The availability endpoint names topics by id; the track carries their names. Flattened
@@ -232,11 +195,13 @@ export function TrackPage() {
             </Link>
           </p> : null}
           <h2 id="practice-topics" tabIndex={-1}>{t.track.topics}</h2>
+          {noQuestionsInTrack ? <p className="content-empty-note" role="status">{t.track.noPublishedTrack}</p> : null}
           {start.isError && !isActiveSession(start.error) ? <ErrorState error={start.error} /> : null}
           <TopicList
             topics={track.data.topics}
             onStart={(topic) => start.mutate(topic)}
             busy={start.isPending}
+            availableByTopic={availableByTopic}
           />
           {track.data.kind === "CERTIFICATION" ? (
             <section
@@ -295,7 +260,6 @@ export function TrackPage() {
                    * work list for whoever reviews content, and without it the shortfall is a
                    * number nobody can act on. See #138.
                    */}
-                  <p><a href="#practice-topics">{t.track.practiceAvailable}</a></p>
                   <details className="mock-coverage">
                     <summary>{t.track.mockMissingCaption}</summary>
                     <ScrollableTable label={t.track.mockMissingCaption}>
