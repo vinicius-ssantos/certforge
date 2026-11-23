@@ -170,6 +170,42 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv151-dip-conceptual-di-vs-dip": {
+      "verdict": "APPROVED",
+      "digest": "sha256:90feacf1e33bc1e2d7c2008222cf113c3bdcf1987d8b682c50fb28927e2ea44c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-23",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-check-then-act-race-concurrenthashmap": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a9642e281dedccc3118bd9a86cb5447b6b33f22c1ff2fa12a86600a67772932c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-23",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-conditionalonmissingbean-starter-override": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2fe22b7f4c63a4709ebdcb9fed7bdcb93c59a4cb9ccb5d6dc6d9634271174520",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-23",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
