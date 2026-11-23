@@ -53,6 +53,53 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
 
+      # Version-pinned OpenSpec validation is required for changes and permanent specs.
+      # This runs in the existing Node 24 job; archived change checklists have their own scope.
+      - name: Validate OpenSpec changes and permanent specs
+        working-directory: .
+        run: npx --yes @fission-ai/openspec@2.1.0 validate --all --strict --no-interactive
+
+      - name: Validate archived OpenSpec task checklists
+        working-directory: .
+        run: npx --yes @fission-ai/openspec@2.1.0 validate --archived --strict --no-interactive
+
+      - name: Assert strict OpenSpec rejects an invalid specification
+        working-directory: .
+        shell: bash
+        run: |
+          trap 'rm -rf openspec/specs/ci-invalid-spec-smoke' EXIT
+          mkdir -p openspec/specs/ci-invalid-spec-smoke
+          cat > openspec/specs/ci-invalid-spec-smoke/spec.md <<'EOF'
+          # ci-invalid-spec-smoke Specification
+
+          ## Purpose
+          Invalid controlled test fixture.
+
+          ## Requirements
+          ### Requirement: Deliberately invalid
+          This is descriptive prose with no normative requirement or scenario.
+          EOF
+          # Validate the fixture directly, not an aggregate that could fail elsewhere.
+          if npx --yes @fission-ai/openspec@2.1.0 validate ci-invalid-spec-smoke --type spec --strict --no-interactive --json > "$RUNNER_TEMP/openspec-negative.json"; then
+            echo "OpenSpec unexpectedly accepted the malformed specification" >&2
+            exit 1
+          fi
+          node - "$RUNNER_TEMP/openspec-negative.json" <<'NODE'
+          const fs = require('node:fs');
+          const assert = require('node:assert/strict');
+          const report = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
+          assert.equal(report.items?.length, 1, 'Expected exactly one item validation result');
+          const item = report.items[0];
+          assert.equal(item.id, 'ci-invalid-spec-smoke');
+          assert.equal(item.type, 'spec');
+          assert.equal(item.valid, false, 'The fixture itself must fail validation');
+          assert.ok(
+            item.issues?.some(issue => issue.level === 'ERROR' && /scenario|normative|shall|must/i.test(issue.message)),
+            'Expected a structural requirement/scenario diagnostic, not a CLI/runtime failure'
+          );
+          console.log('Negative OpenSpec fixture rejected for its own structural errors');
+          NODE
+
       - name: Install
         run: npm ci
 
