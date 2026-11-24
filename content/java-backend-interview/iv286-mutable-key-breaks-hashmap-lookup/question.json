@@ -3,8 +3,8 @@
   "topicId": "a3000000-0000-4000-8000-000000000101",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Tracing why a HashMap lookup silently fails after a key's fields change requires connecting hashCode/equals to bucket placement, a step beyond just reciting the contract.",
-  "prompt": "A `CacheKey` class has mutable fields and overrides `equals`/`hashCode` based on those fields. Code does: build a `CacheKey k`, put it in a `HashMap` as a key, then later mutate one of `k`'s fields, then call `map.get(k)` with the same (now-mutated) reference. The lookup returns `null` even though the key object was never removed. What is happening?",
-  "explanation": "A `HashMap` places an entry into a bucket chosen by the key's `hashCode()` at insertion time. Mutating the key afterward changes what `hashCode()` now returns, so a lookup with the mutated key searches the bucket for the *new* hash — a different bucket from where the entry actually lives — and finds nothing there. The entry is not lost, just unreachable from that hash value; this is exactly the hazard the `Map` interface's documentation warns about when a mutable object is used as a key.",
+  "prompt": "A `CacheKey` class has mutable fields and overrides `equals`/`hashCode` based on those fields. Code creates a `CacheKey k`, inserts it into a `HashMap` as a key, then mutates a field used by `hashCode()` so that the key's newly computed hash selects a **different bucket index** from the one used at insertion (the map has not been resized). A subsequent `map.get(k)` with the same mutated object returns `null` even though the entry was never removed. What explains this?",
+  "explanation": "A HashMap entry is placed into a bucket selected from its key's hash at insertion time. The scenario now explicitly establishes that mutating the key changes its computed hash to one selecting a different bucket, so `map.get(k)` searches somewhere other than the stored entry and returns null. More generally, a changed hash may break retrieval even if the bucket index collides, because the stored hash and lookup hash can differ; mutating an unrelated field that leaves equality and hash behavior unchanged need not break anything. The Java SE 21 Map contract warns that behavior is unspecified when a key is mutated in a way that affects equals while stored.",
   "options": [
     {
       "key": "A",
@@ -39,6 +39,10 @@
     {
       "title": "Object#hashCode (Java SE 21 & JDK 21)",
       "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()"
+    },
+    {
+      "title": "HashMap (Java SE 21 API — hash buckets and get)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
     }
   ],
   "evidence": {
