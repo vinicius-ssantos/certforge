@@ -16,7 +16,7 @@
       "key": "B",
       "text": "A heap keeps all elements in fully sorted order at all times, just like a sorted array, but can update that order in O(log n) by storing the complete binary tree compactly in a single backing array and adjusting parent-child index relationships.",
       "correct": false,
-      "explanation": "A heap only guarantees the heap property (each parent has higher priority than its children), not a full total order across all elements; reading elements in sorted order from a heap is not O(log n) per element overall."
+      "explanation": "A binary heap maintains only the heap property: each parent has at least as high a priority as its children, but its backing array is not fully sorted. Repeatedly extracting the highest-priority element can still produce sorted output in O(log n) per extraction (O(n log n) overall). The incorrect claim is that the heap maintains a fully sorted arrangement at all times."
     },
     {
       "key": "C",
