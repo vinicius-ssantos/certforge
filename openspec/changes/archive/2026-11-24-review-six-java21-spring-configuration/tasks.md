@@ -13,5 +13,11 @@
 - [x] Recompute all six V2 SHA-256 source digests; check standard vector and an existing recorded source digest.
 - [x] Preserve all previous 40 decisions, attribute six new entries to ai-reviewer and keep pack DRAFT.
 - [x] Exclude unresolved @ResponseBody question distractor without fabricating its review.
-- [ ] Complete strict OpenSpec, Java Maven, Web, Playwright, release-image E2E, CodeQL and secret scan gates, plus review.
-- [ ] Merge only after all eight CI checks green; update issue #392 and archive this OpenSpec in follow-up work.
+- [x] Complete strict OpenSpec, Java Maven, Web, Playwright, release-image E2E, CodeQL and secret scan gates, plus review.
+- [x] Merge only after all eight CI checks green; update issue #392 and archive this OpenSpec in follow-up work.
+
+### Verified integration evidence — 2026-11-24
+
+- PR #451 was squash-merged into main after all **eight** required CI/CodeQL checks succeeded, with no unresolved blocking review findings.
+- PR #451 recorded six individually checked and truthful ai-reviewer V2 decisions, correcting both P2 Spring distractor explanations and recomputing their digests before merge; PR #452 fixed the separate @JsonProperty content source without an AI verdict; PR #453 independently reviewed that corrected source and recorded one new AI-attributed digest.
+- Issue #392 remains OPEN with **47/208 reviewed and 161 pending**. Interview pack stays DRAFT, no deploy or publication. Human UX/E2E acceptance issue #428 remains OPEN with its active OpenSpec change unarchived.
