@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000103",
   "difficulty": "EASY",
   "difficultyRationale": "Checks the basic mechanism behind runtime polymorphism (dynamic dispatch) using a direct, unambiguous snippet.",
-  "prompt": "Given this code:\n\n```java\nclass Animal {\n    String sound() { return \"...\"; }\n}\nclass Dog extends Animal {\n    @Override\n    String sound() { return \"Woof\"; }\n}\n\nAnimal a = new Dog();\nSystem.out.println(a.sound());\n```\n\nWhat gets printed, and why?",
+  "prompt": "Given this complete Java program:\n\n```java\nclass Animal {\n    String sound() { return \"...\"; }\n}\nclass Dog extends Animal {\n    @Override\n    String sound() { return \"Woof\"; }\n}\npublic class PolymorphismDemo {\n    public static void main(String[] args) {\n        Animal a = new Dog();\n        System.out.println(a.sound());\n    }\n}\n```\n\nWhat gets printed, and why?",
   "explanation": "Instance methods in Java are dispatched based on the actual runtime type of the object a reference points to, not the declared (static) type of the reference variable. Because a refers to an actual Dog object at runtime, the overridden sound() in Dog runs, printing \"Woof\". This dynamic (virtual) method dispatch is the mechanism that makes polymorphism work.",
   "options": [
     {
