@@ -566,6 +566,78 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv154-stack-lifo-use-case": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f3fc51e0069d7b80c0005aa1e4a228b5f8772c49b92c6a1c5e667f25033bfe62",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-flaky-vs-deterministic": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6f6e93ad41e5368a34e277ef046b340d549f542ac58ded45711b250f4a6b4487",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-completablefuture-exception-propagation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d31291e64a2e526cf9fc103451c0032efd70c77033eb8a9c70c2378792d0f4b6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv152-similar-but-different-rules": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4921721edb7acbbc833288e7fd4bfba44974e1d37c10e32641adad934839496a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-request-scope-proxy-mode": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b0da244665cdf4fc1c97d6c78a7e3b2806c80df8cadbcef67d6e399f4fb6e178",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-when-mocking-hurts": {
+      "verdict": "APPROVED",
+      "digest": "sha256:039682efaedcc44b21d58b58f85f9194928ca3732c4809edc42a6d78d776f732",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
