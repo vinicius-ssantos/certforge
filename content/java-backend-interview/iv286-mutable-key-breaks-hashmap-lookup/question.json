@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Tracing why a HashMap lookup silently fails after a key's fields change requires connecting hashCode/equals to bucket placement, a step beyond just reciting the contract.",
   "prompt": "A `CacheKey` class has mutable fields and overrides `equals`/`hashCode` based on those fields. Code creates a `CacheKey k`, inserts it into a `HashMap` as a key, then mutates a field used by `hashCode()` so that the key's newly computed hash selects a **different bucket index** from the one used at insertion (the map has not been resized). A subsequent `map.get(k)` with the same mutated object returns `null` even though the entry was never removed. What explains this?",
-  "explanation": "The entry was placed in a HashMap bucket selected from the key's hash at insertion time. The scenario explicitly states that mutation changes the computed hash enough to select a different bucket when looking up that same reference; `map.get(k)` searches the new bucket, not the entry's original one, and returns null. This need not occur after every key mutation: a change that preserves the bucket index may still permit retrieval, but mutating a hash-dependent key makes map behavior unreliable. The Java Map contract explicitly warns against mutable keys changing their equality behavior while stored.",
+  "explanation": "A HashMap entry is placed into a bucket selected from its key's hash at insertion time. The scenario now explicitly establishes that mutating the key changes its computed hash to one selecting a different bucket, so `map.get(k)` searches somewhere other than the stored entry and returns null. More generally, a changed hash may break retrieval even if the bucket index collides, because the stored hash and lookup hash can differ; mutating an unrelated field that leaves equality and hash behavior unchanged need not break anything. The Java SE 21 Map contract warns that behavior is unspecified when a key is mutated in a way that affects equals while stored.",
   "options": [
     {
       "key": "A",
@@ -39,6 +39,10 @@
     {
       "title": "Object#hashCode (Java SE 21 & JDK 21)",
       "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()"
+    },
+    {
+      "title": "HashMap (Java SE 21 API — hash buckets and get)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html"
     }
   ],
   "evidence": {
