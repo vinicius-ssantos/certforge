@@ -314,6 +314,78 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv150-polymorphism-dynamic-dispatch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:607c1facf9f63d9b8eedf59ba1a44d1b3777349e5de68b130fb0f8470f4464c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-test-isolation-shared-fixtures": {
+      "verdict": "APPROVED",
+      "digest": "sha256:820dce38f209dd1babd145dbc8def3a4bbbce552bfd2ddb40c1e57ba231d3c41",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-volatile-visibility-not-atomicity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e21318a891211f8201a36698b407d609501e0e859aa708166fe8e0890c8f9041",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-try-with-resources-suppressed-exception": {
+      "verdict": "APPROVED",
+      "digest": "sha256:70c3d25d072b374951a6ee759a59a68459f0017bb37fe9753e4f96e0b48798bc",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-stream-single-use-pipeline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:10f23642a479b586a5ca1afef0d43a55d118a79c61ec96c420ef84128a0fddcf",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-checked-vs-unchecked-recoverability": {
+      "verdict": "APPROVED",
+      "digest": "sha256:abe3731b47e10f29b4388c6926f90af310067ca917beab3c97941340ef9600f1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
