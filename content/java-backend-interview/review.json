@@ -458,6 +458,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-mutable-key-breaks-hashmap-lookup": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9e85edd8ae6459940d0e77c616a9aa7be3cb17531eed173fcdb73e32a4fe5d5c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-double-checked-locking-without-volatile": {
+      "verdict": "APPROVED",
+      "digest": "sha256:845d943af4c44a200b95c5b737391c1e71b5da7766a2cb708997c64beaf34f16",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
