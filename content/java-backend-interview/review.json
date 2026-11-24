@@ -449,7 +449,7 @@
     },
     "iv154-heap-priority-queue": {
       "verdict": "APPROVED",
-      "digest": "sha256:7005582a61dfef61fcc3a8011fbb2e09cc2718463579d537ac2028ae8780b584",
+      "digest": "sha256:d836025a3425c1325fc7b415c78a13d7ea8279de21d3e81a737915894e000e57",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-24",
       "checklist": [
