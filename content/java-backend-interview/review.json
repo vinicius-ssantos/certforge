@@ -242,6 +242,78 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv150-class-vs-object": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d68551edcd278ebb80ebfe78b35d75ade967bb9434997b4cb17fc498c2274bb9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv150-overriding-vs-overloading": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5b25ee339bcb15bb3eb83683364f0a38fceea497a24d4ea9449bd9adcdf0b948",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv150-composition-over-inheritance": {
+      "verdict": "APPROVED",
+      "digest": "sha256:93de8c4aba0dd7e61fc66ce2ff8cbbbb19ca7f438e95456589cf188473fd4299",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-junit5-lifecycle": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ac43621f6229920921f1852feafddb84595cbb26ae4af08db215ac63a274b8f5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-test-pyramid-tradeoffs": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a702e2a115b404b59273ae0d1d792d0dee71e181eb27624dbd82b7c95ab49474",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-value-object-vs-entity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1765ae80b21195c04410eb73ee4be0482276908da8b49a2ebf9bcc0b4b660053",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
