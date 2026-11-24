@@ -482,6 +482,78 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-arraylist-vs-linkedlist-access-pattern": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ce7805be36230deb7b68b1ffc254295ee52c69600bc3aa156fbc06d270963ef5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-self-invocation-bypasses-transactional-proxy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77382ff64e364072660c30176e5d1f0f19e03a9fe8a597f9b80e6a9e9e765c34",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-profile-specific-bean-missing-from-active-profile": {
+      "verdict": "APPROVED",
+      "digest": "sha256:520657ec4e82a49e2d5be3c3362bdef58d9fc48bebc1da9a69a935f8a34133c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-component-scan-bean-not-found": {
+      "verdict": "APPROVED",
+      "digest": "sha256:352a0029f1e7cfa1d9a012537664d748fd9631abc45d25df00629fec1be23428",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-property-source-precedence-env-vs-yaml": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b0d60c9a2239fbae6cf119d38c0c7fd7d1c662eca06adfe575df1b473404f220",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-transactional-propagation-required-vs-requires-new": {
+      "verdict": "APPROVED",
+      "digest": "sha256:78677db7e3ede6cac01e43f5ddfcbbf64473e0badc5685a9733a6d391cd432e1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }

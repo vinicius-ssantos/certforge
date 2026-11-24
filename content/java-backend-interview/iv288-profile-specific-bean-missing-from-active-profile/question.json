@@ -28,13 +28,17 @@
       "key": "D",
       "text": "The bean is automatically registered under the special `default` profile, since no profiles were configured at all.",
       "correct": false,
-      "explanation": "A bean only activates under `default` if it is itself annotated `@Profile(\"default\")`. `@Profile(\"prod\")` does not fall back to `default`; it is scoped strictly to the profile named `prod`."
+      "explanation": "When no explicit profile is active, Spring's fallback profile is `default`, but that does not rewrite this bean's positive `@Profile(\"prod\")` condition. Unprofiled components can register regardless of the active profiles, and expressions such as `@Profile(\"default\")` or `@Profile(\"!prod\")` may also match; this particular `prod`-restricted bean cannot register without `prod` being active."
     }
   ],
   "references": [
     {
       "title": "Spring Boot Reference — Profiles",
       "url": "https://docs.spring.io/spring-boot/reference/features/profiles.html"
+    },
+    {
+      "title": "Spring Framework 6.2 — @Profile Javadoc (default, negated and unprofiled beans)",
+      "url": "https://docs.spring.io/spring-framework/docs/6.2.x/javadoc-api/org/springframework/context/annotation/Profile.html"
     }
   ],
   "evidence": {

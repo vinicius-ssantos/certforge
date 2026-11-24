@@ -28,7 +28,7 @@
       "key": "D",
       "text": "Spring Boot only scans the packages explicitly listed in `application.properties` under a `spring.main.sources` property, and this project simply hasn't configured that property with the right package names.",
       "correct": false,
-      "explanation": "There is no such property governing component scan base packages; the scan base is determined by the location of the `@SpringBootApplication`-annotated class (or an explicit `@ComponentScan(basePackages = ...)`), not by an `application.properties` entry."
+      "explanation": "Spring Boot does support `spring.main.sources` as a way to add application sources, including configuration classes or package names that may be scanned; it is not a nonexistent property. But scanning is not restricted *only* to packages listed there: `@SpringBootApplication` already triggers default component scanning from its own package. Without an extra source or explicit scan base including the sibling `com.example.billing`, `InvoiceService` is outside that default scan."
     }
   ],
   "references": [
@@ -39,6 +39,14 @@
     {
       "title": "Spring Boot Reference Documentation — Structuring Your Code (locating the main application class as the root of the implicit scan)",
       "url": "https://docs.spring.io/spring-boot/reference/using/structuring-your-code.html"
+    },
+    {
+      "title": "Spring Boot Reference — Properties and Configuration (spring.main.sources adds sources)",
+      "url": "https://docs.spring.io/spring-boot/how-to/properties-and-configuration.html"
+    },
+    {
+      "title": "Spring Boot SpringApplication Javadoc — additional sources may be scanned packages",
+      "url": "https://docs.spring.io/spring-boot/api/java/org/springframework/boot/SpringApplication.html"
     }
   ],
   "evidence": {
