@@ -1,0 +1,7 @@
+## Individually verified decisions
+
+1. `iv151-dip-conceptual-di-vs-dip` — **C**: Dependency injection is a wiring mechanism; it does not enforce DIP's abstraction boundary. A Spring container may inject concrete classes. Distractors A/B/D each rely on a false equivalence or false restriction. Cross-check: Martin Fowler's original DI/IoC article and Spring Framework IoC container documentation.
+2. `iv286-check-then-act-race-concurrenthashmap` — **A**: Separate `containsKey` and `put` calls are not an atomic compound action; Java SE 21 `ConcurrentHashMap.computeIfAbsent` makes the invocation atomic for a key. Distractors falsely conflate atomicity across calls, `ConcurrentModificationException`, and thread safety of `containsKey`. Cross-check: Oracle Java SE 21 ConcurrentHashMap Javadoc.
+3. `iv288-conditionalonmissingbean-starter-override` — **B**: Spring Boot's documented auto-configuration ordering makes `@ConditionalOnMissingBean` back off after seeing the user bean. No package-priority or implicit `@Primary` semantics. Cross-check: official Spring Boot Creating Your Own Auto-configuration reference.
+
+The V2 digests were calculated from the exact fields and JSON serialization in `manifest-pack.mjs::reviewDigestV2`, and the computation was cross-checked against an existing approved question's digest. Each added entry identifies `ai-reviewer` (not a human); the pack remains DRAFT. No decisions are recorded for questions whose full Java snippets do not compile or whose text is still undergoing technical correction.
