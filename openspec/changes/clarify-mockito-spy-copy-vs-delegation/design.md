@@ -10,7 +10,7 @@ The corrected D key remains valid in its broader test-double terminology:
 - A **fake** offers a functional but simplified implementation.
 - A **spy** observes interactions and can retain real-method behavior; specifically a Mockito spy operates against its copied state.
 
-The wrong choices still falsely conflate terminology, deny fake behavior or pretend spies must have all methods stubbed. The overall explanation now differentiates classic spy vocabulary from Mockito's concrete implementation. The test-double description is backed by Martin Fowler's *Mocks Aren't Stubs* and pinned Mockito 5.24.0 API at `https://javadoc.io/static/org.mockito/mockito-core/5.24.0/org.mockito/org/mockito/Mockito.html`.
+The wrong option texts still falsely conflate terminology, deny fake behavior or pretend spies must have all methods stubbed. Their three wrong-option explanations are refined too: none may claim Mockito delegates calls to the original instance, or suggest that all stub behavior can never be asserted. The overall explanation differentiates classic spy vocabulary from Mockito's concrete implementation. The test-double description is backed by Martin Fowler's *Mocks Aren't Stubs* and pinned Mockito 5.24.0 API at `https://javadoc.io/static/org.mockito/mockito-core/5.24.0/org.mockito/org/mockito/Mockito.html`.
 
 ### Review isolation
 
