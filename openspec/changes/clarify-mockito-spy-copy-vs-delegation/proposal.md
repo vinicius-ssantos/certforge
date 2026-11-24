@@ -6,7 +6,7 @@ Individual interview question review for issue #392 identified an unreviewed tes
 
 - Correct option **D** (preserving the correct key) to identify spy as a test double that records calls while permitting real method behavior, without promising delegation to the original object.
 - Clarify option D's explanation and overall rationale with the concrete Mockito state-copy behavior and real methods acting on the spy.
-- Pin the Mockito source to versioned **5.24.0** Javadoc and retain the original Martin Fowler source; preserve wrong options A/B/C and their explanations.
+- Pin the Mockito source to versioned **5.24.0** Javadoc and retain the original Martin Fowler source; preserve wrong option texts A/B/C while correcting their potentially misleading rationales about test-double roles and spies.
 
 ## Scope and exclusions
 
