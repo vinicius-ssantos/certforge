@@ -3,7 +3,7 @@
   "topicId": "a3000000-0000-4000-8000-000000000107",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Requires knowing JUnit 5's default instance lifecycle precisely, not just that lifecycle annotations exist.",
-  "prompt": "A JUnit 5 test class declares a non-static instance field and does not use @TestInstance(Lifecycle.PER_CLASS). By default, what is true about that field's state across the class's @Test methods?",
+  "prompt": "A JUnit 5 test class declares a non-static instance field, does not use @TestInstance(Lifecycle.PER_CLASS), and has no global test-instance lifecycle override. By the standard JUnit Jupiter default, what is true about that field's state across the class's @Test methods?",
   "explanation": "JUnit 5's default lifecycle is PER_METHOD: a new instance of the test class is created for every @Test method. Instance fields therefore start fresh for each test and are never implicitly shared, which is also why @BeforeAll and @AfterAll must be static under the default lifecycle — they run once, before any instance exists for a specific test.",
   "options": [
     {
@@ -33,8 +33,8 @@
   ],
   "references": [
     {
-      "title": "JUnit 5 User Guide — Test Instance Lifecycle",
-      "url": "https://junit.org/junit5/docs/current/user-guide/#writing-tests-test-instance-lifecycle"
+      "title": "JUnit 5.14.3 User Guide — Test Instance Lifecycle",
+      "url": "https://docs.junit.org/5.14.3/writing-tests/test-instance-lifecycle.html"
     }
   ],
   "evidence": {
