@@ -554,6 +554,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-restcontroller-vs-controller-responsebody": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3ae603fc639f3cb9230598477b42481a17f926c163c8bb09edefe815105bc8fd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
