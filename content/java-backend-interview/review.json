@@ -386,6 +386,78 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-reentrantlock-vs-synchronized": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0a0ebbc8cf2a46b6b3add91cdbb139912c1da7c411f99cb151c5448c1ccbf6ae",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-synchronized-happens-before": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b140011be93ffa504c721686e3922d9ed8e991851e9a8b9f56bea516f99a0531",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-system-gc-no-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f7eb88a051625d1b20a2b4d41a25ced758e9e959cc1efc72e89e8f5ed8e4a710",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-stream-laziness-short-circuit-infinite": {
+      "verdict": "APPROVED",
+      "digest": "sha256:afcae4e1256c4f4befb935f21c84c669bc4ac02dbc1ea8e285d9f34e1591687d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-deadlock-inconsistent-lock-order": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9189454683cc0fd7c2242110c60a124ecd9715beb37fb39fa633a4d07475c4d9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-heap-priority-queue": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7005582a61dfef61fcc3a8011fbb2e09cc2718463579d537ac2028ae8780b584",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
