@@ -206,6 +206,42 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-hashmap-no-ordering-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4f713baa1633c0bf33e9c8ba53b90e8ce3b2253185de2dd638a385f3223b3b05",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv150-encapsulation-rationale": {
+      "verdict": "APPROVED",
+      "digest": "sha256:66047467e780a7db0664fa92cd098956008862ad13f0fcf27ab19f4477c1bda9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv150-interface-vs-abstract-class": {
+      "verdict": "APPROVED",
+      "digest": "sha256:112abd926d2ae6ef70fbebf8166ff15e646de34769dcdbaf7440ab34a5addc4e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-24",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
