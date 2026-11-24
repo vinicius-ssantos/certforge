@@ -10,4 +10,4 @@ The primary Jackson 2.13 `@JsonProperty` API explicitly allows use on object fie
 
 ### Review integrity
 
-No unrelated option, prompt, overall rationale or question is edited. Add the versioned Jackson reference so current source's future V2 SHA-256 review digest is re-computed after merge and a separate genuine source-backed review. No premature AI_APPROVED or false human approval. Issue #392 remains open with 40/208 on current main before the pending editorial PR #451. The pack remains DRAFT, no deploy.
+No unrelated option, prompt, overall rationale or question is edited. Add the versioned Jackson reference so current source's future V2 SHA-256 review digest is re-computed after merge and a separate genuine source-backed review. No premature AI_APPROVED or false human approval. Issue #392 remains open with 46/208 recorded reviews after merged PR #451; 162 are still awaiting source-bound review. The pack remains DRAFT, no deploy.
