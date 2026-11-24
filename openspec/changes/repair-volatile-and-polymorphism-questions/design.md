@@ -14,4 +14,4 @@ JUnit 5's normal PER_METHOD lifecycle constructs a new test instance for each te
 
 ### Editorial boundary
 
-Neither question receives a verdict or review digest in this correction PR. Compute exact V2 digests only after the corrected source is merged and separately checked; keep the interview pack in DRAFT.
+None of the three corrected questions receives a verdict or review digest in this correction PR. Compute exact V2 digests only after the corrected source is merged and separately checked; keep the interview pack in DRAFT.

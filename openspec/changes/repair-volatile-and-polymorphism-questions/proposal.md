@@ -11,4 +11,4 @@ During the source-by-source AI review for issue #392, three unreviewed Java inte
 
 ## Impact
 
-Two question files and OpenSpec records only. The pack remains DRAFT with no deployment, publishing or human-approval assertion.
+Three question files and OpenSpec records only. The pack remains DRAFT with no deployment, publishing or human-approval assertion.
