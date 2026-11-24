@@ -3,8 +3,8 @@
   "topicId": "a3000000-0000-4000-8000-000000000102",
   "difficulty": "HARD",
   "difficultyRationale": "Requires reasoning about reordering and partially-constructed objects, not just naming the pattern — the classic double-checked-locking bug that the JSR-133 expert group had to formally document.",
-  "prompt": "```java\nprivate static Helper helper; // NOT volatile\npublic static Helper getHelper() {\n    if (helper == null) {\n        synchronized (Helper.class) {\n            if (helper == null) {\n                helper = new Helper();\n            }\n        }\n    }\n    return helper;\n}\n```\nThe `helper` field above is a plain (non-volatile) reference. Under the Java Memory Model, what is the concrete risk with this double-checked locking pattern as written?",
-  "explanation": "The inner synchronized block only protects the write to `helper` and the check inside it; the first, outer check at `if (helper == null)` happens outside any lock. Without `volatile`, the write to `helper` inside the constructing thread can become visible to another thread before that other thread also sees the writes the `Helper` constructor performed — the JMM does not forbid this reordering for a plain field. A thread hitting the fast outer path can therefore read a non-null `helper` that points at a `Helper` object still mid-construction.",
+  "prompt": "Consider these Java class members, where `Helper` has an **ordinary non-final** instance field `int state` set to `42` in its constructor (and no other safe-publication mechanism is used):\n\n```java\nprivate static Helper helper; // NOT volatile\npublic static Helper getHelper() {\n    if (helper == null) {\n        synchronized (Helper.class) {\n            if (helper == null) {\n                helper = new Helper();\n            }\n        }\n    }\n    return helper;\n}\n```\n\nUnder the Java Memory Model, what specific risk does this double-checked locking pattern create for a different thread reading `helper` along the unsynchronized outer path?",
+  "explanation": "The inner synchronized block only orders access for threads that acquire that lock. A thread using the unsynchronized first check may see `helper != null` but still see stale/default values for non-final fields assigned by the Helper constructor, because there is no happens-before edge from construction to that reader. The corrected example specifies a non-final field to avoid conflating this failure with the special final-field semantics in JLS §17.5. Declaring the helper reference volatile (with Java 5+ memory semantics), synchronizing all reads, or using safe holder-based initialization fixes publication.",
   "options": [
     {
       "key": "A",
@@ -20,9 +20,9 @@
     },
     {
       "key": "C",
-      "text": "A thread reading `helper` outside the lock, in the outer check, may see a reference to a `Helper` object whose constructor has not finished running, because the write to `helper` can become visible before the writes performed inside the constructor.",
+      "text": "A thread on the outer unsynchronized path may see a non-null `helper` but still observe the ordinary non-final `Helper.state` as its default `0` instead of constructor-assigned `42`, because there is no happens-before edge safely publishing the constructor's field writes.",
       "correct": true,
-      "explanation": "Correct, and this is exactly what the JSR-133 expert group's declaration on double-checked locking documents: without `volatile` (or an equivalent happens-before edge), a thread that takes the fast outer path can observe a non-null, partially constructed `Helper`."
+      "explanation": "Correct: the outer read is not covered by the inner monitor, so a non-null reference can be visible without the constructor's writes to ordinary non-final fields being visible. Declaring helper volatile (or using another safe-publication mechanism) establishes the necessary ordering. The scenario expressly avoids the special final-field construction guarantee."
     },
     {
       "key": "D",
