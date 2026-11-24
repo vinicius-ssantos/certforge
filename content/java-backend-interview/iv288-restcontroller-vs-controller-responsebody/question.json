@@ -16,7 +16,7 @@
       "key": "B",
       "text": "`UserDto` must be missing a `@JsonProperty` annotation on one or more of its fields, which prevents Jackson's `ObjectMapper` from being able to serialize the object into JSON at all.",
       "correct": false,
-      "explanation": "`@JsonProperty` only customizes field names during JSON serialization and has no bearing on whether serialization happens at all; the actual issue is that the response-body mechanism (`@ResponseBody`) was never engaged for this handler method, so no message converter is ever invoked."
+      "explanation": "`@JsonProperty` can define Jackson logical properties on fields, methods, or constructor parameters and can influence JSON naming and access. But it does not determine whether Spring MVC treats a controller return value as an HTTP response body. This handler lacks `@ResponseBody`, so Spring performs view resolution rather than invoking an `HttpMessageConverter`; adding Jackson property annotations would not fix that routing."
     },
     {
       "key": "C",
@@ -35,6 +35,10 @@
     {
       "title": "Spring Framework Reference — Web MVC, Annotated Controllers: @ResponseBody",
       "url": "https://docs.spring.io/spring-framework/reference/web/webmvc/mvc-controller/ann-methods/responsebody.html"
+    },
+    {
+      "title": "Jackson 2.13 Annotation API — @JsonProperty (properties, accessors and constructor parameters)",
+      "url": "https://fasterxml.github.io/jackson-annotations/javadoc/2.13/com/fasterxml/jackson/annotation/JsonProperty.html"
     }
   ],
   "evidence": {
