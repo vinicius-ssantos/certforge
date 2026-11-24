@@ -113,3 +113,45 @@ explicit `ai-reviewer` attribution, without implying human sign-off.
 #### Scenario: Unreviewed content remains outside the fast lane
 - **WHEN** the 208-question pack has fewer than 208 current verified approvals
 - **THEN** the editorial status remains DRAFT and the unreviewed remainder is not represented as approved.
+
+### Requirement: Concurrent increment examples distinguish permitted races from guaranteed outcomes
+Interview questions about a volatile read-modify-write operation SHALL state that
+lost updates **can** occur, not that they **must** occur in every execution.
+They SHALL distinguish visibility from atomicity with a Java Memory Model reference.
+
+#### Scenario: Evaluate the volatile counter race
+- **WHEN** ten threads each execute 100 increments of a volatile int without compound synchronization
+- **THEN** the question allows a final count of 1000 or a smaller count
+- **AND** answer B explains non-atomic read-modify-write behavior.
+
+### Requirement: Console-output polymorphism examples compile on Java 21
+A Java interview question that asks for a program's printed output SHALL
+show an executable compilation unit and retain the unique correct answer.
+
+#### Scenario: Run the Animal and Dog override sample
+- **WHEN** a learner compiles PolymorphismDemo with Java 21
+- **THEN** it compiles and prints Woof
+- **AND** answer B identifies runtime virtual method dispatch.
+
+### Requirement: JUnit shared-instance questions declare their lifecycle
+When a test-isolation question assumes an instance field survives multiple
+JUnit 5 test methods, its scenario SHALL explicitly select PER_CLASS lifecycle
+and SHALL cite versioned official JUnit 5 references instead of a moving latest link.
+
+#### Scenario: Diagnose order-dependent test pollution
+- **WHEN** one JUnit test leaves mutable instance state visible to another
+- **THEN** the question specifies PER_CLASS and distinguishes it from the PER_METHOD default
+- **AND** answer C recommends fresh independent test state.
+
+### Requirement: Java concurrency and exception review decisions remain source bound
+A Java backend interview review batch SHALL record AI_APPROVED only for
+individually checked current sources, verified answer options and primary
+documentation. Review entries SHALL use the exact V2 digest with explicit
+ai-reviewer attribution, not imply owner review, and shall not publish the
+interview pack while questions remain unreviewed.
+
+#### Scenario: Six concurrency, OOP and testing review decisions
+- **WHEN** the individually reviewed questions `iv150-polymorphism-dynamic-dispatch`, `iv155-test-isolation-shared-fixtures`, `iv286-volatile-visibility-not-atomicity`, `iv286-try-with-resources-suppressed-exception`, `iv286-stream-single-use-pipeline`, and `iv286-checked-vs-unchecked-recoverability` receive verdicts
+- **THEN** their exact respective answer keys remain B, C, B, D, D, and C
+- **AND** each source V2 digest matches its recorded review
+- **AND** all unrelated reviews remain intact and editorialStatus stays DRAFT.
