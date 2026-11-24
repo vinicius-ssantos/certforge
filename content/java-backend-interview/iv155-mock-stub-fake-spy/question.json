@@ -10,19 +10,19 @@
       "key": "A",
       "text": "Mocks and stubs are the same construct, and the only meaningful distinction in test-double vocabulary is between fakes and spies.",
       "correct": false,
-      "explanation": "Mocks and stubs differ in what the test checks: a stub's return value is used by the code under test and never itself asserted on, while a mock's calls are the thing the test verifies — collapsing that distinction loses exactly the point of the vocabulary."
+      "explanation": "Stubs provide canned responses that influence the code under test; mocks let the test verify expected interactions. A testing framework can offer both mechanisms, but the two test-double roles are not synonymous."
     },
     {
       "key": "B",
       "text": "A fake is a mock with Mockito.verify() calls chained onto it, and a spy is a stub whose return values are loaded from an external fixture file, so neither a fake nor a spy ever runs any logic of its own beyond replaying pre-recorded data.",
       "correct": false,
-      "explanation": "Neither definition matches: a fake's defining trait is having real, working logic of its own (not verification chaining), and a spy's defining trait is wrapping a real object (not sourcing data from a fixture)."
+      "explanation": "A fake implements useful simplified behavior rather than chaining Mockito verification. A spy can observe interactions while retaining real-method behavior; with Mockito.spy(object), unstubbed methods run on the spy's own copied state, not by replaying fixture data."
     },
     {
       "key": "C",
       "text": "A spy never exhibits real behavior, since every one of its methods must be explicitly stubbed before use, the same as a strict mock.",
       "correct": false,
-      "explanation": "The opposite is true: a spy wraps a real instance and calls through to its genuine methods unless a specific call is explicitly stubbed, which is exactly what sets it apart from a mock built on an interface with no real implementation behind it."
+      "explanation": "A Mockito spy calls unstubbed real methods on the spy itself and allows selective stubbing, so treating it as a double with no real behavior is incorrect. Those calls are not forwarded to the original object passed to Mockito.spy."
     },
     {
       "key": "D",
