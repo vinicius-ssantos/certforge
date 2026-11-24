@@ -155,3 +155,52 @@ interview pack while questions remain unreviewed.
 - **THEN** their exact respective answer keys remain B, C, B, D, D, and C
 - **AND** each source V2 digest matches its recorded review
 - **AND** all unrelated reviews remain intact and editorialStatus stays DRAFT.
+
+### Requirement: Java concurrency and priority-queue reviews use exact verified sources
+A Java backend interview AI review verdict SHALL correspond to the question's
+current V2 digest and an independently verified correct answer, distractors,
+explanatory rationale and authoritative Java or JLS reference.
+The reviewer SHALL be disclosed as ai-reviewer, never as a fabricated human.
+No question SHALL be promoted to published while the pack is incomplete.
+
+#### Scenario: Six Java 21 concurrency and collections questions receive approved verdicts
+- **WHEN** the questions `iv286-reentrantlock-vs-synchronized`, `iv286-synchronized-happens-before`, `iv286-system-gc-no-guarantee`, `iv286-stream-laziness-short-circuit-infinite`, `iv286-deadlock-inconsistent-lock-order`, and `iv154-heap-priority-queue` are individually reviewed in that exact order
+- **THEN** their correct keys are respectively B, A, B, A, B and D
+- **AND** the heap wrong-option B rationale correctly distinguishes the heap's partially ordered backing array from O(log n) sorted head extraction
+- **AND** the six V2 digests match current source content, without changing the 32 existing entries
+- **AND** `editorialStatus` remains DRAFT; no deployment or human sign-off is implied.
+
+### Requirement: Mutable hash-map key scenarios specify the failure-producing hash change
+A Java interview question about mutated HashMap keys SHALL explicitly describe
+a mutation that changes the lookup's hash-derived bucket, or otherwise avoid
+claiming all mutations necessarily break retrieval. It SHALL cite first-party
+Java Map/HashMap/hashCode documentation and preserve its unique correct key.
+
+#### Scenario: Retrieve an entry after key mutation
+- **WHEN** a key already stored in a HashMap changes its computed hash to select a different bucket without a resize
+- **THEN** lookup with the same mutated key may fail while the entry remains stored
+- **AND** the question correctly retains answer C without implying every key mutation must fail.
+
+### Requirement: Broken double-checked locking examples identify ordinary non-final state
+A Java memory-model interview question about reading a partly visible Helper
+through unsynchronized double-checked locking SHALL identify the ordinary
+non-final field being initialized. It SHALL distinguish publication ordering
+from the special final-field guarantees in JLS §17.5.
+
+#### Scenario: Observe stale state through plain helper reference
+- **WHEN** Helper has a non-final field assigned in construction and the helper reference is not volatile
+- **THEN** a concurrent reader of the unsynchronized outer check may observe a non-null reference but a stale default field value
+- **AND** the answer remains C and no editorial verdict is automatically granted.
+
+### Requirement: Corrected HashMap and DCL questions receive only source-bound reviews
+A Java backend interview technical correction SHALL NOT inherit an earlier
+editorial approval; new V2 AI review verdicts SHALL be recorded only after
+individual review of the exact corrected question, answer alternatives,
+explanation and authoritative sources. Review entries SHALL have a current
+source-bound SHA-256 V2 digest and disclose ai-reviewer as the actual reviewer.
+
+#### Scenario: HashMap mutable-key and unsafe DCL questions pass individual review
+- **WHEN** the revised questions `iv286-mutable-key-breaks-hashmap-lookup` and `iv286-double-checked-locking-without-volatile` are independently reviewed against Oracle Java SE 21 and JSR-133
+- **THEN** their correct answers remain C and C, in that exact order
+- **AND** both review digests match their post-repair question sources
+- **AND** the earlier 38 review decisions remain unchanged and the pack stays DRAFT without publication.
