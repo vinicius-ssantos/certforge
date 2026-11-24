@@ -509,7 +509,7 @@
     },
     "iv288-profile-specific-bean-missing-from-active-profile": {
       "verdict": "APPROVED",
-      "digest": "sha256:8892932a6b9ca65615c40c09a4fb48a50297264380dbfe42967046be30d08505",
+      "digest": "sha256:520657ec4e82a49e2d5be3c3362bdef58d9fc48bebc1da9a69a935f8a34133c1",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-24",
       "checklist": [
@@ -521,7 +521,7 @@
     },
     "iv288-component-scan-bean-not-found": {
       "verdict": "APPROVED",
-      "digest": "sha256:18e13d3b9ea1f63926c060b3fb0730d66d63283649c63a0a2386461595e9829a",
+      "digest": "sha256:352a0029f1e7cfa1d9a012537664d748fd9631abc45d25df00629fec1be23428",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-24",
       "checklist": [
