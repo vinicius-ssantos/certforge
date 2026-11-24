@@ -204,3 +204,49 @@ source-bound SHA-256 V2 digest and disclose ai-reviewer as the actual reviewer.
 - **THEN** their correct answers remain C and C, in that exact order
 - **AND** both review digests match their post-repair question sources
 - **AND** the earlier 38 review decisions remain unchanged and the pack stays DRAFT without publication.
+
+### Requirement: Java Collections and Spring interview verdicts remain technically source-bound
+A Java backend interview AI reviewer SHALL validate the exact question prompt,
+all answer options and explanations against a primary Java or Spring reference
+before recording a V2 digest tied to the current source. An answer SHALL NOT
+be approved if a distractor explanation materially misstates the reference.
+Recorded decisions SHALL disclose ai-reviewer and keep the interview pack
+DRAFT until the remaining editorial queue is completed.
+
+#### Scenario: Six Java and Spring Boot source-backed reviews
+- **WHEN** the specific questions `iv286-arraylist-vs-linkedlist-access-pattern`, `iv288-self-invocation-bypasses-transactional-proxy`, `iv288-profile-specific-bean-missing-from-active-profile`, `iv288-component-scan-bean-not-found`, `iv288-property-source-precedence-env-vs-yaml`, and `iv288-transactional-propagation-required-vs-requires-new` are reviewed in that order
+- **THEN** their exact correct keys respectively remain B, B, B, B, C, B
+- **AND** the profile-option D explanation distinguishes unprofiled/negated conditions from the unmatched `prod` condition
+- **AND** the component-scan option D explanation correctly acknowledges additional `spring.main.sources` sources without denying the default `@SpringBootApplication` scan
+- **AND** every newly recorded V2 digest matches its corresponding current question source after those two P2 corrections
+- **AND** all prior 40 review decisions remain intact
+- **AND** `editorialStatus` is DRAFT, with no implied human acceptance or publishing.
+
+### Requirement: Spring MVC distractors distinguish Jackson metadata from response-body routing
+An interview question that diagnoses a controller's unresolved view SHALL
+distinguish the effect of Spring MVC `@ResponseBody` from Jackson
+`@JsonProperty` property metadata. Wrong-option explanations SHALL not
+falsely claim `@JsonProperty` only renames JSON fields; instead they SHALL
+accurately describe its property-discovery/access uses and explain why
+Jackson annotations do not enable HTTP response-body handling.
+
+#### Scenario: Explain an @Controller method returning a DTO
+- **WHEN** a `@Controller` handler without `@ResponseBody` returns a DTO and view resolution fails
+- **THEN** the correct solution remains to add `@ResponseBody` (answer A)
+- **AND** option B's rationale explains that `@JsonProperty` cannot select Spring MVC response-body handling
+- **AND** authoritative versioned Jackson and official Spring MVC references support the corrected claim
+- **AND** the repaired question remains unapproved until its new exact source digest receives separate review.
+
+### Requirement: Corrected Spring MVC response-body questions receive independent source-bound review
+A Spring MVC interview question corrected after an inaccurate Jackson annotation
+explanation SHALL receive a fresh technical review of the complete corrected
+source before recording an AI-approved V2 digest. A reviewer SHALL distinguish
+Spring MVC response-body routing from JSON property metadata and SHALL disclose
+ai-reviewer as the actual reviewer, not imply owner/human acceptance.
+
+#### Scenario: Review the corrected @Controller DTO question
+- **WHEN** `iv288-restcontroller-vs-controller-responsebody` is independently reviewed after its source correction is merged
+- **THEN** the uniquely correct key remains A: applying `@ResponseBody` writes the DTO via a message converter
+- **AND** wrong-option B accurately explains why `@JsonProperty` cannot enable Spring MVC response-body handling
+- **AND** the recorded V2 SHA-256 digest matches the complete current post-repair question source
+- **AND** all earlier 46 review decisions stay unchanged and the interview pack remains DRAFT without publication.
