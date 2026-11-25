@@ -3,7 +3,7 @@
 | Question | Answer | Exact merged source Git blob | First-party / author-origin basis |
 | --- | --- | --- | --- |
 | `iv286-completablefuture-async-thread` | **D** | `81a38e97a3073f4e9610b770b9808a2e0025937d` | Java SE 21 `CompletableFuture` official Javadoc: dependent actions of non-async methods may run in the completing thread **or another caller of a completion method**. `thenApplyAsync(fn, executorB)` schedules the dependent function using `executorB`, without promising a specific worker-thread identity. |
-| `iv155-mock-stub-fake-spy` | **D** | `e3a1a409936580999df0bea58f6f73b3071e6494` | Official Mockito **5.24.0** `Mockito.spy(Object)` Javadoc states it copies the provided object's state instead of delegating calls to the original. Martin Fowler's original *Mocks Aren't Stubs* distinguishes role-based stubs (predefined responses), mocks (interaction verification), fakes (functional simplified implementation), and spies (observation with real behavior). |
+| `iv155-mock-stub-fake-spy` | **D** | `e3a1a409936580999df0bea58f6f73b3071e6494` | Official Mockito **5.24.0** `Mockito.spy(Object)` Javadoc states it copies the provided object's state instead of delegating calls to the original. Martin Fowler's original *Mocks Aren't Stubs* describes the **classic test spy** as a recording stub, which does **not** inherently promise real-method default behavior. The concrete **Mockito.spy(Object)** API is a distinct, framework-specific spy with default real-method execution on its copied state, not forwarding to the original instance. This question's option D explicitly says `(as with Mockito.spy)` to scope that behavior rather than claiming all test spies behave alike. |
 
 ### Complete answer-option review
 
