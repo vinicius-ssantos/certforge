@@ -90,6 +90,19 @@ describe("Prompt", () => {
     expect(pre).toHaveTextContent("FROM ubuntu");
   });
 
+  it.each([
+    ["yaml", "kind: ConfigMap\nmetadata:\n  name: demo"],
+    ["hcl", 'resource "example" "demo" {\n  count = 1\n}'],
+  ])("renders %s code as escaped Prism tokens while preserving source text", (language, source) => {
+    const fenced = ["```" + language, source, "```"].join("\n");
+    const { container } = render(<Prompt text={fenced} />);
+    const pre = screen.getByLabelText("Code example");
+    expect(pre.querySelectorAll(".token").length).toBeGreaterThan(0);
+    expect(pre.textContent).toBe(source);
+    expect(pre.querySelectorAll("[style], script, style")).toHaveLength(0);
+    expect(container.querySelectorAll("script, style")).toHaveLength(0);
+  });
+
   it("falls back to plain, unhighlighted text for a language with no registered grammar", () => {
     render(<Prompt text={"```text\nplain output\n```"} />);
 

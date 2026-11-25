@@ -1,17 +1,17 @@
 import { useState, type ReactNode } from "react";
-import SyntaxHighlighter from "react-syntax-highlighter/dist/esm/prism-light";
-import dockerfile from "react-syntax-highlighter/dist/esm/languages/prism/docker";
-import hcl from "react-syntax-highlighter/dist/esm/languages/prism/hcl";
-import java from "react-syntax-highlighter/dist/esm/languages/prism/java";
-import yaml from "react-syntax-highlighter/dist/esm/languages/prism/yaml";
+import { refractor } from "refractor/core";
+import dockerfile from "refractor/docker";
+import hcl from "refractor/hcl";
+import java from "refractor/java";
+import yaml from "refractor/yaml";
 import { useLocale, useText } from "../i18n/useText";
 
-// Registered under the content tag content authors actually write (`dockerfile`), not Prism's
-// own module name (`docker`) for that grammar.
-SyntaxHighlighter.registerLanguage("java", java);
-SyntaxHighlighter.registerLanguage("yaml", yaml);
-SyntaxHighlighter.registerLanguage("dockerfile", dockerfile);
-SyntaxHighlighter.registerLanguage("hcl", hcl);
+// Docker's Prism grammar declares `dockerfile` as an alias; all four grammars are registered
+// explicitly, so no other Prism languages are shipped.
+refractor.register(java);
+refractor.register(yaml);
+refractor.register(dockerfile);
+refractor.register(hcl);
 
 const HIGHLIGHTED_LANGUAGES = new Set(["java", "yaml", "dockerfile", "hcl"]);
 
@@ -57,6 +57,30 @@ function CodePre({ children }: { children?: ReactNode }) {
   );
 }
 
+type Token = ReturnType<typeof refractor.highlight>["children"][number];
+
+function renderToken(token: Token, key: number): ReactNode {
+  if (token.type === "text") return token.value;
+  if (token.type !== "element") return null;
+  const classes = token.properties.className;
+  return (
+    <span key={key} className={Array.isArray(classes) ? classes.join(" ") : undefined}>
+      {token.children.map(renderToken)}
+    </span>
+  );
+}
+
+/** Render Prism's AST as escaped React text and spans, without any HTML injection. */
+function HighlightedCode({ value, language }: { value: string; language: string }) {
+  return (
+    <CodePre>
+      <code className={`language-${language}`}>
+        {refractor.highlight(value, language).children.map(renderToken)}
+      </code>
+    </CodePre>
+  );
+}
+
 /**
  * Question text as the learner reads it: prose in the reading face, code in a monospaced block.
  * Nothing else is interpreted, and the text is never inserted as HTML — the highlighter tokenizes
@@ -80,14 +104,7 @@ export function Prompt({ text }: { text: string }): ReactNode {
       {segments.map((segment, index) =>
         segment.kind === "code" ? (
           HIGHLIGHTED_LANGUAGES.has(segment.language) ? (
-            <SyntaxHighlighter
-              key={index}
-              language={segment.language}
-              useInlineStyles={false}
-              PreTag={CodePre}
-            >
-              {segment.value}
-            </SyntaxHighlighter>
+            <HighlightedCode key={index} value={segment.value} language={segment.language} />
           ) : (
             <CodePre key={index}>
               <code>{segment.value}</code>

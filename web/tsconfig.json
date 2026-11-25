@@ -17,8 +17,7 @@
     "types": [
       "vite/client",
       "vitest/globals",
-      "@testing-library/jest-dom/vitest",
-      "react-syntax-highlighter"
+      "@testing-library/jest-dom/vitest"
     ]
   },
   "include": ["src", "vite.config.ts"]
