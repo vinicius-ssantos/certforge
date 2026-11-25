@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.2</version>
+        <version>4.2.0</version>
         <relativePath/>
     </parent>
 
@@ -68,6 +68,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <!-- LabSpecRegistry and JobDescriptionTerms use Jackson 2's standalone ObjectMapper.
+             Springdoc 3.2.1 migrates to Jackson 3 and no longer supplies Jackson 2 transitively.
+             Keep the compile dependency explicit; Spring Boot manages its Jackson 2 BOM. -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
         <!-- Generates the OpenAPI contract the web frontend is typed from. Disabled at run time by
              default (springdoc.api-docs.enabled=false); the contract is produced by a test. -->
