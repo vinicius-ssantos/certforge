@@ -1,12 +1,12 @@
 ## ADDED Requirements
 
-### Requirement: Post-correction Java concurrency and Mockito reviews bind verdicts to exact merged sources
+### Requirement: CompletableFuture source repair receives an independent correct-version review
 
-A Java interview question whose answer/explanations required repair SHALL receive no editorial approval from the repair PR. An AI-reviewer approval SHALL independently check the exact merged question source, four alternatives, distractor explanations, rationale and authoritative reference, with current V2 SHA-256 digest and truthful `ai-reviewer` attribution. Incomplete interview packs SHALL remain DRAFT.
+An interview question with a corrected Java concurrency explanation SHALL receive a review verdict only after its exact merged source, all distractors and primary reference are rechecked. The review SHALL use a V2 source-bound digest and the actual `ai-reviewer` identity, and SHALL NOT approve a separate still-ambiguous question merely because that question received an earlier correction.
 
-#### Scenario: Independently review corrected CompletableFuture and Mockito questions
-- **WHEN** `iv286-completablefuture-async-thread` and `iv155-mock-stub-fake-spy` receive separate post-repair source-bound AI review verdicts
-- **THEN** both unique correct answer keys remain D and D, respectively
-- **AND** the two digests match the exact merged `question.json` sources after PRs #457 and #458
-- **AND** all 53 prior review entries remain unchanged, with `ai-reviewer` recorded for the two new decisions
-- **AND** issue #392 remains open and `editorialStatus` remains DRAFT, without deployment, publication or fabricated human sign-off.
+#### Scenario: Review repaired CompletableFuture without approving ambiguous Mockito spy
+- **WHEN** `iv286-completablefuture-async-thread` receives an independently verified AI verdict after PR #457
+- **THEN** its uniquely correct answer remains D and its V2 digest matches the exact corrected source
+- **AND** all 53 existing review entries remain unchanged and the new reviewer is `ai-reviewer`
+- **AND** `iv155-mock-stub-fake-spy` remains without a review verdict pending a new source correction
+- **AND** issue #392 remains open and the interview pack stays DRAFT, without human acceptance, deployment or publication.

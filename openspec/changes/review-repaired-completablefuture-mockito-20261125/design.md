@@ -1,22 +1,19 @@
-## Independent technical verification of post-correction sources
+## Independent post-repair CompletableFuture review
 
-| Question | Answer | Exact merged source Git blob | First-party / author-origin basis |
-| --- | --- | --- | --- |
-| `iv286-completablefuture-async-thread` | **D** | `81a38e97a3073f4e9610b770b9808a2e0025937d` | Java SE 21 `CompletableFuture` official Javadoc: dependent actions of non-async methods may run in the completing thread **or another caller of a completion method**. `thenApplyAsync(fn, executorB)` schedules the dependent function using `executorB`, without promising a specific worker-thread identity. |
-| `iv155-mock-stub-fake-spy` | **D** | `e3a1a409936580999df0bea58f6f73b3071e6494` | Official Mockito **5.24.0** `Mockito.spy(Object)` Javadoc states it copies the provided object's state instead of delegating calls to the original. Martin Fowler's original *Mocks Aren't Stubs* describes the **classic test spy** as a recording stub, which does **not** inherently promise real-method default behavior. The concrete **Mockito.spy(Object)** API is a distinct, framework-specific spy with default real-method execution on its copied state, not forwarding to the original instance. This question's option D explicitly says `(as with Mockito.spy)` to scope that behavior rather than claiming all test spies behave alike. |
+- Question: `iv286-completablefuture-async-thread`, unique correct answer **D**.
+- Exact corrected source on `main`: Git blob `81a38e97a3073f4e9610b770b9808a2e0025937d`, merged by source-only PR #457 at `defe04783c296a028135e2bce73baba73dfd3d9c`.
+- Primary reference: official Oracle Java SE 21 `CompletableFuture` Javadoc, https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html
+- Technical check: dependent non-async actions **may** be performed by the completing thread or another caller of a completion method; inline execution after completion is possible. `thenApplyAsync(fn, executorB)` uses the supplied executor, not a promised specific worker-thread ID.
+- Distractor **A** wrongly ignores the explicit executor; **B** wrongly guarantees original caller thread; **C** wrongly claims async executes synchronously outside the executor; **D** correctly contrasts the permitted non-async execution paths with supplied-executor execution. Full prompt, all four alternatives, individual explanations and overall rationale checked.
 
-### Complete answer-option review
+### Exact V2 evidence
 
-- **CompletableFuture**: A is wrong because an explicit executor changes async execution; B wrongly guarantees the original caller's thread; C reverses the meaning of `thenApplyAsync`. D is uniquely supported by Oracle's Javadoc and does not guarantee one non-async thread. Main rationale and all four option explanations were read after #457.
-- **Mockito**: A wrongly collapses mock and stub roles; B wrongly says fakes have no real logic and equates spy to fixture replay; C wrongly claims all spy methods require stubbing; D correctly distinguishes the test doubles while explicitly avoiding the false delegation-to-original claim. The full corrected explanation and A/B/C/D rationales were read after #458.
+The canonical `content/manifest-pack.mjs::reviewDigestV2` ordered JSON tuple was independently SHA-256-hashed with UTF-8 serialization after validating the `sha256("abc")` test vector and the previously approved `iv155-when-mocking-hurts` digest.
 
-### Exact V2 SHA-256 source digests
+`iv286-completablefuture-async-thread` → `sha256:d58aa0f4430128f4c26b1085acc85c90e8368f258a843d234d2f3f9f568066ad`.
 
-Use the canonical ordered review tuple in `content/manifest-pack.mjs::reviewDigestV2` with UTF-8 JSON serialization; check the standard `sha256("abc")` vector and an existing recorded `iv155-when-mocking-hurts` V2 digest before these independent calculations.
+All **53** previous V2 decisions are retained. No question text is modified by this review, and the interview pack remains DRAFT.
 
-| ID | Digest |
-| --- | --- |
-| `iv286-completablefuture-async-thread` | `sha256:d58aa0f4430128f4c26b1085acc85c90e8368f258a843d234d2f3f9f568066ad` |
-| `iv155-mock-stub-fake-spy` | `sha256:233078dfe71b8b3eaaa327fb71117046340d3eac5e7aecc48b4f15bccba4698b` |
+### Deliberate exclusion based on independent Codex P2
 
-Both question source Git blobs on `main` match their corrected PR branches; no review verdicts existed before this change. The 53 older review objects remain unmodified. This is AI-review fast lane under ADR 0026, not owner approval or WCAG acceptance.
+`iv155-mock-stub-fake-spy` is **not** approved. Although its copy-state behavior for `Mockito.spy(Object)` was corrected by #458, the learner-facing generic test-double question still describes real-method default as a general test spy property. Martin Fowler's *Mocks Aren't Stubs* (https://martinfowler.com/articles/mocksArentStubs.html) uses the classic Meszaros meaning: a **recording stub**. Mockito 5.24.0's concrete `spy(Object)` (https://javadoc.io/static/org.mockito/mockito-core/5.24.0/org.mockito/org/mockito/Mockito.html) can invoke unstubbed real methods on the spy's copied state, not forward to original. The phrase `(as with Mockito.spy)` in option D does not sufficiently scope its generic assertion. A separate source-only correction must clarify the prompt, option D and rationale before a fresh independent digest-bound review. This is the P2 finding raised on PR #471, not a human sign-off.

@@ -1,11 +1,11 @@
 ## Independent review gates
 
-- [x] Confirm correction PRs #457 and #458 are merged, each after eight successful CI/CodeQL checks and no unresolved blocking review findings.
-- [x] Re-read both corrected question source files from `main`, including prompt, all four options, every distractor explanation, full rationale and references.
-- [x] Verify non-async CompletableFuture execution policy and explicit async executor selection against Oracle Java SE 21 Javadoc; answer D.
-- [x] Verify Mockito spy copied-state/non-delegation semantics against Mockito 5.24.0 Javadoc and test-double roles against Martin Fowler; answer D.
-- [x] Verify both merged question Git blob SHAs match their technical correction branches.
-- [x] Independently compute both V2 digests, cross-check SHA-256 `abc` vector and an existing approved review digest.
-- [x] Record exactly two truthful `ai-reviewer` entries; preserve the 53 older entries and the DRAFT pack.
-- [ ] Verify strict OpenSpec, Java Maven, frontend, Playwright, image release E2E, secret scanner, CodeQL, and independent reviewer findings on the PR.
-- [ ] Squash-merge only after gates pass, update issue #392, then archive the completed OpenSpec separately.
+- [x] Confirm technical source correction #457 was independently merged after eight successful CI/CodeQL checks and no blocking findings.
+- [x] Re-read the post-merge exact `iv286-completablefuture-async-thread` question, all options, explanations and primary Oracle Java SE 21 reference.
+- [x] Confirm unique key D for permitted non-async completion-method caller threads versus explicit async executor selection.
+- [x] Independently compute the correct V2 SHA-256 digest, validating the `abc` vector and an existing approved V2 entry.
+- [x] Preserve all 53 existing reviews and add only the truthful CompletableFuture `ai-reviewer` verdict.
+- [x] Exclude `iv155-mock-stub-fake-spy` after Codex P2: generic classic recording test spy and Mockito real-method spy semantics still conflated; require separate source-only correction and later independent review.
+- [x] Preserve DRAFT pack, open #392, and separate human accessibility #428 gate.
+- [ ] Confirm strict OpenSpec, Maven, Web, Playwright, image E2E, secret scan and CodeQL gates and latest Codex/reviewer findings on this revised PR.
+- [ ] Squash-merge only after required green gates and resolved review comments; then update #392 and archive the completed OpenSpec separately.

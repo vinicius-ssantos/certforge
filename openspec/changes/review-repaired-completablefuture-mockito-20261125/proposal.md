@@ -1,13 +1,16 @@
 ## Why
 
-Issue #392 is an individual, primary-source-backed editorial review of all 208 Java backend interview questions. Before this change, 53 current V2 AI approvals existed, and 155 questions were pending. Two previously blocked questions were **corrected first, without review verdicts**, in separately merged PRs #457 (`CompletableFuture`) and #458 (`Mockito.spy`), after 8/8 checks and Codex review each. The exact corrected sources now require independent V2 decisions.
+Issue #392 requires source-bound review of the 208-question Java backend interview pack. Source correction PR #457 fixed the non-async CompletableFuture execution-thread overclaim without assigning a review. PR #458 similarly repaired Mockito spy copied-state semantics, **but the independent Codex review of this editorial PR identified a new P2**: its generic prompt conflates the Fowler/Meszaros recording-stub meaning of a test spy with Mockito's default real-method behavior. That second question must be corrected in a separate source PR before any approval.
 
 ## What Changes
 
-Record precisely two individually verified AI reviewer V2 decisions against the sources as merged on `main`:
-- `iv286-completablefuture-async-thread`: **D**; non-async `thenApply` actions may run on the completing thread or another caller of a completion method, whereas `thenApplyAsync(fn, executorB)` uses the explicit executor.
-- `iv155-mock-stub-fake-spy`: **D**; stub/mock/fake/spy test-double roles, and Mockito's normal `spy(Object)` copies state rather than forwarding calls to the original.
+Record exactly **one** individually checked AI reviewer V2 verdict against the **already merged** source of `iv286-completablefuture-async-thread`:
+- Answer **D**: non-async `thenApply` dependent actions can run on the completing thread or another caller of a completion method; `thenApplyAsync(fn, executorB)` uses its explicitly provided executor, without a particular worker-thread identity guarantee.
+- Current source digest `sha256:d58aa0f4430128f4c26b1085acc85c90e8368f258a843d234d2f3f9f568066ad`.
+- Review is attributed truthfully to `ai-reviewer`; all 53 preceding verdict objects are unchanged.
+
+**Explicit exclusion:** `iv155-mock-stub-fake-spy` receives NO verdict in this PR; fix its learner-facing generic spy-versus-Mockito ambiguity in a new correction-only PR before separate post-repair review.
 
 ## Boundaries
 
-Exactly two new entries in `content/java-backend-interview/review.json` plus this scoped OpenSpec. All **53** previous verdict entries are preserved and `reviewer: ai-reviewer` reflects the actual reviewer, not the owner. After integration **55/208** individually reviewed with **153 pending**; #392 stays OPEN and pack `editorialStatus: DRAFT`. No question.json edits, pack publication, deployment, UI changes, unrelated human accessibility acceptance (#428), or mass approval.
+One added V2 review entry plus this OpenSpec. If merged, **54/208** individually reviewed, **154 pending**; issue #392 remains OPEN and `editorialStatus` stays DRAFT. No `question.json`, `pack.json`, application, CI, deployment or publication edits. Issue #428 accessibility acceptance remains separately open and untouched.
