@@ -650,6 +650,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv155-mock-stub-fake-spy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7feccdd2c805c75cf5bbdfb31353cd3544b883e1b5760239f16a97f52077cf2d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-25",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
