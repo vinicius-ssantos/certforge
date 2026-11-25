@@ -250,3 +250,79 @@ ai-reviewer as the actual reviewer, not imply owner/human acceptance.
 - **AND** wrong-option B accurately explains why `@JsonProperty` cannot enable Spring MVC response-body handling
 - **AND** the recorded V2 SHA-256 digest matches the complete current post-repair question source
 - **AND** all earlier 46 review decisions stay unchanged and the interview pack remains DRAFT without publication.
+
+### Requirement: Testing and asynchronous interview reviews preserve primary-source semantics
+An AI reviewer approving Java interview questions about testing, concurrency,
+design principles, data structures or Spring scopes SHALL independently
+verify the current entire question, answer distractors and explanation
+against author-origin or first-party technical sources. Source-bound V2
+digests SHALL reflect exact current source text; uncorrected technical
+overclaims SHALL prevent review rather than receive blanket approval.
+
+#### Scenario: Six distinct Java and testing sources receive vetted decisions
+- **WHEN** the questions `iv154-stack-lifo-use-case`, `iv155-flaky-vs-deterministic`, `iv286-completablefuture-exception-propagation`, `iv152-similar-but-different-rules`, `iv288-request-scope-proxy-mode`, and `iv155-when-mocking-hurts` receive individually verified verdicts in that order
+- **THEN** their correct keys respectively remain D, B, C, B, A, D
+- **AND** the six current V2 SHA-256 digests match their source objects
+- **AND** all previous 47 reviews remain unchanged, and reviewer identity is disclosed as ai-reviewer
+- **AND** `iv286-completablefuture-async-thread` and `iv155-mock-stub-fake-spy` remain without verdicts until corrected
+- **AND** the pack remains DRAFT with issue #392 open, no publication, deploy or human sign-off.
+
+### Requirement: CompletableFuture continuation questions describe permitted executor behavior
+A Java 21 interview question contrasting `thenApply` with
+`thenApplyAsync(fn, executor)` SHALL not guarantee the thread identity for
+non-async completion actions. The explanation SHALL account for execution by
+the completing thread or another caller of a completion method, and SHALL
+distinguish this from executing a continuation via a supplied explicit Executor.
+
+#### Scenario: Compare a non-async and explicit-executor async continuation
+- **WHEN** a continuation is registered using `thenApply` on a stage from `supplyAsync`
+- **THEN** the non-async function is not guaranteed to run on only the source executor thread
+- **AND** `thenApplyAsync(fn, executorB)` uses the supplied executorB for the function
+- **AND** the correct key remains D, with no premature review verdict before correcting the source.
+
+### Requirement: Mockito spy interview explanations distinguish copied state and delegation
+A Java testing question referring to Mockito's `spy(Object)` SHALL NOT claim
+that calls on the spy delegate to the original supplied object. It SHALL
+distinguish real-method behavior performed on the spy's copied state from
+forwarding behavior, and keep the classic testing vocabulary clear across
+stubs, mocks, fakes, and spies.
+
+#### Scenario: Correct the test-double classification question
+- **WHEN** `iv155-mock-stub-fake-spy` is reviewed for Mockito-specific accuracy
+- **THEN** the answer D still identifies a stub's canned responses, a mock's interaction verification, a fake's working implementation, and a spy's real-method behavior
+- **AND** its rationale states Mockito spies copy passed instance state rather than forwarding unstubbed calls to that original
+- **AND** it cites pinned Mockito Javadoc and the original Martin Fowler test-double explanation
+- **AND** no new editorial verdict is granted until a separate review of the merged corrected source.
+
+### Requirement: CompletableFuture source repair receives an independent correct-version review
+
+An interview question with a corrected Java concurrency explanation SHALL receive a review verdict only after its exact merged source, all distractors and primary reference are rechecked. The review SHALL use a V2 source-bound digest and the actual `ai-reviewer` identity, and SHALL NOT approve a separate still-ambiguous question merely because that question received an earlier correction.
+
+#### Scenario: Review repaired CompletableFuture without approving ambiguous Mockito spy
+- **WHEN** `iv286-completablefuture-async-thread` receives an independently verified AI verdict after PR #457
+- **THEN** its uniquely correct answer remains D and its V2 digest matches the exact corrected source
+- **AND** all 53 existing review entries remain unchanged and the new reviewer is `ai-reviewer`
+- **AND** `iv155-mock-stub-fake-spy` remains without a review verdict pending a new source correction
+- **AND** issue #392 remains open and the interview pack stays DRAFT, without human acceptance, deployment or publication.
+
+### Requirement: Mockito-specific spy questions distinguish recording stubs from copied-state real-method spies
+
+When a Java testing question claims the real-method behavior of `Mockito.spy(Object)`, its learner-facing prompt SHALL **explicitly scope** the term to Mockito and distinguish the classic Meszaros/Fowler test-spy meaning (a recording stub). It SHALL NOT assert that all test spies delegate calls or invoke real methods by default. A corrected question SHALL remain unapproved until the exact merged source receives a separate verified V2 AI-reviewer verdict.
+
+#### Scenario: Interpret a Mockito spy and classic test spy correctly
+- **WHEN** a learner evaluates `iv155-mock-stub-fake-spy`
+- **THEN** the prompt specifies `Mockito.spy(existingObject)` rather than an undefined generic spy
+- **AND** option D preserves its unique correct key while stating that Mockito copies state and calls unstubbed real methods on the spy, not by delegation to the original
+- **AND** the rationale distinguishes the classic recording-stub test spy from Mockito's concrete implementation using primary and author-origin sources
+- **AND** no new review verdict, human approval or publication occurs in the source correction PR.
+
+### Requirement: Corrected Mockito-specific test spy sources receive independent review
+
+A Java interview question comparing mock, stub, fake and spy SHALL clarify whether it refers to the Meszaros/Fowler recording-stub test spy or to Mockito.spy(Object) with copied-state real-method behavior. An `AI_APPROVED` verdict SHALL occur only after a separate, independent review of the **exact merged corrected question source**, including all options, explanatory rationale and authoritative references, with current V2 SHA-256 digest and truthful ai-reviewer attribution.
+
+#### Scenario: Review the fixed Mockito.spy question after its source correction
+- **WHEN** `iv155-mock-stub-fake-spy` receives an independently verified AI review after PR #472
+- **THEN** unique answer D explicitly refers to `Mockito.spy(existingObject)` rather than generalizing all test spies
+- **AND** the review digest matches the current post-repair source, with `ai-reviewer` named as the actual reviewer
+- **AND** all prior 54 decisions remain unchanged
+- **AND** issue #392 remains open and the pack stays DRAFT, with no human-signoff, publication or deployment.

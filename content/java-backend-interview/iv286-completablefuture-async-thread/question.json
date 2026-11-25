@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Distinguishes the non-async and *Async variants of CompletableFuture's composition methods, which is easy to get wrong when reading real production code.",
   "prompt": "Given `CompletableFuture.supplyAsync(this::fetch, executorA).thenApply(this::parse)` versus the same call with `.thenApplyAsync(this::parse, executorB)` instead of `thenApply` — what is the concrete difference in where `parse` runs?",
-  "explanation": "The plain `thenApply` is not asynchronous on its own: it runs its function on whatever thread completed the stage it is attached to, which in practice is often a worker from the upstream executor (`executorA`), or the calling thread itself if the upstream stage had already completed by the time `thenApply` was registered. The `*Async` variant with an explicit executor argument, `thenApplyAsync(fn, executorB)`, instead always submits the function as a new task to run on `executorB`, regardless of which thread completed the previous stage.",
+  "explanation": "`thenApply` is a non-async dependent stage and does not prescribe which executor handles its function. According to the Java SE 21 CompletableFuture policy, it may run in the thread completing the previous stage or another caller of a completion method; if the source is already complete, the thread registering the continuation can run it inline. `thenApplyAsync(fn, executorB)` arranges the work on the provided executorB, rather than guaranteeing an exact thread identity. Neither variant implies that `thenApply` must run on the original caller or the source's executor.",
   "options": [
     {
       "key": "A",
@@ -16,7 +16,7 @@
       "key": "B",
       "text": "`thenApply` always runs on the thread that originally called `supplyAsync`, never on a thread from `executorA`.",
       "correct": false,
-      "explanation": "`thenApply` runs on whichever thread completes the stage it's chained to — if that stage completes asynchronously on an `executorA` worker thread, `thenApply`'s function runs there, not on the original calling thread."
+      "explanation": "The non-async variant does not guarantee the original caller's thread: it may execute on the completing worker, another caller of a completion method, or inline on the registration thread if the source is already complete. In contrast, the explicit async overload schedules its dependent function via the supplied executorB."
     },
     {
       "key": "C",
@@ -26,9 +26,9 @@
     },
     {
       "key": "D",
-      "text": "Plain `thenApply` runs `parse` on whichever thread completed the previous stage (often a thread from `executorA`, or the calling thread if already complete); `thenApplyAsync(fn, executorB)` instead submits `parse` to run on `executorB`.",
+      "text": "Plain `thenApply` selects no executor: `parse` may execute on a thread completing the previous stage, on another caller of a completion method, or directly on the registration thread if the stage is already complete. `thenApplyAsync(fn, executorB)` instead schedules `parse` using `executorB`.",
       "correct": true,
-      "explanation": "Correct: this is exactly the distinction `CompletableFuture`'s API documents between its non-async and `*Async` method variants — the `*Async` suffix with an explicit `Executor` argument guarantees which executor runs the function, while the plain variant does not control it."
+      "explanation": "Correct. The Java SE 21 CompletableFuture Javadoc allows non-async dependent actions to run on the thread completing the future or on another caller of a completion method; registering a continuation after completion can also cause inline execution on the registering thread. With `thenApplyAsync(fn, executorB)`, the function is arranged to execute using the specified executor, without guaranteeing a particular worker-thread identity."
     }
   ],
   "references": [

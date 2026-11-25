@@ -638,6 +638,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-completablefuture-async-thread": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d58aa0f4430128f4c26b1085acc85c90e8368f258a843d234d2f3f9f568066ad",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-25",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-mock-stub-fake-spy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7feccdd2c805c75cf5bbdfb31353cd3544b883e1b5760239f16a97f52077cf2d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-25",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
