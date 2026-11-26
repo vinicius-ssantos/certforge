@@ -710,6 +710,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv150-inheritance-fragile-base": {
+      "verdict": "APPROVED",
+      "digest": "sha256:117bf58b151d0e4035bb1fd04b48cc117d3d6bb7e63b9b30551b9d517cd75d5c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
