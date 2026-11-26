@@ -770,6 +770,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-springboottest-vs-webmvctest-slice": {
+      "verdict": "APPROVED",
+      "digest": "sha256:29b60b599783dbce3484cd728187fa676a05bf9e03b045f060052066ed6425c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
