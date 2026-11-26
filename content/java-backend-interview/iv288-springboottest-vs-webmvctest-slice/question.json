@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Checks whether the candidate can match a test's actual scope to the right annotation, rather than defaulting to the heaviest option out of habit.",
   "prompt": "A test for a single `@RestController` needs to verify request validation and the shape of the JSON response, without touching a real database and without starting the full application context. Which annotation fits this best, and why?",
-  "explanation": "`@WebMvcTest(MyController.class)` loads only the web layer: the targeted controller, its `@ControllerAdvice`s, Jackson's message-converter configuration, and `MockMvc`, while repository and service beans are provided as mocks rather than real implementations. That matches exactly what the test needs — request/response behavior, not persistence — and starts far less of the context than a full `@SpringBootTest`.",
+  "explanation": "`@WebMvcTest(MyController.class)` is a focused Spring MVC test slice, loading the chosen controller and relevant MVC infrastructure such as `MockMvc`, message conversion and applicable `@ControllerAdvice`, instead of the entire application context. Ordinary application `@Service` and `@Repository` beans are not automatically created in this slice, nor are mocks magically supplied: any required controller service dependencies must be provided explicitly, commonly with `@MockitoBean` in modern Spring Framework / Spring Boot versions. Because the test isolates the web layer and provides collaborators as test doubles, it need not connect to a real database. `@SpringBootTest` starts a broader application context and `@DataJpaTest` targets the persistence slice, so neither is the narrowest fit.",
   "options": [
     {
       "key": "A",
@@ -26,15 +26,19 @@
     },
     {
       "key": "D",
-      "text": "`@WebMvcTest(MyController.class)`, because it loads only the web layer — the controller, its `@ControllerAdvice`s, and `MockMvc` — with service and repository beans mocked in rather than real, so no database is involved.",
+      "text": "`@WebMvcTest(MyController.class)`, because it creates a focused Spring MVC test slice with `MockMvc`, while required service collaborators can be explicitly provided as `@MockitoBean` mocks instead of loading their real implementations or persistence infrastructure.",
       "correct": true,
-      "explanation": "Correct. This is the documented purpose of the `@WebMvcTest` slice: a narrow, fast test of the web layer in isolation from persistence."
+      "explanation": "Correct: `@WebMvcTest` loads selected MVC components and auto-configures `MockMvc`; it does not automatically create mocks for arbitrary `@Service` dependencies. Supply required collaborators explicitly, for example using `@MockitoBean`."
     }
   ],
   "references": [
     {
-      "title": "Spring Boot Reference — Testing Spring Boot Applications (auto-configured tests)",
+      "title": "Spring Boot Reference — Testing Spring Boot Applications (Spring MVC slice and @MockitoBean)",
       "url": "https://docs.spring.io/spring-boot/reference/testing/spring-boot-applications.html"
+    },
+    {
+      "title": "Spring Framework Reference — @MockitoBean and @MockitoSpyBean",
+      "url": "https://docs.spring.io/spring-framework/reference/testing/annotations/integration-spring/annotation-mockitobean.html"
     }
   ],
   "evidence": {
