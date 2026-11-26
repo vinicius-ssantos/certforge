@@ -722,6 +722,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-rollback-only-on-unchecked-exception-by-default": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0f75c0bf11cb000e247a460ac35c9418bf705176f389e98ff412697f41f75caa",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
