@@ -33,12 +33,8 @@
   ],
   "references": [
     {
-      "title": "Adjacency list - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Adjacency_list"
-    },
-    {
-      "title": "Adjacency matrix - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Adjacency_matrix"
+      "title": "Cornell CS 2110 — Graph Representations (adjacency matrices and lists)",
+      "url": "https://www.cs.cornell.edu/courses/cs2110/2026fa/lectures/lec21/"
     }
   ],
   "evidence": {
