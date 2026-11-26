@@ -33,12 +33,8 @@
   ],
   "references": [
     {
-      "title": "Cache replacement policies - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Cache_replacement_policies"
-    },
-    {
-      "title": "Doubly linked list - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Doubly_linked_list"
+      "title": "Oracle Java SE 21 — LinkedHashMap (hash table, doubly linked list, access-order LRU cache)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/LinkedHashMap.html"
     }
   ],
   "evidence": {
