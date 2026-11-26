@@ -782,6 +782,54 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv154-average-vs-worst-case-hashmap": {
+      "verdict": "APPROVED",
+      "digest": "sha256:624cbf8107621ffb8896445313f332a4f00c0ae8281e1200061cdb93a9b4d521",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-balanced-bst-why-balance-matters": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d1f7203fcedbd30c9eb30ea21ef8236e8e6dd050a1c8bdaea82df3094fac9fdf",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-choose-structure-lru-cache": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fedb5e5ca4f590daa9ee79a3f28834989c041e7f96a7705c68afc12f16ab639a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-set-vs-list-membership": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8d94547e523244452d2e9da66be320459753a3e656c4102276ed7052cf43ed92",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
