@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Checks whether the candidate reaches for the real fix (breaking the cycle) rather than papering over it with @Lazy as a first instinct.",
   "prompt": "`OrderService` takes a `PaymentService` in its constructor, and `PaymentService` takes an `OrderService` in its constructor. The application fails to start with a circular-dependency error. A teammate suggests adding `@Lazy` to one of the constructor parameters to make it start. What is the most accurate thing to tell them about that fix?",
-  "explanation": "`@Lazy` on one side of the cycle makes Spring inject a lazy-initialization proxy instead of resolving the real bean immediately, which does make the context start — but it does not remove the underlying design problem: the two services still depend on each other, meaning neither can be understood, tested, or reasoned about independently, and the cycle can still produce confusing runtime behavior (e.g. infinite recursion if a call chain crosses the boundary twice before anything terminates). The more durable fix is to break the cycle structurally — typically by extracting the shared responsibility both services need into a third component or domain object that both depend on, so the dependency graph becomes a tree again.",
+  "explanation": "`@Lazy` on one side of the cycle makes Spring inject a lazy-initialization proxy instead of resolving the real bean immediately, which does make the context start — but it does not remove the underlying design problem: the two services still depend on each other, meaning neither can be understood, tested, or reasoned about independently, and the cycle can still produce confusing runtime behavior (e.g. infinite recursion if a call chain crosses the boundary twice before anything terminates). The more durable fix is to break the cycle structurally — typically by extracting the shared responsibility both services need into a third component or domain object that both depend on, so the dependency graph becomes acyclic.",
   "options": [
     {
       "key": "A",
@@ -35,6 +35,10 @@
     {
       "title": "Spring Framework Reference — Dependency Injection: Circular Dependencies",
       "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+    },
+    {
+      "title": "Spring Framework API — @Lazy injection point and lazy-resolution proxy",
+      "url": "https://docs.spring.io/spring-framework/docs/6.2.7/javadoc-api/org/springframework/context/annotation/Lazy.html"
     }
   ],
   "evidence": {
