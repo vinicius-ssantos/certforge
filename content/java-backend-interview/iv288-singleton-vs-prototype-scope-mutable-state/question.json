@@ -3,8 +3,8 @@
   "topicId": "a3000000-0000-4000-8000-000000000105",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Tests whether the candidate understands that bean scope, not just class design, decides whether mutable instance state is safe to use.",
-  "prompt": "A bean is defined with the default scope and has a mutable, non-thread-safe instance field that accumulates per-request data (e.g. `private final List<String> items = new ArrayList<>();`, appended to on every call). Under load from many concurrent requests, this causes data from one request to leak into another's results. What is the most direct fix that addresses the actual cause?",
-  "explanation": "The default Spring bean scope is `singleton`: exactly one instance is created per Spring container and shared by every caller, including concurrent HTTP request threads. A mutable instance field on a singleton is therefore shared, unsynchronized, mutable state across threads — exactly the bug described. Declaring the bean `@Scope(\"prototype\")` (or restructuring it to hold no mutable per-call state) gives each injection point, or in practice each use, its own instance, so per-request data no longer crosses threads. Synchronizing access to the shared list would fix the race but not the leakage of one request's data into another's result, since the list itself is still shared.",
+  "prompt": "A bean is defined with the default scope and has a mutable, non-thread-safe instance field that accumulates per-request data (e.g. `private final List<String> items = new ArrayList<>();`, appended to on every call). Under load from many concurrent requests, this causes data from one request to leak into another's results. What is the most direct fix that addresses the actual cause without assuming a new Spring bean is created for every HTTP request?",
+  "explanation": "Spring's default singleton scope shares one bean instance per application context, so a mutable list stored as a singleton field is shared across requests. The simplest fix is to keep the per-call accumulator in a method-local variable or parameter. When per-request bean state is genuinely needed, use an appropriate web request scope. Prototype scope creates a new instance on each container lookup/injection, **not** automatically per HTTP request; if a prototype is injected into a singleton just once, that same injected instance remains in the singleton. To obtain multiple prototypes dynamically, explicitly look them up (for example with ObjectProvider) or use an appropriate method-injection mechanism. Synchronization or a concurrent list can address data races but does not isolate each request's results.",
   "options": [
     {
       "key": "A",
@@ -20,9 +20,9 @@
     },
     {
       "key": "C",
-      "text": "Give the bean prototype scope (or otherwise stop holding per-call state on a singleton instance), so each use gets its own instance of the mutable state.",
+      "text": "Remove the per-request accumulator from the shared singleton field and make it a method-local value (or use properly isolated request-scoped state); only use prototype scope if a fresh instance is explicitly obtained per use.",
       "correct": true,
-      "explanation": "Correct. The root cause is scope: a singleton bean is shared, so instance fields on it are effectively global mutable state. Prototype scope (a new instance per request for the bean) — or, more commonly in practice, moving the per-call accumulator into a local variable or method parameter instead of an instance field — removes the sharing instead of just guarding access to it."
+      "explanation": "Correct: local or genuinely request-scoped state prevents different requests from sharing one mutable list. Prototype means a new bean upon lookup/injection, not automatically one bean per HTTP request; injecting a prototype directly into a singleton once does not refresh it on each call."
     },
     {
       "key": "D",
@@ -33,7 +33,7 @@
   ],
   "references": [
     {
-      "title": "Spring Framework Reference — Bean Scopes (singleton is the default; prototype creates a new instance per request for the bean)",
+      "title": "Spring Framework Reference — Bean Scopes (singleton, prototype, request and scoped dependencies)",
       "url": "https://docs.spring.io/spring-framework/reference/core/beans/factory-scopes.html"
     }
   ],
