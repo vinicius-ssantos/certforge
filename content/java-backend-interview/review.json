@@ -734,6 +734,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv150-aggregation-vs-composition": {
+      "verdict": "APPROVED",
+      "digest": "sha256:06e995be2bde33dea0f2bd06659e5d29d0411b7e9193959feb9849a9cdd07b50",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-singleton-vs-prototype-scope-mutable-state": {
+      "verdict": "APPROVED",
+      "digest": "sha256:28b1111e0546652bebc0b64d2908a932f1e23c6850a86333b3c59af767e56660",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
