@@ -830,6 +830,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv154-graph-representation-tradeoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8ab9ed5ab3de4f81af343d2606b632545143326a2e5402286c8d2c66d667a699",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv154-big-o-meaning": {
+      "verdict": "APPROVED",
+      "digest": "sha256:64fcadc3a055fd40cb41a11df8d9574e95c1d17484d88ff87664e2e734c86db7",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
