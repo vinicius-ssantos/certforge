@@ -33,8 +33,12 @@
   ],
   "references": [
     {
-      "title": "Big O notation - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Big_O_notation"
+      "title": "Princeton Algorithms, 4th ed. — Algorithms and Data Structures Cheatsheet (Big Oh)",
+      "url": "https://algs4.cs.princeton.edu/cheatsheet/"
+    },
+    {
+      "title": "Princeton Algorithms, 4th ed. — Analysis of Algorithms",
+      "url": "https://algs4.cs.princeton.edu/14analysis/"
     }
   ],
   "evidence": {
