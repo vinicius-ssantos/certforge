@@ -33,8 +33,12 @@
   ],
   "references": [
     {
-      "title": "Domain-driven design — Working with models (Wikipedia)",
-      "url": "https://en.wikipedia.org/wiki/Domain-driven_design"
+      "title": "Martin Fowler — Evans Classification (Domain Service)",
+      "url": "https://martinfowler.com/bliki/EvansClassification.html"
+    },
+    {
+      "title": "InfoQ — Domain Driven Design Quickly (domain services and cross-entity operations)",
+      "url": "https://www.infoq.com/minibooks/domain-driven-design-quickly/"
     }
   ],
   "evidence": {
