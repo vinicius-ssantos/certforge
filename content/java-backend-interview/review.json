@@ -758,6 +758,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-controlleradvice-handler-precedence": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ac144e674cb9b952792e2b3bfcd791e721fd6028942e7321e96ead62e4fe25d8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
