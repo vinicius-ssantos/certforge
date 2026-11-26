@@ -33,12 +33,12 @@
   ],
   "references": [
     {
-      "title": "Hash table - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Hash_table"
+      "title": "Princeton Algorithms, 4th ed. — Hash Tables",
+      "url": "https://algs4.cs.princeton.edu/34hash/"
     },
     {
-      "title": "Set (abstract data type) - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Set_(abstract_data_type)"
+      "title": "Princeton Algorithms, 4th ed. — Searching (sequential search vs hashing)",
+      "url": "https://algs4.cs.princeton.edu/30searching/"
     }
   ],
   "evidence": {

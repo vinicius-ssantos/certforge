@@ -33,12 +33,12 @@
   ],
   "references": [
     {
-      "title": "Hash table - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Hash_table"
+      "title": "Princeton Algorithms, 4th ed. — Hash Tables and collision costs",
+      "url": "https://algs4.cs.princeton.edu/34hash/"
     },
     {
-      "title": "Self-balancing binary search tree - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Self-balancing_binary_search_tree"
+      "title": "Princeton Algorithms, 4th ed. — Balanced Search Trees",
+      "url": "https://algs4.cs.princeton.edu/33balanced/"
     }
   ],
   "evidence": {
