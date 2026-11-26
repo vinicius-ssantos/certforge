@@ -674,6 +674,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-jvm-heap-stack-method-area": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0f4da47417d179cd1aa25deb3a26acfeeb56c4ce6b0ae7cc6a312da76e495b8c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
