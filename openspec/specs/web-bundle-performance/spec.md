@@ -1,4 +1,10 @@
-## ADDED Requirements
+# web-bundle-performance Specification
+
+## Purpose
+
+Keep question code examples securely highlighted and accessible while enforcing stable, exact-byte frontend JavaScript bundle limits across dependency upgrades.
+
+## Requirements
 
 ### Requirement: Fenced code highlighting preserves safe and accessible Prism rendering
 
@@ -22,6 +28,6 @@ Every frontend dependency or code change MUST respect **155 KiB initial JS** and
 
 #### Scenario: React Router and React Query updates follow a validated bundle optimization
 
-- **WHEN** React Router 8.5.2 and React Query 5.108.2 are built together with the reduced renderer
+- **WHEN** React Router 8.5.2 and React Query 5.108.4 are built together with the reduced renderer
 - **THEN** total JavaScript gzip is below 217,088 exact bytes with documented headroom
 - **AND** each dependency PR still requires its own fresh CI, Codex and E2E checks before integration.
