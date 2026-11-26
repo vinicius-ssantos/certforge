@@ -33,12 +33,8 @@
   ],
   "references": [
     {
-      "title": "Linked list - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Linked_list"
-    },
-    {
-      "title": "Dynamic array - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Dynamic_array"
+      "title": "University of Toronto CSC148 Course Notes — Linked Lists and Running Time",
+      "url": "https://www.teach.cs.toronto.edu/~csc148h/notes/linked-lists/linked_list_efficiency.html"
     }
   ],
   "evidence": {
