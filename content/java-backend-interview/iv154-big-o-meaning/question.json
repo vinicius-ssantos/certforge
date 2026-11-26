@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Targets a frequent interview misconception about Big-O describing absolute runtime rather than asymptotic growth, which requires conceptual rather than factual recall.",
   "prompt": "An engineer says: 'This algorithm is O(n log n), so for n = 1,000,000 it will always run faster in actual wall-clock time than an O(n^2) algorithm on the same input.' What is the most accurate assessment of this reasoning?",
-  "explanation": "Big-O describes how an algorithm's cost grows as n approaches infinity, abstracting away constant factors and hardware; it does not predict actual wall-clock time for any specific, finite n. A well-optimized O(n^2) algorithm with a very small constant factor (or favorable data patterns) can still run faster than an O(n log n) algorithm with a large constant factor for some finite inputs, even fairly large ones.",
+  "explanation": "Big-O notation states an asymptotic upper bound on cost, ignoring constant factors and lower-order terms; it does not predict wall-clock time for a particular finite input such as n = 1,000,000. A well-optimized algorithm whose cost is bounded by O(n²) can be faster for a finite input than one bounded by O(n log n), depending on constants and workloads. Also, a Big-O bound is not automatically tight: merely knowing these two upper bounds cannot establish which algorithm will eventually run faster for all sufficiently large n. A stronger asymptotic comparison would require additional assumptions or tight growth bounds such as Θ.",
   "options": [
     {
       "key": "A",
@@ -20,9 +20,9 @@
     },
     {
       "key": "C",
-      "text": "The reasoning is flawed: Big-O describes asymptotic growth, not wall-clock time for a specific n, so a well-optimized O(n^2) algorithm with a small constant factor can still beat an O(n log n) one on some finite inputs.",
+      "text": "The reasoning is flawed: Big-O is an asymptotic upper bound, not a fixed-size wall-clock guarantee, so even an algorithm with a quadratic growth bound can outperform an O(n log n) algorithm on some finite inputs.",
       "correct": true,
-      "explanation": "Correct: Big-O notation discards constant factors and lower-order terms, so it cannot by itself predict which of two algorithms runs faster on a particular finite input size — only which one eventually wins as n grows large enough."
+      "explanation": "Correct: asymptotic upper bounds alone do not determine running times at a particular input size; constant factors, data patterns and hardware matter, and a Big-O bound need not be tight."
     },
     {
       "key": "D",

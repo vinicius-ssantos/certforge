@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Requires reasoning about space scaling with graph density to choose between two basic graph representations, a common backend data-modeling decision.",
   "prompt": "A backend system models a social graph where each of tens of millions of users is connected, on average, to only a few hundred other users. For storing these connections, what is the main reason an adjacency list is preferred over an adjacency matrix in this scenario?",
-  "explanation": "An adjacency list stores space proportional to the number of edges actually present, which fits a sparse graph where each user has only a few hundred connections out of tens of millions of possible ones. An adjacency matrix allocates space proportional to the square of the number of vertices, regardless of how many edges actually exist, which would be enormously wasteful here.",
+  "explanation": "An adjacency list allocates storage for the vertices plus their actual edges, using O(V + E) space (or O(V + 2E) entries for an undirected graph, which is still O(V + E)). An adjacency matrix requires O(V²) cells regardless of the number of edges. With tens of millions of users but only hundreds of connections per user, E is much smaller than V², so the matrix would be vastly less space-efficient. Adjacency matrices still support O(1) edge-existence checks; the benefit here is memory footprint.",
   "options": [
     {
       "key": "A",
@@ -14,9 +14,9 @@
     },
     {
       "key": "B",
-      "text": "An adjacency list uses space proportional to the number of edges, while an adjacency matrix uses space proportional to the square of the number of vertices, which is wasteful for a sparse graph like this one.",
+      "text": "An adjacency list uses O(V + E) space for vertex lists and stored edges, while an adjacency matrix uses O(V²) space regardless of the edge count, making the matrix wasteful for this sparse graph.",
       "correct": true,
-      "explanation": "Correct: with tens of millions of vertices but only a few hundred edges per vertex, the graph is sparse, and a matrix's quadratic space cost would be vastly larger than the list's edge-proportional cost."
+      "explanation": "Correct: adjacency lists require O(V + E) space to represent all vertices and their actual edges, whereas a V-by-V adjacency matrix requires O(V²) space. When each of tens of millions of users has only hundreds of links, E is far smaller than V²."
     },
     {
       "key": "C",
