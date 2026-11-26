@@ -698,6 +698,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-circular-dependency-two-beans": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5171de9ed8999c8fa5fcc89ac8e64f6138c44046795f00eba7a81484ee8844e3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
