@@ -686,6 +686,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-unbounded-queue-executor-oom": {
+      "verdict": "APPROVED",
+      "digest": "sha256:877b57cfa10a92c2ccdbcc2b6c3396842370b3dc74fdb4a125b874fc9293d22e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
