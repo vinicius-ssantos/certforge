@@ -662,6 +662,18 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv154-dynamic-array-growth": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2372e2113bee0d6248a22c80c6ed4bbc22d58f13ff1392f691eb63206bf786c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
