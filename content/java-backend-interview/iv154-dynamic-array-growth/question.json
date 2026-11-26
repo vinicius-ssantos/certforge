@@ -33,12 +33,12 @@
   ],
   "references": [
     {
-      "title": "Amortized analysis - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Amortized_analysis"
+      "title": "MIT OpenCourseWare — 6.046J Lecture 5: Amortization (Spring 2015), table doubling",
+      "url": "https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/13e2c7d165259712327af0af312a068e_MIT6_046JS15_lec05.pdf"
     },
     {
-      "title": "Dynamic array - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Dynamic_array"
+      "title": "Cornell CS 3110 — Lecture 21: Amortized analysis and dynamic tables",
+      "url": "https://www.cs.cornell.edu/courses/cs3110/2009sp/lectures/lec21.html"
     }
   ],
   "evidence": {
