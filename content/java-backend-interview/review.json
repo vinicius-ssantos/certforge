@@ -854,6 +854,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv154-linked-list-vs-array-insert": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5ed9ca6e1afd6e53b26fb413872ee3f355659f4f55c9786f1822556603fde619",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-domain-service-when-needed": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9bab0d8a6dd0c4a31660d29338b3b654ae6eee7772619bb24e2b923eb3019eac",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-26",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
