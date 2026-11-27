@@ -1286,6 +1286,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv157-aggregate-root-role": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8e2286da794df719569e1b8226c555a34b1a9f901adc64765f62c02cb8c7c9c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-anti-corruption-layer-legacy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8a429c872eb1c01bb0cf1297186bc2e0bd08a1b9947e984df2491057033d1be6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-bounded-context-integration-contract": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb4443f0da124a30e2e7e8950b1e3616188f3066d3d292378f6531956e07c692",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-ddd-when-excessive-crud": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bb7bad515afbf0bd9bbeb0875daac4ccb0acc3d73535fa4d4b6f287207660d98",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-protect-invariant-aggregate": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c1b98cf8c1f779a0ac7db16351fbca4e23f097263c3c3c67950475527dc99777",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-repository-domain-abstraction": {
+      "verdict": "APPROVED",
+      "digest": "sha256:40f872a3138f8a410d10fe302e13c3c797e6ab189f4cd80f0bf0bccdf027151e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-shared-jpa-entity-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77fa977b392d07e30dfed089a5d715b47fe51e6706f527e44da7858e0738c7e4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cpu-spike-blocked-threads": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0860ee0877970f4dd123c8c78b7638a8763c07851814a545f94dfeccd120f417",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
