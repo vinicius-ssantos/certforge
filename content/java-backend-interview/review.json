@@ -1382,6 +1382,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv158-cpu-throttle-container-limits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:599beaa1c816a2aef5af98f9590aaef42664749d1c37584ee7e56b53bebc50c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cross-service-trace-correlation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d44128445cbcb25707818a49f7312f92585c7782d092878ff5bffaae7e564368",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-db-lock-retry-storm": {
+      "verdict": "APPROVED",
+      "digest": "sha256:63ffd03e5a0041a8a9b0c4ca7141fded96c8f1672fcdd056eab798ca5621e324",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-downstream-timeout-cascade": {
+      "verdict": "APPROVED",
+      "digest": "sha256:15c8d55b7aac0e326d4de4fb65fca576e893f6836bf95fe4812d170b1c83f4ef",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-heap-growth-old-gen": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6267dc3d4a7f30021983dc55898b425e26219378fdc80bf6c2db485448b3ef7c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-latency-after-deploy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dba2efa632eabc7da4743c6b7fbb195d80e662cc2242f6a6908bec7eb85051f9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-pool-exhaustion-n-plus-one": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2f62f5f76ac4572405ee32a2e5ff2d9dda604f4243096cc80a58e5aef095c70c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-queue-backlog-duplicate-charges": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1ddf183cd08a93b92482e0ec6f92412f506842c017ab6b791b4bd7cb03e7912f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
