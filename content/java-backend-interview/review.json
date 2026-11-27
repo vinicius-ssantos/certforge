@@ -1478,6 +1478,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv286-stateful-lambda-parallel-stream-race": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9ee770674e105444a3687ecf677cd041a8e5fc5fe413e281bef403595110e629",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-unsafe-publication-constructor": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2b2c1884dc0922946cbb216b5718562af4ac97badfd9276aecc72adc6c1ca6de",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-configurationproperties-vs-value-type-safety": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1c022311098d6c8529bdc4ba867196f200b9cb2366aa566d36bad4249ca4da4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-constructor-injection-circular-detection": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7425f319e915e41d26ee1741a7256ebe28de914da4a4b9d59e478afef94fb2b6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-exclude-autoconfigured-datasource": {
+      "verdict": "APPROVED",
+      "digest": "sha256:82ec44f8286ad83b06ee4238d90d2004202196ed332c4efd6323178af8893742",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-readonly-transaction-what-it-changes": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f55922f90e996dee55922b1911c8bd9871a0a3f9a54b389e1fde589d8d1884bb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-starter-mechanics-debug-report": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f198e4bfb1e36742ab628b4be1ce812ab420bf61dcba6dfb0f36343f0e4a4675",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-transactional-isolation-level-default-wrong": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9bbc028a40ad80eaba555da52c12080ee5f32074bcaeb195402ea469852fb520",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
