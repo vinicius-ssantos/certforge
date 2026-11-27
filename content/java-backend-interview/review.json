@@ -2006,6 +2006,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv292-two-phase-commit-microservices-problem": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d9328139213cc5b5ea1c0f1b8260f6a2f0e24cc6b0e28b7716607d111012fe91",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-vector-clocks-causal-ordering": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d09ba21d22a07f46d77de2d5b6f37add6c8048362c12f261c9bb581eb059a4ae",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-wall-clock-skew-event-ordering": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e566a2c31701f3d25957e64ca08b2394507123970472e86f88d2d01dcace6c41",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-at-least-once-redelivery-requires-idempotent-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e991e9749fd8a7d0f46f64b8078e8f87d6c512ae3fe46501271ed6c5224a4d8c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-at-most-once-silent-message-loss": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7b38ff0688a5e5a22e25ef6dcb94895f42f232ab001a20d89bd96d60facec6c9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-backpressure-slow-consumer-response": {
+      "verdict": "APPROVED",
+      "digest": "sha256:75e3f9b2a8b02701c17f2419ffe31bfaf94fce5230edfd20ec5e29d9657ef511",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-consumer-group-more-consumers-than-partitions": {
+      "verdict": "APPROVED",
+      "digest": "sha256:283de92b46e254f3ffd791d4f80fb460af48ef036360d45dfc81216bcf5fb75a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-consumer-lag-alerting-operational-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f0e181c324fddd6ffcc642fe197cec25e0f7827440be2565c4f36e50f7dc298e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
