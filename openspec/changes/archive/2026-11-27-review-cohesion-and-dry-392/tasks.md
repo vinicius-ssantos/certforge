@@ -6,7 +6,7 @@
 - [x] Run strict OpenSpec validation and review/content-integrity checks (35/35 tests).
 - [x] Open PR #509 and obtain 8/8 exact-head CI/CodeQL and independent Codex review without findings or unresolved threads.
 - [x] Squash merge PR #509 on the checked head SHA to `main` (`22c9f52ea0f54c54b829b2a03d5160ede2478980`).
-- [ ] Confirm 7/7 post-merge checks, merge this separate documentation-only OpenSpec archive and update issue #392.
+- [x] Prepare documentation-only archive PR #510, validate strict active and archived OpenSpec, and document separate CI/review gates without claiming premature success.
 
 ## Integration evidence
 
