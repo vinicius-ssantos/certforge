@@ -36,10 +36,16 @@
       terminal → check-my-work → verdict flow, plus the empty/error/session-lost states, with only
       jsdom's missing `WebSocket`/`ResizeObserver`/`matchMedia` stood in for — not this project's
       own code.
-- [ ] 3.6 Human acceptance: the Vercel-backed lab's terminal (unverified protocol, see proposal)
-      needs one live check with a real Vercel Sandbox credential, which this change does not have
-      and should not acquire unilaterally given the real per-session billing cost ADR 0028
-      already flags. A manual assistive-technology walkthrough of the interactive terminal is a
-      separate, not-yet-done gate, consistent with how this project already treats that gate for
-      other screens.
-- [ ] 3.7 CI and human review on this PR's own head before archiving this change.
+- [x] 3.6 Addressed automated PR review (Codex): fixed a real WebSocket wss:-to-ws: downgrade bug
+      (regression test added) and the release nginx's missing WebSocket-upgrade headers/timeout
+      for the container-bridge terminal path (verified with `nginx -t`). Confirmed, but did not
+      guess a fix for, the release CSP blocking the Vercel-backed lab's external terminal origin
+      -- no public, stable domain exists to allowlist (checked Vercel's own SDK source); left open
+      for the project owner, same as the live-verification gap above.
+- [ ] 3.7 Human acceptance: the Vercel-backed lab's terminal (unverified protocol AND now a known
+      CSP block in the release image, see proposal) needs one live check with a real Vercel
+      Sandbox credential, which this change does not have and should not acquire unilaterally
+      given the real per-session billing cost ADR 0028 already flags. A manual
+      assistive-technology walkthrough of the interactive terminal is a separate, not-yet-done
+      gate, consistent with how this project already treats that gate for other screens.
+- [ ] 3.8 CI and human review on this PR's own head before archiving this change.

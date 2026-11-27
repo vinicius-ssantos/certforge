@@ -61,3 +61,26 @@ makes it reachable at all.
   The two container-bridge labs' terminal path (this project's own code end-to-end) was verified
   working, including under real xterm.js, by scripted browser testing with a mock terminal
   WebSocket during this change.
+- **Follow-up from automated PR review, fixed in this change:** the WebSocket-scheme conversion
+  unconditionally mapped any non-`https:` protocol to `ws:`, which downgraded an already-secure
+  `wss:` URL (Vercel's own, which is never `http:`/`https:` in the first place) to insecure --
+  browsers refuse to open that from an `https:` page as mixed content. Fixed to only convert
+  `http:`/`https:` and leave `ws:`/`wss:` as given; a regression test locks this in
+  (`labs.test.tsx`, "never downgrades an already-secure interactive URL").
+- **Follow-up from automated PR review, fixed in this change:** the release image's nginx only
+  forwarded the two container-bridge labs' terminal traffic through its general `/api/` location,
+  which does not set the `Upgrade`/`Connection` headers a WebSocket handshake needs, and caps
+  reads/writes at 30s -- shorter than a lab's own 900s session limit, so an idle learner reading
+  the screen would be disconnected. Added a narrower, regex-matched location for exactly the
+  terminal path with the standard nginx WebSocket-upgrade `map`/headers and a 920s timeout;
+  verified with `nginx -t` against the updated config.
+- **Follow-up from automated PR review, confirmed real but deliberately NOT fixed in this
+  change:** the release image's CSP (`connect-src 'self'`) blocks the Vercel-backed lab's
+  terminal, whose connection target is an external, vendor-controlled origin. Checked Vercel's
+  own published SDK source (`github.com/vercel/sandbox`, `session.ts` and `api-client.ts`) for the
+  interactive WebSocket's hostname: it is returned by the server at session-start time, not a
+  fixed or documented domain anywhere in the SDK. Writing a CSP allowlist entry from a guessed
+  domain would be worse than today's `'self'`-only policy -- either still wrong, or a silent,
+  unverified security-policy relaxation. This is the same live-verification gap named above;
+  resolving it needs an actual `openInteractive()` response to read the real hostname from, not
+  another guess. Left open for the project owner's decision, same as any other security finding.

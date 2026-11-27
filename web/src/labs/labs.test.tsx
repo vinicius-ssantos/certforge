@@ -141,6 +141,34 @@ describe("the labs catalog", () => {
     expect(
       fetch.calls.some((call) => call.method === "POST" && call.path === "/api/labs/docker-multistage-bloat-v1/sessions"),
     ).toBe(true);
+    // A same-origin path gets this page's own scheme as ws: (http: in this test environment),
+    // not downgraded or upgraded to the other one.
+    expect(FakeWebSocket.instances[0]!.url).toMatch(/^ws:\/\/.*\/api\/labs\/sessions\/session-1\/terminal\?token=tok-1$/);
+  });
+
+  it("never downgrades an already-secure interactive URL from a vendor-hosted terminal", async () => {
+    const user = userEvent.setup();
+    renderApp(
+      {
+        "GET /api/labs": { body: [dockerLab] },
+        "POST /api/labs/docker-multistage-bloat-v1/sessions": {
+          status: 201,
+          body: {
+            sessionId: "sbx_1",
+            labId: dockerLab.labId,
+            // Vercel's own controller-hosted PTY: an absolute, already-secure external URL.
+            interactiveUrl: "wss://sandbox.example.vercel.dev/pty",
+            interactiveToken: "tok-vercel",
+          },
+        },
+      },
+      { path: "/labs" },
+    );
+
+    await user.click(await screen.findByRole("button", { name: "Start lab" }));
+    await waitFor(() => expect(screen.getByRole("status")).toHaveTextContent("Connected"));
+
+    expect(FakeWebSocket.instances[0]!.url).toBe("wss://sandbox.example.vercel.dev/pty?token=tok-vercel");
   });
 
   it("shows what the lab's shell prints and lets the learner check their work", async () => {

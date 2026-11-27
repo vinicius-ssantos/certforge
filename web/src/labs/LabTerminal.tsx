@@ -11,10 +11,19 @@ type ConnectionStatus = "connecting" | "open" | "closed" | "error";
  * temporarily runs) or a full external URL (Vercel's own controller-hosted PTY for every other
  * lab) -- both are a plain WebSocket relaying whatever the learner types to the lab's shell and
  * writing back whatever it prints, so one client handles both the same way.
+ *
+ * The external case is already `ws:`/`wss:`, never `http:`/`https:` -- only the relative-path
+ * case needs a scheme assigned at all, from the page's own. Converting unconditionally (as an
+ * earlier version of this function did) would downgrade an already-secure `wss:` URL to `ws:`,
+ * which browsers refuse to open from an `https:` page as mixed content.
  */
 function webSocketUrl(interactiveUrl: string, interactiveToken: string): string {
   const absolute = new URL(interactiveUrl, window.location.href);
-  absolute.protocol = absolute.protocol === "https:" ? "wss:" : "ws:";
+  if (absolute.protocol === "http:") {
+    absolute.protocol = "ws:";
+  } else if (absolute.protocol === "https:") {
+    absolute.protocol = "wss:";
+  }
   absolute.searchParams.set("token", interactiveToken);
   return absolute.toString();
 }
