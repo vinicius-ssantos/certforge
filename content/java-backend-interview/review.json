@@ -1574,6 +1574,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv288-valid-vs-validated-nested-group": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cb594525debcb4cade359b15b0b0522f83d5c1a8b5207920e1fa527f98732753",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-derived-query-method-naming-mismatch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5a37bb51124971670b3c754d562ad413098d9c6862662ab5b8e62f38f03fe7a8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-dirty-checking-no-explicit-save": {
+      "verdict": "APPROVED",
+      "digest": "sha256:771439e156d9ab2e3633be1bad913abc184f8284139ef1bd024965f6eb396fba",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-entitygraph-fetch-join-fixes-n-plus-one": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a57165ba3e23aebc5f2b9c017a93fb9dc20d22907553518f7e9009e3b90d1b8b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-equals-hashcode-generated-id-before-persist": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4399ed564532a05fce5c5ecda45f4c2c2a73278e7bcde0143c10ffcf1c7adbc3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-first-level-vs-second-level-cache-scope": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5da04071a4b62582ad26e744be5c001bf03db79b70a40614c06ef6278b8fee0f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-flush-vs-commit-auto-flush-trigger": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f52d827782fbcf13e2c687e05f2c26e37944fb834203512c5ee2809b5d0589b1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-flyway-versioned-migrations-core-idea": {
+      "verdict": "APPROVED",
+      "digest": "sha256:59fe65804f0698fdcf354f89114927be00ddc12d373a571aa092d2f21b2069a0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
