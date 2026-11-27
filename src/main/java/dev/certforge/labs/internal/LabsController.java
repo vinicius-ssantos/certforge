@@ -1,11 +1,16 @@
 package dev.certforge.labs.internal;
 
+import dev.certforge.labs.LabCatalog;
 import dev.certforge.labs.LabOrchestrator;
 import dev.certforge.labs.LabSession;
+import dev.certforge.labs.LabSpec;
+import dev.certforge.labs.LabSummary;
 import dev.certforge.labs.LabVerdict;
+import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +29,25 @@ import org.springframework.web.bind.annotation.RestController;
 class LabsController {
 
   private final LabOrchestrator orchestrator;
+  private final LabCatalog catalog;
 
-  LabsController(LabOrchestrator orchestrator) {
+  LabsController(LabOrchestrator orchestrator, LabCatalog catalog) {
     this.orchestrator = orchestrator;
+    this.catalog = catalog;
+  }
+
+  /** The shipped catalog, in the one shape a learner needs to decide which lab to start. */
+  @GetMapping
+  List<LabSummary> list() {
+    return catalog.all().stream().map(LabsController::summarize).toList();
+  }
+
+  private static LabSummary summarize(LabSpec spec) {
+    return new LabSummary(
+        spec.labId(),
+        spec.objective().title(),
+        spec.objective().description(),
+        spec.sandbox().timeoutSeconds());
   }
 
   @PostMapping("/{labId}/sessions")

@@ -66,3 +66,7 @@ export type TopicEvidence = Schemas["TopicEvidenceView"];
 export type Blueprint = Schemas["BlueprintView"];
 export type BlueprintTopic = Schemas["BlueprintTopicView"];
 export type BlueprintMatch = Schemas["MatchView"];
+export type LabSummary = Schemas["LabSummary"];
+export type LabSession = Schemas["LabSession"];
+export type LabVerdict = Schemas["LabVerdict"];
+export type LabCheckResult = Schemas["LabCheckResult"];

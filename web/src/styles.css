@@ -692,6 +692,21 @@ fieldset.field > legend {
   border-left: 3px solid var(--danger);
 }
 
+/* xterm needs an explicit height to lay its rows out in; it does not grow to fit its content the
+ * way ordinary text does. Width stretches with the panel so FitAddon has a real box to measure --
+ * min-width: 0 overrides a grid item's default min-width: auto, which would otherwise let the
+ * canvas FitAddon just sized grow this box in turn, which re-fires the ResizeObserver watching
+ * it, which sizes the canvas again: an unbounded feedback loop, not merely a cosmetic one-off. */
+.lab-terminal-surface {
+  width: 100%;
+  min-width: 0;
+  height: 420px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--s3);
+}
+
 .confirm {
   padding: var(--s3) var(--s4);
   border: 2px solid var(--action);
