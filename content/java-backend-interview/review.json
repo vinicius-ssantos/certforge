@@ -2102,6 +2102,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv293-consumer-lag-offset-gap": {
+      "verdict": "APPROVED",
+      "digest": "sha256:912345faa2235d623d9a48f2531532d6942bd1e13d39635fc9ba6ea3c3b33c52",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-dlq-routes-after-retry-exhaustion": {
+      "verdict": "APPROVED",
+      "digest": "sha256:92848af7e1420949813538232be5e31186ab242abb54a89ac0a85e4f14be8549",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-dlq-vs-drop-or-infinite-retry": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cd7477762496317c74281ce9b8c1daa4eab2938c3bdbc74260ddf3e2d07c51d3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-exactly-once-requires-idempotent-processing-or-transactional-outbox": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2b8724a61855b6ebbf332e25c4ecab705129b02eecb957dbfb03ac08e0076699",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-idempotent-consumer-dedup-processed-message-ids": {
+      "verdict": "APPROVED",
+      "digest": "sha256:418c9cbb3472174c77f0e9f8fce1a62b5d9d82160f6a0233e23462eba81ce3a9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-kafka-partition-key-ordering-same-entity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e91a311bdab59ebc1937ed6882ed3955d46658bd1026d3d2509b8a8957df98e0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-manual-ack-nack-semantics": {
+      "verdict": "APPROVED",
+      "digest": "sha256:71fd1ee08180b94dc82a2dedaa5984b50db424e36b63fa45a012d1ae7781d628",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-offset-commit-before-vs-after-processing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5bab2c62a81f8b94df76efc896d41938cf511ed788bdd087de8bd758acb2f5f8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
