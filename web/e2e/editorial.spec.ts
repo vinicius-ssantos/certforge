@@ -46,6 +46,21 @@ test.describe("the editorial desk", () => {
     await expectNoA11yViolations(page);
     await expectReflows(page);
 
+    // The question-type radio's own native control measures under the app's 44px touch token (an
+    // automated probe flagged ~21px against SC 2.5.8), but the real activatable target for an
+    // editor is the <label> beside it, which already carries that token. Prove the label meets it
+    // and that clicking far inside it, away from the native control's own small box, still
+    // selects the type.
+    const multipleChoiceLabel = page.getByText("Multiple choice", { exact: true });
+    const labelBox = await multipleChoiceLabel.boundingBox();
+    if (labelBox === null) {
+      throw new Error("question-type label not found");
+    }
+    expect(labelBox.height).toBeGreaterThanOrEqual(44);
+    await multipleChoiceLabel.click({ position: { x: labelBox.width - 4, y: labelBox.height / 2 } });
+    await expect(page.getByLabel("Multiple choice", { exact: true })).toBeChecked();
+    await page.getByLabel("Single choice", { exact: true }).check();
+
     // Save only what is written so far; the server accepts an unfinished draft.
     await page.getByLabel("Topic", { exact: true }).selectOption({ label: TOPIC_NAME });
     await page.getByLabel("Question", { exact: true }).fill(label);
