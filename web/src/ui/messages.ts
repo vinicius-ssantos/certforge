@@ -88,6 +88,10 @@ export function errorMessage(error: unknown, t: Catalog): string {
       return t.errors.topicNotActive;
     case "forbidden":
       return t.errors.forbidden;
+    case "lab_not_found":
+      return t.errors.labNotFound;
+    case "lab_session_not_found":
+      return t.errors.labSessionNotFound;
     default:
       return error.status >= 500 ? t.errors.serverSide : t.errors.requestFailed;
   }

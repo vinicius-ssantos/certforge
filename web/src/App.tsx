@@ -30,6 +30,8 @@ const EvidencePage = lazy(() => import("./interview/EvidencePage").then((module)
 const InterviewSessionPage = lazy(() => import("./interview/InterviewSessionPage").then((module) => ({ default: module.InterviewSessionPage })));
 const InterviewsPage = lazy(() => import("./interview/InterviewsPage").then((module) => ({ default: module.InterviewsPage })));
 const SessionReviewPage = lazy(() => import("./history/SessionReviewPage").then((module) => ({ default: module.SessionReviewPage })));
+const LabsPage = lazy(() => import("./labs/LabsPage").then((module) => ({ default: module.LabsPage })));
+const LabSessionPage = lazy(() => import("./labs/LabSessionPage").then((module) => ({ default: module.LabSessionPage })));
 const MockExamPage = lazy(() => import("./mock/MockExamPage").then((module) => ({ default: module.MockExamPage })));
 const MockExamResultPage = lazy(() => import("./mock/MockExamResultPage").then((module) => ({ default: module.MockExamResultPage })));
 const SessionPage = lazy(() => import("./study/SessionPage").then((module) => ({ default: module.SessionPage })));
@@ -69,6 +71,8 @@ export function App() {
           <Route path="/interviews/blueprints/new" element={<NewBlueprintPage />} />
           <Route path="/interviews/blueprints/:blueprintId" element={<BlueprintPage />} />
           <Route path="/interviews/:sessionId" element={<InterviewSessionPage />} />
+          <Route path="/labs" element={<LabsPage />} />
+          <Route path="/labs/sessions/:sessionId" element={<LabSessionPage />} />
           <Route path="/mock-exams/:sessionId" element={<MockExamPage />} />
           <Route path="/mock-exams/:sessionId/result" element={<MockExamResultPage />} />
           <Route path="/history" element={<HistoryPage />} />

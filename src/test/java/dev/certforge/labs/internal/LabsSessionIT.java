@@ -9,6 +9,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -92,6 +93,22 @@ class LabsSessionIT {
         .andExpect(jsonPath("$.checks").isArray());
 
     verify(client).stop("sbx_1");
+  }
+
+  @Test
+  void listsTheShippedCatalogWithOnlyLearnerFacingFields() throws Exception {
+    mvc.perform(get("/api/labs").cookie(learner.session()))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$[?(@.labId=='" + DOCKER_LAB + "')].title").exists())
+        .andExpect(jsonPath("$[?(@.labId=='" + DOCKER_LAB + "')].description").exists())
+        .andExpect(jsonPath("$[?(@.labId=='" + DOCKER_LAB + "')].timeoutSeconds").exists())
+        .andExpect(jsonPath("$[?(@.labId=='" + DOCKER_LAB + "')].image").doesNotExist())
+        .andExpect(jsonPath("$[?(@.labId=='" + DOCKER_LAB + "')].allowedCommands").doesNotExist());
+  }
+
+  @Test
+  void refusesAnonymousCallersListingTheCatalog() throws Exception {
+    assertThat(mvc.perform(get("/api/labs")).andReturn().getResponse().getStatus()).isEqualTo(401);
   }
 
   @Test

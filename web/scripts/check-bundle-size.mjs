@@ -18,8 +18,14 @@ include("index.html");
 
 const total = readdirSync(join(dist, "assets")).map((file) => `assets/${file}`);
 const budgets = [
-  { label: "Initial", files: initial, js: 155, css: 12 },
-  { label: "Total", files: total, js: 212, css: 12 },
+  // +1 KB (155 -> 156): the "Labs" nav link and its i18n strings, shared by every page.
+  { label: "Initial", files: initial, js: 156, css: 12 },
+  // +88 KB (212 -> 300): hands-on labs' interactive terminal (ADR 0029: "a real interactive
+  // terminal", chosen over a lighter file-write-only bridge after the product owner was told
+  // what each costs) pulls in @xterm/xterm, a full ANSI/VT100 terminal emulator -- but only for
+  // learners who open a lab, since LabSessionPage is its own lazily-loaded route and does not
+  // add one byte to a page that never reaches it (Initial above is unaffected).
+  { label: "Total", files: total, js: 300, css: 12 },
 ];
 for (const budget of budgets) {
   for (const kind of ["js", "css"]) {

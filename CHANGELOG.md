@@ -6,6 +6,10 @@ The project follows Semantic Versioning. Changes land under `Unreleased` and mov
 
 ## [Unreleased]
 
+### Added
+
+- Hands-on labs are now reachable from the web app (`/labs`): a catalog of the three shipped labs, a real interactive terminal (whichever orchestration engine runs the session), and a recorded pass/fail verdict with per-check results. The backend (`LabsController`, isolated execution via Vercel Sandbox or a temporary container engine) shipped earlier under #175/ADR 0027-0030 with no frontend; this closes that gap with one new read-only endpoint (`GET /api/labs`) and no change to how a session is isolated, graded or billed. Human acceptance (a live check of the Vercel-backed lab's terminal, and an assistive-technology walkthrough of the interactive terminal) remains outstanding (OpenSpec `expose-hands-on-labs-in-web`).
+
 ### Fixed
 
 - Recorded explicit owner acceptance of UX-01–UX-22, synchronized the three capability specifications and archived OpenSpec `remediate-ux-audit` after PR #424 was integrated.

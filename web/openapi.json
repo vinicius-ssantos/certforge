@@ -1257,6 +1257,25 @@
         "required" : [ "interactiveToken", "interactiveUrl", "labId", "sessionId" ],
         "type" : "object"
       },
+      "LabSummary" : {
+        "properties" : {
+          "description" : {
+            "type" : "string"
+          },
+          "labId" : {
+            "type" : "string"
+          },
+          "timeoutSeconds" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "title" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "description", "labId", "timeoutSeconds", "title" ],
+        "type" : "object"
+      },
       "LabVerdict" : {
         "properties" : {
           "checks" : {
@@ -4269,6 +4288,27 @@
           }
         },
         "tags" : [ "editorial-catalog-controller" ]
+      }
+    },
+    "/api/labs" : {
+      "get" : {
+        "operationId" : "list_4",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/LabSummary"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "labs-controller" ]
       }
     },
     "/api/labs/sessions/{sessionId}/complete" : {
