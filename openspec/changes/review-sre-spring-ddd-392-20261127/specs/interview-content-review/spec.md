@@ -1,8 +1,8 @@
 ## ADDED Requirements
 
-### Requirement: Twenty-four SRE, Spring, DDD and design-pattern interview questions SHALL receive individual V2 approvals only after source verification
+### Requirement: Twenty-three SRE, Spring, DDD and design-pattern interview questions SHALL receive individual V2 approvals only after source verification
 
-Every one of the twenty-four question identifiers documented in this change's design SHALL have a separate AI-reviewer digest and checklist generated using the canonical recorder against its exact current question content. All distractors and technical references SHALL have been checked, and the review-only PR SHALL not edit any question file or pack metadata.
+Every one of the twenty-three question identifiers documented in this change's design SHALL have a separate AI-reviewer digest and checklist generated using the canonical recorder against its exact current question content. All distractors and technical references SHALL have been checked, and the review-only PR SHALL not edit any question file or pack metadata.
 
 #### Scenario: SRE operational troubleshooting
 

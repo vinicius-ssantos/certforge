@@ -1,6 +1,6 @@
 ## Individually evaluated editorial decisions — 2026-11-27
 
-The reviewer inspected all twenty-four exact prompts, correct alternative, three distractors, each option rationale, overall explanation and original author/vendor source. Independently visited first-party Google SRE, Kubernetes, Oracle and Fowler/microservices references. These entries alone are eligible for content-bound V2 approval.
+The reviewer inspected the twenty-three approved exact prompts, correct alternative, three distractors, each option rationale, overall explanation and original author/vendor source. Independently visited first-party Google SRE, Kubernetes, Oracle and Fowler/microservices references. These entries alone are eligible for content-bound V2 approval.
 
 1. **iv158-cpu-spike-blocked-threads — C.** BLOCKED monitor acquisition explains contention but not CPU execution; the RUNNABLE/background workers require diagnosis. A wrongly equates blocked with spin; B adds contenders; D claims GC evidence not in dump. **Primary reference(s):** Oracle Java SE 21 Thread.State and GC tuning.
 
@@ -39,7 +39,7 @@ The concurrent-withdrawal aggregate claim is undergoing separate source-only cor
 Use only `content/record-ai-review.mjs`, one invocation per verified question, to compute exact V2 digests against question/pack. Source content and publication state stay unchanged. Follow exact CI/CodeQL, independent Codex, SHA-guarded squash and separate archival OpenSpec phases.
 
 
-## Additional ten independently reviewed design-pattern questions
+## Additional nine independently reviewed design-pattern questions
 
 Verified against the original author-hosted pattern catalog and the current complete question JSON (all four options and explanations). These decisions extend the fourteen SRE/Spring/DDD items above; they are **not bulk inferred** from the existing answer flags.
 
@@ -61,4 +61,4 @@ Verified against the original author-hosted pattern catalog and the current comp
 
 23. **iv156-strategy-payment-conditional — B.** B isolates payment-specific processing in independently composable strategies and replaces swelling branch chain with lookup; A private helpers leave dispatch, C construction factory leaves branches, D mixes data type with algorithm hierarchy. **Primary source:** Refactoring.Guru /design-patterns/strategy.
 
-24. **iv156-template-method-report-pipeline — C.** C fixes shared load-transform-write skeleton with overridable transform only; A strategy cannot itself enforce outer sequence, B duplicates load/write, D factory selects without enforcing common sequence. **Primary source:** Refactoring.Guru /design-patterns/template-method.
+**NOT APPROVED — iv156-template-method-report-pipeline.** Independent Codex review of PR #520 identified a false contrast: composition with a Strategy can also preserve a fixed load → transform → write sequence if the enclosing ReportJob enforces it. Key C remains a valid Template Method example, but the source explanation incorrectly claims Strategy cannot enforce the sequence; approval withheld until a separate source-only correction and later exact-digest V2 review.

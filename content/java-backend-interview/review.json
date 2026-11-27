@@ -1466,18 +1466,6 @@
         "explanation-complete",
         "reference-is-primary"
       ]
-    },
-    "iv156-template-method-report-pipeline": {
-      "verdict": "APPROVED",
-      "digest": "sha256:00f99e42164410a1117111733978000f0ce6822d39331d060e92eb9c27eabc5d",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
     }
   }
 }
