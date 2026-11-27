@@ -1814,6 +1814,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv292-at-least-once-idempotent-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:50e77c9c9dafef048e547de6f5454564b24d424b4b584b9d4b181d7f50f20145",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-bulkhead-thread-pool-isolation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5d4a2afa24f966908cbac7d91c901e22f0f75de4e33a3836dbe1e788365cb050",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-cap-theorem-misreading-no-partition": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b1ef0badfdc9f361a2b05323ddb546cdf4c85ab33219771038e16104298ef060",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-circuit-breaker-half-open-state": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4639542afc9757be8e324e907210acba3316496e7a9466f3e665c04e400323e9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-circuit-breaker-vs-retry-backoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6ef4449f836f31b4f6afa33bb44f32a5fc95232714b8a8d020e4b23d30031be0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-client-side-vs-server-side-load-balancing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0960e29c12554bfdc15658eef67c7ddbc9ba9c03b109a1b4a13f2c91d080242d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-client-timeout-server-succeeded": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8668ae71129d931218c49335351c9a5f76bcfa908c7c3dd30984f3b354710ebc",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-cp-system-partition-scenario": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4a6696abb979cb4c42071fee4811a1a369c7bfbc61bf128535535cef43d1b989",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
