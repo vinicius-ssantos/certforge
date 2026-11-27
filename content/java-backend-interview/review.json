@@ -1337,7 +1337,7 @@
     },
     "iv157-protect-invariant-aggregate": {
       "verdict": "APPROVED",
-      "digest": "sha256:c1b98cf8c1f779a0ac7db16351fbca4e23f097263c3c3c67950475527dc99777",
+      "digest": "sha256:7aeb045b8851ce3a99cd7a094c40772cec78a12cd98105ea2b158c90f7a7167b",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-27",
       "checklist": [
