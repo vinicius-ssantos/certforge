@@ -1190,6 +1190,270 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv158-cpu-spike-blocked-threads": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0860ee0877970f4dd123c8c78b7638a8763c07851814a545f94dfeccd120f417",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cpu-throttle-container-limits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:599beaa1c816a2aef5af98f9590aaef42664749d1c37584ee7e56b53bebc50c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cross-service-trace-correlation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d44128445cbcb25707818a49f7312f92585c7782d092878ff5bffaae7e564368",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-db-lock-retry-storm": {
+      "verdict": "APPROVED",
+      "digest": "sha256:63ffd03e5a0041a8a9b0c4ca7141fded96c8f1672fcdd056eab798ca5621e324",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-downstream-timeout-cascade": {
+      "verdict": "APPROVED",
+      "digest": "sha256:15c8d55b7aac0e326d4de4fb65fca576e893f6836bf95fe4812d170b1c83f4ef",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-latency-after-deploy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dba2efa632eabc7da4743c6b7fbb195d80e662cc2242f6a6908bec7eb85051f9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-pool-exhaustion-n-plus-one": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2f62f5f76ac4572405ee32a2e5ff2d9dda604f4243096cc80a58e5aef095c70c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-configurationproperties-vs-value-type-safety": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1c022311098d6c8529bdc4ba867196f200b9cb2366aa566d36bad4249ca4da4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-exclude-autoconfigured-datasource": {
+      "verdict": "APPROVED",
+      "digest": "sha256:82ec44f8286ad83b06ee4238d90d2004202196ed332c4efd6323178af8893742",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-readonly-transaction-what-it-changes": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f55922f90e996dee55922b1911c8bd9871a0a3f9a54b389e1fde589d8d1884bb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-starter-mechanics-debug-report": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f198e4bfb1e36742ab628b4be1ce812ab420bf61dcba6dfb0f36343f0e4a4675",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-ddd-when-excessive-crud": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bb7bad515afbf0bd9bbeb0875daac4ccb0acc3d73535fa4d4b6f287207660d98",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-repository-domain-abstraction": {
+      "verdict": "APPROVED",
+      "digest": "sha256:40f872a3138f8a410d10fe302e13c3c797e6ab189f4cd80f0bf0bccdf027151e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-shared-jpa-entity-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77fa977b392d07e30dfed089a5d715b47fe51e6706f527e44da7858e0738c7e4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-builder-optional-parameters": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f58f72988bb4a8aa70e4e1c9b32585053863c86df6e8147a15cd487e957d5c7f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-chain-of-responsibility-validation-pipeline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a117d025bdb63a925627325fb40404b4fad6f1df327e0abf476d000d8f14e5fe",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-decorator-cross-cutting-caching": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1086aec2cc208612a04c6ce027d351290448f26fede209ab7a3f777d74c3b4ad",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-facade-subsystem-simplification": {
+      "verdict": "APPROVED",
+      "digest": "sha256:97c968292ddd64d01423b728d82b2b872aec0ab8e9b2020eb8c48f2c9007e12c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-factory-method-vs-constructor": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb8e394323b8636ff0c69436159d6abbf70aa26a728812154203f5e9bea507bd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-observer-vs-pubsub": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3a6235691f1b3aea3d083187bb5af7f2e7a47477ad74f58bcc4ef7dc176e4291",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-proxy-vs-decorator": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a357b8d6cfc698e08beb51ccab6b076ec8bf15dc4c1d3bab96acb2f2650ab942",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-strategy-payment-conditional": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1f4423ca7ba8817aa7f54116710b096c263edbb98066847e42aab20f86eeb068",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
