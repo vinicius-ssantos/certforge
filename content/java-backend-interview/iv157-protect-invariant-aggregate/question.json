@@ -2,21 +2,21 @@
   "type": "SINGLE_CHOICE",
   "topicId": "a3000000-0000-4000-8000-000000000108",
   "difficulty": "MEDIUM",
-  "difficultyRationale": "Requires connecting the abstract idea of an invariant to a concrete design choice about where validation logic and transaction boundaries live.",
-  "prompt": "A banking domain has an invariant: an `Account`'s balance must never go negative. The team is deciding how to implement withdrawals so this invariant always holds, including under concurrent requests. Which design best protects the invariant?",
-  "explanation": "Protecting an invariant means no code path can change the aggregate's state without going through a check of that invariant, and that the check-and-apply happens atomically within one transaction. Exposing a `withdraw` behavior on the `Account` aggregate root — which checks the balance and applies the debit together, inside one transaction — is the only option that closes off the invariant from being bypassed or raced.",
+  "difficultyRationale": "Requires combining aggregate-root invariant enforcement with database concurrency control to prevent lost updates or overdrafts under concurrent withdrawals.",
+  "prompt": "A banking domain has an invariant: an `Account`'s balance must never go negative, and every successful withdrawal must be reflected in the final balance. The team is deciding how to implement withdrawals so the invariant holds even under concurrent requests. Which design best protects both requirements?",
+  "explanation": "Aggregate invariants should be enforced by behavior on the root rather than through public field mutation. Under concurrent withdrawals, a check and later write in an ordinary transaction alone may use a stale balance and lose updates. The service must ensure a concurrency-safe read/check/write: e.g. acquire a pessimistic row lock before loading the balance, or use an optimistic version check and retry the entire withdrawal from a fresh balance on conflict. Only a successfully checked and committed withdrawal counts as successful.",
   "options": [
     {
       "key": "A",
       "text": "Let callers set the balance field directly, relying on a database CHECK constraint to reject negative values",
       "correct": false,
-      "explanation": "A database constraint can reject an invalid final value, but it does nothing to coordinate two concurrent withdrawals that each read a sufficient balance before either commits, so both could still be individually valid yet jointly overdraw the account."
+      "explanation": "A database CHECK can reject a negative final value but is not by itself a safe withdrawal protocol: separate callers can read a stale balance and overwrite each other's successful debits (a lost update). Direct field setters also let callers bypass domain validation."
     },
     {
       "key": "B",
-      "text": "Expose a `withdraw(amount)` method on the `Account` aggregate root that checks sufficient balance and applies the debit atomically within a single transaction",
+      "text": "Expose a `withdraw(amount)` method on the `Account` aggregate root that checks the available balance, and persist it in a transaction with concurrency control (such as a pessimistic row lock before the check, or optimistic version checking with retry after a conflict), so concurrent successful withdrawals cannot overwrite one another.",
       "correct": true,
-      "explanation": "Correct: funneling every balance change through one method on the root, with the check and the update as one atomic unit of work, is exactly what prevents the invariant from being violated, including under concurrency."
+      "explanation": "Correct. The root owns the balance invariant, and the persistence layer prevents concurrent callers from committing a stale debit. A pessimistic lock serializes access before checking, while optimistic version checking rejects conflicting writes and retries with a fresh balance; a transaction without either safeguard is not sufficient."
     },
     {
       "key": "C",
@@ -35,6 +35,14 @@
     {
       "title": "DDD_Aggregate (Martin Fowler)",
       "url": "https://martinfowler.com/bliki/DDD_Aggregate.html"
+    },
+    {
+      "title": "Spring Data JPA Reference — Locking",
+      "url": "https://docs.spring.io/spring-data/jpa/reference/jpa/locking.html"
+    },
+    {
+      "title": "PostgreSQL Documentation — Transaction Isolation",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html"
     }
   ],
   "evidence": {
