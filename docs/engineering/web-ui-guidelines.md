@@ -22,6 +22,7 @@ The product is a place to study carefully and to write and review questions care
 5. **Errors say what to do.** Messages are chosen by the server's stable error codes (`web/src/ui/messages.ts`), never by server text. A summary at the top of a form takes focus and links to each field.
 6. **The server decides, the screen words it.** Completeness of a revision, who may review, what may be published are all server rules. The interface shows what the server says and never duplicates a rule it would then have to keep in step. Hiding a button is a courtesy, not protection.
 7. **Code is code.** Questions use fenced blocks (three backticks). They render in a monospaced block, scrollable by keyboard, and text is never inserted as HTML.
+8. **Capitalisation has one rule per role, not one rule overall.** Sentence case for body copy, buttons and links (`Explore the study tracks`). Title Case only for proper nouns and idiomatic UI labels that name a thing rather than describe an action (`Java Certification`, `Sign in`). UPPERCASE only for a section eyebrow — a short, deliberately shouted label above a heading (`CERTIFICATION TRACKS`) — never for body text or a control's name. Helper text under a field ends with a period when it is a full sentence and takes none when it is a fragment; do not mix the two for sibling fields on the same form.
 
 ## The editorial desk
 

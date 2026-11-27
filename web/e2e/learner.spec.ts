@@ -103,6 +103,24 @@ test.describe("the learner journey", () => {
     await expectNoA11yViolations(page);
     await expectReflows(page);
 
+    // The confidence radio's own box is native-control-sized (an automated probe measured ~18px
+    // and flagged it against SC 2.5.8), but the real activatable target for a learner is the
+    // <label for="..."> row beside it, which carries the app's 44px touch token. Prove the label
+    // meets that token and that clicking far inside it, away from the native control's own small
+    // box, still answers — not just that the row *looks* tall enough.
+    const confidenceLabel = page.locator('label[for="confidence-MEDIUM"]');
+    const labelBox = await confidenceLabel.boundingBox();
+    if (labelBox === null) {
+      throw new Error("confidence rating label not found");
+    }
+    expect(labelBox.height).toBeGreaterThanOrEqual(44);
+    await confidenceLabel.click({ position: { x: labelBox.width - 4, y: labelBox.height / 2 } });
+    await expect(page.locator("#confidence-MEDIUM")).toBeChecked();
+    // That click moved focus to the radio, same as the keyboard flow below does; restore the
+    // heading focus the rest of this test relies on before continuing the normal answer loop.
+    await page.locator("#question-heading").focus();
+    await expect(page.getByRole("heading", { level: 2, name: `Question 1 of ${FIXTURE_COUNT}` })).toBeFocused();
+
     for (let number = 1; number <= FIXTURE_COUNT; number += 1) {
       await expect(
         page.getByRole("heading", { level: 2, name: `Question ${number} of ${FIXTURE_COUNT}` }),
