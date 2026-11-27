@@ -878,6 +878,30 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv150-cohesion-and-coupling": {
+      "verdict": "APPROVED",
+      "digest": "sha256:54b69deb0cf7ed72a1c60d3762840acc4db23124e271f560c0570ea4936d82b6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv152-dry-definition-core": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5702ee86ca3292d25e87dd47d255cef1480fedebfb3fd64b6f3ee1418d0f248e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
