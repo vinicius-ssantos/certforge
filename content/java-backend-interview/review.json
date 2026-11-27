@@ -1443,18 +1443,6 @@
         "reference-is-primary"
       ]
     },
-    "iv156-repository-vs-dao": {
-      "verdict": "APPROVED",
-      "digest": "sha256:3e7f1f8bf974f5cc22fd0a154fb5c43269779abd13f6a34b5ee884b79e6b0b9d",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
     "iv156-strategy-payment-conditional": {
       "verdict": "APPROVED",
       "digest": "sha256:1f4423ca7ba8817aa7f54116710b096c263edbb98066847e42aab20f86eeb068",

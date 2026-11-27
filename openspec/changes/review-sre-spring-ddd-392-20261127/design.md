@@ -1,6 +1,6 @@
 ## Individually evaluated editorial decisions — 2026-11-27
 
-The reviewer inspected the twenty-three approved exact prompts, correct alternative, three distractors, each option rationale, overall explanation and original author/vendor source. Independently visited first-party Google SRE, Kubernetes, Oracle and Fowler/microservices references. These entries alone are eligible for content-bound V2 approval.
+The reviewer inspected the twenty-two approved exact prompts, correct alternative, three distractors, each option rationale, overall explanation and original author/vendor source. Independently visited first-party Google SRE, Kubernetes, Oracle and Fowler/microservices references. These entries alone are eligible for content-bound V2 approval.
 
 1. **iv158-cpu-spike-blocked-threads — C.** BLOCKED monitor acquisition explains contention but not CPU execution; the RUNNABLE/background workers require diagnosis. A wrongly equates blocked with spin; B adds contenders; D claims GC evidence not in dump. **Primary reference(s):** Oracle Java SE 21 Thread.State and GC tuning.
 
@@ -39,7 +39,7 @@ The concurrent-withdrawal aggregate claim is undergoing separate source-only cor
 Use only `content/record-ai-review.mjs`, one invocation per verified question, to compute exact V2 digests against question/pack. Source content and publication state stay unchanged. Follow exact CI/CodeQL, independent Codex, SHA-guarded squash and separate archival OpenSpec phases.
 
 
-## Additional nine independently reviewed design-pattern questions
+## Additional eight independently reviewed design-pattern questions
 
 Verified against the original author-hosted pattern catalog and the current complete question JSON (all four options and explanations). These decisions extend the fourteen SRE/Spring/DDD items above; they are **not bulk inferred** from the existing answer flags.
 
@@ -57,7 +57,7 @@ Verified against the original author-hosted pattern catalog and the current comp
 
 21. **iv156-proxy-vs-decorator — D.** D identifies lazy virtual proxy for controlling subject instantiation versus stackable timing decorator; A/B/C conflate same wrapper structure or incorrectly require java.lang.reflect.Proxy. **Primary source:** Refactoring.Guru /design-patterns/proxy and /design-patterns/decorator.
 
-22. **iv156-repository-vs-dao — A.** A distinguishes Spring Data's persistence convenience from duplicated query/filtering logic across services without domain-facing seam; B equates framework type with architectural boundary, C JDBC-only overstatement, D DTO leaves filtering duplicated. **Primary source:** Martin Fowler /eaaCatalog/repository.html; Spring Data JPA core concepts.
+**NOT APPROVED — iv156-repository-vs-dao.** A second Codex P2 on PR #520 correctly observed that duplicated business filtering across three callers does not establish that a Spring Data repository interface lacks a Repository boundary. Source-only correction shall acknowledge Spring Data can itself implement Repository while explaining why duplicated domain selection policy needs consolidation; only then a new V2 review is appropriate.
 
 23. **iv156-strategy-payment-conditional — B.** B isolates payment-specific processing in independently composable strategies and replaces swelling branch chain with lookup; A private helpers leave dispatch, C construction factory leaves branches, D mixes data type with algorithm hierarchy. **Primary source:** Refactoring.Guru /design-patterns/strategy.
 
