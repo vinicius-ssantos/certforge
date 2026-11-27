@@ -1190,6 +1190,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv156-decorator-cross-cutting-caching": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1086aec2cc208612a04c6ce027d351290448f26fede209ab7a3f777d74c3b4ad",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-facade-subsystem-simplification": {
+      "verdict": "APPROVED",
+      "digest": "sha256:97c968292ddd64d01423b728d82b2b872aec0ab8e9b2020eb8c48f2c9007e12c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-factory-method-vs-constructor": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb8e394323b8636ff0c69436159d6abbf70aa26a728812154203f5e9bea507bd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-observer-vs-pubsub": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3a6235691f1b3aea3d083187bb5af7f2e7a47477ad74f58bcc4ef7dc176e4291",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-proxy-vs-decorator": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a357b8d6cfc698e08beb51ccab6b076ec8bf15dc4c1d3bab96acb2f2650ab942",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-repository-vs-dao": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3e7f1f8bf974f5cc22fd0a154fb5c43269779abd13f6a34b5ee884b79e6b0b9d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-strategy-payment-conditional": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1f4423ca7ba8817aa7f54116710b096c263edbb98066847e42aab20f86eeb068",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-template-method-report-pipeline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:00f99e42164410a1117111733978000f0ce6822d39331d060e92eb9c27eabc5d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
