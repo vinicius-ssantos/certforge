@@ -3,14 +3,14 @@
   "topicId": "a3000000-0000-4000-8000-000000000112",
   "difficulty": "MEDIUM",
   "difficultyRationale": "The practical fix to the previous replication-lag scenario, testing whether the candidate knows a real mitigation rather than just the problem.",
-  "prompt": "After diagnosing the stale-profile-photo bug as replication lag, a team wants a fix that doesn't give up on read replicas entirely. One common approach is to route a user's own immediate follow-up reads to the primary for a short window after they write, then fall back to replicas afterward. What guarantee is this approach specifically providing?",
-  "explanation": "This is a 'read-your-writes' consistency guarantee: a user is guaranteed to see their own writes immediately, by reading from the primary (which is always up to date) for a short period right after writing, even while other users' reads continue to go to replicas that may lag slightly behind. It's a narrower, cheaper guarantee than making every read in the system strongly consistent.",
+  "prompt": "After a user writes profile changes to the primary database, the application wants to use read replicas when possible while strictly guaranteeing the user never reads an older version of their own write. What routing rule achieves that guarantee without making every other user's reads strongly consistent?",
+  "explanation": "Read-your-writes is a per-session guarantee, not system-wide strong consistency. A fixed short primary-routing window is only a best-effort heuristic if replication can lag longer; after the timer expires a stale replica could violate the promise. Strict enforcement routes the user to the primary or checks a replica's applied log/version watermark and only switches once it is caught up to at least the user's last acknowledged write.",
   "options": [
     {
       "key": "D",
-      "text": "It guarantees read-your-writes consistency for that specific user — their own next read sees their own write immediately, by reading from the primary for a short window — without requiring every read in the system to be strongly consistent.",
+      "text": "Route that user's follow-up reads to the primary until a chosen replica is confirmed to have applied at least the user's write version/log position, then allow replica reads; do not rely on an arbitrary short timer if replication can lag longer.",
       "correct": true,
-      "explanation": "Correct. This targets the specific case that burned the user — seeing their own just-written data — rather than paying the cost of strong consistency for all reads, including other users' reads of data they didn't just write."
+      "explanation": "Correct. Reading primary or a replica proven to have caught up to the user's version establishes read-your-writes for that client, while other users may still see eventual-consistency reads."
     },
     {
       "key": "B",
@@ -28,7 +28,7 @@
       "key": "A",
       "text": "It guarantees that the user's own write itself gets replicated much faster than normal, because detecting that a read-your-writes window is currently active causes the primary to push its replication stream to replicas at a much higher priority than usual.",
       "correct": false,
-      "explanation": "This approach doesn't speed up replication at all — it works around the lag entirely by not reading from the lagging replica during the window, rather than trying to make replication itself complete any faster."
+      "explanation": "This routing change does not accelerate replication; it avoids serving a replica version that precedes the user's own write."
     }
   ],
   "references": [

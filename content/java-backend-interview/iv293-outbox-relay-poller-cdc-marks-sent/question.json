@@ -3,14 +3,14 @@
   "topicId": "a3000000-0000-4000-8000-000000000110",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Checks understanding of the second half of the outbox pattern — how the saved outbox row actually gets published — not just the idea of writing to a table.",
-  "prompt": "A team adopts the transactional outbox pattern: instead of publishing directly to the broker, the order service writes an `OrderCreated` row into an `outbox` table in the same database transaction as the `Order` row itself. What component is still needed to actually get that event onto the broker, and what does it need to guarantee?",
-  "explanation": "Writing to the outbox table only makes the intent to publish durable and transactionally consistent with the business data — it doesn't put the event on the broker by itself. A separate relay process (either a poller that periodically reads unsent outbox rows, or a change-data-capture process like Debezium reading the database's write-ahead log) is responsible for reading those rows, publishing each one to the broker, and then marking it as sent (or deleting it) so it isn't published again. That relay must guarantee it doesn't lose track of a row before confirming the publish succeeded — effectively giving the overall pipeline at-least-once delivery from the outbox to the broker, which is why the consumer on the other end still needs to tolerate occasional redelivery.",
+  "prompt": "A service writes an OrderCreated row to its outbox table in the same local transaction as the Order. How does the event reach a message broker, and how does a polling relay differ from a change-data-capture (CDC) relay?",
+  "explanation": "Writing an outbox event in the same local transaction as an Order makes the publication intention durable but does not itself send a broker message. An asynchronous relay publishes it. Polling relays track unsent rows and mark or delete after confirmed publication; CDC relays (such as Debezium) tail committed DB changes and track durable connector offsets, not necessarily per-row sent flags. Either may redeliver or republish after crashes, so downstream consumers must be idempotent.",
   "options": [
     {
       "key": "A",
-      "text": "A separate relay process (a poller or a change-data-capture reader) must read unsent outbox rows, publish each to the broker, and only then mark the row as sent — effectively at-least-once delivery out of the outbox table.",
+      "text": "A separate relay is needed: a polling publisher reads unprocessed outbox rows, publishes with acknowledgement, then marks them sent; a CDC/log-tailing relay streams committed outbox changes from the database log and tracks durable source offsets/checkpoints instead. Both may publish twice after a crash, so consumers need idempotency.",
       "correct": true,
-      "explanation": "Correct. The outbox table solves the dual-write problem for the write side (making the save-and-intend-to-publish atomic), but something still has to drain that table to the broker; a poller or CDC-based relay is that component, and it needs to avoid marking a row sent before the publish is actually confirmed."
+      "explanation": "Correct. A polling relay can track sent flags, while a CDC relay normally tracks WAL/binlog positions in a connector offset store; marking each row sent is not a universal requirement of CDC. Both patterns require at-least-once-safe consumers."
     },
     {
       "key": "B",
@@ -35,6 +35,10 @@
     {
       "title": "microservices.io — Transactional Outbox pattern (relay via polling publisher or transaction log tailing)",
       "url": "https://microservices.io/patterns/data/transactional-outbox.html"
+    },
+    {
+      "title": "Debezium Documentation — Outbox Event Router",
+      "url": "https://debezium.io/documentation/reference/stable/transformations/outbox-event-router.html"
     }
   ],
   "evidence": {
