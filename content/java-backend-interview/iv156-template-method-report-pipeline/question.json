@@ -4,13 +4,13 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Requires distinguishing a fixed-skeleton design from a swappable-behavior design, two patterns that are often confused because both vary one part of an algorithm.",
   "prompt": "`InvoiceReportJob`, `UsageReportJob` and `AuditReportJob` all run the same sequence: load a date range of records, apply a report-specific transformation to produce rows, then write those rows through a shared CSV writer that handles headers, quoting and file naming. Only the transformation step differs between the three jobs; the load step and the write step are identical in all of them and must stay that way. Which design most directly matches this requirement?",
-  "explanation": "Template Method is for exactly this shape: a fixed sequence of steps where most steps are shared and one (or a few) varies, implemented by putting the shared steps in a base class and leaving the varying step as an abstract method (or hook) that subclasses override. It differs from Strategy, which swaps an entire algorithm at runtime through composition with no fixed surrounding sequence; here the sequence itself — load, transform, write, in that order — is the part that must not change, which is what a base class enforces and a composed, independently swappable object does not.",
+  "explanation": "Template Method directly expresses the required invariant sequence through a base-class run() that loads, calls the subclass transformation, and writes the shared CSV. Importantly, Strategy via composition is **not inherently incompatible** with a fixed pipeline: a single ReportJob.run() could preserve the order while injecting only the variable transformation. The competing Strategy alternative A here is inferior because it explicitly lacks that shared sequence and leaves different ReportJob implementations free to diverge, not because composition is incapable of enforcing an order.",
   "options": [
     {
       "key": "A",
-      "text": "A `ReportTransformationStrategy` interface injected into a single `ReportJob` class, with one implementation per report type, and `ReportJob` free to call the steps in any order it chooses.",
+      "text": "A ReportTransformationStrategy interface supplied to separate ReportJob implementations, with no shared run() skeleton and each implementation left free to assemble load, transform and write in a different sequence.",
       "correct": false,
-      "explanation": "This solves swapping the transformation, but it does not enforce that load and write stay in a fixed shared sequence; a composed strategy object has no say over the order in which the surrounding class calls things, which is a requirement the scenario explicitly states."
+      "explanation": "A Strategy can certainly be composed inside one ReportJob.run() that enforces a fixed load → transform → write sequence. But this particular option leaves pipeline order to each ReportJob implementation with no single shared skeleton, so it does not guarantee the two invariant steps or their ordering."
     },
     {
       "key": "B",
@@ -22,7 +22,7 @@
       "key": "C",
       "text": "An abstract `ReportJob` base class implementing `run()` as load → transform → write, with `transform` declared abstract and overridden by `InvoiceReportJob`, `UsageReportJob` and `AuditReportJob`.",
       "correct": true,
-      "explanation": "This is Template Method: the base class owns the fixed sequence and the shared load/write steps, and only the step that actually varies is left to subclasses, which matches the requirement that load and write stay identical while transform differs."
+      "explanation": "Correct. A shared Template Method run() in the abstract ReportJob base class fixes the order and shares load/write, while the subclass-supplied transform() varies. This is a direct match to the stated intent; a Strategy could also enforce fixed order if a central orchestrator were explicitly retained, but option A does not."
     },
     {
       "key": "D",
