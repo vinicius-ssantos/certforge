@@ -2,9 +2,9 @@
   "type": "SINGLE_CHOICE",
   "topicId": "a3000000-0000-4000-8000-000000000105",
   "difficulty": "HARD",
-  "difficultyRationale": "Requires separating the dirty-read guarantee that READ_COMMITTED actually gives from the check-then-act race it does not prevent — a common source of overconfidence about default isolation.",
-  "prompt": "A `@Transactional` method reads a product's `stock` column, checks that it is greater than zero, and then decrements it. The method runs under whatever isolation level the underlying connection pool reports — typically `READ_COMMITTED` on PostgreSQL or MySQL/InnoDB — because no `isolation` attribute was set. Two concurrent requests both read `stock = 1`, both see it is greater than zero, and both decrement it, leaving `stock = -1`. What is correct about fixing this through the `isolation` attribute?",
-  "explanation": "`READ_COMMITTED` only guarantees that a transaction never sees another transaction's uncommitted (dirty) writes; it says nothing about another transaction committing a write in between this transaction's own read and write. That gap is exactly what lets both requests read the same pre-decrement value. Raising isolation to `SERIALIZABLE` (or using row-level locking, or an atomic `UPDATE ... WHERE stock > 0`) closes that gap, but the default level does not.",
+  "difficultyRationale": "Requires distinguishing dirty-read isolation from atomic stock-decrement logic and choosing portable concurrency control with serialization retry.",
+  "prompt": "A `@Transactional` service method on PostgreSQL reads a product's stock, checks that it is greater than zero, then issues a separate `UPDATE products SET stock = stock - 1 WHERE id = ?` without guarding `stock > 0`. No isolation level is configured, so PostgreSQL uses its default `READ COMMITTED`. Two concurrent requests each read `stock = 1`, then both execute the decrement; the final stock becomes `-1`. What prevents this check-then-act anomaly?",
+  "explanation": "The illustrated separate SELECT and unguarded arithmetic UPDATE can race under PostgreSQL READ COMMITTED: two callers read 1, and then both decrements take effect. Correctness requires serializable isolation with retry on serialization failure, a lock acquired before the read/check, or an atomic conditional UPDATE that allows only stock > 0. PostgreSQL defaults to READ COMMITTED; in contrast MySQL/InnoDB typically defaults to REPEATABLE READ, so generic claims that both default to READ COMMITTED are incorrect.",
   "options": [
     {
       "key": "A",
@@ -14,9 +14,9 @@
     },
     {
       "key": "B",
-      "text": "Setting `@Transactional(isolation = Isolation.SERIALIZABLE)` (or equivalent row-level locking) is needed, because `READ_COMMITTED` permits another transaction's write to commit between this transaction's read and write.",
+      "text": "Use `Isolation.SERIALIZABLE` with retries for serialization failures, or lock the stock row before the check (alternatively use one conditional `UPDATE ... WHERE stock > 0` and verify the affected row count); `READ COMMITTED` alone does not serialize a separate check followed by update.",
       "correct": true,
-      "explanation": "Correct. `SERIALIZABLE` (or explicit locking such as `SELECT ... FOR UPDATE`) prevents the interleaving that causes the lost decrement; `READ_COMMITTED` does not."
+      "explanation": "Correct. `SERIALIZABLE` prevents non-serializable interleavings but may abort a transaction that the caller must retry; a pessimistic row lock protects the balance before checking, while a single conditional UPDATE atomically rechecks available stock. Simply opening a transaction at READ COMMITTED is not enough."
     },
     {
       "key": "C",
@@ -35,6 +35,14 @@
     {
       "title": "Spring Framework Javadoc — @Transactional (isolation attribute)",
       "url": "https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/transaction/annotation/Transactional.html"
+    },
+    {
+      "title": "PostgreSQL Documentation — Transaction Isolation",
+      "url": "https://www.postgresql.org/docs/current/transaction-iso.html"
+    },
+    {
+      "title": "MySQL 8.4 Reference Manual — Transaction Isolation Levels",
+      "url": "https://dev.mysql.com/doc/refman/8.4/en/innodb-transaction-isolation-levels.html"
     }
   ],
   "evidence": {
