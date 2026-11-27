@@ -3,8 +3,8 @@
   "topicId": "a3000000-0000-4000-8000-000000000106",
   "difficulty": "MEDIUM",
   "difficultyRationale": "A common real trade-off once a team reaches for nativeQuery=true to express something JPQL can't.",
-  "prompt": "A reporting endpoint needs a window function (`ROW_NUMBER() OVER (...)`) that JPQL has no syntax for, so a developer adds:\n```java\n@Query(value = \"SELECT ... ROW_NUMBER() OVER (...) ...\", nativeQuery = true)\n```\nWhat's a real trade-off of choosing `nativeQuery = true` here compared to a JPQL `@Query`?",
-  "explanation": "A native query is handed to the database exactly as written, so Hibernate skips its JPQL-to-dialect translation step entirely. That buys access to database-specific SQL features, but it ties the query to that database's syntax. It's also only automatically mapped onto a managed entity when the result shape matches that entity's columns exactly — a window-function reporting query like this one produces extra ranking columns no entity has, so getting a structured result back requires an explicit `@SqlResultSetMapping` or a DTO constructor mapping, work JPQL's entity mapping does for free whenever the shapes already line up.",
+  "prompt": "A reporting endpoint needs a vendor-specific window-function query and uses `@Query(value = \"SELECT ..., ROW_NUMBER() OVER (...) ...\", nativeQuery = true)`. The returned ranking rows do not match the mapped entity columns. What is the real trade-off against a portable JPQL query?",
+  "explanation": "Unlike dialect-translated JPQL, a native SQL string is supplied to the database in its vendor-specific syntax. For a ranking result not matching an entity, choose an appropriate scalar or tuple result, a supported interface projection, or a DTO mapping (including @SqlResultSetMapping where needed). Native queries are not forced to use @SqlResultSetMapping, and cannot be assumed to hydrate managed entities when the selected shape differs.",
   "options": [
     {
       "key": "A",
@@ -14,15 +14,15 @@
     },
     {
       "key": "B",
-      "text": "Native SQL ties the query to the specific database's dialect, and here the result shape doesn't match any entity's mapped columns, so getting a structured result back needs an explicit `@SqlResultSetMapping` or DTO constructor mapping — a JPQL query wouldn't have either cost.",
+      "text": "Native SQL provides the database-specific window syntax but sacrifices JPQL dialect portability, and non-entity ranking rows require an appropriate result shape (for example, scalar/Object[] or Tuple, a projection, or an explicit DTO result-set mapping) instead of assuming a normal managed-entity mapping.",
       "correct": true,
-      "explanation": "Correct. This is the real cost of nativeQuery=true: you gain direct access to database-specific SQL, but you give up dialect portability, and — for a result shape like this one that doesn't match an entity — JPQL's automatic entity mapping too."
+      "explanation": "Correct. Native SQL text is database/dialect-specific and a non-entity result must be represented with a suitable scalar, tuple/projection, or DTO mapping; @SqlResultSetMapping is an option, not an unavoidable prerequisite."
     },
     {
       "key": "C",
       "text": "`nativeQuery = true` only changes how Spring Data parses the method signature, but Hibernate still returns fully managed, dirty-checked `Employee` entities identical to a JPQL result in every case, with zero extra mapping configuration needed, because it falls back to matching result columns against the entity's mapped fields by name.",
       "correct": false,
-      "explanation": "A native query that selects columns beyond an entity's exact mapped shape does not automatically become managed entities; without a result-set mapping or an exact entity-column match, you get plain scalar/tuple results, not transparently managed objects."
+      "explanation": "A native query returning rankings and columns beyond an entity mapping does not automatically return managed entities; it can return scalar, tuple, projection or mapped DTO values depending on the declared return type."
     },
     {
       "key": "D",

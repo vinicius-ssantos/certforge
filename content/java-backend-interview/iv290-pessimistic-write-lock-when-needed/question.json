@@ -4,7 +4,7 @@
   "difficulty": "HARD",
   "difficultyRationale": "Requires weighing the actual trade-off between the two locking strategies under a specific contention profile, not just naming them.",
   "prompt": "A ticket-booking service must guarantee that once a seat is read as \"available\" inside a transaction, no other concurrent transaction can also book it before the first one commits or rolls back — and the seat is under heavy concurrent demand, where retrying failed optimistic-lock conflicts over and over would itself become too costly. What's the appropriate tool here, and why does it fit better than `@Version` in this specific situation?",
-  "explanation": "`LockModeType.PESSIMISTIC_WRITE` issues a `SELECT ... FOR UPDATE` that takes a database row lock at the moment the seat is read, blocking any other transaction from reading or writing that same row until the first transaction ends. That avoids the retry storm a high-contention `@Version` approach would cause under this exact load pattern (many transactions racing for the same row), at the cost of holding a lock for the full duration of the transaction instead of only detecting a conflict after the fact.",
+  "explanation": "PESSIMISTIC_WRITE uses the database row-level locking mechanism (commonly SELECT ... FOR UPDATE), serializing conflicting row updates/locking reads under high contention instead of repeatedly spending work on failed optimistic version checks. Crucially, ordinary non-locking reads may continue seeing a previously committed snapshot under MVCC; the correctness guarantee applies to the booking read/check/update operation performed under the lock, not to blocking all possible readers.",
   "options": [
     {
       "key": "A",
@@ -26,15 +26,19 @@
     },
     {
       "key": "D",
-      "text": "LockModeType.PESSIMISTIC_WRITE issues a SELECT ... FOR UPDATE that takes a database row lock the moment the seat is read, blocking other transactions from reading or writing that row until the first transaction ends — avoiding the repeated-retry pattern high-contention optimistic locking would cause here, in exchange for holding a lock for the transaction's full duration.",
+      "text": "LockModeType.PESSIMISTIC_WRITE typically obtains a row-level write lock when the seat is read (e.g. SELECT ... FOR UPDATE), forcing competing booking transactions that acquire a conflicting write lock or update the seat to wait until the first transaction ends. Ordinary non-locking snapshot SELECTs may still read an earlier committed version.",
       "correct": true,
-      "explanation": "Correct. Under heavy contention for the same row, blocking upfront with a pessimistic lock avoids the wasted work of repeatedly retrying failed optimistic updates, which is exactly the trade-off that makes pessimistic locking the better fit here."
+      "explanation": "Correct. Pessimistic locking prevents competing transactions from both acquiring conflicting locks or updating the seat concurrently, but unlike the old wording it does not require every ordinary MVCC snapshot read to block. The application rechecks availability under the lock before booking."
     }
   ],
   "references": [
     {
       "title": "Jakarta Persistence Javadoc — LockModeType (\"A lock with LockModeType.PESSIMISTIC_WRITE can be obtained on an entity instance to force serialization among transactions\")",
       "url": "https://jakarta.ee/specifications/platform/10/apidocs/jakarta/persistence/LockModeType.html"
+    },
+    {
+      "title": "PostgreSQL Documentation — Explicit Row-level Locking",
+      "url": "https://www.postgresql.org/docs/current/explicit-locking.html"
     }
   ],
   "evidence": {
