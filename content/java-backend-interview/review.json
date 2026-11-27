@@ -1670,6 +1670,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv290-lazy-proxy-getclass-vs-instanceof": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6c3874ef9edcbc2d13944e2362e1e85a54c18683de603f17fa3782f963aa7d60",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-lost-update-no-locking-scenario": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6883cddd818904a5591e7dbace471ed1f6c011d15c3810c9b50bda5fce5f90ac",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-migration-idempotency-concurrent-startup": {
+      "verdict": "APPROVED",
+      "digest": "sha256:67ec84018f64e6ad50571b564e54fb2bc2b721a1281e8d719281c1c3b280d2b0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-n-plus-one-lazy-collection-loop": {
+      "verdict": "APPROVED",
+      "digest": "sha256:975ea22ae273dd6cb8b1c66d337a34f87b3478f5d7ed5c30ac3f67c2197db364",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-onetomany-manytoone-default-fetch-type": {
+      "verdict": "APPROVED",
+      "digest": "sha256:45fb191c164c33745b26f80afbf201af85323455ce80b1550637552718ffcb2b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-pageable-page-count-query": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b9ec4a83754f69eb4c92d8f9535b8db73783b75a147271d69ac0aa1a9ac05e59",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-persistence-context-entity-states": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e5501346413323ac27e7bdd1363658ab7d553665604fa5463bac3afe01334b73",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-pessimistic-write-lock-when-needed": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1be89989d23960f280fc0d067a319497b05256412bbc04931332bf75a9ea7050",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
