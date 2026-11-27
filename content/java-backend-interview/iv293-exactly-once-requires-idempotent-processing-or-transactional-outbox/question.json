@@ -4,13 +4,13 @@
   "difficulty": "HARD",
   "difficultyRationale": "Probes whether a candidate understands that 'exactly-once' is a property of carefully-combined mechanisms, not a single transport-level switch.",
   "prompt": "A developer sets Kafka's idempotent producer (`enable.idempotence=true`) and transactional APIs, and tells the team \"we now have exactly-once delivery end to end.\" A reviewer pushes back, saying that claim is too broad as stated. What is the reviewer's objection?",
-  "explanation": "Kafka's idempotent producer and transactions give exactly-once semantics for writes *within Kafka itself* — a producer won't create duplicate records on retry, and a consume-process-produce chain can be made atomic via transactions. But \"exactly-once\" for the whole pipeline also depends on what happens outside Kafka: if the consumer's processing has an external side effect (a database write, an email, a call to another service) that isn't itself transactionally tied to the offset commit, that external effect can still happen more than once on redelivery. End-to-end exactly-once requires either making that external effect idempotent or wrapping it and the offset commit in the same atomic unit (e.g., a transactional outbox) — Kafka's own guarantee alone doesn't cover it.",
+  "explanation": "Kafka exactly-once semantics address broker-side idempotent writes and transactional consume-process-produce with committed offsets when configured. They cannot automatically include external email, database or HTTP side effects. A transactional outbox can guarantee a local business-row-plus-publication-intent atomic write, but the relay may publish more than once, and it does NOT alone make the consumer's Kafka offset commit atomic with a separate remote side effect. External exactly-once effects require stable idempotency keys enforced where the effect occurs or true transactional coordination.",
   "options": [
     {
       "key": "A",
-      "text": "Kafka's idempotent producer and transactions only guarantee exactly-once semantics for writes inside Kafka; an external side effect outside that boundary can still be duplicated on redelivery unless it's made idempotent or tied into the same atomic unit.",
+      "text": "Kafka idempotent producers and transactions can provide exactly-once Kafka-to-Kafka processing under the correct consumer settings, but do not make arbitrary external database writes/emails/API calls exactly once; external effects still require their own atomic idempotency/transactional coordination.",
       "correct": true,
-      "explanation": "Correct. This is exactly the scope Kafka documents for its exactly-once semantics: it covers producer retries and Kafka-to-Kafka transactional pipelines, not arbitrary external effects a consumer triggers as part of processing a message."
+      "explanation": "Correct. Kafka EOS is scoped to Kafka transaction boundaries; an external effect needs its own idempotent contract or atomic coordination with consumed positions. An outbox helps with reliable publication, but by itself does not atomically commit a Kafka offset and unrelated remote API effect."
     },
     {
       "key": "B",
@@ -35,6 +35,10 @@
     {
       "title": "Confluent Documentation — Kafka Delivery Semantics (exactly-once's external-system caveat: systems claiming it \"may not account for cases where a consumer or producer outside of the system has failed\")",
       "url": "https://docs.confluent.io/kafka/design/delivery-semantics.html"
+    },
+    {
+      "title": "Microservices.io — Transactional Outbox pattern and relay at-least-once caveat",
+      "url": "https://microservices.io/patterns/data/transactional-outbox.html"
     }
   ],
   "evidence": {
