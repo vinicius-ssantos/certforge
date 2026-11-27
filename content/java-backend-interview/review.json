@@ -902,6 +902,54 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv152-duplicated-validation-single-source": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c5ff235c4e8ab34081f35ebfcc24fec27ce2d1eae19e60ef1967e0dd468a923b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv152-premature-abstraction-future-proof": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ca010e30889e694a27c3e8b66ae9ca499245b49875a7add7a33b4049abb9295e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv152-tight-coupling-concrete-dependency": {
+      "verdict": "APPROVED",
+      "digest": "sha256:20d64daac32e21deab4f917765421e300b191f8199478b1d04e4fd1d734c2014",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv155-contract-testing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:67f35e5237bb00fd09169505ca8553e0600e0e552ab9ae55851fa9fc42a22b30",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
