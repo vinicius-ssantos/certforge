@@ -36,6 +36,15 @@ The `iv156-template-method-report-pipeline` question SHALL preserve correct key 
 - **GIVEN** a ReportJob.run() fixes the load, transform, write order
 - **THEN** injecting a transformation Strategy can retain that order, even though a Template Method implements it using subclass overrides
 
+### Requirement: Spring Data Repository versus DAO distinction SHALL not presume the Repository pattern is absent
+
+`iv156-repository-vs-dao` SHALL explicitly acknowledge Spring Data repositories may themselves implement the Repository pattern, while identifying independently duplicated business eligibility/pagination logic in service callers as the concrete weakness. The correct key SHALL remain A and other distractors SHALL stay invalid.
+
+#### Scenario: Multiple services use one JpaRepository
+
+- **GIVEN** services share a persistence repository but repeat eligibility rules
+- **THEN** the answer SHALL recommend centralizing the business rule without falsely denying the Repository pattern exists
+
 ### Requirement: Source-only JPA repairs SHALL not record editorial approvals
 
 The change SHALL retain original answer keys and SHALL not alter `review.json`, `pack.json` or publish the DRAFT pack.
