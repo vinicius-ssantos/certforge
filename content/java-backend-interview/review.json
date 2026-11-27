@@ -2198,6 +2198,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv293-outbox-pattern-dual-write-problem": {
+      "verdict": "APPROVED",
+      "digest": "sha256:040bcb6c99f8296f109856d0d4a6262b26b993535eddd6de802eeae4f7054957",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-outbox-relay-poller-cdc-marks-sent": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4caae89fd6b0b7f42ba66c95ab79c4379b661d8d941e8cec2b67ac31c63477d2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-poison-message-blocks-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4094cf3a27f7eb024d4822eae6424bbdbe9c31f62604258f3e96c1238b0ea4fa",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-poison-message-head-of-line-blocking": {
+      "verdict": "APPROVED",
+      "digest": "sha256:37d83809b0dcdc0d4d53f1b7465b5d4b26c76fbd4049adfed0aea729dc00ea96",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-retry-limit-before-dead-letter": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77f11d6ba3328011408b275e6ce6b28b622c48c8aac875c0f665d3dd4a443c25",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-unbounded-queue-oom-backpressure": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0acd1d57a10272d315e6e44e6787bde59193c364fdfe7e2acc240a2f9684ab3b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cache-invalidation-stale-value-after-update": {
+      "verdict": "APPROVED",
+      "digest": "sha256:678e589bcf6ef573945525036743d002247031f2e1d49c8c8f0ecb802bbd0014",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-capacity-estimation-peak-vs-average": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5213bb2f0b3d3375fef462358d54abcf5dd44908677237328a53cf56509e75cd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
