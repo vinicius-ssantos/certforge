@@ -1910,6 +1910,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv292-distributed-tracing-shared-trace-id": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1468818c6275cda9506cbc70cc039519ad5b3852be8d6495c1d50761c9197f87",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-eventual-consistency-visible-bug": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5f6476b1011fb62f9f8e915488151a91596fa4051c3ee2ea1744ae13f2879da9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-hardcoded-instance-ips-service-discovery": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb9c30df6d60cbe3ff9b51293188c31ba8589c496d948f9e6b142eb3c6c8ef83",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-idempotency-key-retried-post": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3910760ec8217e8272f3fdca85cbd7903fa21ae1b498a2e884bbbe81637db648",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-read-your-writes-narrower-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:46bd6e5e8d1d8cbde5dc47afd4d5f324a558aefed36a5fa84bc877943fe2cad6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-saga-choreography-vs-orchestration-tradeoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:89c8b23aa6023067bca8deb3c407f9d7100d9f7439515ae5b292438c27bd6469",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-saga-orchestration-compensating-actions": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ff2e49f8e004b499ebae9d8bb8b487c61f297c35715451dcb03f2e3319496011",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-timeout-budget-call-chain": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a93cde20310f197c660892b2a3a088811cf5bc8095abe00943ccb1eff089d88a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
