@@ -1766,6 +1766,54 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv290-projection-vs-full-entity-fetch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b31f75843da635a18a01ffee10ae705621282dfad495d39ec9690926fe5612b2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-query-jpql-vs-native-tradeoffs": {
+      "verdict": "APPROVED",
+      "digest": "sha256:727502751f878863d5e22577b501efb30ab1258ec34711f79c3c4f8b17e638ed",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-second-level-cache-stale-external-update": {
+      "verdict": "APPROVED",
+      "digest": "sha256:926fc44bd99345c1dbf3ae162da3625387d2fc1ec156567b7edae3c0af249c56",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-version-optimistic-lock-exception": {
+      "verdict": "APPROVED",
+      "digest": "sha256:318dea058c5a94c0b6dbf1c5b708495d184ea155b5a629c1bcc3ee48a92dea01",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
