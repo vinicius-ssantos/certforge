@@ -2294,6 +2294,102 @@
         "explanation-complete",
         "reference-is-primary"
       ]
+    },
+    "iv294-cdn-edge-cache-offload-limits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aae180aff6f039e57feb604e4f2cf04652b5c9b2e74735e82df6a3696f049b8d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-consistent-hashing-minimal-redistribution": {
+      "verdict": "APPROVED",
+      "digest": "sha256:539446446e7625c87d031533753aab848e5f1697d3f2643fbc71bc1ea16305a8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cross-shard-query-fanout": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c0aed499e2eeef9389fe075a51f59edf59f9a3ff814687b52d4366fe3590b5f4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-fixed-vs-sliding-window-boundary-burst": {
+      "verdict": "APPROVED",
+      "digest": "sha256:606dcab76ab6121d631bf5b4dcd04d5ad48c6c94f713b19d02cee5996aa5d2ca",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-least-connections-vs-round-robin": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d856fded8546d1ba3623a17231991710ad81c975b6fad2992267e825e153f4e2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-rate-limit-gateway-vs-per-service": {
+      "verdict": "APPROVED",
+      "digest": "sha256:868e3265b21a66f3684433100a5b44f94b88f5b9b2d2acb48e11af7022e3507e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-read-replica-write-throughput": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bba15fd00f0b66d84444b77fac63c401d320cdaff5214c8efea02e544ca90dc4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-read-your-writes-primary-routing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ac2570d2f672896ba586af4106e56e660c75a876dee1008a3371d7f9c9b266d8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
     }
   }
 }
