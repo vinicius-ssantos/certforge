@@ -1,0 +1,38 @@
+# Design
+
+## Context
+
+ADR 0006 (2026-07) set policy for any future learner-code execution: disposable, resource-bounded, no DB credentials, no general network access, no application secrets, a narrow job/result contract — and explicitly deferred everything else to `v0.5.0`. `#175`/ADR 0027-0030 (2026-11) then built and got security review for almost exactly that isolation shape, for a different capability (hands-on Kubernetes/Docker labs): `VercelSandboxClient` (create a session from a digest-pinned image, run a bounded command to completion, stop it), with the grading discipline that the orchestrator runs every check itself and never the learner's own shell (ADR 0027 decision 4). See `proposal.md` for why reusing that review matters more than reusing the code.
+
+Labs' *other* half — `openInteractive()`'s controller-hosted PTY and the `lab-shell` command allowlist (ADR 0029) — exists to let a learner type free commands safely. This design does not need it: see Decisions.
+
+## Goals / Non-Goals
+
+**Goals:**
+- Give `v0.5.0` a concrete, reviewable technical shape before any implementation task starts.
+- Reuse `#175`'s already-approved isolation primitive rather than re-litigating sandbox security from scratch.
+- Keep the certification-specific capability (`secure-java-execution`) and the Infrastructure/DevOps-direction capability (hands-on labs) as separate domains depending on one shared, neutral primitive — not one feature absorbed into the other's package.
+
+**Non-Goals:**
+- Free-form, from-scratch learner-authored programs. See Decisions.
+- An interactive terminal or shell for this capability.
+- Deciding whether `v0.5.0` is scheduled now, relative to `v0.4.0`'s own tag — that sequencing call belongs to the product owner, not to this design.
+- Changing anything about how the existing hands-on labs are authored, orchestrated, or billed.
+
+## Decisions
+
+**Submission is "complete an author-authored scaffold," not a free-form program.** The product owner delegated this choice; the reasoning for the direction taken: CertForge's own stated principles put "deterministic correctness first" and "authorial and reviewable content" ahead of open-ended input, and `v0.4.0`'s entire design (`code-analysis-feedback` spec: "SHALL NOT compile or run code in the browser") already drew the line at pre-recorded, author-fixed evidence specifically because grading open-ended text deterministically is hard without a human-authored test harness anyway — which a scaffold-plus-insertion-point *is*. A free-form submission would need the same author-written harness to grade against, so it buys ambiguity (what counts as "the program"? how large? what if it doesn't compile for reasons unrelated to the lesson?) without buying anything a scaffold doesn't already give. This also keeps the authoring workflow symmetrical with every existing question type: an author writes a complete, reviewable artifact; nothing about "what the learner might type" is reviewed in advance because it can't be.
+
+**Extract the sandbox client to a neutral module, not into `dev.certforge.labs`.** `VercelSandboxClient` today lives in `labs.internal` and is Labs-specific in nowhere but location — its own Javadoc already calls itself "a thin wrapper over the Vercel Sandbox REST API." Moving the generic lifecycle (create/cmd/stop, image-digest pinning, the `LabSandbox`-shaped resource limits) to something like `dev.certforge.platform.sandbox` lets `secure-java-execution` depend on it without depending on (or living inside) the Infrastructure/DevOps labs domain, consistent with the project's own rule that certification-specific concepts "must not be diluted into generic fields" — read the other way, a generic primitive should not be owned by a specific domain either. Alternative considered: duplicate a second, independent sandbox-client wrapper for this capability. Rejected — two implementations of the same reviewed security boundary is strictly worse than one shared one, and the existing code is already a thin, generic wrapper, not something Labs-specific that would need unwinding.
+
+**No interactive terminal.** Completing a scaffold is submitted as one text blob, not typed live into a shell. Grading is the orchestrator running `javac` then the compiled class to completion via the same non-interactive `cmd`-style call Labs' own grader already uses for its evaluation probes (never the learner's own session) — so this design never needs ADR 0029's restricted-shell problem (a command allowlist safe against live, arbitrary keystrokes) at all. A session for this capability has no `openInteractive()` step and ships no terminal UI.
+
+**Reuse `VerificationEvidence`'s data shape, not its copy.** `files[] + output` is exactly what a compiled-and-run result is. Its existing English copy is explicit that it is "a recording, not an execution" — true for `v0.4.0`'s pre-recorded evidence, false for this capability's live result. Plan on a sibling component (or a `live: boolean` prop) sharing the data shape and most of the layout, with its own, honestly-different copy — not reusing the existing copy unmodified.
+
+**Smaller resource/time budget than hands-on labs.** Compiling and running a short snippet is a seconds-scale job, not a 900-second interactive session. A `vcpus: 1`, a timeout in the tens of seconds, and a small writable scratch area (enough for one or two source/class files) are all a session needs; Vercel Sandbox's platform-fixed 2 GiB/vCPU memory applies the same way it does for labs.
+
+## Risks / Trade-offs
+
+- **The exact insertion-point/scaffold authoring format isn't designed yet.** [Risk: open-ended authoring tooling work hiding inside what looks like a small spec] → Mitigation: scope the first delta spec to the simplest shape that is still real (one scaffold, one insertion point, one expected-output check), matching how `LabEvaluation` already keeps a lab's checks to a flat list of deterministic probes.
+- **Extracting the sandbox client touches code `#175` already shipped and had security-reviewed.** [Risk: a refactor introduces a regression in already-approved isolation code] → Mitigation: the extraction should be a pure move/rename with `LabsSessionIT`/`LabsContainerSessionIT`-equivalent coverage re-run unchanged, not a behavior change, and reviewed as carefully as the original ADR 0027-0030 work was.
+- **A learner-submitted snippet's compiler diagnostics are themselves learner-facing output** that was never in the original ADR 0006 "untrusted output" conversation in as much detail (a compile error naming a line/column in the learner's own text, echoed back). [Risk: a crafted snippet could try to use compiler/runtime output as a signal-smuggling channel out of the sandbox, or a stack trace could leak host details] → Mitigation: treat runner output as untrusted at the boundary exactly as ADR 0006 already requires ("the main application treats runner output as untrusted and sanitizes it"); this needs its own, explicit review pass before implementation, not an assumption that it's covered by inheriting Labs' isolation alone — Labs never echoes learner-shell output back to the UI for interactive labs (only fixed evidence for the submit path), so this is new ground, not precedent.
