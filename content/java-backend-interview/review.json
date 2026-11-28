@@ -1107,6 +1107,18 @@
         "reference-is-primary"
       ]
     },
+    "iv154-queue-deque-sliding-window": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cfe2fb2e6a181ae3dbe7ff218aa1ed4d1abb5fdae8ec1a9ef07f00e6dc278829",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
     "iv155-repository-mock-tradeoff": {
       "verdict": "APPROVED",
       "digest": "sha256:73154fe96b30a5f0c03ece739999da0d96fbe903cb8a2e95de8302f870933ca4",
@@ -1146,210 +1158,6 @@
     "iv155-testing-async-behavior": {
       "verdict": "APPROVED",
       "digest": "sha256:6b0802eed0d36373209649f6a865eba0e82cb00bd196717586946bb97d8eaa26",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-aggregate-root-role": {
-      "verdict": "APPROVED",
-      "digest": "sha256:8e2286da794df719569e1b8226c555a34b1a9f901adc64765f62c02cb8c7c9c0",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-anti-corruption-layer-legacy": {
-      "verdict": "APPROVED",
-      "digest": "sha256:8a429c872eb1c01bb0cf1297186bc2e0bd08a1b9947e984df2491057033d1be6",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-bounded-context-integration-contract": {
-      "verdict": "APPROVED",
-      "digest": "sha256:fb4443f0da124a30e2e7e8950b1e3616188f3066d3d292378f6531956e07c692",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-cpu-spike-blocked-threads": {
-      "verdict": "APPROVED",
-      "digest": "sha256:0860ee0877970f4dd123c8c78b7638a8763c07851814a545f94dfeccd120f417",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-cpu-throttle-container-limits": {
-      "verdict": "APPROVED",
-      "digest": "sha256:599beaa1c816a2aef5af98f9590aaef42664749d1c37584ee7e56b53bebc50c0",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-cross-service-trace-correlation": {
-      "verdict": "APPROVED",
-      "digest": "sha256:d44128445cbcb25707818a49f7312f92585c7782d092878ff5bffaae7e564368",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-db-lock-retry-storm": {
-      "verdict": "APPROVED",
-      "digest": "sha256:63ffd03e5a0041a8a9b0c4ca7141fded96c8f1672fcdd056eab798ca5621e324",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-downstream-timeout-cascade": {
-      "verdict": "APPROVED",
-      "digest": "sha256:15c8d55b7aac0e326d4de4fb65fca576e893f6836bf95fe4812d170b1c83f4ef",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-latency-after-deploy": {
-      "verdict": "APPROVED",
-      "digest": "sha256:dba2efa632eabc7da4743c6b7fbb195d80e662cc2242f6a6908bec7eb85051f9",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv158-pool-exhaustion-n-plus-one": {
-      "verdict": "APPROVED",
-      "digest": "sha256:2f62f5f76ac4572405ee32a2e5ff2d9dda604f4243096cc80a58e5aef095c70c",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv288-configurationproperties-vs-value-type-safety": {
-      "verdict": "APPROVED",
-      "digest": "sha256:a1c022311098d6c8529bdc4ba867196f200b9cb2366aa566d36bad4249ca4da4",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv288-exclude-autoconfigured-datasource": {
-      "verdict": "APPROVED",
-      "digest": "sha256:82ec44f8286ad83b06ee4238d90d2004202196ed332c4efd6323178af8893742",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv288-readonly-transaction-what-it-changes": {
-      "verdict": "APPROVED",
-      "digest": "sha256:f55922f90e996dee55922b1911c8bd9871a0a3f9a54b389e1fde589d8d1884bb",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv288-starter-mechanics-debug-report": {
-      "verdict": "APPROVED",
-      "digest": "sha256:f198e4bfb1e36742ab628b4be1ce812ab420bf61dcba6dfb0f36343f0e4a4675",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-ddd-when-excessive-crud": {
-      "verdict": "APPROVED",
-      "digest": "sha256:bb7bad515afbf0bd9bbeb0875daac4ccb0acc3d73535fa4d4b6f287207660d98",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-repository-domain-abstraction": {
-      "verdict": "APPROVED",
-      "digest": "sha256:40f872a3138f8a410d10fe302e13c3c797e6ab189f4cd80f0bf0bccdf027151e",
-      "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
-      "checklist": [
-        "correct-option-verified",
-        "distractors-plausible",
-        "explanation-complete",
-        "reference-is-primary"
-      ]
-    },
-    "iv157-shared-jpa-entity-risk": {
-      "verdict": "APPROVED",
-      "digest": "sha256:77fa977b392d07e30dfed089a5d715b47fe51e6706f527e44da7858e0738c7e4",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-27",
       "checklist": [
@@ -1443,9 +1251,1245 @@
         "reference-is-primary"
       ]
     },
+    "iv156-repository-vs-dao": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4697e8b704a27a10606543a09d653e65cf99c961401b24fe540f54b27915504c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
     "iv156-strategy-payment-conditional": {
       "verdict": "APPROVED",
       "digest": "sha256:1f4423ca7ba8817aa7f54116710b096c263edbb98066847e42aab20f86eeb068",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv156-template-method-report-pipeline": {
+      "verdict": "APPROVED",
+      "digest": "sha256:be08330ae568fc02700ac3caf746569ff1deed207f6d915843526b6d10b8f995",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-aggregate-root-role": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8e2286da794df719569e1b8226c555a34b1a9f901adc64765f62c02cb8c7c9c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-anti-corruption-layer-legacy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8a429c872eb1c01bb0cf1297186bc2e0bd08a1b9947e984df2491057033d1be6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-bounded-context-integration-contract": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb4443f0da124a30e2e7e8950b1e3616188f3066d3d292378f6531956e07c692",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-ddd-when-excessive-crud": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bb7bad515afbf0bd9bbeb0875daac4ccb0acc3d73535fa4d4b6f287207660d98",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-protect-invariant-aggregate": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7aeb045b8851ce3a99cd7a094c40772cec78a12cd98105ea2b158c90f7a7167b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-repository-domain-abstraction": {
+      "verdict": "APPROVED",
+      "digest": "sha256:40f872a3138f8a410d10fe302e13c3c797e6ab189f4cd80f0bf0bccdf027151e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv157-shared-jpa-entity-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77fa977b392d07e30dfed089a5d715b47fe51e6706f527e44da7858e0738c7e4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cpu-spike-blocked-threads": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0860ee0877970f4dd123c8c78b7638a8763c07851814a545f94dfeccd120f417",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cpu-throttle-container-limits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:599beaa1c816a2aef5af98f9590aaef42664749d1c37584ee7e56b53bebc50c0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-cross-service-trace-correlation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d44128445cbcb25707818a49f7312f92585c7782d092878ff5bffaae7e564368",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-db-lock-retry-storm": {
+      "verdict": "APPROVED",
+      "digest": "sha256:63ffd03e5a0041a8a9b0c4ca7141fded96c8f1672fcdd056eab798ca5621e324",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-downstream-timeout-cascade": {
+      "verdict": "APPROVED",
+      "digest": "sha256:15c8d55b7aac0e326d4de4fb65fca576e893f6836bf95fe4812d170b1c83f4ef",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-heap-growth-old-gen": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c2332efa90f0456ea3fb8e2ccfa1c46ab5b59b0d092d68da3e4affbb9e78e432",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-latency-after-deploy": {
+      "verdict": "APPROVED",
+      "digest": "sha256:dba2efa632eabc7da4743c6b7fbb195d80e662cc2242f6a6908bec7eb85051f9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-pool-exhaustion-n-plus-one": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2f62f5f76ac4572405ee32a2e5ff2d9dda604f4243096cc80a58e5aef095c70c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv158-queue-backlog-duplicate-charges": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f3fc43913f93bd8693ef69711ae4906120d35bb3e6ea6ff6521e865ddc59692f",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-stateful-lambda-parallel-stream-race": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d695b91140c9a3f01d3c9fd0fdaa453730fafb1ee57deb427286dbdb46542868",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv286-unsafe-publication-constructor": {
+      "verdict": "APPROVED",
+      "digest": "sha256:2b2c1884dc0922946cbb216b5718562af4ac97badfd9276aecc72adc6c1ca6de",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-configurationproperties-vs-value-type-safety": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a1c022311098d6c8529bdc4ba867196f200b9cb2366aa566d36bad4249ca4da4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-constructor-injection-circular-detection": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4b8627f7af1f36ee39a9e9c007e06bc8bf9f1679fd51aff76c1f3a29ed398c4a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-exclude-autoconfigured-datasource": {
+      "verdict": "APPROVED",
+      "digest": "sha256:82ec44f8286ad83b06ee4238d90d2004202196ed332c4efd6323178af8893742",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-readonly-transaction-what-it-changes": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f55922f90e996dee55922b1911c8bd9871a0a3f9a54b389e1fde589d8d1884bb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-starter-mechanics-debug-report": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f198e4bfb1e36742ab628b4be1ce812ab420bf61dcba6dfb0f36343f0e4a4675",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-transactional-isolation-level-default-wrong": {
+      "verdict": "APPROVED",
+      "digest": "sha256:57d574b728f2bbc41881bcfb829af58a2bc0a20f8a3e44e31084423cc77c31e0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv288-valid-vs-validated-nested-group": {
+      "verdict": "APPROVED",
+      "digest": "sha256:23b6379d4944d42918001aa1f5c2365f27d22188cbf5db6fe2107250fef4637d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-derived-query-method-naming-mismatch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5a37bb51124971670b3c754d562ad413098d9c6862662ab5b8e62f38f03fe7a8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-dirty-checking-no-explicit-save": {
+      "verdict": "APPROVED",
+      "digest": "sha256:44144c54cb8d26339e8e05a90a22d5543bd28176c78d941e366e00948b375e1c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-entitygraph-fetch-join-fixes-n-plus-one": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a57165ba3e23aebc5f2b9c017a93fb9dc20d22907553518f7e9009e3b90d1b8b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-equals-hashcode-generated-id-before-persist": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4399ed564532a05fce5c5ecda45f4c2c2a73278e7bcde0143c10ffcf1c7adbc3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-first-level-vs-second-level-cache-scope": {
+      "verdict": "APPROVED",
+      "digest": "sha256:eb1bf20ba2fb9506364a4cd6d5efaa7a1755ff51713c8ceda97fd9d8acd10f02",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-flush-vs-commit-auto-flush-trigger": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f52d827782fbcf13e2c687e05f2c26e37944fb834203512c5ee2809b5d0589b1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-flyway-versioned-migrations-core-idea": {
+      "verdict": "APPROVED",
+      "digest": "sha256:59fe65804f0698fdcf354f89114927be00ddc12d373a571aa092d2f21b2069a0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-lazy-proxy-getclass-vs-instanceof": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6c3874ef9edcbc2d13944e2362e1e85a54c18683de603f17fa3782f963aa7d60",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-lost-update-no-locking-scenario": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6883cddd818904a5591e7dbace471ed1f6c011d15c3810c9b50bda5fce5f90ac",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-migration-idempotency-concurrent-startup": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d8245147512d2f872762fcbefa0bf2ee569811fd268de770dc325b3418697660",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-n-plus-one-lazy-collection-loop": {
+      "verdict": "APPROVED",
+      "digest": "sha256:975ea22ae273dd6cb8b1c66d337a34f87b3478f5d7ed5c30ac3f67c2197db364",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-onetomany-manytoone-default-fetch-type": {
+      "verdict": "APPROVED",
+      "digest": "sha256:45fb191c164c33745b26f80afbf201af85323455ce80b1550637552718ffcb2b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-pageable-page-count-query": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bd876fa8075cfe5985bee437717ec8acc24b7f50316c657a506d66864d0c17eb",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-persistence-context-entity-states": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e5501346413323ac27e7bdd1363658ab7d553665604fa5463bac3afe01334b73",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-pessimistic-write-lock-when-needed": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8724b19ab840e7f57f7cc326e181c4f6217984783b8f7fcad3ed62e068922a03",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-projection-vs-full-entity-fetch": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b31f75843da635a18a01ffee10ae705621282dfad495d39ec9690926fe5612b2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-query-jpql-vs-native-tradeoffs": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6ffcffae72759a8a0599bff435e5dc1ea64c7db82326a9bf81650a731965dde8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-second-level-cache-stale-external-update": {
+      "verdict": "APPROVED",
+      "digest": "sha256:926fc44bd99345c1dbf3ae162da3625387d2fc1ec156567b7edae3c0af249c56",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv290-version-optimistic-lock-exception": {
+      "verdict": "APPROVED",
+      "digest": "sha256:318dea058c5a94c0b6dbf1c5b708495d184ea155b5a629c1bcc3ee48a92dea01",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-at-least-once-idempotent-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:50e77c9c9dafef048e547de6f5454564b24d424b4b584b9d4b181d7f50f20145",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-bulkhead-thread-pool-isolation": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5d4a2afa24f966908cbac7d91c901e22f0f75de4e33a3836dbe1e788365cb050",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-cap-theorem-misreading-no-partition": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b1ef0badfdc9f361a2b05323ddb546cdf4c85ab33219771038e16104298ef060",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-circuit-breaker-half-open-state": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4639542afc9757be8e324e907210acba3316496e7a9466f3e665c04e400323e9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-circuit-breaker-vs-retry-backoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:6ef4449f836f31b4f6afa33bb44f32a5fc95232714b8a8d020e4b23d30031be0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-client-side-vs-server-side-load-balancing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:52dee33bd914bfb8bd9cdc6e81469ee9d1c3c8c7f59353424dde878a8a7cbb9e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-client-timeout-server-succeeded": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8668ae71129d931218c49335351c9a5f76bcfa908c7c3dd30984f3b354710ebc",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-cp-system-partition-scenario": {
+      "verdict": "APPROVED",
+      "digest": "sha256:da3c610ab04a981a403b7c6b4f0753802cd6526534c111782bf48b9b5137ad25",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-distributed-tracing-shared-trace-id": {
+      "verdict": "APPROVED",
+      "digest": "sha256:1468818c6275cda9506cbc70cc039519ad5b3852be8d6495c1d50761c9197f87",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-eventual-consistency-visible-bug": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5f6476b1011fb62f9f8e915488151a91596fa4051c3ee2ea1744ae13f2879da9",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-hardcoded-instance-ips-service-discovery": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fb9c30df6d60cbe3ff9b51293188c31ba8589c496d948f9e6b142eb3c6c8ef83",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-idempotency-key-retried-post": {
+      "verdict": "APPROVED",
+      "digest": "sha256:3910760ec8217e8272f3fdca85cbd7903fa21ae1b498a2e884bbbe81637db648",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-read-your-writes-narrower-guarantee": {
+      "verdict": "APPROVED",
+      "digest": "sha256:46bd6e5e8d1d8cbde5dc47afd4d5f324a558aefed36a5fa84bc877943fe2cad6",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-saga-choreography-vs-orchestration-tradeoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:89c8b23aa6023067bca8deb3c407f9d7100d9f7439515ae5b292438c27bd6469",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-saga-orchestration-compensating-actions": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ff2e49f8e004b499ebae9d8bb8b487c61f297c35715451dcb03f2e3319496011",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-timeout-budget-call-chain": {
+      "verdict": "APPROVED",
+      "digest": "sha256:396c70b089c3428e57eff340c887675be7c30af173b0fbc909b733e61c1d6a3c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-two-phase-commit-microservices-problem": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d9328139213cc5b5ea1c0f1b8260f6a2f0e24cc6b0e28b7716607d111012fe91",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-vector-clocks-causal-ordering": {
+      "verdict": "APPROVED",
+      "digest": "sha256:24e694d52d53023ccc3e178bbb86dd191e4679de3b827695fa6330fce769a608",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv292-wall-clock-skew-event-ordering": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e566a2c31701f3d25957e64ca08b2394507123970472e86f88d2d01dcace6c41",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-at-least-once-redelivery-requires-idempotent-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e991e9749fd8a7d0f46f64b8078e8f87d6c512ae3fe46501271ed6c5224a4d8c",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-at-most-once-silent-message-loss": {
+      "verdict": "APPROVED",
+      "digest": "sha256:a8cb80b98a6685411079b1df80261a5543cf435e10b5919cbf3f83bea71469c1",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-backpressure-slow-consumer-response": {
+      "verdict": "APPROVED",
+      "digest": "sha256:75e3f9b2a8b02701c17f2419ffe31bfaf94fce5230edfd20ec5e29d9657ef511",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-consumer-group-more-consumers-than-partitions": {
+      "verdict": "APPROVED",
+      "digest": "sha256:283de92b46e254f3ffd791d4f80fb460af48ef036360d45dfc81216bcf5fb75a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-consumer-lag-alerting-operational-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:f0e181c324fddd6ffcc642fe197cec25e0f7827440be2565c4f36e50f7dc298e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-consumer-lag-offset-gap": {
+      "verdict": "APPROVED",
+      "digest": "sha256:912345faa2235d623d9a48f2531532d6942bd1e13d39635fc9ba6ea3c3b33c52",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-dlq-routes-after-retry-exhaustion": {
+      "verdict": "APPROVED",
+      "digest": "sha256:92848af7e1420949813538232be5e31186ab242abb54a89ac0a85e4f14be8549",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-dlq-vs-drop-or-infinite-retry": {
+      "verdict": "APPROVED",
+      "digest": "sha256:cd7477762496317c74281ce9b8c1daa4eab2938c3bdbc74260ddf3e2d07c51d3",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-exactly-once-requires-idempotent-processing-or-transactional-outbox": {
+      "verdict": "APPROVED",
+      "digest": "sha256:731595c7efd788a9087a7d36b90c0430e630c68b53d709aee6946b4574ab003b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-idempotent-consumer-dedup-processed-message-ids": {
+      "verdict": "APPROVED",
+      "digest": "sha256:fa792445bfb90d07fad7a6fbc9354dc01d8e7e1f011d13e3464a733d6b551651",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-kafka-partition-key-ordering-same-entity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e91a311bdab59ebc1937ed6882ed3955d46658bd1026d3d2509b8a8957df98e0",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-manual-ack-nack-semantics": {
+      "verdict": "APPROVED",
+      "digest": "sha256:71fd1ee08180b94dc82a2dedaa5984b50db424e36b63fa45a012d1ae7781d628",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-offset-commit-before-vs-after-processing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5bab2c62a81f8b94df76efc896d41938cf511ed788bdd087de8bd758acb2f5f8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-outbox-pattern-dual-write-problem": {
+      "verdict": "APPROVED",
+      "digest": "sha256:040bcb6c99f8296f109856d0d4a6262b26b993535eddd6de802eeae4f7054957",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-outbox-relay-poller-cdc-marks-sent": {
+      "verdict": "APPROVED",
+      "digest": "sha256:b12ba361843784c0318288228d63d4a31829f20e134ec8d419c859cc44c08483",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-28",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-poison-message-blocks-consumer": {
+      "verdict": "APPROVED",
+      "digest": "sha256:4094cf3a27f7eb024d4822eae6424bbdbe9c31f62604258f3e96c1238b0ea4fa",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-poison-message-head-of-line-blocking": {
+      "verdict": "APPROVED",
+      "digest": "sha256:37d83809b0dcdc0d4d53f1b7465b5d4b26c76fbd4049adfed0aea729dc00ea96",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-retry-limit-before-dead-letter": {
+      "verdict": "APPROVED",
+      "digest": "sha256:77f11d6ba3328011408b275e6ce6b28b622c48c8aac875c0f665d3dd4a443c25",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv293-unbounded-queue-oom-backpressure": {
+      "verdict": "APPROVED",
+      "digest": "sha256:0acd1d57a10272d315e6e44e6787bde59193c364fdfe7e2acc240a2f9684ab3b",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cache-invalidation-stale-value-after-update": {
+      "verdict": "APPROVED",
+      "digest": "sha256:678e589bcf6ef573945525036743d002247031f2e1d49c8c8f0ecb802bbd0014",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-capacity-estimation-peak-vs-average": {
+      "verdict": "APPROVED",
+      "digest": "sha256:5213bb2f0b3d3375fef462358d54abcf5dd44908677237328a53cf56509e75cd",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cdn-edge-cache-offload-limits": {
+      "verdict": "APPROVED",
+      "digest": "sha256:aae180aff6f039e57feb604e4f2cf04652b5c9b2e74735e82df6a3696f049b8d",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-consistent-hashing-minimal-redistribution": {
+      "verdict": "APPROVED",
+      "digest": "sha256:539446446e7625c87d031533753aab848e5f1697d3f2643fbc71bc1ea16305a8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-cross-shard-query-fanout": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c0aed499e2eeef9389fe075a51f59edf59f9a3ff814687b52d4366fe3590b5f4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-fixed-vs-sliding-window-boundary-burst": {
+      "verdict": "APPROVED",
+      "digest": "sha256:606dcab76ab6121d631bf5b4dcd04d5ad48c6c94f713b19d02cee5996aa5d2ca",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-least-connections-vs-round-robin": {
+      "verdict": "APPROVED",
+      "digest": "sha256:d856fded8546d1ba3623a17231991710ad81c975b6fad2992267e825e153f4e2",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-rate-limit-gateway-vs-per-service": {
+      "verdict": "APPROVED",
+      "digest": "sha256:868e3265b21a66f3684433100a5b44f94b88f5b9b2d2acb48e11af7022e3507e",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-read-replica-write-throughput": {
+      "verdict": "APPROVED",
+      "digest": "sha256:bba15fd00f0b66d84444b77fac63c401d320cdaff5214c8efea02e544ca90dc4",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-read-your-writes-primary-routing": {
+      "verdict": "APPROVED",
+      "digest": "sha256:ac2570d2f672896ba586af4106e56e660c75a876dee1008a3371d7f9c9b266d8",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-replication-lag-read-after-write": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7f13102a9fff2a00f607bb7e47462cadab7a1262569cb270573c437f016d9a08",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-round-robin-uneven-request-cost": {
+      "verdict": "APPROVED",
+      "digest": "sha256:9ece11c5d058f6bf54d21fd30df020ee1019348d8be92cf6fb849d4b648b6c1a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-sharding-key-hot-shard": {
+      "verdict": "APPROVED",
+      "digest": "sha256:7bfa7568dbf1b4e8b6f948b84f0c0cd01f43350cd667982369aedfd2ad786242",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-stateless-horizontal-scaling-session-affinity": {
+      "verdict": "APPROVED",
+      "digest": "sha256:283f9c814e5b5fb1be61275238e96aecc6f4b3ec888439890714ae0ff635e75a",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-thundering-herd-cache-stampede": {
+      "verdict": "APPROVED",
+      "digest": "sha256:8867e7f7c4cbcf584f644831017dccd1e79715346ee661eea383666189842c42",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-token-bucket-burst-vs-average-rate": {
+      "verdict": "APPROVED",
+      "digest": "sha256:c9f8d4ad9ddad79350e69949c31c88b343b9aed80f3d6123e50f5aa913e25d33",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-vertical-scaling-single-point-of-failure": {
+      "verdict": "APPROVED",
+      "digest": "sha256:e472e355772ca1e19fad4c327c9fd0cde3693f6032c1064d97da731ab6b6cabe",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-write-behind-durability-risk": {
+      "verdict": "APPROVED",
+      "digest": "sha256:03df4f20d1bc954284ef7d0ccf830df2da96f9176dce0acf88fcdce7b287aeb5",
+      "reviewer": "ai-reviewer",
+      "reviewedOn": "2026-11-27",
+      "checklist": [
+        "correct-option-verified",
+        "distractors-plausible",
+        "explanation-complete",
+        "reference-is-primary"
+      ]
+    },
+    "iv294-write-through-vs-cache-aside-latency-tradeoff": {
+      "verdict": "APPROVED",
+      "digest": "sha256:50a8a8fb6c8526289a7627b2f47472f98872e167f8b609ece0d3d2eb530d3bd6",
       "reviewer": "ai-reviewer",
       "reviewedOn": "2026-11-27",
       "checklist": [

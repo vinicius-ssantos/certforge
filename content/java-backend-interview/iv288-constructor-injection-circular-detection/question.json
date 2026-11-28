@@ -3,20 +3,20 @@
   "topicId": "a3000000-0000-4000-8000-000000000105",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Requires knowing why the Spring team recommends constructor injection beyond style — the fail-fast startup behavior is the part candidates often can't articulate.",
-  "prompt": "A service class has three dependencies wired with `@Autowired` directly on the fields. A teammate proposes switching to constructor injection with no `@Autowired` annotation needed (a single constructor). Besides making the class easier to unit test without a Spring context, what concrete behavioral difference does this change introduce at application startup if two beans end up depending on each other?",
-  "explanation": "With field injection, Spring can instantiate a bean (via its no-arg constructor) before any of its dependencies are injected, so a circular dependency between two singleton beans can often be silently resolved by injecting an early, partially-initialized reference. With constructor injection, a bean cannot be instantiated at all until every constructor argument is available, so a genuine circular dependency between two constructor-injected beans fails the application context at startup with a `BeanCurrentlyInCreationException`, rather than succeeding with a partially-constructed object graph.",
+  "prompt": "A legacy Spring Boot 2.5 application has `spring.main.allow-circular-references=true` (or uses a Framework configuration that explicitly permits resolving some singleton setter/field cycles). Two singleton beans have a dependency cycle. A teammate proposes switching both from field injection to required constructor injection. What changes at startup, and would the same distinction apply by default in Spring Boot 2.6+?",
+  "explanation": "When circular references are explicitly allowed, Spring can sometimes construct singleton beans first and inject early references through fields/setters, so some such cycles start successfully. Constructor-only cycles cannot complete either constructor and fail at startup. However, since Spring Boot 2.6, circular dependencies are **disabled by default** (`spring.main.allow-circular-references=false`), so it is wrong to claim that field injection would silently succeed by default in modern Boot. Refactor cycles rather than relying on early references.",
   "options": [
     {
       "key": "A",
       "text": "There is no behavioral difference; both forms fail at startup identically if a cycle exists, since Spring resolves every `@Autowired` injection point, whether on a field or a constructor parameter, during one unified instantiation phase before the bean is handed back to the container.",
       "correct": false,
-      "explanation": "Field injection and constructor injection differ precisely in when the bean is considered fully constructed relative to dependency resolution, which changes whether a cycle is tolerated or rejected."
+      "explanation": "In configurations explicitly allowing early singleton references, setter/field cycles may resolve whereas constructor-only cycles cannot. In modern Boot defaults both fail, which is why the version/configuration scope matters."
     },
     {
       "key": "B",
-      "text": "Constructor injection makes a circular dependency fail fast at startup with a clear error, whereas field injection can silently succeed by injecting a not-yet-fully-initialized bean into the cycle.",
+      "text": "In a configuration explicitly allowing early singleton references, a field/setter cycle can sometimes be resolved using a partially constructed bean, while a required-constructor cycle fails because both constructors need the other bean first; Spring Boot 2.6+ disallows circular references by default, so ordinary field cycles fail too unless explicitly reenabled.",
       "correct": true,
-      "explanation": "Correct. Field-injected (and setter-injected) beans can be constructed via their default constructor and registered as 'currently in creation' before their fields are populated, letting the container hand out an early reference to break the cycle. Constructor injection requires every argument up front, so Spring cannot do this and raises `BeanCurrentlyInCreationException` instead."
+      "explanation": "Correct. This is a conditional distinction for configurations permitting early references, not an unconditional Spring Boot default. Constructor injection still makes hard cycles impossible to resolve; modern Boot prohibits cycles by default."
     },
     {
       "key": "C",
@@ -28,13 +28,17 @@
       "key": "D",
       "text": "Field injection throws at startup for any cycle between two singleton beans, while constructor injection automatically resolves the same cycle by substituting a lazy proxy for one of the two dependencies, with no extra configuration required.",
       "correct": false,
-      "explanation": "No proxy is automatically introduced for a plain singleton cycle, and it is field/setter injection — not constructor injection — that can quietly let a cycle through."
+      "explanation": "Required-constructor cycles cannot be resolved by magically generated lazy proxies; allowing field/setter cycles is conditional, and Boot 2.6+ prohibits them by default."
     }
   ],
   "references": [
     {
       "title": "Spring Framework Reference — Dependency Injection (constructor-based vs. setter-based, circular dependencies)",
       "url": "https://docs.spring.io/spring-framework/reference/core/beans/dependencies/factory-collaborators.html"
+    },
+    {
+      "title": "Spring Boot 2.6 Release Notes — Circular References Prohibited by Default",
+      "url": "https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.6-Release-Notes"
     }
   ],
   "evidence": {

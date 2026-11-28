@@ -33,12 +33,12 @@
   ],
   "references": [
     {
-      "title": "Double-ended queue - Wikipedia",
-      "url": "https://en.wikipedia.org/wiki/Double-ended_queue"
-    },
-    {
       "title": "Deque (Java SE 21 & JDK 21)",
       "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Deque.html"
+    },
+    {
+      "title": "ArrayDeque (Java SE 21 & JDK 21)",
+      "url": "https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayDeque.html"
     }
   ],
   "evidence": {

@@ -4,13 +4,13 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "The two caching layers are easy to confuse by name alone; this checks whether the candidate knows the actual scope and lifetime difference, which is what determines whether a given bug is even possible.",
   "prompt": "Two separate HTTP requests, handled by two separate threads and two separate `@Transactional` methods (each opening its own `EntityManager`/session), both call `em.find(Product.class, 7L)` for the same row. The first request's session has already loaded and cached that `Product`. Does the second request's session reuse that cached instance without hitting the database — and which cache layer, if any, would make that possible?",
-  "explanation": "The first-level cache (the persistence context / `EntityManager` session) is scoped to a single `EntityManager` and its lifetime; it cannot be shared across two independently-opened sessions, so the second request's session cannot see anything the first request's session cached. Only the second-level cache — a `SessionFactory`-wide (application-wide) cache, which is disabled by default and must be explicitly configured with a provider such as Ehcache or Infinispan — is scoped broadly enough to let a second, independent session skip the database for a row a different session already loaded.",
+  "explanation": "The first-level cache (the persistence context / `EntityManager` session) is scoped to a single `EntityManager` and its lifetime; it cannot be shared across two independently-opened sessions, so the second request's session cannot see anything the first request's session cached. The second-level cache is the one layer broad enough in scope to help here, but nothing is actually cached by default: Hibernate's own enabling flag (`hibernate.cache.use_second_level_cache`) defaults to true, yet the default region factory is a no-op that discards every second-level cache call, so real caching only starts once an actual provider (such as Ehcache or Infinispan) is configured and the entity is explicitly marked cacheable (e.g. `@Cacheable`/`@org.hibernate.annotations.Cache`).",
   "options": [
     {
       "key": "A",
-      "text": "The first-level cache cannot help here since it's scoped to one session; only an explicitly-configured second-level cache, which is `SessionFactory`-wide and disabled by default, could let the second request's session avoid hitting the database for that row.",
+      "text": "The first-level cache cannot help here since it's scoped to one session; only an explicitly-configured second-level cache, which is `SessionFactory`-wide and caches nothing until a real provider and per-entity opt-in are configured, could let the second request's session avoid hitting the database for that row.",
       "correct": true,
-      "explanation": "Correct. First-level cache lifetime is bound to its owning `EntityManager`; the second-level cache is the one layer broad enough in scope (and lifetime) to be visible across independently-opened sessions, and it requires deliberate opt-in configuration."
+      "explanation": "Correct. First-level cache lifetime is bound to its owning `EntityManager`; the second-level cache is the one layer broad enough in scope (and lifetime) to be visible across independently-opened sessions, and it requires deliberate opt-in configuration (a real provider, not just the no-op default region factory, plus marking the entity cacheable)."
     },
     {
       "key": "B",
@@ -28,12 +28,12 @@
       "key": "D",
       "text": "The second-level cache is enabled by default for every entity in a standard Spring Boot + Hibernate setup, so the second request would transparently reuse the first request's cached `Product` without any extra dependency or annotation being added to the project.",
       "correct": false,
-      "explanation": "The second-level cache is disabled by default; using it requires adding a cache provider dependency, enabling it in configuration, and typically annotating the entity (e.g. `@Cacheable`/`@org.hibernate.annotations.Cache`) — it is not on out of the box."
+      "explanation": "Hibernate's own enabling flag for second-level caching defaults to true, but its default region factory is a no-op that discards every cache call; actually caching an entity still requires adding a real cache provider dependency and annotating the entity (e.g. `@Cacheable`/`@org.hibernate.annotations.Cache`) — neither is present out of the box in a standard Spring Boot + Hibernate setup."
     }
   ],
   "references": [
     {
-      "title": "Hibernate ORM User Guide — Caching (first-level and second-level cache scope and lifetime)",
+      "title": "Hibernate ORM User Guide — Caching (first-level and second-level cache scope and lifetime, and the default no-op region factory)",
       "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#caching"
     }
   ],

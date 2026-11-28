@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Tests whether the candidate understands the actual trade-off rather than just naming both patterns.",
   "prompt": "A team is deciding whether to put a load balancer in front of a backend service (server-side load balancing) or have each calling service resolve the registry and pick an instance itself (client-side load balancing, e.g. via a library like Spring Cloud LoadBalancer). What is a genuine trade-off between the two, rather than just a naming difference?",
-  "explanation": "Server-side load balancing adds a network hop — every call passes through the balancer — but keeps callers simple, since they just call one stable address and know nothing about the pool. Client-side load balancing removes that extra hop and lets each caller pick instances directly, but it means every calling service now needs its own registry client and balancing logic, and the balancer itself can no longer serve as one place to enforce cross-cutting policy for all callers.",
+  "explanation": "Putting a proxy-style load balancer in front of a service — the scenario here, and the common form of server-side load balancing in a microservices deployment (an L4/L7 proxy such as NGINX, HAProxy or a cloud load balancer) — adds a network hop, since every call passes through it; callers stay simple in exchange, since they just call one stable address and know nothing about the pool. Client-side load balancing removes that extra hop and lets each caller pick instances directly, but it means every calling service now needs its own registry client and balancing logic, and the balancer itself can no longer serve as one place to enforce cross-cutting policy for all callers.",
   "options": [
     {
       "key": "A",
@@ -20,9 +20,9 @@
     },
     {
       "key": "C",
-      "text": "Server-side balancing adds a network hop but keeps callers simple with one address; client-side balancing removes that hop but requires every caller to carry its own registry client and balancing logic instead.",
+      "text": "A proxy-style server-side balancer (the scenario here) adds a network hop but keeps callers simple with one address; client-side balancing removes that hop but requires every caller to carry its own registry client and balancing logic instead.",
       "correct": true,
-      "explanation": "Correct. This is the real trade-off: one extra hop and centralized policy versus lower latency and simpler infrastructure at the cost of pushing discovery/balancing logic into every single caller."
+      "explanation": "Correct. This is the real trade-off for the proxy-style server-side balancer posed here: one extra hop and centralized policy versus lower latency and simpler infrastructure at the cost of pushing discovery/balancing logic into every single caller."
     },
     {
       "key": "D",

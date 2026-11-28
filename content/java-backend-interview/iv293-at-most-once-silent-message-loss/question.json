@@ -3,8 +3,8 @@
   "topicId": "a3000000-0000-4000-8000-000000000110",
   "difficulty": "MEDIUM",
   "difficultyRationale": "Tests whether a candidate understands that auto-commit timing, not message deletion or rebalancing, is what causes at-most-once message loss.",
-  "prompt": "A Kafka consumer runs with `enable.auto.commit=true` and a short `auto.commit.interval.ms`. For one batch, processing (writing results to a downstream database) takes longer than that interval. The consumer crashes partway through processing that batch, after its offsets were auto-committed but before the database writes completed. On restart, the unprocessed records from that batch are never redelivered. Why?",
-  "explanation": "Auto-commit fires on a timer, independent of whether the fetched records have actually finished processing. Once the offset is committed, the broker considers everything up to it consumed; a crash after that commit but before the side effect completes leaves no record that those messages were never truly handled, so the consumer resumes strictly after the committed offset on restart. This is the defining risk of at-most-once delivery: silent loss, never duplication.",
+  "prompt": "A Java KafkaConsumer uses enable.auto.commit=true and auto.commit.interval.ms=1000. Its poll() returns a batch, and the application immediately submits asynchronous database writes for those records to a worker pool while continuing to call poll() on the consumer thread. A later poll triggers auto-commit of the consumed positions even though the worker pool has not completed all writes. The process then crashes. Why can those unfinished records be skipped after restart?",
+  "explanation": "Kafka auto-commit is driven by the consumer polling loop at the configured interval; it is not an autonomous thread interrupting an in-progress synchronous record handler. In this specific example the poll thread advances its position and continues polling while asynchronous database effects are still running, so an auto-commit can record offsets beyond safely processed work. If the process crashes after that commit, the failed unfinished effects are not replayed. Avoid the gap by committing offsets only after relevant external processing has durably succeeded (and managing concurrent completion ordering).",
   "options": [
     {
       "key": "A",
@@ -14,9 +14,9 @@
     },
     {
       "key": "B",
-      "text": "The offset was committed on a fixed timer, independent of whether the batch's side effects had finished; once committed, the broker treats those records as consumed and resumes strictly after that offset on restart, so the unfinished batch is never redelivered.",
+      "text": "Auto-commit can persist positions reached by poll() before asynchronously delegated side effects finish; on restart the consumer resumes from those committed positions and does not automatically replay records whose external work never completed.",
       "correct": true,
-      "explanation": "Correct. Time-based auto-commit decouples the commit from actual processing completion. A crash in that gap between commit and finished side effect is unrecoverable under at-most-once semantics: the broker has no way to know the records were never fully handled."
+      "explanation": "Correct. Auto-commit runs when the consumer polls after the interval has elapsed; it is not an independent background timer interrupting a single synchronous long-running batch. Polling ahead of unfinished asynchronous processing creates the loss window."
     },
     {
       "key": "C",
@@ -35,6 +35,10 @@
     {
       "title": "Confluent Documentation — Kafka Delivery Semantics (at-most-once: \"messages may be lost and are not redelivered\")",
       "url": "https://docs.confluent.io/kafka/design/delivery-semantics.html"
+    },
+    {
+      "title": "Apache Kafka KafkaConsumer Javadoc — automatic offset commit and polling",
+      "url": "https://kafka.apache.org/39/javadoc/org/apache/kafka/clients/consumer/KafkaConsumer.html"
     }
   ],
   "evidence": {

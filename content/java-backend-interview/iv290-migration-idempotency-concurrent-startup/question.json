@@ -4,7 +4,7 @@
   "difficulty": "HARD",
   "difficultyRationale": "A real operational pitfall of running migrations on startup in a horizontally scaled deployment, which goes beyond knowing migration tools exist to knowing how they behave under real deployment topology.",
   "prompt": "A service is deployed with 3 replicas starting up simultaneously, each configured to run Flyway migrations on startup against the same shared database. What does Flyway do to stop two replicas from both trying to apply the same pending migration at the same time, and what's a mistake teams sometimes make here?",
-  "explanation": "Flyway takes a database-level lock around its migrate step (implemented via its own schema history table) so that only one replica actually applies pending migrations at a time; the other replicas wait for that lock, and once it's released they find the migrations already recorded as applied and simply skip them. A mistake teams sometimes make is disabling that locking behavior to shave time off startup, or writing a migration that isn't actually safe to interrupt partway through — both of which turn this exact concurrent-replica scenario into a real risk of a corrupted or partially applied schema.",
+  "explanation": "Flyway coordinates concurrent replicas using the locking technology of the underlying database itself (not a mechanism Flyway invents on its own), so that only one replica actually applies pending migrations at a time; the other replicas wait for that lock, and once it's released they find the migrations already recorded as applied in Flyway's schema history table and simply skip them. A mistake teams sometimes make is disabling that locking behavior to shave time off startup, or writing a migration that isn't actually safe to interrupt partway through — both of which turn this exact concurrent-replica scenario into a real risk of a corrupted or partially applied schema.",
   "options": [
     {
       "key": "A",
@@ -14,7 +14,7 @@
     },
     {
       "key": "B",
-      "text": "Flyway takes a database-level lock around its migration-apply step (for example, via its own schema history table) so only one replica applies pending migrations at a time; the others wait and then see those migrations already marked as applied. A mistake teams make is disabling that locking, or writing a migration that isn't safe if interrupted partway, which this exact concurrent-replica scenario can expose.",
+      "text": "Flyway coordinates using the locking technology of the underlying database itself, so only one replica applies pending migrations at a time; the others wait and then see those migrations already recorded as applied in Flyway's schema history table. A mistake teams make is disabling that locking, or writing a migration that isn't safe if interrupted partway, which this exact concurrent-replica scenario can expose.",
       "correct": true,
       "explanation": "Correct. The locking is what makes running migrations from every replica on startup safe at all; removing it, or writing non-idempotent migrations, reintroduces exactly the race this mechanism exists to prevent."
     },
