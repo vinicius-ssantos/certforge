@@ -4,7 +4,7 @@
   "difficulty": "MEDIUM",
   "difficultyRationale": "Explains the mechanism behind a behavior most Spring Data developers rely on daily (no explicit save needed inside a transaction) without ever having been asked how it actually works.",
   "prompt": "A `@Transactional` service method loads a `Product` via `repository.findById(id)`, calls `product.setPrice(newPrice)`, and returns — never calling `repository.save(product)`. The price change is still persisted when the transaction commits. What mechanism makes that happen, and what would change if the method were not `@Transactional`?",
-  "explanation": "`findById` returns a *managed* entity (loaded within an open persistence context). Hibernate's dirty checking compares each managed entity's current field values against the snapshot taken when it was loaded, at flush time; any difference is translated into an `UPDATE` statement, with no explicit `save()` call required. If the method were not transactional, the persistence context would typically close at the end of the repository call, the entity would become detached, and the later setter call on a detached instance would not be tracked or persisted at all.",
+  "explanation": "`findById` returns a *managed* entity (loaded within an open persistence context). Hibernate's dirty checking compares each managed entity's current field values against the snapshot taken when it was loaded, at flush time; any difference is translated into an `UPDATE` statement, with no explicit `save()` call required. If the method were not transactional, there would be no transaction boundary left to trigger a flush, so the change would never be written to the database — whether the entity itself also becomes detached right away depends on configuration: with Spring Boot's own default (`spring.jpa.open-in-view=true`), the persistence context can stay open and the entity managed for the rest of the request even without `@Transactional`, but with no transaction there is still no commit point to flush the pending change to.",
   "options": [
     {
       "key": "A",
@@ -26,15 +26,19 @@
     },
     {
       "key": "D",
-      "text": "Hibernate's dirty checking compares the managed entity's current state against its loaded snapshot at flush time and generates the `UPDATE` automatically; without `@Transactional`, the entity would become detached and the setter change would be lost.",
+      "text": "Hibernate's dirty checking compares the managed entity's current state against its loaded snapshot at flush time and generates the `UPDATE` automatically; without `@Transactional`, there would be no transaction boundary to trigger a flush, so the change would never be written to the database, regardless of whether the entity itself also happens to detach.",
       "correct": true,
-      "explanation": "Correct. Dirty checking is exactly the mechanism, and it depends on the entity staying managed inside an open persistence context — which `@Transactional` provides and its absence would typically remove."
+      "explanation": "Correct. Dirty checking is exactly the mechanism, and it depends on a transaction eventually flushing and committing — which `@Transactional` provides and its absence removes, independently of whether the entity itself stays attached (e.g. under Spring Boot's default Open Session in View) or detaches."
     }
   ],
   "references": [
     {
       "title": "Hibernate ORM User Guide — Flushing (automatic dirty checking generates the UPDATE statements)",
       "url": "https://docs.hibernate.org/orm/6.4/userguide/html_single/Hibernate_User_Guide.html#flushing"
+    },
+    {
+      "title": "Spring Boot Reference Documentation — Open EntityManager in View (enabled by default for a web application)",
+      "url": "https://docs.spring.io/spring-boot/reference/data/sql.html#data.sql.jpa-and-spring-data"
     }
   ],
   "evidence": {

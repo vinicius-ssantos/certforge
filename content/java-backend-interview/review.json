@@ -1601,9 +1601,9 @@
     },
     "iv290-dirty-checking-no-explicit-save": {
       "verdict": "APPROVED",
-      "digest": "sha256:771439e156d9ab2e3633be1bad913abc184f8284139ef1bd024965f6eb396fba",
+      "digest": "sha256:44144c54cb8d26339e8e05a90a22d5543bd28176c78d941e366e00948b375e1c",
       "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
+      "reviewedOn": "2026-11-28",
       "checklist": [
         "correct-option-verified",
         "distractors-plausible",
@@ -1637,9 +1637,9 @@
     },
     "iv290-first-level-vs-second-level-cache-scope": {
       "verdict": "APPROVED",
-      "digest": "sha256:5da04071a4b62582ad26e744be5c001bf03db79b70a40614c06ef6278b8fee0f",
+      "digest": "sha256:eb1bf20ba2fb9506364a4cd6d5efaa7a1755ff51713c8ceda97fd9d8acd10f02",
       "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
+      "reviewedOn": "2026-11-28",
       "checklist": [
         "correct-option-verified",
         "distractors-plausible",
@@ -1697,9 +1697,9 @@
     },
     "iv290-migration-idempotency-concurrent-startup": {
       "verdict": "APPROVED",
-      "digest": "sha256:67ec84018f64e6ad50571b564e54fb2bc2b721a1281e8d719281c1c3b280d2b0",
+      "digest": "sha256:d8245147512d2f872762fcbefa0bf2ee569811fd268de770dc325b3418697660",
       "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
+      "reviewedOn": "2026-11-28",
       "checklist": [
         "correct-option-verified",
         "distractors-plausible",
@@ -1877,9 +1877,9 @@
     },
     "iv292-client-side-vs-server-side-load-balancing": {
       "verdict": "APPROVED",
-      "digest": "sha256:0960e29c12554bfdc15658eef67c7ddbc9ba9c03b109a1b4a13f2c91d080242d",
+      "digest": "sha256:52dee33bd914bfb8bd9cdc6e81469ee9d1c3c8c7f59353424dde878a8a7cbb9e",
       "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
+      "reviewedOn": "2026-11-28",
       "checklist": [
         "correct-option-verified",
         "distractors-plausible",
@@ -1901,9 +1901,9 @@
     },
     "iv292-cp-system-partition-scenario": {
       "verdict": "APPROVED",
-      "digest": "sha256:4a6696abb979cb4c42071fee4811a1a369c7bfbc61bf128535535cef43d1b989",
+      "digest": "sha256:da3c610ab04a981a403b7c6b4f0753802cd6526534c111782bf48b9b5137ad25",
       "reviewer": "ai-reviewer",
-      "reviewedOn": "2026-11-27",
+      "reviewedOn": "2026-11-28",
       "checklist": [
         "correct-option-verified",
         "distractors-plausible",
