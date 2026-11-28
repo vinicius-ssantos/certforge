@@ -3,32 +3,32 @@
   "topicId": "a3000000-0000-4000-8000-000000000109",
   "difficulty": "HARD",
   "difficultyRationale": "A subtle but common production pitfall: coordinating timeouts across hops, not just setting one on each call in isolation.",
-  "prompt": "Service A calls service B with a 5-second timeout. B, to handle that request, calls service C — and B's own timeout on that call to C is also set to 5 seconds. Under load, requests to A sometimes take close to 10 seconds to fail even though every individual timeout is 5 seconds. What's going wrong, and how should timeouts across a call chain actually be set?",
-  "explanation": "If B's call to C can take up to 5 seconds to time out, and only then does B respond to A (possibly after its own processing), the total time A can wait is the sum of C's timeout plus whatever B still has to do — which can approach or exceed A's own 5-second budget without any single timeout technically being wrong. Each hop's timeout needs to fit inside the remaining budget of the hop that called it, so a later timeout can never by itself exceed the time its caller is still willing to wait.",
+  "prompt": "Service A has a 5-second overall deadline for a user request and makes a call to B with that same 5-second deadline. B invokes C with another independently configured 5-second timeout even though part of A's deadline has already elapsed. A correctly times out at its own 5-second deadline, but B and C may continue working after A has given up. What is the timeout-budget design error?",
+  "explanation": "A properly enforced five-second deadline at A does not become ten seconds merely because B separately configures a five-second C timeout. Instead, if B gives C a fresh five seconds after some of A's budget is gone, B/C may still work after A has timed out. Propagate remaining deadlines and cancellation or choose shorter child timeouts that fit inside the caller's remaining budget.",
   "options": [
     {
       "key": "A",
-      "text": "Each hop's own timeout needs to fit inside the remaining time budget of whichever call invoked it; here B's timeout on C (5s) leaves no room within A's 5s budget, so the total chain can approach double, which is exactly the delay being observed.",
+      "text": "Each downstream timeout should be bounded by the caller's remaining deadline (minus processing/transport margin); giving C an independent fresh 5-second timeout after A's budget has partly elapsed wastes work after A has already timed out, unless deadline/cancellation is propagated.",
       "correct": true,
-      "explanation": "Correct. Timeouts must be coordinated down the call chain, not set identically and independently at each hop — B's call to C has to time out well before A's own patience runs out, or A ends up waiting on the sum of both."
+      "explanation": "Correct. A should not wait ten seconds if its configured total timeout is five; the actual harm is that B/C may outlive A's deadline, consume resources uselessly, and fail to return useful work. Propagate an absolute deadline or remaining budget."
     },
     {
       "key": "B",
-      "text": "Since both timeouts are individually set to exactly 5 seconds, this is actually impossible under normal network conditions — the 10-second delays described must be caused by retry logic at B, not by how the two timeouts relate to each other.",
+      "text": "Because A and B both configured a five-second timeout, A itself is guaranteed to take ten seconds to return a timeout to its client even if A correctly enforces its five-second overall deadline.",
       "correct": false,
-      "explanation": "Two independent 5-second timeouts stacked in sequence (A waiting on B, B waiting on C) genuinely can add up to roughly 10 seconds with no retries involved at all; dismissing it as impossible ignores how sequential timeouts compose."
+      "explanation": "An enforced overall deadline of five seconds prevents A from waiting ten seconds. The real issue is unnecessary downstream work that continues beyond that deadline."
     },
     {
       "key": "C",
       "text": "Timeouts only apply to the network transport layer, not to how long a service spends processing after a call returns, so B's 5-second timeout on C has no bearing on how long A ultimately waits — the delay must come from A's own processing instead.",
       "correct": false,
-      "explanation": "A service waiting for its downstream call to either return or time out is waiting on exactly that duration before it can respond to its own caller; the downstream timeout absolutely does factor into the upstream caller's total wait."
+      "explanation": "A downstream call contributes to end-to-end latency, and deadline propagation is essential to prevent wasted processing and resource exhaustion after callers have timed out."
     },
     {
       "key": "D",
       "text": "The fix is to remove B's timeout on its call to C entirely, since B should always wait as long as it takes for C to answer rather than fail early — removing the inner timeout eliminates the compounding delay seen at A.",
       "correct": false,
-      "explanation": "Removing B's timeout on C doesn't bound anything — it just lets B wait indefinitely on C, which makes A's eventual failure take even longer rather than shorter; the fix is a shorter, coordinated inner timeout, not none at all."
+      "explanation": "Removing the downstream timeout can leave B waiting on C indefinitely and does not enforce A's deadline. The child call should be bounded by remaining budget."
     }
   ],
   "references": [
